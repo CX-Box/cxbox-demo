@@ -1,0 +1,23 @@
+id,created_by_user_id,last_upd_by_user_id,full_name,phone_number,email,client_id
+1000018,1,1,Igor Borisenko,89031094135,igornb.mail@gmail.com,1000017
+1000037,1,1,John P. Whitmarsh,403-363-7570,JohnPWhitmarsh@armyspy.com,1000036
+1000020,1,1,Alex L. Harris,336-996-9126,AlexLHarris@teleworm.us,1000019
+1000021,1,1,Gilbert L. Sorrell,508-454-0775,GilbertLSorrell@rhyta.com,1000019
+1000038,1,1,Daniel T. Forbes,905-549-5293,DanielTForbes@jourrapide.com,1000036
+1000022,1,1,John H. Johnson,954-676-8362,JohnHJohnson@jourrapide.com,1000019
+1000040,1,1,Tommy J. Houghton,519-562-4588,TommyJHoughton@jourrapide.com,1000039
+1000023,1,1,Walter J. Ellis,513-864-6928,WalterJEllis@teleworm.us,1000017
+1000025,1,1,Medoro Bourque,514-827-5413,MedoroBourque@armyspy.com,1000024
+1000041,1,1,Blair L. Smith,450-798-3729,BlairLSmith@rhyta.com,1000039
+1000026,1,1,Orson Covillon,403-549-8369,OrsonCovillon@rhyta.com,1000024
+1000027,1,1,Bayard Bussière,613-658-4481,BayardBussiere@jourrapide.com,1000024
+1000043,1,1,Michael V. Neal,905-353-2952,MichaelVNeal@jourrapide.com,1000042
+1000029,1,1,Vail Courtois,867-925-7780,VailCourtois@rhyta.com,1000028
+1000044,1,1,Jared K. Moser,780-905-9272,JaredKMoser@teleworm.us,1000042
+1000030,1,1,Guerin Marleau,604-915-3860,GuerinMarleau@dayrep.com,1000028
+1000032,1,1,Earl M. Gonzales,514-889-9023,EarlMGonzales@rhyta.com,1000031
+1000046,1,1,Derek W. Graham,613-387-7557,DerekWGraham@rhyta.com,1000045
+1000034,1,1,Kenneth A. Williams,613-312-0652,KennethAWilliams@jourrapide.com,1000033
+1000035,1,1,Elbert B. Kilgore,416-835-0613,ElbertBKilgore@teleworm.us,1000033
+1000047,1,1,Calvin M. Vanhouten,416-229-2083,CalvinMVanhouten@armyspy.com,1000045
+

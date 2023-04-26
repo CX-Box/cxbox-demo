@@ -1,0 +1,14 @@
+{
+  "name": "clientViewOperations",
+  "title": "",
+  "type": "Form",
+  "bc": "client",
+  "fields": [],
+  "options": {
+    "actionGroups": {
+      "include": [
+        "actions"
+      ]
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "name": "saleListHeader",
+  "title": "Sale List",
+  "type": "HeaderWidget",
+  "bc": "sale",
+  "fields": []
+}

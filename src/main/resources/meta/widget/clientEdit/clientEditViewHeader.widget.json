@@ -1,0 +1,7 @@
+{
+  "name": "clientEditViewHeader",
+  "title": "Client Overview",
+  "type": "HeaderWidget",
+  "bc": "clientEdit",
+  "fields": []
+}

@@ -1,0 +1,45 @@
+{
+  "name": "clientList",
+  "title": "",
+  "type": "List",
+  "bc": "client",
+  "fields": [
+    {
+      "title": "Client",
+      "key": "fullName",
+      "type": "input",
+      "drillDown": "true"
+    },
+    {
+      "title": "Address",
+      "key": "address",
+      "type": "input"
+    },
+    {
+      "title": "Field of Activity",
+      "key": "fieldOfActivity",
+      "type": "input"
+    },
+    {
+      "title": "Importance",
+      "key": "importance",
+      "type": "dictionary",
+      "bgColorKey": "color"
+    },
+    {
+      "title": "Status",
+      "key": "status",
+      "type": "dictionary"
+    }
+  ],
+  "options": {
+    "actionGroups": {
+      "include": [
+        "create",
+        "actions"
+      ]
+    }
+  }
+
+}
+

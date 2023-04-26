@@ -1,0 +1,6 @@
+id,agenda,status,start_date_time,end_date_time,address,notes,result,responsible_id,client_id,contact_id,created_by_user_id,last_upd_by_user_id
+1000048,Sale of equipment for production,Completed,2021-07-30 23:00:00.000000,2021-07-31 01:40:00.000000,"Client's office. Moscow, Kotelny proezd, 93",Discussion of the sale of equipment for the production of 100 units.,"Sold 100 units. products, discount applied",1,1000031,1000032,1,1
+1000049,Sale of equipment for production,InProgress,2021-09-19 17:09:41.383000,2021-09-20 02:10:00.000000,"Client's office. Moscow, Kotelny proezd, 93",,,1,1000031,1000032,1,1
+1000050,Identify which campaigns seemed to have the biggest impact,NotStarted,2021-09-19 17:11:06.405000,2021-09-19 17:11:06.405000,"Clients office.
+Moscow, st. Koshkina, 12",,,1,1000033,1000035,1,1
+1000051,Review upcoming marketing campaign plan,Cancelled,2021-09-19 12:14:00.000000,2021-09-19 17:14:13.921000,Meeting Room B. Clients office,,,1,1000024,1000026,1,1

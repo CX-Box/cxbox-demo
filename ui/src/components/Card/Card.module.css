@@ -1,0 +1,29 @@
+@import "../../assets/fonts/fonts.module.css";
+@value colors "../../assets/styles/theme.module.css";
+@value main-light-mode from colors;
+
+.container {
+    background-color: white;
+    border-radius: 2px;
+    margin-bottom: 4.571em;
+}
+
+.widgetTitle {
+    color: main-light-mode;
+    font-family: openSans_bold;
+    font-size: 20px;
+    line-height: 28px;
+    margin-bottom: 1.2em;
+}
+
+.tabContainer {
+    margin-bottom: 16px;
+}
+
+.title {
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 1.56;
+    color: #595959;
+    margin-left: -12px;
+}

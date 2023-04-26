@@ -1,0 +1,15 @@
+@value colors "../../../assets/styles/theme.module.css";
+@value accent, main-dark-mode from colors;
+
+.container :global(.ant-modal-header) {
+    font-family: openSans_bold;
+    border-bottom: none;
+}
+
+.container :global(.ant-modal-footer) {
+    border-top: none;
+}
+
+.actions {
+    margin-top: 1em;
+}

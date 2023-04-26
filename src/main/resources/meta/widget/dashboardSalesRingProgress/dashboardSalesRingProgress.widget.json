@@ -1,0 +1,32 @@
+{
+  "name": "dashboardSalesRingProgress",
+  "title": "Closed Sales",
+  "type": "RingProgress",
+  "bc": "dashboardSalesRingProgress",
+  "fields": [
+    {
+      "title": "",
+      "key": "salesPercent",
+      "type": "input"
+    },
+    {
+      "title": "",
+      "key": "salesSum",
+      "type": "input"
+    },
+    {
+      "title": "",
+      "key": "salesDescription",
+      "type": "input"
+    }
+  ],
+  "options": {
+    "ringProgressOptions": {
+      "text": "Sum of closed sales",
+      "percentField": "salesPercent",
+      "numberField": "salesSum",
+      "descriptionField": "salesDescription"
+    }
+  }
+}
+

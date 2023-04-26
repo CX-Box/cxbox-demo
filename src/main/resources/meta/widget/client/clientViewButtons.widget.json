@@ -1,0 +1,14 @@
+{
+  "name": "clientViewButtons",
+  "title": "",
+  "type": "Form",
+  "bc": "client",
+  "fields": [],
+  "options": {
+    "actionGroups": {
+      "include": [
+       "edit"
+      ]
+    }
+  }
+}

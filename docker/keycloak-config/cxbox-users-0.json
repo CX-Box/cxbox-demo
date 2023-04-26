@@ -1,0 +1,30 @@
+{
+  "realm" : "cxbox",
+  "users" : [ {
+    "id" : "f6810c3d-b027-407a-92b3-50dd479b6bb7",
+    "createdTimestamp" : 1631869680337,
+    "username" : "demo",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : false,
+    "firstName" : "John",
+    "lastName" : "Snow",
+    "email" : "demo@local.com",
+    "credentials" : [ {
+      "id" : "646ecbba-567e-4dd9-8043-6e7fd2e581ad",
+      "type" : "password",
+      "createdDate" : 1631869698399,
+      "secretData" : "{\"value\":\"E6uRVF+cAKK9fGBJEbbU1b5FoByU5Dk/2TJOtfSfk1DAWJNLFsIABPSrTGGZuJjE4B28V41i5rNcvEo+z5xxEw==\",\"salt\":\"Abv5gg1GveqwfjkN5pb09A==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "uma_authorization", "offline_access" ],
+    "clientRoles" : {
+      "account" : [ "view-profile", "manage-account" ],
+      "cxbox-keycloak-client" : [ "CXBOX_USER" ]
+    },
+    "notBefore" : 0,
+    "groups" : [ ]
+  } ]
+}

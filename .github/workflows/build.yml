@@ -1,0 +1,17 @@
+name: deploy
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: trigger jenkins job
+        uses: appleboy/jenkins-action@master
+        with:
+          url: http://manage.cxbox.org:8080
+          user: admin
+          token: ${{ secrets.JENKINS_TOKEN }}
+          job: demo

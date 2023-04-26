@@ -1,0 +1,7 @@
+{
+  "name": "clientEditHeader",
+  "title": "Client Creation",
+  "type": "HeaderWidget",
+  "bc": "clientEdit",
+  "fields": []
+}

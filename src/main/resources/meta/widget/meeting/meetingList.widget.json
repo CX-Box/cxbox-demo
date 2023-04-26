@@ -1,0 +1,53 @@
+{
+  "name": "meetingList",
+  "title": "",
+  "type": "List",
+  "bc": "meeting",
+  "fields": [
+    {
+      "title": "Meeting",
+      "key": "id",
+      "type": "input",
+      "drillDown": "true"
+    },
+    {
+      "title": "Agenda",
+      "key": "agenda",
+      "type": "input"
+    },
+    {
+      "title": "Start Date",
+      "key": "startDateTime",
+      "type": "dateTime"
+    },
+    {
+      "title": "Status",
+      "key": "status",
+      "type": "input"
+    },
+    {
+      "title": "clientId",
+      "key": "clientId",
+      "type": "input",
+      "hidden": "true"
+    },
+    {
+      "title": "Client Name",
+      "key": "clientName",
+      "type": "input"
+    },
+    {
+      "title": "Contact",
+      "key": "contactName",
+      "type": "input"
+    }
+  ],
+  "options": {
+    "actionGroups": {
+      "include": [
+        "create",
+        "actions"
+      ]
+    }
+  }
+}

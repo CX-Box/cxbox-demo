@@ -1,0 +1,46 @@
+{
+  "name": "clienteditoverview",
+  "title": "Client Edit",
+  "template": "DashboardView",
+  "url": "/screen/client/view/clienteditoverview",
+  "widgets": [
+    {
+      "widgetName": "SecondLevelMenu",
+      "position": 0,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "clientEditStep",
+      "position": 0,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "clientEditViewHeader",
+      "position": 1,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "clientView",
+      "position": 3,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "contactListHeader",
+      "position": 4,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "contactViewList",
+      "position": 4,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "clientEditButtons",
+      "position": 4,
+      "gridWidth": 24
+    }
+  ],
+  "rolesAllowed": [
+   "CXBOX_USER"
+  ]
+}

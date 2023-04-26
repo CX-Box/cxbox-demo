@@ -1,0 +1,41 @@
+{
+  "name": "clientview",
+  "title": "Client View",
+  "template": "DashboardView",
+  "url": "/screen/client/view/clientview",
+  "widgets": [
+    {
+      "widgetName": "SecondLevelMenu",
+      "position": 0,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "clientEditViewHeader",
+      "position": 1,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "clientViewOperations",
+      "position": 2,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "clientView",
+      "position": 3,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "contactListHeader",
+      "position": 4,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "contactViewList",
+      "position": 4,
+      "gridWidth": 24
+    }
+  ],
+  "rolesAllowed": [
+   "CXBOX_USER"
+  ]
+}

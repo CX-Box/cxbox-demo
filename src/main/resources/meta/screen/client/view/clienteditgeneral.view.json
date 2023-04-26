@@ -1,0 +1,31 @@
+{
+  "name": "clienteditgeneral",
+  "title": "Client Edit",
+  "template": "DashboardView",
+  "url": "/screen/client/view/clienteditgeneral",
+  "widgets": [
+    {
+      "widgetName": "SecondLevelMenu",
+      "position": 0,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "clientEditHeader",
+      "position": 1,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "clientEditStep",
+      "position": 2,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "clientEdit",
+      "position": 3,
+      "gridWidth": 24
+    }
+  ],
+  "rolesAllowed": [
+   "CXBOX_USER"
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "name": "saleedit",
+  "title": "Sale Edit",
+  "template": "DashboardView",
+  "url": "/screen/meeting/view/saleedit",
+  "widgets": [
+    {
+      "widgetName": "SecondLevelMenu",
+      "position": 0,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "saleEditHeader",
+      "position": 1,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "saleEdit",
+      "position": 2,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "clientSalePickListPopup",
+      "position": 1,
+      "gridWidth": 24
+    }
+  ],
+  "rolesAllowed": [
+    "CXBOX_USER"
+  ]
+}

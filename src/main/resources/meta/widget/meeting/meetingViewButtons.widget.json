@@ -1,0 +1,14 @@
+{
+  "name": "meetingViewButtons",
+  "title": "",
+  "type": "Form",
+  "bc": "meeting",
+  "fields": [],
+  "options": {
+    "actionGroups": {
+      "include": [
+        "actions"
+      ]
+    }
+  }
+}

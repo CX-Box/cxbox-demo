@@ -1,0 +1,17 @@
+{
+  "name": "clientEditButtons",
+  "title": "",
+  "type": "Form",
+  "bc": "clientEdit",
+  "fields": [],
+  "options": {
+    "actionGroups": {
+      "include": [
+        "next",
+        "previous",
+        "finish",
+        "cancel"
+      ]
+    }
+  }
+}

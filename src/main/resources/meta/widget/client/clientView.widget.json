@@ -1,0 +1,108 @@
+{
+  "name": "clientView",
+  "title": "General information",
+  "type": "Info",
+  "bc": "client",
+  "fields": [
+    {
+      "blockId": "1",
+      "name": "Client",
+      "fields": [
+        {
+          "label": "Client Name",
+          "key": "fullName",
+          "type": "input"
+        },
+        {
+          "label": "Address",
+          "key": "address",
+          "type": "input"
+        },
+        {
+          "label": "Status",
+          "key": "status",
+          "type": "dictionary"
+        },
+        {
+          "label": "Field of Activity",
+          "key": "fieldOfActivity",
+          "type": "input"
+        },
+        {
+          "label": "Importance",
+          "key": "importance",
+          "type": "dictionary",
+          "bgColorKey": "color"
+        },
+        {
+          "label": "breifId",
+          "key": "breifId",
+          "type": "hidden"
+        },
+        {
+          "label": "Breif",
+          "key": "breif",
+          "type": "fileUpload",
+          "fileIdKey": "breifId"
+        }
+      ]
+    }
+  ],
+  "options": {
+    "actionGroups": {
+      "include": [
+        "edit"
+      ]
+    },
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "fullName",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "address",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "status",
+              "span": 12
+            }
+          ]
+        },{
+          "cols": [
+            {
+              "fieldKey": "fieldOfActivity",
+              "span": 12
+            }
+          ]
+        },{
+          "cols": [
+            {
+              "fieldKey": "importance",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "breif",
+              "span": 12
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

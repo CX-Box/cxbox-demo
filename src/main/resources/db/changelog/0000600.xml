@@ -1,0 +1,262 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd"
+  logicalFilePath="db/changelog/0000600.xml">
+
+  <changeSet id="main demo tables" author="ryalalov">
+    <createTable tableName="CLIENT">
+      <column name="ID" remarks="Identifier" type="NUMBER(19, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" remarks="Creation date"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" remarks="Last updated date"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false" foreignKeyName="CLIENT_CREATED_BY" references="USERS"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false" foreignKeyName="CLIENT_LAST_UPD_BY" references="USERS"/>
+      </column>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="FULL_NAME" type="VARCHAR(200)"/>
+      <column name="ADDRESS" type="VARCHAR(500)"/>
+      <column name="IMPORTANCE" type="VARCHAR(20)"/>
+      <column name="STATUS" type="VARCHAR(200)"/>
+      <column name="EDIT_STEP" type="VARCHAR(200)"/>
+      <column name="BREIF" type="VARCHAR(500)"/>
+      <column name="BREIF_ID" type="VARCHAR(500)"/>
+    </createTable>
+
+    <createTable tableName="CONTACT">
+      <column name="ID" remarks="Identifier" type="NUMBER(19, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" remarks="Creation date"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" remarks="Last updated date"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false" foreignKeyName="CONTACT_CREATED_BY" references="USERS"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false" foreignKeyName="CONTACT_LAST_UPD_BY" references="USERS"/>
+      </column>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="FULL_NAME" type="VARCHAR(200)"/>
+      <column name="PHONE_NUMBER" type="VARCHAR(13)"/>
+      <column name="EMAIL" type="VARCHAR(50)"/>
+      <column name="CLIENT_ID" type="NUMBER(19, 0)">
+        <constraints foreignKeyName="REF_CLIENT" references="CLIENT"/>
+      </column>
+    </createTable>
+
+    <createTable tableName="FIELD_OF_ACTIVITY">
+      <column name="VALUE" type="VARCHAR(50)"/>
+      <column name="CLIENT_ID" type="NUMBER(19, 0)">
+        <constraints foreignKeyName="REF_CLIENT" references="CLIENT"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="meeting table" author="kuzin">
+    <createTable tableName="MEETING">
+      <column name="ID" remarks="Identifier" type="NUMBER(19, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="AGENDA" type="VARCHAR(200)"/>
+      <column name="STATUS" type="VARCHAR(200)"/>
+      <column name="START_DATE_TIME" type="TIMESTAMP(6)"/>
+      <column name="END_DATE_TIME" type="TIMESTAMP(6)"/>
+      <column name="ADDRESS" type="VARCHAR(200)"/>
+      <column name="NOTES" type="VARCHAR(200)"/>
+      <column name="RESULT" type="VARCHAR(200)"/>
+      <column name="RESPONSIBLE_ID" type="NUMBER(19, 0)">
+        <constraints nullable="true" foreignKeyName="MEETING_RESPONSIBLE_ID" referencedColumnNames="ID"
+          referencedTableName="USERS"/>
+      </column>
+      <column name="CLIENT_ID" type="NUMBER(19, 0)">
+        <constraints nullable="true" foreignKeyName="MEETING_CLIENT_ID" referencedColumnNames="ID"
+          referencedTableName="CLIENT"/>
+      </column>
+      <column name="CONTACT_ID" type="NUMBER(19, 0)">
+        <constraints nullable="true" foreignKeyName="MEETING_CONTACT_ID" referencedColumnNames="ID"
+          referencedTableName="CONTACT"/>
+      </column>
+
+      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" remarks="Creation date"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" remarks="Last updated date"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false" foreignKeyName="MEETING_CREATED_BY" referencedColumnNames="ID"
+          referencedTableName="USERS"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false" foreignKeyName="MEETING_LAST_UPD_BY" referencedColumnNames="ID"
+          referencedTableName="USERS"/>
+      </column>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="dashboard_filter table" author="mitrofanova">
+    <createTable tableName="DASHBOARD_FILTER">
+      <column name="ID" remarks="Identifier" type="NUMBER(19, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false" foreignKeyName="FILTER_USER_ID" references="USERS"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" remarks="Creation date"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" remarks="Last updated date"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false" foreignKeyName="FILTER_CREATED_BY" references="USERS"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false" foreignKeyName="FILTER_LAST_UPD_BY" references="USERS"/>
+      </column>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="dashboard_filter_field_of_activity table" author="mitrofanova">
+    <createTable tableName="DASHBOARD_FILTER_FIELD_OF_ACTIVITY">
+      <column name="VALUE" type="VARCHAR(50)"/>
+      <column name="DASHBOARD_FILTER_ID" type="NUMBER(19, 0)">
+        <constraints foreignKeyName="REF_DASHBOARD_FILTER" references="DASHBOARD_FILTER"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" remarks="Creation date"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" remarks="Last updated date"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false" foreignKeyName="FILTER_CREATED_BY" references="USERS"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false" foreignKeyName="FILTER_LAST_UPD_BY" references="USERS"/>
+      </column>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="sale table" author="mitrofanova">
+    <createTable tableName="SALE">
+      <column name="ID" remarks="Identifier" type="NUMBER(19, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="CLIENT_ID" type="NUMBER(19, 0)">
+        <constraints nullable="true" foreignKeyName="SALE_CLIENT_ID" referencedColumnNames="ID"
+          referencedTableName="CLIENT"/>
+      </column>
+      <column name="PRODUCT" type="VARCHAR(50)">
+      </column>
+      <column name="STATUS" type="VARCHAR(50)">
+      </column>
+      <column name="SUM" type="NUMBER(19, 0)">
+      </column>
+      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" remarks="Creation date"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" remarks="Last updated date"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false" foreignKeyName="FILTER_CREATED_BY" references="USERS"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false" foreignKeyName="FILTER_LAST_UPD_BY" references="USERS"/>
+      </column>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="local example data" author="initial" runOnChange="true" context="local">
+    <loadUpdateData tableName="CLIENT" primaryKey="ID" encoding="UTF-8" separator="," quotchar="&quot;"
+      file="db/data/CLIENT.csv">
+      <column header="ID" name="ID" type="STRING"/>
+      <column header="created_by_user_id" name="created_by_user_id" type="STRING"/>
+      <column header="last_upd_by_user_id" name="last_upd_by_user_id" type="STRING"/>
+      <column header="full_name" name="full_name" type="STRING"/>
+      <column header="address" name="address" type="STRING"/>
+      <column header="importance" name="importance" type="STRING"/>
+      <column header="edit_step" name="edit_step" type="STRING"/>
+      <column header="status" name="status" type="STRING"/>
+    </loadUpdateData>
+    <loadUpdateData tableName="FIELD_OF_ACTIVITY" primaryKey="value,client_id" encoding="UTF-8" separator="," quotchar="&quot;"
+      file="db/data/FIELD_OF_ACTIVITY.csv">
+      <column header="value" name="value" type="STRING"/>
+      <column header="client_id" name="client_id" type="STRING"/>
+    </loadUpdateData>
+    <loadUpdateData tableName="CONTACT" primaryKey="ID" encoding="UTF-8" separator="," quotchar="&quot;"
+      file="db/data/CONTACT.csv">
+      <column header="ID" name="ID" type="STRING"/>
+      <column header="created_by_user_id" name="created_by_user_id" type="STRING"/>
+      <column header="last_upd_by_user_id" name="last_upd_by_user_id" type="STRING"/>
+      <column header="full_name" name="full_name" type="STRING"/>
+      <column header="phone_number" name="phone_number" type="STRING"/>
+      <column header="email" name="email" type="STRING"/>
+      <column header="client_id" name="client_id" type="STRING"/>
+    </loadUpdateData>
+    <loadUpdateData tableName="MEETING" primaryKey="ID" encoding="UTF-8" separator="," quotchar="&quot;"
+      file="db/data/MEETING.csv">
+      <column header="ID" name="ID" type="STRING"/>
+      <column header="agenda" name="agenda" type="STRING"/>
+      <column header="start_date_time" name="start_date_time" type="STRING"/>
+      <column header="end_date_time" name="end_date_time" type="STRING"/>
+      <column header="address" name="address" type="STRING"/>
+      <column header="notes" name="notes" type="STRING"/>
+      <column header="result" name="result" type="STRING"/>
+      <column header="responsible_id" name="responsible_id" type="STRING"/>
+      <column header="client_id" name="client_id" type="STRING"/>
+      <column header="contact_id" name="contact_id" type="STRING"/>
+      <column header="created_by_user_id" name="created_by_user_id" type="STRING"/>
+      <column header="last_upd_by_user_id" name="last_upd_by_user_id" type="STRING"/>
+    </loadUpdateData>
+    <loadUpdateData tableName="bc_filter_groups" primaryKey="ID" encoding="UTF-8" separator="," quotchar="&quot;"
+      file="db/data/BC_FILTER_GROUPS.csv">
+      <column header="ID" name="ID" type="STRING"/>
+      <column header="name" name="name" type="STRING"/>
+      <column header="bc" name="bc" type="STRING"/>
+      <column header="filters" name="filters" type="STRING"/>
+    </loadUpdateData>
+  </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,41 @@
+{
+  "name": "meetingview",
+  "title": "Meeting View",
+  "template": "DashboardView",
+  "url": "/screen/meeting/view/meetingview",
+  "widgets": [
+    {
+      "widgetName": "SecondLevelMenu",
+      "position": 0,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "meetingEditViewHeader",
+      "position": 1,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "meetingViewButtons",
+      "position": 2,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "meetingView",
+      "position": 3,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "meetingViewClientInfo",
+      "position": 4,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "meetingViewResult",
+      "position": 5,
+      "gridWidth": 24
+    }
+  ],
+  "rolesAllowed": [
+   "CXBOX_USER"
+  ]
+}

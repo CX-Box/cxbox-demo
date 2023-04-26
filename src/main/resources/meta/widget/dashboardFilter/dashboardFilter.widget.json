@@ -1,0 +1,33 @@
+{
+  "name": "dashboardFilter",
+  "title": "Filters",
+  "type": "Form",
+  "bc": "dashboardFilter",
+  "fields": [
+    {
+      "label": "Field of Activity",
+      "key": "fieldOfActivity",
+      "type": "multipleSelect"
+    }
+  ],
+  "options": {
+    "actionGroups": {
+      "include": [
+        "filter"
+      ]
+    },
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "fieldOfActivity",
+              "span": 12
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
+

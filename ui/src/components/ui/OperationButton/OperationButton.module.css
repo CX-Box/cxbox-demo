@@ -1,0 +1,15 @@
+@value colors "../../../assets/styles/theme.module.css";
+@value accent, main-dark-mode from colors;
+
+.base {
+    padding: 10px 16px;
+    margin-right: 0.5em;
+    height: 40px;
+    line-height: 20px;
+}
+
+.primaryOperation {
+    background-color: accent;
+    color: main-dark-mode;
+    border-radius: 8px;
+}

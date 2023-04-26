@@ -1,0 +1,21 @@
+{
+  "name": "salelist",
+  "title": "Sale List",
+  "template": "DashboardView",
+  "url": "/screen/meeting/view/salelist",
+  "widgets": [
+    {
+      "widgetName": "saleListHeader",
+      "position": 1,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "saleList",
+      "position": 2,
+      "gridWidth": 24
+    }
+  ],
+  "rolesAllowed": [
+   "CXBOX_USER"
+  ]
+}

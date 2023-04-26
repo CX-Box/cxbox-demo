@@ -1,0 +1,11 @@
+id,created_by_user_id,last_upd_by_user_id,full_name,address,importance,edit_step,status
+1000042,1,1,LLC “SvyazKomGroup”,"Moscow region, Dmitrov, st. Soviet, 14",High,FillGeneralInformation,InProgress
+1000045,1,1,LLC TelemedOperations,"Moscow, Polevoy 1st, lane, 72",Middle,FillGeneralInformation,New
+1000019,1,1,ServiceSet Group JSC,"Moscow, st. Nemchinova, 15",Middle,CreateClientContact,Inactive
+1000017,1,1,LLC “Web Project Communication”,"Moscow, st. Bagritsky, 3",Low,ReviewClientCard,New
+1000024,1,1,LLC “Info Trust”,"Moscow region, Vidnoe, st. Leninskaya, 9",Middle,CreateClientContact,InProgress
+1000028,1,1,LLC “Synthesis Technology”,"St. Petersburg, st. Narvskaya, 41",Middle,FillGeneralInformation,InProgress
+1000031,1,1,LLC “TelecomTrade”,"Moscow, Kotelny proezd, 93",High,FillGeneralInformation,InProgress
+1000033,1,1,AllianceConsult JSC,"Moscow, st. Koshkina, 12",High,FillGeneralInformation,New
+1000036,1,1,AcademWeb Holding,"St. Petersburg, st. Gdovskaya, 6",Low,ReviewClientCard,Inactive
+1000039,1,1,Trade Prof Media LLC,"Moscow, st. Makarenko, 57",Low,FillGeneralInformation,New

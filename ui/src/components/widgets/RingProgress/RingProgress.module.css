@@ -1,0 +1,34 @@
+@value colors "../../../assets/styles/theme.module.css";
+@value main-light-mode, text-description from colors;
+
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.textContainer {
+ margin-right: 27px;
+}
+
+.textDescription {
+  font-family: 'openSans_regular';
+  font-size: 14px;
+  line-height: 20px;
+  color: text-description;
+}
+
+.textValue {
+  font-family: 'openSans_bold';
+  font-size: 20px;
+  line-height: 28px;
+  color: main-light-mode;
+}
+
+.textClarification {
+  font-family: 'openSans_regular';
+  font-size: 14px;
+  line-height: 22px;
+  color: main-light-mode;
+}

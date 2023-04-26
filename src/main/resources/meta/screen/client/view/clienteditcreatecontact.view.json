@@ -1,0 +1,25 @@
+{
+  "name": "clienteditcreatecontact",
+  "title": "Client Edit",
+  "template": "DashboardView",
+  "url": "/screen/client/view/clienteditcreatecontact",
+  "widgets": [
+    {
+      "widgetName": "SecondLevelMenu",
+      "position": 0,
+      "gridWidth": 24
+    },{
+      "widgetName": "contactEditHeader",
+      "position": 1,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "contactEditForm",
+      "position": 5,
+      "gridWidth": 24
+    }
+  ],
+  "rolesAllowed": [
+   "CXBOX_USER"
+  ]
+}

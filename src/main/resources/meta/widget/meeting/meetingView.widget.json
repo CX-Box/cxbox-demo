@@ -1,0 +1,95 @@
+{
+  "name": "meetingView",
+  "title": "General Information",
+  "type": "Info",
+  "bc": "meeting",
+  "fields": [
+    {
+      "blockId": "1",
+      "name": "General Information",
+      "fields": [
+        {
+          "label": "Agenda",
+          "key": "agenda",
+          "type": "input"
+        },
+        {
+          "label": "Date and time",
+          "key": "period",
+          "type": "input"
+        },
+        {
+          "label": "Status",
+          "key": "status",
+          "type": "input"
+        },
+        {
+          "label": "Status",
+          "key": "status",
+          "type": "input"
+        },
+        {
+          "label": "Address",
+          "key": "address",
+          "type": "input"
+        },
+        {
+          "label": "Responsible",
+          "key": "responsibleName",
+          "type": "input"
+        }
+      ]
+    }
+  ],
+  "options": {
+    "actionGroups": {
+      "include": [
+        "edit"
+      ]
+    },
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "agenda",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "period",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "status",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "address",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "responsibleName",
+              "span": 12
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

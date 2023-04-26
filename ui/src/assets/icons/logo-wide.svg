@@ -1,0 +1,17 @@
+<svg viewBox="0 0 240 38" xmlns="http://www.w3.org/2000/svg">
+  <style>
+
+    .heavy {
+    font: bold 30px Stencil;
+    fill: blue;
+    }
+
+    .heavyR {
+    font: bold 30px Stencil;
+    fill: red;
+    }
+  </style>
+
+  <text x="20" y="35" class="heavy">DE</text>
+  <text x="60" y="35" class="heavyR">MO</text>
+</svg>

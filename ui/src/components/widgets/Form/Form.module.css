@@ -1,0 +1,23 @@
+@value colors "../../../assets/styles/theme.module.css";
+@value main-light-mode from colors;
+
+.formContainer :global(.ant-form) {
+    margin-left: 12px;
+}
+
+.formContainer :global(.ant-form-item) {
+    font-family: openSans_regular;
+}
+
+.formContainer :global(.ant-form-item-label > label) {
+    font-family: openSans_bold;
+    line-height: 20px;
+    color: main-light-mode;
+}
+
+.formContainer :global(.ant-form .ant-row > .ant-row > .ant-col input),
+.formContainer :global(.ant-form .ant-row > .ant-row > .ant-col textarea),
+.formContainer :global(.ant-form .ant-row > .ant-row > .ant-col .ant-select-selection__rendered),
+.formContainer :global(.ant-form .ant-row > .ant-row > .ant-col .ant-select-dropdown-menu-item) {
+    color: main-light-mode;
+}

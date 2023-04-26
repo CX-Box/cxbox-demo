@@ -1,0 +1,36 @@
+{
+  "name": "saleList",
+  "title": "",
+  "type": "List",
+  "bc": "sale",
+  "fields": [
+    {
+      "title": "Client",
+      "key": "clientName",
+      "type": "input"
+    },
+    {
+      "title": "Product",
+      "key": "product",
+      "type": "input"
+    },
+    {
+      "title": "Status",
+      "key": "status",
+      "type": "input"
+    },
+    {
+      "title": "Sum, $",
+      "key": "sum",
+      "type": "number"
+    }
+  ],
+  "options": {
+    "actionGroups": {
+      "include": [
+        "create",
+        "edit"
+      ]
+    }
+  }
+}

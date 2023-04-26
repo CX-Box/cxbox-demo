@@ -1,0 +1,106 @@
+{
+  "name": "clientEdit",
+  "title": "General information",
+  "type": "Form",
+  "bc": "clientEdit",
+  "fields": [
+    {
+      "label": "Client Name",
+      "key": "fullName",
+      "type": "input"
+    },
+    {
+      "label": "Importance",
+      "key": "importance",
+      "type": "dictionary"
+    },
+    {
+      "label": "Address",
+      "key": "address",
+      "type": "input"
+    },
+    {
+      "label": "Status",
+      "key": "status",
+      "type": "dictionary"
+    },
+    {
+      "label": "Field of Activity",
+      "key": "fieldOfActivity",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "breifId",
+      "key": "breifId",
+      "type": "hidden"
+    },
+    {
+      "label": "Breif",
+      "key": "breif",
+      "type": "fileUpload",
+      "fileIdKey": "breifId"
+    }
+  ],
+  "options": {
+    "actionGroups": {
+      "include": [
+        "next",
+        "previous",
+        "finish",
+        "cancel"
+      ]
+    },
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "fullName",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "importance",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "address",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "status",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "fieldOfActivity",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "breif",
+              "span": 12
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

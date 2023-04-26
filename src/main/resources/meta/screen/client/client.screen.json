@@ -1,0 +1,33 @@
+{
+  "name": "client",
+  "icon": "team",
+  "order": 0,
+  "title": "Client",
+  "navigation": {
+    "menu": [
+      {
+        "title": "Clients",
+        "child": [
+          {
+            "viewName": "clientlist"
+          },
+          {
+            "viewName": "clienteditgeneral"
+          },
+          {
+            "viewName": "clienteditcontacts"
+          },
+          {
+            "viewName": "clienteditoverview"
+          },
+          {
+            "viewName": "clientview"
+          },
+          {
+            "viewName": "clienteditcreatecontact"
+          }
+        ]
+      }
+    ]
+  }
+}

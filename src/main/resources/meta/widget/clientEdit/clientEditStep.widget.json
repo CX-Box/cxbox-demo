@@ -1,0 +1,18 @@
+{
+  "name": "clientEditStep",
+  "title": "Step",
+  "type": "Steps",
+  "bc": "clientEdit",
+  "fields": [
+    {
+      "label": "editStep",
+      "key": "editStep",
+      "type": "input"
+    }
+  ],
+  "options": {
+    "stepsOptions": {
+      "stepsDictionaryKey": "editStep"
+    }
+  }
+}

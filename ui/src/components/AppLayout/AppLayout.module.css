@@ -1,0 +1,28 @@
+@import "../../assets/fonts/fonts.module.css";
+@value colors "../../assets/styles/theme.module.css";
+@value main-dark-mode from colors;
+
+.appLayout {
+  font-family: openSans_regular;
+  font-size: 14px;
+  line-height: 20px;
+}
+.appLayout, :global(.ant-layout) {
+  background: main-dark-mode
+}
+
+.appLayout :global(.ant-layout-header) {
+  background: main-dark-mode;
+}
+
+body :global(.ant-popover) {
+  z-index: 1060;
+}
+
+.spinContainer {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}

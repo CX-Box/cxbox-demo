@@ -1,0 +1,21 @@
+{
+  "name": "meetinglist",
+  "title": "Meeting List",
+  "template": "DashboardView",
+  "url": "/screen/meeting/view/meetinglist",
+  "widgets": [
+    {
+      "widgetName": "meetingListHeader",
+      "position": 1,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "meetingList",
+      "position": 2,
+      "gridWidth": 24
+    }
+  ],
+  "rolesAllowed": [
+   "CXBOX_USER"
+  ]
+}

@@ -1,0 +1,9 @@
+upstream app {
+            #TODO>>remove ip_hash after spring session jdbc added to Cxbox
+            ip_hash;
+            server ${CXBOX_APP_1};
+            server ${CXBOX_APP_2};
+        }
+upstream keycloak {
+            server ${KEYCLOAK_1};
+        }

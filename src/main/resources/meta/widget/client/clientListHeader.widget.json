@@ -1,0 +1,7 @@
+{
+  "name": "clientListHeader",
+  "title": "Client List",
+  "type": "HeaderWidget",
+  "bc": "client",
+  "fields": []
+}

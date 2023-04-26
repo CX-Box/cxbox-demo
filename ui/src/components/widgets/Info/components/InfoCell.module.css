@@ -1,0 +1,29 @@
+@import "../../../../assets/fonts/fonts.module.css";
+@value colors "../../../../assets/styles/theme.module.css";
+@value main-light-mode from colors;
+
+.labelArea {
+    flex: 2 0;
+}
+
+.label {
+    font-family: openSans_bold;
+}
+.label, :global(.ant-typography) {
+    color: main-light-mode;
+}
+
+.hint {
+    opacity: 0.5;
+}
+
+.fieldData>:global([class^='ReadOnlyField']) {
+    line-height: 20px;
+    color: main-light-mode;
+}
+
+.fieldData {
+    flex: 3 0;
+    overflow: hidden;
+
+}

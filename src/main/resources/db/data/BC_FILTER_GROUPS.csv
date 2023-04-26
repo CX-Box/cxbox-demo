@@ -1,0 +1,3 @@
+﻿ID,name,bc,filters
+1,First priority,client,"importance.equalsOneOf=%5B%22High%22%5D&status.equalsOneOf=%5B%22In+progress%22%5D"
+2,LLC only,client,"fullName.contains=LLC"

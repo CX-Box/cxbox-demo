@@ -1,0 +1,21 @@
+@value colors "../../../assets/styles/theme.module.css";
+@value accent, main-light-mode from colors;
+
+.pagination {
+    text-align: end;
+    margin-top: 16px;
+}
+
+.pagination :global(.ant-pagination-item a) {
+    font-family: openSans_regular;
+    color: main-light-mode;
+}
+
+.pagination :global(.ant-pagination-item-active ) {
+    border-radius: 2px;
+    border-color: accent;
+}
+
+.pagination :global(.ant-pagination-item-active a ) {
+    color: accent;
+}

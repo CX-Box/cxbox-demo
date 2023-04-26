@@ -1,0 +1,20 @@
+
+/*light mode*/
+@value main-light-mode: #141F35;
+@value accent: #3F7BEF;
+@value accent20: #3F7BEF33;
+@value not-available: #BBC9D9;
+@value warning: #FCA546;
+@value warning20: #FCA54633;
+
+@value error: #EC3F3F;
+@value error20: #EC3F3F33;
+
+@value success: #008C3E;
+@value success: #008C3E33;
+
+@value text-description: #D9D9D9;
+/*dark mode*/
+@value main-dark-mode: #FFFFFF;
+
+

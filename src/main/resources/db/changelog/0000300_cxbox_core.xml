@@ -1,0 +1,1386 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd"
+  logicalFilePath="db/changelog/0000300_cxbox_core.xml">
+
+  <changeSet author="initial" id="BC TABLE">
+    <createTable remarks="Бизнес-компоненты" tableName="BC">
+      <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="NAME" remarks="Название бизнес-компонента" type="VARCHAR2(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="PARENT_NAME" remarks="Название родительского бизнес-компонента" type="VARCHAR2(255)"/>
+      <column name="QUERY" remarks="Sql для получения списка бизнес-компонент" type="CLOB">
+        <constraints nullable="false"/>
+      </column>
+      <column name="DEFAULT_ORDER" remarks="Сортировка по умолчанию" type="VARCHAR2(500)"/>
+      <column name="REPORT_DATE_FIELD" remarks="Поле типа дата для PIVOT-фильтрации" type="VARCHAR2(500)"/>
+      <column defaultValueNumeric="5" name="PAGE_LIMIT" remarks="Кол-во строк при пагинации" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValue="[]" name="BINDS" type="CLOB"/>
+      <column defaultValueNumeric="0" name="EDITABLE" remarks="Редактируемые поля" type="NUMBER(1, 0)"/>
+      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" remarks="Дата создания"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" remarks="Дата обновления"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REFRESH" remarks="Не кэшировать с фронта" type="NUMBER(1, 0)"/>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  <changeSet author="initial" id="BC_FILTER_GROUPS TABLE">
+    <createTable remarks="Группы фильтров" tableName="BC_FILTER_GROUPS">
+      <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="NAME" remarks="Имя группы фильтров" type="VARCHAR2(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="BC" remarks="Бизнес-компонент" type="VARCHAR2(255 BYTE)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="FILTERS" remarks="Фильтры" type="VARCHAR2(4000 BYTE)"/>
+      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" remarks="Дата создания"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" remarks="Дата изменения"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  <changeSet author="initial" id="BC_PROPERTIES TABLE">
+    <createTable remarks="Поиск по умолчанию" tableName="BC_PROPERTIES">
+      <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" remarks="Дата создания"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" remarks="Дата изменения"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="BC" remarks="БК" type="VARCHAR2(255 BYTE)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValue="&quot;&quot;" name="FILTER" remarks="Фильтр(JSON)" type="VARCHAR2(4000 BYTE)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="PAGE_LIMIT" remarks="Лимит страницы по умолчанию" type="NUMBER(10, 0)"/>
+      <column name="REPORT_PERIOD" remarks="Интервал даты по умолчанию" type="NUMBER(10, 0)"/>
+      <column name="SORT" remarks="Сортировка по умолчанию" type="VARCHAR2(4000 BYTE)"/>
+      <column name="DIM_FILTER_SPEC" type="CLOB"/>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="BC_READ_ONLY_FLG_FIELD" remarks="Поле с ДТО, при значении поля true блокирует запись"
+        type="VARCHAR2(255)"/>
+    </createTable>
+  </changeSet>
+  <changeSet author="initial" id="CUSTOMIZABLE_RESPONSE_SERVICE TABLE">
+    <createTable remarks="Кастомизируеммые inner - сервисы" tableName="CUSTOMIZABLE_RESPONSE_SERVICE">
+      <column name="ID" remarks="Индентификатор" type="NUMBER(19, 0)">
+        <constraints primaryKey="true" primaryKeyName="PK_CUSTOMIZABLE_RESPONSE_SERVI"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" remarks="Дата создания"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" remarks="Дата изменения"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" remarks="Кто создал" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" remarks="Кто изменил" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="SERVICE_NAME" remarks="Название сервиса" type="VARCHAR2(1000)"/>
+      <column name="DTO_CLASS" remarks="Название ДТО" type="VARCHAR2(1000)"/>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  <changeSet author="initial" id="DEPT TABLE">
+    <createTable remarks="Департамент" tableName="DEPT">
+      <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="CODE" remarks="Код департамента" type="VARCHAR2(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="SHORT_NAME" remarks="Краткое наименование" type="VARCHAR2(64)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="FULL_NAME" remarks="Полное наименование" type="VARCHAR2(256)"/>
+      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  <changeSet author="initial" id="DEPT_AUD TABLE">
+    <createTable tableName="DEPT_AUD">
+      <column name="ID" type="NUMBER(19, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="REV" type="NUMBER(10, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="REVTYPE" type="NUMBER(3, 0)"/>
+      <column name="CODE" type="VARCHAR2(64)"/>
+      <column name="SHORT_NAME" type="VARCHAR2(64)"/>
+      <column name="FULL_NAME" type="VARCHAR2(256)"/>
+      <column name="CREATED_DATE" type="TIMESTAMP(6)"/>
+      <column name="UPDATED_DATE" type="TIMESTAMP(6)"/>
+      <column name="CREATED_BY_USER_ID" type="NUMBER(19, 0)"/>
+      <column name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)"/>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  <changeSet author="initial" id="SYSTEM_SETTINGS TABLE">
+    <createTable remarks="Системные настройки" tableName="SYSTEM_SETTINGS">
+      <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="KEY" remarks="Ключ" type="VARCHAR2(255)"/>
+      <column name="VALUE" remarks="Значение" type="VARCHAR2(1500)"/>
+      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  <changeSet author="initial" id="DICTIONARY_ITEM TABLE">
+    <createTable remarks="Значения простых справочников" tableName="DICTIONARY_ITEM">
+      <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="TYPE" remarks="Тип справочника" type="VARCHAR2(255)"/>
+      <column name="KEY" remarks="Ключ" type="VARCHAR2(255)"/>
+      <column name="VALUE" remarks="Значение по умолчанию" type="VARCHAR2(255)"/>
+      <column name="ACTIVE" remarks="Признак активности" type="BOOLEAN"/>
+      <column name="DISPLAY_ORDER" remarks="Порядок отображения" type="NUMBER"/>
+      <column name="DESCRIPTION" remarks="Описание" type="VARCHAR2(1000)"/>
+      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="0" name="ADDITION_FLG" remarks="Вспомогательный" type="NUMBER(1, 0)"/>
+      <column name="DICTIONARY_TYPE_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  <changeSet author="initial" id="DICTIONARY_ITEM_TR TABLE">
+    <createTable remarks="Переводы простых справочников" tableName="DICTIONARY_ITEM_TR">
+      <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)"/>
+      <column name="LANGUAGE" remarks="Язык" type="VARCHAR2(255)"/>
+      <column name="VALUE" remarks="Значение" type="VARCHAR2(1500)"/>
+    </createTable>
+  </changeSet>
+  <changeSet author="initial" id="AUD_DICTIONARY TABLE">
+    <createTable tableName="AUD_DICTIONARY" remarks="Аудит справочников">
+      <column name="ID" type="NUMBER(19)" remarks="Идентификатор">
+        <constraints nullable="false" primaryKey="true"/>
+      </column>
+      <column name="EVENT_TYPE" type="VARCHAR2(255)" remarks="Тип события"/>
+      <column name="EVENT_DATE" type="DATE" remarks="Дата события"/>
+      <column name="DICT_TYPE" type="VARCHAR2(255)" remarks="Тип справочника"/>
+      <column name="KEY" type="VARCHAR2(255)" remarks="Ключ справочника"/>
+      <column name="FIELD" type="VARCHAR2(255)" remarks="Какое поле изменилось"/>
+      <column name="VSTAMP" type="NUMBER(19)" defaultValue="0"/>
+      <column name="CREATED_DATE" type="TIMESTAMP(6)" defaultValueComputed="current_timestamp">
+        <constraints nullable="false"/>
+      </column>
+      <column name="CREATED_BY_USER_ID" type="NUMBER(19)" defaultValue="1">
+        <constraints nullable="false"/>
+      </column>
+      <column name="UPDATED_DATE" type="TIMESTAMP(6)" defaultValueComputed="current_timestamp">
+        <constraints nullable="false"/>
+      </column>
+      <column name="LAST_UPD_BY_USER_ID" type="NUMBER(19)" defaultValue="1">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  <changeSet author="initial" id="DICTIONARY_LNK_RULE TABLE">
+    <createTable remarks="Правила связи справочников" tableName="DICTIONARY_LNK_RULE">
+      <column name="ID" remarks="Индентификатор" type="NUMBER(19, 0)">
+        <constraints primaryKey="true" primaryKeyName="PK_DICTIONARY_LNK_RULE"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" remarks="Дата создания"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" remarks="Дата изменения"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" remarks="Кто создал" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" remarks="Кто изменил" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="SERVICE_ID" remarks="Сервис" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="FIELD" remarks="Поле с типом LOV" type="VARCHAR2(1000)"/>
+      <column name="TYPE" remarks="Тип справочника поля" type="VARCHAR2(1000)"/>
+      <column name="NAME" remarks="Название" type="VARCHAR2(1000)"/>
+      <column defaultValueNumeric="0" name="ALL_VALUES" remarks="Все значения" type="NUMBER(1, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="0" name="FILTERABLE_FIELD" remarks="Правило для фильтра" type="NUMBER(1, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="0" name="DEFAULT_RULE_FLG" remarks="Правило по умолчанию" type="NUMBER(1, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  <changeSet author="initial" id="DICTIONARY_LNK_RULE_COND TABLE">
+    <createTable remarks="Условия применения правила на поле LOV" tableName="DICTIONARY_LNK_RULE_COND">
+      <column name="ID" remarks="Индентификатор" type="NUMBER(19, 0)">
+        <constraints primaryKey="true" primaryKeyName="PK_DICTIONARY_LNK_RULE_COND"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" remarks="Дата создания"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" remarks="Дата изменения"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" remarks="Кто создал" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" remarks="Кто изменил" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="RULE_ID" remarks="Правило" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="TYPE" remarks="Тип условия" type="VARCHAR2(255)"/>
+      <column name="FIELD_NAME" remarks="Имя поля" type="VARCHAR2(255)"/>
+      <column name="FIELD_TEXT_VALUE" remarks="Текстовое значение" type="VARCHAR2(1000)"/>
+      <column name="FIELD_DICT_VALUE" remarks="Справочное значение" type="VARCHAR2(255)"/>
+      <column name="DEPT_ID" remarks="Департамент пользователя" type="NUMBER(19, 0)"/>
+      <column name="BC_NAME" remarks="Имя БК" type="VARCHAR2(255)"/>
+      <column name="FIELD_TYPE" remarks="Тип справочника связанного поля" type="VARCHAR2(255)"/>
+      <column name="FIELD_BOOLEAN_VALUE" type="BOOLEAN"/>
+      <column defaultValueNumeric="0" name="RULE_INVERSION_FLG" remarks="Инверсия результата выполнения условия"
+        type="NUMBER(1)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  <changeSet author="initial" id="DICTIONARY_LNK_RULE_VALUE TABLE">
+    <createTable remarks="Значения при применении правила" tableName="DICTIONARY_LNK_RULE_VALUE">
+      <column name="ID" remarks="Индентификатор" type="NUMBER(19, 0)">
+        <constraints primaryKey="true" primaryKeyName="PK_DICTIONARY_LNK_RULE_VALUE"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" remarks="Дата создания"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" remarks="Дата изменения"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" remarks="Кто создал" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" remarks="Кто изменил" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="RULE_ID" remarks="Правило" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="CHILD_KEY" remarks="Код дочернего справочника" type="VARCHAR2(1000)"/>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  <changeSet author="initial" id="DICTIONARY_TYPE TABLE">
+    <createTable remarks="Типы простых справочников" tableName="DICTIONARY_TYPE">
+      <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="TYPE" remarks="Тип справочника" type="VARCHAR2(255)"/>
+      <column name="TYPE_DESC" remarks="Описание" type="VARCHAR2(1000)"/>
+      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  <changeSet author="initial" id="DIVISION TABLE">
+    <createTable remarks="Подразделение" tableName="DIVISION">
+      <column name="ID" remarks="Индентификатор" type="NUMBER(19, 0)">
+        <constraints primaryKey="true" primaryKeyName="PK_DIVISION"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" remarks="Дата создания"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" remarks="Дата изменения"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" remarks="Кто создал" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" remarks="Кто изменил" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="LEVEL_CD" remarks="Уровень подразделения" type="VARCHAR2(255)"/>
+      <column name="NAME" remarks="Название" type="VARCHAR2(1000)"/>
+      <column name="ACTIVE" remarks="Активно" type="NUMBER(1, 0)"/>
+      <column name="DEPT_ID" remarks="Департмент" type="NUMBER(19, 0)"/>
+      <column name="PARENT_ID" remarks="Родительское подразделение" type="NUMBER(19, 0)"/>
+      <column name="HEAD_USER_ROLE_ID" remarks="Руководитель" type="NUMBER(19, 0)"/>
+      <column name="FULL_NAME" remarks="Полное название" type="VARCHAR2(4000)"/>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="0" name="CHECK_GU_FLG" remarks="Принадлежность к ГУ" type="NUMBER(1, 0)"/>
+      <column name="HEAD_OFFICE_CD" remarks="Наименование оргструктуры" type="VARCHAR2(255)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="initial" id="RESPONSIBILITIES TABLE">
+    <createTable remarks="Респонсибилити" tableName="RESPONSIBILITIES">
+      <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="INTERNAL_ROLE_CD" remarks="Роль" type="VARCHAR2(255 BYTE)"/>
+      <column name="DEPT_ID" remarks="Департмент" type="NUMBER(19, 0)"/>
+      <column name="RESPONSIBILITIES" remarks="Респонсибилити" type="VARCHAR2(255 BYTE)"/>
+      <column name="SCREENS" remarks="Доступные пользователю скрины" type="CLOB"/>
+      <column name="RESP_TYPE" type="VARCHAR2(255)"/>
+      <column defaultValueNumeric="0" name="READ_ONLY" type="BOOLEAN">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" remarks="Дата создания"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" remarks="Дата изменения"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  <changeSet author="initial" id="REVINFO TABLE">
+    <createTable tableName="REVINFO">
+      <column name="ID" type="NUMBER(10, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="TIMESTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="USER_ID" type="NUMBER(19, 0)"/>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="initial" id="SCREEN TABLE">
+    <createTable remarks="Экран" tableName="SCREEN">
+      <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="PRIMARY_VIEW_NAME" remarks="Идентификатор VIEW по умолчанию" type="VARCHAR2(255)"/>
+      <column defaultValue="[]" name="PRIMARY_VIEWS" remarks="Массив VIEW по умолчанию" type="CLOB"/>
+      <column name="NAME" remarks="Название" type="VARCHAR2(255)"/>
+      <column name="TITLE" remarks="Заголовок" type="VARCHAR2(255)"/>
+      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" type="TIMESTAMP(6)"/>
+      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" type="TIMESTAMP(6)"/>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  <changeSet author="initial" id="NAVIGATION_GROUP TABLE">
+    <createTable remarks="Группы вью" tableName="NAVIGATION_GROUP">
+      <column name="ID" remarks="Идентификатор" type="VARCHAR2(255)">
+        <constraints primaryKey="true" primaryKeyName="PK_NAVIGATION_GROUP"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" remarks="Дата создания"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" remarks="Дата изменения"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="TYPE_CD" remarks="Тип группы" type="VARCHAR2(255)"/>
+      <column name="SCREEN_NAME" remarks="Экран" type="VARCHAR2(255)"/>
+      <column name="TITLE" remarks="Название" type="VARCHAR2(1000)"/>
+      <column name="PARENT_ID" remarks="Родительская группа" type="VARCHAR2(255)"/>
+      <column name="SEQ" remarks="Порядок" type="NUMBER(19, 0)"/>
+      <column name="DESCRIPTION" remarks="Описание" type="VARCHAR2(1000)"/>
+      <column name="DEFAULT_VIEW" remarks="Порядок" type="VARCHAR2(255)"/>
+      <column name="HIDDEN" remarks="Скрыто" type="NUMBER(1)"/>
+    </createTable>
+  </changeSet>
+  <changeSet author="initial" id="NAVIGATION_VIEW TABLE">
+    <createTable remarks="Связь вью с группами" tableName="NAVIGATION_VIEW">
+      <column name="ID" remarks="Идентификатор" type="VARCHAR2(255)">
+        <constraints primaryKey="true" primaryKeyName="PK_NAVIGATION_VIEW"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" remarks="Дата создания"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" remarks="Дата изменения"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="TYPE_CD" remarks="Тип группы" type="VARCHAR2(255)"/>
+      <column name="VIEW_NAME" remarks="Вью" type="VARCHAR2(255)"/>
+      <column name="SCREEN_NAME" remarks="Экран" type="VARCHAR2(255)"/>
+      <column name="PARENT_GROUP_ID" remarks="Группа" type="VARCHAR2(255)"/>
+      <column name="SEQ" remarks="Порядок" type="NUMBER(19, 0)"/>
+      <column name="DESCRIPTION" remarks="Описание" type="VARCHAR2(1000)"/>
+      <column name="HIDDEN" remarks="Скрыто" type="NUMBER(1)"/>
+    </createTable>
+  </changeSet>
+  <changeSet author="initial" id="SEARCH_SPEC TABLE">
+    <createTable remarks="Критерии поиска" tableName="SEARCH_SPEC">
+      <column name="ID" type="NUMBER(19, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="TYPE" remarks="Тип критерия" type="VARCHAR2(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="ROLE_CD" remarks="Роль" type="VARCHAR2(255)"/>
+      <column name="BC_NAME" remarks="Имя компоненты" type="VARCHAR2(255)"/>
+      <column name="NAME" remarks="Имя компоненты" type="VARCHAR2(255)"/>
+      <column name="URL" type="VARCHAR2(255)"/>
+      <column name="SERVICE_NAME" type="VARCHAR2(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="initial" id="USERS TABLE">
+    <createTable remarks="Пользователи" tableName="USERS">
+      <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="FIRST_NAME" remarks="Имя" type="VARCHAR2(255)"/>
+      <column name="LAST_NAME" remarks="Фамилия" type="VARCHAR2(255)"/>
+      <column name="PATRONYMIC" remarks="Отчество" type="VARCHAR2(255)"/>
+      <column name="LOGIN" remarks="Логин" type="VARCHAR2(255)"/>
+      <column name="PASSWORD" remarks="Пароль" type="VARCHAR2(255)"/>
+      <column name="INTERNAL_ROLE_CD" remarks="Внутренняя роль" type="VARCHAR2(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="USER_PRINCIPAL_NAME" type="VARCHAR2(255)"/>
+      <column name="PHONE" remarks="Телефон" type="VARCHAR2(255)"/>
+      <column name="EMAIL" remarks="Эл. почта" type="VARCHAR2(255)"/>
+      <column name="FULL_USER_NAME" remarks="displayName" type="VARCHAR2(255)"/>
+      <column name="TITLE" remarks="title" type="VARCHAR2(255)"/>
+      <column name="EXT_ATTR_11" remarks="attribute11" type="VARCHAR2(255)"/>
+      <column name="EXT_ATTR_12" remarks="attribute12" type="VARCHAR2(255)"/>
+      <column name="EXT_ATTR_13" remarks="attribute13" type="VARCHAR2(255)"/>
+      <column name="DEPT_ID" remarks="Идентификатор Департамента" type="NUMBER(19, 0)"/>
+      <column name="ORIG_DEPT_CODE" remarks="Дочерний департамент" type="VARCHAR2(255)"/>
+      <column name="TIMEZONE" type="VARCHAR2(255 BYTE)"/>
+      <column name="LOCALE" type="VARCHAR2(20 BYTE)"/>
+      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="EXT_ATTR_14" remarks="5й уровень иерархии" type="VARCHAR2(255)"/>
+      <column name="EXT_ATTR_15" remarks="6й уровень иерархии" type="VARCHAR2(255)"/>
+      <column name="DN" remarks="LDAP Distinguished Name" type="VARCHAR2(255)"/>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="ACTIVE" remarks="Признак активности" type="BOOLEAN"/>
+    </createTable>
+  </changeSet>
+  <changeSet author="initial" id="USERS_AUD TABLE">
+    <createTable tableName="USERS_AUD">
+      <column name="ID" type="NUMBER(19, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="REV" type="NUMBER(10, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="REVTYPE" type="NUMBER(3, 0)"/>
+      <column name="FIRST_NAME" type="VARCHAR2(255)"/>
+      <column name="LAST_NAME" type="VARCHAR2(255)"/>
+      <column name="PATRONYMIC" type="VARCHAR2(255)"/>
+      <column name="LOGIN" type="VARCHAR2(255)"/>
+      <column name="PASSWORD" type="VARCHAR2(255)"/>
+      <column name="INTERNAL_ROLE_CD" type="VARCHAR2(255)"/>
+      <column name="INTERNAL_POST" type="VARCHAR2(255)"/>
+      <column name="USER_PRINCIPAL_NAME" type="VARCHAR2(255)"/>
+      <column name="PHONE" type="VARCHAR2(255)"/>
+      <column name="EMAIL" type="VARCHAR2(255)"/>
+      <column name="FULL_USER_NAME" type="VARCHAR2(255)"/>
+      <column name="TITLE" type="VARCHAR2(255)"/>
+      <column name="EXT_ATTR_11" type="VARCHAR2(255)"/>
+      <column name="EXT_ATTR_12" type="VARCHAR2(255)"/>
+      <column name="EXT_ATTR_13" type="VARCHAR2(255)"/>
+      <column name="DEPT_ID" type="NUMBER(19, 0)"/>
+      <column name="ORIG_DEPT_CODE" type="VARCHAR2(255)"/>
+      <column name="TIMEZONE" type="VARCHAR2(255 BYTE)"/>
+      <column name="LOCALE" type="VARCHAR2(20 BYTE)"/>
+      <column name="CREATED_DATE" type="TIMESTAMP(6)"/>
+      <column name="UPDATED_DATE" type="TIMESTAMP(6)"/>
+      <column name="CREATED_BY_USER_ID" type="NUMBER(19, 0)"/>
+      <column name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)"/>
+      <column name="EXT_ATTR_14" remarks="5й уровень иерархии" type="VARCHAR2(255)"/>
+      <column name="EXT_ATTR_15" remarks="6й уровень иерархии" type="VARCHAR2(255)"/>
+      <column name="DN" remarks="LDAP Distinguished Name" type="VARCHAR2(255)"/>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="ACTIVE" type="BOOLEAN"/>
+    </createTable>
+  </changeSet>
+  <changeSet author="initial" id="USER_ROLE TABLE">
+    <createTable remarks="Роли пользователя" tableName="USER_ROLE">
+      <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="USER_ID" remarks="Идентификатор пользователя" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="INTERNAL_ROLE_CD" remarks="TYPE = INTERNAL_ROLE Внутренняя роль в Системе"
+        type="VARCHAR2(255)"/>
+      <column defaultValueNumeric="false" name="ACTIVE" remarks="Признак активности роли" type="BOOLEAN"/>
+      <column defaultValueNumeric="false" name="MAIN" remarks="Признак основная роль (последняя выбранная роль)"
+        type="BOOLEAN"/>
+      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" remarks="Дата создания"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" remarks="Дата последнего обновления"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" remarks="Идентификатор пользователя-создателя"
+        type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"
+        remarks="Идентификатор последнего пользователя, обновившего запись" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="DIVISION_ID" remarks="Подразделение" type="NUMBER(19, 0)"/>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  <changeSet author="initial" id="VIEWS TABLE">
+    <createTable remarks="Объект VIEW для обновленного механизма метадаты" tableName="VIEWS">
+      <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="NAME" remarks="Наименование" type="VARCHAR2(255)"/>
+      <column name="TEMPLATE" remarks="Шаблон" type="VARCHAR2(255)"/>
+      <column name="TITLE" remarks="Заголовок" type="VARCHAR2(255)"/>
+      <column name="URL" remarks="Ссылка на запрос данных" type="VARCHAR2(1000)"/>
+      <column defaultValueNumeric="0" name="CUSTOMIZABLE"
+        remarks="Признак &quot;Настраиваемый пользователем&quot;" type="NUMBER(1, 0)"/>
+      <column defaultValueNumeric="0" name="EDITABLE" remarks="Признак &quot;Настраеваемая сетка&quot;"
+        type="NUMBER(1, 0)"/>
+      <column defaultValueNumeric="0" name="IGNORE_HISTORY" remarks="Признак &quot;Скрывать в Breadcrumbs&quot;"
+        type="NUMBER(1, 0)"/>
+      <column name="OPTIONS" remarks="Общие настройки view" type="CLOB"/>
+      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  <changeSet author="initial" id="VIEW_WIDGETS TABLE">
+    <createTable remarks="Виджеты для Вью с позицией и лимитом" tableName="VIEW_WIDGETS">
+      <column name="VIEW_NAME" remarks="Название VIEW" type="VARCHAR2(255)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="WIDGET_ID" remarks="Идентификатор виджета" type="NUMBER(19, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column defaultValueNumeric="0" name="HIDE_BY_DEFAULT" type="NUMBER(1, 0)"/>
+      <column name="POSITON" remarks="Позиция" type="NUMBER(10, 0)"/>
+      <column name="DESCRIPTION_TITLE" type="VARCHAR2(255)"/>
+      <column name="DESCRIPTION" type="CLOB"/>
+      <column name="SNIPPET" type="CLOB"/>
+      <column name="PAGE_LIMIT" remarks="Лимит" type="NUMBER(10, 0)"/>
+      <column defaultValueNumeric="1" name="GRID_WIDTH" type="NUMBER(2, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="0" name="GRID_BREAK" type="NUMBER(1, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="0" name="SHOW_EXPORT_STAMP" remarks="Выводить отметку о ДСП при выгрузке"
+        type="NUMBER(1, 0)"/>
+    </createTable>
+  </changeSet>
+  <changeSet author="initial" id="WIDGET TABLE">
+    <createTable remarks="Виджет" tableName="WIDGET">
+      <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="NAME" type="VARCHAR2(255)"/>
+      <column defaultValue="[]" name="SHOW_CONDITION" remarks="Условие отображения виджета (Toggle Widget)"
+        type="CLOB"/>
+      <column defaultValue="[]" name="FIELDS" remarks="Поля" type="CLOB"/>
+      <column defaultValue="[]" name="AXIS_FIELDS" remarks="Поля-оси двумерного фильтра" type="CLOB"/>
+      <column defaultValue="[]" name="CHART" remarks="Графики и диаграммы" type="CLOB"/>
+      <column name="OPTIONS" remarks="Общие настройки виджета" type="CLOB"/>
+      <column name="GRAPH" type="CLOB"/>
+      <column name="PIVOT_FIELDS" type="CLOB"/>
+      <column name="TEMPLATE" remarks="Шаблон виджета" type="VARCHAR2(255)"/>
+      <column name="TITLE" remarks="Заголовок" type="VARCHAR2(255)"/>
+      <column name="TYPE" remarks="Тип" type="VARCHAR2(255)"/>
+      <column name="BC" remarks="Бизнес компонента" type="VARCHAR2(255)"/>
+      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="initial" id="BC_FILTER_GROUPS INDEXES">
+    <addUniqueConstraint columnNames="NAME, BC" constraintName="BC_FILTER_GROUPS_UNIQUE"
+      tableName="BC_FILTER_GROUPS"/>
+    <createIndex indexName="BC_FILTER_GROUPS_UNIQUE_INDEX" tableName="BC_FILTER_GROUPS" unique="true">
+      <column name="NAME"/>
+      <column name="BC"/>
+    </createIndex>
+    <createIndex indexName="BC_FILTER_GROUPS_IND2" tableName="BC_FILTER_GROUPS">
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"/>
+    </createIndex>
+    <createIndex indexName="BC_FILTER_GROUPS_IND1" tableName="BC_FILTER_GROUPS">
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="initial" id="BC_PROPERTIES INDEXES">
+    <addUniqueConstraint columnNames="BC" constraintName="BC_PROPERTIES_BC" tableName="BC_PROPERTIES"/>
+    <createIndex indexName="BC_PROPERTIES_BC_INDEX" tableName="BC_PROPERTIES" unique="true">
+      <column name="BC"/>
+    </createIndex>
+    <createIndex indexName="BC_PROPERTIES_IND1" tableName="BC_PROPERTIES">
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID"/>
+    </createIndex>
+    <createIndex indexName="BC_PROPERTIES_IND2" tableName="BC_PROPERTIES">
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="initial" id="BC INDEXES">
+    <addUniqueConstraint columnNames="NAME" constraintName="BC_UNIQUE" tableName="BC"/>
+    <createIndex indexName="BC_UNIQUE_INDEX" tableName="BC" unique="true">
+      <column name="NAME"/>
+    </createIndex>
+    <createIndex indexName="BC_IND1" tableName="BC">
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID"/>
+    </createIndex>
+    <createIndex indexName="BC_IND2" tableName="BC">
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="initial" id="DICTIONARY_ITEM INDEXES">
+    <addUniqueConstraint columnNames="TYPE, KEY" constraintName="DIC_SELECT_UNIQUE_TYPE_KEY"
+      tableName="DICTIONARY_ITEM"/>
+    <createIndex indexName="DIC_SELECT_UNIQUE_TYPE_KEY_INDEX" tableName="DICTIONARY_ITEM" unique="true">
+      <column name="TYPE"/>
+      <column name="KEY"/>
+    </createIndex>
+    <addUniqueConstraint columnNames="TYPE, DISPLAY_ORDER" constraintName="DIC_SELECT_UNIQUE_TYPE_ORDER"
+      tableName="DICTIONARY_ITEM"/>
+    <createIndex indexName="DIC_SELECT_UNIQUE_TYPE_ORDER_INDEX" tableName="DICTIONARY_ITEM" unique="true">
+      <column name="TYPE"/>
+      <column name="DISPLAY_ORDER"/>
+    </createIndex>
+    <createIndex indexName="DICTIONARY_ITEM_IND1" tableName="DICTIONARY_ITEM">
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID"/>
+    </createIndex>
+    <createIndex indexName="DICTIONARY_ITEM_IND2" tableName="DICTIONARY_ITEM">
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="initial" id="DICTIONARY_ITEM_TR INDEXES" dbms="oracle">
+    <createIndex indexName="DICTIONARY_ITEM_TR_PK" tableName="DICTIONARY_ITEM_TR" unique="true">
+      <column name="ID"/>
+      <column name="LANGUAGE"/>
+    </createIndex>
+    <addPrimaryKey columnNames="ID, LANGUAGE" constraintName="DICTIONARY_ITEM_TR_PK"
+      forIndexName="DICTIONARY_ITEM_TR_PK" tableName="DICTIONARY_ITEM_TR"/>
+  </changeSet>
+  <changeSet author="initial" id="DICTIONARY_ITEM_TR INDEXES" dbms="postgresql">
+    <createIndex indexName="DICTIONARY_ITEM_IND3" tableName="DICTIONARY_ITEM_TR" unique="true">
+      <column name="ID"/>
+      <column name="LANGUAGE"/>
+    </createIndex>
+    <addPrimaryKey columnNames="ID, LANGUAGE" constraintName="DICTIONARY_ITEM_TR_PK"
+      tableName="DICTIONARY_ITEM_TR"/>
+  </changeSet>
+  <changeSet author="initial" id="SYSTEM_SETTINGS INDEXES">
+    <addUniqueConstraint columnNames="KEY" constraintName="SYS_SETTINGS_UNIQUE_KEY" tableName="SYSTEM_SETTINGS"/>
+    <createIndex indexName="SYS_SETTINGS_UNIQUE_KEY_INDEX" tableName="SYSTEM_SETTINGS" unique="true">
+      <column name="KEY"/>
+    </createIndex>
+    <createIndex indexName="SYS_SETTINGS_IND1" tableName="SYSTEM_SETTINGS">
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID"/>
+    </createIndex>
+    <createIndex indexName="SYS_SETTINGS_IND2" tableName="SYSTEM_SETTINGS">
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet author="initial" id="USERS INDEXES">
+    <addUniqueConstraint columnNames="LOGIN" constraintName="UK_LOGIN_NAME" tableName="USERS"/>
+    <createIndex indexName="UK_LOGIN_NAME_INDEX" tableName="USERS" unique="true">
+      <column name="LOGIN"/>
+    </createIndex>
+    <addUniqueConstraint columnNames="DN" constraintName="USERS_DN_UNIQUE" tableName="USERS"/>
+    <createIndex indexName="USERS_DN_UNIQUE_INDEX" tableName="USERS" unique="true">
+      <column name="DN"/>
+    </createIndex>
+    <createIndex indexName="USERS_IND1" tableName="USERS">
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID"/>
+    </createIndex>
+    <createIndex indexName="USERS_IND2" tableName="USERS">
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"/>
+    </createIndex>
+    <createIndex indexName="USERS_IND3" tableName="USERS">
+      <column name="DEPT_ID"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="initial" id="SCREEN INDEXES">
+    <addUniqueConstraint columnNames="NAME" constraintName="UK_SCREEN_NAME" tableName="SCREEN"/>
+    <createIndex indexName="UK_SCREEN_NAME_INDEX" tableName="SCREEN" unique="true">
+      <column name="NAME"/>
+    </createIndex>
+
+    <createIndex indexName="SCREEN_IND1" tableName="SCREEN">
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID"/>
+    </createIndex>
+    <createIndex indexName="SCREEN_IND2" tableName="SCREEN">
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="initial" id="VIEWS INDEXES">
+    <addUniqueConstraint columnNames="NAME" constraintName="UK_VIEW_NAME" tableName="VIEWS"/>
+    <createIndex indexName="UK_VIEW_NAME_INDEX" tableName="VIEWS" unique="true">
+      <column name="NAME"/>
+    </createIndex>
+
+    <createIndex indexName="VIEWS_IND1" tableName="VIEWS">
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID"/>
+    </createIndex>
+    <createIndex indexName="VIEWS_IND2" tableName="VIEWS">
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="initial" id="USER_ROLE INDEXES">
+    <addUniqueConstraint columnNames="USER_ID, INTERNAL_ROLE_CD" constraintName="USER_ROLE_UNIQUE"
+      tableName="USER_ROLE"/>
+    <createIndex indexName="USER_ROLE_UNIQUE_INDEX" tableName="USER_ROLE" unique="true">
+      <column name="USER_ID"/>
+      <column name="INTERNAL_ROLE_CD"/>
+    </createIndex>
+
+    <createIndex indexName="USER_ROLE_IND1" tableName="USER_ROLE">
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID"/>
+    </createIndex>
+    <createIndex indexName="USER_ROLE_IND2" tableName="USER_ROLE">
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"/>
+    </createIndex>
+    <createIndex indexName="USER_ROLE_IND3" tableName="USER_ROLE">
+      <column name="USER_ID"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="initial" id="WIDGET INDEXES">
+    <addUniqueConstraint columnNames="NAME" constraintName="WIDGET_NAME_CONSTRAINT_UNIQUE" tableName="WIDGET"/>
+    <createIndex indexName="WIDGET_NAME_CONSTRAINT_UNIQUE_INDEX" tableName="WIDGET" unique="true">
+      <column name="NAME"/>
+    </createIndex>
+
+    <createIndex indexName="WIDGET_IND1" tableName="WIDGET">
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID"/>
+    </createIndex>
+    <createIndex indexName="WIDGET_IND2" tableName="WIDGET">
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="initial" id="DEPT INDEXES">
+    <createIndex indexName="DEPT_IND1" tableName="DEPT">
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID"/>
+    </createIndex>
+    <createIndex indexName="DEPT_IND2" tableName="DEPT">
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="initial" id="DICTIONARY_TYPE INDEXES">
+    <createIndex indexName="DICTIONARY_TYPE_IND1" tableName="DICTIONARY_TYPE">
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID"/>
+    </createIndex>
+    <createIndex indexName="DICTIONARY_TYPE_IND2" tableName="DICTIONARY_TYPE">
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet author="initial" id="RESPONSIBILITIES INDEXES">
+    <createIndex indexName="RESPONSIBILITIES_IND1" tableName="RESPONSIBILITIES">
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID"/>
+    </createIndex>
+    <createIndex indexName="RESPONSIBILITIES_IND2" tableName="RESPONSIBILITIES">
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="initial" dbms="oracle" id="SEARCH_SPEC INDEXES">
+    <createIndex indexName="SEARCH_SPEC_SVC_NAME_FK" tableName="SEARCH_SPEC" unique="true">
+      <column computed="true"
+        name="CASE &quot;TYPE&quot; WHEN 'BC' THEN &quot;BC_NAME&quot;||&quot;NAME&quot;||&quot;SERVICE_NAME&quot; WHEN 'LINK' THEN &quot;BC_NAME&quot;||&quot;NAME&quot;||&quot;SERVICE_NAME&quot; WHEN 'SECURITY' THEN &quot;ROLE_CD&quot;||&quot;NAME&quot;||&quot;SERVICE_NAME&quot; ELSE NULL END"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="initial" dbms="postgresql" id="SEARCH_SPEC INDEXES">
+    <createIndex indexName="SEARCH_SPEC_SVC_NAME_FK" tableName="SEARCH_SPEC" unique="true">
+      <column computed="true"
+        name="(CASE 'TYPE' WHEN 'BC' THEN 'BC_NAME' || 'NAME' || 'SERVICE_NAME' WHEN 'LINK' THEN 'BC_NAME' || 'NAME' || 'SERVICE_NAME' WHEN 'SECURITY' THEN 'ROLE_CD' || 'NAME' || 'SERVICE_NAME' ELSE NULL END)"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet author="initial" id="VIEW_WIDGETS INDEXES">
+    <createIndex indexName="VIEW_WIDGETS_IND1" tableName="VIEW_WIDGETS">
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID"/>
+    </createIndex>
+    <createIndex indexName="VIEW_WIDGETS_IND2" tableName="VIEW_WIDGETS">
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"/>
+    </createIndex>
+    <createIndex indexName="VIEW_WIDGETS_IND3" tableName="VIEW_WIDGETS">
+      <column name="WIDGET_ID"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet author="initial" id="SYSTEM_SETTINGS CONSTRAINTS">
+    <addForeignKeyConstraint baseColumnNames="CREATED_BY_USER_ID" baseTableName="SYSTEM_SETTINGS"
+      constraintName="FK_SYS_SETTINGS_CREATED_BY" deferrable="false"
+      initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
+      referencedColumnNames="ID" referencedTableName="USERS" validate="true"/>
+    <addForeignKeyConstraint baseColumnNames="LAST_UPD_BY_USER_ID" baseTableName="SYSTEM_SETTINGS"
+      constraintName="FK_SYS_SETTINGS_UPDATED_BY" deferrable="false"
+      initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
+      referencedColumnNames="ID" referencedTableName="USERS" validate="true"/>
+  </changeSet>
+  <changeSet author="initial" id="DICTIONARY_ITEM CONSTRAINTS">
+    <addForeignKeyConstraint baseColumnNames="DICTIONARY_TYPE_ID" baseTableName="DICTIONARY_ITEM"
+      constraintName="CONS_DICTIONARY_TYPE_ID" deferrable="true" initiallyDeferred="true"
+      onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
+      referencedTableName="DICTIONARY_TYPE" validate="true"/>
+    <addForeignKeyConstraint baseColumnNames="CREATED_BY_USER_ID" baseTableName="DICTIONARY_ITEM"
+      constraintName="FK_DICTIONARY_ITEM_CREATED_BY" deferrable="false"
+      initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
+      referencedColumnNames="ID" referencedTableName="USERS" validate="true"/>
+    <addForeignKeyConstraint baseColumnNames="LAST_UPD_BY_USER_ID" baseTableName="DICTIONARY_ITEM"
+      constraintName="FK_DICTIONARY_ITEM_UPDATED_BY" deferrable="false"
+      initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
+      referencedColumnNames="ID" referencedTableName="USERS" validate="true"/>
+  </changeSet>
+  <changeSet author="initial" id="DICTIONARY_ITEM_TR CONSTRAINTS">
+    <addForeignKeyConstraint baseColumnNames="ID" baseTableName="DICTIONARY_ITEM_TR"
+      constraintName="DICTIONARY_ITEM_TR_FK" deferrable="false" initiallyDeferred="false"
+      onDelete="CASCADE" onUpdate="CASCADE" referencedColumnNames="ID"
+      referencedTableName="DICTIONARY_ITEM" validate="true"/>
+  </changeSet>
+  <changeSet author="initial" id="DEPT_AUD CONSTRAINTS">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="DEPT_AUD" constraintName="DEPT_AUD_REV_FK"
+      deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
+      referencedColumnNames="ID" referencedTableName="REVINFO" validate="true"/>
+  </changeSet>
+  <changeSet author="initial" id="VIEW_WIDGETS CONSTRAINTS">
+    <addForeignKeyConstraint baseColumnNames="WIDGET_ID" baseTableName="VIEW_WIDGETS"
+      constraintName="FK_B8EXT2811OBUYOMW5CKRCFWFQ" deferrable="false"
+      initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
+      referencedColumnNames="ID" referencedTableName="WIDGET" validate="true"/>
+    <addForeignKeyConstraint baseColumnNames="CREATED_BY_USER_ID" baseTableName="VIEW_WIDGETS"
+      constraintName="FK_VIEW_WIDGETS_CREATED_BY" deferrable="false"
+      initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
+      referencedColumnNames="ID" referencedTableName="USERS" validate="true"/>
+    <addForeignKeyConstraint baseColumnNames="LAST_UPD_BY_USER_ID" baseTableName="VIEW_WIDGETS"
+      constraintName="FK_VIEW_WIDGETS_UPDATED_BY" deferrable="false"
+      initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
+      referencedColumnNames="ID" referencedTableName="USERS" validate="true"/>
+    <addForeignKeyConstraint baseColumnNames="VIEW_NAME" baseTableName="VIEW_WIDGETS"
+      constraintName="FK_HDRAA16PLT7QLFTN6I2XGDN2K" deferrable="false"
+      initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
+      referencedColumnNames="NAME" referencedTableName="VIEWS" validate="true"/>
+  </changeSet>
+  <changeSet author="initial" id="BC CONSTRAINTS">
+    <addForeignKeyConstraint baseColumnNames="CREATED_BY_USER_ID" baseTableName="BC"
+      constraintName="FK_BC_CREATED_BY" deferrable="false" initiallyDeferred="false"
+      onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
+      referencedTableName="USERS" validate="true"/>
+    <addForeignKeyConstraint baseColumnNames="LAST_UPD_BY_USER_ID" baseTableName="BC"
+      constraintName="FK_BC_UPDATED_BY" deferrable="false" initiallyDeferred="false"
+      onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
+      referencedTableName="USERS" validate="true"/>
+  </changeSet>
+  <changeSet author="initial" id="BC_FILTER_GROUPS CONSTRAINTS">
+    <addForeignKeyConstraint baseColumnNames="CREATED_BY_USER_ID" baseTableName="BC_FILTER_GROUPS"
+      constraintName="FK_BC_FILTER_GROUPS_CREATED_BY" deferrable="false"
+      initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
+      referencedColumnNames="ID" referencedTableName="USERS" validate="true"/>
+    <addForeignKeyConstraint baseColumnNames="LAST_UPD_BY_USER_ID" baseTableName="BC_FILTER_GROUPS"
+      constraintName="FK_BC_FILTER_GROUPS_UPDATED_BY" deferrable="false"
+      initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
+      referencedColumnNames="ID" referencedTableName="USERS" validate="true"/>
+  </changeSet>
+  <changeSet author="initial" id="CUSTOMIZABLE_RESPONSE_SERVICE CONSTRAINTS">
+    <addForeignKeyConstraint baseColumnNames="CREATED_BY_USER_ID" baseTableName="CUSTOMIZABLE_RESPONSE_SERVICE"
+      constraintName="FK_CRSRVS_CB" deferrable="false" initiallyDeferred="false"
+      onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
+      referencedTableName="USERS" validate="true"/>
+    <addForeignKeyConstraint baseColumnNames="LAST_UPD_BY_USER_ID" baseTableName="CUSTOMIZABLE_RESPONSE_SERVICE"
+      constraintName="FK_CRSRVS_UB" deferrable="false" initiallyDeferred="false"
+      onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
+      referencedTableName="USERS" validate="true"/>
+  </changeSet>
+  <changeSet author="initial" id="BC_PROPERTIES CONSTRAINTS">
+    <addForeignKeyConstraint baseColumnNames="CREATED_BY_USER_ID" baseTableName="BC_PROPERTIES"
+      constraintName="FK_DEFBCPROPS_CREATED_BY" deferrable="false" initiallyDeferred="false"
+      onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
+      referencedTableName="USERS" validate="true"/>
+    <addForeignKeyConstraint baseColumnNames="LAST_UPD_BY_USER_ID" baseTableName="BC_PROPERTIES"
+      constraintName="FK_DEFBCPROPS_UPDATED_BY" deferrable="false" initiallyDeferred="false"
+      onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
+      referencedTableName="USERS" validate="true"/>
+  </changeSet>
+  <changeSet author="initial" id="DEPT CONSTRAINTS">
+    <addForeignKeyConstraint baseColumnNames="CREATED_BY_USER_ID" baseTableName="DEPT"
+      constraintName="FK_DEPT_CREATED_BY" deferrable="false" initiallyDeferred="false"
+      onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
+      referencedTableName="USERS" validate="true"/>
+    <addForeignKeyConstraint baseColumnNames="LAST_UPD_BY_USER_ID" baseTableName="DEPT"
+      constraintName="FK_DEPT_UPDATED_BY" deferrable="false" initiallyDeferred="false"
+      onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
+      referencedTableName="USERS" validate="true"/>
+  </changeSet>
+  <changeSet author="initial" id="DICTIONARY_TYPE CONSTRAINTS">
+    <addForeignKeyConstraint baseColumnNames="CREATED_BY_USER_ID" baseTableName="DICTIONARY_TYPE"
+      constraintName="FK_DICTIONARY_TYPE_CREATED_BY" deferrable="false"
+      initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
+      referencedColumnNames="ID" referencedTableName="USERS" validate="true"/>
+    <addForeignKeyConstraint baseColumnNames="LAST_UPD_BY_USER_ID" baseTableName="DICTIONARY_TYPE"
+      constraintName="FK_DICTIONARY_TYPE_UPDATED_BY" deferrable="false"
+      initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
+      referencedColumnNames="ID" referencedTableName="USERS" validate="true"/>
+  </changeSet>
+  <changeSet author="initial" id="DIVISION CONSTRAINTS">
+    <addForeignKeyConstraint baseColumnNames="CREATED_BY_USER_ID" baseTableName="DIVISION"
+      constraintName="FK_DIVISION_CB" deferrable="false" initiallyDeferred="false"
+      onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
+      referencedTableName="USERS" validate="true"/>
+    <addForeignKeyConstraint baseColumnNames="LAST_UPD_BY_USER_ID" baseTableName="DIVISION"
+      constraintName="FK_DIVISION_UB" deferrable="false" initiallyDeferred="false"
+      onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
+      referencedTableName="USERS" validate="true"/>
+  </changeSet>
+  <changeSet author="initial" id="DICTIONARY_LNK_RULE_COND CONSTRAINTS">
+    <addForeignKeyConstraint baseColumnNames="CREATED_BY_USER_ID" baseTableName="DICTIONARY_LNK_RULE_COND"
+      constraintName="FK_DLNKRULECOND_CB" deferrable="false" initiallyDeferred="false"
+      onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
+      referencedTableName="USERS" validate="true"/>
+    <addForeignKeyConstraint baseColumnNames="RULE_ID" baseTableName="DICTIONARY_LNK_RULE_COND"
+      constraintName="FK_DLNKRULECOND_RULE" deferrable="false" initiallyDeferred="false"
+      onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
+      referencedTableName="DICTIONARY_LNK_RULE" validate="true"/>
+    <addForeignKeyConstraint baseColumnNames="LAST_UPD_BY_USER_ID" baseTableName="DICTIONARY_LNK_RULE_COND"
+      constraintName="FK_DLNKRULECOND_UB" deferrable="false" initiallyDeferred="false"
+      onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
+      referencedTableName="USERS" validate="true"/>
+  </changeSet>
+  <changeSet author="initial" id="DICTIONARY_LNK_RULE_VALUE CONSTRAINTS">
+    <addForeignKeyConstraint baseColumnNames="CREATED_BY_USER_ID" baseTableName="DICTIONARY_LNK_RULE_VALUE"
+      constraintName="FK_DLNKRULEVAL_CB" deferrable="false" initiallyDeferred="false"
+      onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
+      referencedTableName="USERS" validate="true"/>
+    <addForeignKeyConstraint baseColumnNames="RULE_ID" baseTableName="DICTIONARY_LNK_RULE_VALUE"
+      constraintName="FK_DLNKRULEVAL_RULE" deferrable="false" initiallyDeferred="false"
+      onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
+      referencedTableName="DICTIONARY_LNK_RULE" validate="true"/>
+    <addForeignKeyConstraint baseColumnNames="LAST_UPD_BY_USER_ID" baseTableName="DICTIONARY_LNK_RULE_VALUE"
+      constraintName="FK_DLNKRULEVAL_UB" deferrable="false" initiallyDeferred="false"
+      onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
+      referencedTableName="USERS" validate="true"/>
+  </changeSet>
+  <changeSet author="initial" id="DICTIONARY_LNK_RULE CONSTRAINTS">
+    <addForeignKeyConstraint baseColumnNames="CREATED_BY_USER_ID" baseTableName="DICTIONARY_LNK_RULE"
+      constraintName="FK_DLNKRULE_CB" deferrable="false" initiallyDeferred="false"
+      onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
+      referencedTableName="USERS" validate="true"/>
+    <addForeignKeyConstraint baseColumnNames="SERVICE_ID" baseTableName="DICTIONARY_LNK_RULE"
+      constraintName="FK_DLNKRULE_SRVS" deferrable="false" initiallyDeferred="false"
+      onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
+      referencedTableName="CUSTOMIZABLE_RESPONSE_SERVICE" validate="true"/>
+    <addForeignKeyConstraint baseColumnNames="LAST_UPD_BY_USER_ID" baseTableName="DICTIONARY_LNK_RULE"
+      constraintName="FK_DLNKRULE_UB" deferrable="false" initiallyDeferred="false"
+      onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
+      referencedTableName="USERS" validate="true"/>
+  </changeSet>
+
+
+  <changeSet author="initial" id="RESPONSIBILITIES CONSTRAINTS">
+    <addForeignKeyConstraint baseColumnNames="CREATED_BY_USER_ID" baseTableName="RESPONSIBILITIES"
+      constraintName="FK_RESPONSIBILITIES_CREATED_BY" deferrable="false"
+      initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
+      referencedColumnNames="ID" referencedTableName="USERS" validate="true"/>
+    <addForeignKeyConstraint baseColumnNames="LAST_UPD_BY_USER_ID" baseTableName="RESPONSIBILITIES"
+      constraintName="FK_RESPONSIBILITIES_UPDATED_BY" deferrable="false"
+      initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
+      referencedColumnNames="ID" referencedTableName="USERS" validate="true"/>
+  </changeSet>
+
+  <changeSet author="initial" id="SCREEN CONSTRAINTS">
+    <addForeignKeyConstraint baseColumnNames="CREATED_BY_USER_ID" baseTableName="SCREEN"
+      constraintName="FK_SCREEN_CREATED_BY" deferrable="false" initiallyDeferred="false"
+      onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
+      referencedTableName="USERS" validate="true"/>
+    <addForeignKeyConstraint baseColumnNames="LAST_UPD_BY_USER_ID" baseTableName="SCREEN"
+      constraintName="FK__SCREEN_UPDATED_BY" deferrable="false" initiallyDeferred="false"
+      onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
+      referencedTableName="USERS" validate="true"/>
+  </changeSet>
+
+  <changeSet author="initial" id="USERS CONSTRAINTS">
+    <addForeignKeyConstraint baseColumnNames="CREATED_BY_USER_ID" baseTableName="USERS"
+      constraintName="FK_USER_CREATED_BY" deferrable="false" initiallyDeferred="false"
+      onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
+      referencedTableName="USERS" validate="true"/>
+    <addForeignKeyConstraint baseColumnNames="LAST_UPD_BY_USER_ID" baseTableName="USERS"
+      constraintName="FK__USER_UPDATED_BY" deferrable="false" initiallyDeferred="false"
+      onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
+      referencedTableName="USERS" validate="true"/>
+  </changeSet>
+  <changeSet author="initial" id="USER_ROLE CONSTRAINTS">
+    <addForeignKeyConstraint baseColumnNames="CREATED_BY_USER_ID" baseTableName="USER_ROLE"
+      constraintName="FK_USER_ROLE_CREATED_BY" deferrable="false" initiallyDeferred="false"
+      onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
+      referencedTableName="USERS" validate="true"/>
+    <addForeignKeyConstraint baseColumnNames="DIVISION_ID" baseTableName="USER_ROLE"
+      constraintName="FK_USER_ROLE_DIVISION" deferrable="false" initiallyDeferred="false"
+      onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
+      referencedTableName="DIVISION" validate="true"/>
+    <addForeignKeyConstraint baseColumnNames="LAST_UPD_BY_USER_ID" baseTableName="USER_ROLE"
+      constraintName="FK_USER_ROLE_UPDATED_BY" deferrable="false" initiallyDeferred="false"
+      onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
+      referencedTableName="USERS" validate="true"/>
+    <addForeignKeyConstraint baseColumnNames="USER_ID" baseTableName="USER_ROLE" constraintName="FK_USER_USER_ROLE"
+      deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
+      referencedColumnNames="ID" referencedTableName="USERS" validate="true"/>
+  </changeSet>
+  <changeSet author="initial" id="VIEWS CONSTRAINTS">
+    <addForeignKeyConstraint baseColumnNames="CREATED_BY_USER_ID" baseTableName="VIEWS"
+      constraintName="FK_VIEW_CREATED_BY" deferrable="false" initiallyDeferred="false"
+      onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
+      referencedTableName="USERS" validate="true"/>
+    <addForeignKeyConstraint baseColumnNames="LAST_UPD_BY_USER_ID" baseTableName="VIEWS"
+      constraintName="FK_VIEW_UPDATED_BY" deferrable="false" initiallyDeferred="false"
+      onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
+      referencedTableName="USERS" validate="true"/>
+  </changeSet>
+  <changeSet author="initial" id="NAVIGATION_VIEW CONSTRAINTS">
+    <addForeignKeyConstraint baseColumnNames="PARENT_GROUP_ID" baseTableName="NAVIGATION_VIEW"
+      constraintName="FK_VIEW_GROUP_DATA_VIEW_GROUP" deferrable="false"
+      initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
+      referencedColumnNames="ID" referencedTableName="NAVIGATION_GROUP" validate="true"/>
+    <addForeignKeyConstraint baseColumnNames="VIEW_NAME" baseTableName="NAVIGATION_VIEW"
+      constraintName="FK_VIEW_GROUP_DATA_VIEW_NAME" deferrable="false"
+      initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
+      referencedColumnNames="NAME" referencedTableName="VIEWS" validate="true"/>
+  </changeSet>
+  <changeSet author="initial" id="NAVIGATION_GROUP CONSTRAINTS">
+    <addForeignKeyConstraint baseColumnNames="SCREEN_NAME" baseTableName="NAVIGATION_GROUP"
+      constraintName="FK_VIEW_GROUP_SCREEN_NAME" deferrable="false" initiallyDeferred="false"
+      onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="NAME"
+      referencedTableName="SCREEN" validate="true"/>
+    <addForeignKeyConstraint baseColumnNames="PARENT_ID" baseTableName="NAVIGATION_GROUP"
+      constraintName="FK_VIEW_GROUP_VIEW_GROUP" deferrable="false" initiallyDeferred="false"
+      onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
+      referencedTableName="NAVIGATION_GROUP" validate="true"/>
+  </changeSet>
+
+  <changeSet author="initial" id="WIDGET CONSTRAINTS">
+    <addForeignKeyConstraint baseColumnNames="CREATED_BY_USER_ID" baseTableName="WIDGET"
+      constraintName="FK_WIDGET_CREATED_BY" deferrable="false" initiallyDeferred="false"
+      onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
+      referencedTableName="USERS" validate="true"/>
+    <addForeignKeyConstraint baseColumnNames="LAST_UPD_BY_USER_ID" baseTableName="WIDGET"
+      constraintName="FK_WIDGET_UPDATED_BY" deferrable="false" initiallyDeferred="false"
+      onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
+      referencedTableName="USERS" validate="true"/>
+  </changeSet>
+  <changeSet author="initial" id="REVINFO CONSTRAINTS">
+    <addForeignKeyConstraint baseColumnNames="USER_ID" baseTableName="REVINFO" constraintName="REVINFO_USERS_FK"
+      deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
+      referencedColumnNames="ID" referencedTableName="USERS" validate="true"/>
+  </changeSet>
+  <changeSet author="initial" id="SEARCH_SPEC CONSTRAINTS">
+    <addForeignKeyConstraint baseColumnNames="CREATED_BY_USER_ID" baseTableName="SEARCH_SPEC"
+      constraintName="SEARCH_SPEC_CREATED_USER_FK" deferrable="false"
+      initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
+      referencedColumnNames="ID" referencedTableName="USERS" validate="true"/>
+    <addForeignKeyConstraint baseColumnNames="LAST_UPD_BY_USER_ID" baseTableName="SEARCH_SPEC"
+      constraintName="SEARCH_SPEC_UPDATED_USER_FK" deferrable="false"
+      initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
+      referencedColumnNames="ID" referencedTableName="USERS" validate="true"/>
+  </changeSet>
+  <changeSet author="initial" id="USERS_AUD CONSTRAINTS">
+    <addForeignKeyConstraint baseColumnNames="REV" baseTableName="USERS_AUD" constraintName="USERS_AUD_REV_FK"
+      deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
+      referencedColumnNames="ID" referencedTableName="REVINFO" validate="true"/>
+  </changeSet>
+
+  <changeSet author="initial" id="INITIAL DATA">
+    <loadData tableName="USERS" encoding="UTF-8" separator=";" quotchar="&quot;"
+      file="db/data/CXBOX-USERS.csv">
+      <column header="ID" name="ID" type="NUMERIC"/>
+      <column header="FIRST_NAME" name="FIRST_NAME" type="STRING"/>
+      <column header="LAST_NAME" name="LAST_NAME" type="STRING"/>
+      <column header="PATRONYMIC" name="PATRONYMIC" type="STRING"/>
+      <column header="LOGIN" name="LOGIN" type="STRING"/>
+      <column header="PASSWORD" name="PASSWORD" type="STRING"/>
+      <column header="INTERNAL_ROLE_CD" name="INTERNAL_ROLE_CD" type="STRING"/>
+      <column header="USER_PRINCIPAL_NAME" name="USER_PRINCIPAL_NAME" type="STRING"/>
+      <column header="PHONE" name="PHONE" type="STRING"/>
+      <column header="EMAIL" name="EMAIL" type="STRING"/>
+      <column header="FULL_USER_NAME" name="FULL_USER_NAME" type="STRING"/>
+      <column header="TITLE" name="TITLE" type="STRING"/>
+      <column header="DEPT_ID" name="DEPT_ID" type="NUMERIC"/>
+      <column header="ORIG_DEPT_CODE" name="ORIG_DEPT_CODE" type="STRING"/>
+      <column header="TIMEZONE" name="TIMEZONE" type="STRING"/>
+    </loadData>
+    <loadData tableName="DEPT" encoding="UTF-8" separator=";" quotchar="&quot;"
+      file="db/data/CXBOX-DEPT.csv">
+      <column name="ID" header="ID" type="NUMERIC"/>
+      <column name="CODE" header="CODE" type="STRING"/>
+      <column name="SHORT_NAME" header="SHORT_NAME" type="STRING"/>
+      <column name="FULL_NAME" header="FULL_NAME" type="STRING"/>
+    </loadData>
+  </changeSet>
+
+  <changeSet author="initial" id="USERS CONSTRAINTS(2)">
+    <addForeignKeyConstraint baseColumnNames="DEPT_ID" baseTableName="USERS" constraintName="USERS_FK_1"
+      deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
+      referencedColumnNames="ID" referencedTableName="DEPT" validate="true"/>
+  </changeSet>
+
+  <changeSet author="initial" id="INITIAL DATA(2)">
+    <loadData tableName="USER_ROLE" encoding="UTF-8" separator=";" quotchar="&quot;"
+      file="db/data/CXBOX-USER_ROLE.csv">
+      <column header="ID" name="ID" type="NUMERIC"/>
+      <column header="USER_ID" name="USER_ID" type="NUMERIC"/>
+      <column header="INTERNAL_ROLE_CD" name="INTERNAL_ROLE_CD" type="STRING"/>
+      <column header="ACTIVE" name="ACTIVE" type="NUMERIC"/>
+      <column header="MAIN" name="MAIN" type="NUMERIC"/>
+    </loadData>
+  </changeSet>
+
+  <changeSet id="SYSTEM SETTINGS" author="initial" runOnChange="true">
+    <loadUpdateData tableName="SYSTEM_SETTINGS" primaryKey="KEY" encoding="UTF-8" separator=";" quotchar="&quot;"
+      file="db/data/CXBOX-SYSTEM_SETTINGS.csv">
+      <column header="ID" name="ID" type="SEQUENCE"/>
+      <column header="KEY" name="KEY" type="STRING"/>
+      <column header="VALUE" name="VALUE" type="STRING"/>
+    </loadUpdateData>
+  </changeSet>
+
+  <changeSet author="initial" id="DICTIONARIES" runOnChange="true">
+    <delete tableName="DICTIONARY_ITEM_TR"/>
+
+    <loadUpdateData tableName="DICTIONARY_TYPE" primaryKey="ID" encoding="UTF-8" separator=";" quotchar="&quot;"
+      file="db/data/CXBOX-DICTIONARY_TYPE.csv">
+      <column header="ID" name="ID" type="NUMERIC"/>
+      <column header="TYPE" name="TYPE" type="STRING"/>
+      <column header="TYPE_DESC" name="TYPE_DESC" type="STRING"/>
+    </loadUpdateData>
+
+    <loadUpdateData tableName="DICTIONARY_ITEM" primaryKey="TYPE,KEY" encoding="UTF-8" separator=";"
+      quotchar="&quot;" file="db/data/CXBOX-DICTIONARY_ITEM.csv">
+      <column header="ID" name="ID" type="NUMERIC"/>
+      <column header="DICTIONARY_TYPE_ID" name="DICTIONARY_TYPE_ID" type="NUMERIC"/>
+      <column header="TYPE" name="TYPE" type="STRING"/>
+      <column header="KEY" name="KEY" type="STRING"/>
+      <column header="VALUE" name="VALUE" type="STRING"/>
+      <column header="ACTIVE" name="ACTIVE" type="NUMERIC"/>
+      <column header="DISPLAY_ORDER" name="DISPLAY_ORDER" type="NUMERIC"/>
+      <column header="DESCRIPTION" name="DESCRIPTION" type="STRING"/>
+    </loadUpdateData>
+
+    <sql>
+      insert into DICTIONARY_ITEM_TR (ID, LANGUAGE, VALUE)
+      select ID, 'ru' as LANGUAGE, VALUE as VALUE
+      from DICTIONARY_ITEM;
+    </sql>
+  </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,57 @@
+@value colors "../../assets/styles/theme.module.css";
+@value accent, accent20 from colors;
+
+
+.MenuItemLink {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    width: 224px;
+}
+
+.MenuItemLink :global(.anticon) {
+    font-size: 1.3em;
+}
+
+.Container {
+    border-right: 0;
+}
+
+.menuContainer :global(.ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected) {
+    background-color: accent20;
+}
+
+.Container :global(.ant-menu-item:active) {
+    border-radius: 8px;
+    color: accent;
+    background-color: accent20;
+}
+
+.Container :global(.ant-menu-item-selected) {
+    border-radius: 8px;
+    color: accent;
+}
+.Container :global(.ant-menu-item:hover) {
+    color: accent;
+}
+
+.Item {
+    display: flex;
+    align-items: center;
+}
+
+.Item:global(.ant-menu-item) {
+    height: 48px;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+
+
+.Container:global(.ant-menu-vertical) {
+    border-right: 0;
+}
+
+.sideMenuCollapsed {
+    display: none;
+}

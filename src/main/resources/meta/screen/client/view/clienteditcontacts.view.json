@@ -1,0 +1,36 @@
+{
+  "name": "clienteditcontacts",
+  "title": "Client Edit",
+  "template": "DashboardView",
+  "url": "/screen/client/view/clienteditcontacts",
+  "widgets": [
+    {
+      "widgetName": "SecondLevelMenu",
+      "position": 0,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "clientEditStep",
+      "position": 0,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "contactEditList",
+      "position": 3,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "clientEditButtons",
+      "position": 5,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "contactEditAssoc",
+      "position": 6,
+      "gridWidth": 24
+    }
+  ],
+  "rolesAllowed": [
+   "CXBOX_USER"
+  ]
+}

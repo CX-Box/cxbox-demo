@@ -1,0 +1,26 @@
+{
+  "name": "contactEditAssoc",
+  "title": "Contacts",
+  "type": "AssocListPopup",
+  "bc": "contactEditAssoc",
+  "showCondition": [],
+  "fields": [
+    {
+      "title": "Contact Full Name",
+      "key": "fullName",
+      "type": "input"
+    },
+    {
+      "title": "Phone Number",
+      "key": "phoneNumber",
+      "type": "input"
+    },
+    {
+      "title": "Email",
+      "key": "email",
+      "type": "input"
+    }
+  ],
+  "axisFields": [],
+  "chart": []
+}

@@ -1,0 +1,10 @@
+
+.fieldArea {
+    display: flex;
+    min-height: 3.5em;
+    align-items: center;
+}
+
+.columnDirection {
+    flex-direction: column;
+}

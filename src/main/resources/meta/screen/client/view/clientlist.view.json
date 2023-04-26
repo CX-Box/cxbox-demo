@@ -1,0 +1,21 @@
+{
+  "name": "clientlist",
+  "title": "Client List",
+  "template": "DashboardView",
+  "url": "/screen/client/view/clientlist",
+  "widgets": [
+    {
+      "widgetName": "clientListHeader",
+      "position": 1,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "clientList",
+      "position": 2,
+      "gridWidth": 24
+    }
+  ],
+  "rolesAllowed": [
+   "CXBOX_USER"
+  ]
+}

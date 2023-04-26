@@ -1,0 +1,21 @@
+@value colors "../../../../assets/styles/theme.module.css";
+@value accent from colors;
+
+.button {
+    color: accent;
+    height: 20px;
+}
+
+.overlayContainer {
+    min-width: 200px;
+}
+
+.overlayContainer :global(.ant-menu-vertical) {
+    border-right: none;
+    border-radius: 8px;
+    box-shadow: 0px 8px 24px rgba(187, 201, 217, 0.2);
+}
+
+.overlayContainer :global(.ant-menu-item:hover) {
+    color: accent;
+}

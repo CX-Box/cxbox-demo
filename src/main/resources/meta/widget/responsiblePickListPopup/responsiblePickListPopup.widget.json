@@ -1,0 +1,16 @@
+{
+  "name": "responsiblePickListPopup",
+  "title": "List of names",
+  "type": "PickListPopup",
+  "bc": "responsiblePickListPopup",
+  "showCondition": [],
+  "fields": [
+     {
+       "title": "Name",
+       "key": "name",
+       "type": "input"
+     }
+  ],
+  "axisFields": [],
+  "chart": []
+}

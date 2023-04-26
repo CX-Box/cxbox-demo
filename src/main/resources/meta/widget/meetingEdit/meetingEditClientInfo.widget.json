@@ -1,0 +1,54 @@
+{
+  "name": "meetingEditClientInfo",
+  "title": "Client Information",
+  "type": "Form",
+  "bc": "meetingEdit",
+  "fields": [
+    {
+      "label": "Client Name",
+      "key": "clientName",
+      "type": "pickList",
+      "popupBcName": "clientPickListPopup",
+      "pickMap": {
+        "clientName": "fullName",
+        "clientId": "id"
+      }
+    },
+    {
+      "label": "Contact",
+      "key": "contactName",
+      "type": "pickList",
+      "popupBcName": "contactPickListPopup",
+      "pickMap": {
+        "contactName": "fullName",
+        "contactId": "id"
+      }
+    }
+  ],
+  "options": {
+    "actionGroups": {
+      "include": [
+      ]
+    },
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "clientName",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "contactName",
+              "span": 12
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

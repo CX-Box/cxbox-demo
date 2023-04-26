@@ -1,0 +1,21 @@
+{
+  "name": "sale",
+  "icon": "stock",
+  "order": 2,
+  "title": "Sale",
+  "navigation": {
+    "menu": [
+      {
+        "title": "Sales",
+        "child": [
+          {
+            "viewName": "salelist"
+          },
+          {
+            "viewName": "saleedit"
+          }
+        ]
+      }
+    ]
+  }
+}

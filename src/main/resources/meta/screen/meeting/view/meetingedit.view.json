@@ -1,0 +1,51 @@
+{
+  "name": "meetingedit",
+  "title": "Meeting Edit",
+  "template": "DashboardView",
+  "url": "/screen/meeting/view/meetingedit",
+  "widgets": [
+    {
+      "widgetName": "SecondLevelMenu",
+      "position": 0,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "meetingEditHeader",
+      "position": 1,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "meetingEdit",
+      "position": 2,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "meetingEditClientInfo",
+      "position": 4,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "meetingEditResult",
+      "position": 5,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "responsiblePickListPopup",
+      "position": 1,
+      "gridWidth": 24
+    },
+     {
+       "widgetName": "clientPickListPopup",
+       "position": 1,
+       "gridWidth": 24
+     },
+     {
+       "widgetName": "contactPickListPopup",
+       "position": 1,
+       "gridWidth": 24
+     }
+  ],
+  "rolesAllowed": [
+   "CXBOX_USER"
+  ]
+}

@@ -1,0 +1,16 @@
+.span {
+  margin-left: 8px;
+}
+
+.dropDownMenu:global(.ant-select-dropdown--multiple ) {
+  max-width: 255px;
+}
+
+.dropDownMenu :global(.ant-select-dropdown-menu-item-selected ):not(:hover ) {
+  background-color: white;
+}
+
+.dropDownMenu:global(.ant-select-dropdown.ant-select-dropdown--multiple .ant-select-dropdown-menu-item-selected .ant-select-selected-icon ),
+.dropDownMenu:global(.ant-select-dropdown.ant-select-dropdown--multiple .ant-select-dropdown-menu-item:hover .ant-select-selected-icon ) {
+    display: none;
+}

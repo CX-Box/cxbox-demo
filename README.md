@@ -1,7 +1,6 @@
-# Cxbox Simple Project
-[Live Demo](http://demo.cxbox.org)
-login: `demo`, password: `demo`
+<h2 align="center">CXBOX Demo Project</h2>
 
+<p align="center">
 <h4 align="center">CXBOX - Rapid Enterprise Level Application Development Platform</h4>
 
 <p align="center">
@@ -26,16 +25,16 @@ login: `demo`, password: `demo`
 </div>
 
 ## Description
-CXBOX main purpose is to speed up development of typical Enterprise Level Application based on Spring Boot. A fixed contract with a user interface called [Cxbox-UI](https://github.com/CX-Box/cxbox-ui) allows backend developer to create typical interfaces providing just Json meta files. Full set of typical Enterprise Level UI components included - widgets, fields, layouts (views), navigation (screens).
 
-## Using CXBOX
-To get started,
-- [download Intellij Plugin](https://plugins.jetbrains.com/plugin/19523-tesler-helper). [Intellij Plugin](https://plugins.jetbrains.com/plugin/19523-tesler-helper) adds platform specific autocomplete, inspection, navigation and code generation features.
+CXBOX main purpose is to speed up development of typical Enterprise Level Application based on Spring Boot. A fixed
+contract with a user interface called [Cxbox-UI](https://github.com/CX-Box/cxbox-ui) allows backend developer to create
+typical interfaces providing just Json meta files. Full set of typical Enterprise Level UI components included -
+widgets, fields, layouts (views), navigation (screens).
 
-- [download Demo](https://github.com/CX-Box/cxbox-demo) and follow [README.md](https://github.com/CX-Box/cxbox-demo#readme) instructions. Feel free to use demo as template project to start your own projects
+## Prerequisites:
 
-### Prerequisites:
 #####
+
 * java 8+
 * maven 3.6+
 * node.js 14.4+
@@ -44,16 +43,30 @@ To get started,
 * docker
 * docker-compose
 
-## Getting started with docker
-* install dependencies and build front-end
+## Getting started
+
+* [download Demo](https://github.com/CX-Box/cxbox-demo) source code
+
+
+* install dependencies and build back-end and front-end
+
 ```
 mvn clean install -PUI
 ```
+
 * start environment
+
 ```
 docker-compose up -d
 ```
+
 * run application
+
 ```
 press green button in Application.java
 ```
+## Usage
+* Feel free to use this demo project as template to start your own projects!
+
+## License
+CXBox Demo is an open-source project with the [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) license

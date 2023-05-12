@@ -1,8 +1,8 @@
 
-<h2 align="center">CXBOX Demo Project</h2>
+<h2 align="center">CXBOX Demo</h2>
 
 <blockquote>
-<div style="padding: 10px"> 
+<div> 
 <p align="center">
 <h4 align="center">CXBOX - Rapid Enterprise Level Application Development Platform</h4>
 

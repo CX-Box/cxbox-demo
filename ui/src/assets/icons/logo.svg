@@ -1,17 +1,34 @@
-<svg viewBox="0 0 240 38" xmlns="http://www.w3.org/2000/svg">
-  <style>
-
-    .heavy {
-    font: bold 30px Stencil;
-    fill: rgb(63, 123, 239);
-    }
-
-    .heavyR {
-    font: bold 30px Stencil;
-    fill: rgb(236, 63, 63);
-    }
-  </style>
-
-  <text x="20" y="35" class="heavy">CX</text>
-  <text x="60" y="35" class="heavyR">BOX</text>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 27.3.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="svg_null" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+  viewBox="0 0 457.2 109.2" style="enable-background:new 0 0 457.2 109.2;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#B91B5F;}
+	.st1{fill-rule:evenodd;clip-rule:evenodd;fill:#833F91;}
+	.st2{fill-rule:evenodd;clip-rule:evenodd;fill:#B91B5F;fill-opacity:0.7;}
+	.st3{fill-rule:evenodd;clip-rule:evenodd;fill:#833F91;fill-opacity:0.7;}
+	.st4{opacity:0.74;}
+	.st5{fill:#833F91;}
+	.st6{font-family:'Stencil';}
+	.st7{font-size:62.2802px;}
+	.st8{letter-spacing:0.8;}
+</style>
+  <polygon id="shape.accent" class="st0" points="15.9,30.7 15.6,48.5 60.4,17.7 60.6,0 "/>
+  <polygon id="shape.accent_00000058578984455717482740000015101694037092719795_" class="st0" points="15.9,60.7 15.6,78.5
+	60.4,47.7 60.6,30 "/>
+  <polygon id="shape.accent_00000139262130389259181420000006150764052966818951_" class="st1" points="60.9,91.5 60.7,109.2
+	105.4,78.5 105.6,60.7 "/>
+  <polygon id="shape.accent_00000073695251714854917550000004159081223196434616_" class="st1" points="60.9,61.5 60.7,79.2
+	105.4,48.5 105.6,30.7 "/>
+  <polygon id="shape.accent_00000138535245964607515310000008821431943310832052_" class="st2" points="15.6,48.5 60.7,79.2
+	60.9,61.5 15.9,30.7 "/>
+  <polygon id="shape.accent_00000023250367431736682870000011202246663436641207_" class="st3" points="60.4,17.7 105.4,48.5
+	105.6,30.7 60.6,0 "/>
+  <polygon id="shape.accent_00000039835503199161906630000017184438060199979933_" class="st3" points="60.4,47.7 105.4,78.5
+	105.6,60.7 60.6,30 "/>
+  <polygon id="shape.accent_00000005944962738607481630000018012638429138346163_" class="st2" points="15.6,78.5 60.7,109.2
+	60.9,91.5 15.9,60.7 "/>
+  <g class="st4">
+	<text transform="matrix(1.1886 0 0 1 115.0958 77.1963)" class="st5 st6 st7 st8">CXBox</text>
+</g>
 </svg>

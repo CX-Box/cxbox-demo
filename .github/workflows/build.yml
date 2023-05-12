@@ -16,7 +16,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '12.x'
-          cache: 'yarn'
+          cache: 'npm'
       - name: Build with Maven
         run: mvn clean install -PUI
         env:
@@ -34,7 +34,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '12.x'
-          cache: 'yarn'
+          cache: 'npm'
       - name: Build with Maven
         run: mvn clean install -PUI
         env:

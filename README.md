@@ -24,18 +24,28 @@
       Documentation
     </a>
   </h3>
+
 </div>
 
 
 
-<h2>Description</h2>
+<h3>Description</h2>
 <p>
 CXBOX main purpose is to speed up development of typical Enterprise Level Application based on Spring Boot. A fixed
-contract with a user interface called [Cxbox-UI](https://github.com/CX-Box/cxbox-ui) allows backend developer to create
+contract with a user interface called <a href="https://github.com/CX-Box/cxbox-ui" target="_blank">Cxbox-UI</a> allows backend developer to create
 typical interfaces providing just Json meta files. Full set of typical Enterprise Level UI components included -
 widgets, fields, layouts (views), navigation (screens).
 </p>
 </div>
+
+<h3>Using CXBOX</h2>
+<ul>
+<li> <a href="https://plugins.jetbrains.com/plugin/19523-tesler-helper" target="_blank">download Intellij Plugin</a> adds platform specific autocomplete, inspection, navigation and code generation features.
+</li>
+<li>
+ <a href="https://github.com/CX-Box/cxbox-demo" target="_blank">download Demo</a> and follow <a href="https://github.com/CX-Box/cxbox-demo#readme" target="_blank">README.md</a> instructions. Feel free to use demo as template project to start your own projects
+</li>
+</ul>
 </blockquote>
 
 # CXBOX Demo

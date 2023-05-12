@@ -13,9 +13,10 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
       - name: Setup Node
-        uses: actions/setup-node@v2-beta
+        uses: actions/setup-node@v3
         with:
           node-version: '12.x'
+          cache: 'yarn'
       - name: Build with Maven
         run: mvn clean install -PUI
         env:
@@ -30,9 +31,10 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
       - name: Setup Node
-        uses: actions/setup-node@v2-beta
+        uses: actions/setup-node@v3
         with:
           node-version: '12.x'
+          cache: 'yarn'
       - name: Build with Maven
         run: mvn clean install -PUI
         env:

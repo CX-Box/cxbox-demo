@@ -1,17 +1,31 @@
-name: deploy
+name: Build project
 
-on:
-  push:
-    branches: [ main ]
+on: [push, workflow_dispatch]
 
 jobs:
-  build:
+  build11:
     runs-on: ubuntu-latest
     steps:
-      - name: trigger jenkins job
-        uses: appleboy/jenkins-action@master
+      - uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
         with:
-          url: http://manage.cxbox.org:8080
-          user: admin
-          token: ${{ secrets.JENKINS_TOKEN }}
-          job: demo
+          java-version: '11'
+          distribution: 'adopt'
+      - name: Build with Maven
+        run: mvn clean install -PUI
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  build8:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+      - name: Build with Maven
+        run: mvn clean install -PUI
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

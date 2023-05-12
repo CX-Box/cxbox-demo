@@ -1,5 +1,5 @@
 <h2 align="center">CXBOX Demo Project</h2>
-
+<div style="background-color: #f2f2f2; order-left: 6px solid #f44336; padding: 10px"> 
 <p align="center">
 <h4 align="center">CXBOX - Rapid Enterprise Level Application Development Platform</h4>
 
@@ -24,12 +24,16 @@
   </h3>
 </div>
 
-## Description
 
+
+<h2>Description</h2>
+<p>
 CXBOX main purpose is to speed up development of typical Enterprise Level Application based on Spring Boot. A fixed
 contract with a user interface called [Cxbox-UI](https://github.com/CX-Box/cxbox-ui) allows backend developer to create
 typical interfaces providing just Json meta files. Full set of typical Enterprise Level UI components included -
 widgets, fields, layouts (views), navigation (screens).
+</p>
+</div>
 
 # CXBOX Demo
 ## Prerequisites:
@@ -66,8 +70,11 @@ docker-compose up -d
 ```
 press green button in Application.java
 ```
+
 ## Usage
+
 * Feel free to use this demo project as template to start your own projects!
 
 ## License
+
 CXBox Demo is an open-source project with the [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) license

@@ -26,7 +26,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Exit early if java 8
-        run: '[ "${{ matrix.java }}" = "8" ] && exit 0 || echo "continue"'
+        run: '[ "${{ matrix.java }}" = "8" ] && exit 0 || echo "Skip deploy for java 8. Deploy will be processed for java 11"'
       - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
@@ -41,3 +41,18 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/cxbox-demo:latest
+      - name: Deploy to Docker Host
+        uses: wshihadeh/docker-deployment-action@v1
+        with:
+          remote_docker_host: user@myswarm.com
+          ssh_private_key: ${{ secrets.CXBOX_DEMO_SSH_PRIVATE_KEY }}
+          ssh_public_key: ${{ secrets.CXBOX_DEMO_SSH_PUBLIC_KEY }}
+          pre_deployment_command_args: 'docker-compose -f $INPUT_STACK_FILE_NAME rm -svfa'
+          docker_prune: 'true'
+          deployment_mode: docker-compose
+          copy_stack_file: true
+          pull_images_first: 'true'
+          deploy_path: /home/user/
+          stack_file_name: docker-compose.yaml
+          keep_files: 5
+          args: up -d

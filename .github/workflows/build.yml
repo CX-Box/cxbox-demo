@@ -25,8 +25,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Exit early if java 8
         run: '[ "${{ matrix.java }}" = "8" ] && exit 1 || echo "continue"'
-      - name: docker build & push
-        run: docker build
       - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:

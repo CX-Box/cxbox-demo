@@ -31,6 +31,7 @@ contract with a user interface called [Cxbox-UI](https://github.com/CX-Box/cxbox
 typical interfaces providing just Json meta files. Full set of typical Enterprise Level UI components included -
 widgets, fields, layouts (views), navigation (screens).
 
+# CXBOX Demo
 ## Prerequisites:
 
 #####

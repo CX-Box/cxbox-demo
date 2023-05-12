@@ -22,7 +22,7 @@ jobs:
           node-version: '14.15.x'
           cache: "npm"
       - name: Build with Maven
-        run: mvn clean install -PUI
+        run: mvn clean install -PUI -U
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Exit early if java 8

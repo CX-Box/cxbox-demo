@@ -15,12 +15,10 @@ jobs:
         with:
           java-version: ${{ matrix.java }}
           distribution: 'adopt'
-          cache: 'maven'
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: '14.15.x'
-          cache: 'npm'
       - name: Build with Maven
         run: mvn clean install -PUI
         env:

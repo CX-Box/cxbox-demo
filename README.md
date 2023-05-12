@@ -1,12 +1,14 @@
+
 <h2 align="center">CXBOX Demo Project</h2>
-<div style="background-color: #f2f2f2; order-left: 6px solid #f44336; padding: 10px"> 
+
+<blockquote>
+<div style="padding: 10px"> 
 <p align="center">
 <h4 align="center">CXBOX - Rapid Enterprise Level Application Development Platform</h4>
 
 <p align="center">
 <a href="http://www.apache.org/licenses/LICENSE-2.0"><img src="https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat" alt="license" title=""></a>
 </p>
-
 
 <div align="center">
   <h3>
@@ -34,6 +36,7 @@ typical interfaces providing just Json meta files. Full set of typical Enterpris
 widgets, fields, layouts (views), navigation (screens).
 </p>
 </div>
+</blockquote>
 
 # CXBOX Demo
 ## Prerequisites:

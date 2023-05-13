@@ -1,5 +1,10 @@
-
 <h2 align="center">CXBOX Demo</h2>
+<div align="center">
+<a href="https://github.com/CX-Box/cxbox-demo/actions/workflows/build_main.yml"><img src="https://github.com/CX-Box/cxbox-demo/actions/workflows/build_main.yml/badge.svg" title="">
+</a>
+<a href="https://sonarcloud.io/summary/overall?id=CX-Box_cxbox-demo"><img src="https://sonarcloud.io/api/project_badges/measure?project=CX-Box_cxbox-demo&metric=alert_status&branch=main" alt="sonar" title="">
+</a>
+</div>
 
 <blockquote>
 <div> 

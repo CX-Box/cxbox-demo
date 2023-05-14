@@ -16,6 +16,7 @@ import org.cxbox.core.dto.rowmeta.CreateResult;
 import java.util.Set;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -23,11 +24,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class DashboardClientActivitiesService extends VersionAwareResponseService<DashboardClientActivitiesDTO, Client> {
 
-	private final DashboardFilterRepository dashboardFilterRepository;
+	@Autowired
+	private DashboardFilterRepository dashboardFilterRepository;
 
-	public DashboardClientActivitiesService(DashboardFilterRepository dashboardFilterRepository) {
+	public DashboardClientActivitiesService() {
 		super(DashboardClientActivitiesDTO.class, Client.class, null, DashboardClientActivitiesMeta.class);
-		this.dashboardFilterRepository = dashboardFilterRepository;
 	}
 
 

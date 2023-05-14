@@ -18,24 +18,24 @@ import org.cxbox.core.dto.rowmeta.PostAction;
 import org.cxbox.core.dto.rowmeta.PreAction;
 import org.cxbox.core.service.action.Actions;
 import org.cxbox.core.util.session.SessionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S3252","java:S1186"})
 @Service
 public class ClientReadService extends VersionAwareResponseService<ClientReadDTO, Client> {
 
-	private final ClientRepository clientRepository;
+	@Autowired
+	private ClientRepository clientRepository;
 
-	private final MeetingRepository meetingRepository;
+	@Autowired
+	private MeetingRepository meetingRepository;
 
-	private final SessionService sessionService;
+	@Autowired
+	private SessionService sessionService;
 
-	public ClientReadService(ClientRepository clientRepository, MeetingRepository meetingRepository,
-			SessionService sessionService) {
+	public ClientReadService() {
 		super(ClientReadDTO.class, Client.class, null, ClientReadMeta.class);
-		this.clientRepository = clientRepository;
-		this.meetingRepository = meetingRepository;
-		this.sessionService = sessionService;
 	}
 
 	@Override

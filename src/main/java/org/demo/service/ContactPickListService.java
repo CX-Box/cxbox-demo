@@ -10,6 +10,7 @@ import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.cxbox.model.core.entity.BaseEntity_;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +18,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class ContactPickListService extends VersionAwareResponseService<ContactDTO, Contact> {
 
-	private final MeetingRepository meetingRepository;
+	@Autowired
+	private MeetingRepository meetingRepository;
 
-	public ContactPickListService(MeetingRepository meetingRepository) {
+	public ContactPickListService() {
 		super(ContactDTO.class, Contact.class, null, ContactPickListMeta.class);
-		this.meetingRepository = meetingRepository;
 	}
 
 	@Override

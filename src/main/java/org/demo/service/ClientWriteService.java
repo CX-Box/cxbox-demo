@@ -17,6 +17,7 @@ import org.cxbox.core.dto.rowmeta.PostAction;
 import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
 import java.util.Arrays;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
@@ -25,11 +26,11 @@ import java.util.stream.Collectors;
 @Service
 public class ClientWriteService extends VersionAwareResponseService<ClientWriteDTO, Client> {
 
-	private final ClientRepository clientRepository;
+	@Autowired
+	private ClientRepository clientRepository;
 
-	public ClientWriteService(ClientRepository clientRepository) {
+	public ClientWriteService() {
 		super(ClientWriteDTO.class, Client.class, null, ClientWriteMeta.class);
-		this.clientRepository = clientRepository;
 	}
 
 	@Override

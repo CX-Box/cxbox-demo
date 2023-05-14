@@ -18,6 +18,7 @@ import org.cxbox.core.util.session.SessionService;
 import org.cxbox.model.core.entity.User;
 import org.cxbox.model.core.entity.User_;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -26,15 +27,14 @@ import org.springframework.stereotype.Service;
 public class
 DashboardFilterService extends VersionAwareResponseService<DashboardFilterDTO, User> {
 
-	private final SessionService sessionService;
+	@Autowired
+	private SessionService sessionService;
 
-	private final DashboardFilterRepository dashboardFilterRepository;
+	@Autowired
+	private DashboardFilterRepository dashboardFilterRepository;
 
-	public DashboardFilterService(SessionService sessionService,
-			DashboardFilterRepository dashboardFilterRepository) {
+	public DashboardFilterService() {
 		super(DashboardFilterDTO.class, User.class, null, DashboardFilterMeta.class);
-		this.sessionService = sessionService;
-		this.dashboardFilterRepository = dashboardFilterRepository;
 	}
 
 	@Override

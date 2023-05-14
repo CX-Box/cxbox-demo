@@ -20,20 +20,21 @@ import org.cxbox.core.service.action.Actions;
 import org.cxbox.core.service.action.ActionsBuilder;
 import org.cxbox.core.util.session.SessionService;
 import java.util.Arrays;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S3252", "java:S1186"})
 @Service
 public class MeetingReadService extends VersionAwareResponseService<MeetingDTO, Meeting> {
 
-	private final MeetingRepository meetingRepository;
+	@Autowired
+	private MeetingRepository meetingRepository;
 
-	private final SessionService sessionService;
+	@Autowired
+	private SessionService sessionService;
 
-	public MeetingReadService(MeetingRepository meetingRepository, SessionService sessionService) {
+	public MeetingReadService() {
 		super(MeetingDTO.class, Meeting.class, null, MeetingReadMeta.class);
-		this.meetingRepository = meetingRepository;
-		this.sessionService = sessionService;
 	}
 
 	@Override

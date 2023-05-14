@@ -21,6 +21,7 @@ import org.cxbox.core.service.action.Actions;
 import org.cxbox.model.core.entity.BaseEntity_;
 import java.util.Collections;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -28,14 +29,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class ClientContactService extends VersionAwareResponseService<ContactDTO, Contact> {
 
-	private final ContactRepository contactRepository;
+	@Autowired
+	private ContactRepository contactRepository;
 
-	private final ClientRepository clientRepository;
+	@Autowired
+	private ClientRepository clientRepository;
 
-	public ClientContactService(ContactRepository contactRepository, ClientRepository clientRepository) {
+	public ClientContactService() {
 		super(ContactDTO.class, Contact.class, null, ClientContactMeta.class);
-		this.contactRepository = contactRepository;
-		this.clientRepository = clientRepository;
 	}
 
 	@Override

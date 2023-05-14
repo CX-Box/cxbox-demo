@@ -14,20 +14,21 @@ import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.cxbox.core.dto.rowmeta.PostAction;
 import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S3252","java:S1186"})
 @Service
 public class SaleWriteService extends VersionAwareResponseService<SaleDTO, Sale> {
 
-	private final SaleRepository saleRepository;
+	@Autowired
+	private SaleRepository saleRepository;
 
-	private final ClientRepository clientRepository;
+	@Autowired
+	private ClientRepository clientRepository;
 
-	public SaleWriteService(SaleRepository saleRepository, ClientRepository clientRepository) {
+	public SaleWriteService() {
 		super(SaleDTO.class, Sale.class, null, SaleWriteMeta.class);
-		this.saleRepository = saleRepository;
-		this.clientRepository = clientRepository;
 	}
 
 	@Override

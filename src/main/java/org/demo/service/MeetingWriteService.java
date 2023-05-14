@@ -17,27 +17,27 @@ import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.cxbox.core.dto.rowmeta.PostAction;
 import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S3252", "java:S1186"})
 @Service
 public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO, Meeting> {
 
-	private final MeetingRepository meetingRepository;
+	@Autowired
+	private MeetingRepository meetingRepository;
 
-	private final ClientRepository clientRepository;
+	@Autowired
+	private ClientRepository clientRepository;
 
-	private final ContactRepository contactRepository;
+	@Autowired
+	private ContactRepository contactRepository;
 
-	private final UserRepository userRepository;
+	@Autowired
+	private UserRepository userRepository;
 
-	public MeetingWriteService(MeetingRepository meetingRepository, ClientRepository clientRepository,
-			ContactRepository contactRepository, UserRepository userRepository) {
+	public MeetingWriteService() {
 		super(MeetingDTO.class, Meeting.class, null, MeetingWriteMeta.class);
-		this.meetingRepository = meetingRepository;
-		this.clientRepository = clientRepository;
-		this.contactRepository = contactRepository;
-		this.userRepository = userRepository;
 	}
 
 	@Override

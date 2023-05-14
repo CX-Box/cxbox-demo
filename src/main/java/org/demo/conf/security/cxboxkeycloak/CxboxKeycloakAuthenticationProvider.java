@@ -92,7 +92,7 @@ public class CxboxKeycloakAuthenticationProvider extends KeycloakAuthenticationP
 	}
 
 	//Note>>taken "as is" from real project - refactor
-	public User upsert(AccessToken accessToken, String role) {
+	public void upsert(AccessToken accessToken, String role) {
 		txService.invokeInNewTx(() -> {
 					authzService.loginAs(authzService.createAuthentication(VANILLA));
 					for (int i = 1; i <= 10; i++) {

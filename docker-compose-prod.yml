@@ -6,7 +6,7 @@ services:
     image: 'cxbox/demo:${APP_IMAGE_TAG}'
     environment:
       FRONTEND_AUTH_SERVER_URL: 'http://demo.cxbox.org:9080/auth/'
-      BAKEND_AUTH_SERVER_URL: 'http://demo.cxbox.org:9080/auth/'
+      BACKEND_AUTH_SERVER_URL: 'http://demo.cxbox.org:9080/auth/'
       DEV_PANEL_ENABLED: 'true'
       META_DIRECTORY: 'classpath:meta'
       DATABASE_DRIVER: 'org.postgresql.Driver'
@@ -29,7 +29,7 @@ services:
     image: 'cxboxplatform/demo:${APP_IMAGE_TAG}'
     environment:
       FRONTEND_AUTH_SERVER_URL: 'http://demo.cxbox.org:9080/auth/'
-      BAKEND_AUTH_SERVER_URL: 'http://demo.cxbox.org:9080/auth/'
+      BACKEND_AUTH_SERVER_URL: 'http://demo.cxbox.org:9080/auth/'
 
       DEV_PANEL_ENABLED: 'true'
       META_DIRECTORY: 'classpath:meta'

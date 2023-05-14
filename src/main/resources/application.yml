@@ -75,7 +75,7 @@ spring:
     banner-mode: off
 
 keycloak:
-  auth-server-url: ${BAKEND_AUTH_SERVER_URL:http://localhost:9080/auth}
+  auth-server-url: ${BACKEND_AUTH_SERVER_URL:http://localhost:9080/auth}
   realm: cxbox
   resource: cxbox-keycloak-client
   bearer-only: true

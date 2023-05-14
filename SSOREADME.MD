@@ -1,4 +1,4 @@
-### Keycloack:
+### Keycloak:
 ##### 1 Frontend configuration
 `ui/src/keycloak/index.ts`
 
@@ -32,4 +32,4 @@ To save changes made in UI to git one can change `keycloak.migration.action=impo
 and delete and start new container. All changes will be present in /docker/keycloak-config. Please, do not forget to set `keycloak.migration.action=import` back
 
 ##### 5 Clean keycloak start
-delete `.tmp` folder, then delete and start keycloack container
+delete `.tmp` folder, then delete and start keycloak container

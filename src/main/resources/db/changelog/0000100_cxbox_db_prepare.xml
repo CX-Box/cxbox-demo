@@ -4,7 +4,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd"
                    logicalFilePath="db/changelog/0000100_cxbox_db_prepare.xml">
 
-    <changeSet runAlways="true" dbms="oracle" id="ORACLE CHAR SEMMANTICS" author="initial">
+    <changeSet runAlways="true" dbms="oracle" id="ORACLE CHAR SEMANTICS" author="initial">
         <sql>
             alter session set NLS_LENGTH_SEMANTICS ='CHAR';
         </sql>

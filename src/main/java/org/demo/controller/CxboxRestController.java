@@ -6,11 +6,12 @@ import org.demo.service.ClientReadService;
 import org.demo.service.ClientWriteService;
 import org.demo.service.ContactPickListService;
 import org.demo.service.DashboardFilterService;
+import org.demo.service.DashboardSalesFunnelService;
+import org.demo.service.DashboardSalesRingProgressService;
 import org.demo.service.MeetingReadService;
 import org.demo.service.MeetingWriteService;
 import org.demo.service.ClientPickListService;
 import org.demo.service.ResponsiblePickListService;
-import org.demo.service.DashboardService;
 import org.demo.service.SaleReadService;
 import org.demo.service.SaleWriteService;
 import org.cxbox.core.crudma.bc.BcIdentifier;
@@ -48,8 +49,8 @@ public enum CxboxRestController implements EnumBcIdentifier {
 		clientSalePickListPopup(saleEdit, ClientPickListService.class),
 	dashboardFilter(DashboardFilterService.class),
 		dashboardClientActivities(dashboardFilter, DashboardClientActivitiesService.class),
-	dashboardSalesFunnel(dashboardFilter, DashboardService.class),
-	dashboardSalesRingProgress(dashboardFilter, DashboardService.class);
+	dashboardSalesFunnel(dashboardFilter, DashboardSalesFunnelService.class),
+	dashboardSalesRingProgress(dashboardFilter, DashboardSalesRingProgressService.class);
 
 	// @formatter:on
 

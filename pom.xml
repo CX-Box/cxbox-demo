@@ -18,12 +18,12 @@
     <java.version>1.8</java.version>
 
     <!-- dependencies versions -->
-    <postgresql.version>42.2.18</postgresql.version>
+    <postgresql.version>42.2.27</postgresql.version>
     <keycloak-spring-boot-starter.version>14.0.0</keycloak-spring-boot-starter.version>
 
     <!--delete after fix https://github.com/spring-projects/spring-security/issues/9787-->
     <spring-security.version>5.5.1</spring-security.version>
-    <spring-security-crypto.version>5.5.0</spring-security-crypto.version>
+    <spring-security-crypto.version>5.5.8</spring-security-crypto.version>
     <minio.version>8.3.0</minio.version>
 
     <!--minio compatible version-->
@@ -65,19 +65,16 @@
       <artifactId>spring-security-crypto</artifactId>
       <version>${spring-security-crypto.version}</version>
     </dependency>
-
     <dependency>
       <groupId>io.minio</groupId>
       <artifactId>minio</artifactId>
       <version>${minio.version}</version>
     </dependency>
-
     <dependency>
       <groupId>org.springdoc</groupId>
       <artifactId>springdoc-openapi-ui</artifactId>
-      <version>1.5.2</version>
+      <version>1.5.13</version>
     </dependency>
-
     <dependency>
       <groupId>org.keycloak</groupId>
       <artifactId>keycloak-spring-boot-starter</artifactId>
@@ -97,7 +94,6 @@
       <artifactId>lombok</artifactId>
       <scope>provided</scope>
     </dependency>
-
     <dependency>
       <groupId>org.cxbox</groupId>
       <artifactId>cxbox-model-core</artifactId>

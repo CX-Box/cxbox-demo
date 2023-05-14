@@ -8,7 +8,6 @@ import org.demo.entity.enums.ClientEditStep;
 import org.demo.entity.enums.FieldOfActivity;
 import org.demo.repository.ClientRepository;
 import org.demo.dto.ClientWriteDTO;
-import org.demo.dto.ClientWriteDTO_.*;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.DrillDownType;
@@ -52,8 +51,8 @@ public class ClientWriteService extends VersionAwareResponseService<ClientWriteD
 		setIfChanged(data, ClientWriteDTO_.importance, entity::setImportance);
 		setIfChanged(data, ClientWriteDTO_.status, entity::setStatus);
 		setIfChanged(data, ClientWriteDTO_.address, entity::setAddress);
-		setIfChanged(data, ClientWriteDTO_.breif, entity::setBreif);
-		setIfChanged(data, ClientWriteDTO_.breifId, entity::setBreifId);
+		setIfChanged(data, ClientWriteDTO_.briefId, entity::setBrief);
+		setIfChanged(data, ClientWriteDTO_.briefId, entity::setBriefId);
 		return new ActionResultDTO<>(entityToDto(bc, entity));
 	}
 

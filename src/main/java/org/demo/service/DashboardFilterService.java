@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-@SuppressWarnings({"java:S3252","java:S1186"})
+@SuppressWarnings({"java:S3252", "java:S1186"})
 @Service
 public class
 DashboardFilterService extends VersionAwareResponseService<DashboardFilterDTO, User> {
@@ -83,17 +83,14 @@ DashboardFilterService extends VersionAwareResponseService<DashboardFilterDTO, U
 	@Override
 	protected DashboardFilterDTO entityToDto(BusinessComponent bc, User entity) {
 		DashboardFilterDTO dto = super.entityToDto(bc, entity);
-		DashboardFilter dashboardFilter = dashboardFilterRepository.findOne(
+		dashboardFilterRepository.findOne(
 				(root, cq, cb) -> cb.equal(root.get(DashboardFilter_.userId), sessionService.getSessionUser().getId())
-		).orElse(null);
-		if (dashboardFilter != null) {
-			dto.setFieldOfActivity(dashboardFilter.getFieldOfActivities()
-					.stream()
-					.collect(MultivalueField.toMultivalueField(
-							Enum::name,
-							FieldOfActivity::getValue
-					)));
-		}
+		).ifPresent(dashboardFilter -> dto.setFieldOfActivity(dashboardFilter.getFieldOfActivities()
+				.stream()
+				.collect(MultivalueField.toMultivalueField(
+						Enum::name,
+						FieldOfActivity::getValue
+				))));
 		return dto;
 	}
 

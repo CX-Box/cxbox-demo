@@ -54,8 +54,8 @@ public class Client extends BaseEntity {
 	@Enumerated(value = EnumType.STRING)
 	private ClientEditStep editStep = ClientEditStep.FILL_GENERAL_INFORMATION;
 
-	private String breif;
+	private String brief;
 
-	private String breifId;
+	private String briefId;
 
 }

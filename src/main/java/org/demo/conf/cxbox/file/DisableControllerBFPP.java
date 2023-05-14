@@ -1,5 +1,6 @@
 package org.demo.conf.cxbox.file;
 
+import lombok.NonNull;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Component;
 public class DisableControllerBFPP implements BeanFactoryPostProcessor {
 
 	@Override
-	public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+	public void postProcessBeanFactory(@NonNull ConfigurableListableBeanFactory beanFactory) throws BeansException {
 		BeanDefinitionRegistry beanDefinitionRegistry = (BeanDefinitionRegistry) beanFactory;
 		beanDefinitionRegistry.removeBeanDefinition("cxboxFileController");
 	}

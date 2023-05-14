@@ -31,7 +31,6 @@ public enum ClientEditStep {
 	public static Optional<ClientEditStep> getPreviousEditStep(Client client) {
 		return Arrays.stream(ClientEditStep.values())
 				.filter(v -> v.ordinal() < client.getEditStep().ordinal())
-				.sorted((v1, v2) -> Integer.compare(v2.ordinal(), v1.ordinal()))
-				.findFirst();
+				.min((v1, v2) -> Integer.compare(v2.ordinal(), v1.ordinal()));
 	}
 }

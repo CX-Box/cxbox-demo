@@ -25,8 +25,8 @@ public class ClientWriteMeta extends FieldMetaBuilder<ClientWriteDTO> {
 				ClientWriteDTO_.address,
 				ClientWriteDTO_.importance,
 				ClientWriteDTO_.fieldOfActivity,
-				ClientWriteDTO_.breifId,
-				ClientWriteDTO_.breif,
+				ClientWriteDTO_.briefId,
+				ClientWriteDTO_.brief,
 				ClientWriteDTO_.editStep,
 				ClientWriteDTO_.status
 		);

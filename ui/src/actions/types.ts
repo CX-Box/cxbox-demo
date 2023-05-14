@@ -1,5 +1,5 @@
 /**
- * This is an utility class for typing payload of redux actions
+ * This is a utility class for typing payload of redux actions
  */
 import { ActionPayloadTypes as CxboxActionPayloadTypes, createActionCreators } from '@cxbox-ui/core'
 

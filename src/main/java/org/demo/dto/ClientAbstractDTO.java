@@ -33,9 +33,9 @@ public abstract class ClientAbstractDTO extends DataResponseDTO {
 
 	private String color;
 
-	private String breif;
+	private String brief;
 
-	private String breifId;
+	private String briefId;
 
 	ClientAbstractDTO(Client client) {
 		this.id = client.getId().toString();
@@ -45,8 +45,8 @@ public abstract class ClientAbstractDTO extends DataResponseDTO {
 		this.editStep = client.getEditStep();
 		this.status = client.getStatus();
 		this.color = Optional.ofNullable(client.getImportance()).map(ClientImportance::getColor).orElse(null);
-		this.breif = client.getBreif();
-		this.breifId = client.getBreifId();
+		this.brief = client.getBrief();
+		this.briefId = client.getBriefId();
 	}
 
 }

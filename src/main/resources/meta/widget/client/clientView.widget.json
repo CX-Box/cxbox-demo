@@ -35,15 +35,15 @@
           "bgColorKey": "color"
         },
         {
-          "label": "breifId",
-          "key": "breifId",
+          "label": "briefId",
+          "key": "briefId",
           "type": "hidden"
         },
         {
-          "label": "Breif",
-          "key": "breif",
+          "label": "Brief",
+          "key": "brief",
           "type": "fileUpload",
-          "fileIdKey": "breifId"
+          "fileIdKey": "briefId"
         }
       ]
     }

@@ -9,5 +9,5 @@ import lombok.Getter;
 public enum ActionIcon implements ActionIconSpecifier {
 	MENU("menu");
 
-	String actionIconCode;
+	final String actionIconCode;
 }

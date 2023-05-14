@@ -25,7 +25,7 @@ ID;DICTIONARY_TYPE_ID;TYPE;KEY;VALUE;ACTIVE;DISPLAY_ORDER;DESCRIPTION
 ##### 4 Saving keycloak configuration changes to git (realm, client, users and so on)
 Keycloak in docker-compose.yml is configured to import configuration from `/docker/keycloak-config` on container startup using `keycloak.migration.action=import` [docs](https://access.redhat.com/documentation/en-us/red_hat_single_sign-on/7.0/html/server_administration_guide/export_import)
 
-By default in will not override changes made in UI on container restart, because `keycloak.migration.strategy=IGNORE_EXISTING` is used [docs](https://access.redhat.com/documentation/en-us/red_hat_single_sign-on/7.0/html/server_administration_guide/export_import)
+By default, in will not override changes made in UI on container restart, because `keycloak.migration.strategy=IGNORE_EXISTING` is used [docs](https://access.redhat.com/documentation/en-us/red_hat_single_sign-on/7.0/html/server_administration_guide/export_import)
 
 To save changes made in UI to git one can change `keycloak.migration.action=import` to
 `keycloak.migration.action=export` in docker-compose.yml

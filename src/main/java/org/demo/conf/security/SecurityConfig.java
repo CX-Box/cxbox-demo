@@ -28,6 +28,7 @@ import org.springframework.security.web.authentication.session.RegisterSessionAu
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
+@SuppressWarnings("java:S4502, java:S5122, java:S5804")
 @EnableWebSecurity
 @ComponentScan(basePackageClasses = KeycloakSecurityComponents.class)
 @RequiredArgsConstructor

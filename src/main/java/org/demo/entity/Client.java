@@ -1,5 +1,6 @@
 package org.demo.entity;
 
+import lombok.EqualsAndHashCode;
 import org.demo.entity.enums.ClientEditStep;
 import org.demo.entity.enums.ClientImportance;
 import org.demo.entity.enums.ClientStatus;
@@ -25,6 +26,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@EqualsAndHashCode(of = {}, callSuper = true)
 public class Client extends BaseEntity {
 
 	private String fullName;

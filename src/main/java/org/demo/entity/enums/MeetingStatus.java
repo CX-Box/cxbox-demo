@@ -1,6 +1,7 @@
 package org.demo.entity.enums;
 
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.Collections;
 import org.demo.entity.Meeting;
 import java.util.Arrays;
 import java.util.List;
@@ -14,7 +15,7 @@ public enum MeetingStatus {
 	COMPLETED("Completed", "Finish") {
 		@Override
 		public List<MeetingStatus> available(@NonNull Meeting meeting) {
-			return Arrays.asList(IN_PROGRESS);
+			return Collections.singletonList(IN_PROGRESS);
 		}
 
 		@Override
@@ -47,7 +48,7 @@ public enum MeetingStatus {
 	CANCELLED("Cancelled", "Cancel Meeting") {
 		@Override
 		public List<MeetingStatus> available(@NonNull Meeting meeting) {
-			return Arrays.asList(IN_PROGRESS);
+			return Collections.singletonList(IN_PROGRESS);
 		}
 
 		@Override

@@ -31,22 +31,6 @@ public class DashboardService extends AbstractCrudmaService {
 
 	private final SaleRepository saleRepository;
 
-	final String clients_key = "All active Clients";
-
-	final String activities_key = "Preparatory Activities";
-
-	final String meetings_key = "Number of Meetings";
-
-	final String sales_key = "Number of Sales";
-
-	final String clients_color = "#779FE9";
-
-	final String activities_color = "#8FAFE9";
-
-	final String meetings_color = "#5F90EA";
-
-	final String sales_color = "#4D83E7";
-
 	public DashboardService(ClientRepository clientRepository, MeetingRepository meetingRepository,
 			SaleRepository saleRepository) {
 		this.clientRepository = clientRepository;
@@ -69,10 +53,10 @@ public class DashboardService extends AbstractCrudmaService {
 	private List<DataResponseDTO> createSalesFunnelDTOS() {
 		List<DataResponseDTO> salesFunnelDTOS = new ArrayList<>();
 		long activitiesAmount = clientRepository.count() + meetingRepository.count();
-		salesFunnelDTOS.add(new DashboardSalesFunnelDTO(clients_key, clientRepository.count(), clients_color));
-		salesFunnelDTOS.add(new DashboardSalesFunnelDTO(activities_key, activitiesAmount, activities_color));
-		salesFunnelDTOS.add(new DashboardSalesFunnelDTO(meetings_key, meetingRepository.count(), meetings_color));
-		salesFunnelDTOS.add(new DashboardSalesFunnelDTO(sales_key, saleRepository.count(), sales_color));
+		salesFunnelDTOS.add(new DashboardSalesFunnelDTO("All active Clients", clientRepository.count(), "#779FE9"));
+		salesFunnelDTOS.add(new DashboardSalesFunnelDTO("Preparatory Activities", activitiesAmount, "#8FAFE9"));
+		salesFunnelDTOS.add(new DashboardSalesFunnelDTO("Number of Meetings", meetingRepository.count(), "#5F90EA"));
+		salesFunnelDTOS.add(new DashboardSalesFunnelDTO("Number of Sales", saleRepository.count(), "#4D83E7"));
 		return salesFunnelDTOS;
 	}
 

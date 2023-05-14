@@ -2,7 +2,7 @@
   "name": "dashboard",
   "title": "Dashboard",
   "template": "DashboardView",
-  "url": "/screen/meeting/view/dashboard",
+  "url": "/screen/dashboard/view/dashboard",
   "widgets": [
     {
       "widgetName": "dashboardFilter",

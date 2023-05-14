@@ -24,11 +24,6 @@
           "type": "input"
         },
         {
-          "label": "Status",
-          "key": "status",
-          "type": "input"
-        },
-        {
           "label": "Address",
           "key": "address",
           "type": "input"

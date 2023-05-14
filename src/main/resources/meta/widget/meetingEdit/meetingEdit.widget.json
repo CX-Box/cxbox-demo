@@ -22,17 +22,12 @@
      {
        "label": "Status",
        "key": "status",
-       "type": "input"
+       "type": "hidden"
      },
     {
       "label": "Address",
       "key": "address",
       "type": "text"
-    },
-    {
-      "label": "Status",
-      "key": "status",
-      "type": "input"
     },
     {
       "label": "Responsible",

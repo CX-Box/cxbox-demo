@@ -2,7 +2,7 @@
   "name": "salelist",
   "title": "Sale List",
   "template": "DashboardView",
-  "url": "/screen/meeting/view/salelist",
+  "url": "/screen/sale/view/salelist",
   "widgets": [
     {
       "widgetName": "saleListHeader",

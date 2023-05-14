@@ -2,7 +2,7 @@
   "name": "saleedit",
   "title": "Sale Edit",
   "template": "DashboardView",
-  "url": "/screen/meeting/view/saleedit",
+  "url": "/screen/sale/view/saleedit",
   "widgets": [
     {
       "widgetName": "SecondLevelMenu",

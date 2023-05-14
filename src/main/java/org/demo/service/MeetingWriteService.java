@@ -60,16 +60,16 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 		setIfChanged(data, notes, entity::setNotes);
 		setIfChanged(data, result, entity::setResult);
 		setMappedIfChanged(data, responsibleId, entity::setResponsible,
-				id -> userRepository.findById(id).orElse(null)
+				id -> id != null ? userRepository.getById(id) : null
 		);
 		setMappedIfChanged(data, clientId, e -> {
 					entity.setClient(e);
 					entity.setContact(null);
 				},
-				id -> clientRepository.findById(id).orElse(null)
+				id -> id != null ? clientRepository.getById(id) : null
 		);
 		setMappedIfChanged(data, contactId, entity::setContact,
-				id -> contactRepository.findById(id).orElse(null)
+				id -> id != null ? contactRepository.getById(id) : null
 		);
 		meetingRepository.save(entity);
 		return new ActionResultDTO<>(entityToDto(bc, entity));

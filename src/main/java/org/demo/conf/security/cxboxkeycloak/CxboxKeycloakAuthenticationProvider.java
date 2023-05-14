@@ -67,7 +67,7 @@ public class CxboxKeycloakAuthenticationProvider extends KeycloakAuthenticationP
 		return authentication;
 	}
 
-	//TODO>>taken "as is" from real project - refactor
+	//Note>>taken "as is" from real project - refactor
 	private void upsertUserAndRoles(AccessToken accessToken, Set<String> roles) {
 		txService.invokeInNewTx(() -> {
 			authzService.loginAs(authzService.createAuthentication(VANILLA));
@@ -91,7 +91,7 @@ public class CxboxKeycloakAuthenticationProvider extends KeycloakAuthenticationP
 		});
 	}
 
-	//TODO>>taken "as is" from real project - refactor
+	//Note>>taken "as is" from real project - refactor
 	public User upsert(AccessToken accessToken, String role) {
 		txService.invokeInNewTx(() -> {
 					authzService.loginAs(authzService.createAuthentication(VANILLA));

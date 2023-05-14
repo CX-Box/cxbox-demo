@@ -42,6 +42,7 @@ public class CxboxKeycloakCoreSessionService extends CoreSessionServiceImpl {
 		}
 	}
 
+	@SuppressWarnings("java:S1874")
 	private CxboxKeycloakAccount mapTokenToCxboxDetails(KeycloakAuthenticationToken token,
 			KeycloakAuthenticationToken accessToken, SimpleKeycloakAccount account) {
 		CxboxKeycloakAccount details = new CxboxKeycloakAccount(

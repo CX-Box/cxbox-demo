@@ -23,10 +23,6 @@ public class DashboardSalesRingProgressService extends AbstractCrudmaService {
 
 	@Override
 	public ResultPage<DashboardSalesRingProgressDTO> getAll(BusinessComponent bc) {
-		return ResultPage.of(ImmutableList.of(createSalesRingProgressDTO()), 1);
-	}
-
-	private DashboardSalesRingProgressDTO createSalesRingProgressDTO() {
 		DashboardSalesRingProgressDTO dto = new DashboardSalesRingProgressDTO();
 		List<Sale> sales = saleRepository.findAll();
 		long allSalesSum = sales.stream().map(Sale::getSum).filter(Objects::nonNull).mapToLong(Long::longValue)
@@ -44,7 +40,7 @@ public class DashboardSalesRingProgressService extends AbstractCrudmaService {
 		dto.setSalesPercent(String.valueOf(percent));
 		dto.setSalesSum("$" + closedSalesSum);
 		dto.setSalesDescription("From $" + allSalesSum + " KPI sales");
-		return dto;
+		return ResultPage.of(ImmutableList.of(dto), 1);
 	}
 
 	@Override

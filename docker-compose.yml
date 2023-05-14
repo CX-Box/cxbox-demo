@@ -9,7 +9,7 @@ services:
     expose:
       - 5432
     ports:
-      - 5432:5432
+      - "5432:5432"
   keycloak:
     image: jboss/keycloak:12.0.4
     command:
@@ -31,9 +31,9 @@ services:
       - KEYCLOAK_PASSWORD=admin
       - DB_VENDOR=h2
     ports:
-      - 9080:9080
-      - 9443:9443
-      - 10990:10990
+      - "9080:9080"
+      - "9443:9443"
+      - "10990:10990"
   cxbox_minio:
     image: bitnami/minio:2022.2.12
     expose:

@@ -21,8 +21,8 @@ services:
     expose:
       - 8080
     ports:
-      - 0.0.0.0:8081:8080
-      - 127.0.0.1:8981:8989
+      - "0.0.0.0:8081:8080"
+      - "127.0.0.1:8981:8989"
     restart: always
 
   cxbox-demo-node-2:
@@ -45,8 +45,8 @@ services:
     expose:
       - 8080
     ports:
-      - 0.0.0.0:8082:8080
-      - 127.0.0.1:8982:8989
+      - "0.0.0.0:8082:8080"
+      - "127.0.0.1:8982:8989"
     restart: always
 
   cxbox_postgres:
@@ -56,7 +56,7 @@ services:
     expose:
       - 5432
     ports:
-      - 127.0.0.1:5432:5432
+      - "127.0.0.1:5432:5432"
   keycloak:
     image: jboss/keycloak:12.0.4
     command:
@@ -80,9 +80,9 @@ services:
     expose:
       - 9080
     ports:
-      - 127.0.0.1:9080:9080
-      - 127.0.0.1:9443:9443
-      - 127.0.0.1:10990:10990
+      - "127.0.0.1:9080:9080"
+      - "127.0.0.1:9443:9443"
+      - "127.0.0.1:10990:10990"
 
   cxbox_minio:
     image: bitnami/minio:2022.2.12
@@ -106,8 +106,8 @@ services:
       CXBOX_APP_2: 'cxbox-demo-node-2:8080'
       KEYCLOAK_1: 'keycloak:9080'
     ports:
-      - 80:80
-      - 443:443
+      - "80:80"
+      - "443:443"
     restart: always
     depends_on:
       - cxbox-demo-node-1

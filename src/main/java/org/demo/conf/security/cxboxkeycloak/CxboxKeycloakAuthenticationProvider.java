@@ -27,7 +27,7 @@ import java.util.Set;
 
 import static org.cxbox.api.service.session.InternalAuthorizationService.VANILLA;
 
-@SuppressWarnings({"java:S1874", "java:S5804"})
+@SuppressWarnings({"java:S1874", "java:S5804", "SpringJavaAutowiredFieldsWarningInspection"})
 @Component
 @Slf4j
 public class CxboxKeycloakAuthenticationProvider extends KeycloakAuthenticationProvider {

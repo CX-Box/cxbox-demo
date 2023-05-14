@@ -1,7 +1,6 @@
 package org.demo.service;
 
 import org.demo.controller.CxboxRestController;
-import org.demo.dto.ClientWriteDTO_;
 import org.demo.dto.ContactDTO_;
 import org.demo.entity.Client;
 import org.demo.entity.Contact;

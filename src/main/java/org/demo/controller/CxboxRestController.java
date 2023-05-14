@@ -27,6 +27,7 @@ import org.springframework.stereotype.Component;
  * but current enum approach shows, that it is less error-prone in huge enterprise projects
  * (because single line in this enum creates >5 rest endpoints)
  */
+@SuppressWarnings({"java:S115","java:S1144"})
 @Getter
 public enum CxboxRestController implements EnumBcIdentifier {
 

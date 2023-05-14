@@ -8,6 +8,7 @@ import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.cxbox.model.core.entity.User;
 import org.springframework.stereotype.Service;
 
+@SuppressWarnings({"java:S3252","java:S1186"})
 @Service
 public class ResponsiblePickListService extends VersionAwareResponseService<ResponsibleDTO, User> {
 

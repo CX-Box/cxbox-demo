@@ -13,6 +13,7 @@ import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
 import java.util.Arrays;
 import org.springframework.stereotype.Service;
 
+@SuppressWarnings({"java:S3252","java:S1186"})
 @Service
 public class ClientWriteMeta extends FieldMetaBuilder<ClientWriteDTO> {
 

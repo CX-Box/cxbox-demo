@@ -13,6 +13,7 @@ import org.cxbox.model.core.entity.BaseEntity_;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+@SuppressWarnings({"java:S3252","java:S1186"})
 @Service
 public class ContactPickListService extends VersionAwareResponseService<ContactDTO, Contact> {
 

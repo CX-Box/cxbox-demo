@@ -22,6 +22,7 @@ import org.cxbox.core.util.session.SessionService;
 import java.util.Arrays;
 import org.springframework.stereotype.Service;
 
+@SuppressWarnings({"java:S3252","java:S1186"})
 @Service
 public class MeetingReadService extends VersionAwareResponseService<MeetingDTO, Meeting> {
 

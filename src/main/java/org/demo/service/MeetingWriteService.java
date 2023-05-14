@@ -18,6 +18,7 @@ import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
 import org.springframework.stereotype.Service;
 
+@SuppressWarnings({"java:S3252","java:S1186"})
 @Service
 public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO, Meeting> {
 

@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
 
+@SuppressWarnings({"java:S3252","java:S1186"})
 @Service
 public class ClientWriteService extends VersionAwareResponseService<ClientWriteDTO, Client> {
 

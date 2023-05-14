@@ -20,6 +20,7 @@ import org.cxbox.core.service.action.Actions;
 import org.cxbox.core.util.session.SessionService;
 import org.springframework.stereotype.Service;
 
+@SuppressWarnings({"java:S3252","java:S1186"})
 @Service
 public class ClientReadService extends VersionAwareResponseService<ClientReadDTO, Client> {
 

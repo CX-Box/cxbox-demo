@@ -19,9 +19,9 @@ import javax.persistence.criteria.JoinType;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+@SuppressWarnings({"java:S3252","java:S1186"})
 @Service
-public class
-DashboardClientActivitiesService extends VersionAwareResponseService<DashboardClientActivitiesDTO, Client> {
+public class DashboardClientActivitiesService extends VersionAwareResponseService<DashboardClientActivitiesDTO, Client> {
 
 	private final DashboardFilterRepository dashboardFilterRepository;
 

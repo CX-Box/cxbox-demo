@@ -1,12 +1,14 @@
 package org.demo.service;
 
+
 import org.demo.controller.CxboxRestController;
+import org.demo.dto.ClientWriteDTO_;
 import org.demo.entity.Client;
 import org.demo.entity.enums.ClientEditStep;
 import org.demo.entity.enums.FieldOfActivity;
 import org.demo.repository.ClientRepository;
 import org.demo.dto.ClientWriteDTO;
-import org.demo.dto.ClientWriteDTO_;
+import org.demo.dto.ClientWriteDTO_.*;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.DrillDownType;
@@ -39,9 +41,7 @@ public class ClientWriteService extends VersionAwareResponseService<ClientWriteD
 
 	@Override
 	protected ActionResultDTO<ClientWriteDTO> doUpdateEntity(Client entity, ClientWriteDTO data, BusinessComponent bc) {
-		if (data.isFieldChanged(ClientWriteDTO_.fullName)) {
-			entity.setFullName(data.getFullName());
-		}
+		setIfChanged(data, ClientWriteDTO_.fullName, entity::setFullName);
 		if (data.isFieldChanged(ClientWriteDTO_.fieldOfActivity)) {
 			entity.setFieldOfActivities(
 					data.getFieldOfActivity().getValues()
@@ -49,22 +49,11 @@ public class ClientWriteService extends VersionAwareResponseService<ClientWriteD
 							.map(v -> FieldOfActivity.getByValue(v.getValue()))
 							.collect(Collectors.toSet()));
 		}
-		if (data.isFieldChanged(ClientWriteDTO_.importance)) {
-			entity.setImportance(data.getImportance());
-		}
-		if (data.isFieldChanged(ClientWriteDTO_.status)) {
-			entity.setStatus(data.getStatus());
-		}
-		if (data.isFieldChanged(ClientWriteDTO_.address)) {
-			entity.setAddress(data.getAddress());
-		}
-		if (data.isFieldChanged(ClientWriteDTO_.breif)) {
-			entity.setBreif(data.getBreif());
-		}
-		if (data.isFieldChanged(ClientWriteDTO_.breifId)) {
-			entity.setBreifId(data.getBreifId());
-		}
-
+		setIfChanged(data, ClientWriteDTO_.importance, entity::setImportance);
+		setIfChanged(data, ClientWriteDTO_.status, entity::setStatus);
+		setIfChanged(data, ClientWriteDTO_.address, entity::setAddress);
+		setIfChanged(data, ClientWriteDTO_.breif, entity::setBreif);
+		setIfChanged(data, ClientWriteDTO_.breifId, entity::setBreifId);
 		return new ActionResultDTO<>(entityToDto(bc, entity));
 	}
 

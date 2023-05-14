@@ -50,15 +50,9 @@ public class SaleWriteService extends VersionAwareResponseService<SaleDTO, Sale>
 				entity.setClient(null);
 			}
 		}
-		if (data.isFieldChanged(SaleDTO_.product)) {
-			entity.setProduct(data.getProduct());
-		}
-		if (data.isFieldChanged(SaleDTO_.status)) {
-			entity.setStatus(data.getStatus());
-		}
-		if (data.isFieldChanged(SaleDTO_.sum)) {
-			entity.setSum(data.getSum());
-		}
+		setIfChanged(data, SaleDTO_.product, entity::setProduct);
+		setIfChanged(data, SaleDTO_.status, entity::setStatus);
+		setIfChanged(data, SaleDTO_.sum, entity::setSum);
 		return new ActionResultDTO<>(entityToDto(bc, entity));
 	}
 

@@ -1,6 +1,7 @@
 package org.demo.service;
 
 import org.demo.controller.CxboxRestController;
+import org.demo.dto.ClientWriteDTO_;
 import org.demo.dto.ContactDTO_;
 import org.demo.entity.Client;
 import org.demo.entity.Contact;
@@ -70,15 +71,9 @@ public class ClientContactService extends VersionAwareResponseService<ContactDTO
 
 	@Override
 	protected ActionResultDTO<ContactDTO> doUpdateEntity(Contact entity, ContactDTO data, BusinessComponent bc) {
-		if (data.isFieldChanged(ContactDTO_.fullName)) {
-			entity.setFullName(data.getFullName());
-		}
-		if (data.isFieldChanged(ContactDTO_.email)) {
-			entity.setEmail(data.getEmail());
-		}
-		if (data.isFieldChanged(ContactDTO_.phoneNumber)) {
-			entity.setPhoneNumber(data.getPhoneNumber());
-		}
+		setIfChanged(data, ContactDTO_.fullName, entity::setFullName);
+		setIfChanged(data, ContactDTO_.email, entity::setEmail);
+		setIfChanged(data, ContactDTO_.phoneNumber, entity::setPhoneNumber);
 		return new ActionResultDTO<>(entityToDto(bc, entity));
 	}
 

@@ -4,7 +4,6 @@ import static org.demo.dto.MeetingDTO_.*;
 
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.MeetingDTO;
-import org.demo.dto.MeetingDTO_;
 import org.demo.entity.Meeting;
 import org.demo.repository.ClientRepository;
 import org.demo.repository.ContactRepository;

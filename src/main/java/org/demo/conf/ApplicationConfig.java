@@ -1,5 +1,6 @@
 package org.demo.conf;
 
+import lombok.NonNull;
 import org.cxbox.api.config.CxboxBeanProperties;
 import org.cxbox.api.service.tx.ITransactionStatus;
 import org.cxbox.core.config.APIConfig;
@@ -38,7 +39,7 @@ public class ApplicationConfig {
 	public WebMvcConfigurer corsConfigurer() {
 		return new WebMvcConfigurer() {
 			@Override
-			public void addCorsMappings(CorsRegistry registry) {
+			public void addCorsMappings(@NonNull CorsRegistry registry) {
 				registry
 						.addMapping("/**")
 						.allowedMethods("*")
@@ -47,7 +48,7 @@ public class ApplicationConfig {
 			}
 
 			@Override
-			public void configureAsyncSupport(AsyncSupportConfigurer configurer) {
+			public void configureAsyncSupport(@NonNull AsyncSupportConfigurer configurer) {
 				configurer.setTaskExecutor(getTaskExecutor());
 			}
 		};

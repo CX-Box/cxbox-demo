@@ -70,6 +70,7 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
 						.antMatchers("/**").fullyAuthenticated());
 	}
 
+	@SuppressWarnings("java:S5344")
 	@Override
 	public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
 		KeycloakAuthenticationProvider keycloakAuthenticationProvider = keycloakAuthenticationProvider();

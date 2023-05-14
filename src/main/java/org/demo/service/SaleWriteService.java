@@ -24,9 +24,9 @@ public class SaleWriteService extends VersionAwareResponseService<SaleDTO, Sale>
 
 	private final ClientRepository clientRepository;
 
-	public SaleWriteService(SaleRepository SaleRepository, ClientRepository clientRepository) {
+	public SaleWriteService(SaleRepository saleRepository, ClientRepository clientRepository) {
 		super(SaleDTO.class, Sale.class, null, SaleWriteMeta.class);
-		this.saleRepository = SaleRepository;
+		this.saleRepository = saleRepository;
 		this.clientRepository = clientRepository;
 	}
 

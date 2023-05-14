@@ -22,7 +22,7 @@ import org.cxbox.core.util.session.SessionService;
 import java.util.Arrays;
 import org.springframework.stereotype.Service;
 
-@SuppressWarnings({"java:S3252","java:S1186"})
+@SuppressWarnings({"java:S3252", "java:S1186"})
 @Service
 public class MeetingReadService extends VersionAwareResponseService<MeetingDTO, Meeting> {
 
@@ -87,35 +87,34 @@ public class MeetingReadService extends VersionAwareResponseService<MeetingDTO, 
 	}
 
 	private ActionsBuilder<MeetingDTO> getStatusModelActions(ActionsBuilder<MeetingDTO> builder) {
-		Arrays.stream(MeetingStatus.values()).sequential().forEach(status -> {
-			builder.newAction().action(status.getValue(), status.getButton())
-					.invoker((bc, dto) -> {
-						Meeting meeting = meetingRepository.getById(Long.parseLong(bc.getId()));
-						meeting.getStatus().transition(status, meeting);
-						if (meeting.getStatus().equals(MeetingStatus.Completed)) {
-							return new ActionResultDTO<MeetingDTO>().setAction(PostAction.drillDown(
-									DrillDownType.INNER,
-									"/screen/meeting/view/meetingedit/"
-											+ CxboxRestController.meetingEdit + "/"
-											+ meeting.getId()
-							));
-						}
-						return new ActionResultDTO<MeetingDTO>().setAction(PostAction.refreshBc(bc.getDescription()));
-					})
-					.available(bc -> {
-						if (bc.getId() == null) {
-							return false;
-						}
-						Meeting meeting = meetingRepository.getById(Long.parseLong(bc.getId()));
-						return meeting.getStatus().available(meeting).contains(status);
-					})
-					.withPreAction(PreAction.builder().preActionType(PreActionType.CONFIRMATION)
-							.message("Do You confirm the action on the meeting?")
-							.customParameters(ImmutableMap.of("okText", status.getButton(), "cancelText", "Back to meeting list"))
-							.build())
-					.scope(ActionScope.RECORD)
-					.add();
-		});
+		Arrays.stream(MeetingStatus.values()).sequential()
+				.forEach(status -> builder.newAction().action(status.getValue(), status.getButton())
+						.invoker((bc, dto) -> {
+							Meeting meeting = meetingRepository.getById(Long.parseLong(bc.getId()));
+							meeting.getStatus().transition(status, meeting);
+							if (meeting.getStatus().equals(MeetingStatus.Completed)) {
+								return new ActionResultDTO<MeetingDTO>().setAction(PostAction.drillDown(
+										DrillDownType.INNER,
+										"/screen/meeting/view/meetingedit/"
+												+ CxboxRestController.meetingEdit + "/"
+												+ meeting.getId()
+								));
+							}
+							return new ActionResultDTO<MeetingDTO>().setAction(PostAction.refreshBc(bc.getDescription()));
+						})
+						.available(bc -> {
+							if (bc.getId() == null) {
+								return false;
+							}
+							Meeting meeting = meetingRepository.getById(Long.parseLong(bc.getId()));
+							return meeting.getStatus().available(meeting).contains(status);
+						})
+						.withPreAction(PreAction.builder().preActionType(PreActionType.CONFIRMATION)
+								.message("Do You confirm the action on the meeting?")
+								.customParameters(ImmutableMap.of("okText", status.getButton(), "cancelText", "Back to meeting list"))
+								.build())
+						.scope(ActionScope.RECORD)
+						.add());
 		return builder;
 	}
 

@@ -1,8 +1,9 @@
 package org.demo.service;
 
+import static org.demo.dto.MeetingDTO_.*;
+
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.MeetingDTO;
-import org.demo.dto.MeetingDTO_;
 import org.demo.entity.Meeting;
 import org.demo.repository.ClientRepository;
 import org.demo.repository.ContactRepository;
@@ -18,7 +19,7 @@ import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
 import org.springframework.stereotype.Service;
 
-@SuppressWarnings({"java:S3252","java:S1186"})
+@SuppressWarnings({"java:S3252", "java:S1186"})
 @Service
 public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO, Meeting> {
 
@@ -52,46 +53,24 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 
 	@Override
 	protected ActionResultDTO<MeetingDTO> doUpdateEntity(Meeting entity, MeetingDTO data, BusinessComponent bc) {
-		if (data.isFieldChanged(MeetingDTO_.agenda)) {
-			entity.setAgenda(data.getAgenda());
-		}
-		if (data.isFieldChanged(MeetingDTO_.startDateTime)) {
-			entity.setStartDateTime(data.getStartDateTime());
-		}
-		if (data.isFieldChanged(MeetingDTO_.endDateTime)) {
-			entity.setEndDateTime(data.getEndDateTime());
-		}
-		if (data.isFieldChanged(MeetingDTO_.address)) {
-			entity.setAddress(data.getAddress());
-		}
-		if (data.isFieldChanged(MeetingDTO_.notes)) {
-			entity.setNotes(data.getNotes());
-		}
-		if (data.isFieldChanged(MeetingDTO_.result)) {
-			entity.setResult(data.getResult());
-		}
-		if (data.isFieldChanged(MeetingDTO_.responsibleId)) {
-			if (data.getResponsibleId() != null) {
-				entity.setResponsible(userRepository.getById(data.getResponsibleId()));
-			} else {
-				entity.setResponsible(null);
-			}
-		}
-		if (data.isFieldChanged(MeetingDTO_.clientId)) {
-			if (data.getClientId() != null) {
-				entity.setClient(clientRepository.getById(data.getClientId()));
-			} else {
-				entity.setClient(null);
-			}
-			entity.setContact(null);
-		}
-		if (data.isFieldChanged(MeetingDTO_.contactId)) {
-			if (data.getContactId() != null) {
-				entity.setContact(contactRepository.getById(data.getContactId()));
-			} else {
-				entity.setContact(null);
-			}
-		}
+		setIfChanged(data, agenda, entity::setAgenda);
+		setIfChanged(data, startDateTime, entity::setStartDateTime);
+		setIfChanged(data, endDateTime, entity::setEndDateTime);
+		setIfChanged(data, address, entity::setAddress);
+		setIfChanged(data, notes, entity::setNotes);
+		setIfChanged(data, result, entity::setResult);
+		setMappedIfChanged(data, responsibleId, entity::setResponsible,
+				id -> userRepository.findById(id).orElse(null)
+		);
+		setMappedIfChanged(data, clientId, e -> {
+					entity.setClient(e);
+					entity.setContact(null);
+				},
+				id -> clientRepository.findById(id).orElse(null)
+		);
+		setMappedIfChanged(data, contactId, entity::setContact,
+				id -> contactRepository.findById(id).orElse(null)
+		);
 		meetingRepository.save(entity);
 		return new ActionResultDTO<>(entityToDto(bc, entity));
 	}

@@ -4,6 +4,7 @@ import static org.demo.dto.MeetingDTO_.*;
 
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.MeetingDTO;
+import org.demo.dto.MeetingDTO_;
 import org.demo.entity.Meeting;
 import org.demo.repository.ClientRepository;
 import org.demo.repository.ContactRepository;
@@ -62,12 +63,14 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 		setMappedIfChanged(data, responsibleId, entity::setResponsible,
 				id -> id != null ? userRepository.getById(id) : null
 		);
-		setMappedIfChanged(data, clientId, e -> {
-					entity.setClient(e);
-					entity.setContact(null);
-				},
-				id -> id != null ? clientRepository.getById(id) : null
-		);
+		if (data.isFieldChanged(clientId)) {
+			if (data.getClientId() != null) {
+				entity.setClient(clientRepository.getById(data.getClientId()));
+			} else {
+				entity.setClient(null);
+			}
+			entity.setContact(null);
+		}
 		setMappedIfChanged(data, contactId, entity::setContact,
 				id -> id != null ? contactRepository.getById(id) : null
 		);

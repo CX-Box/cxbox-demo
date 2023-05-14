@@ -6,12 +6,12 @@
   "widgets": [
     {
       "widgetName": "meetingListHeader",
-      "position": 1,
+      "position": 0,
       "gridWidth": 24
     },
     {
       "widgetName": "meetingList",
-      "position": 2,
+      "position": 10,
       "gridWidth": 24
     }
   ],

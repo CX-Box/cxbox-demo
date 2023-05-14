@@ -8,14 +8,15 @@
       "widgetName": "SecondLevelMenu",
       "position": 0,
       "gridWidth": 24
-    },{
+    },
+    {
       "widgetName": "contactEditHeader",
-      "position": 1,
+      "position": 10,
       "gridWidth": 24
     },
     {
       "widgetName": "contactEditForm",
-      "position": 5,
+      "position": 20,
       "gridWidth": 24
     }
   ],

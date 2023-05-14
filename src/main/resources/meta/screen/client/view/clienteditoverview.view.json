@@ -11,32 +11,32 @@
     },
     {
       "widgetName": "clientEditStep",
-      "position": 0,
+      "position": 10,
       "gridWidth": 24
     },
     {
       "widgetName": "clientEditViewHeader",
-      "position": 1,
+      "position": 20,
       "gridWidth": 24
     },
     {
       "widgetName": "clientView",
-      "position": 3,
+      "position": 30,
       "gridWidth": 24
     },
     {
       "widgetName": "contactListHeader",
-      "position": 4,
+      "position": 40,
       "gridWidth": 24
     },
     {
       "widgetName": "contactViewList",
-      "position": 4,
+      "position": 50,
       "gridWidth": 24
     },
     {
       "widgetName": "clientEditButtons",
-      "position": 4,
+      "position": 60,
       "gridWidth": 24
     }
   ],

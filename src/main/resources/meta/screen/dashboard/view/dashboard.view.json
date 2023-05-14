@@ -11,17 +11,17 @@
     },
     {
       "widgetName": "dashboardClientActivitiesList",
-      "position": 2,
+      "position": 10,
       "gridWidth": 13
     },
     {
       "widgetName": "dashboardSalesRingProgress",
-      "position": 2,
+      "position": 20,
       "gridWidth": 9
     },
     {
       "widgetName": "dashboardSalesFunnel",
-      "position": 3,
+      "position": 30,
       "gridWidth": 13
     }
   ],

@@ -27,6 +27,7 @@ import java.util.Set;
 
 import static org.cxbox.api.service.session.InternalAuthorizationService.VANILLA;
 
+@SuppressWarnings("java:S1874")
 @Component
 @Slf4j
 public class CxboxKeycloakAuthenticationProvider extends KeycloakAuthenticationProvider {
@@ -126,6 +127,7 @@ public class CxboxKeycloakAuthenticationProvider extends KeycloakAuthenticationP
 				(root, cq, cb) -> cb.equal(cb.upper(root.get(User_.login)), login.toUpperCase())
 		).orElse(null);
 	}
+
 
 	private void updateUser(AccessToken accessToken, String role, User user) {
 		if (user.getLogin() == null) {

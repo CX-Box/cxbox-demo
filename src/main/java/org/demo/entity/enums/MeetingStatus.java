@@ -11,10 +11,10 @@ import lombok.NonNull;
 @Getter
 @AllArgsConstructor
 public enum MeetingStatus {
-	Completed("Completed", "Finish") {
+	COMPLETED("Completed", "Finish") {
 		@Override
 		public List<MeetingStatus> available(@NonNull Meeting meeting) {
-			return Arrays.asList(InProgress);
+			return Arrays.asList(IN_PROGRESS);
 		}
 
 		@Override
@@ -22,10 +22,10 @@ public enum MeetingStatus {
 			meeting.setStatus(meetingStatus);
 		}
 	},
-	InProgress("In progress", "Start Meeting") {
+	IN_PROGRESS("In progress", "Start Meeting") {
 		@Override
 		public List<MeetingStatus> available(@NonNull Meeting meeting) {
-			return Arrays.asList(Completed, Cancelled);
+			return Arrays.asList(COMPLETED, CANCELLED);
 		}
 
 		@Override
@@ -33,10 +33,10 @@ public enum MeetingStatus {
 			meeting.setStatus(meetingStatus);
 		}
 	},
-	NotStarted("Not started", "") {
+	NOT_STARTED("Not started", "") {
 		@Override
 		public List<MeetingStatus> available(@NonNull Meeting meeting) {
-			return Arrays.asList(Cancelled, InProgress);
+			return Arrays.asList(CANCELLED, IN_PROGRESS);
 		}
 
 		@Override
@@ -44,10 +44,10 @@ public enum MeetingStatus {
 			meeting.setStatus(meetingStatus);
 		}
 	},
-	Cancelled("Cancelled", "Cancel Meeting") {
+	CANCELLED("Cancelled", "Cancel Meeting") {
 		@Override
 		public List<MeetingStatus> available(@NonNull Meeting meeting) {
-			return Arrays.asList(InProgress);
+			return Arrays.asList(IN_PROGRESS);
 		}
 
 		@Override

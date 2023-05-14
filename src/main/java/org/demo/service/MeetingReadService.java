@@ -92,7 +92,7 @@ public class MeetingReadService extends VersionAwareResponseService<MeetingDTO, 
 						.invoker((bc, dto) -> {
 							Meeting meeting = meetingRepository.getById(Long.parseLong(bc.getId()));
 							meeting.getStatus().transition(status, meeting);
-							if (meeting.getStatus().equals(MeetingStatus.Completed)) {
+							if (meeting.getStatus().equals(MeetingStatus.COMPLETED)) {
 								return new ActionResultDTO<MeetingDTO>().setAction(PostAction.drillDown(
 										DrillDownType.INNER,
 										"/screen/meeting/view/meetingedit/"

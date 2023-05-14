@@ -11,9 +11,9 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @AllArgsConstructor
 public enum ClientEditStep {
-	FillGeneralInformation("Fill general information", "screen/client/view/clienteditgeneral/"),
-	CreateClientContact("Add client contact", "screen/client/view/clienteditcontacts/"),
-	ReviewClientCard("Review client card", "screen/client/view/clienteditoverview/");
+	FILL_GENERAL_INFORMATION("Fill general information", "screen/client/view/clienteditgeneral/"),
+	CREATE_CLIENT_CONTACT("Add client contact", "screen/client/view/clienteditcontacts/"),
+	REVIEW_CLIENT_CARD("Review client card", "screen/client/view/clienteditoverview/");
 
 	@JsonValue
 	private final String value;

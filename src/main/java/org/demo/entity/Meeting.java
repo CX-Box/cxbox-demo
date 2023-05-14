@@ -30,7 +30,7 @@ public class Meeting extends BaseEntity {
 	private LocalDateTime endDateTime = LocalDateTime.now();
 
 	@Enumerated(EnumType.STRING)
-	private MeetingStatus status = MeetingStatus.NotStarted;
+	private MeetingStatus status = MeetingStatus.NOT_STARTED;
 
 	private String address;
 

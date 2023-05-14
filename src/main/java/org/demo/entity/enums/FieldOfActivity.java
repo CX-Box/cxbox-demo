@@ -10,11 +10,11 @@ import com.fasterxml.jackson.annotation.JsonValue;
 @RequiredArgsConstructor
 public enum FieldOfActivity {
 	IT("IT"),
-	Media("Media"),
-	Finance("Finance"),
-	Medicine("Medicine"),
-	Manufacturing("Manufacturing"),
-	Education("Education");
+	MEDIA("Media"),
+	FINANCE("Finance"),
+	MEDICINE("Medicine"),
+	MANUFACTURING("Manufacturing"),
+	EDUCATION("Education");
 
 	@JsonValue
 	private final String value;

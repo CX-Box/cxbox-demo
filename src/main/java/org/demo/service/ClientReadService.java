@@ -101,7 +101,7 @@ public class ClientReadService extends VersionAwareResponseService<ClientReadDTO
 								.withPreAction(PreAction.confirm("Are You sure You want to deactivate the client?"))
 								.invoker((bc, data) -> {
 									Client client = clientRepository.getById(bc.getIdAsLong());
-									client.setStatus(ClientStatus.Inactive);
+									client.setStatus(ClientStatus.INACTIVE);
 									clientRepository.save(client);
 									return new ActionResultDTO<ClientReadDTO>()
 											.setAction(PostAction.showMessage(MessageType.INFO, "Client deactivated!"));

@@ -46,13 +46,13 @@ public class Client extends BaseEntity {
 	private Set<Meeting> meetings = new HashSet<>();
 
 	@Enumerated(value = EnumType.STRING)
-	private ClientImportance importance = ClientImportance.Low;
+	private ClientImportance importance = ClientImportance.LOW;
 
 	@Enumerated(value = EnumType.STRING)
-	private ClientStatus status = ClientStatus.New;
+	private ClientStatus status = ClientStatus.NEW;
 
 	@Enumerated(value = EnumType.STRING)
-	private ClientEditStep editStep = ClientEditStep.FillGeneralInformation;
+	private ClientEditStep editStep = ClientEditStep.FILL_GENERAL_INFORMATION;
 
 	private String breif;
 

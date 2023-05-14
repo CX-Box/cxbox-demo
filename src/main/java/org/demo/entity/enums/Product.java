@@ -7,8 +7,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum Product {
-	Equipment("Equipment"),
-	Expertise("Expertise");
+	EQUIPMENT("Equipment"),
+	EXPERTISE("Expertise");
 
 	@JsonValue
 	private final String value;

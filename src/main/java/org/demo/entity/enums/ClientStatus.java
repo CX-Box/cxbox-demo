@@ -7,9 +7,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ClientStatus {
-	New("New"),
-	Inactive("Inactive"),
-	InProgress("In progress");
+	NEW("New"),
+	INACTIVE("Inactive"),
+	IN_PROGRESS("In progress");
 
 	@JsonValue
 	private final String value;

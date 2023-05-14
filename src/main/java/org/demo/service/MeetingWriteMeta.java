@@ -16,7 +16,7 @@ public class MeetingWriteMeta extends FieldMetaBuilder<MeetingDTO> {
 	@Override
 	public void buildRowDependentMeta(RowDependentFieldsMeta<MeetingDTO> fields, InnerBcDescription bcDescription,
 			Long id, Long parentId) {
-		if (MeetingStatus.Completed.equals(fields.get(MeetingDTO_.status).getCurrentValue())) {
+		if (MeetingStatus.COMPLETED.equals(fields.get(MeetingDTO_.status).getCurrentValue())) {
 			fields.setEnabled(
 					MeetingDTO_.notes,
 					MeetingDTO_.result

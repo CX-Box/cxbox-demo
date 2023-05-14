@@ -67,7 +67,7 @@ public class DashboardService extends AbstractCrudmaService {
 		long allSalesSum = sales.stream().map(Sale::getSum).filter(Objects::nonNull).mapToLong(Long::longValue)
 				.sum();
 		long closedSalesSum = sales.stream()
-				.filter(sale -> sale.getStatus() != null && sale.getStatus().equals(SaleStatus.Closed)).map(Sale::getSum)
+				.filter(sale -> sale.getStatus() != null && sale.getStatus().equals(SaleStatus.CLOSED)).map(Sale::getSum)
 				.filter(Objects::nonNull)
 				.mapToLong(Long::longValue).sum();
 		double percent;

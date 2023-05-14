@@ -7,8 +7,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum SaleStatus {
-	Open("Open"),
-	Closed("Closed");
+	OPEN("Open"),
+	CLOSED("Closed");
 
 	@JsonValue
 	private final String value;

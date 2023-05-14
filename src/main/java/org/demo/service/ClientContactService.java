@@ -51,15 +51,20 @@ public class ClientContactService extends VersionAwareResponseService<ContactDTO
 		Client client = clientRepository.findById(bc.getParentIdAsLong()).orElse(null);
 		entity.setClient(client);
 		contactRepository.save(entity);
-		return new CreateResult<>(entityToDto(bc, entity))
-				.setAction(PostAction.drillDown(
-						DrillDownType.INNER,
-						"/screen/client/view/clienteditcreatecontact/"
-								+ CxboxRestController.clientEdit + "/"
-								+ client.getId() + "/"
-								+ CxboxRestController.contactEdit + "/"
-								+ entity.getId()
-				));
+		CreateResult<ContactDTO> result = new CreateResult<>(entityToDto(bc, entity));
+
+		if (client != null) {
+			result
+					.setAction(PostAction.drillDown(
+							DrillDownType.INNER,
+							"/screen/client/view/clienteditcreatecontact/"
+									+ CxboxRestController.clientEdit + "/"
+									+ client.getId() + "/"
+									+ CxboxRestController.contactEdit + "/"
+									+ entity.getId()
+					));
+		}
+		return result;
 	}
 
 	@Override

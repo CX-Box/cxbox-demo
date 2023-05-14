@@ -25,20 +25,16 @@ public class DashboardSalesFunnelService extends AbstractCrudmaService {
 
 	@Autowired
 	private SaleRepository saleRepository;
+
 	@Override
 	public ResultPage<DashboardSalesFunnelDTO> getAll(BusinessComponent bc) {
-		List<DashboardSalesFunnelDTO> salesFunnelDTOS = createSalesFunnelDTOS();
-		return ResultPage.of(salesFunnelDTOS, salesFunnelDTOS.size());
-	}
-
-	private List<DashboardSalesFunnelDTO> createSalesFunnelDTOS() {
-		List<DashboardSalesFunnelDTO> salesFunnelDTOS = new ArrayList<>();
+		List<DashboardSalesFunnelDTO> result = new ArrayList<>();
 		long activitiesAmount = clientRepository.count() + meetingRepository.count();
-		salesFunnelDTOS.add(new DashboardSalesFunnelDTO("All active Clients", clientRepository.count(), "#779FE9"));
-		salesFunnelDTOS.add(new DashboardSalesFunnelDTO("Preparatory Activities", activitiesAmount, "#8FAFE9"));
-		salesFunnelDTOS.add(new DashboardSalesFunnelDTO("Number of Meetings", meetingRepository.count(), "#5F90EA"));
-		salesFunnelDTOS.add(new DashboardSalesFunnelDTO("Number of Sales", saleRepository.count(), "#4D83E7"));
-		return salesFunnelDTOS;
+		result.add(new DashboardSalesFunnelDTO("All active Clients", clientRepository.count(), "#779FE9"));
+		result.add(new DashboardSalesFunnelDTO("Preparatory Activities", activitiesAmount, "#8FAFE9"));
+		result.add(new DashboardSalesFunnelDTO("Number of Meetings", meetingRepository.count(), "#5F90EA"));
+		result.add(new DashboardSalesFunnelDTO("Number of Sales", saleRepository.count(), "#4D83E7"));
+		return ResultPage.of(result, result.size());
 	}
 
 	@Override

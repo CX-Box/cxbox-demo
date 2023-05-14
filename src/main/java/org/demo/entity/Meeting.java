@@ -1,5 +1,6 @@
 package org.demo.entity;
 
+import lombok.EqualsAndHashCode;
 import org.demo.entity.enums.MeetingStatus;
 import org.cxbox.model.core.entity.BaseEntity;
 import org.cxbox.model.core.entity.User;
@@ -19,6 +20,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@EqualsAndHashCode(of = {}, callSuper = true)
 public class Meeting extends BaseEntity {
 
 	private String agenda;

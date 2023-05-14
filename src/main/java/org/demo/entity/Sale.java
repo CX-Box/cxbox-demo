@@ -1,5 +1,6 @@
 package org.demo.entity;
 
+import lombok.EqualsAndHashCode;
 import org.demo.entity.enums.Product;
 import org.demo.entity.enums.SaleStatus;
 import org.cxbox.model.core.entity.BaseEntity;
@@ -19,6 +20,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@EqualsAndHashCode(of = {}, callSuper = true)
 public class Sale extends BaseEntity {
 
 	@ManyToOne

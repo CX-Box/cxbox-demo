@@ -1,5 +1,6 @@
 package org.demo.entity;
 
+import lombok.EqualsAndHashCode;
 import org.cxbox.model.core.entity.BaseEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,7 @@ import javax.persistence.Table;
 @Getter
 @Setter
 @NoArgsConstructor
+@EqualsAndHashCode(of = {}, callSuper = true)
 public class Contact extends BaseEntity {
 
 	@ManyToOne

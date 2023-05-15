@@ -21,8 +21,10 @@ cxbox:
       include-packages: org.cxbox.core.ui.model.json.field.subtypes, org.demo.conf.cxbox.meta
   api:
     path: /api/v1
+    use-servlet-context-path: false
   ui:
     path: /ui
+    use-servlet-context-path: false
 
 server:
   port : 8080

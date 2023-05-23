@@ -46,3 +46,18 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/cxbox-demo:latest
+      - name: Deploy to Docker Host
+        uses: wshihadeh/docker-deployment-action@v1
+        with:
+          remote_docker_host: user@188.124.37.74
+          ssh_private_key: ${{ secrets.CXBOX_DEMO_SSH_PRIVATE_KEY }}
+          ssh_public_key: ${{ secrets.CXBOX_DEMO_SSH_PUBLIC_KEY }}
+          pre_deployment_command_args: 'docker compose -f $INPUT_STACK_FILE_NAME rm -svfa'
+          docker_prune: 'true'
+          deployment_mode: docker-compose
+          copy_stack_file: true
+          pull_images_first: 'true'
+          deploy_path: /home/cxbox/demo
+          stack_file_name: docker-compose.yaml
+          keep_files: 5
+          args: up -d

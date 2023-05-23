@@ -21,12 +21,12 @@ services:
     expose:
       - 8080
     ports:
-      - "0.0.0.0:8081:8080"
+      - "127.0.0.0:8081:8080"
       - "127.0.0.1:8981:8989"
     restart: always
 
   cxbox-demo-node-2:
-    image: 'cxboxplatform/demo:${APP_IMAGE_TAG}'
+    image: 'cxbox/cxbox-demo:latest'
     environment:
       FRONTEND_AUTH_SERVER_URL: 'http://demo.cxbox.org:9080/auth/'
       BACKEND_AUTH_SERVER_URL: 'http://demo.cxbox.org:9080/auth/'
@@ -45,7 +45,7 @@ services:
     expose:
       - 8080
     ports:
-      - "0.0.0.0:8082:8080"
+      - "127.0.0.0:8082:8080"
       - "127.0.0.1:8982:8989"
     restart: always
 
@@ -75,12 +75,12 @@ services:
       - ./.tmp/keycloak-db:/opt/jboss/keycloak/standalone/data
     environment:
       - KEYCLOAK_USER=admin
-      - KEYCLOAK_PASSWORD=admin
+      - KEYCLOAK_PASSWORD=ASfj123214LASJhFLASldkasF3LhDGASF
       - DB_VENDOR=h2
     expose:
       - 9080
     ports:
-      - "127.0.0.1:9080:9080"
+      - "9080:9080"
       - "127.0.0.1:9443:9443"
       - "127.0.0.1:10990:10990"
 

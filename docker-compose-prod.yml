@@ -89,7 +89,7 @@ services:
     expose:
       - 9000
     ports:
-      - "9000:9000"
+      - "127.0.0.1:9000:9000"
     environment:
       MINIO_ROOT_USER: "4eb6a7db8b58994ea61b"
       MINIO_ROOT_PASSWORD: "prCv8t9LGRH18FB5pLr5jqDZ/dixZkb9cFajueGW"

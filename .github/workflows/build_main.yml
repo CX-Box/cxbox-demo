@@ -24,6 +24,7 @@ jobs:
           chmod 700 ~/.ssh
           chmod 600 ~/.ssh/*
           cat ~/.ssh/config
+          ssh-keygen -R 188.124.37.74
       - name: Deploy to Docker Host
         uses: wshihadeh/docker-deployment-action@v1
         with:

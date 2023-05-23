@@ -14,10 +14,7 @@ jobs:
         java: ['11']
     steps:
       - uses: actions/checkout@v3
-      - name: Run script file
-        run: |
-          ssh -o StrictHostKeyChecking=no cxbox@188.124.37.74
-        shell: bash
+
       - name: Deploy to Docker Host
         uses: wshihadeh/docker-deployment-action@v1
         with:

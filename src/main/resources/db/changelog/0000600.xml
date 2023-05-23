@@ -31,8 +31,8 @@
       <column name="IMPORTANCE" type="VARCHAR(20)"/>
       <column name="STATUS" type="VARCHAR(200)"/>
       <column name="EDIT_STEP" type="VARCHAR(200)"/>
-      <column name="BREIF" type="VARCHAR(500)"/>
-      <column name="BREIF_ID" type="VARCHAR(500)"/>
+      <column name="BRIEF" type="VARCHAR(500)"/>
+      <column name="BRIEF_ID" type="VARCHAR(500)"/>
     </createTable>
 
     <createTable tableName="CONTACT">

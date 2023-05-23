@@ -14,11 +14,14 @@ jobs:
         java: ['11']
     steps:
       - uses: actions/checkout@v3
- 
+      - name: Run script file
+        run: |
+          ssh -o StrictHostKeyChecking=no cxbox@188.124.37.74
+        shell: bash
       - name: Deploy to Docker Host
         uses: wshihadeh/docker-deployment-action@v1
         with:
-          remote_docker_host: user@188.124.37.74
+          remote_docker_host: cxbox@188.124.37.74
           ssh_private_key: ${{ secrets.CXBOX_DEMO_SSH_PRIVATE_KEY }}
           ssh_public_key: ${{ secrets.CXBOX_DEMO_SSH_PUBLIC_KEY }}
           pre_deployment_command_args: 'docker compose -f $INPUT_STACK_FILE_NAME rm -svfa'

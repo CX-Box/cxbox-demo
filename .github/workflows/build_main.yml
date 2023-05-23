@@ -14,29 +14,42 @@ jobs:
         java: ['11']
     steps:
       - uses: actions/checkout@v3
-      - name: Configure SSH 1
-        run: |
-          mkdir -p ~/.ssh/
-          cat >>~/.ssh/config <<END
-            Host *
-              StrictHostKeyChecking no
-          END
-          chmod 700 ~/.ssh
-          chmod 600 ~/.ssh/*
-          cat ~/.ssh/config
-          ssh-keygen -R 188.124.37.74
-      - name: Deploy to Docker Host
-        uses: wshihadeh/docker-deployment-action@v1
+      - name: prepare - stop all containers from previous deploy
+        uses: appleboy/ssh-action@v0.1.10
         with:
-          remote_docker_host: cxbox@188.124.37.74
-          ssh_private_key: ${{ secrets.CXBOX_DEMO_SSH_PRIVATE_KEY }}
-          ssh_public_key: ${{ secrets.CXBOX_DEMO_SSH_PUBLIC_KEY }}
-          pre_deployment_command_args: 'docker compose -f $INPUT_STACK_FILE_NAME rm -svfa'
-          docker_prune: 'true'
-          deployment_mode: docker-compose
-          copy_stack_file: true
-          pull_images_first: 'true'
-          deploy_path: /home/cxbox/demo
-          stack_file_name: docker-compose-prod.yaml
-          keep_files: 5
-          args: up -d
+          host: 188.124.37.74
+          username: ${{ secrets.CXBOX_DEMO_SSH_USER }}
+          password: ${{ secrets.CXBOX_DEMO_SSH_PASSWORD }}
+          port: 22
+          script: |
+            sudo mkdir /home/cxbox/demo || true
+            sudo chmod -R 777 /home/cxbox/demo || true
+            cd /home/cxbox/demo
+            sudo docker ps
+            sudo docker compose -f docker-compose.yml rm -svfa || true
+            sudo docker system prune --force
+            sudo docker volume prune --force
+            sudo docker image prune -a --force
+            sudo docker ps
+      - name: prepare - copy files from new release and delete old files
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: 188.124.37.74
+          username:  ${{ secrets.CXBOX_DEMO_SSH_USER }}
+          password: ${{ secrets.CXBOX_DEMO_SSH_PASSWORD }}
+          port: 22
+          source: "docker,docker-compose-prod.yml"
+          target: /home/cxbox/demo
+          rm: true
+      - name: start
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: 188.124.37.74
+          username: ${{ secrets.CXBOX_DEMO_SSH_USER }}
+          password: ${{ secrets.CXBOX_DEMO_SSH_PASSWORD }}
+          port: 22
+          script: |
+            sudo chmod -R 777 /home/cxbox/demo || true
+            cd /home/cxbox/demo
+            sudo docker compose -f docker-compose-prod.yml up -d
+            docker ps

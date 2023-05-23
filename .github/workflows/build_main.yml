@@ -58,6 +58,6 @@ jobs:
           copy_stack_file: true
           pull_images_first: 'true'
           deploy_path: /home/cxbox/demo
-          stack_file_name: docker-compose.yaml
+          stack_file_name: docker-compose-prod.yaml
           keep_files: 5
           args: up -d

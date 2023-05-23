@@ -25,7 +25,6 @@ services:
       ]
     volumes:
       - ./docker/keycloak-config:/opt/jboss/keycloak/realm-config
-      - ./.tmp/keycloak-db:/opt/jboss/keycloak/standalone/data
     environment:
       - KEYCLOAK_USER=admin
       - KEYCLOAK_PASSWORD=admin

@@ -26,7 +26,7 @@ jobs:
             sudo chmod -R 777 /home/cxbox/demo || true
             cd /home/cxbox/demo
             sudo docker ps
-            sudo docker compose -f docker-compose.yml rm -svfa || true
+            sudo docker compose -f docker-compose-prod.yml rm -svfa || true
             sudo docker system prune --force
             sudo docker volume prune --force
             sudo docker image prune -a --force

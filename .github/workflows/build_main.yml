@@ -14,7 +14,13 @@ jobs:
         java: ['11']
     steps:
       - uses: actions/checkout@v3
-
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh/
+          cat >>~/.ssh/config <<END
+            Host *
+              StrictHostKeyChecking no
+          END
       - name: Deploy to Docker Host
         uses: wshihadeh/docker-deployment-action@v1
         with:

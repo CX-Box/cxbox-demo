@@ -1,0 +1,63 @@
+.button {
+    border: none;
+    background: none;
+    outline: none;
+    cursor: pointer;
+}
+
+.button:hover {
+    color: black;
+}
+
+.icon {
+    font-size: 20px;
+}
+
+.row {
+    display: flex;
+    cursor: pointer;
+}
+
+.row:hover {
+    background-color: #e6fbff;
+}
+
+.controls {
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    width: 100px;
+    min-width: 100px;
+    display: flex;
+    justify-content: center;
+}
+
+.column {
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    flex-grow: 1;
+    flex-basis: 0;
+}
+
+.content {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.more {
+    display: none;
+}
+
+.column:hover .more {
+    display: block;
+}
+
+.more:hover {
+    color: black;
+}

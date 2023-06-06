@@ -1,0 +1,55 @@
+.multivalue {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+    border: 1px solid #b3b3b3;
+    padding: 4px 4px 4px 11px;
+    cursor: pointer;
+
+    :global {
+        .ant-tag {
+            position: relative;
+            max-width: 100%;
+            margin-left: 2px;
+            margin-right: 2px;
+            padding-right: 20px;
+            line-height: 18px;
+            cursor: default;
+            background: #ffffff;
+            overflow: hidden;
+            text-overflow: ellipsis;
+
+            .anticon {
+                position: absolute;
+                display: block;
+                top: 3px;
+                right: 6px;
+            }
+        }
+
+        .ant-tag:hover {
+            opacity: 1;
+        }
+    }
+}
+
+.iconContainer {
+    display: table-cell;
+    width: 30px;
+    padding-left: 11px;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.disabled {
+    background-color: #f1f1f1;
+    cursor: not-allowed;
+}
+
+.error {
+    border-color: red;
+}
+
+.enabled:empty:not(:focus):before {
+    content: attr(data-text)
+}

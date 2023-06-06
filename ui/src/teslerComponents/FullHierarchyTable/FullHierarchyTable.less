@@ -1,0 +1,64 @@
+.container tr:global(.ant-table-expanded-row) > td {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.container :global(.ant-table-tbody) > tr > td {
+    border-bottom: none;
+}
+
+.table {
+    :global {
+        .ant-table-body > table {
+            table-layout: fixed;
+        }
+
+        .ant-table .ant-table-thead > tr > th.ant-table-column-has-actions.ant-table-column-has-filters {
+            .ant-table-filter-icon.ant-table-filter-open {
+                background: #fbfeff;
+            }
+
+        }
+
+        .ant-table .ant-table-thead > tr > th.ant-table-column-has-actions.ant-table-column-has-filters:hover {
+            .ant-table-filter-icon:hover {
+                background: #fbfeff;
+            }
+        }
+
+        .ant-table .ant-table-thead > tr > th {
+            .ant-table-filter-icon {
+                display: inline-block;
+                width: 28px;
+                height: 50%;
+                align-self: center;
+                cursor: pointer;
+                margin: 5px;
+                top: 5px;
+                right: auto;
+                background: #fbfeff;
+                color: rgb(187, 187, 187);
+            }
+        }
+
+        .ant-table .ant-table-row {
+            vertical-align: top;
+        }
+    }
+}
+
+.selectColumn {
+    text-align: center;
+}
+
+.padding1 {
+    padding-left: 40px;
+}
+
+.padding2 {
+    padding-left: 60px;
+}
+
+.padding3 {
+    padding-left: 80px;
+}

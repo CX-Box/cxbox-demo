@@ -1,10 +1,10 @@
 import React from 'react'
 import { RingProgress } from '@ant-design/plots'
 import styles from '../RingProgress/RingProgress.module.css'
-import { RingProgressWidgetMeta } from '../../../interfaces/widget'
 import { useSelector } from 'react-redux'
-import { AppState } from '../../../interfaces/storeSlices'
 import { Statistic, StyleAttr } from '@antv/g2plot/lib/types'
+import { RingProgressWidgetMeta } from '@interfaces/widget'
+import { AppState } from '@interfaces/storeSlices'
 
 interface RingProgressProps {
     meta: RingProgressWidgetMeta

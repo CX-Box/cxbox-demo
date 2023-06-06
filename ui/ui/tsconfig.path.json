@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@assets/*": ["src/assets/*"],
+      "@assets": ["src/assets"],
+      "@components/*": ["src/components/*"],
+      "@components": ["src/components"],
+      "@teslerComponents/*": ["src/teslerComponents/*"],
+      "@teslerComponents": ["src/teslerComponents"],
+      "@newTeslerComponents/*": ["src/newTeslerComponents/*"],
+      "@newTeslerComponents": ["src/newTeslerComponents"],
+      "@constants/*": ["src/constants/*"],
+      "@constants": ["src/constants"],
+      "@interfaces/*": ["src/interfaces/*"],
+      "@interfaces": ["src/interfaces"],
+      "@actions/*": ["src/actions/*"],
+      "@actions": ["src/actions"],
+      "@utils/*": ["src/utils/*"],
+      "@utils": ["src/utils"],
+      "@hooks/*": ["src/hooks/*"],
+      "@hooks": ["src/hooks"],
+      "@imports/*": ["src/imports/*"],
+      "@imports": ["src/imports"]
+    }
+  }
+}

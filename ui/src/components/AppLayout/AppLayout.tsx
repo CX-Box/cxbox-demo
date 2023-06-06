@@ -3,13 +3,14 @@ import { Layout, Spin } from 'antd'
 import AppSide from '../AppSide/AppSide'
 import AppBar from '../AppBar/AppBar'
 import { useDispatch, useSelector } from 'react-redux'
-import { AppState } from '../../interfaces/storeSlices'
+import { AppState } from '@interfaces/storeSlices'
 import DevPanel from '../DevPanel/DevPanel'
-import { SSO_AUTH } from '../../actions/types'
+import { SSO_AUTH } from '@actions/types'
 import styles from './AppLayout.module.css'
 import View from '../View/View'
 import ModalInvoke from '../ModalInvoke/ModalInvoke'
 import SystemNotifications from '../SystemNotifications/SystemNotifications'
+import Notifications from '@components/Notifications/Notifications'
 
 export const AppLayout: React.FC = () => {
     const sessionActive = useSelector((state: AppState) => state.session.active)
@@ -25,6 +26,7 @@ export const AppLayout: React.FC = () => {
 
     return sessionActive ? (
         <Layout>
+            <Notifications />
             <DevPanel />
             {modalInvoke?.operation && <ModalInvoke />}
             <SystemNotifications />

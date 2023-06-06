@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PickListPopup test should render custom title, table and footer: customFooter 1`] = `
+<i>
+  custom Footer
+</i>
+`;
+
+exports[`PickListPopup test should render custom title, table and footer: customTableText 1`] = `
+<Spin
+  size="default"
+  spinning={false}
+  wrapperClassName=""
+>
+  <p>
+    custom Table
+  </p>
+</Spin>
+`;
+
+exports[`PickListPopup test should render custom title, table and footer: customTitle 1`] = `"custom title"`;
+
+exports[`PickListPopup test should render default title and footer: popupTitle 1`] = `
+<div>
+  <h1
+    className="title"
+  >
+    Users
+  </h1>
+</div>
+`;

@@ -1,4 +1,5 @@
 {
+  "extends": "./tsconfig.path.json",
   "compilerOptions": {
     "target": "es5",
     "lib": [
@@ -18,7 +19,9 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react",
-    "strict": true
+    "strict": true,
+    "strictNullChecks": false,
+    "strictFunctionTypes": false
   },
   "include": [
     "src"

@@ -30,7 +30,7 @@ function AssocListPopup({ meta }: AssocListPopupProps) {
             const calleeWidgetName = store.view.popupData?.calleeWidgetName
             const associateFieldKey = store.view.popupData?.associateFieldKey
             const data = store.data[bcName] || emptyData
-            const bcFilters = store.screen.filters?.[calleeBCName!] ?? EMPTY_ARRAY
+            const bcFilters = store.screen.filters?.[calleeBCName!] ?? (EMPTY_ARRAY as BcFilter[])
             const filterDataItems = bcFilters.find(filterItem => filterItem.fieldName === associateFieldKey)?.value as DataItem[]
             if (isFilter && filterDataItems?.length > 0) {
                 data?.forEach(dataItem => {

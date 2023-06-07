@@ -6,6 +6,7 @@ import org.cxbox.core.crudma.bc.EnumBcIdentifier;
 import org.cxbox.core.crudma.bc.impl.AbstractEnumBcSupplier;
 import org.cxbox.core.crudma.bc.impl.BcDescription;
 import org.demo.service.ContactMultivalueService;
+import org.demo.service.DadataCompanySuggestionPickListService;
 import org.demo.service.DashboardClientActivitiesService;
 import org.demo.service.ClientContactService;
 import org.demo.service.ClientPickListService;
@@ -52,7 +53,8 @@ public enum CxboxRestController implements EnumBcIdentifier {
 	dashboardFilter(DashboardFilterService.class),
 		dashboardClientActivities(dashboardFilter, DashboardClientActivitiesService.class),
 	dashboardSalesFunnel(dashboardFilter, DashboardSalesFunnelService.class),
-	dashboardSalesRingProgress(dashboardFilter, DashboardSalesRingProgressService.class);
+	dashboardSalesRingProgress(dashboardFilter, DashboardSalesRingProgressService.class),
+	companySuggestionPickList(DadataCompanySuggestionPickListService.class);
 
 	// @formatter:on
 

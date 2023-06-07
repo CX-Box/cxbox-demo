@@ -124,6 +124,7 @@ minio:
   url: ${MINIO_URL:http://localhost:9000}
   bucket:
     name: ${MINIO_DEFAULT_BUCKETS:edcs3gnsadevb}
+
 management:
   endpoint:
     metrics:
@@ -133,3 +134,8 @@ management:
     web:
       exposure:
         include: 'metrics'
+
+integration:
+  dadata:
+    base-url: ${DADATA_URL:https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest}
+    api-key: ${DADATA_API_KEY:885218b4321600b90d4161c85bc11766cd6810c1}

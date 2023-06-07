@@ -83,7 +83,13 @@ function groupByRow<WidgetMeta extends AppWidgetMeta>(widgets: WidgetMeta[], ski
 
 const { WidgetTypes } = interfaces
 
-const popupWidgets = [WidgetTypes.AssocListPopup, WidgetTypes.PickListPopup, WidgetTypes.FlatTreePopup, CustomWidgetTypes.FormPopup]
+const popupWidgets = [
+    WidgetTypes.AssocListPopup,
+    WidgetTypes.PickListPopup,
+    WidgetTypes.FlatTreePopup,
+    CustomWidgetTypes.FormPopup,
+    CustomWidgetTypes.DocumentFormPopup
+]
 function getColWidth(widget: AppWidgetMeta) {
     // this is necessary so that the popup widget does not affect the formation of the grid
     const needFullWidth = popupWidgets.includes(widget.type as interfaces.WidgetTypes)

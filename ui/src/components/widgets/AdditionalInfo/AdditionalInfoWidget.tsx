@@ -1,12 +1,11 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { interfaces } from '@cxbox-ui/core'
 import { CustomWidgetTypes } from '@interfaces/widget'
-import { useAppDispatch, useAppSelector } from '@store'
+import { useAppSelector } from '@store'
 import { buildBcUrl } from '@utils/buildBcUrl'
-import { actions } from '@actions'
 import { useFlatFormFields } from '@hooks/useFlatFormFields'
 import { Col, Row } from 'antd'
-import { ActionLink, Field } from '@cxboxComponents'
+import { Field } from '@cxboxComponents'
 import styles from './AdditionalInfoWidget.module.css'
 
 type AdditionalInfoWidgetMeta = Omit<interfaces.WidgetInfoMeta, 'type'>

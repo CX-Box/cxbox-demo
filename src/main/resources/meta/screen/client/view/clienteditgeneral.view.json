@@ -23,6 +23,11 @@
       "widgetName": "clientEdit",
       "position": 30,
       "gridWidth": 24
+    },
+    {
+      "widgetName": "companySuggestionPickList",
+      "position": 100,
+      "gridWidth": 24
     }
   ],
   "rolesAllowed": [

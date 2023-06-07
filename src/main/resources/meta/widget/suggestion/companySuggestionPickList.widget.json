@@ -1,0 +1,32 @@
+{
+  "name": "companySuggestionPickList",
+  "title": "",
+  "type": "PickListPopup",
+  "bc": "companySuggestionPickList",
+  "showCondition": [],
+  "limit": 20,
+  "fields": [
+    {
+      "title": "",
+      "key": "value",
+      "type": "input"
+    },
+    {
+      "title": "INN",
+      "key": "inn",
+      "type": "input"
+    },
+    {
+      "title": "KPP",
+      "key": "kpp",
+      "type": "input"
+    },
+    {
+      "title": "OGRN",
+      "key": "ogrn",
+      "type": "input"
+    }
+  ],
+  "axisFields": [],
+  "chart": []
+}

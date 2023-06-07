@@ -1,0 +1,66 @@
+@import "../../assets/styles/theme";
+
+.dropdown {
+    margin: 0;
+    padding: 2px 0;
+    border: 0;
+    color: rgba(0,0,0,.65);
+    line-height: 1.5;
+    list-style: none;
+    box-sizing: border-box;
+    font-size: 14px;
+    background-color: #fff;
+    outline: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,.15);
+    border-radius: 4px;
+}
+
+.option {
+    display: flex;
+    flex-direction: column;
+}
+
+.arrow, .clear {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    height: 12px;
+    margin-top: -8px;
+    font-size: 12px;
+
+    color: rgba(0, 0, 0, 0.25);
+
+    svg {
+        transition: transform 0.3s;
+    }
+}
+
+:global(.has-error) .arrow {
+    color: @error;
+}
+
+.clear {
+    visibility: hidden;
+    cursor: pointer;
+
+    &:hover {
+        color: rgba(0, 0, 0, 0.45);
+    }
+}
+
+.filled:hover  {
+    .clear {
+        visibility: visible;
+    }
+
+    .arrow {
+        visibility: hidden;
+    }
+}
+
+.inputWrapper[aria-expanded="true"] {
+    .arrow svg {
+        transform: rotate(180deg);
+    }
+}
+

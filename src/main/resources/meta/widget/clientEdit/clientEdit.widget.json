@@ -7,7 +7,12 @@
     {
       "label": "Client Name",
       "key": "fullName",
-      "type": "input"
+      "type": "suggestionPickList",
+      "popupBcName": "companySuggestionPickList",
+      "pickMap": {
+        "fullName": "value",
+        "address": "address"
+      }
     },
     {
       "label": "Importance",

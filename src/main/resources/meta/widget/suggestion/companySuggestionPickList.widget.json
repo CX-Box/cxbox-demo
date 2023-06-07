@@ -12,18 +12,8 @@
       "type": "input"
     },
     {
-      "title": "INN",
-      "key": "inn",
-      "type": "input"
-    },
-    {
-      "title": "KPP",
-      "key": "kpp",
-      "type": "input"
-    },
-    {
-      "title": "OGRN",
-      "key": "ogrn",
+      "title": "Address",
+      "key": "address",
       "type": "input"
     }
   ],

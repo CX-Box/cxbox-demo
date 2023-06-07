@@ -1,5 +1,6 @@
 package org.demo.controller;
 
+import org.demo.service.DadataCompanySuggestionPickListService;
 import org.demo.service.DashboardClientActivitiesService;
 import org.demo.service.ClientContactService;
 import org.demo.service.ClientReadService;
@@ -50,7 +51,8 @@ public enum CxboxRestController implements EnumBcIdentifier {
 	dashboardFilter(DashboardFilterService.class),
 		dashboardClientActivities(dashboardFilter, DashboardClientActivitiesService.class),
 	dashboardSalesFunnel(dashboardFilter, DashboardSalesFunnelService.class),
-	dashboardSalesRingProgress(dashboardFilter, DashboardSalesRingProgressService.class);
+	dashboardSalesRingProgress(dashboardFilter, DashboardSalesRingProgressService.class),
+	companySuggestionPickList(DadataCompanySuggestionPickListService.class);
 
 	// @formatter:on
 

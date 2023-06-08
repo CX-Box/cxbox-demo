@@ -2,7 +2,7 @@
   "name": "clientList",
   "title": "",
   "type": "List",
-  "bc": "client",
+  "bc": "clientList",
   "fields": [
     {
       "title": "Client",
@@ -18,7 +18,7 @@
     {
       "title": "Field of Activity",
       "key": "fieldOfActivity",
-      "type": "input"
+      "type": "multipleSelect"
     },
     {
       "title": "Importance",
@@ -36,7 +36,8 @@
     "actionGroups": {
       "include": [
         "create",
-        "actions"
+        "save",
+        "cancel-create"
       ]
     }
   }

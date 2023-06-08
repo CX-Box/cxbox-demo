@@ -1,0 +1,15 @@
+.root {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    color: #000000;
+}
+
+.icon {
+    font-size: 20px;
+}
+
+.icon:hover {
+    color: #3F7BEF;
+}
+

@@ -13,6 +13,11 @@
       "widgetName": "clientList",
       "position": 10,
       "gridWidth": 24
+    },
+    {
+      "widgetName": "clientFormForList",
+      "position": 10,
+      "gridWidth": 24
     }
   ],
   "rolesAllowed": [

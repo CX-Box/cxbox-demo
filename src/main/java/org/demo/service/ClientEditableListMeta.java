@@ -32,7 +32,6 @@ public class ClientEditableListMeta extends FieldMetaBuilder<ClientWriteDTO> {
 				ClientWriteDTO_.fullName,
 				ClientWriteDTO_.importance,
 				ClientWriteDTO_.address,
-				ClientWriteDTO_.fieldOfActivity,
 				ClientWriteDTO_.status
 		);
 

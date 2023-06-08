@@ -45,3 +45,15 @@ export interface SuggestionPickListWidgetMeta extends WidgetMeta {
 export interface SuggestionPickListField extends Omit<PickListFieldMeta, 'type'> {
     type: CustomFieldTypes.SuggestionPickList
 }
+
+type InternalWidgetOption = {
+    widget: string
+    style: 'inlineForm' | 'popup' | 'inline' | 'none'
+}
+
+export interface AppWidgetMeta extends WidgetMeta {
+    options?: WidgetOptions & {
+        create?: InternalWidgetOption
+        edit?: InternalWidgetOption
+    }
+}

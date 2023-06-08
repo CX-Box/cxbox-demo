@@ -1,5 +1,6 @@
 package org.demo.controller;
 
+import org.demo.service.ClientEditableListService;
 import org.demo.service.DashboardClientActivitiesService;
 import org.demo.service.ClientContactService;
 import org.demo.service.ClientReadService;
@@ -33,7 +34,7 @@ import org.springframework.stereotype.Component;
 public enum CxboxRestController implements EnumBcIdentifier {
 
 	// @formatter:on
-
+	clientList(ClientEditableListService.class),
 	client(ClientReadService.class),
 		contact(client, ClientContactService.class),
 	clientEdit(ClientWriteService.class),

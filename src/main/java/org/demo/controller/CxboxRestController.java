@@ -34,7 +34,7 @@ import org.springframework.stereotype.Component;
 public enum CxboxRestController implements EnumBcIdentifier {
 
 	// @formatter:on
-	clientList(ClientEditableListService.class),
+	clientListEdit(ClientEditableListService.class),
 	client(ClientReadService.class),
 		contact(client, ClientContactService.class),
 	clientEdit(ClientWriteService.class),

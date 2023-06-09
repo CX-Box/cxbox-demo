@@ -1,0 +1,77 @@
+{
+  "name": "clientFormForList",
+  "title": "",
+  "type": "Form",
+  "bc": "clientListEdit",
+  "fields": [
+    {
+      "label": "Client",
+      "key": "fullName",
+      "type": "input",
+      "drillDown": "true"
+    },
+    {
+      "label": "Address",
+      "key": "address",
+      "type": "input"
+    },
+    {
+      "label": "Field of Activity",
+      "key": "fieldOfActivity",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Importance",
+      "key": "importance",
+      "type": "dictionary",
+      "bgColorKey": "color"
+    },
+    {
+      "label": "Status",
+      "key": "status",
+      "type": "dictionary"
+    }
+  ],
+  "options": {
+    "internalWidgetFor": "clientList",
+    "actionGroups": {
+      "include": [
+        "save"
+      ]
+    },
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "fullName",
+              "span": 7
+            },
+            {
+              "fieldKey": "status",
+              "span": 7
+            },
+            {
+              "fieldKey": "address",
+              "span": 7
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "importance",
+              "span": 6
+            },
+            {
+              "fieldKey": "fieldOfActivity",
+              "span": 6
+            }
+          ]
+        }
+      ]
+    }
+  }
+
+}
+

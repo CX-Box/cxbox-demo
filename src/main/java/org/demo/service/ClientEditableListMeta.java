@@ -2,9 +2,11 @@ package org.demo.service;
 
 import java.util.Arrays;
 import org.cxbox.core.crudma.bc.impl.InnerBcDescription;
+import org.cxbox.core.dto.DrillDownType;
 import org.cxbox.core.dto.rowmeta.FieldsMeta;
 import org.cxbox.core.dto.rowmeta.RowDependentFieldsMeta;
 import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
+import org.demo.controller.CxboxRestController;
 import org.demo.dto.ClientReadDTO_;
 import org.demo.dto.ClientWriteDTO;
 import org.demo.dto.ClientWriteDTO_;
@@ -44,6 +46,12 @@ public class ClientEditableListMeta extends FieldMetaBuilder<ClientWriteDTO> {
 						.map(FieldOfActivity::getValue)
 						.toArray(String[]::new)
 		);
+		fields.setDrilldown(
+				ClientReadDTO_.fullName,
+				DrillDownType.INNER,
+				"/screen/client/view/clientview/" + CxboxRestController.client + "/" + id
+		);
+
 	}
 
 	@Override

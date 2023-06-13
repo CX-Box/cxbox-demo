@@ -4,9 +4,9 @@ import ColumnFilter, { ColumnFilterOwnProps } from './ColumnFilter'
 import ColumnSort from './ColumnSort'
 import styles from './ColumnTitle.less'
 import TemplatedTitle from '@teslerComponents/TemplatedTitle/TemplatedTitle'
-import { WidgetListField } from '@tesler-ui/core'
-import { RowMetaField } from '@tesler-ui/core'
-import { FieldType } from '@tesler-ui/core'
+import { WidgetListField } from '@cxbox-ui/core'
+import { RowMetaField } from '@cxbox-ui/core'
+import { FieldType } from '@cxbox-ui/core'
 
 /**
  * TODO: Rename to ColumnTitleProps in 2.0.0

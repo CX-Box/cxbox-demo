@@ -3,11 +3,12 @@ import { Icon, Popover } from 'antd'
 import styles from './MultivalueHover.less'
 import cn from 'classnames'
 import { BaseFieldProps } from '@teslerComponents/Field/Field'
-import { MultivalueSingleValue } from '@tesler-ui/core'
-import { DataValue } from '@tesler-ui/schema'
-import { useWidgetHighlightFilter } from '@tesler-ui/core'
-import { escapedSrc } from '@tesler-ui/core'
+import { MultivalueSingleValue } from '@cxbox-ui/core'
+import { DataValue } from '@cxbox-ui/schema'
+import { useWidgetHighlightFilter } from '@cxbox-ui/core'
+import { escapedSrc } from '@cxbox-ui/core'
 import { SearchHighlight } from '@teslerComponents'
+import { FrownOutlined } from '@ant-design/icons'
 
 export interface MultivalueHoverProps extends BaseFieldProps {
     data: MultivalueSingleValue[]
@@ -43,7 +44,7 @@ const Multivalue: React.FunctionComponent<MultivalueHoverProps> = props => {
                 )}
             </p>
         ) : props.onDrillDown ? (
-            <Icon className={cn(props.className)} type="left-circle" onClick={props.onDrillDown} />
+            <FrownOutlined />
         ) : null
     const fields = props.data.map((multivalueSingleValue, index) => {
         return (

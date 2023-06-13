@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react'
 import { WidgetMeta } from '@cxbox-ui/core/interfaces/widget'
 import styles from './Header.module.css'
-import { TemplatedTitle } from '@cxbox-ui/core'
+import { TemplatedTitle } from '@teslerComponents'
 
 interface HeaderProps {
     meta: WidgetMeta

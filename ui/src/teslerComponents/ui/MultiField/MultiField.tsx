@@ -2,8 +2,8 @@ import React from 'react'
 import styles from './MultiField.less'
 import Field from '@teslerComponents/Field/Field'
 import cn from 'classnames'
-import { WidgetField } from '@tesler-ui/core'
-import { DataItem } from '@tesler-ui/core'
+import { WidgetField } from '@cxbox-ui/core'
+import { DataItem } from '@cxbox-ui/core'
 
 export interface MultiFieldProps {
     bcName: string

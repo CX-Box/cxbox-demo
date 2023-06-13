@@ -3,9 +3,9 @@ import { connect, useSelector } from 'react-redux'
 import { Dispatch } from 'redux'
 import { Store } from '@interfaces/store'
 import MultivalueTag from '@teslerComponents/ui/Multivalue/MultivalueTag'
-import { WidgetTypes } from '@tesler-ui/schema'
-import { MultivalueSingleValue } from '@tesler-ui/core'
-import { MultivalueFieldMeta } from '@tesler-ui/core'
+import { WidgetTypes } from '@cxbox-ui/schema'
+import { MultivalueSingleValue } from '@cxbox-ui/core'
+import { MultivalueFieldMeta } from '@cxbox-ui/core'
 import { $do } from '@actions/types'
 
 export interface MultivalueFieldOwnProps {

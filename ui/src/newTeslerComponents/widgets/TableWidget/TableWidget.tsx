@@ -8,7 +8,7 @@ import Pagination from '../../ui/Pagination/Pagination'
 import RowOperationsButton from '../../RowOperations/RowOperationsButton'
 import DefaultHeader from './components/Header'
 import CustomColumnTitle from './components/CustomColumnTitle'
-import { DataItem } from '@tesler-ui/core'
+import { DataItem } from '@cxbox-ui/core'
 import {
     PaginationMode,
     RowMetaField,
@@ -20,7 +20,7 @@ import {
     useRowMetaProps,
     useDataProps,
     useFieldNormalization
-} from '@tesler-ui/core'
+} from '@cxbox-ui/core'
 import FullHierarchyTable from '@teslerComponents/FullHierarchyTable/FullHierarchyTable'
 import HierarchyTable from '@teslerComponents/HierarchyTable/HierarchyTable'
 

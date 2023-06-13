@@ -17,7 +17,7 @@
 
 import React from 'react'
 import NavigationTabs from '@teslerComponents/ui/NavigationTabs/NavigationTabs'
-import { NavigationWidgetMeta } from '@tesler-ui/core'
+import { NavigationWidgetMeta } from '@cxbox-ui/core'
 
 export interface NavigationTabsWidgetProps {
     meta: NavigationWidgetMeta

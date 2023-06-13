@@ -11,12 +11,12 @@ import FullHierarchyTable from '@teslerComponents/FullHierarchyTable/FullHierarc
 import ColumnTitle from '@teslerComponents/ColumnTitle/ColumnTitle'
 import Pagination from '@teslerComponents/ui/Pagination/Pagination'
 import cn from 'classnames'
-import { PaginationMode, WidgetTableMeta } from '@tesler-ui/core'
-import { DataItem, PendingDataItem, PickMap } from '@tesler-ui/core'
-import { RowMetaField } from '@tesler-ui/core'
-import { FieldType } from '@tesler-ui/core'
-import { buildBcUrl } from '@tesler-ui/core'
-import { createMapDispatchToProps } from '@tesler-ui/core'
+import { PaginationMode, WidgetTableMeta } from '@cxbox-ui/core'
+import { DataItem, PendingDataItem, PickMap } from '@cxbox-ui/core'
+import { RowMetaField } from '@cxbox-ui/core'
+import { FieldType } from '@cxbox-ui/core'
+import { buildBcUrl } from '@cxbox-ui/core'
+import { createMapDispatchToProps } from '@cxbox-ui/core'
 import { $do } from '@actions/types'
 
 export interface PickListPopupActions {

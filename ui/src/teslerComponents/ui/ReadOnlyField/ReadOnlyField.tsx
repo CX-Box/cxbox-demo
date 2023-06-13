@@ -1,9 +1,9 @@
 import React from 'react'
 import styles from './ReadOnlyField.less'
 import cn from 'classnames'
-import { WidgetFieldBase } from '@tesler-ui/core'
-import { useWidgetHighlightFilter } from '@tesler-ui/core'
-import { escapedSrc } from '@tesler-ui/core'
+import { WidgetFieldBase } from '@cxbox-ui/core'
+import { useWidgetHighlightFilter } from '@cxbox-ui/core'
+import { escapedSrc } from '@cxbox-ui/core'
 import ActionLink from '@teslerComponents/ui/ActionLink/ActionLink'
 import { SearchHighlight } from '@teslerComponents'
 

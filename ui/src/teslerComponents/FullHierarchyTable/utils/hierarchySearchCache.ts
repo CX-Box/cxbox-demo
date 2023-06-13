@@ -15,8 +15,8 @@
  * limitations under the License.
  */
 
-import { AssociatedItem } from '@tesler-ui/core'
-import { BcFilter } from '@tesler-ui/core'
+import { AssociatedItem } from '@cxbox-ui/core'
+import { BcFilter } from '@cxbox-ui/core'
 
 /**
  * Function to memoize

@@ -2,7 +2,7 @@ import React from 'react'
 import { Button } from 'antd'
 import { useTranslation } from 'react-i18next'
 import styles from './Pagination.less'
-import { PaginationMode, PaginationProps as UsePaginationProps, usePagination } from '@tesler-ui/core'
+import { PaginationMode, PaginationProps as UsePaginationProps, usePagination } from '@cxbox-ui/core'
 
 export interface PaginationProps extends Omit<UsePaginationProps, 'changePage'> {
     onChangePage?: UsePaginationProps['changePageAdditional']

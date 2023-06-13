@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react'
 import { createLocation } from 'history'
-import { historyObj } from '@tesler-ui/core'
+import { historyObj } from '@cxbox-ui/core'
 
 export interface LinkProps {
     children: React.ReactNode

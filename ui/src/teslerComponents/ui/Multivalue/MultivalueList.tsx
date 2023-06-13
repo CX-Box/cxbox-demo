@@ -2,8 +2,8 @@ import React from 'react'
 import styles from './MultivalueList.less'
 import cn from 'classnames'
 import MultiValueListRecord from '@teslerComponents/Multivalue/MultiValueListRecord'
-import { MultivalueFieldMeta } from '@tesler-ui/core'
-import { MultivalueSingleValue } from '@tesler-ui/core'
+import { MultivalueFieldMeta } from '@cxbox-ui/core'
+import { MultivalueSingleValue } from '@cxbox-ui/core'
 
 export interface MultivalueListProps {
     fieldTitle: React.ReactNode

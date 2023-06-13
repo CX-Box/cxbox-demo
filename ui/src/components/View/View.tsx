@@ -1,7 +1,7 @@
 import React from 'react'
 import { CustomWidgetDescriptor, WidgetTypes } from '@cxbox-ui/core/interfaces/widget'
 import Card from '../Card/Card'
-import { View as CxboxView } from '@cxbox-ui/core'
+import { View as CxboxView } from '@teslerComponents'
 import { CustomFieldTypes, CustomWidgetTypes } from '../../interfaces/widget'
 import MultipleSelectField from '../../fields/MultipleSelectField/MultipleSelectField'
 import Form from '../widgets/Form/Form'

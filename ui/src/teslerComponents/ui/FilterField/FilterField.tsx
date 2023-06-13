@@ -24,12 +24,13 @@ import { Checkbox, DatePicker, Icon, Input } from 'antd'
 import { CheckboxChangeEvent } from 'antd/lib/checkbox'
 import moment, { Moment } from 'moment'
 import RangePicker from './components/RangePicker'
-import { WidgetListField, WidgetMeta } from '@tesler-ui/core'
-import { RowMetaField } from '@tesler-ui/core'
-import { DataValue } from '@tesler-ui/schema'
-import { FieldType } from '@tesler-ui/core'
+import { WidgetListField, WidgetMeta } from '@cxbox-ui/core'
+import { RowMetaField } from '@cxbox-ui/core'
+import { DataValue } from '@cxbox-ui/schema'
+import { FieldType } from '@cxbox-ui/core'
 import { CheckboxFilter } from '@teslerComponents/ui/CheckboxFilter/CheckboxFilter'
 import { getFormat } from '@teslerComponents/ui/DatePickerField/DatePickerField'
+import { FrownOutlined } from '@ant-design/icons'
 
 export interface ColumnFilterControlProps {
     widgetFieldMeta: WidgetListField
@@ -140,7 +141,7 @@ export const ColumnFilterControl: React.FC<ColumnFilterControlProps> = props => 
                 <Input
                     autoFocus
                     value={props.value as string}
-                    suffix={<Icon type="search" />}
+                    suffix={<FrownOutlined />}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         const textValue = e.target.value.substr(0, 100)
                         props.onChange(textValue || null)

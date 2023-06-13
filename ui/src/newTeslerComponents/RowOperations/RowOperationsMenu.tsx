@@ -1,9 +1,10 @@
 import React, { memo, useCallback } from 'react'
-import { Menu, Icon, Skeleton } from 'antd'
-import { Operation, isOperationGroup, OperationGroup } from '@tesler-ui/core'
+import { Menu, Skeleton } from 'antd'
+import { Operation, isOperationGroup, OperationGroup } from '@cxbox-ui/core'
 import { ClickParam } from 'antd/lib/menu'
 import { useTranslation } from 'react-i18next'
 import styles from './RowOperationsMenu.less'
+import { FrownOutlined } from '@ant-design/icons'
 
 /**
  * {@link RowOperationsMenu | RowOperationsMenu} properties
@@ -37,7 +38,7 @@ export const RowOperationsMenu: React.FC<RowOperationsMenuProps> = ({ loading, o
     const menuItem = useCallback(
         (item: Operation) => (
             <Menu.Item key={item.type} onClick={handleClick}>
-                {item.icon && <Icon type={item.icon} />}
+                {item.icon && <FrownOutlined />}
                 {item.text}
             </Menu.Item>
         ),

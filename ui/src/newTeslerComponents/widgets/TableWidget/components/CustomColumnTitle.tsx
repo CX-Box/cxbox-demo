@@ -1,7 +1,7 @@
 import React from 'react'
 import { TableWidgetProps } from '../TableWidget'
 import ColumnTitle from '../../../ColumnTitle/ColumnTitle'
-import { RowMetaField, WidgetListField } from '@tesler-ui/core'
+import { RowMetaField, WidgetListField } from '@cxbox-ui/core'
 
 interface CustomColumnTitleProps extends Pick<TableWidgetProps, 'columnTitleComponent'> {
     widgetName: string

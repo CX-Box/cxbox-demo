@@ -7,7 +7,7 @@ import {
     getCardWrap,
     useShowCondition,
     getWidgetComponent
-} from '@tesler-ui/core'
+} from '@cxbox-ui/core'
 import styles from './Widget.less'
 
 interface WidgetProps {

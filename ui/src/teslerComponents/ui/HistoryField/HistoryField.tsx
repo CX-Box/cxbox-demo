@@ -3,9 +3,9 @@ import Field from '@teslerComponents/Field/Field'
 import styles from './HistoryField.less'
 import { diffWords } from 'diff'
 import cn from 'classnames'
-import { WidgetField } from '@tesler-ui/core'
-import { DataItem } from '@tesler-ui/core'
-import { FieldType } from '@tesler-ui/core'
+import { WidgetField } from '@cxbox-ui/core'
+import { DataItem } from '@cxbox-ui/core'
+import { FieldType } from '@cxbox-ui/core'
 
 export interface HistoryFieldProps {
     fieldMeta: WidgetField

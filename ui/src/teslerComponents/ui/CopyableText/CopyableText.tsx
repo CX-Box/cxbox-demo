@@ -1,5 +1,6 @@
 import React, { CSSProperties } from 'react'
 import { Icon, Input } from 'antd'
+import { FrownOutlined } from '@ant-design/icons'
 
 interface CopyableTextProps {
     text: string
@@ -14,16 +15,7 @@ const CopyableText: React.FunctionComponent<CopyableTextProps> = props => {
         document.execCommand('copy')
     }, [textRef])
     const inputStyle: CSSProperties = { width: 300 }
-    return (
-        <Input
-            className={className}
-            size="small"
-            ref={textRef}
-            value={text}
-            style={inputStyle}
-            addonAfter={<Icon type="copy" onClick={handleCopyDetails} />}
-        />
-    )
+    return <Input className={className} size="small" ref={textRef} value={text} style={inputStyle} addonAfter={<FrownOutlined />} />
 }
 
 export default React.memo(CopyableText)

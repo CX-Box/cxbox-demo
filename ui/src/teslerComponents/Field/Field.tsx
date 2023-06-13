@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
-import { Form, Icon, Input, Tooltip } from 'antd'
+import { Form, Input, Tooltip } from 'antd'
 import { Store } from '@interfaces/store'
 import DatePickerField from '@teslerComponents/ui/DatePickerField/DatePickerField'
 import NumberInput from '@teslerComponents/ui/NumberInput/NumberInput'
@@ -24,13 +24,14 @@ import { CustomizationContext } from '@teslerComponents/View/View'
 import { InteractiveInput } from '@teslerComponents/ui/InteractiveInput/InteractiveInput'
 import HistoryField from '@teslerComponents/ui/HistoryField/HistoryField'
 import { TooltipPlacement } from 'antd/es/tooltip'
-import { WidgetField, WidgetFieldBase, WidgetTypes } from '@tesler-ui/core'
-import { DataItem, MultivalueSingleValue, PendingDataItem } from '@tesler-ui/core'
-import { DataValue } from '@tesler-ui/schema'
-import { RowMetaField } from '@tesler-ui/core'
-import { FieldType, PendingValidationFails, PendingValidationFailsFormat } from '@tesler-ui/core'
-import { buildBcUrl, useDrillDownUrl } from '@tesler-ui/core'
+import { WidgetField, WidgetFieldBase, WidgetTypes } from '@cxbox-ui/core'
+import { DataItem, MultivalueSingleValue, PendingDataItem } from '@cxbox-ui/core'
+import { DataValue } from '@cxbox-ui/schema'
+import { RowMetaField } from '@cxbox-ui/core'
+import { FieldType, PendingValidationFails, PendingValidationFailsFormat } from '@cxbox-ui/core'
+import { buildBcUrl, useDrillDownUrl } from '@cxbox-ui/core'
 import { $do } from '@actions/types'
+import { FrownOutlined } from '@ant-design/icons'
 
 interface FieldOwnProps {
     widgetFieldMeta: WidgetField
@@ -329,7 +330,7 @@ export const Field: FunctionComponent<FieldProps> = ({
             resultField = readOnly ? (
                 pickListField
             ) : (
-                <InteractiveInput suffix={handleDrilldown && <Icon type="link" />} onSuffixClick={handleDrilldown}>
+                <InteractiveInput suffix={handleDrilldown && <FrownOutlined />} onSuffixClick={handleDrilldown}>
                     {pickListField}
                 </InteractiveInput>
             )
@@ -351,7 +352,7 @@ export const Field: FunctionComponent<FieldProps> = ({
             resultField = readOnly ? (
                 pickListField
             ) : (
-                <InteractiveInput suffix={handleDrilldown && <Icon type="link" />} onSuffixClick={handleDrilldown}>
+                <InteractiveInput suffix={handleDrilldown && <FrownOutlined />} onSuffixClick={handleDrilldown}>
                     {pickListField}
                 </InteractiveInput>
             )
@@ -418,7 +419,7 @@ export const Field: FunctionComponent<FieldProps> = ({
             ) : (
                 <InteractiveInput
                     suffixClassName={suffixClassName}
-                    suffix={handleDrilldown && <Icon type="link" />}
+                    suffix={handleDrilldown && <FrownOutlined />}
                     onSuffixClick={handleDrilldown}
                 >
                     <Input

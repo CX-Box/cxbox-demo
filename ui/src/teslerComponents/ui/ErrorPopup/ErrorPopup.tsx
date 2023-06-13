@@ -1,13 +1,14 @@
 import React, { FunctionComponent } from 'react'
-import { Modal, Form, Collapse, Icon, Button } from 'antd'
+import { Modal, Form, Collapse, Button } from 'antd'
 import { useTranslation } from 'react-i18next'
 import cn from 'classnames'
 import styles from './ErrorPopup.less'
 import { Dispatch } from 'redux'
 import { connect } from 'react-redux'
 import { Store } from '@interfaces/store'
-import { ApplicationError, ApplicationErrorType, BusinessError, SystemError } from '@tesler-ui/core'
+import { ApplicationError, ApplicationErrorType, BusinessError, SystemError } from '@cxbox-ui/core'
 import { $do } from '@actions/types'
+import { FrownOutlined } from '@ant-design/icons'
 
 export interface ErrorPopupOwnProps {
     className?: string
@@ -33,7 +34,7 @@ export const ErrorPopup: FunctionComponent<ErrorPopupProps> = props => {
     const { t } = useTranslation()
     const title = (
         <header className={styles.header}>
-            <Icon className={styles.icon} type="exclamation-circle-o" />
+            <FrownOutlined />
             <span className={styles.title}>{props.title || t('Error')}</span>
         </header>
     )

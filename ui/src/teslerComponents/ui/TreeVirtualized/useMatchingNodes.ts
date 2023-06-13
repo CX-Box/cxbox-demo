@@ -16,7 +16,7 @@
  */
 
 import React from 'react'
-import { TreeNodeAscending } from '@tesler-ui/core'
+import { TreeNodeAscending } from '@cxbox-ui/core'
 
 const initialExpanded: Record<string, boolean> = { '0': true }
 

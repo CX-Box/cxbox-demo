@@ -9,9 +9,10 @@ import styles from './InlinePickList.less'
 import { Store } from '@interfaces/store'
 import cn from 'classnames'
 import { useTranslation } from 'react-i18next'
-import { DataItem, PickMap } from '@tesler-ui/core'
-import { useDebounce } from '@tesler-ui/core'
+import { DataItem, PickMap } from '@cxbox-ui/core'
+import { useDebounce } from '@cxbox-ui/core'
 import { $do } from '@actions/types'
+import { FrownOutlined } from '@ant-design/icons'
 
 interface InlinePickListOwnProps extends BaseFieldProps {
     fieldName: string
@@ -127,7 +128,7 @@ const InlinePickList: React.FunctionComponent<InlinePickListProps> = ({
                 })}
             </Select>
             <span className={cn(styles.buttonContainer, { [styles.disabledButton]: disabled })} onClick={!disabled ? handleClick : null}>
-                <Icon type="paper-clip" />
+                <FrownOutlined />
             </span>
         </span>
     )

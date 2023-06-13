@@ -1,5 +1,6 @@
 import React from 'react'
-import { buildBcUrl, TemplatedTitle } from '@cxbox-ui/core'
+import { buildBcUrl } from '@cxbox-ui/core'
+import { TemplatedTitle } from '@teslerComponents'
 import { WidgetMeta, WidgetTypes } from '@cxbox-ui/core/interfaces/widget'
 import { Col, Row } from 'antd'
 import Operations from '../Operations/Operations'

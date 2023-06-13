@@ -3,9 +3,9 @@ import { Col, Row } from 'antd'
 import styles from './InfoRow.less'
 import cn from 'classnames'
 import InfoCell from './InfoCell'
-import { LayoutRow, WidgetInfoField, WidgetInfoMeta } from '@tesler-ui/core'
-import { DataItem } from '@tesler-ui/core'
-import { RowMetaField } from '@tesler-ui/core'
+import { LayoutRow, WidgetInfoField, WidgetInfoMeta } from '@cxbox-ui/core'
+import { DataItem } from '@cxbox-ui/core'
+import { RowMetaField } from '@cxbox-ui/core'
 
 export interface InfoRowProps {
     meta: WidgetInfoMeta

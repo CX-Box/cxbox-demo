@@ -18,7 +18,7 @@
 import React from 'react'
 import { Tabs } from 'antd'
 import styles from './NavigationTabs.less'
-import { historyObj, useViewTabs } from '@tesler-ui/core'
+import { historyObj, useViewTabs } from '@cxbox-ui/core'
 
 interface NavigationTabsProps {
     navigationLevel: number

@@ -1,12 +1,12 @@
 import React, { FunctionComponent } from 'react'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
-import { Icon } from 'antd'
 import { Store } from '@interfaces/store'
 import cn from 'classnames'
 import styles from './ColumnSort.less'
-import { BcSorter } from '@tesler-ui/core'
+import { BcSorter } from '@cxbox-ui/core'
 import { $do } from '@actions/types'
+import { FrownOutlined } from '@ant-design/icons'
 
 export interface ColumnSortOwnProps {
     className?: string
@@ -45,7 +45,7 @@ export const ColumnSort: FunctionComponent<ColumnSortProps> = props => {
         props.onSort(props.bcName, sorter, props.page, props.widgetName, props.infinitePagination)
     }
 
-    return <Icon className={cn(styles.icon, props.className, { [styles.forceShow]: props.sorter })} type={icon} onClick={handleSort} />
+    return <FrownOutlined />
 }
 
 function mapStateToProps(store: Store, ownProps: ColumnSortOwnProps) {

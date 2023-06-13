@@ -1,6 +1,6 @@
 import React from 'react'
 import { WidgetFormMeta } from '@cxbox-ui/core/interfaces/widget'
-import { FormWidget } from '@cxbox-ui/core'
+import { FormWidget } from '@teslerComponents'
 import styles from './Form.module.css'
 
 interface FormProps {

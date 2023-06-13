@@ -21,11 +21,12 @@ import { Icon, Checkbox } from 'antd'
 import styles from './TreeVirtualizedNode.less'
 import { useSelector } from 'react-redux'
 import { Store } from '@interfaces/store'
-import { TreeNodeBidirectional } from '@tesler-ui/core'
-import { WidgetListField } from '@tesler-ui/core'
-import { BcFilter } from '@tesler-ui/core'
+import { TreeNodeBidirectional } from '@cxbox-ui/core'
+import { WidgetListField } from '@cxbox-ui/core'
+import { BcFilter } from '@cxbox-ui/core'
 import SearchHightlight from '@teslerComponents/ui/SearchHightlight/SearchHightlight'
-import { escapedSrc } from '@tesler-ui/core'
+import { escapedSrc } from '@cxbox-ui/core'
+import { FrownOutlined } from '@ant-design/icons'
 
 /**
  * Properties for `TreeVirtualizedNode` component
@@ -103,7 +104,7 @@ export function TreeVirtualizedNode<T extends TreeNodeBidirectional>(props: Tree
             <div className={styles.controls}>
                 {item.children?.length && (
                     <button className={styles.button} onClick={() => data.onToggle(item.id)}>
-                        <Icon className={styles.icon} type={expanded ? 'minus-square' : 'plus-square'} />
+                        <FrownOutlined />
                     </button>
                 )}
             </div>

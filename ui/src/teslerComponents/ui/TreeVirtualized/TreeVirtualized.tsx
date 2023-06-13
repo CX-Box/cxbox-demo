@@ -20,10 +20,10 @@ import { FixedSizeList, FixedSizeListProps, ListChildComponentProps, Align } fro
 import TreeVirtualizedNode from './TreeVirtualizedNode'
 import { useSearchResult } from './useSearchResult'
 import { useMatchingNodes } from './useMatchingNodes'
-import { WidgetListField } from '@tesler-ui/core'
-import { BcFilter, FilterType } from '@tesler-ui/core'
-import { DataNode, TreeNodeBidirectional } from '@tesler-ui/core'
-import { assignTreeLinks, getDescendants, presort } from '@tesler-ui/core'
+import { WidgetListField } from '@cxbox-ui/core'
+import { BcFilter, FilterType } from '@cxbox-ui/core'
+import { DataNode, TreeNodeBidirectional } from '@cxbox-ui/core'
+import { assignTreeLinks, getDescendants, presort } from '@cxbox-ui/core'
 
 /**
  * Properties for TreeVirtualized component

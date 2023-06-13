@@ -15,6 +15,6 @@ export {
     SSO_AUTH,
     useControlColumnsMerge,
     useFieldNormalization
-} from '@tesler-ui/core'
+} from '@cxbox-ui/core'
 
-export type { PaginationProps, SorterProps, ControlColumnsMergeProps } from '@tesler-ui/core'
+export type { PaginationProps, SorterProps, ControlColumnsMergeProps } from '@cxbox-ui/core'

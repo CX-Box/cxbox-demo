@@ -2,7 +2,7 @@ import cn from 'classnames'
 import React, { ReactNode } from 'react'
 import styles from './InfoValueWrapper.less'
 import { Col } from 'antd'
-import { LayoutCol, LayoutRow } from '@tesler-ui/core'
+import { LayoutCol, LayoutRow } from '@cxbox-ui/core'
 
 interface ValueWrapperProps {
     row: LayoutRow

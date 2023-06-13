@@ -2,7 +2,7 @@ import React from 'react'
 import { Button, Tooltip } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { Store } from '@tesler-ui/core'
+import { Store } from '@cxbox-ui/core'
 import { $do } from '@actions/types'
 
 interface DebugModeButtonProps {

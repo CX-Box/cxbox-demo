@@ -1,5 +1,5 @@
 import React from 'react'
-import { Menu, Icon } from 'antd'
+import { Menu } from 'antd'
 import { changeLocation } from '@cxbox-ui/core'
 import styles from './ScreenNavigation.module.css'
 import { ClickParam } from 'antd/lib/menu'
@@ -22,7 +22,8 @@ function ScreenNavigation() {
                     return (
                         <Menu.Item key={item.url} className={styles.Item}>
                             <span className={styles.MenuItemLink}>
-                                <Icon type={item.icon ? item.icon : 'coffee'} />
+                                {/*<Icon type={item.icon ? item.icon : 'coffee'} />*/}
+                                <span>iconca</span>
                                 <span>{item.text}</span>
                             </span>
                         </Menu.Item>

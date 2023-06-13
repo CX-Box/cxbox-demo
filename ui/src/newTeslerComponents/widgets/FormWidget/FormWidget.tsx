@@ -4,8 +4,8 @@ import Field from '../../Field/Field'
 import styles from './FormWidget.less'
 import cn from 'classnames'
 import { useBcProps, usePendingProps, useRowMetaProps } from '@imports/teslerCore'
-import { useFlatFormFields, WidgetFormMeta, WidgetFormField } from '@tesler-ui/core'
-import { FieldType } from '@tesler-ui/core'
+import { useFlatFormFields, WidgetFormMeta, WidgetFormField } from '@cxbox-ui/core'
+import { FieldType } from '@cxbox-ui/core'
 import { TemplatedTitle } from '@teslerComponents'
 
 interface FormWidgetProps {

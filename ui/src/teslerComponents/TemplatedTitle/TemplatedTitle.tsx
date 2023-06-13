@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react'
 import { connect } from 'react-redux'
 import { Store } from '@interfaces/store'
-import { getFieldTitle } from '@tesler-ui/core'
+import { getFieldTitle } from '@cxbox-ui/core'
 
 interface TemplatedTitleOwnProps {
     title: string

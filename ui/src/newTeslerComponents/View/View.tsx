@@ -1,6 +1,6 @@
 import React, { ComponentType, memo } from 'react'
 import { CustomizationContext } from './View.context'
-import { CustomWidgetDescriptor, WidgetMeta } from '@tesler-ui/core'
+import { CustomWidgetDescriptor, WidgetMeta } from '@cxbox-ui/core'
 
 export interface ViewProps {
     widgets: WidgetMeta[]

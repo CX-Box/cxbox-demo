@@ -2,7 +2,7 @@ import React from 'react'
 import { Row, Col } from 'antd'
 import Widget from '@teslerComponents/Widget/Widget'
 import WidgetErrorBoundary from '@teslerComponents/WidgetErrorBoundary/WidgetErrorBoundary'
-import { CustomWidgetDescriptor, WidgetMeta } from '@tesler-ui/core'
+import { CustomWidgetDescriptor, WidgetMeta } from '@cxbox-ui/core'
 
 export interface DashboardLayoutProps {
     widgets: WidgetMeta[]

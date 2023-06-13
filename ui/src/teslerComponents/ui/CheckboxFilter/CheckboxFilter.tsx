@@ -20,7 +20,7 @@ import { Checkbox } from 'antd'
 import { CheckboxChangeEvent } from 'antd/lib/checkbox'
 import cn from 'classnames'
 import styles from './CheckboxFilter.less'
-import { DataValue } from '@tesler-ui/schema'
+import { DataValue } from '@cxbox-ui/schema'
 
 export interface CheckboxFilterProps {
     title: string

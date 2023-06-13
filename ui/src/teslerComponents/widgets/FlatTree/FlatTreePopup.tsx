@@ -23,7 +23,7 @@ import { Store } from '@interfaces/store'
 import { PopupFooter } from '@teslerComponents/ui/Popup/PopupFooter'
 import { useSingleSelect } from './useSingleSelect'
 import { useMultipleSelect } from './useMultipleSelect'
-import { WidgetTableMeta } from '@tesler-ui/core'
+import { WidgetTableMeta } from '@cxbox-ui/core'
 import { $do } from '@actions/types'
 import { PickListPopup } from '@teslerComponents'
 

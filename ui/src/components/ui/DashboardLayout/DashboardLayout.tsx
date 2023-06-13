@@ -1,6 +1,6 @@
 import React from 'react'
 import { Row, Col } from 'antd'
-import { Widget } from '@cxbox-ui/core'
+import { Widget } from '@teslerComponents'
 import { CustomWidgetDescriptor, WidgetMeta } from '@cxbox-ui/core/interfaces/widget'
 
 export interface DashboardLayoutProps {

@@ -2,7 +2,7 @@ import React, { MutableRefObject } from 'react'
 import { Button, Dropdown } from 'antd'
 import styles from './RowOperationsButton.less'
 import RowOperationsMenu from './RowOperationsMenu'
-import { useOperations, useRowMenuInstance, WidgetTableMeta, DataItem } from '@tesler-ui/core'
+import { useOperations, useRowMenuInstance, WidgetTableMeta, DataItem } from '@cxbox-ui/core'
 
 /**
  * {@link RowOperationsMenu | RowOperationsMenu} properties

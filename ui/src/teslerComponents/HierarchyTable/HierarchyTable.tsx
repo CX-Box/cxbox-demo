@@ -9,15 +9,16 @@ import styles from './HierarchyTable.less'
 import Pagination from '@teslerComponents/ui/Pagination/Pagination'
 import cn from 'classnames'
 import RowOperationsButton from '@teslerComponents/RowOperations/RowOperationsButton'
-import { PaginationMode, WidgetListField, WidgetTableMeta, WidgetTableHierarchy } from '@tesler-ui/core'
-import { DataItem, PendingDataItem } from '@tesler-ui/core'
-import { AssociatedItem } from '@tesler-ui/core'
-import { RowMetaField } from '@tesler-ui/core'
-import { Route } from '@tesler-ui/core'
-import { buildBcUrl, useAssocRecords, useRowMenu } from '@tesler-ui/core'
-import { FieldType } from '@tesler-ui/core'
+import { PaginationMode, WidgetListField, WidgetTableMeta, WidgetTableHierarchy } from '@cxbox-ui/core'
+import { DataItem, PendingDataItem } from '@cxbox-ui/core'
+import { AssociatedItem } from '@cxbox-ui/core'
+import { RowMetaField } from '@cxbox-ui/core'
+import { Route } from '@cxbox-ui/core'
+import { buildBcUrl, useAssocRecords, useRowMenu } from '@cxbox-ui/core'
+import { FieldType } from '@cxbox-ui/core'
 import { $do } from '@actions/types'
 import { getColumnWidth } from '@utils/hierarchy'
+import { FrownOutlined } from '@ant-design/icons'
 
 interface HierarchyTableOwnProps {
     meta: WidgetTableMeta
@@ -54,7 +55,7 @@ export const Exp: FunctionComponent = (props: any) => {
         return null
     }
     const type = props.expanded ? 'minus-square' : 'plus-square'
-    return <Icon className={styles.expand} type={type} onClick={e => props.onExpand(props.record, e)} />
+    return <FrownOutlined />
 }
 
 const emptyArray: string[] = []

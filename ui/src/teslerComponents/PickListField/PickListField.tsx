@@ -4,8 +4,8 @@ import { connect, useSelector } from 'react-redux'
 import ReadOnlyField from '@teslerComponents/ui/ReadOnlyField/ReadOnlyField'
 import { BaseFieldProps, ChangeDataItemPayload } from '@teslerComponents/Field/Field'
 import { Store } from '@interfaces/store'
-import { WidgetTypes } from '@tesler-ui/schema'
-import { PickMap } from '@tesler-ui/core'
+import { WidgetTypes } from '@cxbox-ui/schema'
+import { PickMap } from '@cxbox-ui/core'
 import { $do } from '@actions/types'
 
 interface IPickListWidgetInputOwnProps extends BaseFieldProps {

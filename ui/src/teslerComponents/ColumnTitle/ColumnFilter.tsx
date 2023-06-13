@@ -7,12 +7,12 @@ import cn from 'classnames'
 import { ReactComponent as FilterIcon } from './filter-solid.svg'
 import FilterPopup from '@teslerComponents/FilterPopup/FilterPopup'
 import FilterField from '@teslerComponents/ui/FilterField/FilterField'
-import { PickListFieldMeta, WidgetTypes } from '@tesler-ui/schema'
-import { WidgetListField, WidgetMeta, MultivalueFieldMeta } from '@tesler-ui/core'
-import { RowMetaField } from '@tesler-ui/core'
-import { BcFilter } from '@tesler-ui/core'
-import { FieldType } from '@tesler-ui/core'
-import { $do } from '@tesler-ui/core'
+import { PickListFieldMeta, WidgetTypes } from '@cxbox-ui/schema'
+import { WidgetListField, WidgetMeta, MultivalueFieldMeta } from '@cxbox-ui/core'
+import { RowMetaField } from '@cxbox-ui/core'
+import { BcFilter } from '@cxbox-ui/core'
+import { FieldType } from '@cxbox-ui/core'
+import { $do } from '@cxbox-ui/core'
 
 /**
  * @deprecated TODO: Remove in 2.0.0 by merging with ColumnFilterProps

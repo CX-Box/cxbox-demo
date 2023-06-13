@@ -5,7 +5,7 @@ import Pagination from '@teslerComponents/ui/Pagination/Pagination'
 import styles from './Popup.less'
 import { ModalProps } from 'antd/lib/modal'
 import cn from 'classnames'
-import { PaginationMode } from '@tesler-ui/core'
+import { PaginationMode } from '@cxbox-ui/core'
 
 export interface PopupProps extends ModalProps {
     onOkHandler?: () => void

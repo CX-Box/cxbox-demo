@@ -1,9 +1,10 @@
 import React from 'react'
 import { Icon, Select as AntdSelect } from 'antd'
 import { BaseFieldProps } from '@teslerComponents/Field/Field'
-import { MultivalueSingleValue } from '@tesler-ui/core'
+import { MultivalueSingleValue } from '@cxbox-ui/core'
 import Select, { SelectProps } from '@teslerComponents/ui/Select/Select'
 import ReadOnlyField from '@teslerComponents/ui/ReadOnlyField/ReadOnlyField'
+import { FrownOutlined } from '@ant-design/icons'
 
 export interface DictionaryProps extends BaseFieldProps {
     value?: MultivalueSingleValue[] | string | null
@@ -122,7 +123,7 @@ const Dictionary: React.FunctionComponent<DictionaryProps> = props => {
 export function getIconByParams(params: string, extraStyleClasses?: string) {
     if (params) {
         const [antIconType, cssColor] = params.split(' ')
-        return <Icon type={antIconType} style={{ color: cssColor }} className={extraStyleClasses} />
+        return <FrownOutlined />
     }
     return null
 }

@@ -2,11 +2,11 @@ import React, { MutableRefObject } from 'react'
 import { Button, Dropdown } from 'antd'
 import styles from './RowOperationsButton.less'
 import { useDispatch } from 'react-redux'
-import { DataItem } from '@tesler-ui/schema'
+import { DataItem } from '@cxbox-ui/schema'
 import RowOperationsMenu from './RowOperationsMenu'
-import { WidgetTableMeta } from '@tesler-ui/core'
+import { WidgetTableMeta } from '@cxbox-ui/core'
 import { $do } from '@actions/types'
-import { useRowMenuInstance } from '@tesler-ui/core'
+import { useRowMenuInstance } from '@cxbox-ui/core'
 
 /**
  * {@link RowOperationsMenu | RowOperationsMenu} properties

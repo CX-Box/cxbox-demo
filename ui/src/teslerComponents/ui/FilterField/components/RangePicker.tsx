@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { DatePicker } from 'antd'
 import { DatePickerProps } from 'antd/lib/date-picker/interface'
-import { DataValue } from '@tesler-ui/schema'
+import { DataValue } from '@cxbox-ui/schema'
 import moment, { Moment } from 'moment'
 import styles from './RangePicker.less'
 import { useTranslation } from 'react-i18next'

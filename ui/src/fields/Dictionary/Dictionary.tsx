@@ -6,7 +6,7 @@ import { buildBcUrl } from '@cxbox-ui/core'
 import styles from './Dictionary.module.css'
 import { RowMeta } from '@cxbox-ui/core/interfaces/rowMeta'
 import { EMPTY_ARRAY, opacitySuffix } from '../../constants/constants'
-import { Dictionary as CoreDictionary } from '@cxbox-ui/core'
+import { Dictionary as CoreDictionary } from '@teslerComponents'
 
 function Dictionary(props: DictionaryProps) {
     const { value, meta, widgetName, backgroundColor } = props

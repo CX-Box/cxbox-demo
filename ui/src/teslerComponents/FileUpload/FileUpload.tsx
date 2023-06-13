@@ -3,14 +3,15 @@ import { connect } from 'react-redux'
 import { Store } from '@interfaces/store'
 import { Dispatch } from 'redux'
 import styles from './FileUpload.less'
-import { Icon, Upload } from 'antd'
+import { Upload } from 'antd'
 import { UploadFile } from 'antd/es/upload/interface'
 import cn from 'classnames'
 import { useTranslation } from 'react-i18next'
 import { ChangeDataItemPayload } from '@teslerComponents/Field/Field'
-import { DataItem } from '@tesler-ui/core'
-import { applyParams, getFileUploadEndpoint } from '@tesler-ui/core'
+import { DataItem } from '@cxbox-ui/core'
+import { applyParams, getFileUploadEndpoint } from '@cxbox-ui/core'
 import { $do } from '@actions/types'
+import { FrownOutlined } from '@ant-design/icons'
 
 export interface FileUploadOwnProps {
     fieldName: string
@@ -134,7 +135,7 @@ const FileUpload: React.FunctionComponent<FileUploadOwnProps & FileUploadProps &
                             <div>
                                 <span className={cn(styles.viewLink, styles.prevValue)}>
                                     <a href={diffDownloadUrl}>
-                                        <Icon type="file" /> <span>{diffFileName}</span>
+                                        <FrownOutlined /> <span>{diffFileName}</span>
                                     </a>
                                 </span>
                             </div>
@@ -143,7 +144,7 @@ const FileUpload: React.FunctionComponent<FileUploadOwnProps & FileUploadProps &
                             <div>
                                 <span className={cn(styles.viewLink, styles.newValue)}>
                                     <a href={downloadUrl}>
-                                        <Icon type="file" /> <span>{fileName}</span>
+                                        <FrownOutlined /> <span>{fileName}</span>
                                     </a>
                                 </span>
                             </div>
@@ -157,7 +158,7 @@ const FileUpload: React.FunctionComponent<FileUploadOwnProps & FileUploadProps &
             <span className={styles.viewLink}>
                 {downloadParams.id && (
                     <a href={downloadUrl}>
-                        <Icon type="file" /> <span>{fileName}</span>
+                        <FrownOutlined /> <span>{fileName}</span>
                     </a>
                 )}
             </span>
@@ -167,7 +168,7 @@ const FileUpload: React.FunctionComponent<FileUploadOwnProps & FileUploadProps &
     const controls: { [key: string]: React.ReactNode } = {
         deleteButton: (
             <div className={styles.deleteButton} onClick={onFileDelete} key="delete-btn">
-                <Icon type="delete" title={t('Delete')} />
+                <FrownOutlined />
             </div>
         ),
 

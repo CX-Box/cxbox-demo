@@ -5,7 +5,7 @@ import DashboardLayout from '@teslerComponents/ui/DashboardLayout/DashboardLayou
 import { FileUploadPopup } from '@teslerComponents/FileUploadPopup/FileUploadPopup'
 import ViewInfoLabel from '@teslerComponents/DebugPanel/components/ViewInfoLabel'
 import DebugPanel from '@teslerComponents/DebugPanel/DebugPanel'
-import { CustomWidget, CustomWidgetDescriptor, PopupWidgetTypes, WidgetMeta } from '@tesler-ui/core'
+import { CustomWidget, CustomWidgetDescriptor, PopupWidgetTypes, WidgetMeta } from '@cxbox-ui/core'
 
 export interface ViewProps {
     debugMode?: boolean

@@ -3,7 +3,7 @@ import './imports/rxjs'
 import { render } from 'react-dom'
 import { Provider } from '@cxbox-ui/core'
 import { ConfigProvider } from 'antd'
-import enUs from 'antd/es/locale-provider/en_US'
+import 'antd/dist/reset.css'
 import { reducers } from './reducers'
 import { epics } from './epics'
 import './index.css'
@@ -12,7 +12,7 @@ import { axiosInstance } from './api/session'
 
 const App = (
     <Provider customReducers={reducers} customEpics={epics} axiosInstance={axiosInstance()}>
-        <ConfigProvider locale={enUs}>
+        <ConfigProvider>
             <AppLayout />
         </ConfigProvider>
     </Provider>

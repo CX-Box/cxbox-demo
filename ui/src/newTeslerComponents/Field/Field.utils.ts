@@ -11,7 +11,7 @@ import {
     usePendingProps,
     DataValue,
     $do
-} from '@tesler-ui/core'
+} from '@cxbox-ui/core'
 import { CustomizationContext } from '@newTeslerComponents/View/View.context'
 
 interface StoreStateProps {

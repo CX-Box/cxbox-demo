@@ -1,6 +1,6 @@
 import React from 'react'
 import { WidgetTableMeta } from '@cxbox-ui/core/interfaces/widget'
-import { TableWidget } from '@cxbox-ui/core'
+import { TableWidget } from '@teslerComponents'
 import styles from './Table.module.css'
 import { ColumnProps } from 'antd/es/table'
 import { DataItem } from '@cxbox-ui/core/interfaces/data'

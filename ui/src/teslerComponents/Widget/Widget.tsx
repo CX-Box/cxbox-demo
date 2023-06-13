@@ -13,9 +13,9 @@ import FlatTreePopup from '@teslerComponents/widgets/FlatTree/FlatTreePopup'
 import FlatTree from '@teslerComponents/widgets/FlatTree/FlatTree'
 import DebugPanel from '@teslerComponents/DebugPanel/DebugPanel'
 import NavigationTabsWidget from '@teslerComponents/widgets/NavigationTabsWidget/NavigationTabsWidget'
-import { CustomWidgetDescriptor, isCustomWidget, PopupWidgetTypes, WidgetMeta, WidgetMetaAny, WidgetTypes } from '@tesler-ui/core'
-import { checkShowCondition } from '@tesler-ui/core'
-import { buildBcUrl } from '@tesler-ui/core'
+import { CustomWidgetDescriptor, isCustomWidget, PopupWidgetTypes, WidgetMeta, WidgetMetaAny, WidgetTypes } from '@cxbox-ui/core'
+import { checkShowCondition } from '@cxbox-ui/core'
+import { buildBcUrl } from '@cxbox-ui/core'
 
 interface WidgetOwnProps {
     meta: WidgetMeta | WidgetMetaAny

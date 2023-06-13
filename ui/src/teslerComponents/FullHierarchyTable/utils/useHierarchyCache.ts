@@ -18,7 +18,7 @@
 import React from 'react'
 import { HierarchySearchCache } from '@teslerComponents/FullHierarchyTable/utils/hierarchySearchCache'
 import { FullHierarchyDataItem } from '@teslerComponents/FullHierarchyTable/FullHierarchyTable'
-import { BcFilter } from '@tesler-ui/core'
+import { BcFilter } from '@cxbox-ui/core'
 
 const ancestorsKeysCache = new HierarchySearchCache()
 const descendantsKeysCache = new HierarchySearchCache()

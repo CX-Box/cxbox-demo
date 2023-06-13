@@ -2,7 +2,8 @@ import React from 'react'
 import { Icon } from 'antd'
 import cn from 'classnames'
 import styles from './ColumnSort.less'
-import { useSorter } from '@tesler-ui/core'
+import { useSorter } from '@cxbox-ui/core'
+import { FrownOutlined } from '@ant-design/icons'
 
 export interface ColumnSortProps {
     className?: string
@@ -19,7 +20,7 @@ export const ColumnSort = ({ widgetName, className, fieldKey }: ColumnSortProps)
 
     const icon = sorter?.direction === 'asc' ? 'caret-up' : 'caret-down'
 
-    return <Icon className={cn(styles.icon, className, { [styles.forceShow]: sorter })} type={icon} onClick={toggleSort} />
+    return <FrownOutlined />
 }
 
 export default React.memo(ColumnSort)

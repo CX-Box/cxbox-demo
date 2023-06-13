@@ -17,7 +17,7 @@
 
 import React from 'react'
 import { FullHierarchyDataItem } from '@teslerComponents/FullHierarchyTable/FullHierarchyTable'
-import { BcFilter } from '@tesler-ui/core'
+import { BcFilter } from '@cxbox-ui/core'
 
 const emptyArray: string[] = []
 

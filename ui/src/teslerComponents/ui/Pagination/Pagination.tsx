@@ -21,7 +21,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Store } from '@interfaces/store'
 import styles from './Pagination.less'
-import { PaginationMode } from '@tesler-ui/core'
+import { PaginationMode } from '@cxbox-ui/core'
 import { $do } from '@actions/types'
 
 /**

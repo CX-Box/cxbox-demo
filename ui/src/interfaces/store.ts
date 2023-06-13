@@ -1,6 +1,6 @@
 import { AppState } from '../interfaces/storeSlices'
 import { AnyAction } from './actions'
-export type { Store } from '@tesler-ui/core/interfaces/store'
+export type { Store } from '@cxbox-ui/core/interfaces/store'
 
 /**
  * Describes an application reducer

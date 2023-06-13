@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
-import { DataItem, PendingDataItem, PickMap } from '@tesler-ui/core'
+import { DataItem, PendingDataItem, PickMap } from '@cxbox-ui/core'
 import { $do } from '@actions/types'
 
 /**

@@ -1,14 +1,15 @@
 import React from 'react'
-import { Menu, Icon, Skeleton } from 'antd'
+import { Menu, Skeleton } from 'antd'
 import { useSelector, useDispatch } from 'react-redux'
 import { Store } from '@interfaces/store'
 import { ClickParam } from 'antd/lib/menu'
 import { useTranslation } from 'react-i18next'
 import styles from './RowOperationsMenu.less'
-import { WidgetMeta } from '@tesler-ui/core'
-import { buildBcUrl, useWidgetOperations } from '@tesler-ui/core'
+import { WidgetMeta } from '@cxbox-ui/core'
+import { buildBcUrl, useWidgetOperations } from '@cxbox-ui/core'
 import { $do } from '@actions/types'
-import { isOperationGroup, Operation } from '@tesler-ui/core'
+import { isOperationGroup, Operation } from '@cxbox-ui/core'
+import { FrownOutlined } from '@ant-design/icons'
 
 /**
  * {@link RowOperationsMenu | RowOperationsMenu} properties
@@ -61,7 +62,7 @@ export const RowOperationsMenu: React.FC<RowOperationsMenuProps> = ({ meta, bcNa
     const menuItem = React.useCallback(
         (item: Operation) => (
             <Menu.Item key={item.type} onClick={handleClick}>
-                {item.icon && <Icon type={item.icon} />}
+                {item.icon && <FrownOutlined />}
                 {item.text}
             </Menu.Item>
         ),

@@ -2,6 +2,7 @@ import React from 'react'
 import { Input, Icon } from 'antd'
 import { useTranslation } from 'react-i18next'
 import styles from './PickInput.less'
+import { FrownOutlined } from '@ant-design/icons'
 
 export interface PickInputProps {
     disabled?: boolean
@@ -27,7 +28,7 @@ const PickInput: React.FunctionComponent<PickInputProps> = ({ disabled, value, p
 
     const { t } = useTranslation()
 
-    const clearButton = onClear && !disabled && value ? <Icon type="close-circle" onClick={onClear} /> : null
+    const clearButton = onClear && !disabled && value ? <FrownOutlined /> : null
 
     return (
         <Input
@@ -37,13 +38,7 @@ const PickInput: React.FunctionComponent<PickInputProps> = ({ disabled, value, p
             value={value || ''}
             suffix={clearButton}
             className={className}
-            addonAfter={
-                loading ? (
-                    <Icon type="loading" spin />
-                ) : (
-                    <Icon className={disabled ? styles.disabledButton : null} type="paper-clip" onClick={!disabled ? handleClick : null} />
-                )
-            }
+            addonAfter={loading ? <FrownOutlined /> : <FrownOutlined />}
         />
     )
 }

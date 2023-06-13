@@ -2,8 +2,9 @@ import React from 'react'
 import { Tag, Icon } from 'antd'
 import styles from './MultivalueTag.less'
 import cn from 'classnames'
-import { MultivalueSingleValue } from '@tesler-ui/core'
-import { MultivalueFieldMeta } from '@tesler-ui/core'
+import { MultivalueSingleValue } from '@cxbox-ui/core'
+import { MultivalueFieldMeta } from '@cxbox-ui/core'
+import { FrownOutlined } from '@ant-design/icons'
 
 export interface MultivalueTagProps {
     disabled: boolean
@@ -84,7 +85,7 @@ const MultivalueTag: React.FunctionComponent<MultivalueTagProps> = ({
                 })}
             </div>
             <div className={cn(styles.iconContainer, { [styles.disabled]: disabled })}>
-                <Icon type={loading ? 'loading' : 'folder-open'} spin={loading} />
+                <FrownOutlined />
             </div>
         </div>
     )

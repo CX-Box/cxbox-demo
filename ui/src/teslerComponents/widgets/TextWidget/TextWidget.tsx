@@ -3,7 +3,7 @@ import styles from './TextWidget.less'
 import marked from 'marked'
 import parse from 'html-react-parser'
 import WidgetErrorBoundary from '@teslerComponents/WidgetErrorBoundary/WidgetErrorBoundary'
-import { WidgetTextMeta } from '@tesler-ui/core'
+import { WidgetTextMeta } from '@cxbox-ui/core'
 
 interface TextWidgetOwnProps {
     meta: WidgetTextMeta

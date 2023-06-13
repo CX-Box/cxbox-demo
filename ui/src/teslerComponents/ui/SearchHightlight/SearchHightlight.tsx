@@ -1,5 +1,5 @@
 import React from 'react'
-import { splitIntoTokens } from '@tesler-ui/core'
+import { splitIntoTokens } from '@cxbox-ui/core'
 
 interface SearchHighlightProps {
     source: string

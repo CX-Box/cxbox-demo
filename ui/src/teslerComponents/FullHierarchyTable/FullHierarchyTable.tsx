@@ -10,15 +10,16 @@ import ColumnTitle from '@teslerComponents/ColumnTitle/ColumnTitle'
 import cn from 'classnames'
 import { useHierarchyCache } from './utils/useHierarchyCache'
 import { useExpandedKeys } from './utils/useExpandedKeys'
-import { WidgetListField, WidgetTableMeta } from '@tesler-ui/core'
-import { DataItem, PendingDataItem } from '@tesler-ui/core'
-import { BcFilter, FilterType } from '@tesler-ui/core'
-import { RowMetaField } from '@tesler-ui/core'
-import { AssociatedItem } from '@tesler-ui/core'
-import { buildBcUrl, useAssocRecords } from '@tesler-ui/core'
-import { FieldType } from '@tesler-ui/core'
+import { WidgetListField, WidgetTableMeta } from '@cxbox-ui/core'
+import { DataItem, PendingDataItem } from '@cxbox-ui/core'
+import { BcFilter, FilterType } from '@cxbox-ui/core'
+import { RowMetaField } from '@cxbox-ui/core'
+import { AssociatedItem } from '@cxbox-ui/core'
+import { buildBcUrl, useAssocRecords } from '@cxbox-ui/core'
+import { FieldType } from '@cxbox-ui/core'
 import { $do } from '@actions/types'
 import { getColumnWidth } from '@utils/hierarchy'
+import { FrownOutlined } from '@ant-design/icons'
 
 export interface FullHierarchyTableOwnProps {
     meta: WidgetTableMeta
@@ -67,13 +68,7 @@ const Exp: FunctionComponent = (props: any) => {
     if (!props.onExpand || props.record.noChildren) {
         return null
     }
-    return (
-        <Icon
-            style={{ fontSize: '20px' }}
-            type={props.expanded ? 'minus-square' : 'plus-square'}
-            onClick={e => props.onExpand(props.record, e)}
-        />
-    )
+    return <FrownOutlined />
 }
 
 /**

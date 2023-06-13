@@ -1,12 +1,13 @@
 import React from 'react'
-import { Upload, Icon } from 'antd'
+import { Upload } from 'antd'
 import { useSelector, useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Store } from '@interfaces/store'
 import { Popup } from '@teslerComponents/ui/Popup/Popup'
 import styles from './FileUploadPopup.less'
-import { getFileUploadEndpoint } from '@tesler-ui/core'
+import { getFileUploadEndpoint } from '@cxbox-ui/core'
 import { $do } from '@actions/types'
+import { FrownOutlined } from '@ant-design/icons'
 
 /**
  * @category Components
@@ -45,7 +46,7 @@ export const FileUploadPopup: React.FC = () => {
                     }}
                 >
                     <div className={styles.icon}>
-                        <Icon type="inbox" />
+                        <FrownOutlined />
                     </div>
                     <div className={styles.text}>{t('Select files')}</div>
                 </Upload.Dragger>

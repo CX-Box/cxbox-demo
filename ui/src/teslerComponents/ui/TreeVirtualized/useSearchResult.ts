@@ -16,9 +16,9 @@
  */
 
 import React from 'react'
-import { TreeNodeBidirectional, TreeNodeCollapsable } from '@tesler-ui/core'
-import { buildSearchResultTree } from '@tesler-ui/core'
-import { breadthFirstSearch } from '@tesler-ui/core'
+import { TreeNodeBidirectional, TreeNodeCollapsable } from '@cxbox-ui/core'
+import { buildSearchResultTree } from '@cxbox-ui/core'
+import { breadthFirstSearch } from '@cxbox-ui/core'
 
 /**
  * Returns a memoized array of matching nodes, their direct children and every ancestor node.

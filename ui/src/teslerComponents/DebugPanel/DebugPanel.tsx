@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import { Store } from '@interfaces/store'
 import FormattedJSON from './components/FormattedJSON'
 import WidgetInfoLabel from './components/WidgetInfoLabel'
-import { WidgetMeta } from '@tesler-ui/core'
+import { WidgetMeta } from '@cxbox-ui/core'
 
 interface DebugPanelProps {
     widgetMeta: WidgetMeta

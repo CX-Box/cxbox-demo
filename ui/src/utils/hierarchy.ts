@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import { FieldType, RowMetaField, WidgetListField } from '@tesler-ui/core'
+import { FieldType, RowMetaField, WidgetListField } from '@cxbox-ui/core'
 
 /**
  * Function of calculate hierarchy column width

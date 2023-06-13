@@ -1,6 +1,6 @@
 import React from 'react'
 import { Row, Col } from 'antd'
-import { CustomWidgetDescriptor, useWidgetsGrid, WidgetMeta } from '@tesler-ui/core'
+import { CustomWidgetDescriptor, useWidgetsGrid, WidgetMeta } from '@cxbox-ui/core'
 import { WidgetErrorBoundary } from '@teslerComponents'
 import Widget from '@newTeslerComponents/Widget/Widget'
 

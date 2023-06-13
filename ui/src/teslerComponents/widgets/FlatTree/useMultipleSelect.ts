@@ -1,8 +1,8 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Store } from '@interfaces/store'
-import { TreeAssociatedRecord } from '@tesler-ui/core'
-import { $do, useAssocRecords } from '@tesler-ui/core'
+import { TreeAssociatedRecord } from '@cxbox-ui/core'
+import { $do, useAssocRecords } from '@cxbox-ui/core'
 
 /**
  *

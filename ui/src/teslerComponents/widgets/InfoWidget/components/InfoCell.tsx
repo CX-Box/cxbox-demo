@@ -6,9 +6,9 @@ import Field from '@teslerComponents/Field/Field'
 import ActionLink from '@teslerComponents/ui/ActionLink/ActionLink'
 import InfoValueWrapper from './InfoValueWrapper'
 import MultiValueListRecord from '@teslerComponents/Multivalue/MultiValueListRecord'
-import { LayoutRow, LayoutCol, WidgetInfoMeta, WidgetInfoField } from '@tesler-ui/core'
-import { DataItem, MultivalueSingleValue } from '@tesler-ui/core'
-import { FieldType } from '@tesler-ui/core'
+import { LayoutRow, LayoutCol, WidgetInfoMeta, WidgetInfoField } from '@cxbox-ui/core'
+import { DataItem, MultivalueSingleValue } from '@cxbox-ui/core'
+import { FieldType } from '@cxbox-ui/core'
 
 export interface ValueCellProps {
     row: LayoutRow

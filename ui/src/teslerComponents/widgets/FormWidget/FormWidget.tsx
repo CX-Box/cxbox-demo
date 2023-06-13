@@ -6,10 +6,10 @@ import Field from '@teslerComponents/Field/Field'
 import styles from './FormWidget.less'
 import cn from 'classnames'
 import TemplatedTitle from '@teslerComponents/TemplatedTitle/TemplatedTitle'
-import { WidgetFormMeta, WidgetFormField } from '@tesler-ui/core'
-import { RowMetaField } from '@tesler-ui/core'
-import { buildBcUrl, useFlatFormFields } from '@tesler-ui/core'
-import { FieldType, PendingValidationFails, PendingValidationFailsFormat } from '@tesler-ui/core'
+import { WidgetFormMeta, WidgetFormField } from '@cxbox-ui/core'
+import { RowMetaField } from '@cxbox-ui/core'
+import { buildBcUrl, useFlatFormFields } from '@cxbox-ui/core'
+import { FieldType, PendingValidationFails, PendingValidationFailsFormat } from '@cxbox-ui/core'
 
 interface FormWidgetOwnProps {
     meta: WidgetFormMeta

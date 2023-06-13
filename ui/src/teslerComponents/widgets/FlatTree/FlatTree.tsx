@@ -23,11 +23,11 @@ import { Store } from '@interfaces/store'
 import ColumnTitle from '@teslerComponents/ColumnTitle/ColumnTitle'
 import styles from './FlatTree.less'
 import { Checkbox } from 'antd'
-import { WidgetTableMeta } from '@tesler-ui/core'
-import { DataItem } from '@tesler-ui/core'
-import { DataItemNode, TreeAssociatedRecord } from '@tesler-ui/core'
-import { buildBcUrl } from '@tesler-ui/core'
-import { FieldType } from '@tesler-ui/core'
+import { WidgetTableMeta } from '@cxbox-ui/core'
+import { DataItem } from '@cxbox-ui/core'
+import { DataItemNode, TreeAssociatedRecord } from '@cxbox-ui/core'
+import { buildBcUrl } from '@cxbox-ui/core'
+import { FieldType } from '@cxbox-ui/core'
 
 /**
  * Properties for `FlatTreePopup` widget

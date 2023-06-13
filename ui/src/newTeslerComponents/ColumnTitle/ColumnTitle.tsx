@@ -3,7 +3,7 @@ import cn from 'classnames'
 import ColumnFilter, { ColumnFilterProps } from './ColumnFilter'
 import ColumnSort from './ColumnSort'
 import styles from './ColumnTitle.less'
-import { RowMetaField, WidgetListField, FieldType } from '@tesler-ui/core'
+import { RowMetaField, WidgetListField, FieldType } from '@cxbox-ui/core'
 import { TemplatedTitle } from '@teslerComponents'
 
 export interface ColumnTitleProps {

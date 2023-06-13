@@ -4,8 +4,8 @@ import cn from 'classnames'
 import readOnlyFieldStyles from '@teslerComponents/ui/ReadOnlyField/ReadOnlyField.less'
 import { TooltipPlacement } from 'antd/es/tooltip'
 import { useCustomFields, useFieldHandlers, useStoreState } from './Field.utils'
-import { WidgetField, WidgetFieldBase, MultivalueSingleValue, FieldType } from '@tesler-ui/core'
-import { deleteUndefinedFromObject, DataItem, DataValue } from '@tesler-ui/core'
+import { WidgetField, WidgetFieldBase, MultivalueSingleValue, FieldType } from '@cxbox-ui/core'
+import { deleteUndefinedFromObject, DataItem, DataValue } from '@cxbox-ui/core'
 import HistoryField from '@teslerComponents/ui/HistoryField/HistoryField'
 import InlinePickList from '@teslerComponents/InlinePickList/InlinePickList'
 import MultiField from '@teslerComponents/ui/MultiField/MultiField'
@@ -24,6 +24,7 @@ import {
     TextArea
 } from '@teslerComponents'
 import { InteractiveInput } from '@teslerComponents/ui/InteractiveInput/InteractiveInput'
+import { FrownOutlined } from '@ant-design/icons'
 
 interface FieldProps {
     widgetField: WidgetField
@@ -283,7 +284,7 @@ export const Field: FunctionComponent<FieldProps> = ({
             resultField = readOnly ? (
                 pickListField
             ) : (
-                <InteractiveInput suffix={handleDrillDown && <Icon type="link" />} onSuffixClick={handleDrillDown}>
+                <InteractiveInput suffix={handleDrillDown && <FrownOutlined />} onSuffixClick={handleDrillDown}>
                     {pickListField}
                 </InteractiveInput>
             )
@@ -305,7 +306,7 @@ export const Field: FunctionComponent<FieldProps> = ({
             resultField = readOnly ? (
                 pickListField
             ) : (
-                <InteractiveInput suffix={handleDrillDown && <Icon type="link" />} onSuffixClick={handleDrillDown}>
+                <InteractiveInput suffix={handleDrillDown && <FrownOutlined />} onSuffixClick={handleDrillDown}>
                     {pickListField}
                 </InteractiveInput>
             )
@@ -372,7 +373,7 @@ export const Field: FunctionComponent<FieldProps> = ({
             ) : (
                 <InteractiveInput
                     suffixClassName={suffixClassName}
-                    suffix={handleDrillDown && <Icon type="link" />}
+                    suffix={handleDrillDown && <FrownOutlined />}
                     onSuffixClick={handleDrillDown}
                 >
                     <Input {...commonInputProps} autoFocus={forceFocus} maxLength={widgetField.maxInput} />

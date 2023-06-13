@@ -4,9 +4,9 @@ import { Dispatch } from 'redux'
 import cn from 'classnames'
 import styles from './MultiValueListRecord.less'
 import ActionLink from '@teslerComponents/ui/ActionLink/ActionLink'
-import { MultivalueSingleValue, RecordSnapshotState } from '@tesler-ui/core'
-import { DrillDownType } from '@tesler-ui/core'
-import { store } from '@tesler-ui/core'
+import { MultivalueSingleValue, RecordSnapshotState } from '@cxbox-ui/core'
+import { DrillDownType } from '@cxbox-ui/core'
+import { store } from '@cxbox-ui/core'
 import { $do } from '@actions/types'
 
 export interface MultiValueListRecordOwnProps {

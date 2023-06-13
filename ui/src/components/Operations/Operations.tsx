@@ -2,7 +2,7 @@ import React from 'react'
 import { $do, useWidgetOperations } from '@cxbox-ui/core'
 import { isOperationGroup, Operation, OperationGroup } from '@cxbox-ui/core/interfaces/operation'
 import { WidgetMeta } from '@cxbox-ui/core/interfaces/widget'
-import { Button, Icon } from 'antd'
+import { Button } from 'antd'
 import { AppState } from '../../interfaces/storeSlices'
 import styles from './Operations.module.css'
 import OperationButton from '../ui/OperationButton/OperationButton'
@@ -46,7 +46,7 @@ function Operations(props: OperationsOwnProps) {
                     }
                     return removeRecordOperationWidgets.includes(widgetMeta.type) && item.scope === 'record' ? null : (
                         <OperationButton key={item.type} onClick={() => handleOperationClick(item)}>
-                            {item.icon && <Icon type={item.icon} />}
+                            {item.icon && <span>iconca</span>}
                             {item.text}
                         </OperationButton>
                     )

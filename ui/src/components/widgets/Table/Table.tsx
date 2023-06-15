@@ -7,12 +7,16 @@ import { DataItem } from '@cxbox-ui/core/interfaces/data'
 import MenuColumn from './components/MenuColumn'
 import Pagination from '../../ui/Pagination/Pagination'
 import { TableWidgetOwnProps } from '@cxbox-ui/core/components/widgets/TableWidget/TableWidget'
+import { useExpandableForm } from './hooks/useExpandableForm'
 
 interface TableProps extends TableWidgetOwnProps {
     meta: WidgetTableMeta
 }
 
 function Table({ meta, ...rest }: TableProps) {
+    const { expandIcon, expandIconColumn, expandable, getExpandIconColumnIndex, expandedRowRender, expandedRowKeys } =
+        useExpandableForm(meta)
+
     const menuColumn: ColumnProps<DataItem> = React.useMemo(() => {
         return {
             title: '',
@@ -23,15 +27,32 @@ function Table({ meta, ...rest }: TableProps) {
             }
         }
     }, [meta])
+
     const controlColumns = React.useMemo(() => {
         const resultColumns: Array<{ column: ColumnProps<DataItem>; position: 'left' | 'right' }> = []
+
+        if (expandIconColumn) {
+            resultColumns.push({ column: expandIconColumn, position: 'right' })
+        }
+
         resultColumns.push({ column: menuColumn, position: 'right' })
         return [...resultColumns]
-    }, [menuColumn])
+    }, [expandIconColumn, menuColumn])
 
     return (
         <div className={styles.tableContainer}>
-            <TableWidget meta={meta} controlColumns={controlColumns} disablePagination {...rest} />
+            <TableWidget
+                meta={meta}
+                controlColumns={controlColumns}
+                disablePagination
+                {...rest}
+                expandedRowKeys={expandedRowKeys}
+                allowEdit={!expandable}
+                expandIconColumnIndex={getExpandIconColumnIndex(controlColumns)}
+                expandIconAsCell={false}
+                expandIcon={expandIcon}
+                expandedRowRender={expandedRowRender}
+            />
             <Pagination meta={meta} />
         </div>
     )

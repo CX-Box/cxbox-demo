@@ -1,10 +1,12 @@
 import React from 'react'
 import { Row, Col } from 'antd'
 import { Widget } from '@cxbox-ui/core'
-import { CustomWidgetDescriptor, WidgetMeta } from '@cxbox-ui/core/interfaces/widget'
+import { CustomWidgetDescriptor } from '@cxbox-ui/core/interfaces/widget'
+import { AppWidgetMeta } from '../../../interfaces/widget'
+import { createSkipWidgetList } from '../../../utils/createSkipWidgetList'
 
 export interface DashboardLayoutProps {
-    widgets: WidgetMeta[]
+    widgets: AppWidgetMeta[]
     customWidgets?: Record<string, CustomWidgetDescriptor>
     skipWidgetTypes?: string[]
     customSpinner?: (props: any) => React.ReactElement<any>
@@ -35,11 +37,13 @@ export function DashboardLayout(props: DashboardLayoutProps) {
     )
 }
 
-function groupByRow(widgets: WidgetMeta[], skipWidgetTypes: string[]) {
+function groupByRow<WidgetMeta extends AppWidgetMeta>(widgets: WidgetMeta[], skipWidgetTypes: string[]) {
     const byRow: Record<string, WidgetMeta[]> = {}
+    const skipWidgetList = createSkipWidgetList(widgets)
+
     widgets
         .filter(item => {
-            return !skipWidgetTypes.includes(item.type)
+            return !skipWidgetTypes.includes(item.type) && !skipWidgetList.includes(item.name)
         })
         .forEach(item => {
             if (!byRow[item.position]) {

@@ -14,3 +14,11 @@
 .dropDownMenu:global(.ant-select-dropdown.ant-select-dropdown--multiple .ant-select-dropdown-menu-item:hover .ant-select-selected-icon ) {
     display: none;
 }
+
+.readOnly {
+  display: inline-block;
+  max-width: 100%;
+  font-size: 14px;
+  line-height: 20px;
+  color: #141F35;
+}

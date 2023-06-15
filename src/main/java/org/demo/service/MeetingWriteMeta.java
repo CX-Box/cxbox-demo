@@ -1,5 +1,9 @@
 package org.demo.service;
 
+import java.util.Optional;
+import org.cxbox.api.data.dto.rowmeta.FieldDTO;
+import org.cxbox.core.dto.DrillDownType;
+import org.demo.controller.CxboxRestController;
 import org.demo.dto.MeetingDTO;
 import org.demo.dto.MeetingDTO_;
 import org.demo.entity.enums.MeetingStatus;
@@ -49,6 +53,19 @@ public class MeetingWriteMeta extends FieldMetaBuilder<MeetingDTO> {
 				MeetingDTO_.address
 		);
 
+		fields.setDrilldown(
+				MeetingDTO_.id,
+				DrillDownType.INNER,
+				"/screen/meeting/view/meetingview/" + CxboxRestController.meeting + "/" + id
+		);
+		if (Optional.ofNullable(fields.get(MeetingDTO_.clientId)).map(FieldDTO::getCurrentValue).isPresent()) {
+			fields.setDrilldown(
+					MeetingDTO_.clientName,
+					DrillDownType.INNER,
+					"/screen/client/view/clientview/" + CxboxRestController.client + "/" +
+							fields.get(MeetingDTO_.clientId).getCurrentValue()
+			);
+		}
 	}
 
 	@Override

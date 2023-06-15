@@ -2,6 +2,6 @@
   "name": "clientListHeader",
   "title": "Client List",
   "type": "HeaderWidget",
-  "bc": "client",
+  "bc": "clientListEdit",
   "fields": []
 }

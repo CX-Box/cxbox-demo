@@ -16,10 +16,11 @@ interface MultipleSelectFieldProps {
     meta: WidgetField
     widgetName: string
     onChange?: (value: MultivalueSingleValue[]) => void
+    readOnly: boolean
 }
 
 const MultipleSelectField: React.FunctionComponent<MultipleSelectFieldProps> = props => {
-    const { value, values, onChange } = props
+    const { value, values, onChange, readOnly } = props
     const { Option } = Select
 
     const currentValues = React.useMemo(() => {
@@ -48,8 +49,12 @@ const MultipleSelectField: React.FunctionComponent<MultipleSelectFieldProps> = p
         dropdownClassName: styles.dropDownMenu,
         mode: 'multiple',
         optionLabelProp: 'label',
-        value: value?.map(i => i.value),
+        value: value?.length ? value?.map(i => i.value) : [],
         onChange: handleOnChange
+    }
+
+    if (readOnly) {
+        return <div className={styles.readOnly}>{extendedProps.value?.join(', ')}</div>
     }
 
     return (

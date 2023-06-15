@@ -1,14 +1,15 @@
 package org.demo.service;
 
-import static org.demo.dto.MeetingDTO_.*;
+import static org.demo.dto.MeetingDTO_.address;
+import static org.demo.dto.MeetingDTO_.agenda;
+import static org.demo.dto.MeetingDTO_.clientId;
+import static org.demo.dto.MeetingDTO_.contactId;
+import static org.demo.dto.MeetingDTO_.endDateTime;
+import static org.demo.dto.MeetingDTO_.notes;
+import static org.demo.dto.MeetingDTO_.responsibleId;
+import static org.demo.dto.MeetingDTO_.result;
+import static org.demo.dto.MeetingDTO_.startDateTime;
 
-import org.demo.controller.CxboxRestController;
-import org.demo.dto.MeetingDTO;
-import org.demo.entity.Meeting;
-import org.demo.repository.ClientRepository;
-import org.demo.repository.ContactRepository;
-import org.demo.repository.MeetingRepository;
-import org.demo.repository.UserRepository;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.DrillDownType;
@@ -17,6 +18,16 @@ import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.cxbox.core.dto.rowmeta.PostAction;
 import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
+import org.cxbox.core.service.action.ActionsBuilder;
+import org.demo.conf.cxbox.icon.ActionIcon;
+import org.demo.controller.CxboxRestController;
+import org.demo.dto.MeetingDTO;
+import org.demo.entity.Meeting;
+import org.demo.repository.ClientRepository;
+import org.demo.repository.ContactRepository;
+import org.demo.repository.MeetingRepository;
+import org.demo.repository.UserRepository;
+import org.demo.service.action.MeetingStatusModelActionProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +47,9 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 	@Autowired
 	private UserRepository userRepository;
 
+	@Autowired
+	private MeetingStatusModelActionProvider statusModelActionProvider;
+
 	public MeetingWriteService() {
 		super(MeetingDTO.class, Meeting.class, null, MeetingWriteMeta.class);
 	}
@@ -43,12 +57,7 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 	@Override
 	protected CreateResult<MeetingDTO> doCreateEntity(Meeting entity, BusinessComponent bc) {
 		meetingRepository.save(entity);
-		return new CreateResult<>(entityToDto(bc, entity)).setAction(PostAction.drillDown(
-				DrillDownType.INNER,
-				"/screen/meeting/view/meetingedit/"
-						+ CxboxRestController.meetingEdit
-						+ "/" + entity.getId()
-		));
+		return new CreateResult<>(entityToDto(bc, entity));
 	}
 
 	@Override
@@ -80,6 +89,17 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 	@Override
 	public Actions<MeetingDTO> getActions() {
 		return Actions.<MeetingDTO>builder()
+				.create().text("Add")
+				.add()
+				.save()
+				.add()
+				.addGroup(
+						"actions",
+						"Actions",
+						0,
+						addEditAction(statusModelActionProvider.getMeetingActions()).build()
+				)
+				.withIcon(ActionIcon.MENU, false)
 				.newAction()
 				.scope(ActionScope.RECORD)
 				.withAutoSaveBefore()
@@ -101,6 +121,22 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 						)))
 				.add()
 				.build();
+	}
+
+	private ActionsBuilder<MeetingDTO> addEditAction(ActionsBuilder<MeetingDTO> builder) {
+		return builder
+				.newAction()
+				.action("edit", "Edit")
+				.scope(ActionScope.RECORD)
+				.withoutAutoSaveBefore()
+				.invoker((bc, data) -> new ActionResultDTO<MeetingDTO>()
+						.setAction(PostAction.drillDown(
+								DrillDownType.INNER,
+								"/screen/meeting/view/meetingedit/" +
+										CxboxRestController.meetingEdit + "/" +
+										bc.getId()
+						)))
+				.add();
 	}
 
 }

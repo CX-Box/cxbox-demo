@@ -2,6 +2,6 @@
   "name": "meetingListHeader",
   "title": "Meeting List",
   "type": "HeaderWidget",
-  "bc": "meeting",
+  "bc": "meetingEdit",
   "fields": []
 }

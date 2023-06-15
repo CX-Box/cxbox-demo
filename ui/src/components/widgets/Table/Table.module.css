@@ -1,4 +1,3 @@
-/*@import "../../../assets/fonts/fonts.module.css";*/
 @value colors "../../../assets/styles/theme.module.css";
 @value accent20, accent, main-light-mode from colors;
 
@@ -29,11 +28,13 @@
     padding: 13px 8px;
 }
 
-.tableContainer :global([class^="ColumnTitle"]) {
-    font-family: openSans_bold;
+.tableContainer :global([class^="ColumnTitle"]),
+.tableContainer :global(th span.ant-table-header-column) {
+    font-family: openSans_bold, sans-serif;
     line-height: 20px;
     color: main-light-mode;
 }
+
 .tableContainer :global([class^="ActionLink"]) {
     color: accent;
 }

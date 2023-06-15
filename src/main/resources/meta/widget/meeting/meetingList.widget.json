@@ -2,7 +2,7 @@
   "name": "meetingList",
   "title": "",
   "type": "List",
-  "bc": "meeting",
+  "bc": "meetingEdit",
   "fields": [
     {
       "title": "Meeting",
@@ -43,9 +43,16 @@
     }
   ],
   "options": {
+    "create": {
+      "widget": "meetingFormForList"
+    },
+    "edit": {
+      "widget": "meetingFormForList"
+    },
     "actionGroups": {
       "include": [
         "create",
+        "edit",
         "actions"
       ]
     }

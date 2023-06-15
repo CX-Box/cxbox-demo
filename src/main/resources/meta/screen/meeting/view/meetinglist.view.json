@@ -13,6 +13,21 @@
       "widgetName": "meetingList",
       "position": 10,
       "gridWidth": 24
+    },
+    {
+      "widgetName": "meetingFormForList",
+      "position": 20,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "clientPickListPopup",
+      "position": 30,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "contactPickListPopup",
+      "position": 40,
+      "gridWidth": 24
     }
   ],
   "rolesAllowed": [

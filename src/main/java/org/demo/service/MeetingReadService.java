@@ -20,21 +20,26 @@ import org.cxbox.core.service.action.Actions;
 import org.cxbox.core.service.action.ActionsBuilder;
 import org.cxbox.core.util.session.SessionService;
 import java.util.Arrays;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.demo.service.action.MeetingStatusModelActionProvider;
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S3252", "java:S1186"})
 @Service
 public class MeetingReadService extends VersionAwareResponseService<MeetingDTO, Meeting> {
 
-	@Autowired
-	private MeetingRepository meetingRepository;
 
-	@Autowired
-	private SessionService sessionService;
+	private final MeetingRepository meetingRepository;
 
-	public MeetingReadService() {
+	private final SessionService sessionService;
+
+	private final MeetingStatusModelActionProvider statusModelActionProvider;
+
+	public MeetingReadService(MeetingRepository meetingRepository, SessionService sessionService,
+			MeetingStatusModelActionProvider statusModelActionProvider) {
 		super(MeetingDTO.class, Meeting.class, null, MeetingReadMeta.class);
+		this.meetingRepository = meetingRepository;
+		this.sessionService = sessionService;
+		this.statusModelActionProvider = statusModelActionProvider;
 	}
 
 	@Override
@@ -65,7 +70,7 @@ public class MeetingReadService extends VersionAwareResponseService<MeetingDTO, 
 						"actions",
 						"Actions",
 						0,
-						addEditAction(getStatusModelActions(Actions.builder())).build()
+						addEditAction(statusModelActionProvider.getMeetingActions()).build()
 				)
 				.withIcon(ActionIcon.MENU, false)
 				.build();
@@ -85,38 +90,6 @@ public class MeetingReadService extends VersionAwareResponseService<MeetingDTO, 
 										bc.getId()
 						)))
 				.add();
-	}
-
-	private ActionsBuilder<MeetingDTO> getStatusModelActions(ActionsBuilder<MeetingDTO> builder) {
-		Arrays.stream(MeetingStatus.values()).sequential()
-				.forEach(status -> builder.newAction().action(status.getValue(), status.getButton())
-						.invoker((bc, dto) -> {
-							Meeting meeting = meetingRepository.getById(Long.parseLong(bc.getId()));
-							meeting.getStatus().transition(status, meeting);
-							if (meeting.getStatus().equals(MeetingStatus.COMPLETED)) {
-								return new ActionResultDTO<MeetingDTO>().setAction(PostAction.drillDown(
-										DrillDownType.INNER,
-										"/screen/meeting/view/meetingedit/"
-												+ CxboxRestController.meetingEdit + "/"
-												+ meeting.getId()
-								));
-							}
-							return new ActionResultDTO<MeetingDTO>().setAction(PostAction.refreshBc(bc.getDescription()));
-						})
-						.available(bc -> {
-							if (bc.getId() == null) {
-								return false;
-							}
-							Meeting meeting = meetingRepository.getById(Long.parseLong(bc.getId()));
-							return meeting.getStatus().available(meeting).contains(status);
-						})
-						.withPreAction(PreAction.builder().preActionType(PreActionType.CONFIRMATION)
-								.message("Do You confirm the action on the meeting?")
-								.customParameters(ImmutableMap.of("okText", status.getButton(), "cancelText", "Back to meeting list"))
-								.build())
-						.scope(ActionScope.RECORD)
-						.add());
-		return builder;
 	}
 
 

@@ -2,7 +2,7 @@
   "name": "clientList",
   "title": "",
   "type": "List",
-  "bc": "client",
+  "bc": "clientListEdit",
   "fields": [
     {
       "title": "Client",
@@ -18,7 +18,8 @@
     {
       "title": "Field of Activity",
       "key": "fieldOfActivity",
-      "type": "input"
+      "type": "multipleSelect",
+      "hidden": false
     },
     {
       "title": "Importance",
@@ -33,6 +34,12 @@
     }
   ],
   "options": {
+    "create": {
+      "widget": "clientFormForList"
+    },
+    "edit": {
+      "widget": "clientFormForList"
+    },
     "actionGroups": {
       "include": [
         "create",

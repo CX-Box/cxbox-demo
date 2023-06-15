@@ -11,7 +11,7 @@
     },
     {
       "title": "Product",
-      "key": "product",
+      "key": "macroProduct",
       "type": "input"
     },
     {

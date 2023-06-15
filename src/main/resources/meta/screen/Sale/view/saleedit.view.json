@@ -1,7 +1,7 @@
 {
   "name": "saleedit",
-  "title": "Sale Edit",
-  "template": "DashboardView",
+  "title": "asfsfdsgdfg",
+  "template": "QuadColumnView",
   "url": "/screen/sale/view/saleedit",
   "widgets": [
     {
@@ -19,9 +19,20 @@
       "position": 20,
       "gridWidth": 24
     },
+
     {
-      "widgetName": "saleEdit",
+      "widgetName": "calculatorFormApplet",
       "position": 30,
+      "gridWidth": 12
+    },
+    {
+      "widgetName": "calculatorCardFormApplet",
+      "position": 30,
+      "gridWidth": 12
+    },
+    {
+      "widgetName": "calculatorParamsFormApplet",
+      "position": 40,
       "gridWidth": 24
     }
   ],

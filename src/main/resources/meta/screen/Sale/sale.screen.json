@@ -2,11 +2,11 @@
   "name": "sale",
   "icon": "stock",
   "order": 2,
-  "title": "Sale",
+  "title": "Обращения",
   "navigation": {
     "menu": [
       {
-        "title": "Sales",
+        "title": "Предварительный расчет",
         "child": [
           {
             "viewName": "salelist"

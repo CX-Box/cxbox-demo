@@ -1,0 +1,62 @@
+{
+  "name": "calculatorCardFormApplet",
+  "title": "Параметры карты",
+  "type": "Form",
+  "bc": "saleEdit",
+  "fields": [
+    {
+      "label": "Категория карты",
+      "key": "cardCategory",
+      "type": "dictionary"
+    },
+    {
+      "label": "Мин. ежемесячный платеж, %",
+      "key": "tariffMinMonthPayment",
+      "type": "percent"
+    },
+    {
+      "label": "Обслуживание в год, руб.",
+      "key": "cardCommissionThirdYear",
+      "type": "money"
+    },
+    {
+      "label": "",
+      "key": "emptyField",
+      "type": "hint"
+    }
+  ],
+  "options": {
+    "actionGroups": {
+      "include": [
+      ]
+    },
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "cardCategory",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "cardCommissionThirdYear",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "tariffMinMonthPayment",
+              "span": 12
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

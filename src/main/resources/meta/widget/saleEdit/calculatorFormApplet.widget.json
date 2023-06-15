@@ -1,0 +1,45 @@
+{
+  "name": "calculatorFormApplet",
+  "title": "Продукт",
+  "type": "Form",
+  "bc": "saleEdit",
+  "fields": [
+    {
+      "label": "Макропродукт",
+      "key": "macroProduct",
+      "type": "dictionary"
+    },
+    {
+      "label": "Наличие обеспечения",
+      "key": "collateralAvailability",
+      "type": "radio"
+    },
+    {
+      "label": "",
+      "key": "emptyField",
+      "type": "hint"
+    }
+  ],
+  "options": {
+    "actionGroups": {
+      "include": [
+      ]
+    },
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "macroProduct",
+              "span": 12
+            },
+            {
+              "fieldKey": "collateralAvailability",
+              "span": 12
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

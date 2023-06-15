@@ -17,7 +17,7 @@ import org.cxbox.core.service.action.Actions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@SuppressWarnings({"java:S3252","java:S1186"})
+@SuppressWarnings({"java:S3252", "java:S1186"})
 @Service
 public class SaleWriteService extends VersionAwareResponseService<SaleDTO, Sale> {
 
@@ -44,6 +44,60 @@ public class SaleWriteService extends VersionAwareResponseService<SaleDTO, Sale>
 
 	@Override
 	protected ActionResultDTO<SaleDTO> doUpdateEntity(Sale entity, SaleDTO data, BusinessComponent bc) {
+		if (data.isFieldChanged(SaleDTO_.reducedPaymentTerm)) {
+			entity.setReducedPaymentTerm(data.getReducedPaymentTerm());
+		}
+		if (data.isFieldChanged(SaleDTO_.reducedPayment)) {
+			entity.setReducedPayment(data.getReducedPayment());
+		}
+		if (data.isFieldChanged(SaleDTO_.reducedPaymentFlag)) {
+			entity.setReducedPaymentFlag(data.getReducedPaymentFlag());
+		}
+		if (data.isFieldChanged(SaleDTO_.reqRate)) {
+			entity.setReqRate(data.getReqRate());
+		}
+		if (data.isFieldChanged(SaleDTO_.customRateFlg)) {
+			entity.setCustomRateFlg(data.getCustomRateFlg());
+		}
+		if (data.isFieldChanged(SaleDTO_.rBSelectDayFlag)) {
+			entity.setRBSelectDayFlag(data.getRBSelectDayFlag());
+		}
+		if (data.isFieldChanged(SaleDTO_.paymentDate)) {
+			entity.setPaymentDate(data.getPaymentDate());
+		}
+		if (data.isFieldChanged(SaleDTO_.reqCurrency)) {
+			entity.setReqCurrency(data.getReqCurrency());
+		}
+		if (data.isFieldChanged(SaleDTO_.reqTerm)) {
+			entity.setReqTerm(data.getReqTerm());
+		}
+		if (data.isFieldChanged(SaleDTO_.reqPayment)) {
+			entity.setReqPayment(data.getReqPayment());
+		}
+		if (data.isFieldChanged(SaleDTO_.reqAmount)) {
+			entity.setReqAmount(data.getReqAmount());
+		}
+		if (data.isFieldChanged(SaleDTO_.typeCalc)) {
+			entity.setTypeCalc(data.getTypeCalc());
+		}
+		if (data.isFieldChanged(SaleDTO_.cardHint)) {
+			entity.setCardHint(data.getCardHint());
+		}
+		if (data.isFieldChanged(SaleDTO_.emptyField)) {
+			entity.setHintTest(data.getEmptyField());
+		}
+		if (data.isFieldChanged(SaleDTO_.cardCommissionThirdYear)) {
+			entity.setCardCommissionThirdYear(data.getCardCommissionThirdYear());
+		}
+		if (data.isFieldChanged(SaleDTO_.tariffMinMonthPayment)) {
+			entity.setTariffMinMonthPayment(data.getTariffMinMonthPayment());
+		}
+		if (data.isFieldChanged(SaleDTO_.cardCategory)) {
+			entity.setCardCategory(data.getCardCategory());
+		}
+		if (data.isFieldChanged(SaleDTO_.collateralAvailability)) {
+			entity.setCollateralAvailability(data.getCollateralAvailability());
+		}
 		if (data.isFieldChanged(SaleDTO_.clientId)) {
 			if (data.getClientId() != null) {
 				entity.setClient(clientRepository.getById(data.getClientId()));
@@ -51,7 +105,7 @@ public class SaleWriteService extends VersionAwareResponseService<SaleDTO, Sale>
 				entity.setClient(null);
 			}
 		}
-		setIfChanged(data, SaleDTO_.product, entity::setProduct);
+		setIfChanged(data, SaleDTO_.macroProduct, entity::setProduct);
 		setIfChanged(data, SaleDTO_.status, entity::setStatus);
 		setIfChanged(data, SaleDTO_.sum, entity::setSum);
 		return new ActionResultDTO<>(entityToDto(bc, entity));

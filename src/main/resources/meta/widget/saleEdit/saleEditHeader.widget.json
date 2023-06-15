@@ -1,7 +1,13 @@
 {
   "name": "saleEditHeader",
-  "title": "Sale",
+  "title": "Предварительный расчет. ${productHint}",
   "type": "HeaderWidget",
   "bc": "saleEdit",
-  "fields": []
+  "fields": [
+    {
+      "label": "Product Hint",
+      "key": "emptyField",
+      "type": "hidden"
+    }
+  ]
 }

@@ -1,0 +1,38 @@
+{
+  "name": "creditParamsFormApplet",
+  "title": "Параметры для расчета",
+  "type": "Form",
+  "bc": "saleEdit",
+  "fields": [
+    {
+      "label": "Запрашиваемая клиентом сумма кредита",
+      "key": "reqAmount",
+      "type": "money",
+      "comment": "IIF([Opty Id] IS NULL, [Req Amount], [Requested Calc Amount]), where 'Requested Calculation' join REQ_AMOUNT column of CX_OPTY_CALC on 'Requested Calc Id' = CX_OPTY_CALC.id where 'Requested Calc Id' is X_REQ_CALC_ID from 'opty' join of 'ATC Calc' bc "
+    },
+    {
+      "label": "",
+      "key": "emptyField",
+      "type": "hint"
+    }
+  ],
+  "options": {
+    "actionGroups": {
+      "include": [
+        "save",
+        "saveAndContinue",
+        "cancel"
+      ]
+    },
+    "layout": {
+      "rows": [{
+          "cols": [
+            {
+              "fieldKey": "reqAmount",
+              "span": 12
+            }
+          ]
+        }]
+    }
+  }
+}

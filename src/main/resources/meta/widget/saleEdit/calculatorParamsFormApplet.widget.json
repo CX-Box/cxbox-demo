@@ -1,0 +1,153 @@
+{
+  "name": "calculatorParamsFormApplet",
+  "title": "Параметры для расчета",
+  "type": "Form",
+  "bc": "saleEdit",
+  "fields": [
+    {
+      "label": "Тип расчета",
+      "key": "typeCalc",
+      "type": "dictionary"
+    },
+    {
+      "label": "Сумма, pуб.",
+      "key": "reqAmount",
+      "type": "money"
+    },
+    {
+      "label": "Платеж, pуб.",
+      "key": "reqPayment",
+      "type": "money"
+    },
+    {
+      "label": "Срок, мес.",
+      "key": "reqTerm",
+      "type": "number",
+      "digits": 3
+    },
+    {
+      "label": "Валюта",
+      "key": "reqCurrency",
+      "type": "dictionary",
+      "hidden": true
+    },
+    {
+      "label": "Выбрать дату",
+      "key": "rBSelectDayFlag",
+      "type": "checkbox"
+    },
+    {
+      "label": "Дата платежа",
+      "key": "paymentDate",
+      "type": "dictionary"
+    },
+    {
+      "label": "Нестандартная % ставка",
+      "key": "customRateFlg",
+      "type": "checkbox"
+    },
+    {
+      "label": "Процентная ставка,%",
+      "key": "reqRate",
+      "type": "percent"
+    },
+    {
+      "label": "Сниженный платеж",
+      "key": "reducedPaymentFlag",
+      "type": "checkbox"
+    },
+    {
+      "label": "Сниженный платеж, руб.",
+      "key": "reducedPayment",
+      "type": "money"
+    },
+    {
+      "label": "Срок действия, мес.",
+      "key": "reducedPaymentTerm",
+      "type": "number"
+    },
+    {
+      "label": "",
+      "key": "emptyField",
+      "type": "hint"
+    }
+  ],
+  "options": {
+    "actionGroups": {
+      "include": [
+        "save",
+        "saveAndContinue",
+        "cancel"
+      ]
+    },
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "typeCalc",
+              "span": 6
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "reqAmount",
+              "span": 6
+            },
+            {
+              "fieldKey": "reqPayment",
+              "span": 6
+            },
+            {
+              "fieldKey": "reqTerm",
+              "span": 6
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "customRateFlg",
+              "span": 6
+            },
+            {
+              "fieldKey": "reqRate",
+              "span": 6
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "reducedPaymentFlag",
+              "span": 6
+            },
+            {
+              "fieldKey": "reducedPayment",
+              "span": 6
+            },
+            {
+              "fieldKey": "reducedPaymentTerm",
+              "span": 6
+            }
+          ]
+        },
+
+        {
+          "cols": [
+            {
+              "fieldKey": "rBSelectDayFlag",
+              "span": 6
+            },
+            {
+              "fieldKey": "paymentDate",
+              "span": 6
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

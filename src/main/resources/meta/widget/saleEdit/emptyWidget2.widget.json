@@ -1,0 +1,8 @@
+{
+  "name": "emptyWidget2",
+  "title": "",
+  "type": "HeaderWidget",
+  "bc": "saleEdit",
+  "fields": [
+  ]
+}

@@ -10,7 +10,8 @@ export enum CustomWidgetTypes {
     Funnel = 'Funnel',
     RingProgress = 'RingProgress',
     DashboardList = 'DashboardList',
-    SuggestionPickList = 'SuggestionPickList'
+    SuggestionPickList = 'SuggestionPickList',
+    Tabs = 'Tabs'
 }
 
 export const removeRecordOperationWidgets: Array<WidgetTypes | string> = [WidgetTypes.List]
@@ -32,6 +33,20 @@ export interface FunnelWidgetMeta extends WidgetMeta {
 export interface RingProgressWidgetMeta extends WidgetMeta {
     type: CustomWidgetTypes.RingProgress
     options: WidgetOptions & { ringProgressOptions: { text: string; numberField: string; descriptionField: string; percentField: string } }
+}
+
+type InternalWidgetOption = {
+    widget: string
+    style: 'inlineForm' | 'popup' | 'inline' | 'none'
+}
+
+export interface AppWidgetMeta extends WidgetMeta {
+    options?: WidgetOptions & {
+        create?: InternalWidgetOption
+        edit?: InternalWidgetOption
+
+        navigationLevel?: number
+    }
 }
 
 export interface SuggestionPickListWidgetMeta extends WidgetMeta {

@@ -5,7 +5,7 @@
   "url": "/screen/sale/view/saleedit",
   "widgets": [
     {
-      "widgetName": "SecondLevelMenu",
+      "widgetName": "tabs",
       "position": 0,
       "gridWidth": 24
     },

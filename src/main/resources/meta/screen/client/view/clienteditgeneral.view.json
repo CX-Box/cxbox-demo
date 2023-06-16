@@ -5,7 +5,7 @@
   "url": "/screen/client/view/clienteditgeneral",
   "widgets": [
     {
-      "widgetName": "SecondLevelMenu",
+      "widgetName": "tabs",
       "position": 0,
       "gridWidth": 24
     },

@@ -21,8 +21,9 @@ import RingProgress from '../widgets/RingProgress/RingProgress'
 import DashboardCard from '../DashboardCard/DashboardCard'
 import DashboardList from '../widgets/DashboardList/DashboardList'
 import SuggestionPickListField from '../../fields/SuggestionPickList/SuggestionPickList'
+import Tabs from '../widgets/Tabs/Tabs'
 
-const skipWidgetTypes = [WidgetTypes.SecondLevelMenu]
+const skipWidgetTypes = [WidgetTypes.SecondLevelMenu] // TODO remove
 
 const customFields = {
     [FieldType.dictionary]: Dictionary,
@@ -40,7 +41,8 @@ const customWidgets: Partial<Record<CustomWidgetTypes | WidgetTypes, CustomWidge
     [CustomWidgetTypes.RingProgress]: { component: RingProgress, card: DashboardCard },
     [CustomWidgetTypes.DashboardList]: { component: DashboardList, card: DashboardCard },
     [WidgetTypes.AssocListPopup]: AssocListPopup,
-    [WidgetTypes.PickListPopup]: PickListPopup
+    [WidgetTypes.PickListPopup]: PickListPopup,
+    [CustomWidgetTypes.Tabs]: { component: Tabs, card: EmptyCard }
 }
 
 function View() {

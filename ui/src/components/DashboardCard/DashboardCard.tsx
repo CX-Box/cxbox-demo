@@ -10,7 +10,7 @@ function DashboardCard({ children }: DashboardCardProps) {
     return (
         <div className={styles.container}>
             <Row justify="center">
-                <Col span={22} offset={1}>
+                <Col span={24}>
                     <h2 className={styles.header}>{(children as any)?.props?.meta?.title}</h2>
                     {children}
                 </Col>

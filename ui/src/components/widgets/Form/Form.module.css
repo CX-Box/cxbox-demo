@@ -50,5 +50,9 @@
     text-align: left;
     font-size: 14px;
 }
+
+.formContainer div[class^="CheckboxPicker__container"] :global(.ant-checkbox) {
+    align-self: flex-start;
+}
 /* fix for displaying checkbox after */
 

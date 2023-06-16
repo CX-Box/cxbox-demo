@@ -22,7 +22,7 @@ function Card({ meta, children, className }: CardProps) {
 
     return (
         <Row justify="center">
-            <Col span={22} offset={1}>
+            <Col span={24}>
                 <div className={cn(styles.container, className)}>
                     {meta.title && (
                         <h2 className={styles.widgetTitle}>

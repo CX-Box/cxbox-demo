@@ -21,3 +21,38 @@
 .formContainer :global(.ant-form .ant-row > .ant-row > .ant-col .ant-select-dropdown-menu-item) {
     color: main-light-mode;
 }
+/* TODO remove the fixes after moving components from the core */
+/* fix for grid form ant.d 3.x.x before */
+.formContainer div[class*="FormWidget__colWrapper"] {
+    padding: 0 24px 0 0;
+}
+
+.formContainer div[class*="FormWidget__colWrapper"]:last-child {
+    padding: 0 24px 0 0;
+}
+.formContainer > form {
+    margin: 0 12px;
+}
+/* fix for grid form ant.d 3.x.x after */
+
+/* fix for displaying checkbox before */
+.formContainer div[class^="CheckboxPicker__container"] :global(.ant-checkbox-wrapper) {
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.formContainer div[class^="CheckboxPicker__container"] :global(.ant-checkbox + span) {
+    padding: 0 0 8px;
+    font-family: openSans_bold;
+    line-height: 20px;
+    color: #141F35;
+    white-space: initial;
+    text-align: left;
+    font-size: 14px;
+}
+
+.formContainer div[class^="CheckboxPicker__container"] :global(.ant-checkbox) {
+    align-self: flex-start;
+}
+/* fix for displaying checkbox after */
+

@@ -1,0 +1,7 @@
+{
+  "name": "productListHeader",
+  "title": "Маркетинговые продукты",
+  "type": "HeaderWidget",
+  "bc": "product",
+  "fields": []
+}

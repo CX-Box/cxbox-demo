@@ -17,12 +17,8 @@
     {
       "label": "Обслуживание в год, руб.",
       "key": "cardCommissionThirdYear",
-      "type": "money"
-    },
-    {
-      "label": "",
-      "key": "emptyField",
-      "type": "hint"
+      "type": "money",
+      "nullable": true
     }
   ],
   "options": {
@@ -38,20 +34,17 @@
               "fieldKey": "cardCategory",
               "span": 12
             }
-          ]
-        },
-        {
-          "cols": [
-            {
-              "fieldKey": "cardCommissionThirdYear",
-              "span": 12
-            }
+
           ]
         },
         {
           "cols": [
             {
               "fieldKey": "tariffMinMonthPayment",
+              "span": 12
+            },
+            {
+              "fieldKey": "cardCommissionThirdYear",
               "span": 12
             }
           ]

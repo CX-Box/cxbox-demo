@@ -1,0 +1,76 @@
+{
+  "name": "productList",
+  "title": "",
+  "type": "List",
+  "bc": "product",
+  "fields": [
+    {
+      "title": "Код продукта",
+      "key": "productCode",
+      "type": "input",
+      "drillDown": "true"
+    },
+    {
+      "title": "Наименование продукта",
+      "key": "shortName",
+      "type": "input"
+    },
+    {
+      "title": "Макропродукт",
+      "key": "macroProduct",
+      "type": "dictionary"
+    },
+    {
+      "title": "Статус",
+      "key": "status",
+      "type": "dictionary"
+    },
+    {
+      "title": "Дата начала действия продукта",
+      "key": "startDate",
+      "type": "date"
+    },
+    {
+      "title": "Дата окончания действия продукта",
+      "key": "endDate",
+      "type": "date"
+    },
+    {
+      "title": "Версия продукта",
+      "key": "version",
+      "type": "number"
+    },
+    {
+      "title": "Нестандартный продукт",
+      "key": "nonStandartFlag",
+      "type": "checkbox"
+    },
+    {
+      "title": "Недоступен для DSA",
+      "key": "notDSA",
+      "type": "checkbox"
+    },
+    {
+      "title": "Проверка выполнена",
+      "key": "gBCCheckedFlg",
+      "type": "checkbox"
+    },
+    {
+      "title": "Siebel Id",
+      "key": "siebelId",
+      "type": "input"
+    },
+    {
+      "title": "Id",
+      "key": "id",
+      "type": "input"
+    }
+  ],
+  "options": {
+    "actionGroups": {
+      "include": [
+        "create"
+      ]
+    }
+  }
+}

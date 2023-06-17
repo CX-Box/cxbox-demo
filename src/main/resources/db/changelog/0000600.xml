@@ -72,30 +72,41 @@
     </createTable>
   </changeSet>
 
-  <changeSet id="meeting table" author="kuzin">
-    <createTable tableName="MEETING">
+  <changeSet id="product sync" author="kuzin">
+    <createTable tableName="PRODUCT_SYNC">
       <column name="ID" remarks="Identifier" type="NUMBER(19, 0)">
         <constraints primaryKey="true"/>
       </column>
-      <column name="AGENDA" type="VARCHAR(200)"/>
-      <column name="STATUS" type="VARCHAR(200)"/>
-      <column name="START_DATE_TIME" type="TIMESTAMP(6)"/>
-      <column name="END_DATE_TIME" type="TIMESTAMP(6)"/>
-      <column name="ADDRESS" type="VARCHAR(200)"/>
-      <column name="NOTES" type="VARCHAR(200)"/>
-      <column name="RESULT" type="VARCHAR(200)"/>
-      <column name="RESPONSIBLE_ID" type="NUMBER(19, 0)">
-        <constraints nullable="true" foreignKeyName="MEETING_RESPONSIBLE_ID" referencedColumnNames="ID"
+
+      <column name="PAGE_SIZE" type="NUMBER(19, 0)"/>
+      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" remarks="Creation date"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" remarks="Last updated date"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false" foreignKeyName="MEETING_CREATED_BY" referencedColumnNames="ID"
           referencedTableName="USERS"/>
       </column>
-      <column name="CLIENT_ID" type="NUMBER(19, 0)">
-        <constraints nullable="true" foreignKeyName="MEETING_CLIENT_ID" referencedColumnNames="ID"
-          referencedTableName="CLIENT"/>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false" foreignKeyName="MEETING_LAST_UPD_BY" referencedColumnNames="ID"
+          referencedTableName="USERS"/>
       </column>
-      <column name="CONTACT_ID" type="NUMBER(19, 0)">
-        <constraints nullable="true" foreignKeyName="MEETING_CONTACT_ID" referencedColumnNames="ID"
-          referencedTableName="CONTACT"/>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
       </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="product table" author="kuzin">
+    <createTable tableName="PRODUCT">
+      <column name="ID" remarks="Identifier" type="NUMBER(19, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="SHORT_NAME" type="VARCHAR(200)"/>
 
       <column defaultValueComputed="current_timestamp" name="CREATED_DATE" remarks="Creation date"
         type="TIMESTAMP(6)">
@@ -225,37 +236,19 @@
       <column header="value" name="value" type="STRING"/>
       <column header="client_id" name="client_id" type="STRING"/>
     </loadUpdateData>
-    <loadUpdateData tableName="CONTACT" primaryKey="ID" encoding="UTF-8" separator="," quotchar="&quot;"
-      file="db/data/CONTACT.csv">
-      <column header="ID" name="ID" type="STRING"/>
-      <column header="created_by_user_id" name="created_by_user_id" type="STRING"/>
-      <column header="last_upd_by_user_id" name="last_upd_by_user_id" type="STRING"/>
-      <column header="full_name" name="full_name" type="STRING"/>
-      <column header="phone_number" name="phone_number" type="STRING"/>
-      <column header="email" name="email" type="STRING"/>
-      <column header="client_id" name="client_id" type="STRING"/>
-    </loadUpdateData>
-    <loadUpdateData tableName="MEETING" primaryKey="ID" encoding="UTF-8" separator="," quotchar="&quot;"
-      file="db/data/MEETING.csv">
-      <column header="ID" name="ID" type="STRING"/>
-      <column header="agenda" name="agenda" type="STRING"/>
-      <column header="start_date_time" name="start_date_time" type="STRING"/>
-      <column header="end_date_time" name="end_date_time" type="STRING"/>
-      <column header="address" name="address" type="STRING"/>
-      <column header="notes" name="notes" type="STRING"/>
-      <column header="result" name="result" type="STRING"/>
-      <column header="responsible_id" name="responsible_id" type="STRING"/>
-      <column header="client_id" name="client_id" type="STRING"/>
-      <column header="contact_id" name="contact_id" type="STRING"/>
-      <column header="created_by_user_id" name="created_by_user_id" type="STRING"/>
-      <column header="last_upd_by_user_id" name="last_upd_by_user_id" type="STRING"/>
-    </loadUpdateData>
+
     <loadUpdateData tableName="bc_filter_groups" primaryKey="ID" encoding="UTF-8" separator="," quotchar="&quot;"
       file="db/data/BC_FILTER_GROUPS.csv">
       <column header="ID" name="ID" type="STRING"/>
       <column header="name" name="name" type="STRING"/>
       <column header="bc" name="bc" type="STRING"/>
       <column header="filters" name="filters" type="STRING"/>
+    </loadUpdateData>
+
+    <loadUpdateData tableName="PRODUCT_SYNC" primaryKey="ID" encoding="UTF-8" separator="," quotchar="&quot;"
+      file="db/data/PRODUCT_SYNC.csv">
+      <column header="ID" name="ID" type="STRING"/>
+      <column header="PAGE_SIZE" name="PAGE_SIZE" type="NUMERIC"/>
     </loadUpdateData>
   </changeSet>
 

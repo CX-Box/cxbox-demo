@@ -15,16 +15,10 @@
             "viewName": "clienteditgeneral"
           },
           {
-            "viewName": "clienteditcontacts"
-          },
-          {
             "viewName": "clienteditoverview"
           },
           {
             "viewName": "clientview"
-          },
-          {
-            "viewName": "clienteditcreatecontact"
           }
         ]
       }

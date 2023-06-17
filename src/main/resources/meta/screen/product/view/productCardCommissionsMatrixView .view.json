@@ -1,0 +1,36 @@
+{
+  "name": "productCardCommissionsMatrixView ",
+  "title": "Комиссии по карте",
+  "template": "DashboardView",
+  "url": "/screen/product/view/productCardCommissionsMatrixView ",
+  "widgets": [
+    {
+      "widgetName": "productEdit",
+      "position": 10,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "tabsLevel2",
+      "position": 11,
+      "gridWidth": 20
+    },
+    {
+      "widgetName": "matrixItemCardCommissionList",
+      "position": 20,
+      "gridWidth": 23
+    },
+    {
+      "widgetName": "matrixItemCardCommissionsKeyParametersForm",
+      "position": 60,
+      "gridWidth": 12
+    },
+    {
+      "widgetName": "matrixItemCardCommissionsForm",
+      "position": 60,
+      "gridWidth": 12
+    }
+  ],
+  "rolesAllowed": [
+    "CXBOX_USER"
+  ]
+}

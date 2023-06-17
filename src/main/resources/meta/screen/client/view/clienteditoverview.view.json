@@ -5,7 +5,7 @@
   "url": "/screen/client/view/clienteditoverview",
   "widgets": [
     {
-      "widgetName": "tabs",
+      "widgetName": "tabsLevel2",
       "position": 0,
       "gridWidth": 24
     },
@@ -22,16 +22,6 @@
     {
       "widgetName": "clientView",
       "position": 30,
-      "gridWidth": 24
-    },
-    {
-      "widgetName": "contactListHeader",
-      "position": 40,
-      "gridWidth": 24
-    },
-    {
-      "widgetName": "contactViewList",
-      "position": 50,
       "gridWidth": 24
     },
     {

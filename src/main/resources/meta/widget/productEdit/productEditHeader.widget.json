@@ -1,0 +1,7 @@
+{
+  "name": "productEditHeader",
+  "title": "Product",
+  "type": "HeaderWidget",
+  "bc": "productEdit",
+  "fields": []
+}

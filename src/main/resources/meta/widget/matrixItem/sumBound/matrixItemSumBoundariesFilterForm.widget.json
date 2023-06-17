@@ -1,0 +1,198 @@
+{
+  "name": "matrixItemSumBoundariesFilterForm",
+  "title": "Ограничения параметров. Параметры для расчета",
+  "type": "Form",
+  "bc": "matrixItemSumBound",
+  "fields": [
+    {
+      "label": "Мин. сумма кредита",
+      "key": "minLoanSumRestriction",
+      "digits": 2,
+      "type": "number"
+    },
+    {
+      "label": "Макс. сумма кредита",
+      "key": "maxLoanSumRestriction",
+      "digits": 2,
+      "type": "number"
+    },
+    {
+      "label": "Мин. сумма залога вклад",
+      "key": "minDepositSumRestriction",
+      "digits": 2,
+      "type": "number"
+    },
+    {
+      "label": "Макс. сумма залога вклада",
+      "key": "maxDepositSumRestriction",
+      "digits": 2,
+      "type": "number"
+    },
+    {
+      "label": "Мин. срок",
+      "key": "minTermRestriction",
+      "digits": 2,
+      "type": "number"
+    },
+    {
+      "label": "Макс.срок",
+      "key": "maxTermRestriction",
+      "digits": 2,
+      "type": "number"
+    },
+    {
+      "label": "Соотношение  суммы  рефинансируемых  кредитов к итоговой сумме кредита, в %",
+      "key": "refSumLoanRatio",
+      "digits": 2,
+      "type": "number"
+    },
+    {
+      "label": "Максимальная сумма дополнительных кредитных средств («сумма на руки»), руб.",
+      "key": "maxAddSum",
+      "type": "number"
+    },
+    {
+      "label": "Минимальная сумма дополнительных кредитных средств («сумма на руки»), руб.",
+      "key": "minAddSum",
+      "type": "number"
+    },
+    {
+      "label": "Минимальная сумма всех рефинансируемых кредитов, руб.",
+      "key": "minRefinSum",
+      "type": "number"
+    },
+    {
+      "label": "Максимальная сумма всех рефинансируемых кредитов, руб",
+      "key": "maxRefinSum",
+      "type": "number"
+    },
+    {
+      "label": "Максимальное отклонение суммы",
+      "key": "maxDeviateAmount",
+      "digits": 2,
+      "type": "number"
+    },
+    {
+      "label": "Срок кредита для расчёта ПСК",
+      "key": "creditTermPSK",
+      "digits": 2,
+      "type": "number"
+    }
+  ],
+  "options": {
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "minLoanSumRestriction",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "maxLoanSumRestriction",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "minDepositSumRestriction",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "maxDepositSumRestriction",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "minTermRestriction",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "maxTermRestriction",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "refSumLoanRatio",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "maxAddSum",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "minAddSum",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "minRefinSum",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "maxRefinSum",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "maxDeviateAmount",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "creditTermPSK",
+              "span": 12
+            }
+          ]
+        }
+      ]
+    },
+    "actionGroups": {
+      "include": [
+        "create",
+        "save"
+      ]
+    }
+  }
+}

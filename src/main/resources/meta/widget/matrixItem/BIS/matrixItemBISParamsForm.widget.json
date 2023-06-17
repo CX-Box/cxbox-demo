@@ -1,0 +1,45 @@
+{
+  "name": "matrixItemBISParamsForm",
+  "title": "Параметры БИС. Параметры для расчета",
+  "type": "Form",
+  "bc": "matrixItemBIS",
+  "fields": [
+    {
+      "label": "Вид ссуды",
+      "key": "bISLoanCategory",
+      "type": "input"
+    },
+    {
+      "label": "Целевая система открытия",
+      "key": "targetOpenSystem",
+      "type": "dictionary"
+    }
+  ],
+  "options": {
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "bISLoanCategory",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "targetOpenSystem",
+              "span": 12
+            }
+          ]
+        }]
+    },
+    "actionGroups": {
+      "include": [
+        "create",
+        "save"
+      ]
+    }
+  }
+}

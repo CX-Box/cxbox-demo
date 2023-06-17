@@ -1,9 +1,0 @@
-{
-  "name": "tabs",
-  "title": "Navigation",
-  "type": "Tabs",
-  "fields": [],
-  "options": {
-    "navigationLevel": 1
-  }
-}

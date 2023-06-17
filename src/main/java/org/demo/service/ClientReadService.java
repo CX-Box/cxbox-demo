@@ -3,11 +3,11 @@ package org.demo.service;
 import org.demo.conf.cxbox.icon.ActionIcon;
 import org.demo.controller.CxboxRestController;
 import org.demo.entity.Client;
-import org.demo.entity.Meeting;
+import org.demo.entity.Product;
 import org.demo.entity.enums.ClientStatus;
 import org.demo.repository.ClientRepository;
 import org.demo.dto.ClientReadDTO;
-import org.demo.repository.MeetingRepository;
+import org.demo.repository.ProductRepository;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.DrillDownType;
@@ -29,7 +29,7 @@ public class ClientReadService extends VersionAwareResponseService<ClientReadDTO
 	private ClientRepository clientRepository;
 
 	@Autowired
-	private MeetingRepository meetingRepository;
+	private ProductRepository productRepository;
 
 	@Autowired
 	private SessionService sessionService;
@@ -76,25 +76,7 @@ public class ClientReadService extends VersionAwareResponseService<ClientReadDTO
 											));
 								})
 								.add()
-								.newAction()
-								.action("create_meeting", "Create Meeting")
-								.withAutoSaveBefore()
-								.invoker((bc, data) -> {
-									Client client = clientRepository.getById(bc.getIdAsLong());
-									Meeting meeting = meetingRepository.save(new Meeting()
-											.setResponsible(sessionService.getSessionUser())
-											.setClient(client)
-									);
-									return new ActionResultDTO<ClientReadDTO>()
-											.setAction(PostAction.drillDown(
-													DrillDownType.INNER,
-													"screen/meeting/view/meetingedit/"
-															+ CxboxRestController.meetingEdit + "/"
-															+ meeting.getId()
-											));
-								})
-								.available(bc -> false)//TODO>>remove false, after fixing UI error for this drill-down
-								.add()
+
 								.newAction()
 								.action("deactivate", "Deactivate")
 								.withAutoSaveBefore()

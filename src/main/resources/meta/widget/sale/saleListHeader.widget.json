@@ -1,6 +1,6 @@
 {
   "name": "saleListHeader",
-  "title": "Sale List",
+  "title": "Обращения",
   "type": "HeaderWidget",
   "bc": "sale",
   "fields": []

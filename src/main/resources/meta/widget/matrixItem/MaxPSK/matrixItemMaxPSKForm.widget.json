@@ -1,0 +1,30 @@
+{
+  "name": "matrixItemMaxPSKForm",
+  "title": "Максимальная ПСК. Параметры для расчета",
+  "type": "Form",
+  "bc": "matrixItemMaxPsk",
+  "fields": [
+    {
+      "label": "Максимальная ПСК, %",
+      "key": "maxPSKPerc",
+      "type": "percent",
+      "digits": 2
+    }
+  ],
+  "options": {
+    "layout": {"rows": [{
+          "cols": [
+            {
+              "fieldKey": "maxPSKPerc",
+              "span": 12
+            }
+          ]
+        }]},
+    "actionGroups": {
+      "include": [
+        "create",
+        "save"
+      ]
+    }
+  }
+}

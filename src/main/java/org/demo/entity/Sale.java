@@ -3,8 +3,8 @@ package org.demo.entity;
 import lombok.EqualsAndHashCode;
 import org.demo.entity.enums.CardCategoryEnum;
 import org.demo.entity.enums.CollateralAvailabilityEnum;
+import org.demo.entity.enums.MacroProduct;
 import org.demo.entity.enums.PaymentDateEnum;
-import org.demo.entity.enums.Product;
 import org.demo.entity.enums.ReqCurrencyEnum;
 import org.demo.entity.enums.SaleStatus;
 import org.cxbox.model.core.entity.BaseEntity;
@@ -34,7 +34,7 @@ public class Sale extends BaseEntity {
 
 	@Column
 	@Enumerated(EnumType.STRING)
-	private Product product;
+	private MacroProduct macroproduct;
 
 	@Column
 	@Enumerated(EnumType.STRING)
@@ -66,15 +66,16 @@ public class Sale extends BaseEntity {
 	@Column
 	private String cardHint;
 
+
 	@Enumerated(value = EnumType.STRING)
-	@Column
-	private TypeCalcEnum typeCalc;
+	@Column(columnDefinition = "varchar(100) default 'AmountTerm'")
+	private TypeCalcEnum typeCalc = TypeCalcEnum.AmountTerm;
 
 	@Column
-	private Long reqAmount;
+	private Double reqAmount;
 
 	@Column
-	private Long reqPayment;
+	private Double reqPayment;
 
 	@Column
 	private Long reqTerm;
@@ -88,7 +89,7 @@ public class Sale extends BaseEntity {
 	private PaymentDateEnum paymentDate;
 
 	@Column
-	private Boolean rBSelectDayFlag;
+	private Boolean selDayFlg;
 
 	@Column
 	private Boolean customRateFlg;
@@ -104,5 +105,36 @@ public class Sale extends BaseEntity {
 
 	@Column
 	private Long reducedPaymentTerm;
+
+	@Column
+	private Long amountHandWithoutInsurance;
+
+	@Column
+	private Long overpaymentAmountDay;
+
+	@Column
+	private Long overpaymentAmount;
+
+	@Column
+	private Long overpaymentAmountPercent;
+
+	@Column
+	private Long pSKPercent;
+
+	@Column
+	private Long approvedAmount;
+
+	@Column
+	private Long resAmount;
+
+	@Column
+	private Long pSKPercentCrics;
+
+	@Column
+	private Long sumCreditAdditionalServices;
+
+	@JoinColumn(name = "REQ_PRODUCT_ID")
+	@ManyToOne
+	private Product reqProduct;
 
 }

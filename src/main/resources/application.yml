@@ -99,3 +99,18 @@ integration:
   dadata:
     base-url: ${DADATA_URL:https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest}
     api-key: ${DADATA_API_KEY:885218b4321600b90d4161c85bc11766cd6810c1}
+
+decorator:
+  datasource:
+    enabled: true
+    datasource-proxy:
+      logging: slf4j
+      query:
+        enable-logging: true
+        log-level: debug
+      slow-query:
+        enable-logging: true
+        log-level: warn
+        threshold: 300
+      multiline: true
+      count-query: false

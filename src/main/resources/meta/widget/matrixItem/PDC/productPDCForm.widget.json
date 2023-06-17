@@ -1,0 +1,59 @@
+{
+  "name": "productPDCForm",
+  "title": "Проверки. Параметры расчета",
+  "type": "Form",
+  "bc": "matrixItemPDC",
+  "fields": [
+    {
+      "label": "Необходимость проведения PDC",
+      "key": "preDisbursementCheckFlag",
+      "type": "checkbox"
+    },
+    {
+      "label": "Электронная проверка PDC",
+      "key": "electronicCheck",
+      "type": "checkbox"
+    },
+    {
+      "label": "Необходимость проведения POC",
+      "key": "preOfferCheck",
+      "type": "checkbox"
+    }
+  ],
+  "options": {
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "preDisbursementCheckFlag",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "electronicCheck",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "preOfferCheck",
+              "span": 12
+            }
+          ]
+        }
+      ]
+    },
+    "actionGroups": {
+      "include": [
+        "create",
+        "save"
+      ]
+    }
+  }
+}

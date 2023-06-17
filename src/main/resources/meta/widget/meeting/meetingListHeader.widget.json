@@ -1,7 +1,0 @@
-{
-  "name": "meetingListHeader",
-  "title": "Meeting List",
-  "type": "HeaderWidget",
-  "bc": "meeting",
-  "fields": []
-}

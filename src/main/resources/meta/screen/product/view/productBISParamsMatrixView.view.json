@@ -1,0 +1,36 @@
+{
+  "name": "productBISParamsMatrixView",
+  "title": "Параметры БИС",
+  "template": "DashboardView",
+  "url": "/screen/product/view/productBISParamsMatrixView",
+  "widgets": [
+    {
+      "widgetName": "productEdit",
+      "position": 10,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "tabsLevel2",
+      "position": 11,
+      "gridWidth": 20
+    },
+    {
+      "widgetName": "matrixItemBisList",
+      "position": 20,
+      "gridWidth": 23
+    },
+    {
+      "widgetName": "matrixItemBISKeyParametersForm",
+      "position": 60,
+      "gridWidth": 12
+    },
+    {
+      "widgetName": "matrixItemBISParamsForm",
+      "position": 60,
+      "gridWidth": 12
+    }
+  ],
+  "rolesAllowed": [
+    "CXBOX_USER"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "productEditClientInfo",
+  "title": "Client Information",
+  "type": "Form",
+  "bc": "productEdit",
+  "fields": [
+
+
+  ],
+  "options": {
+    "actionGroups": {
+      "include": [
+      ]
+    }
+  }
+}

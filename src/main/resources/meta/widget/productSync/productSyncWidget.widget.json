@@ -1,0 +1,33 @@
+{
+  "name": "productSyncWidget",
+  "title": "Синхронизировать",
+  "type": "Form",
+  "bc": "productSync",
+  "fields": [
+    {
+      "label": "Кол-во строк",
+      "key": "pageSize",
+      "type": "number"
+    }
+  ],
+  "options": {
+    "actionGroups": {
+      "include": [
+        "sync"
+      ]
+    },
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "pageSize",
+              "span": 12
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
+

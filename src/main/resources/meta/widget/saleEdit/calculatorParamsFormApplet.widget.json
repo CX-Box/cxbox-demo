@@ -12,18 +12,22 @@
     {
       "label": "Сумма, pуб.",
       "key": "reqAmount",
-      "type": "money"
+      "type": "money",
+      "nullable": true,
+      "digits": 2
     },
     {
       "label": "Платеж, pуб.",
       "key": "reqPayment",
-      "type": "money"
+      "type": "money",
+      "nullable": true,
+      "digits": 2
     },
     {
       "label": "Срок, мес.",
       "key": "reqTerm",
       "type": "number",
-      "digits": 3
+      "nullable": true
     },
     {
       "label": "Валюта",
@@ -33,7 +37,7 @@
     },
     {
       "label": "Выбрать дату",
-      "key": "rBSelectDayFlag",
+      "key": "selDayFlg",
       "type": "checkbox"
     },
     {
@@ -49,7 +53,8 @@
     {
       "label": "Процентная ставка,%",
       "key": "reqRate",
-      "type": "percent"
+      "type": "percent",
+      "nullable": true
     },
     {
       "label": "Сниженный платеж",
@@ -59,25 +64,19 @@
     {
       "label": "Сниженный платеж, руб.",
       "key": "reducedPayment",
-      "type": "money"
+      "type": "money",
+      "nullable": true
     },
     {
       "label": "Срок действия, мес.",
       "key": "reducedPaymentTerm",
-      "type": "number"
-    },
-    {
-      "label": "",
-      "key": "emptyField",
-      "type": "hint"
+      "type": "number",
+      "nullable": true
     }
   ],
   "options": {
     "actionGroups": {
       "include": [
-        "save",
-        "saveAndContinue",
-        "cancel"
       ]
     },
     "layout": {
@@ -87,11 +86,7 @@
             {
               "fieldKey": "typeCalc",
               "span": 6
-            }
-          ]
-        },
-        {
-          "cols": [
+            },
             {
               "fieldKey": "reqAmount",
               "span": 6
@@ -115,6 +110,14 @@
             {
               "fieldKey": "reqRate",
               "span": 6
+            },
+            {
+              "fieldKey": "selDayFlg",
+              "span": 6
+            },
+            {
+              "fieldKey": "paymentDate",
+              "span": 6
             }
           ]
         },
@@ -130,19 +133,6 @@
             },
             {
               "fieldKey": "reducedPaymentTerm",
-              "span": 6
-            }
-          ]
-        },
-
-        {
-          "cols": [
-            {
-              "fieldKey": "rBSelectDayFlag",
-              "span": 6
-            },
-            {
-              "fieldKey": "paymentDate",
               "span": 6
             }
           ]

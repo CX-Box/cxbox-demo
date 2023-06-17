@@ -1,0 +1,275 @@
+{
+  "name": "matrixItemPriceParametersForm",
+  "title": "Ценовые параметры. Параметры для расчета",
+  "type": "Form",
+  "bc": "matrixItemTariff",
+  "fields": [
+    {
+      "label": "Редакция тарифного плана, ПФ",
+      "key": "tariffVersionPF",
+      "type": "input"
+    },
+    {
+      "label": "Наименование тарифного плана, ПФ",
+      "key": "tariffNamePf",
+      "type": "input"
+    },
+    {
+      "label": "Наименование тарифного плана при увольнении, ПФ",
+      "key": "dismissTariffNamePf",
+      "type": "input"
+    },
+    {
+      "label": "Процентная ставка, % (КК - для безналичных операций)",
+      "key": "ratePercent",
+      "type": "percent",
+      "digits": 2
+    },
+    {
+      "label": "Процентная ставка для наличных операций, %",
+      "key": "cashCreditRate",
+      "type": "percent",
+      "digits": 2
+    },
+    {
+      "label": "Процентная ставка при наступлении особых обстоятельств,%",
+      "key": "specCondRate",
+      "type": "percent",
+      "digits": 2
+    },
+    {
+      "label": "Минимальная % ставка:",
+      "key": "minPercentRate",
+      "type": "percent",
+      "digits": 2
+    },
+    {
+      "label": "Мин. ежемесячный платеж по осн. долгу, %",
+      "key": "minMonthlyPaymentForMainDebt",
+      "type": "percent",
+      "digits": 2
+    },
+    {
+      "label": "Минимальный ежемесячный платеж, в валюте кредита",
+      "key": "minMounthPayment",
+      "type": "number",
+      "digits": 2
+    },
+    {
+      "label": "Комиссия за выдачу наличных средств за счет лимита овердрафта, %",
+      "key": "cashCommissionOverdraft",
+      "type": "percent",
+      "digits": 2
+    },
+    {
+      "label": "Штрафные санкции за просрочку платежа, ПФ",
+      "key": "penaltiesForPaymDelayPf",
+      "type": "input"
+    },
+    {
+      "label": "Пени за несвоевр. предоставление док., подтв. прологацию автокаско, ПФ",
+      "key": "penaltiesForNoCascoPf",
+      "type": "input"
+    },
+    {
+      "label": "Схема начисления",
+      "key": "paymentScheme",
+      "type": "input"
+    },
+    {
+      "label": "Льготный период, мес.",
+      "key": "gracePeriodMonth",
+      "type": "number"
+    },
+    {
+      "label": "Максимальный срок отсрочки",
+      "key": "maxDelayTerm",
+      "type": "number"
+    },
+    {
+      "label": "Минимальный срок отсрочки",
+      "key": "minDelayTerm",
+      "type": "number"
+    },
+    {
+      "label": "Соотношение отсрочки выплаты основного долга/сроку кредита (в %)",
+      "key": "delayToLoanTerm",
+      "type": "percent",
+      "digits": 2
+    },
+    {
+      "label": "Вариант расчета графика платежей",
+      "key": "aTCScheduleType",
+      "type": "dictionary"
+    },
+    {
+      "label": "Сдвигать дату платежа на рабочий день",
+      "key": "movePaymentDateFlg",
+      "type": "checkbox"
+    }
+  ],
+  "options": {
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "tariffVersionPF",
+              "span": 23
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "tariffNamePf",
+              "span": 23
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "dismissTariffNamePf",
+              "span": 23
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "ratePercent",
+              "span": 23
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "cashCreditRate",
+              "span": 23
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "specCondRate",
+              "span": 23
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "minMonthlyPaymentForMainDebt",
+              "span": 23
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "minPercentRate",
+              "span": 23
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "minMounthPayment",
+              "span": 23
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "cashCommissionOverdraft",
+              "span": 23
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "penaltiesForPaymDelayPf",
+              "span": 23
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "penaltiesForNoCascoPf",
+              "span": 23
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "paymentScheme",
+              "span": 23
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "gracePeriodMonth",
+              "span": 23
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "maxDelayTerm",
+              "span": 23
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "minDelayTerm",
+              "span": 23
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "delayToLoanTerm",
+              "span": 23
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "aTCScheduleType",
+              "span": 23
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "movePaymentDateFlg",
+              "span": 23
+            }
+          ]
+        }
+      ]
+    },
+    "actionGroups": {
+      "include": [
+        "create",
+        "save"
+      ]
+    }
+  }
+}

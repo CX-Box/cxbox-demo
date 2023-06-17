@@ -44,7 +44,7 @@ public class SaleReadService extends VersionAwareResponseService<SaleDTO, Sale> 
 	@Override
 	public Actions<SaleDTO> getActions() {
 		return Actions.<SaleDTO>builder()
-				.create().text("Add").add()
+				.create().text("Кредитный калькулятор").add()
 				.newAction()
 				.action("edit", "Edit")
 				.withoutAutoSaveBefore()

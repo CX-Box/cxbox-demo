@@ -1,0 +1,9 @@
+{
+  "name": "tabsLevel2",
+  "title": "Navigation",
+  "type": "Tabs",
+  "fields": [],
+  "options": {
+    "navigationLevel": 2
+  }
+}

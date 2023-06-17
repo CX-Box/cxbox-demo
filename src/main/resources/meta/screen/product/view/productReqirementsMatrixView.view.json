@@ -1,0 +1,36 @@
+{
+  "name": "productReqirementsMatrixView",
+  "title": "Требования к участникам",
+  "template": "DashboardView",
+  "url": "/screen/product/view/productReqirementsMatrixView",
+  "widgets": [
+    {
+      "widgetName": "productEdit",
+      "position": 10,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "tabsLevel2",
+      "position": 11,
+      "gridWidth": 20
+    },
+    {
+      "widgetName": "matrixItemRequirementsList",
+      "position": 20,
+      "gridWidth": 23
+    },
+    {
+      "widgetName": "matrixItemRequirementsKeyParameterssForm",
+      "position": 60,
+      "gridWidth": 12
+    },
+    {
+      "widgetName": "matrixItemRequirementsForm",
+      "position": 60,
+      "gridWidth": 12
+    }
+  ],
+  "rolesAllowed": [
+    "CXBOX_USER"
+  ]
+}

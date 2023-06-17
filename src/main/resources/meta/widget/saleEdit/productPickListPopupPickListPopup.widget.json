@@ -1,0 +1,24 @@
+{
+  "title": "productPickListPopupPickListPopup title",
+  "name": "productPickListPopupPickListPopup",
+  "type": "PickListPopup",
+  "bc": "productPickListPopup",
+  "fields": [
+    {
+      "title": "Код продукта",
+      "key": "productCode",
+      "type": "input",
+      "drillDown": "true"
+    },
+    {
+      "title": "Наименование продукта",
+      "key": "shortName",
+      "type": "input"
+    },
+    {
+      "title": "id",
+      "key": "id",
+      "type": "input"
+    }
+  ]
+}

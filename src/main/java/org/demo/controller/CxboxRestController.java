@@ -2,16 +2,17 @@ package org.demo.controller;
 
 import org.demo.service.DadataCompanySuggestionPickListService;
 import org.demo.service.DashboardClientActivitiesService;
-import org.demo.service.ClientContactService;
 import org.demo.service.ClientReadService;
 import org.demo.service.ClientWriteService;
-import org.demo.service.ContactPickListService;
 import org.demo.service.DashboardFilterService;
 import org.demo.service.DashboardSalesFunnelService;
 import org.demo.service.DashboardSalesRingProgressService;
-import org.demo.service.MeetingReadService;
-import org.demo.service.MeetingWriteService;
+import org.demo.service.MatrixItemService;
+import org.demo.service.ProductReadService;
+import org.demo.service.ProductSyncService;
+import org.demo.service.ProductWriteService;
 import org.demo.service.ClientPickListService;
+import org.demo.service.ProductPickPickListService;
 import org.demo.service.ResponsiblePickListService;
 import org.demo.service.SaleReadService;
 import org.demo.service.SaleWriteService;
@@ -36,17 +37,27 @@ public enum CxboxRestController implements EnumBcIdentifier {
 	// @formatter:on
 
 	client(ClientReadService.class),
-		contact(client, ClientContactService.class),
+
 	clientEdit(ClientWriteService.class),
-		contactEdit(clientEdit, ClientContactService.class),
-		contactEditAssoc(clientEdit, ClientContactService.class),
-	meeting(MeetingReadService.class),
-	meetingEdit(MeetingWriteService.class),
-		responsiblePickListPopup(meetingEdit, ResponsiblePickListService.class),
-		clientPickListPopup(meetingEdit, ClientPickListService.class),
-		contactPickListPopup(meetingEdit, ContactPickListService.class),
+	productSync(ProductSyncService.class),
+	product(ProductReadService.class),
+	productEdit(ProductWriteService.class),
+		matrixItemError(productEdit, MatrixItemService.class),
+		matrixItemProduct(productEdit, MatrixItemService.class),
+		matrixItemBIS(productEdit, MatrixItemService.class),
+		matrixItemCardCommission(productEdit, MatrixItemService.class),
+		matrixItemMaxPsk(productEdit, MatrixItemService.class),
+		matrixItemProdDisc(productEdit, MatrixItemService.class),
+		matrixItemPDC(productEdit, MatrixItemService.class),
+		matrixItemSumBound(productEdit, MatrixItemService.class),
+		matrixItem(productEdit, MatrixItemService.class),
+		matrixItemTariff(productEdit, MatrixItemService.class),
+		matrixItemRequirements(productEdit, MatrixItemService.class),
+		responsiblePickListPopup(productEdit, ResponsiblePickListService.class),
+		clientPickListPopup(productEdit, ClientPickListService.class),
 	sale(SaleReadService.class),
 	saleEdit(SaleWriteService.class),
+	productPickListPopup(saleEdit, ProductPickPickListService.class),
 		clientSalePickListPopup(saleEdit, ClientPickListService.class),
 	dashboardFilter(DashboardFilterService.class),
 		dashboardClientActivities(dashboardFilter, DashboardClientActivitiesService.class),

@@ -1,7 +1,0 @@
-{
-  "name": "meetingEditHeader",
-  "title": "Meeting",
-  "type": "HeaderWidget",
-  "bc": "meetingEdit",
-  "fields": []
-}

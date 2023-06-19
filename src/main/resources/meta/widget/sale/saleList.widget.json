@@ -5,24 +5,19 @@
   "bc": "sale",
   "fields": [
     {
-      "title": "Client",
-      "key": "clientName",
+      "title": "Продукт",
+      "key": "reqProduct",
       "type": "input"
     },
     {
-      "title": "Product",
+      "title": "Макропродукт",
       "key": "macroProduct",
       "type": "input"
     },
     {
-      "title": "Status",
-      "key": "status",
-      "type": "input"
-    },
-    {
-      "title": "Sum, $",
-      "key": "sum",
-      "type": "number"
+      "title": "Запрощенная сумма",
+      "key": "reqAmount",
+      "type": "number", "nullable": true
     }
   ],
   "options": {

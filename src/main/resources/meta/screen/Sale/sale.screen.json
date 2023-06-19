@@ -3,18 +3,17 @@
   "icon": "stock",
   "order": 2,
   "title": "Обращения",
+  "primaryViews": [
+    "salelist"
+  ],
   "navigation": {
     "menu": [
       {
-        "title": "Предварительный расчет",
-        "child": [
-          {
-            "viewName": "salelist"
-          },
-          {
-            "viewName": "saleedit"
-          }
-        ]
+        "viewName": "salelist"
+      },
+      {
+        "viewName": "saleedit",
+        "hidden": true
       }
     ]
   }

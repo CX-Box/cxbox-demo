@@ -1,0 +1,35 @@
+{
+  "name": "productTariffMatrixView",
+  "title": "Ценовые параметры",
+  "template": "DashboardView",
+  "url": "/screen/product/view/productTariffMatrixView",
+  "widgets": [
+    {
+      "widgetName": "productEdit",
+      "position": 10,
+      "gridWidth": 24
+    },{
+      "widgetName": "tabsLevel2",
+      "position": 11,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "matrixItemTariffList",
+      "position": 20,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "matrixItemTariffKeyParametersForm",
+      "position": 40,
+      "gridWidth": 12
+    },
+    {
+      "widgetName": "matrixItemPriceParametersForm",
+      "position": 40,
+      "gridWidth": 12
+    }
+  ],
+  "rolesAllowed": [
+   "CXBOX_USER"
+  ]
+}

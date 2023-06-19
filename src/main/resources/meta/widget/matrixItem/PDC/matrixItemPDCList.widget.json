@@ -1,0 +1,41 @@
+{
+  "name": "matrixItemPDCList",
+  "title": "",
+  "type": "List",
+  "bc": "matrixItemPDC",
+  "fields": [
+    {
+      "title": "Тип матрицы",
+      "key": "matrixType",
+      "type": "dictionary"
+    },
+    {
+      "title": "Siebel Id",
+      "key": "siebelId",
+      "type": "input"
+    },
+    {
+      "title": "Priority",
+      "key": "priority",
+      "type": "number", "nullable": true
+    },
+    {
+      "title": "Currency",
+      "key": "currency",
+      "type": "multipleSelect"
+    },
+    {
+      "title": "Тип участника",
+      "key": "participantTypes",
+      "type": "multipleSelect"
+    }
+  ],
+  "options": {
+    "actionGroups": {
+      "include": [
+        "create",
+        "save"
+      ]
+    }
+  }
+}

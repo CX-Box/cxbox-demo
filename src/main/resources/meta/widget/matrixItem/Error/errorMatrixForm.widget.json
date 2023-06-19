@@ -1,0 +1,46 @@
+{
+  "name": "errorMatrixForm",
+  "title": "Матрица ошибок. Параметры для расчета",
+  "type": "Form",
+  "bc": "matrixItemError",
+  "fields": [
+    {
+      "label": "Код",
+      "key": "errorCode",
+      "type": "input"
+    },
+    {
+      "label": "Текст ошибки",
+      "key": "errorText",
+      "type": "text"
+    }
+  ],
+  "options": {
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "errorCode",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "errorText",
+              "span": 12
+            }
+          ]
+        }
+      ]
+    },
+    "actionGroups": {
+      "include": [
+        "create",
+        "save"
+      ]
+    }
+  }
+}

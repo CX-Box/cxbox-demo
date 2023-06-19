@@ -1,0 +1,20 @@
+Флаг,Номер релиза,Расширенное описание,Неактивно,Тип,Отображаемое значение,Изменено,Пересчет,Многоязычный,Код, независимый от языка,Род. LIC,Высокий,Низкое,Порядковый номер,Активно,Название языка,Уровень репликации,Цель (мин.),Цель (макс.),Весовой коэффициент,Рисунок,Описание
+,,,N,ATC_MACROPRODUCT,Кредитная карта,N,Y,Y,Credit Card,,,,50,Y,Русский,All,,,,,
+,,,N,ATC_MACROPRODUCT,Овердрафт,N,Y,Y,Overdraft,,,,50,Y,Русский,All,,,,,
+,,,N,ATC_MACROPRODUCT,Кредит наличными,N,Y,Y,NPK,,,,51,Y,Русский,All,,,,,
+,,,N,ATC_MACROPRODUCT,Новая кредитная карта,N,Y,Y,NCC,,,,52,Y,Русский,All,,,,,
+,,,N,ATC_MACROPRODUCT,Вклад,Y,Y,Y,DepositSMS,,,,53,Y,Русский,All,,,,,
+,,,N,ATC_MACROPRODUCT,Другие продукты,Y,Y,Y,OtherProducts,,,,53,Y,Русский,All,,,,,
+,,,N,ATC_MACROPRODUCT,Кредитные продукты,Y,Y,Y,Credit,,,,53,Y,Русский,All,,,,,
+,,,N,ATC_MACROPRODUCT,Счета/карты/ПБУ,Y,Y,Y,Accounts,,,,53,Y,Русский,All,,,,,
+,,,N,ATC_MACROPRODUCT,Рефинансирование,N,Y,Y,Refinance,,,,55,Y,Русский,All,,,,,
+,,,N,ATC_MACROPRODUCT,УКЛ,N,Y,Y,CLC,,,,56,Y,Русский,All,,,,,
+,,,N,ATC_MACROPRODUCT,МФО,Y,Y,Y,MFO,,,,80,Y,Русский,All,,,,,BSGV-29277>>AENIKEEVA
+,,,N,ATC_MACROPRODUCT,Автокредит,N,Y,Y,AUTO,,,,100,Y,Русский,All,,,,,ED
+,,,N,ATC_MACROPRODUCT,Рефинансирование ИЖК,N,Y,Y,Refinance IZK,,,,100,Y,Русский,All,,,,,
+,,,N,ATC_MACROPRODUCT,Не определен,N,Y,Y,Undefined,,,,101,Y,Русский,All,,,,,ED
+,,,N,ATC_MACROPRODUCT,Депозит,N,Y,Y,Deposit,,,,103,Y,Русский,All,,,,,
+,,,N,ATC_MACROPRODUCT,Овердрафт 1 рубль,N,Y,Y,Overdraft 1 RUR,,,,104,Y,Русский,All,,,,,
+,,,N,ATC_MACROPRODUCT,Текущий счет,N,Y,Y,Current Account,,,,201,Y,Русский,All,,,,,
+,,,N,ATC_MACROPRODUCT,Карта МожноВсе,N,Y,Y,Card EverythingAllowed,,,,202,Y,Русский,All,,,,,
+,,,N,ATC_MACROPRODUCT,Банковский вклад,N,Y,Y,Bank Deposit,,,,203,Y,Русский,All,,,,,

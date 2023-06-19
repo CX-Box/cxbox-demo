@@ -1,0 +1,36 @@
+{
+  "name": "productMaxPSKMatrixView",
+  "title": "Максимальная ПСК",
+  "template": "DashboardView",
+  "url": "/screen/product/view/productMaxPSKMatrixView",
+  "widgets": [
+    {
+      "widgetName": "productEdit",
+      "position": 10,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "tabsLevel2",
+      "position": 11,
+      "gridWidth": 20
+    },
+    {
+      "widgetName": "matrixItemMaxPSKList",
+      "position": 20,
+      "gridWidth": 23
+    },
+    {
+      "widgetName": "maxPSKKeyParametersForm",
+      "position": 60,
+      "gridWidth": 12
+    },
+    {
+      "widgetName": "matrixItemMaxPSKForm",
+      "position": 60,
+      "gridWidth": 12
+    }
+  ],
+  "rolesAllowed": [
+    "CXBOX_USER"
+  ]
+}

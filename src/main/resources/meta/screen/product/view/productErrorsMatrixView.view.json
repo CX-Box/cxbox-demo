@@ -1,0 +1,36 @@
+{
+  "name": "productErrorsMatrixView",
+  "title": "Матрица ошибок",
+  "template": "DashboardView",
+  "url": "/screen/product/view/productErrorsMatrixView",
+  "widgets": [
+    {
+      "widgetName": "productEdit",
+      "position": 10,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "tabsLevel2",
+      "position": 11,
+      "gridWidth": 20
+    },
+    {
+      "widgetName": "matrixItemErrorList",
+      "position": 20,
+      "gridWidth": 23
+    },
+    {
+      "widgetName": "errorMatrixKeyParameters",
+      "position": 60,
+      "gridWidth": 12
+    },
+    {
+      "widgetName": "errorMatrixForm",
+      "position": 60,
+      "gridWidth": 12
+    }
+  ],
+  "rolesAllowed": [
+    "CXBOX_USER"
+  ]
+}

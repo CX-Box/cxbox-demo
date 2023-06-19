@@ -1,12 +1,12 @@
 {
   "name": "salelist",
-  "title": "Sale List",
+  "title": "Расчет",
   "template": "DashboardView",
   "url": "/screen/sale/view/salelist",
   "widgets": [
     {
       "widgetName": "saleListHeader",
-      "position": 0,
+      "position": 1,
       "gridWidth": 24
     },
     {

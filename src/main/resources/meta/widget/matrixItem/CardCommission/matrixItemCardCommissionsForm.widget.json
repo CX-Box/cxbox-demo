@@ -1,0 +1,272 @@
+{
+  "name": "matrixItemCardCommissionsForm",
+  "title": "Комиссии по карте. Параметры для расчета",
+  "type": "Form",
+  "bc": "matrixItemCardCommission",
+  "fields": [
+    {
+      "label": "Комиссия за выдачу карты",
+      "key": "cardIssueCommission",
+      "digits": 2,
+      "type": "number",
+      "nullable": true
+    },
+    {
+      "label": "Комиссия за выдачу моментальной карты",
+      "key": "instantCardCommission",
+      "digits": 2,
+      "type": "number",
+      "nullable": true
+    },
+    {
+      "label": "Единовременная комиссия за срочное оформление КК",
+      "key": "onetimeCardCommission",
+      "digits": 2,
+      "type": "number",
+      "nullable": true
+    },
+    {
+      "label": "Комиссия за ежемесячное обслуживание карты мин.",
+      "key": "minCardServiceCommission",
+      "digits": 2,
+      "type": "number",
+      "nullable": true
+    },
+    {
+      "label": "Комиссия за ежемесячное обслуживание карты макс.",
+      "key": "maxCardServiceCommission",
+      "digits": 2,
+      "type": "number",
+      "nullable": true
+    },
+    {
+      "label": "Комиссия за годовое обслуживание карты за 1й год, ПСК",
+      "key": "fstYrCardCommission",
+      "digits": 2,
+      "type": "number",
+      "nullable": true
+    },
+    {
+      "label": "Комиссия за годовое обслуживание карты за 2й год, ПСК",
+      "key": "secondYrCardCommission",
+      "digits": 2,
+      "type": "number",
+      "nullable": true
+    },
+    {
+      "label": "Комиссия за годовое обслуживание карты за 3й и послед. годы, ПСК",
+      "key": "thirdYrCard",
+      "digits": 2,
+      "type": "number",
+      "nullable": true
+    },
+    {
+      "label": "Комиссия за годовое обслуживание карты за 1й год, ПФ",
+      "key": "fstYrCardCommissionPF",
+      "type": "input"
+    },
+    {
+      "label": "Комиссия за годовое обслуживание карты за 2й год, ПФ",
+      "key": "secondYrCardCommissionPF",
+      "type": "input"
+    },
+    {
+      "label": "Комиссия за годовое обслуживание карты за 3й и послед. годы, ПФ",
+      "key": "thirdYrCardCommissionPF",
+      "type": "input"
+    },
+    {
+      "label": "Комиссия за снятие наличных в банкоматах Росбанка",
+      "key": "cashCommission",
+      "type": "input"
+    },
+    {
+      "label": "Комиссия за снятие наличных в банкоматах, ПВН сторонних банков",
+      "key": "othbankMoneyComission",
+      "type": "input"
+    },
+    {
+      "label": "Код карточного продукта для БИС",
+      "key": "bISCardProductCode",
+      "type": "input"
+    },
+    {
+      "label": "Бинранг",
+      "key": "binRange",
+      "type": "input"
+    },
+    {
+      "label": "Код тарифа заказа карты",
+      "key": "cardTariffCode",
+      "type": "input"
+    },
+    {
+      "label": "Пороговое значение оборотов",
+      "key": "limitOperationSum",
+      "digits": 2,
+      "type": "number",
+      "nullable": true
+    },
+    {
+      "label": "Код продукта для АРТe",
+      "key": "aRTProductCode",
+      "type": "input"
+    }
+  ],
+  "options": {
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "cardIssueCommission",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "instantCardCommission",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "onetimeCardCommission",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "minCardServiceCommission",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "maxCardServiceCommission",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "fstYrCardCommission",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "secondYrCardCommission",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "thirdYrCard",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "fstYrCardCommissionPF",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "secondYrCardCommissionPF",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "thirdYrCardCommissionPF",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "cashCommission",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "othbankMoneyComission",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "bISCardProductCode",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "binRange",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "cardTariffCode",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "limitOperationSum",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "aRTProductCode",
+              "span": 12
+            }
+          ]
+        }
+      ]
+    },
+    "actionGroups": {
+      "include": [
+        "create",
+        "save"
+      ]
+    }
+  }
+}

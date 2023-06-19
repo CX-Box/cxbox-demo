@@ -15,27 +15,42 @@
       "type": "radio"
     },
     {
-      "label": "",
-      "key": "emptyField",
-      "type": "hint"
+      "label": "Маркетинговый продукт",
+      "key": "reqProduct",
+      "type": "pickList",
+      "popupBcName": "productPickListPopup",
+      "pickMap": {
+        "reqProduct": "shortName",
+        "reqProductId": "id"
+      }
     }
   ],
   "options": {
     "actionGroups": {
       "include": [
+        "getProduct"
       ]
     },
     "layout": {
       "rows": [
+
         {
           "cols": [
             {
               "fieldKey": "macroProduct",
-              "span": 12
+              "span": 11
             },
             {
               "fieldKey": "collateralAvailability",
-              "span": 12
+              "span": 11
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "reqProduct",
+              "span": 22
             }
           ]
         }

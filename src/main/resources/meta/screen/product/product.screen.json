@@ -1,0 +1,58 @@
+{
+  "name": "product",
+  "icon": "calendar",
+  "order": 1,
+  "title": "Продуктвый каталог",
+  "navigation": {
+    "menu": [
+      {
+        "viewName": "productlist"
+      },
+      {
+        "title": "Products",
+        "child": [
+          {
+            "viewName": "productSelectionMatrixView",
+            "hidden": false
+          },
+          {
+            "viewName": "productTariffMatrixView",
+            "hidden": false
+          },
+          {
+            "viewName": "productCardCommissionsMatrixView ",
+            "hidden": false
+          },
+          {
+            "viewName": "productBISParamsMatrixView",
+            "hidden": false
+          },
+          {
+            "viewName": "productReqirementsMatrixView",
+            "hidden": false
+          },
+          {
+            "viewName": "productMaxPSKMatrixView",
+            "hidden": false
+          },
+          {
+            "viewName": "productSumBoundariesMatrixView",
+            "hidden": false
+          },
+          {
+            "viewName": "productErrorsMatrixView",
+            "hidden": false
+          },
+          {
+            "viewName": "productDiscountsMatrixView",
+            "hidden": false
+          },
+          {
+            "viewName": "productPDCMatrixView",
+            "hidden": false
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,5 +1,6 @@
 package org.demo.dto;
 
+import com.google.common.base.Splitter;
 import org.demo.entity.Client;
 import org.demo.entity.enums.FieldOfActivity;
 import java.util.stream.Collectors;
@@ -19,7 +20,7 @@ public class ClientReadDTO extends ClientAbstractDTO {
 		this.fieldOfActivity = client.getFieldOfActivities()
 				.stream()
 				.map(FieldOfActivity::getValue)
-				.collect(Collectors.joining(", "));
+				.collect(Collectors.joining(",",",",","));
 
 	}
 

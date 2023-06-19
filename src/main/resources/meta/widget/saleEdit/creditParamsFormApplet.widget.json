@@ -1,38 +1,123 @@
 {
   "name": "creditParamsFormApplet",
-  "title": "Параметры для расчета",
+  "title": "Параметры для расчета. Запрашиваемая клиентом сумма кредита ${requestedAmount}",
   "type": "Form",
   "bc": "saleEdit",
   "fields": [
     {
       "label": "Запрашиваемая клиентом сумма кредита",
-      "key": "reqAmount",
+      "key": "requestedAmount",
       "type": "money",
-      "comment": "IIF([Opty Id] IS NULL, [Req Amount], [Requested Calc Amount]), where 'Requested Calculation' join REQ_AMOUNT column of CX_OPTY_CALC on 'Requested Calc Id' = CX_OPTY_CALC.id where 'Requested Calc Id' is X_REQ_CALC_ID from 'opty' join of 'ATC Calc' bc "
+      "nullable": true,
+      "hidden": true,
+      "digits": 2
     },
     {
-      "label": "",
-      "key": "emptyField",
-      "type": "hint"
+      "label": "Сумма на руки",
+      "key": "amountHandWithoutInsurance",
+      "type": "money",
+      "nullable": true
+    },
+    {
+      "label": "Сумма переплаты, в день",
+      "key": "overpaymentAmountDay",
+      "type": "money",
+      "nullable": true
+    },
+    {
+      "label": "Сумма переплаты, всего",
+      "key": "overpaymentAmount",
+      "type": "money",
+      "nullable": true
+    },
+    {
+      "label": "ПСК, %",
+      "key": "pskPercent",
+      "type": "percent"
+    },
+    {
+      "label": "Одобренная сумма кредита",
+      "key": "approvedAmount",
+      "type": "money",
+      "nullable": true
+    },
+    {
+      "label": "Итоговая сумма кредита",
+      "key": "resAmount",
+      "type": "money",
+      "nullable": true
+    },
+    {
+      "label": "ПСК (особые обстоятельства), %",
+      "key": "pskPercentCrics",
+      "type": "percent"
+    },
+    {
+      "label": "Сумма комиссий за доп. услуги",
+      "key": "sumCreditAdditionalServices",
+      "type": "money",
+      "nullable": true
+    },
+    {
+      "label": "Одобренная банком сумма кредита для рефинансирования выбранных кредитов",
+      "key": "rbRefinApprovedAmount",
+      "type": "money",
+      "nullable": true
     }
   ],
   "options": {
     "actionGroups": {
       "include": [
-        "save",
-        "saveAndContinue",
-        "cancel"
+
       ]
     },
     "layout": {
-      "rows": [{
+      "rows": [
+        {
           "cols": [
             {
-              "fieldKey": "reqAmount",
-              "span": 12
+              "fieldKey": "approvedAmount",
+              "span": 6
+            },
+            {
+              "fieldKey": "resAmount",
+              "span": 6
+            },
+            {
+              "fieldKey": "amountHandWithoutInsurance",
+              "span": 6
             }
           ]
-        }]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "pskPercent",
+              "span": 6
+            },
+            {
+              "fieldKey": "overpaymentAmountDay",
+              "span": 6
+            },
+            {
+              "fieldKey": "overpaymentAmount",
+              "span": 6
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "pskPercentCrics",
+              "span": 6
+            },
+            {
+              "fieldKey": "sumCreditAdditionalServices",
+              "span": 6
+            }
+          ]
+        }
+      ]
     }
   }
 }

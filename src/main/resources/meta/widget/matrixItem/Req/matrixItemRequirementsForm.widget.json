@@ -1,0 +1,241 @@
+{
+  "name": "matrixItemRequirementsForm",
+  "title": "Параметры БИС. Параметры для расчета",
+  "type": "Form",
+  "bc": "matrixItemRequirements",
+  "fields": [
+    {
+      "label": "Обязательное гражданство РФ",
+      "key": "rfResidentRequired",
+      "type": "checkbox"
+    },
+    {
+      "label": "Адрес места работы в регионе присутствия одного из филиалов банка",
+      "key": "bankDivnJobAddress",
+      "type": "checkbox"
+    },
+    {
+      "label": "Постоянная регистрация в регионе присут. одного из филиалов Банка",
+      "key": "bankDivnResidency",
+      "type": "checkbox"
+    },
+    {
+      "label": "Обязательно предоставление доп. ДУЛ",
+      "key": "additionalIDRequired",
+      "type": "checkbox"
+    },
+    {
+      "label": "Обязательно указание места работы",
+      "key": "jobRequired",
+      "type": "checkbox"
+    },
+    {
+      "label": "Обязательное пред-е свид-ва о браке в случае поруч-ва супруги",
+      "key": "confirmMarriageReq",
+      "type": "checkbox"
+    },
+    {
+      "label": "Минимальная сумма дохода",
+      "key": "minTotalIncome",
+      "digits": 2,
+      "type": "number", "nullable": true
+    },
+    {
+      "label": "Мин. стаж при наличии пост. регистрации на тер. филиала Банка, мес",
+      "key": "minMthsAtJobReg",
+      "type": "number", "nullable": true
+    },
+    {
+      "label": "Мин. стаж при отсутствии пост. регистрации на тер. филиала Банка, мес",
+      "key": "minMthsAtJobNoreg",
+      "type": "number", "nullable": true
+    },
+    {
+      "label": "Мин. возраст для мужчин, лет",
+      "key": "minAgeForMen",
+      "type": "number", "nullable": true
+    },
+    {
+      "label": "Макс. возраст для мужчин на дату оформления, лет",
+      "key": "maxAgeForMenApplication",
+      "type": "number", "nullable": true
+    },
+    {
+      "label": "Макс. возраст для мужчин на дату погашения, лет",
+      "key": "maxAgeForMenPaid",
+      "type": "number", "nullable": true
+    },
+    {
+      "label": "Мин. возраст для женщин, лет",
+      "key": "minAgeForWomen",
+      "type": "number", "nullable": true
+    },
+    {
+      "label": "Макс. возраст для женщин на дату оформления, лет",
+      "key": "maxAgeForWomenApplication",
+      "type": "number", "nullable": true
+    },
+    {
+      "label": "Макс. возраст для женщин на дату погашения, лет",
+      "key": "maxAgeForWomenPaid",
+      "type": "number", "nullable": true
+    },
+    {
+      "label": "Категория клиента",
+      "key": "bisClientCategory",
+      "type": "input"
+    },
+    {
+      "label": "Тип ПД",
+      "key": "proofOfIncome",
+      "type": "multipleSelect"
+    }
+  ],
+  "options": {
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "rfResidentRequired",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "bankDivnJobAddress",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "bankDivnResidency",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "additionalIDRequired",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "jobRequired",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "confirmMarriageReq",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "minTotalIncome",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "minMthsAtJobReg",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "minMthsAtJobNoreg",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "minAgeForMen",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "maxAgeForMenApplication",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "maxAgeForMenPaid",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "minAgeForWomen",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "maxAgeForWomenApplication",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "maxAgeForWomenPaid",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "bisClientCategory",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "proofOfIncome",
+              "span": 12
+            }
+          ]
+        }]
+    },
+    "actionGroups": {
+      "include": [
+        "create",
+        "save"
+      ]
+    }
+  }
+}

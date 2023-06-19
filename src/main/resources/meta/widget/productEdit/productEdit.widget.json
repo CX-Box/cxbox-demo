@@ -1,0 +1,458 @@
+{
+  "name": "productEdit",
+  "title": "Маркетинговый продукт",
+  "type": "Form",
+  "bc": "productEdit",
+  "fields": [
+    {
+      "label": "Код продукта",
+      "key": "productCode",
+      "type": "input",
+      "drillDown": "true"
+    },
+    {
+      "label": "Наименование короткое",
+      "key": "shortName",
+      "type": "input"
+    },
+    {
+      "label": "Наименование продукта",
+      "key": "fullName",
+      "type": "input"
+    },
+    {
+      "label": "Макропродукт",
+      "key": "macroProduct",
+      "type": "dictionary"
+    },
+    {
+      "label": "Статус",
+      "key": "status",
+      "type": "dictionary"
+    },
+    {
+      "label": "Продукт действ. с",
+      "key": "startDate",
+      "type": "date"
+    },
+    {
+      "label": "Продукт действ. до",
+      "key": "endDate",
+      "type": "date"
+    },
+    {
+      "label": "Версия продукта",
+      "key": "version",
+      "type": "number", "nullable": true
+    },
+    {
+      "label": "Проверка выполнена",
+      "key": "gBCCheckedFlg",
+      "type": "checkbox",
+      "hidden": true
+    },
+    {
+      "label": "Siebel Id",
+      "key": "siebelId",
+      "type": "input"
+    },
+    {
+      "label": "Id",
+      "key": "id",
+      "type": "input",
+      "hidden": true
+    },
+    {
+      "label": "Максимальное отклонение суммы",
+      "key": "maxDeviateAmount",
+      "type": "money",
+      "nullable": true
+    },
+    {
+      "label": "Код поправки конвертации",
+      "key": "convertationCorrectionCodeBIS",
+      "type": "input"
+    },
+    {
+      "label": "Категория качества ссуды:",
+      "key": "riskGroupBIS",
+      "type": "input"
+    },
+    {
+      "label": "Тип ссуды",
+      "key": "loanTypeBIS",
+      "type": "input"
+    },
+    {
+      "label": "Срок рассм. Рисков, час",
+      "key": "rMReviewDate",
+      "type": "number", "nullable": true
+    },
+    {
+      "label": "Риск-сегмент по умолчанию",
+      "key": "riskSegment",
+      "type": "input"
+    },
+    {
+      "label": "Предодобренное предложение",
+      "key": "preapproveProduct",
+      "type": "dictionary"
+    },
+    {
+      "label": "Валюты",
+      "key": "currency",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Валюта по умолчанию",
+      "key": "defaultCurrency",
+      "type": "dictionary",
+      "hidden": true
+    },
+    {
+      "label": "Отношение срока кредита к сроку депозита, в мес.",
+      "key": "ratioLoanDepositTerm",
+      "type": "number", "nullable": true
+    },
+    {
+      "label": "Типы документов,подтверждающих доход",
+      "key": "incomeConfirmType",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Допустимые виды залога",
+      "key": "pledgeType",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Мин. кол-во залогов",
+      "key": "pledgeNumMin",
+      "type": "number", "nullable": true
+    },
+    {
+      "label": "Макс. кол-во залогов",
+      "key": "pledgeNumMax",
+      "type": "number", "nullable": true
+    },
+    {
+      "label": "Макс. кол-во поручителей",
+      "key": "guarantorNumMax",
+      "type": "number", "nullable": true
+    },
+    {
+      "label": "Мин. кол-во поручителей",
+      "key": "guarantorNumMin",
+      "type": "number", "nullable": true
+    },
+    {
+      "label": "Обобщенная категория nклиента по умолчанию",
+      "key": "categoryGroupGeneral",
+      "type": "dictionary"
+    },
+    {
+      "label": "Категория клиента по умолчанию",
+      "key": "categoryGroup",
+      "type": "dictionary"
+    },
+    {
+      "label": "Код операции УКЛ",
+      "key": "gBCLimitOperationType",
+      "type": "dictionary"
+    },
+    {
+      "label": "Срок оферты",
+      "key": "offerExpireDate",
+      "type": "number", "nullable": true
+    },
+    {
+      "label": "Дней",
+      "key": "offerExpireDateUnit",
+      "type": "dictionary"
+    },
+    {
+      "label": "Срок действ. пол. решения",
+      "key": "acceptExpireDate",
+      "type": "number", "nullable": true
+    },
+    {
+      "label": "Дней",
+      "key": "acceptExpireDateUnit",
+      "type": "dictionary"
+    },
+    {
+      "label": "Действие хар. кл. (дн)",
+      "key": "rBValidityPeriod",
+      "type": "number", "nullable": true
+    },
+    {
+      "label": "Доступна именная карта",
+      "key": "rBNamedCardIssueAvailability",
+      "type": "dictionary"
+    },
+    {
+      "label": "Дополнительный регулярный доход",
+      "key": "spouseTotalIncomeFlg",
+      "type": "checkbox"
+    },
+    {
+      "label": "Опция 'Сниженный платеж'",
+      "key": "reducedPaymentFlg",
+      "type": "checkbox"
+    },
+    {
+      "label": "Нестандартный",
+      "key": "nonStandartFlag",
+      "type": "checkbox"
+    },
+    {
+      "label": "Недоступен для DSA",
+      "key": "notDSA",
+      "type": "checkbox"
+    },
+    {
+      "label": "Доступна моментальная карта",
+      "key": "instantCardIssueFlg",
+      "type": "checkbox"
+    },
+    {
+      "label": "Доступно только для VIP",
+      "key": "vIPAvailableFlag",
+      "type": "checkbox"
+    },
+    {
+      "label": "Разрешенное отклонение аннуитета от макс.платежа из выбранного вектора в валюте кредита",
+      "key": "annuityDeviationCrCur",
+      "type": "number", "nullable": true
+    },
+    {
+      "label": "Разрешенное отклонение аннуитета от макс.платежа из выбранного вектора в % соотношении к макс.платежу",
+      "key": "annuityDeviationPercent",
+      "type": "percent"
+    },
+    {
+      "label": "Фиксированная дата платежа в конце месяца",
+      "key": "fixedPaymentDateFlag",
+      "type": "checkbox"
+    },
+    {
+      "label": "Страховые продукты для настройки",
+      "key": "insuranceTypeAdm",
+      "type": "multipleSelect"
+    }
+  ],
+  "options": {
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "siebelId",
+              "span": 3
+            },
+            {
+              "fieldKey": "shortName",
+              "span": 6
+            },
+            {
+              "fieldKey": "macroProduct",
+              "span": 6
+            },
+            {
+              "fieldKey": "offerExpireDate",
+              "span": 3
+            },
+            {
+              "fieldKey": "offerExpireDateUnit",
+              "span": 3
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "fullName",
+              "span": 6
+            },
+            {
+              "fieldKey": "loanTypeBIS",
+              "span": 3
+            },
+            {
+              "fieldKey": "pledgeType",
+              "span": 3
+            },
+            {
+              "fieldKey": "riskSegment",
+              "span": 3
+            },
+            {
+              "fieldKey": "acceptExpireDate",
+              "span": 3
+            },
+            {
+              "fieldKey": "acceptExpireDateUnit",
+              "span": 3
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "productCode",
+              "span": 3
+            },
+            {
+              "fieldKey": "status",
+              "span": 3
+            },
+            {
+              "fieldKey": "currency",
+              "span": 3
+            },
+            {
+              "fieldKey": "rMReviewDate",
+              "span": 3
+            },
+            {
+              "fieldKey": "pledgeNumMin",
+              "span": 3
+            },
+            {
+              "fieldKey": "pledgeNumMax",
+              "span": 3
+            },
+            {
+              "fieldKey": "rBValidityPeriod",
+              "span": 3
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "startDate",
+              "span": 3
+            },
+            {
+              "fieldKey": "endDate",
+              "span": 3
+            },
+            {
+              "fieldKey": "convertationCorrectionCodeBIS",
+              "span": 3
+            },
+            {
+              "fieldKey": "riskGroupBIS",
+              "span": 3
+            },
+            {
+              "fieldKey": "guarantorNumMin",
+              "span": 3
+            },
+            {
+              "fieldKey": "guarantorNumMax",
+              "span": 3
+            },
+            {
+              "fieldKey": "spouseTotalIncomeFlg",
+              "span": 3
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "version",
+              "span": 3
+            },
+            {
+              "fieldKey": "preapproveProduct",
+              "span": 3
+            },
+            {
+              "fieldKey": "maxDeviateAmount",
+              "span": 6
+            },
+            {
+              "fieldKey": "categoryGroupGeneral",
+              "span": 3
+            },
+            {
+              "fieldKey": "categoryGroup",
+              "span": 3
+            },
+            {
+              "fieldKey": "reducedPaymentFlg",
+              "span": 3
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "ratioLoanDepositTerm",
+              "span": 6
+            },
+            {
+              "fieldKey": "gBCLimitOperationType",
+              "span": 3
+            },
+            {
+              "fieldKey": "nonStandartFlag",
+              "span": 3
+            },
+            {
+              "fieldKey": "notDSA",
+              "span": 3
+            },
+            {
+              "fieldKey": "instantCardIssueFlg",
+              "span": 3
+            },
+            {
+              "fieldKey": "vIPAvailableFlag",
+              "span": 3
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "annuityDeviationCrCur",
+              "span": 6
+            },
+            {
+              "fieldKey": "annuityDeviationPercent",
+              "span": 6
+            },
+            {
+              "fieldKey": "fixedPaymentDateFlag",
+              "span": 3
+            },
+            {
+              "fieldKey": "insuranceTypeAdm",
+              "span": 3
+            },
+            {
+              "fieldKey": "rBNamedCardIssueAvailability",
+              "span": 3
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "incomeConfirmType",
+              "span": 21
+            }
+          ]
+        }
+      ]
+    },
+    "actionGroups": {
+      "include": [
+        "save"
+      ]
+    }
+  }
+}

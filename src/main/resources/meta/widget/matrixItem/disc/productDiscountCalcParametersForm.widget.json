@@ -1,0 +1,46 @@
+{
+  "name": "productDiscountCalcParametersForm",
+  "title": "Матрица дисконта. Параметры для расчета",
+  "type": "Form",
+  "bc": "matrixItemProdDisc",
+  "fields": [
+    {
+      "label": "Отклонение от % ставки по продукту",
+      "key": "bankRate",
+      "digits": 2,
+      "type": "percent"
+    },
+    {
+      "label": "Отклонение от % ставки при наступлении особых обстоятельств",
+      "key": "specialRateDiscount",
+      "digits": 2,
+      "type": "percent"
+    }
+  ],
+  "options": {
+
+    "layout": {"rows": [
+      {
+          "cols": [
+            {
+              "fieldKey": "bankRate",
+              "span": 12
+            }
+          ]
+        },
+      {
+          "cols": [
+            {
+              "fieldKey": "specialRateDiscount",
+              "span": 12
+            }
+          ]
+        }]},
+    "actionGroups": {
+      "include": [
+        "create",
+        "save"
+      ]
+    }
+  }
+}

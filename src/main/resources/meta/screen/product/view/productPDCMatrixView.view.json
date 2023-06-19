@@ -1,0 +1,36 @@
+{
+  "name": "productPDCMatrixView",
+  "title": "Проверки",
+  "template": "DashboardView",
+  "url": "/screen/product/view/productPDCMatrixView",
+  "widgets": [
+    {
+      "widgetName": "productEdit",
+      "position": 10,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "tabsLevel2",
+      "position": 11,
+      "gridWidth": 20
+    },
+    {
+      "widgetName": "matrixItemPDCList",
+      "position": 20,
+      "gridWidth": 23
+    },
+    {
+      "widgetName": "productPDCParameters",
+      "position": 60,
+      "gridWidth": 12
+    },
+    {
+      "widgetName": "productPDCForm",
+      "position": 60,
+      "gridWidth": 12
+    }
+  ],
+  "rolesAllowed": [
+    "CXBOX_USER"
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "name": "productSumBoundariesMatrixView",
+  "title": "Ограничения параметров",
+  "template": "DashboardView",
+  "url": "/screen/product/view/productSumBoundariesMatrixView",
+  "widgets": [
+    {
+      "widgetName": "productEdit",
+      "position": 10,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "tabsLevel2",
+      "position": 11,
+      "gridWidth": 20
+    },
+    {
+      "widgetName": "matrixItemSumBoundList",
+      "position": 20,
+      "gridWidth": 23
+    },
+    {
+      "widgetName": "sumBoundariesKeyParametersForm",
+      "position": 60,
+      "gridWidth": 12
+    },
+    {
+      "widgetName": "matrixItemSumBoundariesFilterForm",
+      "position": 60,
+      "gridWidth": 12
+    }
+  ],
+  "rolesAllowed": [
+    "CXBOX_USER"
+  ]
+}

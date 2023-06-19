@@ -2,24 +2,24 @@
 @value main-light-mode, accent from colors;
 
 .container {
-    overflow: hidden;
+  overflow: hidden;
 }
 
 .container :global(.ant-tabs-ink-bar) {
-    background-color: accent;
+  background-color: accent;
 }
 
 .container :global(.ant-tabs-bar) {
-    border: none;
+  border: none;
 }
 
 .container :global(.ant-tabs-top .ant-tabs-ink-bar-animated) {
-    transition: none;
+  transition: none;
 }
 
 .item {
-    font-size: 14px;
-    line-height: 20px;
-    color: main-light-mode;
+  font-size: 14px;
+  line-height: 20px;
+  color: main-light-mode;
 }
 

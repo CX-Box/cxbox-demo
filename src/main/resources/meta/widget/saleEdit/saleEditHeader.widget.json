@@ -1,7 +1,7 @@
 {
   "name": "saleEditHeader",
   "title": "Предварительный расчет. ${productHint}",
-  "type": "HeaderWidget",
+  "type": "Form",
   "bc": "saleEdit",
   "fields": [
     {
@@ -9,5 +9,10 @@
       "key": "emptyField",
       "type": "hidden"
     }
-  ]
+  ],
+  "actionGroups": {
+    "include": [
+      "saveAndContinue"
+    ]
+  }
 }

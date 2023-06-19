@@ -1,0 +1,36 @@
+{
+  "name": "productDiscountsMatrixView",
+  "title": "Матрица дисконта",
+  "template": "DashboardView",
+  "url": "/screen/product/view/productDiscountsMatrixView",
+  "widgets": [
+    {
+      "widgetName": "productEdit",
+      "position": 10,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "tabsLevel2",
+      "position": 11,
+      "gridWidth": 20
+    },
+    {
+      "widgetName": "matrixItemProdDiscList",
+      "position": 20,
+      "gridWidth": 23
+    },
+    {
+      "widgetName": "productDiscountKeyParameters",
+      "position": 60,
+      "gridWidth": 12
+    },
+    {
+      "widgetName": "productDiscountCalcParametersForm",
+      "position": 60,
+      "gridWidth": 12
+    }
+  ],
+  "rolesAllowed": [
+    "CXBOX_USER"
+  ]
+}

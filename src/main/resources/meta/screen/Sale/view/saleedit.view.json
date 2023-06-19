@@ -5,8 +5,8 @@
   "url": "/screen/sale/view/saleedit",
   "widgets": [
     {
-      "widgetName": "SecondLevelMenu",
-      "position": 0,
+      "widgetName": "productPickListPopupPickListPopup",
+      "position": 2,
       "gridWidth": 24
     },
     {
@@ -19,7 +19,6 @@
       "position": 20,
       "gridWidth": 24
     },
-
     {
       "widgetName": "calculatorFormApplet",
       "position": 30,
@@ -33,6 +32,16 @@
     {
       "widgetName": "calculatorParamsFormApplet",
       "position": 40,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "tabsLevel1",
+      "position": 45,
+      "gridWidth": 12
+    },
+    {
+      "widgetName": "creditParamsFormApplet",
+      "position": 50,
       "gridWidth": 24
     }
   ],

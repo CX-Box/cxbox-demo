@@ -8,7 +8,7 @@ import org.cxbox.core.crudma.impl.AbstractCrudmaService;
 import org.cxbox.core.dto.rowmeta.MetaDTO;
 import org.demo.dto.DashboardSalesFunnelDTO;
 import org.demo.repository.ClientRepository;
-import org.demo.repository.MeetingRepository;
+import org.demo.repository.ProductRepository;
 import org.demo.repository.SaleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ public class DashboardSalesFunnelService extends AbstractCrudmaService {
 	private ClientRepository clientRepository;
 
 	@Autowired
-	private MeetingRepository meetingRepository;
+	private ProductRepository productRepository;
 
 	@Autowired
 	private SaleRepository saleRepository;
@@ -29,10 +29,10 @@ public class DashboardSalesFunnelService extends AbstractCrudmaService {
 	@Override
 	public ResultPage<DashboardSalesFunnelDTO> getAll(BusinessComponent bc) {
 		List<DashboardSalesFunnelDTO> result = new ArrayList<>();
-		long activitiesAmount = clientRepository.count() + meetingRepository.count();
+		long activitiesAmount = clientRepository.count() + productRepository.count();
 		result.add(new DashboardSalesFunnelDTO("All active Clients", clientRepository.count(), "#779FE9"));
 		result.add(new DashboardSalesFunnelDTO("Preparatory Activities", activitiesAmount, "#8FAFE9"));
-		result.add(new DashboardSalesFunnelDTO("Number of Meetings", meetingRepository.count(), "#5F90EA"));
+		result.add(new DashboardSalesFunnelDTO("Number of Products", productRepository.count(), "#5F90EA"));
 		result.add(new DashboardSalesFunnelDTO("Number of Sales", saleRepository.count(), "#4D83E7"));
 		return ResultPage.of(result, result.size());
 	}

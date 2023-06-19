@@ -39,12 +39,6 @@ public class Client extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private Set<FieldOfActivity> fieldOfActivities = new HashSet<>();
 
-	@OneToMany(mappedBy = "client")
-	private Set<Contact> contacts = new HashSet<>();
-
-	@OneToMany(mappedBy = "client")
-	private Set<Meeting> meetings = new HashSet<>();
-
 	@Enumerated(value = EnumType.STRING)
 	private ClientImportance importance = ClientImportance.LOW;
 

@@ -4,3 +4,7 @@
     height: 100%;
     display: flex;
 }
+
+.ant-input[disabled] {
+    background-color: rgb(245, 245, 245) !important;
+}

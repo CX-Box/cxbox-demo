@@ -1,0 +1,263 @@
+{
+  "name": "matrixItemProductForm",
+  "title": "Подбор продукта. Ключевые параметры",
+  "type": "Form",
+  "bc": "matrixItemProduct",
+  "fields": [
+    {
+      "label": "Валюта",
+      "key": "currency",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Тип участника",
+      "key": "participantTypes",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Канал привлечения клиента",
+      "key": "attractionCloseChannel",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Номер маркет выборки промо ",
+      "key": "tariffCode",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Категория работодателя",
+      "key": "employerCategory",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Риск сегмент",
+      "key": "riskSegment",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Обобщенная категория клиента",
+      "key": "categoryGroupGeneral",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Категория клиента",
+      "key": "categoryGroup",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Зарплатный клиент",
+      "key": "salaryClient",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Маркетинговый сегмент 1",
+      "key": "marketingSegment1",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Маркетинговый сегмент 2",
+      "key": "marketingSegment2",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Маркетинговый сегмент 3",
+      "key": "marketingSegment3",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Маркетинговый сегмент 4",
+      "key": "marketingSegment4",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Тип документа подтверждающего доход",
+      "key": "incomeConfirmDocumentType",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Страховой продукт",
+      "key": "insuranceType",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Постзалог",
+      "key": "rBSubsequentPledgeFlag",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Наличие обеспечения",
+      "key": "hasCollateralFlg",
+      "type": "checkbox"
+    },
+    {
+      "label": "Тип карты",
+      "key": "cardType",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Категория карты",
+      "key": "cardCategory",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Мин. срок",
+      "key": "minTermMonths",
+      "type": "number", "nullable": true
+    },
+    {
+      "label": "Макс.срок",
+      "key": "maxTermMonths",
+      "type": "number", "nullable": true
+    },
+    {
+      "label": "Мин. сумма",
+      "key": "minSum",
+      "type": "number", "nullable": true
+    },
+    {
+      "label": "Макс. сумма",
+      "key": "maxSum",
+      "type": "number", "nullable": true
+    },
+    {
+      "label": "Вид ссуды",
+      "key": "gBCLoanCategory",
+      "type": "multipleSelect"
+    }
+  ],
+  "options": {
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "currency",
+              "span": 6
+            },
+            {
+              "fieldKey": "salaryClient",
+              "span": 6
+            },
+            {
+              "fieldKey": "hasCollateralFlg",
+              "span": 6
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "participantTypes",
+              "span": 6
+            },
+            {
+              "fieldKey": "marketingSegment1",
+              "span": 6
+            },
+            {
+              "fieldKey": "cardType",
+              "span": 6
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "attractionCloseChannel",
+              "span": 6
+            },
+            {
+              "fieldKey": "marketingSegment2",
+              "span": 6
+            },
+            {
+              "fieldKey": "cardCategory",
+              "span": 6
+            }
+          ]
+        },{
+          "cols": [
+            {
+              "fieldKey": "tariffCode",
+              "span": 6
+            },
+            {
+              "fieldKey": "marketingSegment3",
+              "span": 6
+            },
+            {
+              "fieldKey": "minTermMonths",
+              "span": 6
+            }
+          ]
+        },{
+          "cols": [
+            {
+              "fieldKey": "categoryGroup",
+              "span": 6
+            },
+            {
+              "fieldKey": "marketingSegment4",
+              "span": 6
+            },
+            {
+              "fieldKey": "maxTermMonths",
+              "span": 6
+            }
+          ]
+        },{
+          "cols": [
+            {
+              "fieldKey": "employerCategory",
+              "span": 6
+            },
+            {
+              "fieldKey": "incomeConfirmDocumentType",
+              "span": 6
+            },
+            {
+              "fieldKey": "minSum",
+              "span": 6
+            }
+          ]
+        },{
+          "cols": [
+            {
+              "fieldKey": "riskSegment",
+              "span": 6
+            },
+            {
+              "fieldKey": "insuranceType",
+              "span": 6
+            },
+            {
+              "fieldKey": "maxSum",
+              "span": 6
+            }
+          ]
+        },{
+          "cols": [
+            {
+              "fieldKey": "categoryGroupGeneral",
+              "span": 6
+            },
+            {
+              "fieldKey": "rBSubsequentPledgeFlag",
+              "span": 6
+            },
+            {
+              "fieldKey": "gBCLoanCategory",
+              "span": 6
+            }
+          ]
+        }
+      ]
+    },
+    "actionGroups": {
+      "include": [
+        "create",
+        "save"
+      ]
+    }
+  }
+}

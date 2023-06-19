@@ -10,11 +10,11 @@
     },
     {
       "key": "amount",
-      "type": "number"
+      "type": "number", "nullable": true
     },
     {
       "key": "color",
-      "type": "number"
+      "type": "number", "nullable": true
     }
   ],
   "options": {

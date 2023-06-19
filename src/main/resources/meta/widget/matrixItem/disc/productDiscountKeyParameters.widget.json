@@ -1,0 +1,292 @@
+{
+  "name": "productDiscountKeyParameters",
+  "title": "Матрица дисконта. Ключевые параметры",
+  "type": "Form",
+  "bc": "matrixItemProdDisc",
+  "fields": [
+    {
+      "label": "Валюта",
+      "key": "currency",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Тип участника",
+      "key": "participantTypes",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Канал привлечения клиента",
+      "key": "attractionCloseChannel",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Номер маркет выборки промо",
+      "key": "tariffCode",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Категория работодателя",
+      "key": "employerCategory",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Риск сегмент",
+      "key": "riskSegment",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Обобщенная категория клиента",
+      "key": "categoryGroupGeneral",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Категория клиента",
+      "key": "categoryGroup",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Зарплатный клиент",
+      "key": "salaryClient",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Маркетинговый сегмент 1",
+      "key": "marketingSegment1",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Маркетинговый сегмент 2",
+      "key": "marketingSegment2",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Маркетинговый сегмент 3",
+      "key": "marketingSegment3",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Маркетинговый сегмент 4",
+      "key": "marketingSegment4",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Тип документа подтверждающего доход",
+      "key": "incomeConfirmDocumentType",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Страховой продукт",
+      "key": "insuranceType",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Наличие обеспечения",
+      "key": "hasCollateralFlg",
+      "type": "checkbox"
+    },
+    {
+      "label": "Категория карты",
+      "key": "cardCategory",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Мин. срок",
+      "key": "minTermMonths",
+      "type": "number",
+      "nullable": true
+    },
+    {
+      "label": "Макс.срок",
+      "key": "maxTermMonths",
+      "type": "number",
+      "nullable": true
+    },
+    {
+      "label": "Мин. сумма",
+      "key": "minSum",
+      "type": "number",
+      "nullable": true
+    },
+    {
+      "label": "Макс. сумма",
+      "key": "maxSum",
+      "type": "number",
+      "nullable": true
+    },
+    {
+      "label": "Вид ссуды",
+      "key": "gBCLoanCategory",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Тип карты",
+      "key": "cardType",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Постзалог",
+      "key": "rBSubsequentPledgeFlag",
+      "type": "multipleSelect"
+    }
+  ],
+  "options": {
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "currency",
+              "span": 12
+            },
+            {
+              "fieldKey": "incomeConfirmDocumentType",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "participantTypes",
+              "span": 12
+            },
+            {
+              "fieldKey": "insuranceType",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "attractionCloseChannel",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "tariffCode",
+              "span": 12
+            },
+            {
+              "fieldKey": "hasCollateralFlg",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "employerCategory",
+              "span": 12
+            },
+            {
+              "fieldKey": "cardCategory",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "riskSegment",
+              "span": 12
+            },
+            {
+              "fieldKey": "minTermMonths",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "categoryGroupGeneral",
+              "span": 12
+            },
+            {
+              "fieldKey": "maxTermMonths",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "categoryGroup",
+              "span": 12
+            },
+            {
+              "fieldKey": "minSum",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "salaryClient",
+              "span": 12
+            },
+            {
+              "fieldKey": "maxSum",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "marketingSegment1",
+              "span": 12
+            },
+            {
+              "fieldKey": "cardType",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "marketingSegment2",
+              "span": 12
+            },
+            {
+              "fieldKey": "gBCLoanCategory",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "marketingSegment3",
+              "span": 12
+            },
+            {
+              "fieldKey": "rBSubsequentPledgeFlag",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "marketingSegment4",
+              "span": 12
+            }
+          ]
+        }
+      ]
+    },
+    "actionGroups": {
+      "include": [
+        "create",
+        "save"
+      ]
+    }
+  }
+}

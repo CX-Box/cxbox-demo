@@ -21,7 +21,7 @@ import RingProgress from '../widgets/RingProgress/RingProgress'
 import DashboardCard from '../DashboardCard/DashboardCard'
 import DashboardList from '../widgets/DashboardList/DashboardList'
 import SuggestionPickListField from '../../fields/SuggestionPickList/SuggestionPickList'
-import { FourthLevelMenu, SecondLevelMenu, ThirdLevelMenu } from '../widgets/menu'
+import LevelMenu from '../widgets/LevelMenu/LevelMenu'
 
 const skipWidgetTypes: string[] = []
 
@@ -42,9 +42,9 @@ const customWidgets: Partial<Record<CustomWidgetTypes | WidgetTypes, CustomWidge
     [CustomWidgetTypes.DashboardList]: { component: DashboardList, card: DashboardCard },
     [WidgetTypes.AssocListPopup]: AssocListPopup,
     [WidgetTypes.PickListPopup]: PickListPopup,
-    [WidgetTypes.SecondLevelMenu]: { component: SecondLevelMenu, card: EmptyCard },
-    [WidgetTypes.ThirdLevelMenu]: { component: ThirdLevelMenu, card: EmptyCard },
-    [WidgetTypes.FourthLevelMenu]: { component: FourthLevelMenu, card: EmptyCard }
+    [WidgetTypes.SecondLevelMenu]: { component: LevelMenu, card: EmptyCard },
+    [WidgetTypes.ThirdLevelMenu]: { component: LevelMenu, card: EmptyCard },
+    [WidgetTypes.FourthLevelMenu]: { component: LevelMenu, card: EmptyCard }
 }
 
 function View() {

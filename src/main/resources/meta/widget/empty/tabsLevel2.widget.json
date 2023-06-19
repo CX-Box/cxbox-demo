@@ -1,9 +1,7 @@
 {
   "name": "tabsLevel2",
   "title": "Navigation",
-  "type": "Tabs",
+  "type": "ThirdLevelMenu",
   "fields": [],
-  "options": {
-    "navigationLevel": 2
-  }
+  "options": {}
 }

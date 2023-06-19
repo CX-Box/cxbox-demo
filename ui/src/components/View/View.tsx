@@ -20,8 +20,9 @@ import Funnel from '../widgets/Funnel/Funnel'
 import RingProgress from '../widgets/RingProgress/RingProgress'
 import DashboardCard from '../DashboardCard/DashboardCard'
 import DashboardList from '../widgets/DashboardList/DashboardList'
+import LevelMenu from '../widgets/LevelMenu/LevelMenu'
 
-const skipWidgetTypes = [WidgetTypes.SecondLevelMenu]
+const skipWidgetTypes: string[] = []
 
 const customFields = {
     [FieldType.dictionary]: Dictionary,
@@ -38,7 +39,10 @@ const customWidgets: Partial<Record<CustomWidgetTypes | WidgetTypes, CustomWidge
     [CustomWidgetTypes.RingProgress]: { component: RingProgress, card: DashboardCard },
     [CustomWidgetTypes.DashboardList]: { component: DashboardList, card: DashboardCard },
     [WidgetTypes.AssocListPopup]: AssocListPopup,
-    [WidgetTypes.PickListPopup]: PickListPopup
+    [WidgetTypes.PickListPopup]: PickListPopup,
+    [WidgetTypes.SecondLevelMenu]: { component: LevelMenu, card: EmptyCard },
+    [WidgetTypes.ThirdLevelMenu]: { component: LevelMenu, card: EmptyCard },
+    [WidgetTypes.FourthLevelMenu]: { component: LevelMenu, card: EmptyCard }
 }
 
 function View() {

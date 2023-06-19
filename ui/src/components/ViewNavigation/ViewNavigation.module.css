@@ -13,6 +13,10 @@
     border: none;
 }
 
+.container :global(.ant-tabs-top .ant-tabs-ink-bar-animated) {
+    transition: none;
+}
+
 .item {
     font-size: 14px;
     line-height: 20px;

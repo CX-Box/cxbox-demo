@@ -12,7 +12,7 @@
     {
       "title": "Number of open activities",
       "key": "numberOfOpenActivities",
-      "type": "number"
+      "type": "number", "nullable": true
     }
   ]
 }

@@ -17,7 +17,8 @@
     {
       "title": "Priority",
       "key": "priority",
-      "type": "number"
+      "type": "number",
+      "nullable": true
     },
     {
       "title": "Currency",

@@ -7,7 +7,7 @@
     {
       "label": "Кол-во строк",
       "key": "pageSize",
-      "type": "number"
+      "type": "number", "nullable": true
     }
   ],
   "options": {

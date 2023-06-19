@@ -43,7 +43,7 @@
     {
       "label": "Версия продукта",
       "key": "version",
-      "type": "number"
+      "type": "number", "nullable": true
     },
     {
       "label": "Проверка выполнена",
@@ -86,7 +86,7 @@
     {
       "label": "Срок рассм. Рисков, час",
       "key": "rMReviewDate",
-      "type": "number"
+      "type": "number", "nullable": true
     },
     {
       "label": "Риск-сегмент по умолчанию",
@@ -112,7 +112,7 @@
     {
       "label": "Отношение срока кредита к сроку депозита, в мес.",
       "key": "ratioLoanDepositTerm",
-      "type": "number"
+      "type": "number", "nullable": true
     },
     {
       "label": "Типы документов,подтверждающих доход",
@@ -127,22 +127,22 @@
     {
       "label": "Мин. кол-во залогов",
       "key": "pledgeNumMin",
-      "type": "number"
+      "type": "number", "nullable": true
     },
     {
       "label": "Макс. кол-во залогов",
       "key": "pledgeNumMax",
-      "type": "number"
+      "type": "number", "nullable": true
     },
     {
       "label": "Макс. кол-во поручителей",
       "key": "guarantorNumMax",
-      "type": "number"
+      "type": "number", "nullable": true
     },
     {
       "label": "Мин. кол-во поручителей",
       "key": "guarantorNumMin",
-      "type": "number"
+      "type": "number", "nullable": true
     },
     {
       "label": "Обобщенная категория nклиента по умолчанию",
@@ -162,7 +162,7 @@
     {
       "label": "Срок оферты",
       "key": "offerExpireDate",
-      "type": "number"
+      "type": "number", "nullable": true
     },
     {
       "label": "Дней",
@@ -172,7 +172,7 @@
     {
       "label": "Срок действ. пол. решения",
       "key": "acceptExpireDate",
-      "type": "number"
+      "type": "number", "nullable": true
     },
     {
       "label": "Дней",
@@ -182,7 +182,7 @@
     {
       "label": "Действие хар. кл. (дн)",
       "key": "rBValidityPeriod",
-      "type": "number"
+      "type": "number", "nullable": true
     },
     {
       "label": "Доступна именная карта",
@@ -222,7 +222,7 @@
     {
       "label": "Разрешенное отклонение аннуитета от макс.платежа из выбранного вектора в валюте кредита",
       "key": "annuityDeviationCrCur",
-      "type": "number"
+      "type": "number", "nullable": true
     },
     {
       "label": "Разрешенное отклонение аннуитета от макс.платежа из выбранного вектора в % соотношении к макс.платежу",

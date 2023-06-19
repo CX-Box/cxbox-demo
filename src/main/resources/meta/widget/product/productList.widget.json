@@ -38,7 +38,7 @@
     {
       "title": "Версия продукта",
       "key": "version",
-      "type": "number"
+      "type": "number", "nullable": true
     },
     {
       "title": "Нестандартный продукт",

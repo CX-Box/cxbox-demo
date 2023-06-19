@@ -8,49 +8,57 @@
       "label": "Комиссия за выдачу карты",
       "key": "cardIssueCommission",
       "digits": 2,
-      "type": "number"
+      "type": "number",
+      "nullable": true
     },
     {
       "label": "Комиссия за выдачу моментальной карты",
       "key": "instantCardCommission",
       "digits": 2,
-      "type": "number"
+      "type": "number",
+      "nullable": true
     },
     {
       "label": "Единовременная комиссия за срочное оформление КК",
       "key": "onetimeCardCommission",
       "digits": 2,
-      "type": "number"
+      "type": "number",
+      "nullable": true
     },
     {
       "label": "Комиссия за ежемесячное обслуживание карты мин.",
       "key": "minCardServiceCommission",
       "digits": 2,
-      "type": "number"
+      "type": "number",
+      "nullable": true
     },
     {
       "label": "Комиссия за ежемесячное обслуживание карты макс.",
       "key": "maxCardServiceCommission",
       "digits": 2,
-      "type": "number"
+      "type": "number",
+      "nullable": true
     },
     {
       "label": "Комиссия за годовое обслуживание карты за 1й год, ПСК",
       "key": "fstYrCardCommission",
       "digits": 2,
-      "type": "number"
+      "type": "number",
+      "nullable": true
     },
     {
       "label": "Комиссия за годовое обслуживание карты за 2й год, ПСК",
       "key": "secondYrCardCommission",
       "digits": 2,
-      "type": "number"
+      "type": "number",
+      "nullable": true
     },
     {
       "label": "Комиссия за годовое обслуживание карты за 3й и послед. годы, ПСК",
       "key": "thirdYrCard",
       "digits": 2,
-      "type": "number"
+      "type": "number",
+      "nullable": true
     },
     {
       "label": "Комиссия за годовое обслуживание карты за 1й год, ПФ",
@@ -96,7 +104,8 @@
       "label": "Пороговое значение оборотов",
       "key": "limitOperationSum",
       "digits": 2,
-      "type": "number"
+      "type": "number",
+      "nullable": true
     },
     {
       "label": "Код продукта для АРТe",
@@ -250,7 +259,8 @@
               "span": 12
             }
           ]
-        }]
+        }
+      ]
     },
     "actionGroups": {
       "include": [

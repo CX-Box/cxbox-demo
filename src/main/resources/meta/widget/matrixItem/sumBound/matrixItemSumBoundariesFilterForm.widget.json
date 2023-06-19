@@ -8,75 +8,75 @@
       "label": "Мин. сумма кредита",
       "key": "minLoanSumRestriction",
       "digits": 2,
-      "type": "number"
+      "type": "number", "nullable": true
     },
     {
       "label": "Макс. сумма кредита",
       "key": "maxLoanSumRestriction",
       "digits": 2,
-      "type": "number"
+      "type": "number", "nullable": true
     },
     {
       "label": "Мин. сумма залога вклад",
       "key": "minDepositSumRestriction",
       "digits": 2,
-      "type": "number"
+      "type": "number", "nullable": true
     },
     {
       "label": "Макс. сумма залога вклада",
       "key": "maxDepositSumRestriction",
       "digits": 2,
-      "type": "number"
+      "type": "number", "nullable": true
     },
     {
       "label": "Мин. срок",
       "key": "minTermRestriction",
       "digits": 2,
-      "type": "number"
+      "type": "number", "nullable": true
     },
     {
       "label": "Макс.срок",
       "key": "maxTermRestriction",
       "digits": 2,
-      "type": "number"
+      "type": "number", "nullable": true
     },
     {
       "label": "Соотношение  суммы  рефинансируемых  кредитов к итоговой сумме кредита, в %",
       "key": "refSumLoanRatio",
       "digits": 2,
-      "type": "number"
+      "type": "number", "nullable": true
     },
     {
       "label": "Максимальная сумма дополнительных кредитных средств («сумма на руки»), руб.",
       "key": "maxAddSum",
-      "type": "number"
+      "type": "number", "nullable": true
     },
     {
       "label": "Минимальная сумма дополнительных кредитных средств («сумма на руки»), руб.",
       "key": "minAddSum",
-      "type": "number"
+      "type": "number", "nullable": true
     },
     {
       "label": "Минимальная сумма всех рефинансируемых кредитов, руб.",
       "key": "minRefinSum",
-      "type": "number"
+      "type": "number", "nullable": true
     },
     {
       "label": "Максимальная сумма всех рефинансируемых кредитов, руб",
       "key": "maxRefinSum",
-      "type": "number"
+      "type": "number", "nullable": true
     },
     {
       "label": "Максимальное отклонение суммы",
       "key": "maxDeviateAmount",
       "digits": 2,
-      "type": "number"
+      "type": "number", "nullable": true
     },
     {
       "label": "Срок кредита для расчёта ПСК",
       "key": "creditTermPSK",
       "digits": 2,
-      "type": "number"
+      "type": "number", "nullable": true
     }
   ],
   "options": {

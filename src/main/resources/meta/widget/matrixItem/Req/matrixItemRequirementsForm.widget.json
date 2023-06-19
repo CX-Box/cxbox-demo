@@ -38,47 +38,47 @@
       "label": "Минимальная сумма дохода",
       "key": "minTotalIncome",
       "digits": 2,
-      "type": "number"
+      "type": "number", "nullable": true
     },
     {
       "label": "Мин. стаж при наличии пост. регистрации на тер. филиала Банка, мес",
       "key": "minMthsAtJobReg",
-      "type": "number"
+      "type": "number", "nullable": true
     },
     {
       "label": "Мин. стаж при отсутствии пост. регистрации на тер. филиала Банка, мес",
       "key": "minMthsAtJobNoreg",
-      "type": "number"
+      "type": "number", "nullable": true
     },
     {
       "label": "Мин. возраст для мужчин, лет",
       "key": "minAgeForMen",
-      "type": "number"
+      "type": "number", "nullable": true
     },
     {
       "label": "Макс. возраст для мужчин на дату оформления, лет",
       "key": "maxAgeForMenApplication",
-      "type": "number"
+      "type": "number", "nullable": true
     },
     {
       "label": "Макс. возраст для мужчин на дату погашения, лет",
       "key": "maxAgeForMenPaid",
-      "type": "number"
+      "type": "number", "nullable": true
     },
     {
       "label": "Мин. возраст для женщин, лет",
       "key": "minAgeForWomen",
-      "type": "number"
+      "type": "number", "nullable": true
     },
     {
       "label": "Макс. возраст для женщин на дату оформления, лет",
       "key": "maxAgeForWomenApplication",
-      "type": "number"
+      "type": "number", "nullable": true
     },
     {
       "label": "Макс. возраст для женщин на дату погашения, лет",
       "key": "maxAgeForWomenPaid",
-      "type": "number"
+      "type": "number", "nullable": true
     },
     {
       "label": "Категория клиента",

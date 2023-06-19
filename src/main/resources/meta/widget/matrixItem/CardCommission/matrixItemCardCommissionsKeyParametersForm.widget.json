@@ -97,22 +97,22 @@
     {
       "label": "Мин. срок",
       "key": "minTermMonths",
-      "type": "number"
+      "type": "number", "nullable": true
     },
     {
       "label": "Макс.срок",
       "key": "maxTermMonths",
-      "type": "number"
+      "type": "number", "nullable": true
     },
     {
       "label": "Мин. сумма",
       "key": "minSum",
-      "type": "number"
+      "type": "number", "nullable": true
     },
     {
       "label": "Макс. сумма",
       "key": "maxSum",
-      "type": "number"
+      "type": "number", "nullable": true
     },
     {
       "label": "Вид ссуды",

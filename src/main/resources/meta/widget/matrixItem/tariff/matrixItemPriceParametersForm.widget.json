@@ -52,7 +52,7 @@
     {
       "label": "Минимальный ежемесячный платеж, в валюте кредита",
       "key": "minMounthPayment",
-      "type": "number",
+      "type": "number", "nullable": true,
       "digits": 2
     },
     {
@@ -79,17 +79,17 @@
     {
       "label": "Льготный период, мес.",
       "key": "gracePeriodMonth",
-      "type": "number"
+      "type": "number", "nullable": true
     },
     {
       "label": "Максимальный срок отсрочки",
       "key": "maxDelayTerm",
-      "type": "number"
+      "type": "number", "nullable": true
     },
     {
       "label": "Минимальный срок отсрочки",
       "key": "minDelayTerm",
-      "type": "number"
+      "type": "number", "nullable": true
     },
     {
       "label": "Соотношение отсрочки выплаты основного долга/сроку кредита (в %)",

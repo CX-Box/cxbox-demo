@@ -17,7 +17,7 @@
     {
       "title": "Запрощенная сумма",
       "key": "reqAmount",
-      "type": "number"
+      "type": "number", "nullable": true
     }
   ],
   "options": {

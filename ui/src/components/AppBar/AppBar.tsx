@@ -6,16 +6,19 @@ import { useSelector } from 'react-redux'
 import { AppState } from '../../interfaces/storeSlices'
 import { Layout } from 'antd'
 import cn from 'classnames'
-import { AppWidgetMeta, CustomWidgetTypes } from '../../interfaces/widget'
+import { AppWidgetMeta } from '../../interfaces/widget'
+import { isBarNavigation } from '../../utils/isNavigationForBar'
+import { getNavigationDepth } from '../../utils/getNavigationDepth'
 
 function AppBar() {
     const widgets = useSelector((state: AppState) => state.view.widgets)
-    const widgetTabs = widgets[0]?.type === CustomWidgetTypes.Tabs ? (widgets[0] as AppWidgetMeta) : undefined
-    const showTabs = !!widgetTabs
+    const menuWidget = widgets?.find(isBarNavigation) as AppWidgetMeta
+    const showTabs = !!menuWidget
+    const depth = getNavigationDepth(menuWidget?.type)
 
     return (
         <Layout.Header className={cn(styles.container, { [styles.withTabs]: showTabs })}>
-            {showTabs && <ViewNavigation depth={widgetTabs?.options?.navigationLevel} />}
+            {showTabs && <ViewNavigation depth={depth} />}
             <UserMenu />
         </Layout.Header>
     )

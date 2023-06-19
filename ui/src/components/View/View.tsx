@@ -21,9 +21,9 @@ import RingProgress from '../widgets/RingProgress/RingProgress'
 import DashboardCard from '../DashboardCard/DashboardCard'
 import DashboardList from '../widgets/DashboardList/DashboardList'
 import SuggestionPickListField from '../../fields/SuggestionPickList/SuggestionPickList'
-import Tabs from '../widgets/Tabs/Tabs'
+import { FourthLevelMenu, SecondLevelMenu, ThirdLevelMenu } from '../widgets/menu'
 
-const skipWidgetTypes = [WidgetTypes.SecondLevelMenu] // TODO remove
+const skipWidgetTypes: string[] = []
 
 const customFields = {
     [FieldType.dictionary]: Dictionary,
@@ -42,7 +42,9 @@ const customWidgets: Partial<Record<CustomWidgetTypes | WidgetTypes, CustomWidge
     [CustomWidgetTypes.DashboardList]: { component: DashboardList, card: DashboardCard },
     [WidgetTypes.AssocListPopup]: AssocListPopup,
     [WidgetTypes.PickListPopup]: PickListPopup,
-    [CustomWidgetTypes.Tabs]: { component: Tabs, card: EmptyCard }
+    [WidgetTypes.SecondLevelMenu]: { component: SecondLevelMenu, card: EmptyCard },
+    [WidgetTypes.ThirdLevelMenu]: { component: ThirdLevelMenu, card: EmptyCard },
+    [WidgetTypes.FourthLevelMenu]: { component: FourthLevelMenu, card: EmptyCard }
 }
 
 function View() {

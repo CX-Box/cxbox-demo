@@ -2,8 +2,9 @@ import React from 'react'
 import { Row, Col } from 'antd'
 import { Widget } from '@cxbox-ui/core'
 import { CustomWidgetDescriptor } from '@cxbox-ui/core/interfaces/widget'
-import { AppWidgetMeta, CustomWidgetTypes } from '../../../interfaces/widget'
+import { AppWidgetMeta } from '../../../interfaces/widget'
 import { createSkipWidgetList } from '../../../utils/createSkipWidgetList'
+import { isBarNavigation } from '../../../utils/isNavigationForBar'
 
 export interface DashboardLayoutProps {
     widgets: AppWidgetMeta[]
@@ -43,9 +44,7 @@ function groupByRow<WidgetMeta extends AppWidgetMeta>(widgets: WidgetMeta[], ski
 
     widgets
         .filter((item, index) => {
-            const isAppBarTabs = index === 0 && item.type === CustomWidgetTypes.Tabs
-
-            return !skipWidgetTypes.includes(item.type) && !skipWidgetList.includes(item.name) && !isAppBarTabs
+            return !skipWidgetTypes.includes(item.type) && !skipWidgetList.includes(item.name) && !isBarNavigation(item, index)
         })
         .forEach(item => {
             if (!byRow[item.position]) {

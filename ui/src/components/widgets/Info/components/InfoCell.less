@@ -1,0 +1,30 @@
+@import "../../../../assets/styles/theme";
+
+.labelArea {
+    flex: 2 0;
+}
+
+.label {
+    font-weight: 700;
+}
+.label, :global(.ant-typography) {
+    color: @main-light-mode;
+}
+
+.hint {
+    opacity: 0.5;
+}
+
+.fieldData>:global([class^='ReadOnlyField']) {
+    line-height: 20px;
+    color: @main-light-mode;
+}
+
+.fieldData {
+    flex: 3 0;
+    overflow: hidden;
+    /* TODO delete when the field is corrected */
+    div[class^='CheckboxPicker__container'] :global(.ant-checkbox-wrapper) :global(.ant-checkbox) + span {
+        display: none;
+    }
+}

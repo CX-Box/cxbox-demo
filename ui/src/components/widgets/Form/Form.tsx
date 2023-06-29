@@ -1,7 +1,7 @@
 import React from 'react'
 import { WidgetFormMeta } from '@cxbox-ui/core/interfaces/widget'
 import { FormWidget } from '@cxbox-ui/core'
-import styles from './Form.module.css'
+import styles from './Form.less'
 
 interface FormProps {
     meta: WidgetFormMeta

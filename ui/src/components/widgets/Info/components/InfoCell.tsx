@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from './InfoCell.module.css'
+import styles from './InfoCell.less'
 import { LayoutRow, WidgetInfoMeta, WidgetInfoField } from '@cxbox-ui/core/interfaces/widget'
 import { DataItem, MultivalueSingleValue } from '@cxbox-ui/core/interfaces/data'
 import { FieldType } from '@cxbox-ui/core/interfaces/view'

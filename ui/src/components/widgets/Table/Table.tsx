@@ -1,7 +1,7 @@
 import React from 'react'
 import { WidgetTableMeta } from '@cxbox-ui/core/interfaces/widget'
 import { TableWidget } from '@cxbox-ui/core'
-import styles from './Table.module.css'
+import styles from './Table.less'
 import { ColumnProps } from 'antd/es/table'
 import { DataItem } from '@cxbox-ui/core/interfaces/data'
 import MenuColumn from './components/MenuColumn'
@@ -23,6 +23,7 @@ function Table({ meta, ...rest }: TableProps) {
             }
         }
     }, [meta])
+
     const controlColumns = React.useMemo(() => {
         const resultColumns: Array<{ column: ColumnProps<DataItem>; position: 'left' | 'right' }> = []
         resultColumns.push({ column: menuColumn, position: 'right' })

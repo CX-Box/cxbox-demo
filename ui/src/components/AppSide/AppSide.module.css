@@ -1,8 +1,17 @@
 .logoContainer {
     display: flex;
-    justify-content: center;
-    padding: 1.5em 0 3em 0;
+    justify-content: flex-start;
+    padding: 1.5em 24px 3em 24px;
+    max-width: 100%;
+    overflow: hidden;
 }
+
+.collapsed.logoContainer {
+    margin-left: -3px;
+    padding: 1.5em 0;
+}
+
 .side {
-    margin: 0 8px;
+    background: #262626;
+    border-radius: 0 8px 8px 0;
 }

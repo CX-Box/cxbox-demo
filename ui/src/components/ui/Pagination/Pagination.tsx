@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Pagination as AntPagination } from 'antd'
-import styles from './Pagination.module.css'
+import styles from './Pagination.less'
 import { $do } from '../../../actions/types'
 import { WidgetTableMeta } from '@cxbox-ui/core/interfaces/widget'
 import { AppState } from '../../../interfaces/storeSlices'
@@ -36,15 +36,17 @@ function Pagination({ meta }: PaginationProps) {
     }
 
     return (
-        <AntPagination
-            className={styles.pagination}
-            size="small"
-            pageSize={limit}
-            defaultCurrent={page}
-            current={page}
-            total={total}
-            onChange={handlePageChange}
-        />
+        <div className={styles.container}>
+            <AntPagination
+                className={styles.pagination}
+                size="small"
+                pageSize={limit}
+                defaultCurrent={page}
+                current={page}
+                total={total}
+                onChange={handlePageChange}
+            />
+        </div>
     )
 }
 export default React.memo(Pagination)

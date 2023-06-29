@@ -2,10 +2,9 @@ import React from 'react'
 import cn from 'classnames'
 import { AssocListPopup as CoreAssocListPopup, useAssocRecords, useTranslation } from '@cxbox-ui/core'
 import { WidgetTableMeta } from '@cxbox-ui/core/interfaces/widget'
-import tableStyles from '../Table/Table.module.css'
-import styles from './AssocListPopup.module.css'
+import tableStyles from '../Table/Table.less'
+import styles from './AssocListPopup.less'
 import Pagination from '../../ui/Pagination/Pagination'
-import OperationButton from '../../ui/OperationButton/OperationButton'
 import { useDispatch, useSelector } from 'react-redux'
 import { $do } from '../../../actions/types'
 import { AppState } from '../../../interfaces/storeSlices'
@@ -13,6 +12,7 @@ import { BcFilter, FilterType } from '@cxbox-ui/core/interfaces/filters'
 import { DataItem } from '@cxbox-ui/core/interfaces/data'
 import { AssociatedItem } from '@cxbox-ui/core/interfaces/operation'
 import { EMPTY_ARRAY } from '../../../constants/constants'
+import Button from '../../ui/Button/Button'
 
 const emptyData: AssociatedItem[] = []
 
@@ -128,8 +128,8 @@ function AssocListPopup({ meta }: AssocListPopupProps) {
                     <>
                         <Pagination meta={meta} />
                         <div className={styles.actions}>
-                            <OperationButton onClick={isFilter ? filterData : saveData}>{t('Save')}</OperationButton>
-                            <OperationButton onClick={onCancel}>{t('Cancel')}</OperationButton>
+                            <Button onClick={isFilter ? filterData : saveData}>{t('Save')}</Button>
+                            <Button onClick={onCancel}>{t('Cancel')}</Button>
                         </div>
                     </>
                 )

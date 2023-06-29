@@ -1,5 +1,5 @@
 import React from 'react'
-import { ViewNavigation } from '../ViewNavigation/ViewNavigation'
+import ViewNavigation from '../ViewNavigation/ViewNavigation'
 import UserMenu from './components/UserMenu/UserMenu'
 import styles from './AppBar.module.css'
 import { useSelector } from 'react-redux'
@@ -11,9 +11,10 @@ import { WidgetTypes } from '@cxbox-ui/core/interfaces/widget'
 function AppBar() {
     const widgets = useSelector((state: AppState) => state.view.widgets)
     const showTabs = widgets?.some(i => i.type === WidgetTypes.SecondLevelMenu)
+
     return (
         <Layout.Header className={cn(styles.container, { [styles.withTabs]: showTabs })}>
-            {showTabs && <ViewNavigation />}
+            <div className={styles.navigationContainer}>{showTabs && <ViewNavigation />}</div>
             <UserMenu />
         </Layout.Header>
     )

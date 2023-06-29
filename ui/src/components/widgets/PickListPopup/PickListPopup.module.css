@@ -1,5 +1,5 @@
 .container :global(.ant-modal-header) {
-    font-family: openSans_bold;
+    font-weight: 700;
     border-bottom: none;
 }
 .container :global(.ant-modal-header > tr > th) {

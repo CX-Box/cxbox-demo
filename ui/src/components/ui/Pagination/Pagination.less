@@ -1,0 +1,41 @@
+@import '../../../assets/styles/theme';
+
+.container {
+    margin: 16px 0;
+    display: flex;
+    justify-content: flex-start;
+
+    :global(.ant-pagination.mini).pagination {
+        :global {
+            .ant-pagination-item,
+            .ant-pagination-prev,
+            .ant-pagination-next {
+                border: 1px solid #D9D9D9;
+                height: 32px;
+                width: 32px;
+                margin-right: 8px;
+                border-radius: 2px;
+
+                > a {
+                    padding: 4px 6px;
+                }
+
+                &-active {
+                    border-color: @primary-red;
+                    > a {
+                        color: @primary-red;
+                    }
+                }
+
+                &:hover > a {
+                    color: @primary-red;
+                }
+            }
+
+            .ant-pagination-jump-next {
+                border: none;
+                margin-right: 8px;
+            }
+        }
+    }
+}

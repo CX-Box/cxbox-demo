@@ -1,7 +1,7 @@
 import React from 'react'
 import { Menu, Icon } from 'antd'
 import { changeLocation } from '@cxbox-ui/core'
-import styles from './ScreenNavigation.module.css'
+import styles from './ScreenNavigation.less'
 import { ClickParam } from 'antd/lib/menu'
 import { useSelector } from 'react-redux'
 import { AppState } from '../../interfaces/storeSlices'
@@ -17,11 +17,11 @@ function ScreenNavigation() {
 
     return (
         <div className={styles.menuContainer}>
-            <Menu className={styles.Container} selectedKeys={[screenUrl]} onClick={handleScreen} theme="light">
+            <Menu className={styles.container} selectedKeys={[screenUrl]} onClick={handleScreen} theme="dark">
                 {screens.map(item => {
                     return (
-                        <Menu.Item key={item.url} className={styles.Item}>
-                            <span className={styles.MenuItemLink}>
+                        <Menu.Item key={item.url} className={styles.item}>
+                            <span className={styles.menuItemLink}>
                                 <Icon type={item.icon ? item.icon : 'coffee'} />
                                 <span>{item.text}</span>
                             </span>

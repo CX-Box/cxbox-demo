@@ -1,0 +1,36 @@
+@import '../../assets/styles/theme';
+
+.container {
+    font-weight: 500;
+    overflow: hidden;
+}
+
+.container :global(.ant-tabs-bar) {
+    border: none;
+    margin: 0;
+}
+
+.container :global(.ant-tabs-tab-active) .item {
+    color: @primary-red;
+}
+
+.container :global(.ant-tabs-tab) {
+    padding: 21px 16px 20px 16px;
+}
+
+.container :global(.ant-tabs-ink-bar) {
+    background-color: @primary-red;
+    height: 2px;
+    bottom: 2px;
+}
+
+.containerForOneItem :global(.ant-tabs-ink-bar) {
+    background-color: @primary-red;
+    width: 100%;
+}
+
+.item {
+    color: #000000D9;
+    font-size: 14px;
+}
+

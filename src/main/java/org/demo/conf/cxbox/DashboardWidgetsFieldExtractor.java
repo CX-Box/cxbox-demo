@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class FieldExtractor extends BaseFieldExtractor {
+public class DashboardWidgetsFieldExtractor extends BaseFieldExtractor {
 
 	@Override
 	public Set<BcField> extract(Widget widget) {

@@ -1,1 +1,2 @@
-org.demo.conf.cxbox.FieldExtractor
+org.demo.conf.cxbox.DashboardWidgetsFieldExtractor
+org.demo.conf.cxbox.ExtendedFormFieldExtractor

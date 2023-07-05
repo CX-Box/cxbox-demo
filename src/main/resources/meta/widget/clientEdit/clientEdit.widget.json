@@ -5,9 +5,13 @@
   "bc": "clientEdit",
   "fields": [
     {
-      "label": "Client Name",
+      "label": "Company",
       "key": "fullName",
-      "type": "input"
+      "type": "suggestionPickList",
+      "popupBcName": "companySuggestionPickList",
+      "pickMap": {
+        "address": "address"
+      }
     },
     {
       "label": "Importance",

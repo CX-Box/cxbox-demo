@@ -1,0 +1,22 @@
+{
+  "name": "companySuggestionPickList",
+  "title": "",
+  "type": "PickListPopup",
+  "bc": "companySuggestionPickList",
+  "showCondition": [],
+  "limit": 20,
+  "fields": [
+    {
+      "title": "",
+      "key": "value",
+      "type": "input"
+    },
+    {
+      "title": "Address",
+      "key": "address",
+      "type": "input"
+    }
+  ],
+  "axisFields": [],
+  "chart": []
+}

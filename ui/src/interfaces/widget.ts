@@ -1,14 +1,16 @@
-import { WidgetMeta, WidgetTypes, WidgetOptions } from '@cxbox-ui/core/interfaces/widget'
+import { WidgetMeta, WidgetTypes, WidgetOptions, PickListFieldMeta } from '@cxbox-ui/core/interfaces/widget'
 
 export enum CustomFieldTypes {
-    MultipleSelect = 'multipleSelect'
+    MultipleSelect = 'multipleSelect',
+    SuggestionPickList = 'suggestionPickList'
 }
 
 export enum CustomWidgetTypes {
     Steps = 'Steps',
     Funnel = 'Funnel',
     RingProgress = 'RingProgress',
-    DashboardList = 'DashboardList'
+    DashboardList = 'DashboardList',
+    SuggestionPickList = 'SuggestionPickList'
 }
 
 export const removeRecordOperationWidgets: Array<WidgetTypes | string> = [WidgetTypes.List]
@@ -30,4 +32,16 @@ export interface FunnelWidgetMeta extends WidgetMeta {
 export interface RingProgressWidgetMeta extends WidgetMeta {
     type: CustomWidgetTypes.RingProgress
     options: WidgetOptions & { ringProgressOptions: { text: string; numberField: string; descriptionField: string; percentField: string } }
+}
+
+export interface SuggestionPickListWidgetMeta extends WidgetMeta {
+    type: CustomWidgetTypes.SuggestionPickList
+    fields: Array<{
+        title: string
+        key: string
+    }>
+}
+
+export interface SuggestionPickListField extends Omit<PickListFieldMeta, 'type'> {
+    type: CustomFieldTypes.SuggestionPickList
 }

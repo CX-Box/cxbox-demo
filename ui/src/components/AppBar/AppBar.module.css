@@ -1,8 +1,19 @@
 .container {
     display: flex;
-    align-items: center;
-    justify-content: flex-end;
+    width: 100%;
+    background: #fff;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    padding: 5px 5px 0 46px;
 }
+
+.navigationContainer {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    padding: 0 5px 0 0;
+}
+
 .withTabs {
     justify-content: space-between;
 }

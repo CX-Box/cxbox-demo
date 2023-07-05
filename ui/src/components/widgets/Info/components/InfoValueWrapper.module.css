@@ -1,8 +1,9 @@
 
 .fieldArea {
     display: flex;
-    min-height: 3.5em;
+    min-height: 52px;
     align-items: center;
+    border-bottom: 1px solid #d5d5d5;
 }
 
 .columnDirection {

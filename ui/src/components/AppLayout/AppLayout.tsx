@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AppState } from '../../interfaces/storeSlices'
 import DevPanel from '../DevPanel/DevPanel'
 import { SSO_AUTH } from '../../actions/types'
-import styles from './AppLayout.module.css'
+import styles from './AppLayout.less'
 import View from '../View/View'
 import ModalInvoke from '../ModalInvoke/ModalInvoke'
 import SystemNotifications from '../SystemNotifications/SystemNotifications'
@@ -24,13 +24,13 @@ export const AppLayout: React.FC = () => {
     }, [sessionActive, logoutRequested, dispatch])
 
     return sessionActive ? (
-        <Layout>
+        <Layout className={styles.root}>
             <DevPanel />
             {modalInvoke?.operation && <ModalInvoke />}
             <SystemNotifications />
             <Layout className={styles.appLayout}>
                 <AppSide />
-                <Layout.Content>
+                <Layout.Content className={styles.mainContent}>
                     <AppBar />
                     <View />
                 </Layout.Content>

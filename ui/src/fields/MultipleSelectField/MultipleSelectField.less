@@ -1,0 +1,83 @@
+.span {
+  margin-left: 8px;
+}
+
+.dropDownMenu:global(.ant-select-dropdown--multiple ) {
+  max-width: 255px;
+}
+
+.dropDownMenu :global(.ant-select-dropdown-menu-item-selected ):not(:hover ) {
+  background-color: white;
+}
+
+.dropDownMenu:global(.ant-select-dropdown.ant-select-dropdown--multiple .ant-select-dropdown-menu-item-selected .ant-select-selected-icon ),
+.dropDownMenu:global(.ant-select-dropdown.ant-select-dropdown--multiple .ant-select-dropdown-menu-item:hover .ant-select-selected-icon ) {
+  display: none;
+}
+
+.root {
+  min-height: 40px;
+
+  :global(.ant-select-arrow) {
+    margin-top: -2px;
+  }
+}
+
+.oneLine {
+  height: 40px;
+}
+
+/* Style for select and tag wrapper before */
+.root:global(.ant-select div.ant-select-selection) {
+  min-height: 40px;
+  padding: 0 0 3px;
+  border: 1px solid #d9d9d9;
+  border-radius: 2px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: rgba(0, 0, 0, 0.85);
+
+  position: relative;
+}
+
+.oneLine:global(.ant-select div.ant-select-selection) {
+  height: 40px;
+}
+
+:global(.ant-form-item-control.has-error) {
+  .root:global(.ant-select div.ant-select-selection) {
+    border-color: #f85359;
+  }
+}
+
+/* Tag */
+.root :global(.ant-select-selection--multiple > ul > li),
+.root :global(.ant-select-selection--multiple .ant-select-selection__rendered > ul > li) {
+  height: 32px;
+  display: flex;
+  align-items: center;
+}
+/* Style for select and tag wrapper after */
+
+/* Styles for the badge maxTagCount before */
+.oneLine :global(.ant-select-selection--multiple .ant-select-selection__rendered > ul > li.ant-select-selection__choice.ant-select-selection__choice__disabled) {
+  flex-shrink: 0;
+}
+/* Styles for the badge maxTagCount after */
+
+/* Avoids moving input to a new line before */
+.oneLine:global(.ant-select ul),
+.oneLine:global(.ant-select ol) {
+  overflow: hidden;
+  height: 40px;
+  width: 100%;
+  display: flex;
+}
+
+.oneLine :global(.ant-select-selection--multiple .ant-select-selection__choice),
+.oneLine :global(.ant-select-selection--multiple .ant-select-search--inline) {
+  float: none;
+}
+/* Avoids moving input to a new line after */

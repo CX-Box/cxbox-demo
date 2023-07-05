@@ -2,7 +2,7 @@ import React from 'react'
 import cn from 'classnames'
 import { PickListPopup as CorePickListPopup } from '@cxbox-ui/core'
 import { WidgetTableMeta } from '@cxbox-ui/core/interfaces/widget'
-import tableStyles from '../Table/Table.module.css'
+import tableStyles from '../Table/Table.less'
 import styles from './PickListPopup.module.css'
 import Pagination from '../../ui/Pagination/Pagination'
 

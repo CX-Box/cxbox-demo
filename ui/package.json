@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "craco start",
-    "build": "cross-env CI=false react-scripts build && npm run rename",
+    "build": "cross-env CI=false craco build --config craco.prod.config.js && npm run rename",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint ./src",
@@ -62,8 +62,9 @@
   },
   "homepage": ".",
   "devDependencies": {
-    "cross-env": "7.0.3",
     "@craco/craco": "^6.4.3",
+    "craco-less": "^2.0.0",
+    "cross-env": "7.0.3",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
     "http-proxy-middleware": "^2.0.1",

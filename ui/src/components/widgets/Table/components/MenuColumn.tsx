@@ -4,7 +4,7 @@ import { Dropdown, Button } from 'antd'
 import { useDispatch } from 'react-redux'
 import { $do } from '../../../../actions/types'
 import { RowOperationsMenu } from '@cxbox-ui/core'
-import styles from './MenuColumn.module.css'
+import styles from './MenuColumn.less'
 
 interface MenuColumnProps {
     meta: WidgetTableMeta
@@ -43,7 +43,7 @@ function MenuColumn({ meta, rowKey }: MenuColumnProps) {
                 </div>
             }
         >
-            <Button icon="more" onClick={handleFetchMeta} type="link" className={styles.button} />
+            <Button icon="ellipsis" onClick={handleFetchMeta} type="link" className={styles.button} />
         </Dropdown>
     )
 }

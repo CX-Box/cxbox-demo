@@ -7,6 +7,7 @@ import logo from '../../assets/icons/logo.svg'
 import logoWide from '../../assets/icons/logo-wide.svg'
 import { $do } from '../../actions/types'
 import styles from './AppSide.module.css'
+import cn from 'classnames'
 
 function AppSide() {
     const dispatch = useDispatch()
@@ -16,8 +17,8 @@ function AppSide() {
     }, [dispatch, menuCollapsed])
 
     return (
-        <Layout.Sider theme="light" collapsed={menuCollapsed} className={styles.side}>
-            <div className={styles.logoContainer}>
+        <Layout.Sider theme="light" collapsed={menuCollapsed} className={styles.side} collapsedWidth={48} width={256}>
+            <div className={cn(styles.logoContainer, menuCollapsed && styles.collapsed)}>
                 <img src={menuCollapsed ? logo : logoWide} onClick={handleMenuCollapse} alt="logo" />
             </div>
             <ScreenNavigation />

@@ -1,8 +1,12 @@
 import React from 'react'
-import { Menu } from 'antd'
-import { useDispatch, useSelector } from 'react-redux'
+import { Divider } from 'antd'
+import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import { AppState } from '../../../../interfaces/storeSlices'
 import { $do } from '@cxbox-ui/core'
+import styles from './UserMenuContent.less'
+import cn from 'classnames'
+import Button from '../../../ui/Button/Button'
+import { UserRole } from '@cxbox-ui/core/interfaces/session'
 
 export const UserMenuContent: React.FC = () => {
     const { firstName, lastName, login, activeRole, roles } = useSelector((state: AppState) => {
@@ -13,31 +17,54 @@ export const UserMenuContent: React.FC = () => {
             activeRole: state.session.activeRole,
             roles: state.session.roles
         }
-    })
+    }, shallowEqual)
     const dispatch = useDispatch()
     const createSwitchRoleHandler = React.useCallback((roleKey: string) => () => dispatch($do.switchRole({ role: roleKey })), [dispatch])
     const handleLogout = React.useCallback(() => dispatch($do.logout(null)), [dispatch])
-    const userName = `${firstName} ${lastName}`
-    const activeRoleValue = roles?.find(i => i.key === activeRole)?.value
+    const fullName = `${lastName} ${firstName}`
+    const sortedRoles = React.useMemo(() => roles?.sort(roleComparator), [roles])
+
     return (
-        <Menu>
-            <Menu.Item key="userName">{userName}</Menu.Item>
-            <Menu.Item key="login">{login}</Menu.Item>
-            <Menu.Item key="activeRole">{activeRoleValue}</Menu.Item>
-            <Menu.Divider key="divider1" />
-            <Menu.SubMenu key="roles" title="Roles">
-                {roles?.map(i => (
-                    <Menu.Item key={i.key} onClick={createSwitchRoleHandler(i.key)}>
-                        {i.value}
-                    </Menu.Item>
-                ))}
-            </Menu.SubMenu>
-            <Menu.Divider key="divider2" />
-            <Menu.Item key="logout" onClick={handleLogout}>
+        <div className={styles.root}>
+            <div className={cn(styles.loginContainer)}>
+                <span className={styles.fullName}>{fullName}</span>
+                <span>{login}</span>
+            </div>
+            <Divider className={styles.divider} />
+            <div className={cn(styles.rolesList)}>
+                {sortedRoles?.map(i => {
+                    return (
+                        <div
+                            className={cn(styles.roleButtonWrapper, {
+                                [styles.checked]: i.key === activeRole
+                            })}
+                            key={i.key}
+                        >
+                            <Button className={styles.roleButton} type="link" onClick={createSwitchRoleHandler(i.key)}>
+                                {i.value}
+                            </Button>
+                        </div>
+                    )
+                })}
+            </div>
+            <Divider className={styles.divider} />
+            <Button className={cn(styles.signOut)} type="default" onClick={handleLogout} icon="logout">
                 Log out
-            </Menu.Item>
-        </Menu>
+            </Button>
+        </div>
     )
 }
 
 export default React.memo(UserMenuContent)
+
+function roleComparator(a: UserRole, b: UserRole) {
+    if (a.value > b.value) {
+        return 1
+    }
+
+    if (a.value < b.value) {
+        return -1
+    }
+
+    return 0
+}

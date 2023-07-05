@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react'
 import { WidgetMeta } from '@cxbox-ui/core/interfaces/widget'
-import styles from './Header.module.css'
+import styles from './Header.less'
 import { TemplatedTitle } from '@cxbox-ui/core'
 
 interface HeaderProps {

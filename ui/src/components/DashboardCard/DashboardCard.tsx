@@ -7,11 +7,12 @@ interface DashboardCardProps {
 }
 
 function DashboardCard({ children }: DashboardCardProps) {
+    const title = (children as any)?.props?.meta?.title
     return (
         <div className={styles.container}>
             <Row justify="center">
-                <Col span={22} offset={1}>
-                    <h2 className={styles.header}>{(children as any)?.props?.meta?.title}</h2>
+                <Col span={24}>
+                    {title && <h2 className={styles.header}>{title}</h2>}
                     {children}
                 </Col>
             </Row>

@@ -1,6 +1,6 @@
 import React from 'react'
 import { RingProgress } from '@ant-design/plots'
-import styles from '../RingProgress/RingProgress.module.css'
+import styles from './RingProgress.less'
 import { RingProgressWidgetMeta } from '../../../interfaces/widget'
 import { useSelector } from 'react-redux'
 import { AppState } from '../../../interfaces/storeSlices'
@@ -33,7 +33,7 @@ function PrjRingProgress({ meta }: RingProgressProps) {
     }
     const progressStatistic: Statistic = {
         title: false,
-        content: { style: { fontFamily: 'openSans_bold', fontSize: '20px', color: '#141F35' } }
+        content: { style: { fontFamily: 'Roboto', fontWeight: 700, fontSize: '20px', color: '#141F35' } }
     }
 
     return (

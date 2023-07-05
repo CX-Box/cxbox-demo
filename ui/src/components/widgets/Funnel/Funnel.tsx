@@ -24,7 +24,7 @@ function Funnel({ meta }: FunnelProps) {
         position: 'right',
         layout: 'vertical',
         itemMarginBottom: 16,
-        itemName: { style: { fontSize: 14, fontFamily: 'openSans_regular' } },
+        itemName: { style: { fontSize: 14, fontFamily: 'Roboto', fontWeight: 400 } },
         marker: (name, index) => ({
             symbol: 'circle',
             style: {
@@ -36,7 +36,8 @@ function Funnel({ meta }: FunnelProps) {
         content: labelData => labelData.value,
         style: {
             fontSize: 20,
-            fontFamily: 'openSans_bold',
+            fontFamily: 'Roboto',
+            fontWeight: '700',
             fill: '#141F35'
         }
     }

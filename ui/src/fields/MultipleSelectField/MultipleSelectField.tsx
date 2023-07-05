@@ -5,10 +5,11 @@ import { buildBcUrl } from '@cxbox-ui/core'
 import { connect } from 'react-redux'
 import { MultivalueSingleValue } from '@cxbox-ui/core/interfaces/data'
 import { SelectProps } from 'antd/lib/select'
-import styles from './MultipleSelectField.module.css'
+import styles from './MultipleSelectField.less'
 import checkbox from '../../assets/icons/checkbox.svg'
 import checkboxEmpty from '../../assets/icons/checkboxEmpty.svg'
 import { AppState } from '../../interfaces/storeSlices'
+import cn from 'classnames'
 
 interface MultipleSelectFieldProps {
     value: MultivalueSingleValue[]
@@ -52,8 +53,10 @@ const MultipleSelectField: React.FunctionComponent<MultipleSelectFieldProps> = p
         onChange: handleOnChange
     }
 
+    const isOneLineStyle = false
+
     return (
-        <Select showArrow {...extendedProps}>
+        <Select showArrow {...extendedProps} className={cn(styles.root, extendedProps.className, isOneLineStyle && styles.oneLine)}>
             {currentValues}
         </Select>
     )

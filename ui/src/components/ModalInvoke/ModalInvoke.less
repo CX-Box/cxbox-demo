@@ -1,0 +1,34 @@
+@import '../../assets/styles/theme';
+
+.overwrite  :global(.ant-modal-header) {
+  font-weight: 700;
+  border-bottom: none;
+}
+
+.overwrite :global(.ant-modal-body) {
+  font-weight: 400;
+}
+
+.overwrite :global(.ant-modal-footer) {
+  border-top: none;
+}
+
+.overwrite :global(.ant-btn) {
+  padding: 10px 16px;
+  margin-right: 0.5em;
+  height: 40px;
+  line-height: 20px;
+  border-radius: 8px;
+}
+
+.overwrite :global(.ant-btn-primary) {
+  background-color: @accent;
+  color: @main-dark-mode;
+  border-color: rgb(217, 217, 217);
+}
+
+.overwrite :global(.ant-btn-primary:hover) {
+  background-color: white;
+  color: @accent;
+  border-color: @accent;
+}

@@ -1,0 +1,60 @@
+@import '../../assets/styles/theme.less';
+
+.logoContainer {
+    display: flex;
+    justify-content: flex-start;
+
+    flex-shrink: 0;
+
+    width: 100%;
+    padding: 20px 24px;
+
+    overflow: hidden;
+}
+
+.collapsed .logoContainer {
+    justify-content: center;
+
+    padding: 10px 0;
+}
+
+.side {
+    background: #262626;
+    border-radius: 0 8px 8px 0;
+}
+
+.side :global(.ant-layout-sider-children) {
+    display: flex;
+    flex-direction: column;
+}
+
+.navigationWrapper {
+    width: 100%;
+    overflow-y: auto;
+    /* for scrolling because of the border radius */
+    margin-bottom: 5px;
+}
+
+.collapsed .navigationWrapper {
+}
+
+/* The emerging W3C standard
+that is currently Firefox-only */
+.navigationWrapper {
+    scrollbar-width: thin;
+    scrollbar-color: @primary-red transparent;
+}
+
+/* Works on Chrome/Edge/Safari */
+.navigationWrapper::-webkit-scrollbar {
+    width: 4px;
+}
+
+.navigationWrapper::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.navigationWrapper::-webkit-scrollbar-thumb {
+    background-color: @primary-red;
+    border-radius: 2px;
+}

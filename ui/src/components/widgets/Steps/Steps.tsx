@@ -4,6 +4,7 @@ import { Steps as AntSteps } from 'antd'
 import { buildBcUrl } from '@cxbox-ui/core'
 import { useSelector } from 'react-redux'
 import { AppState } from '../../../interfaces/storeSlices'
+import styles from './Steps.less'
 
 interface StepsProps {
     meta: StepsWidgetMeta
@@ -26,7 +27,7 @@ function Steps({ meta }: StepsProps) {
     const values = stepsValues?.map(i => i.value)
     const currentIndex = values?.findIndex(i => i === stepCurrentValue)
     return (
-        <AntSteps current={currentIndex}>
+        <AntSteps className={styles.container} current={currentIndex}>
             {values?.map(i => {
                 return <Step key={i} title={i} />
             })}

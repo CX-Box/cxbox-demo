@@ -38,7 +38,7 @@ function Operations(props: OperationsOwnProps) {
         [dispatch, bcName, widgetMeta]
     )
     return (
-        <div className={cn(styles.container, className)}>
+        <div className={cn(styles.container, className, { [styles.empty]: !currentOperations?.length })}>
             {metaInProgress ? (
                 <Button loading />
             ) : (

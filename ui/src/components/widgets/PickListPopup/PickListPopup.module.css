@@ -8,3 +8,7 @@
 .container :global(.ant-modal-footer) {
     border-top: none;
 }
+
+.container :global(.ant-table-tbody > tr:hover > td) {
+    background: #fafafa !important;
+}

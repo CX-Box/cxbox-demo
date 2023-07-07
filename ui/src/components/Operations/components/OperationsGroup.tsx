@@ -4,7 +4,7 @@ import { Dropdown, Icon, Menu } from 'antd'
 import styles from './OperationsGroup.less'
 import { removeRecordOperationWidgets } from '../../../interfaces/widget'
 import { WidgetTypes } from '@cxbox-ui/core/interfaces/widget'
-import Button, { customTypes } from '../../ui/Button/Button'
+import Button from '../../ui/Button/Button'
 
 interface OperationsGroupProps {
     group: OperationGroup
@@ -34,7 +34,7 @@ function OperationsGroup({ group, widgetType, onClick }: OperationsGroupProps) {
 
     return (
         <Dropdown trigger={['click']} overlay={operationsMenu} getPopupContainer={element => element.parentElement as HTMLElement}>
-            <Button key={group.text} type={getGroupButtonType({ widgetType })}>
+            <Button key={group.text}>
                 <Icon type={group.icon} />
                 {group.text}
             </Button>
@@ -43,11 +43,3 @@ function OperationsGroup({ group, widgetType, onClick }: OperationsGroupProps) {
 }
 
 export default React.memo(OperationsGroup)
-
-const getGroupButtonType = ({ widgetType, defaultType }: { widgetType?: string; defaultType?: string }) => {
-    if (widgetType === WidgetTypes.Form) {
-        return customTypes.formOperation
-    }
-
-    return defaultType
-}

@@ -43,13 +43,25 @@
         }
 
         div[class^='TableWidget__filtersContainer'] {
+            display: flex;
+            justify-content: flex-start;
+            align-items: baseline;
+
             a[class^='ActionLink'] {
+                display: block;
+                height: 21px;
+
                 color: @primary-red;
                 background-color: #DD0A341A;
                 border: 1px solid @primary-red;
                 border-radius: 8px;
                 padding: 1px 8px;
                 margin-right: 8px;
+            }
+
+            .ant-select-arrow {
+                right: 8px;
+                margin-top: -7px;
             }
         }
 

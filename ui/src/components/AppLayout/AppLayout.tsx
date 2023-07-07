@@ -31,8 +31,8 @@ export const AppLayout: React.FC = () => {
             <Layout className={styles.appLayout}>
                 <AppSide />
                 <Layout.Content className={styles.mainContent}>
-                    <AppBar />
                     <View />
+                    <AppBar />
                 </Layout.Content>
             </Layout>
         </Layout>

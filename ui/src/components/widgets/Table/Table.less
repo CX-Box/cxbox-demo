@@ -1,7 +1,7 @@
 @import '../../../assets/styles/theme';
 
 // table header
-.tableContainer {
+.tableContainer div[class*="TableWidget__tableContainer"] {
     :global {
         .ant-table .ant-table-thead > tr > th {
             padding: 11px 16px;
@@ -18,25 +18,8 @@
 }
 
 // table body
-.tableContainer {
+.tableContainer div[class*="TableWidget__tableContainer"] {
     :global {
-
-        /* fixed menu column before */
-        .ant-table-scroll {
-            overflow-x: auto;
-        }
-        /* fixed menu column after */
-
-        .anticon-ellipsis {
-            visibility: hidden;
-        }
-
-        .ant-table-row:hover,
-        .ant-table-row-hover {
-            .anticon-ellipsis {
-                visibility: visible;
-            }
-        }
 
         .ant-table-row > td {
             line-height: 1.43;
@@ -76,6 +59,10 @@
                 height: 16px;
             }
         }
+    }
+
+    div[class*="TableWidget__tableWithRowMenu"] tbody td:last-child {
+        padding-right: 34px;
     }
 }
 

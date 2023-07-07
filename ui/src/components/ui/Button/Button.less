@@ -14,7 +14,7 @@
 .root.formOperationYellow {
     &:global(.ant-btn) {
         display: inline-flex;
-        align-items: center;
+        align-items: flex-start;
         height: 40px;
         border: solid 1px @primary-red;
         padding: 10px;
@@ -33,6 +33,10 @@
             color: #fff;
             background-color: #1088e7;
             border-color: #1088e7;
+        }
+
+        :global(.anticon) {
+            font-size: 20px;
         }
     }
 }

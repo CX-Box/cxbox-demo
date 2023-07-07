@@ -19,16 +19,23 @@ import React from 'react'
 import { Tabs } from 'antd'
 import { historyObj, useViewTabs } from '@cxbox-ui/core'
 import styles from './ViewNavigation.less'
+import { TabsProps } from 'antd/lib/tabs'
+import cn from 'classnames'
 
-export function ViewNavigation() {
-    const tabs = useViewTabs(1)
+interface ViewNavigationProps extends Pick<TabsProps, 'type'> {
+    depth?: number
+}
+
+export function ViewNavigation({ depth = 1, type = 'card' }: ViewNavigationProps) {
+    const tabs = useViewTabs(depth)
+
     const handleChange = (key: string) => {
         historyObj.push(key)
     }
 
     return (
-        <nav className={styles.container}>
-            <Tabs activeKey={tabs?.find(item => item.selected)?.url} tabBarGutter={24} size="large" onChange={handleChange}>
+        <nav className={cn(styles.container, styles[type])}>
+            <Tabs activeKey={tabs?.find(item => item.selected)?.url} tabBarGutter={24} size="large" onChange={handleChange} type={type}>
                 {tabs?.map(item => (
                     <Tabs.TabPane key={item.url} tab={<span className={styles.item}>{item.title}</span>} />
                 ))}

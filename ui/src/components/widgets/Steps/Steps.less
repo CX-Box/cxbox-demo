@@ -1,0 +1,92 @@
+.container {
+    &:global(.ant-steps) {
+        overflow-x: hidden;
+        padding-bottom: 10px;
+        :global{
+            .ant-steps-item {
+                min-width: min-content;
+                margin-right: 8px;
+                .ant-steps-item-icon {
+                    border-color: rgba(0, 0, 0, 0.25);
+
+                    .ant-steps-icon {
+                        font-style: normal;
+                        font-weight: 400;
+                        font-size: 16px;
+                        line-height: 24px;
+                        color: rgba(0, 0, 0, 0.25);
+                    }
+                }
+
+                .ant-steps-item-content {
+                    .ant-steps-item-title {
+                        font-style: normal;
+                        font-weight: 400;
+                        font-size: 16px;
+                        line-height: 32px;
+
+                        &::after {
+                            background: #f0f0f0;
+                        }
+                    }
+
+                    .ant-steps-item-description {
+                        font-style: normal;
+                        font-weight: 400;
+                        font-size: 14px;
+                        line-height: 22px;
+                        color: rgba(0, 0, 0, 0.45);
+                    }
+                }
+
+                &.ant-steps-item-finish {
+                    .ant-steps-item-icon {
+                        border-color: #1c1d1d;
+
+                        .ant-steps-icon {
+                            color: #1c1d1d;
+                        }
+                    }
+
+                    .ant-steps-item-content {
+                        .ant-steps-item-title {
+                            color: #1c1d1d;
+
+                            &::after {
+                                background: #1c1d1d;
+                            }
+                        }
+                    }
+                }
+
+                &.ant-steps-item-process {
+                    .ant-steps-item-icon {
+                        background: #1c1d1d;
+
+                        .ant-steps-icon {
+                            color: #fff;
+                        }
+                    }
+
+                    .ant-steps-item-content {
+                        .ant-steps-item-title {
+                            color: #1c1d1d;
+                        }
+
+                        .ant-steps-item-description {
+                            color: #1c1d1d;
+                        }
+                    }
+                }
+
+                &.ant-steps-item-wait {
+                    .ant-steps-item-icon {
+                        .ant-steps-icon {
+                            color: rgba(0, 0, 0, 0.25);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

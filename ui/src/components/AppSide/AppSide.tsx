@@ -6,7 +6,7 @@ import { Layout } from 'antd'
 import logo from '../../assets/icons/logo.svg'
 import logoWide from '../../assets/icons/logo-wide.svg'
 import { $do } from '../../actions/types'
-import styles from './AppSide.module.css'
+import styles from './AppSide.less'
 import cn from 'classnames'
 
 function AppSide() {
@@ -17,11 +17,19 @@ function AppSide() {
     }, [dispatch, menuCollapsed])
 
     return (
-        <Layout.Sider theme="light" collapsed={menuCollapsed} className={styles.side} collapsedWidth={48} width={256}>
-            <div className={cn(styles.logoContainer, menuCollapsed && styles.collapsed)}>
+        <Layout.Sider
+            theme="light"
+            collapsed={menuCollapsed}
+            className={cn(styles.side, menuCollapsed && styles.collapsed)}
+            collapsedWidth={48}
+            width={256}
+        >
+            <div className={cn(styles.logoContainer)}>
                 <img src={menuCollapsed ? logo : logoWide} onClick={handleMenuCollapse} alt="logo" />
             </div>
-            <ScreenNavigation />
+            <div className={cn(styles.navigationWrapper)}>
+                <ScreenNavigation />
+            </div>
         </Layout.Sider>
     )
 }

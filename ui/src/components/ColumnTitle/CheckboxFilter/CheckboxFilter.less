@@ -1,0 +1,24 @@
+.header {
+    font-weight: bold;
+}
+
+.list {
+    padding: 0;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    list-style: none;
+    max-height: 200px;
+    overflow: auto;
+}
+
+.listItem:not(:last-child) {
+    margin-bottom: 5px;
+}
+
+:global(.ant-checkbox-wrapper).checkbox {
+    margin-right: 7px;
+
+    :global(.ant-checkbox-inner) {
+        border-color: #9c9c9c;
+    }
+}

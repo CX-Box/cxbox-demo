@@ -17,10 +17,11 @@ interface MultipleSelectFieldProps {
     meta: WidgetField
     widgetName: string
     onChange?: (value: MultivalueSingleValue[]) => void
+    readOnly: boolean
 }
 
 const MultipleSelectField: React.FunctionComponent<MultipleSelectFieldProps> = props => {
-    const { value, values, onChange } = props
+    const { value, values, onChange, readOnly } = props
     const { Option } = Select
 
     const currentValues = React.useMemo(() => {
@@ -54,6 +55,10 @@ const MultipleSelectField: React.FunctionComponent<MultipleSelectFieldProps> = p
     }
 
     const isOneLineStyle = false
+
+    if (readOnly) {
+        return <div className={styles.readOnly}>{extendedProps.value?.join(', ')}</div>
+    }
 
     return (
         <Select showArrow {...extendedProps} className={cn(styles.root, extendedProps.className, isOneLineStyle && styles.oneLine)}>

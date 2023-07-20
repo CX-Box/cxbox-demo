@@ -46,7 +46,7 @@ function ColumnFilter({ widgetName, widgetMeta, rowMeta, components }: ColumnFil
     )
 
     const isPickList = effectiveFieldMeta.type === FieldType.pickList
-    const isMultivalue = [FieldType.multivalue, FieldType.multivalueHover].includes(effectiveFieldMeta.type) || isPickList
+    const isMultivalue = [FieldType.multivalueHover, FieldType.multivalue].includes(effectiveFieldMeta.type) || isPickList
 
     const handleVisibleChange = useCallback(
         (eventVisible: boolean) => {
@@ -98,6 +98,10 @@ function ColumnFilter({ widgetName, widgetMeta, rowMeta, components }: ColumnFil
         </FilterPopup>
     )
 
+    if (isMultiValueHoverFieldType(listFields, effectiveFieldMeta)) {
+        return null
+    }
+
     return (
         <Popover
             trigger="click"
@@ -113,3 +117,7 @@ function ColumnFilter({ widgetName, widgetMeta, rowMeta, components }: ColumnFil
 }
 
 export default memo(ColumnFilter)
+
+function isMultiValueHoverFieldType(fields: WidgetListField[], fieldMeta: WidgetListField) {
+    return fields.find(initialField => initialField.key === fieldMeta.key)?.type === FieldType.multivalueHover
+}

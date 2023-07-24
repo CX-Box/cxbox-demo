@@ -45,6 +45,7 @@ public class SaleReadService extends VersionAwareResponseService<SaleDTO, Sale> 
 	public Actions<SaleDTO> getActions() {
 		return Actions.<SaleDTO>builder()
 				.create().text("Add").add()
+				.delete().text("Delete").add()
 				.newAction()
 				.action("edit", "Edit")
 				.withoutAutoSaveBefore()

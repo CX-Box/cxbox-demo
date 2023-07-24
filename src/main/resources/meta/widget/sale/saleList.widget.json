@@ -29,7 +29,8 @@
     "actionGroups": {
       "include": [
         "create",
-        "edit"
+        "edit",
+        "delete"
       ]
     }
   }

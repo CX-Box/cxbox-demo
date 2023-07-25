@@ -9,9 +9,10 @@ import { epics } from './epics'
 import './index.css'
 import AppLayout from './components/AppLayout/AppLayout'
 import { axiosInstance } from './api/session'
+import { middlewares } from './middlewares'
 
 const App = (
-    <Provider customReducers={reducers} customEpics={epics} axiosInstance={axiosInstance()}>
+    <Provider customReducers={reducers} customEpics={epics} axiosInstance={axiosInstance()} customMiddlewares={middlewares}>
         <ConfigProvider locale={enUs}>
             <AppLayout />
         </ConfigProvider>

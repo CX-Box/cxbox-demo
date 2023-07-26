@@ -92,3 +92,17 @@
 .sideMenuCollapsed {
     display: none;
 }
+
+.search {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    margin: 0 24px 10px;
+    width: auto;
+}
+
+:global(.ant-layout-sider-collapsed) {
+    .search {
+        margin: 0;
+    }
+}

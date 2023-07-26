@@ -51,7 +51,7 @@ spring:
     drop-first: true
     contexts: local
   cache:
-    type: None
+    type: SIMPLE
   jpa:
     properties:
       hibernate:

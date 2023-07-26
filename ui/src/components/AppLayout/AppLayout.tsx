@@ -10,6 +10,7 @@ import styles from './AppLayout.less'
 import View from '../View/View'
 import ModalInvoke from '../ModalInvoke/ModalInvoke'
 import SystemNotifications from '../SystemNotifications/SystemNotifications'
+import ErrorPopup from '../containers/ErrorPopup/ErrorPopup'
 
 export const AppLayout: React.FC = () => {
     const sessionActive = useSelector((state: AppState) => state.session.active)
@@ -26,6 +27,7 @@ export const AppLayout: React.FC = () => {
     return sessionActive ? (
         <Layout className={styles.root}>
             <DevPanel />
+            <ErrorPopup />
             {modalInvoke?.operation && <ModalInvoke />}
             <SystemNotifications />
             <Layout className={styles.appLayout}>

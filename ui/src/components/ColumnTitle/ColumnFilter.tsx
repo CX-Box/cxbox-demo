@@ -59,7 +59,7 @@ function ColumnFilter({ widgetName, widgetMeta, rowMeta, components }: ColumnFil
                         calleeBCName: widget?.bcName,
                         calleeWidgetName: widget?.name,
                         assocValueKey: !isPickList ? fieldMetaMultivalue.assocValueKey : fieldMetaPickListField.pickMap[fieldMeta.key],
-                        associateFieldKey: !isPickList ? fieldMetaMultivalue.associateFieldKey : fieldMeta.key,
+                        associateFieldKey: !isPickList ? fieldMetaMultivalue.associateFieldKey ?? fieldMeta.key : fieldMeta.key,
                         isFilter: true
                     })
                 )

@@ -133,6 +133,10 @@ function ColumnFilter({ widgetName, widgetMeta, rowMeta, components }: ColumnFil
 export default memo(ColumnFilter)
 
 function getAssociateFieldKeyForPickList(fieldMeta: PickListFieldMeta) {
+    if (!fieldMeta?.pickMap) {
+        return null
+    }
+
     return Object.entries(fieldMeta.pickMap).reduce((acc: null | string, [key, value]) => {
         if (value === 'id') {
             return key

@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from 'react'
+import React, { memo, useCallback, useEffect } from 'react'
 import { Popover } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import styles from './ColumnFilter.less'
@@ -47,11 +47,13 @@ function ColumnFilter({ widgetName, widgetMeta, rowMeta, components }: ColumnFil
 
     const isPickList = effectiveFieldMeta.type === FieldType.pickList
     const isMultivalue = [FieldType.multivalue, FieldType.multivalueHover].includes(effectiveFieldMeta.type) || isPickList
+    const { associateFieldKeyForPickList } = useAssociateFieldKeyForPickList(fieldMetaPickListField)
 
     const handleVisibleChange = useCallback(
         (eventVisible: boolean) => {
             if (isMultivalue && eventVisible) {
                 setVisible(false)
+
                 dispatch(
                     $do.showViewPopup({
                         bcName: fieldMeta.popupBcName as string,
@@ -59,7 +61,9 @@ function ColumnFilter({ widgetName, widgetMeta, rowMeta, components }: ColumnFil
                         calleeBCName: widget?.bcName,
                         calleeWidgetName: widget?.name,
                         assocValueKey: !isPickList ? fieldMetaMultivalue.assocValueKey : fieldMetaPickListField.pickMap[fieldMeta.key],
-                        associateFieldKey: !isPickList ? fieldMetaMultivalue.associateFieldKey ?? fieldMeta.key : fieldMeta.key,
+                        associateFieldKey: !isPickList
+                            ? fieldMetaMultivalue.associateFieldKey ?? fieldMeta.key
+                            : associateFieldKeyForPickList ?? fieldMeta.key,
                         isFilter: true
                     })
                 )
@@ -67,7 +71,21 @@ function ColumnFilter({ widgetName, widgetMeta, rowMeta, components }: ColumnFil
                 setVisible(!visible)
             }
         },
-        [visible, isMultivalue, isPickList, fieldMeta, assocWidget, widget, fieldMetaMultivalue, fieldMetaPickListField, dispatch]
+        [
+            isMultivalue,
+            dispatch,
+            fieldMeta.popupBcName,
+            fieldMeta.key,
+            assocWidget?.name,
+            widget?.bcName,
+            widget?.name,
+            isPickList,
+            fieldMetaMultivalue.assocValueKey,
+            fieldMetaMultivalue.associateFieldKey,
+            fieldMetaPickListField.pickMap,
+            associateFieldKeyForPickList,
+            visible
+        ]
     )
 
     const handleApply = useCallback(() => {
@@ -113,3 +131,28 @@ function ColumnFilter({ widgetName, widgetMeta, rowMeta, components }: ColumnFil
 }
 
 export default memo(ColumnFilter)
+
+function getAssociateFieldKeyForPickList(fieldMeta: PickListFieldMeta) {
+    return Object.entries(fieldMeta.pickMap).reduce((acc: null | string, [key, value]) => {
+        if (value === 'id') {
+            return key
+        }
+
+        return acc
+    }, null)
+}
+
+function useAssociateFieldKeyForPickList(fieldMeta: PickListFieldMeta) {
+    const isPickList = fieldMeta.type === FieldType.pickList
+    const associateFieldKeyForPickList = getAssociateFieldKeyForPickList(fieldMeta)
+
+    useEffect(() => {
+        if (isPickList && !associateFieldKeyForPickList) {
+            console.info(`pickmap with "id" on right side not found - filter will be applied to field referenced in "key"`)
+        }
+    }, [associateFieldKeyForPickList, isPickList])
+
+    return {
+        associateFieldKeyForPickList
+    }
+}

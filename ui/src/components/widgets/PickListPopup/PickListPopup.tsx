@@ -5,6 +5,9 @@ import { WidgetTableMeta } from '@cxbox-ui/core/interfaces/widget'
 import tableStyles from '../Table/Table.less'
 import styles from './PickListPopup.module.css'
 import Pagination from '../../ui/Pagination/Pagination'
+import { AppState } from '../../../interfaces/storeSlices'
+import { useSelector } from 'react-redux'
+import AssocListPopup from '../AssocListPopup/AssocListPopup'
 
 interface PickListPopupProps {
     meta: WidgetTableMeta
@@ -26,7 +29,17 @@ function PickListPopup({ meta }: PickListPopupProps) {
         footer: customFooter
     }
 
+    const showAssocFilter = useShowAssocFilter()
+
+    if (showAssocFilter) {
+        return <AssocListPopup meta={meta} />
+    }
+
     return <CorePickListPopup className={cn(tableStyles.tableContainer, styles.container)} widget={meta} components={components} />
 }
 
 export default React.memo(PickListPopup)
+
+function useShowAssocFilter() {
+    return useSelector((state: AppState) => !!state.view.popupData?.isFilter)
+}

@@ -32,11 +32,15 @@ public class CxboxKeycloakCoreSessionService extends CoreSessionServiceImpl {
 			return null;
 		} else if (auth instanceof KeycloakAuthenticationToken) {
 			KeycloakAuthenticationToken token = (KeycloakAuthenticationToken) auth;
-			KeycloakAuthenticationToken accessToken = (KeycloakAuthenticationToken) auth;
-			SimpleKeycloakAccount account = (SimpleKeycloakAccount) accessToken.getDetails();
-			CxboxKeycloakAccount details = mapTokenToCxboxDetails(token, accessToken, account);
-			token.setDetails(details);
-			return details;
+			if (token.getDetails() instanceof CxboxKeycloakAccount) {
+				return (CxboxKeycloakAccount) token.getDetails();
+			} else {
+				KeycloakAuthenticationToken accessToken = (KeycloakAuthenticationToken) auth;
+				SimpleKeycloakAccount account = (SimpleKeycloakAccount) accessToken.getDetails();
+				CxboxKeycloakAccount details = mapTokenToCxboxDetails(token, accessToken, account);
+				token.setDetails(details);
+				return details;
+			}
 		} else {
 			return super.getAuthenticationDetails(auth);
 		}

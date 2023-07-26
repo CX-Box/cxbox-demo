@@ -1010,6 +1010,18 @@
     </createIndex>
   </changeSet>
 
+  <changeSet author="initial" id="NAVIGATION_VIEW INDEXES">
+    <createIndex indexName="navigation_view_screen_name_type_cd_index" tableName="NAVIGATION_VIEW">
+      <column name="screen_name"/>
+      <column name="type_cd"/>
+    </createIndex>
+    <createIndex indexName="navigation_view_screen_name_type_cd_seq_index" tableName="NAVIGATION_VIEW">
+      <column name="screen_name"/>
+      <column name="type_cd"/>
+      <column name="seq"/>
+    </createIndex>
+  </changeSet>
+
   <changeSet author="initial" id="VIEW_WIDGETS INDEXES">
     <createIndex indexName="VIEW_WIDGETS_IND1" tableName="VIEW_WIDGETS">
       <column defaultValueNumeric="1" name="CREATED_BY_USER_ID"/>

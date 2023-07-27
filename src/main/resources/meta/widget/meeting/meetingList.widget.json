@@ -43,6 +43,12 @@
     }
   ],
   "options": {
+    "create": {
+      "widget": "meetingFormForList"
+    },
+    "edit": {
+      "widget": "meetingFormForList"
+    },
     "actionGroups": {
       "include": [
         "create",

@@ -36,7 +36,6 @@
     }
   ],
   "options": {
-    "internalWidgetFor": "meetingList",
     "actionGroups": {
       "include": [
         "save"

@@ -41,6 +41,24 @@ export class CustomActionTypes extends CxboxActionPayloadTypes {
         count: number
         bcName: string
     } = z
+
+    setRecordForm: {
+        widgetName: string
+        bcName: string
+        cursor: string
+        active: boolean
+        create: boolean
+    } = z
+
+    partialUpdateRecordForm: {
+        widgetName?: string
+        bcName?: string
+        cursor?: string
+        active?: boolean
+        create?: boolean
+    } = z
+
+    resetRecordForm: null = z
 }
 
 /**

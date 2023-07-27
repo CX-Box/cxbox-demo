@@ -1,0 +1,74 @@
+{
+  "name": "meetingFormForList",
+  "title": "",
+  "type": "Form",
+  "bc": "meetingEdit",
+  "fields": [
+    {
+      "label": "Agenda",
+      "key": "agenda",
+      "type": "input"
+    },
+    {
+      "label": "Start Date",
+      "key": "startDateTime",
+      "type": "dateTime"
+    },
+    {
+      "label": "Client Name",
+      "key": "clientName",
+      "type": "pickList",
+      "popupBcName": "clientPickListPopup",
+      "pickMap": {
+        "clientName": "fullName",
+        "clientId": "id"
+      }
+    },
+    {
+      "label": "Contact",
+      "key": "contactName",
+      "type": "pickList",
+      "popupBcName": "contactPickListPopup",
+      "pickMap": {
+        "contactName": "fullName",
+        "contactId": "id"
+      }
+    }
+  ],
+  "options": {
+    "internalWidgetFor": "meetingList",
+    "actionGroups": {
+      "include": [
+        "save"
+      ]
+    },
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "agenda",
+              "span": 7
+            },
+            {
+              "fieldKey": "startDateTime",
+              "span": 7
+            },
+            {
+              "fieldKey": "clientName",
+              "span": 7
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "contactName",
+              "span": 6
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

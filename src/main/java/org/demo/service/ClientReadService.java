@@ -41,11 +41,7 @@ public class ClientReadService extends VersionAwareResponseService<ClientReadDTO
 	@Override
 	protected CreateResult<ClientReadDTO> doCreateEntity(Client entity, BusinessComponent bc) {
 		clientRepository.save(entity);
-		return new CreateResult<>(entityToDto(bc, entity))
-				.setAction(PostAction.drillDown(
-						DrillDownType.INNER,
-						entity.getEditStep().getEditView() + CxboxRestController.clientEdit + "/" + entity.getId()
-				));
+		return new CreateResult<>(entityToDto(bc, entity));
 	}
 
 	@Override

@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: ['8', '11', '17']
+        java: ['17']
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK ${{ matrix.java }}
@@ -31,9 +31,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       - name: Exit early if java 8
-        run: '[ "${{ matrix.java }}" = "8" ] && exit 0 || echo "Skip deploy for java 8. Deploy will be processed for java 11"'
-      - name: Exit early if java 17
-        run: '[ "${{ matrix.java }}" = "17" ] && exit 0 || echo "Skip deploy for java 17. Deploy will be processed for java 11"'
+        run: '[ "${{ matrix.java }}" = "8" ] && exit 0 || echo "Skip deploy for java 8. Deploy will be processed for java 17"'
+      - name: Exit early if java 11
+        run: '[ "${{ matrix.java }}" = "11" ] && exit 0 || echo "Skip deploy for java 11. Deploy will be processed for java 17"'
       - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:

@@ -8,6 +8,13 @@ export type CustomView = ViewState & {
             count: number
         }
     }
+    recordForm: {
+        active: boolean
+        widgetName: string
+        bcName: string
+        cursor: string
+        create: boolean
+    }
 }
 
 /**
@@ -26,7 +33,14 @@ export const initialState: CustomView = {
     rowHeight: null,
     readOnly: false,
     popupData: { bcName: '' },
-    bcRecordsCount: {}
+    bcRecordsCount: {},
+    recordForm: {
+        active: false,
+        create: false,
+        widgetName: '',
+        bcName: ``,
+        cursor: ''
+    }
 }
 
 export default function viewReducer(state: CustomView = initialState, action: AnyAction, store?: Readonly<AppState>): CustomView {
@@ -46,6 +60,36 @@ export default function viewReducer(state: CustomView = initialState, action: An
                 }
             }
         }
+
+        case actionTypes.setRecordForm: {
+            return {
+                ...state,
+                recordForm: {
+                    ...action.payload
+                }
+            }
+        }
+
+        case actionTypes.partialUpdateRecordForm: {
+            return {
+                ...state,
+                recordForm: {
+                    ...state.recordForm,
+                    ...action.payload
+                }
+            }
+        }
+
+        case actionTypes.selectView:
+        case actionTypes.resetRecordForm: {
+            return {
+                ...state,
+                recordForm: {
+                    ...initialState.recordForm
+                }
+            }
+        }
+
         default:
             return state
     }

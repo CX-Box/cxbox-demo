@@ -21,10 +21,14 @@ import RingProgress from '../widgets/RingProgress/RingProgress'
 import DashboardCard from '../DashboardCard/DashboardCard'
 import DashboardList from '../widgets/DashboardList/DashboardList'
 import LevelMenu from '../widgets/LevelMenu/LevelMenu'
+import { Number } from '../../fields/NumberInput/NumberInput'
 
 const skipWidgetTypes: WidgetTypes[] = []
 
 const customFields = {
+    [FieldType.number]: Number,
+    [FieldType.percent]: Number,
+    [FieldType.money]: Number,
     [FieldType.dictionary]: Dictionary,
     [CustomFieldTypes.MultipleSelect]: MultipleSelectField
 }

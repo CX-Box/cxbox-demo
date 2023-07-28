@@ -82,6 +82,29 @@ export const internalFormWidgetMiddleware =
             return next(action)
         }
 
+        const showNotificationBeforeCreatingWhenThereIsAnActiveEdit = (action: AnyAction) => {
+            openNotification({
+                ...TEXTS_FOR_UNSAVED_NOTIFICATION,
+                onOk: () => {
+                    dispatch(
+                        $do.sendOperation({
+                            bcName: action.payload.bcName,
+                            operationType: OperationTypeCrud.save,
+                            widgetName: recordForm.widgetName,
+                            onSuccessAction: action
+                        })
+                    )
+                },
+                onCancel: () => {
+                    dispatch($do.bcCancelPendingChanges(null as any))
+                    dispatch($do.clearValidationFails(null))
+                    next(action)
+                }
+            })
+
+            return { type: actionTypes.emptyAction }
+        }
+
         const showNotificationAtChangeActiveForm = (action: AnyAction) => {
             openNotification({
                 ...TEXTS_FOR_UNSAVED_NOTIFICATION,
@@ -208,7 +231,11 @@ export const internalFormWidgetMiddleware =
             ? getWidgetWithInternalWidgetCreateForAction(state.view.widgets, action)
             : undefined
 
-        if (isCreateOperation && widgetWithInternalWidgetCreate) {
+        if (isCreateOperation && widgetWithInternalWidgetCreate && isPreviousPendingDataChanges) {
+            return showNotificationBeforeCreatingWhenThereIsAnActiveEdit(action)
+        }
+
+        if (isCreateOperation && widgetWithInternalWidgetCreate && !isPreviousPendingDataChanges) {
             return partialUpdateRecordFormForActionSuccessfullyCreate(
                 action,
                 widgetWithInternalWidgetCreate.bcName, // the bcName of the external widget and the internal form widget should be the same
@@ -227,6 +254,39 @@ export const internalFormWidgetMiddleware =
             return resetRecordFormAfter(action)
         }
         // Logic for create operation after
+
+        // Logic for closing the current record form before
+        const currentCursor = recordForm.cursor
+        const currentPendingDataChanges = currentCursor ? state.view.pendingDataChanges?.[recordForm.bcName]?.[currentCursor] : undefined
+        const isCurrentPendingDataChanges = currentPendingDataChanges ? !!Object.keys(currentPendingDataChanges).length : false
+
+        const showNotificationAtRecordClose = (action: AnyAction) => {
+            openNotification({
+                ...TEXTS_FOR_UNSAVED_NOTIFICATION,
+                onOk: () => {
+                    dispatch(
+                        $do.sendOperation({
+                            bcName: recordForm.bcName,
+                            operationType: OperationTypeCrud.save,
+                            widgetName: recordForm.widgetName,
+                            onSuccessAction: action
+                        })
+                    )
+                },
+                onCancel: () => {
+                    dispatch($do.bcCancelPendingChanges(null as any))
+                    dispatch($do.clearValidationFails(null))
+                    next(action)
+                }
+            })
+
+            return { type: actionTypes.emptyAction }
+        }
+
+        if (action.type === actionTypes.resetRecordForm && isCurrentPendingDataChanges) {
+            return showNotificationAtRecordClose(action)
+        }
+        // Logic for closing the current record form after
 
         return next(action)
     }

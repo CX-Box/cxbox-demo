@@ -6,13 +6,20 @@ import { DataValue } from '@cxbox-ui/core/interfaces/data'
 import { CheckboxFilter } from './CheckboxFilter/CheckboxFilter'
 import { CustomFieldTypes } from '../../interfaces/widget'
 import { NumberFieldMeta } from '@cxbox-ui/schema/dist/interfaces/widget'
+import { getFormat } from '../../utils/date'
+import RangePicker from './RangePicker'
+import DatePicker from './DatePicker'
+import { DateFieldTypes } from '../../interfaces/date'
 
-interface FilterFieldProps extends ColumnFilterControlProps {}
+interface FilterFieldProps extends ColumnFilterControlProps {
+    visible?: boolean
+}
 
-function FilterField(props: FilterFieldProps) {
+function FilterField({ visible, ...props }: FilterFieldProps) {
     const { widgetFieldMeta, value, onChange, rowFieldMeta } = props
+    const fieldType = widgetFieldMeta.type as string
 
-    switch (widgetFieldMeta.type as string) {
+    switch (fieldType) {
         case FieldType.number:
         case FieldType.money:
         case FieldType.percent:
@@ -38,6 +45,24 @@ function FilterField(props: FilterFieldProps) {
                 />
             )
         }
+        case FieldType.dateTimeWithSeconds:
+        case FieldType.dateTime:
+        case FieldType.date: {
+            if (props.widgetOptions?.filterDateByRange) {
+                return (
+                    <RangePicker
+                        value={props.value as DataValue[]}
+                        onChange={onChange}
+                        format={getFormat(fieldType === FieldType.dateTime, fieldType === FieldType.dateTimeWithSeconds)}
+                        startOf={getStartOf(fieldType)}
+                        open={visible}
+                        showTime={getShowTime(fieldType)}
+                    />
+                )
+            }
+            return <DatePicker autoFocus onChange={onChange} value={value as DataValue[]} format={getFormat()} open={visible} />
+        }
+
         default: {
             return <CoreFilterField {...props} />
         }
@@ -45,3 +70,25 @@ function FilterField(props: FilterFieldProps) {
 }
 
 export default React.memo(FilterField)
+
+function getShowTime(type: DateFieldTypes | string) {
+    switch (type) {
+        case FieldType.dateTimeWithSeconds:
+            return { format: 'HH:mm:ss' }
+        case FieldType.dateTime:
+            return { format: 'HH:mm' }
+        default:
+            return undefined
+    }
+}
+
+function getStartOf(type: DateFieldTypes | string) {
+    switch (type) {
+        case FieldType.dateTimeWithSeconds:
+            return 's'
+        case FieldType.dateTime:
+            return 'm'
+        default:
+            return 'd'
+    }
+}

@@ -85,7 +85,7 @@ export function useExpandableForm(currentWidgetMeta: AppWidgetMeta) {
                 }
             }
 
-            return <ExpandIcon expanded={expanded} openIcon="edit" closeIcon="" onClick={handleExpand} />
+            return <ExpandIcon expanded={expanded} openIcon="edit" closeIcon="close" onClick={handleExpand} />
         },
         [currentWidgetMeta.bcName, currentWidgetMeta.name, dispatch]
     )

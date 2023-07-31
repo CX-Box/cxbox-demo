@@ -116,6 +116,7 @@ export function getFilterType(fieldType: FieldType) {
             return FilterType.specified
         }
         case FieldType.input:
+        case FieldType.fileUpload:
         case FieldType.text: {
             return FilterType.contains
         }

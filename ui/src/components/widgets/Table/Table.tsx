@@ -15,7 +15,7 @@ interface TableProps extends TableWidgetOwnProps {
 }
 
 function Table({ meta, ...rest }: TableProps) {
-    const { expandIcon, expandIconColumn, getExpandIconColumnIndex, expandedRowRender, expandedRowKeys } = useExpandableForm(
+    const { expandable, expandIcon, expandIconColumn, getExpandIconColumnIndex, expandedRowRender, expandedRowKeys } = useExpandableForm(
         meta as AppWidgetMeta
     )
 
@@ -39,7 +39,7 @@ function Table({ meta, ...rest }: TableProps) {
                 {...rest}
                 columnTitleComponent={props => props && <ColumnTitle {...props} />}
                 expandedRowKeys={expandedRowKeys}
-                allowEdit={false}
+                allowEdit={!expandable}
                 expandIconColumnIndex={getExpandIconColumnIndex(controlColumns)}
                 expandIconAsCell={false}
                 expandIcon={expandIcon}

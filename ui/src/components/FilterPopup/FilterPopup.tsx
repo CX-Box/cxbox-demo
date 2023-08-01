@@ -13,6 +13,7 @@ import { AppState } from '../../interfaces/storeSlices'
 import { WidgetField } from '@cxbox-ui/core/interfaces/widget'
 import { BcFilter, FilterType } from '@cxbox-ui/core/interfaces/filters'
 import { $do } from '../../actions/types'
+import { CustomFieldTypes } from '../../interfaces/widget'
 
 interface FilterPopupProps {
     widgetName: string
@@ -107,8 +108,9 @@ export default React.memo(FilterPopup)
  *
  * @param fieldType Field type
  */
-export function getFilterType(fieldType: FieldType) {
+export function getFilterType(fieldType: FieldType | CustomFieldTypes) {
     switch (fieldType) {
+        case CustomFieldTypes.MultipleSelect:
         case FieldType.dictionary: {
             return FilterType.equalsOneOf
         }

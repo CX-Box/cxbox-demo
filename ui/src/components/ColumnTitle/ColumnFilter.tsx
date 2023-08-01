@@ -112,6 +112,7 @@ function ColumnFilter({ widgetName, widgetMeta, rowMeta, components }: ColumnFil
                 value={value}
                 onChange={setValue}
                 widgetOptions={widgetOptions}
+                visible={visible}
             />
         </FilterPopup>
     )

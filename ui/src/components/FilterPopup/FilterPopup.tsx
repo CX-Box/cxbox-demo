@@ -40,14 +40,13 @@ const FilterPopup: React.FC<FilterPopupProps> = props => {
     if (!widgetMeta) {
         return null
     }
+
     const handleApply = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         const newFilter: BcFilter = {
-            type:
-                widget?.options?.filterDateByRange &&
-                [FieldType.date, FieldType.dateTime, FieldType.dateTimeWithSeconds].includes(props?.fieldType as FieldType)
-                    ? FilterType.range
-                    : getFilterType(widgetMeta.type),
+            type: [FieldType.date, FieldType.dateTime, FieldType.dateTimeWithSeconds].includes(props?.fieldType as FieldType)
+                ? FilterType.range
+                : getFilterType(widgetMeta.type),
             value: props.value,
             fieldName: props.fieldKey,
             viewName,

@@ -35,7 +35,7 @@ export function ViewNavigation({ depth = 1, type = 'card' }: ViewNavigationProps
 
     return (
         <nav className={cn(styles.container, styles[type])}>
-            <Tabs activeKey={tabs?.find(item => item.selected)?.url} tabBarGutter={24} size="large" onChange={handleChange} type={type}>
+            <Tabs activeKey={tabs?.find(item => item.selected)?.url} tabBarGutter={24} onChange={handleChange} type={type}>
                 {tabs?.map(item => (
                     <Tabs.TabPane key={item.url} tab={<span className={styles.item}>{item.title}</span>} />
                 ))}

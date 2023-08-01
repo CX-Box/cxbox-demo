@@ -110,7 +110,7 @@ export default React.memo(FilterPopup)
  */
 export function getFilterType(fieldType: FieldType | CustomFieldTypes) {
     switch (fieldType) {
-        case CustomFieldTypes.MultipleSelect:
+        case FieldType.radio:
         case FieldType.dictionary: {
             return FilterType.equalsOneOf
         }

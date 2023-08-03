@@ -228,7 +228,7 @@ export const internalFormWidgetMiddleware =
         // Logic for create operation before
         const isCreateOperation = action.type === actionTypes.sendOperation && action.payload.operationType === OperationTypeCrud.create
         const widgetWithInternalWidgetCreate = isCreateOperation
-            ? getWidgetWithInternalWidgetCreateForAction(state.view.widgets, action)
+            ? getWidgetWithInternalWidgetCreateForAction(state.view.widgets as AppWidgetMeta[], action)
             : undefined
 
         if (isCreateOperation && widgetWithInternalWidgetCreate && isPreviousPendingDataChanges) {

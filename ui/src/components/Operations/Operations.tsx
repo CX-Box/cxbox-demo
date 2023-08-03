@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import OperationsGroup from './components/OperationsGroup'
 import { removeRecordOperationWidgets } from '../../interfaces/widget'
 import Button, { customTypes } from '../ui/Button/Button'
+import { ExportButton } from './components/ExportButton/ExportButton'
 import cn from 'classnames'
 
 export interface OperationsOwnProps {
@@ -37,26 +38,32 @@ function Operations(props: OperationsOwnProps) {
         },
         [dispatch, bcName, widgetMeta]
     )
+
     return (
         <div className={cn(styles.container, className, { [styles.empty]: !currentOperations?.length })}>
             {metaInProgress ? (
                 <Button loading />
             ) : (
-                currentOperations.map((item: Operation | OperationGroup, index) => {
-                    if (isOperationGroup(item)) {
-                        return <OperationsGroup key={item.type} group={item} widgetType={widgetMeta.type} onClick={handleOperationClick} />
-                    }
-                    return removeRecordOperationWidgets.includes(widgetMeta.type) && item.scope === 'record' ? null : (
-                        <Button
-                            key={item.type}
-                            type={getButtonType({ widgetType: widgetMeta.type, index })}
-                            onClick={() => handleOperationClick(item)}
-                        >
-                            {item.icon && <Icon type={item.icon} />}
-                            {item.text}
-                        </Button>
-                    )
-                })
+                <>
+                    {currentOperations.map((item: Operation | OperationGroup, index) => {
+                        if (isOperationGroup(item)) {
+                            return (
+                                <OperationsGroup key={item.type} group={item} widgetType={widgetMeta.type} onClick={handleOperationClick} />
+                            )
+                        }
+                        return removeRecordOperationWidgets.includes(widgetMeta.type) && item.scope === 'record' ? null : (
+                            <Button
+                                key={item.type}
+                                type={getButtonType({ widgetType: widgetMeta.type, index })}
+                                onClick={() => handleOperationClick(item)}
+                            >
+                                {item.icon && <Icon type={item.icon} />}
+                                {item.text}
+                            </Button>
+                        )
+                    })}
+                    <ExportButton widgetMeta={widgetMeta} />
+                </>
             )}
         </div>
     )

@@ -1,4 +1,4 @@
-import { WidgetMeta, WidgetTypes, WidgetOptions } from '@cxbox-ui/core/interfaces/widget'
+import { WidgetMeta, WidgetTypes, WidgetOptions, WidgetListFieldBase } from '@cxbox-ui/core/interfaces/widget'
 
 export enum CustomFieldTypes {
     MultipleSelect = 'multipleSelect'
@@ -32,6 +32,13 @@ export interface RingProgressWidgetMeta extends WidgetMeta {
     options: WidgetOptions & { ringProgressOptions: { text: string; numberField: string; descriptionField: string; percentField: string } }
 }
 
+export type TableWidgetField = WidgetListFieldBase & {
+    /**
+     * Width (px) to be set for the field when exporting to Excel
+     */
+    excelWidth?: number
+}
+
 type InternalWidgetOption = {
     widget: string
     style: 'inlineForm' | 'popup' | 'inline' | 'none'
@@ -41,5 +48,11 @@ export interface AppWidgetMeta extends WidgetMeta {
     options?: WidgetOptions & {
         create?: InternalWidgetOption
         edit?: InternalWidgetOption
+
+        export: {
+            // Part of the file name, by default taken from the widget title
+            title?: string
+            show: boolean
+        }
     }
 }

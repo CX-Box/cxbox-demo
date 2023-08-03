@@ -2,7 +2,7 @@ import React from 'react'
 import { Row, Col } from 'antd'
 import { Widget } from '@cxbox-ui/core'
 import { CustomWidgetDescriptor, WidgetTypes } from '@cxbox-ui/core/interfaces/widget'
-import { AppWidgetMeta } from '../../../interfaces/widget'
+import { AppWidgetMeta, CustomWidgetTypes } from '../../../interfaces/widget'
 import { createSkipWidgetList } from '../../../utils/createSkipWidgetList'
 
 export interface DashboardLayoutProps {
@@ -54,7 +54,7 @@ function groupByRow<WidgetMeta extends AppWidgetMeta>(widgets: WidgetMeta[], ski
     return byRow
 }
 
-const popupWidgets = [WidgetTypes.AssocListPopup, WidgetTypes.PickListPopup, WidgetTypes.FlatTreePopup]
+const popupWidgets = [WidgetTypes.AssocListPopup, WidgetTypes.PickListPopup, WidgetTypes.FlatTreePopup, CustomWidgetTypes.FormPopup]
 function getColWidth(widget: AppWidgetMeta) {
     // this is necessary so that the popup widget does not affect the formation of the grid
     const needFullWidth = popupWidgets.includes(widget.type as WidgetTypes)

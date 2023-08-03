@@ -1,7 +1,7 @@
 import React from 'react'
 import { Row, Col } from 'antd'
 import { Widget } from '@cxbox-ui/core'
-import { CustomWidgetDescriptor } from '@cxbox-ui/core/interfaces/widget'
+import { CustomWidgetDescriptor, WidgetTypes } from '@cxbox-ui/core/interfaces/widget'
 import { AppWidgetMeta } from '../../../interfaces/widget'
 import { createSkipWidgetList } from '../../../utils/createSkipWidgetList'
 
@@ -22,7 +22,7 @@ export function DashboardLayout(props: DashboardLayoutProps) {
             {Object.values(widgetsByRow).map((row, rowIndex) => (
                 <Row key={rowIndex}>
                     {row.map((widget, colIndex) => (
-                        <Col key={colIndex} span={widget.gridWidth}>
+                        <Col key={colIndex} span={getColWidth(widget)}>
                             <Widget
                                 meta={widget}
                                 card={props.card}
@@ -52,6 +52,14 @@ function groupByRow<WidgetMeta extends AppWidgetMeta>(widgets: WidgetMeta[], ski
             byRow[item.position].push(item)
         })
     return byRow
+}
+
+const popupWidgets = [WidgetTypes.AssocListPopup, WidgetTypes.PickListPopup, WidgetTypes.FlatTreePopup]
+function getColWidth(widget: AppWidgetMeta) {
+    // this is necessary so that the popup widget does not affect the formation of the grid
+    const needFullWidth = popupWidgets.includes(widget.type as WidgetTypes)
+
+    return needFullWidth ? 24 : widget.gridWidth
 }
 
 export const MemoizedDashboard = React.memo(DashboardLayout)

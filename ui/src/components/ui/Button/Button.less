@@ -8,68 +8,69 @@
     &.strong {
         font-weight: bold;
     }
-}
 
-.root.customDefault,
-.root.formOperationYellow {
-    &:global(.ant-btn) {
-        display: inline-flex;
-        align-items: flex-start;
-        height: 40px;
-        border: solid 1px @primary-red;
-        padding: 10px;
-        font-size: 14px;
-        font-weight: normal;
-        line-height: 1.57;
-        color: white;
-        border-radius: 2px;
-        background-color: @primary-red;
+    &.customDefault,
+    &.formOperation,
+    &.formOperationYellow {
+        &:global(.ant-btn) {
+            display: inline-flex;
+            align-items: flex-start;
+            height: 40px;
+            border: solid 1px @primary-red;
+            padding: 10px;
+            font-size: 14px;
+            font-weight: normal;
+            line-height: 1.57;
+            color: white;
+            border-radius: 2px;
+            background-color: @primary-red;
 
-        &:global(.ant-btn-primary) {
-            background-color: #176db7;
-        }
-        &:global(.ant-btn-primary:hover),
-        &:global(.ant-btn-primary:focus) {
-            color: #fff;
-            background-color: #1088e7;
-            border-color: #1088e7;
-        }
+            &:global(.ant-btn-primary) {
+                background-color: #176db7;
+            }
+            &:global(.ant-btn-primary:hover),
+            &:global(.ant-btn-primary:focus) {
+                color: #fff;
+                background-color: #1088e7;
+                border-color: #1088e7;
+            }
 
-        :global(.anticon) {
-            font-size: 20px;
+            :global(.anticon) {
+                font-size: 20px;
+            }
         }
     }
-}
 
-.formOperationYellow {
-    &:global(.ant-btn) {
-        border-color: @primary-red;
-        border-radius: 2px;
-        background: @primary-red;
-        color: white;
-        box-shadow: none;
-
-        &:hover {
+    &.formOperationYellow {
+        &:global(.ant-btn) {
             border-color: @primary-red;
+            border-radius: 2px;
             background: @primary-red;
+            color: white;
+            box-shadow: none;
+
+            &:hover {
+                border-color: @primary-red;
+                background: @primary-red;
+            }
         }
     }
-}
 
-.formOperation {
-    &:global(.ant-btn) {
-        border-color: transparent;
-        border-radius: 4px;
-        background: none;
-        color: @cerulean;
-        box-shadow: none;
-
-        &:hover,
-        &:focus,
-        &:active {
+    &.formOperation {
+        &:global(.ant-btn) {
             border-color: transparent;
+            border-radius: 4px;
             background: none;
             color: @cerulean;
+            box-shadow: none;
+
+            &:hover,
+            &:focus,
+            &:active {
+                border-color: transparent;
+                background: none;
+                color: @cerulean;
+            }
         }
     }
 }

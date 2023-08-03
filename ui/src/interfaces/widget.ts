@@ -1,10 +1,11 @@
-import { WidgetMeta, WidgetTypes, WidgetOptions, WidgetListFieldBase } from '@cxbox-ui/core/interfaces/widget'
+import { WidgetMeta, WidgetTypes, WidgetOptions, WidgetListFieldBase, WidgetFormMeta } from '@cxbox-ui/core/interfaces/widget'
 
 export enum CustomFieldTypes {
     MultipleSelect = 'multipleSelect'
 }
 
 export enum CustomWidgetTypes {
+    FormPopup = 'FormPopup',
     Steps = 'Steps',
     Funnel = 'Funnel',
     RingProgress = 'RingProgress',
@@ -55,4 +56,8 @@ export interface AppWidgetMeta extends WidgetMeta {
             show: boolean
         }
     }
+}
+
+export interface WidgetFormPopupMeta extends Omit<WidgetFormMeta, 'type'> {
+    type: CustomWidgetTypes.FormPopup
 }

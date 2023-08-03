@@ -117,6 +117,7 @@ export function getFilterType(fieldType: FieldType | CustomFieldTypes) {
         case FieldType.checkbox: {
             return FilterType.specified
         }
+        case FieldType.inlinePickList:
         case FieldType.input:
         case FieldType.fileUpload:
         case FieldType.text: {

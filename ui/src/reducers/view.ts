@@ -1,6 +1,7 @@
 import { actionTypes, AnyAction } from '../interfaces/actions'
 import { AppState } from '../interfaces/storeSlices'
-import { ViewState } from '@cxbox-ui/core/interfaces/view'
+import { PopupData, ViewState } from '@cxbox-ui/core/interfaces/view'
+import { CustomActionTypes } from '../actions/types'
 
 export type CustomView = ViewState & {
     bcRecordsCount: {
@@ -14,6 +15,11 @@ export type CustomView = ViewState & {
         bcName: string
         cursor: string
         create: boolean
+    }
+    popupData?: PopupData & {
+        options?: {
+            operation?: CustomActionTypes['processPreInvoke']
+        }
     }
 }
 
@@ -86,6 +92,18 @@ export default function viewReducer(state: CustomView = initialState, action: An
                 ...state,
                 recordForm: {
                     ...initialState.recordForm
+                }
+            }
+        }
+
+        case actionTypes.showViewPopup: {
+            const { options } = action.payload as CustomActionTypes['showViewPopup']
+
+            return {
+                ...state,
+                popupData: {
+                    ...state.popupData,
+                    options
                 }
             }
         }

@@ -1,0 +1,91 @@
+.popupModal {
+    :global {
+        .ant-modal-body {
+            padding: 3px;
+            overflow-y: auto;
+        }
+
+        .ant-modal-close-x {
+            display: block;
+            font-style: normal;
+            text-align: center;
+            text-transform: none;
+            text-rendering: auto;
+            width: 24px;
+            height: 24px;
+            line-height: 24px;
+            font-size: 14px;
+        }
+
+        .ant-table-selection-column {
+            &:first-child {
+                width: 50px;
+                max-width: 50px;
+                min-width: 50px;
+            }
+        }
+    }
+}
+
+:global {
+    .ant-modal-mask {
+        z-index: 1056 !important;
+    }
+
+    .ant-modal-wrap {
+        z-index: 1057 !important;
+    }
+}
+
+.minimalWidthFix {
+    :global {
+        .ant-table-tbody > tr > td {
+            min-width: 200px;
+        }
+    }
+}
+
+.title {
+    font-size: 24px;
+    margin: 0;
+}
+
+.footerContainer {
+    display: flex;
+    flex-direction: column;
+
+    .pagination {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .actions {
+        display: flex;
+        flex-direction: row;
+        margin: 5px 14px;
+    }
+}
+.tagArea {
+    overflow-y: auto;
+    max-height: 200px;
+    :global {
+        .ant-tag {
+            position: relative;
+            margin: 2px 2px 0 2px;
+            padding-right: 20px;
+            line-height: 18px;
+            background: #ffffff;
+            white-space: initial;
+
+            .anticon {
+                position: absolute;
+                display: block;
+                top: 3px;
+                right: 6px;
+            }
+        }
+    }
+}
+

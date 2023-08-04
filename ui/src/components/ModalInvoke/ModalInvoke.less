@@ -13,22 +13,40 @@
   border-top: none;
 }
 
-.overwrite :global(.ant-btn) {
-  padding: 10px 16px;
-  margin-right: 0.5em;
-  height: 40px;
-  line-height: 20px;
-  border-radius: 8px;
-}
+.overwrite :global(.ant-modal-footer),
+.overwrite :global(.ant-modal-confirm-btns) {
+      :global(.ant-btn) {
+        display: inline-flex;
+        align-items: flex-start;
+        height: 40px;
+        border: solid 1px @primary-red;
+        padding: 10px;
+        font-size: 14px;
+        font-weight: normal;
+        line-height: 1.57;
+        color: white;
+        border-radius: 2px;
+        background-color: @primary-red;
 
-.overwrite :global(.ant-btn-primary) {
-  background-color: @accent;
-  color: @main-dark-mode;
-  border-color: rgb(217, 217, 217);
-}
+        :global(.anticon) {
+          font-size: 20px;
+        }
+      }
 
-.overwrite :global(.ant-btn-primary:hover) {
-  background-color: white;
-  color: @accent;
-  border-color: @accent;
-}
+      :global(.ant-btn:not(.ant-btn-primary)) {
+        border-color: transparent;
+        border-radius: 4px;
+        background: none;
+        color: @cerulean;
+        box-shadow: none;
+
+        &:hover,
+        &:focus,
+        &:active {
+          border-color: transparent;
+          background: none;
+          color: @cerulean;
+        }
+      }
+  }
+

@@ -18,7 +18,7 @@ function ExpandedRow({ widgetMeta, operations }: ExpandedRowProps) {
     return (
         <div className={styles.root}>
             <Form meta={widgetMeta} />
-            {operations?.length && <Operations operations={operations} bcName={widgetMeta?.bcName} widgetMeta={widgetMeta} />}
+            {operations?.length ? <Operations operations={operations} bcName={widgetMeta?.bcName} widgetMeta={widgetMeta} /> : null}
         </div>
     )
 }

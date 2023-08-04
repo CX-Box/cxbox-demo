@@ -49,6 +49,7 @@ function Operations(props: OperationsOwnProps) {
                     if (isOperationGroup(item)) {
                         return <OperationsGroup key={item.type} group={item} widgetType={widgetMeta.type} onClick={handleOperationClick} />
                     }
+
                     return removeRecordOperationWidgets.includes(widgetMeta.type) && item.scope === 'record' ? null : (
                         <Button
                             key={item.type}

@@ -37,6 +37,9 @@
       "enabled": true,
       "placeholder": "Find by Client or Address"
     },
+    "filterSetting": {
+      "enabled": true
+    },
     "actionGroups": {
       "include": [
         "create",

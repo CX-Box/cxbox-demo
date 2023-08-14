@@ -90,7 +90,7 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 	public ActionResultDTO onCancel(BusinessComponent bc) {
 		return new ActionResultDTO<>().setAction(PostAction.drillDown(
 				DrillDownType.INNER,
-				"/screen/meeting/view/meetingview/" + CxboxRestController.meeting + "/" + bc.getId()
+				"/screen/meeting/"
 		));
 	}
 

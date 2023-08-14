@@ -1,5 +1,6 @@
 package org.demo.service;
 
+import org.cxbox.core.service.action.CxboxActionIconSpecifier;
 import org.demo.conf.cxbox.icon.ActionIcon;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.MeetingDTO;
@@ -61,6 +62,7 @@ public class MeetingReadService extends VersionAwareResponseService<MeetingDTO, 
 	public Actions<MeetingDTO> getActions() {
 		return Actions.<MeetingDTO>builder()
 				.create().text("Add").add()
+				.cancelCreate().text("Cancel").withIcon(CxboxActionIconSpecifier.CLOSE, false).add()
 				.addGroup(
 						"actions",
 						"Actions",

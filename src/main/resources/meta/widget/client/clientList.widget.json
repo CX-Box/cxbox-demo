@@ -11,13 +11,13 @@
       "drillDown": "true"
     },
     {
-      "title": "Address",
-      "key": "address",
-      "type": "input"
+      "title": "Field Of Activity",
+      "key": "fieldOfActivity",
+      "type": "multipleSelect"
     },
     {
-      "title": "Field of Activity",
-      "key": "fieldOfActivity",
+      "title": "Address",
+      "key": "address",
       "type": "input"
     },
     {

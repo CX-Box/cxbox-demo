@@ -1,5 +1,6 @@
 package org.demo.service;
 
+import org.cxbox.core.service.action.CxboxActionIconSpecifier;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.SaleDTO;
 import org.demo.dto.SaleDTO_;
@@ -58,6 +59,15 @@ public class SaleWriteService extends VersionAwareResponseService<SaleDTO, Sale>
 	}
 
 	@Override
+	public ActionResultDTO<SaleDTO> onCancel(BusinessComponent bc) {
+		return new ActionResultDTO<SaleDTO>().setAction(
+				PostAction.drillDown(
+						DrillDownType.INNER,
+						"/screen/sale/"
+				));
+	}
+
+	@Override
 	public Actions<SaleDTO> getActions() {
 		return Actions.<SaleDTO>builder()
 				.newAction()
@@ -70,16 +80,7 @@ public class SaleWriteService extends VersionAwareResponseService<SaleDTO, Sale>
 								"/screen/sale/view/salelist/" + CxboxRestController.sale + "/" + bc.getId()
 						)))
 				.add()
-				.newAction()
-				.action("cancel", "Cancel")
-				.scope(ActionScope.BC)
-				.withoutAutoSaveBefore()
-				.invoker((bc, dto) -> new ActionResultDTO<SaleDTO>().setAction(
-						PostAction.drillDown(
-								DrillDownType.INNER,
-								"/screen/sale/"
-						)))
-				.add()
+				.cancelCreate().text("Cancel").withIcon(CxboxActionIconSpecifier.CLOSE, false).add()
 				.build();
 	}
 

@@ -1,0 +1,21 @@
+{
+  "title": "contactAssocListPopup title",
+  "name": "contactAssocListPopup",
+  "type": "AssocListPopup",
+  "bc": "contactAssocListPopup",
+  "fields": [
+    {
+      "title": "Full Name",
+      "key": "fullName",
+      "type": "input"
+    },
+    {
+      "title": "id",
+      "key": "id",
+      "type": "text"
+    }
+  ],
+  "options": {
+    "usePrimary": true
+  }
+}

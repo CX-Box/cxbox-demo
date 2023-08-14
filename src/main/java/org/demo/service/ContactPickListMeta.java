@@ -1,16 +1,18 @@
 package org.demo.service;
 
-import org.demo.dto.ContactDTO;
-import org.demo.dto.ContactDTO_;
 import org.cxbox.core.crudma.bc.impl.InnerBcDescription;
 import org.cxbox.core.dto.rowmeta.FieldsMeta;
 import org.cxbox.core.dto.rowmeta.RowDependentFieldsMeta;
 import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
+import org.demo.dto.ContactDTO;
+import org.demo.dto.ContactDTO_;
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S3252","java:S1186"})
 @Service
 public class ContactPickListMeta extends FieldMetaBuilder<ContactDTO> {
+
+
 
 
 	@Override

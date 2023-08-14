@@ -5,11 +5,12 @@ import org.cxbox.core.crudma.bc.BcIdentifier;
 import org.cxbox.core.crudma.bc.EnumBcIdentifier;
 import org.cxbox.core.crudma.bc.impl.AbstractEnumBcSupplier;
 import org.cxbox.core.crudma.bc.impl.BcDescription;
+import org.demo.service.ContactMultivalueService;
+import org.demo.service.DashboardClientActivitiesService;
 import org.demo.service.ClientContactService;
 import org.demo.service.ClientPickListService;
 import org.demo.service.ClientReadWriteService;
 import org.demo.service.ContactPickListService;
-import org.demo.service.DashboardClientActivitiesService;
 import org.demo.service.DashboardFilterService;
 import org.demo.service.DashboardSalesFunnelService;
 import org.demo.service.DashboardSalesRingProgressService;
@@ -39,6 +40,7 @@ public enum CxboxRestController implements EnumBcIdentifier {
 		contactEditAssoc(clientEdit, ClientContactService.class),
 	meeting(MeetingReadService.class),
 	meetingEdit(MeetingWriteService.class),
+	contactAssocListPopup(meetingEdit, ContactMultivalueService.class),
 		responsiblePickListPopup(meetingEdit, ResponsiblePickListService.class),
 		clientPickListPopup(meetingEdit, ClientPickListService.class),
 		contactPickListPopup(meetingEdit, ContactPickListService.class),

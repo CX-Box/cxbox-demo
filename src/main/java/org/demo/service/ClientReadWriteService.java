@@ -1,10 +1,16 @@
 package org.demo.service;
 
 
+import org.cxbox.core.dto.MessageType;
+import org.cxbox.core.dto.rowmeta.PreAction;
+import org.cxbox.core.util.session.SessionService;
+import org.demo.conf.cxbox.icon.ActionIcon;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.ClientWriteDTO_;
 import org.demo.entity.Client;
+import org.demo.entity.Meeting;
 import org.demo.entity.enums.ClientEditStep;
+import org.demo.entity.enums.ClientStatus;
 import org.demo.entity.enums.FieldOfActivity;
 import org.demo.repository.ClientRepository;
 import org.demo.dto.ClientWriteDTO;
@@ -17,6 +23,7 @@ import org.cxbox.core.dto.rowmeta.PostAction;
 import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
 import java.util.Arrays;
+import org.demo.repository.MeetingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,19 +31,29 @@ import java.util.stream.Collectors;
 
 @SuppressWarnings({"java:S3252","java:S1186"})
 @Service
-public class ClientWriteService extends VersionAwareResponseService<ClientWriteDTO, Client> {
+public class ClientReadWriteService extends VersionAwareResponseService<ClientWriteDTO, Client> {
 
 	@Autowired
 	private ClientRepository clientRepository;
 
-	public ClientWriteService() {
-		super(ClientWriteDTO.class, Client.class, null, ClientWriteMeta.class);
+	@Autowired
+	private MeetingRepository meetingRepository;
+
+	@Autowired
+	private SessionService sessionService;
+
+	public ClientReadWriteService() {
+		super(ClientWriteDTO.class, Client.class, null, ClientReadWriteMeta.class);
 	}
 
 	@Override
 	protected CreateResult<ClientWriteDTO> doCreateEntity(Client entity, BusinessComponent bc) {
 		clientRepository.save(entity);
-		return new CreateResult<>(entityToDto(bc, entity));
+		return new CreateResult<>(entityToDto(bc, entity))
+				.setAction(PostAction.drillDown(
+						DrillDownType.INNER,
+						entity.getEditStep().getEditView() + CxboxRestController.clientEdit + "/" + entity.getId()
+				));
 	}
 
 	@Override
@@ -55,6 +72,15 @@ public class ClientWriteService extends VersionAwareResponseService<ClientWriteD
 		setIfChanged(data, ClientWriteDTO_.briefId, entity::setBrief);
 		setIfChanged(data, ClientWriteDTO_.briefId, entity::setBriefId);
 		return new ActionResultDTO<>(entityToDto(bc, entity));
+	}
+
+	@Override
+	public ActionResultDTO<ClientWriteDTO> onCancel(BusinessComponent bc) {
+		return new ActionResultDTO<ClientWriteDTO>().setAction(
+				PostAction.drillDown(
+						DrillDownType.INNER,
+						"/screen/client"
+				));
 	}
 
 	@Override
@@ -117,15 +143,60 @@ public class ClientWriteService extends VersionAwareResponseService<ClientWriteD
 					return ClientEditStep.getPreviousEditStep(client).isPresent();
 				})
 				.add()
-				.action("cancel", "Cancel")
-				.scope(ActionScope.BC)
-				.withoutAutoSaveBefore()
-				.invoker((bc, dto) -> new ActionResultDTO<ClientWriteDTO>().setAction(
-						PostAction.drillDown(
-								DrillDownType.INNER,
-								"/screen/client"
-						)))
-				.add()
+				.cancelCreate().text("Cancel").available(bc -> true).add()
+				.create().text("Add").add()
+				.addGroup(
+						"actions",
+						"Actions",
+						0,
+						Actions.<ClientWriteDTO>builder()
+								.newAction()
+								.action("edit", "Edit")
+								.withoutAutoSaveBefore()
+								.invoker((bc, data) -> {
+									Client client = clientRepository.getById(bc.getIdAsLong());
+									return new ActionResultDTO<ClientWriteDTO>()
+											.setAction(PostAction.drillDown(
+													DrillDownType.INNER,
+													client.getEditStep().getEditView()
+															+ CxboxRestController.clientEdit + "/"
+															+ bc.getId()
+											));
+								})
+								.add()
+								.newAction()
+								.action("create_meeting", "Create Meeting")
+								.withAutoSaveBefore()
+								.invoker((bc, data) -> {
+									Client client = clientRepository.getById(bc.getIdAsLong());
+									Meeting meeting = meetingRepository.save(new Meeting()
+											.setResponsible(sessionService.getSessionUser())
+											.setClient(client)
+									);
+									return new ActionResultDTO<ClientWriteDTO>()
+											.setAction(PostAction.drillDown(
+													DrillDownType.INNER,
+													"screen/meeting/view/meetingedit/"
+															+ CxboxRestController.meetingEdit + "/"
+															+ meeting.getId()
+											));
+								})
+								.available(bc -> false)//TODO>>remove false, after fixing UI error for this drill-down
+								.add()
+								.newAction()
+								.action("deactivate", "Deactivate")
+								.withAutoSaveBefore()
+								.withPreAction(PreAction.confirm("Are You sure You want to deactivate the client?"))
+								.invoker((bc, data) -> {
+									Client client = clientRepository.getById(bc.getIdAsLong());
+									client.setStatus(ClientStatus.INACTIVE);
+									clientRepository.save(client);
+									return new ActionResultDTO<ClientWriteDTO>()
+											.setAction(PostAction.showMessage(MessageType.INFO, "Client deactivated!"));
+								})
+								.add()
+								.build()
+				).withIcon(ActionIcon.MENU, false)
 				.build();
 	}
 

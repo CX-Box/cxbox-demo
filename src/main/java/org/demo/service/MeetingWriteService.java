@@ -87,12 +87,18 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 	}
 
 	@Override
+	public ActionResultDTO onCancel(BusinessComponent bc) {
+		return new ActionResultDTO<>().setAction(PostAction.drillDown(
+				DrillDownType.INNER,
+				"/screen/meeting/view/meetingview/" + CxboxRestController.meeting + "/" + bc.getId()
+		));
+	}
+
+	@Override
 	public Actions<MeetingDTO> getActions() {
 		return Actions.<MeetingDTO>builder()
-				.create().text("Add")
-				.add()
-				.save()
-				.add()
+				.create().text("Add").add()
+				.save().add()
 				.addGroup(
 						"actions",
 						"Actions",
@@ -110,16 +116,7 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 								"/screen/meeting/view/meetingview/" + CxboxRestController.meeting + "/" + bc.getId()
 						)))
 				.add()
-				.newAction()
-				.action("cancel", "Cancel")
-				.scope(ActionScope.BC)
-				.withoutAutoSaveBefore()
-				.invoker((bc, dto) -> new ActionResultDTO<MeetingDTO>().setAction(
-						PostAction.drillDown(
-								DrillDownType.INNER,
-								"/screen/meeting/"
-						)))
-				.add()
+				.cancelCreate().text("Cancel").available(bc -> true).add()
 				.build();
 	}
 

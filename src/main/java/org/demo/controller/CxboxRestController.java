@@ -1,25 +1,23 @@
 package org.demo.controller;
 
-import org.demo.service.ClientEditableListService;
-import org.demo.service.DashboardClientActivitiesService;
+import lombok.Getter;
+import org.cxbox.core.crudma.bc.BcIdentifier;
+import org.cxbox.core.crudma.bc.EnumBcIdentifier;
+import org.cxbox.core.crudma.bc.impl.AbstractEnumBcSupplier;
+import org.cxbox.core.crudma.bc.impl.BcDescription;
 import org.demo.service.ClientContactService;
-import org.demo.service.ClientReadService;
-import org.demo.service.ClientWriteService;
+import org.demo.service.ClientPickListService;
+import org.demo.service.ClientReadWriteService;
 import org.demo.service.ContactPickListService;
+import org.demo.service.DashboardClientActivitiesService;
 import org.demo.service.DashboardFilterService;
 import org.demo.service.DashboardSalesFunnelService;
 import org.demo.service.DashboardSalesRingProgressService;
 import org.demo.service.MeetingReadService;
 import org.demo.service.MeetingWriteService;
-import org.demo.service.ClientPickListService;
 import org.demo.service.ResponsiblePickListService;
 import org.demo.service.SaleReadService;
 import org.demo.service.SaleWriteService;
-import org.cxbox.core.crudma.bc.BcIdentifier;
-import org.cxbox.core.crudma.bc.EnumBcIdentifier;
-import org.cxbox.core.crudma.bc.impl.AbstractEnumBcSupplier;
-import org.cxbox.core.crudma.bc.impl.BcDescription;
-import lombok.Getter;
 import org.springframework.stereotype.Component;
 
 /**
@@ -34,10 +32,9 @@ import org.springframework.stereotype.Component;
 public enum CxboxRestController implements EnumBcIdentifier {
 
 	// @formatter:on
-	clientListEdit(ClientEditableListService.class),
-	client(ClientReadService.class),
+	client(ClientReadWriteService.class),
 		contact(client, ClientContactService.class),
-	clientEdit(ClientWriteService.class),
+	clientEdit(ClientReadWriteService.class),
 		contactEdit(clientEdit, ClientContactService.class),
 		contactEditAssoc(clientEdit, ClientContactService.class),
 	meeting(MeetingReadService.class),

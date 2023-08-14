@@ -38,7 +38,8 @@
   "options": {
     "actionGroups": {
       "include": [
-        "save"
+        "save",
+        "cancel-create"
       ]
     },
     "layout": {

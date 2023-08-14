@@ -59,9 +59,4 @@ public class SaleReadService extends VersionAwareResponseService<SaleDTO, Sale> 
 				.build();
 	}
 
-	@Override
-	public boolean isDeferredCreationSupported(BusinessComponent bc) {
-		return false;
-	}
-
 }

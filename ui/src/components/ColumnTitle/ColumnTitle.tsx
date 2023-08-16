@@ -7,6 +7,7 @@ import cn from 'classnames'
 import ColumnSort from './ColumnSort'
 import { TemplatedTitle } from '@cxbox-ui/core'
 import styles from './ColumnTitle.less'
+import { CustomFieldTypes } from '../../interfaces/widget'
 
 interface ColumnTitleProps {
     widgetName: string
@@ -14,7 +15,8 @@ interface ColumnTitleProps {
     rowMeta: RowMetaField
 }
 
-export const notSortableFields: readonly FieldType[] = [
+export const notSortableFields: readonly (FieldType | CustomFieldTypes)[] = [
+    CustomFieldTypes.MultipleSelect,
     FieldType.multivalue,
     FieldType.multivalueHover,
     FieldType.multifield,

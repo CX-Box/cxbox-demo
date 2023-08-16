@@ -53,7 +53,15 @@ const FilterPopup: React.FC<FilterPopupProps> = props => {
             viewName,
             widgetName: widget?.name as string
         }
-        if (props.value === null || props.value === undefined) {
+        if ((props.value === null || props.value === undefined) && FieldType.checkbox === props.fieldType) {
+            dispatch(
+                $do.bcAddFilter({
+                    bcName: widget?.bcName as string,
+                    filter: { ...newFilter, value: false },
+                    widgetName: widget?.name as string
+                })
+            )
+        } else if (props.value === null || props.value === undefined) {
             dispatch($do.bcRemoveFilter({ bcName: widget?.bcName as string, filter: filter as BcFilter }))
         } else {
             dispatch($do.bcAddFilter({ bcName: widget?.bcName as string, filter: newFilter, widgetName: widget?.name as string }))

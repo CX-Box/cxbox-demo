@@ -22,7 +22,7 @@ function Table({ meta, primaryColumn, disablePagination, ...rest }: TableProps) 
 
     const controlColumns = React.useMemo(() => {
         const resultColumns: Array<ControlColumn> = []
-        if (meta.options?.usePrimary && primaryColumn) {
+        if (meta.options?.primary?.enabled && primaryColumn) {
             resultColumns.push(primaryColumn as any)
         }
 
@@ -31,7 +31,7 @@ function Table({ meta, primaryColumn, disablePagination, ...rest }: TableProps) 
         }
 
         return [...resultColumns]
-    }, [expandIconColumn, meta.options?.usePrimary, primaryColumn])
+    }, [expandIconColumn, meta.options?.primary?.enabled, primaryColumn])
 
     return (
         <div className={styles.tableContainer}>

@@ -54,15 +54,17 @@ type InternalWidgetOption = {
 
 export interface AppWidgetMeta extends WidgetMeta {
     options?: WidgetOptions & {
-        usePrimary?: boolean
+        primary?: {
+            enabled: boolean
+        }
 
         create?: InternalWidgetOption
         edit?: InternalWidgetOption
 
-        export: {
+        export?: {
             // Part of the file name, by default taken from the widget title
             title?: string
-            show: boolean
+            enabled: boolean
         }
     }
 }

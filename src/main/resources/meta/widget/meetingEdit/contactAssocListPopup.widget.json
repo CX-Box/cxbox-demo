@@ -16,6 +16,8 @@
     }
   ],
   "options": {
-    "usePrimary": true
+    "primary": {
+      "enabled": true
+    }
   }
 }

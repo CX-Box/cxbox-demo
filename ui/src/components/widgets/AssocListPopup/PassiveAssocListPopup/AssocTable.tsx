@@ -29,7 +29,8 @@ export const AssocTable = ({ ...props }: AssocTableProps) => {
     const primaryColumn: ControlColumn = useMemo(
         () => ({
             column: {
-                title: t('Primary'),
+                // TODO need to add localization
+                title: props.meta.options?.primary?.title ?? t('Primary'),
                 width: '85px',
                 key: '_primary',
                 render: (text, record) => {
@@ -47,7 +48,7 @@ export const AssocTable = ({ ...props }: AssocTableProps) => {
             },
             position: 'left'
         }),
-        [changeItem, selectedRecords, t]
+        [changeItem, props.meta.options?.primary?.title, selectedRecords, t]
     )
 
     return (

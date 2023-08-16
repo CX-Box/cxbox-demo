@@ -23,6 +23,7 @@ import DashboardList from '../widgets/DashboardList/DashboardList'
 import LevelMenu from '../widgets/LevelMenu/LevelMenu'
 import { Number } from '../../fields/NumberInput/NumberInput'
 import { FormPopup } from '../widgets/FormPopup/FormPopup'
+import MultivalueField from '../../fields/Multivalue/MultivalueField'
 
 const skipWidgetTypes: WidgetTypes[] = []
 
@@ -31,6 +32,7 @@ const customFields = {
     [FieldType.percent]: Number,
     [FieldType.money]: Number,
     [FieldType.dictionary]: Dictionary,
+    [FieldType.multivalue]: MultivalueField,
     [CustomFieldTypes.MultipleSelect]: MultipleSelectField
 }
 

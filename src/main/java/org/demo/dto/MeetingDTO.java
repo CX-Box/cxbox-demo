@@ -1,22 +1,30 @@
 package org.demo.dto;
 
 import static java.util.Optional.ofNullable;
+import static org.demo.conf.cxbox.core.multivaluePrimary.MultivalueExt.PRIMARY;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
+import org.cxbox.api.data.dto.DataResponseDTO;
+import org.cxbox.core.dto.multivalue.MultivalueField;
+import org.cxbox.core.util.filter.SearchParameter;
+import org.cxbox.core.util.filter.provider.impl.DateTimeValueProvider;
+import org.cxbox.core.util.filter.provider.impl.EnumValueProvider;
+import org.cxbox.core.util.filter.provider.impl.MultiFieldValueProvider;
+import org.cxbox.model.core.entity.BaseEntity;
+import org.cxbox.model.core.entity.User;
+import org.demo.conf.cxbox.core.multivaluePrimary.MultivalueExt;
 import org.demo.entity.Client;
 import org.demo.entity.Contact;
 import org.demo.entity.Meeting;
 import org.demo.entity.enums.MeetingStatus;
-import org.cxbox.api.data.dto.DataResponseDTO;
-import org.cxbox.core.util.filter.SearchParameter;
-import org.cxbox.core.util.filter.provider.impl.DateTimeValueProvider;
-import org.cxbox.core.util.filter.provider.impl.EnumValueProvider;
-import org.cxbox.model.core.entity.BaseEntity;
-import org.cxbox.model.core.entity.User;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
 @Setter
@@ -58,6 +66,11 @@ public class MeetingDTO extends DataResponseDTO {
 	@SearchParameter(name = "contact.fullName")
 	private String contactName;
 
+	@SearchParameter(name = "additionalContacts.id", multiFieldKey = MultiFieldValueProvider.class)
+	private MultivalueField additionalContacts;
+
+	private String additionalContactsDisplayedKey;
+
 	public MeetingDTO(Meeting meeting) {
 		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy hh:mm");
 
@@ -77,6 +90,20 @@ public class MeetingDTO extends DataResponseDTO {
 		this.clientId = ofNullable(meeting.getClient()).map(BaseEntity::getId).orElse(null);
 		this.contactId = ofNullable(meeting.getContact()).map(BaseEntity::getId).orElse(null);
 		this.contactName = ofNullable(meeting.getContact()).map(Contact::getFullName).orElse(null);
+
+		this.additionalContacts = meeting.getAdditionalContacts().stream().collect(MultivalueExt.toMultivalueField(
+				e -> String.valueOf(e.getId()),
+				Contact::getFullName,
+				Map.of(
+						PRIMARY,
+						field -> Objects.equals(field.getId(), meeting.getAdditionalContactPrimaryId()) ? Boolean.TRUE.toString()
+								: null
+				)
+		));
+		this.additionalContactsDisplayedKey = StringUtils.abbreviate(meeting.getAdditionalContacts().stream()
+				.map(Contact::getFullName
+				).collect(Collectors.joining(",")), 12);
 	}
+
 
 }

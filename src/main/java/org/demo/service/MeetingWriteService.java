@@ -10,18 +10,26 @@ import static org.demo.dto.MeetingDTO_.responsibleId;
 import static org.demo.dto.MeetingDTO_.result;
 import static org.demo.dto.MeetingDTO_.startDateTime;
 
+import java.util.Objects;
+import java.util.stream.Collectors;
+import javax.persistence.EntityManager;
+import lombok.val;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.DrillDownType;
+import org.cxbox.core.dto.multivalue.MultivalueFieldSingleValue;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.cxbox.core.dto.rowmeta.PostAction;
 import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
 import org.cxbox.core.service.action.ActionsBuilder;
+import org.demo.conf.cxbox.core.multivaluePrimary.MultivalueExt;
 import org.demo.conf.cxbox.icon.ActionIcon;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.MeetingDTO;
+import org.demo.dto.MeetingDTO_;
+import org.demo.entity.Contact;
 import org.demo.entity.Meeting;
 import org.demo.repository.ClientRepository;
 import org.demo.repository.ContactRepository;
@@ -50,6 +58,9 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 	@Autowired
 	private MeetingStatusModelActionProvider statusModelActionProvider;
 
+	@Autowired
+	private EntityManager entityManager;
+
 	public MeetingWriteService() {
 		super(MeetingDTO.class, Meeting.class, null, MeetingWriteMeta.class);
 	}
@@ -62,6 +73,17 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 
 	@Override
 	protected ActionResultDTO<MeetingDTO> doUpdateEntity(Meeting entity, MeetingDTO data, BusinessComponent bc) {
+		if (data.isFieldChanged(MeetingDTO_.additionalContacts)) {
+			entity.getAdditionalContacts().clear();
+			entity.getAdditionalContacts().addAll(data.getAdditionalContacts().getValues().stream()
+					.map(MultivalueFieldSingleValue::getId)
+					.filter(Objects::nonNull)
+					.map(Long::parseLong)
+					.map(e -> entityManager.getReference(Contact.class, e))
+					.collect(Collectors.toList()));
+			val primary = data.getAdditionalContacts().getValues().stream().filter(e -> e.getOptions().get(MultivalueExt.PRIMARY) != null && e.getOptions().get(MultivalueExt.PRIMARY).equalsIgnoreCase(Boolean.TRUE.toString())).findAny();
+			primary.ifPresent(s -> entity.setAdditionalContactPrimaryId(Long.parseLong(s.getId())));
+		}
 		setIfChanged(data, agenda, entity::setAgenda);
 		setIfChanged(data, startDateTime, entity::setStartDateTime);
 		setIfChanged(data, endDateTime, entity::setEndDateTime);

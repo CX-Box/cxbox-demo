@@ -5,6 +5,11 @@
   "url": "/screen/meeting/view/meetingedit",
   "widgets": [
     {
+      "widgetName": "contactAssocListPopup",
+      "position": 2,
+      "gridWidth": 24
+    },
+    {
       "widgetName": "SecondLevelMenu",
       "position": 0,
       "gridWidth": 24

@@ -13,13 +13,14 @@ import org.cxbox.core.dto.rowmeta.RowDependentFieldsMeta;
 import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
 import org.springframework.stereotype.Service;
 
-@SuppressWarnings({"java:S3252","java:S1186"})
+@SuppressWarnings({"java:S3252", "java:S1186"})
 @Service
 public class MeetingWriteMeta extends FieldMetaBuilder<MeetingDTO> {
 
 	@Override
 	public void buildRowDependentMeta(RowDependentFieldsMeta<MeetingDTO> fields, InnerBcDescription bcDescription,
 			Long id, Long parentId) {
+		fields.setEnabled(MeetingDTO_.additionalContacts);
 		if (MeetingStatus.COMPLETED.equals(fields.get(MeetingDTO_.status).getCurrentValue())) {
 			fields.setEnabled(
 					MeetingDTO_.notes,
@@ -70,6 +71,7 @@ public class MeetingWriteMeta extends FieldMetaBuilder<MeetingDTO> {
 
 	@Override
 	public void buildIndependentMeta(FieldsMeta<MeetingDTO> fields, InnerBcDescription bcDescription, Long parentId) {
+		fields.enableFilter(MeetingDTO_.additionalContacts);
 		fields.setForceActive(MeetingDTO_.clientId);
 		fields.setForceActive(MeetingDTO_.startDateTime);
 		fields.setForceActive(MeetingDTO_.endDateTime);

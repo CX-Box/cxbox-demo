@@ -1,5 +1,10 @@
 package org.demo.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import lombok.EqualsAndHashCode;
 import org.demo.entity.enums.MeetingStatus;
 import org.cxbox.model.core.entity.BaseEntity;
@@ -49,5 +54,14 @@ public class Meeting extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "CLIENT_ID")
 	private Client client;
+
+	private Long additionalContactPrimaryId;
+
+	@JoinTable(name = "Meeting_Contact",
+			joinColumns = @JoinColumn(name = "Meeting_id"),
+			inverseJoinColumns = @JoinColumn(name = "Contact_id")
+	)
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	private List<Contact> additionalContacts = new ArrayList<>();
 
 }

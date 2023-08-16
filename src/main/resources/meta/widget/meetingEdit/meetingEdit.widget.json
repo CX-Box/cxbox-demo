@@ -5,6 +5,14 @@
   "bc": "meetingEdit",
   "fields": [
     {
+      "label": "Additional Contacts",
+      "key": "additionalContacts",
+      "displayedKey": "additionalContactsDisplayedKey",
+      "type": "multivalue",
+      "popupBcName": "contactAssocListPopup",
+      "assocValueKey": "fullName"
+    },
+    {
       "label": "Agenda",
       "key": "agenda",
       "type": "input"
@@ -19,11 +27,11 @@
       "key": "endDateTime",
       "type": "dateTime"
     },
-     {
-       "label": "Status",
-       "key": "status",
-       "type": "hidden"
-     },
+    {
+      "label": "Status",
+      "key": "status",
+      "type": "hidden"
+    },
     {
       "label": "Address",
       "key": "address",
@@ -43,7 +51,6 @@
   "options": {
     "actionGroups": {
       "include": [
-
       ]
     },
     "layout": {
@@ -76,14 +83,22 @@
             }
           ]
         },
-       {
-         "cols": [
-           {
-             "fieldKey": "responsibleName",
-             "span": 12
-           }
-         ]
-       }
+        {
+          "cols": [
+            {
+              "fieldKey": "responsibleName",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "additionalContacts",
+              "span": 12
+            }
+          ]
+        }
       ]
     }
   }

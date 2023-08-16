@@ -56,6 +56,7 @@ export interface AppWidgetMeta extends WidgetMeta {
     options?: WidgetOptions & {
         primary?: {
             enabled: boolean
+            title?: string
         }
 
         create?: InternalWidgetOption

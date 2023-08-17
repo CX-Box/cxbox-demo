@@ -119,6 +119,15 @@
     </createTable>
   </changeSet>
 
+  <changeSet id="meeting table primary" author="iborisenko">
+    <addColumn tableName="MEETING">
+      <column name="additional_contact_primary_id" type="NUMBER(19, 0)">
+        <constraints nullable="true" foreignKeyName="additional_contact_primary_id" referencedColumnNames="ID"
+          referencedTableName="CONTACT"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
   <changeSet id="dashboard_filter table" author="mitrofanova">
     <createTable tableName="DASHBOARD_FILTER">
       <column name="ID" remarks="Identifier" type="NUMBER(19, 0)">

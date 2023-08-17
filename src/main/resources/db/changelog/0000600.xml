@@ -128,6 +128,17 @@
     </addColumn>
   </changeSet>
 
+  <changeSet id="meeting_contact table" author="iborisenko">
+    <createTable tableName="meeting_contact">
+      <column name="meeting_id" type="NUMBER(19, 0)">
+        <constraints nullable="false" foreignKeyName="meeting_contact_meeting" references="meeting"/>
+      </column>
+      <column name="contact_id" type="NUMBER(19, 0)">
+        <constraints nullable="false" foreignKeyName="meeting_contact_contact" references="contact"/>
+      </column>
+    </createTable>
+  </changeSet>
+
   <changeSet id="dashboard_filter table" author="mitrofanova">
     <createTable tableName="DASHBOARD_FILTER">
       <column name="ID" remarks="Identifier" type="NUMBER(19, 0)">

@@ -10,6 +10,8 @@ import { getFormat } from '../../utils/date'
 import RangePicker from './RangePicker'
 import DatePicker from './DatePicker'
 import { DateFieldTypes } from '../../interfaces/date'
+import { CheckboxChangeEvent } from 'antd/lib/checkbox'
+import { Checkbox } from 'antd'
 
 interface FilterFieldProps extends ColumnFilterControlProps {
     visible?: boolean
@@ -20,6 +22,16 @@ function FilterField({ visible, ...props }: FilterFieldProps) {
     const fieldType = widgetFieldMeta.type as string
 
     switch (fieldType) {
+        case FieldType.checkbox: {
+            return (
+                <Checkbox
+                    checked={value as boolean}
+                    onChange={(e: CheckboxChangeEvent) => {
+                        onChange(e.target.checked)
+                    }}
+                />
+            )
+        }
         case FieldType.number:
         case FieldType.money:
         case FieldType.percent:

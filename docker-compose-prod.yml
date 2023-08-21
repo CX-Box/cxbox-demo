@@ -13,8 +13,8 @@ services:
       CXBOX_APP_2: 'cxbox-demo-node-2:8080'
       KEYCLOAK_1: 'keycloak:9080'
     ports:
-      - "80:80"
-      - "443:443"
+      - "82:80"
+      - "442:443"
     restart: always
     depends_on:
       - cxbox-demo-node-1

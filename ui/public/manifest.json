@@ -1,6 +1,6 @@
 {
-  "short_name": "CXBox Enterprise Application",
-  "name": "CXBox Enterprise Application",
+  "short_name": "CXBox Demo",
+  "name": "CXBox Demo",
   "icons": [
     {
       "src": "favicon.svg",

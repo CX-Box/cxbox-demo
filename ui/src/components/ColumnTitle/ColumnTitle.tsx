@@ -21,7 +21,6 @@ export const notSortableFields: readonly (FieldType | CustomFieldTypes)[] = [
     FieldType.multivalueHover,
     FieldType.multifield,
     FieldType.hidden,
-    FieldType.inlinePickList,
     FieldType.hint
 ]
 

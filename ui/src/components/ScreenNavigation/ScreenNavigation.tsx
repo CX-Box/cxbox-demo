@@ -26,7 +26,7 @@ function ScreenNavigation() {
             <Menu className={styles.container} selectedKeys={[screenUrl]} onClick={handleScreen} theme="dark">
                 {filteredScreens.map(item => {
                     return (
-                        <Menu.Item key={item.url} className={styles.item}>
+                        <Menu.Item key={item.url} className={styles.item} title={item.text}>
                             <span className={styles.menuItemLink}>
                                 <Icon type={item.icon ? item.icon : 'coffee'} />
                                 <span>{item.text}</span>

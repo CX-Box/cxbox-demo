@@ -1,11 +1,4 @@
-import {
-    WidgetMeta,
-    WidgetTypes,
-    WidgetOptions,
-    WidgetListFieldBase,
-    WidgetFormMeta,
-    WidgetTableMeta
-} from '@cxbox-ui/core/interfaces/widget'
+import { WidgetMeta, WidgetTypes, WidgetOptions, WidgetListFieldBase, WidgetFormMeta } from '@cxbox-ui/core/interfaces/widget'
 
 export enum CustomFieldTypes {
     MultipleSelect = 'multipleSelect'
@@ -54,24 +47,15 @@ type InternalWidgetOption = {
 
 export interface AppWidgetMeta extends WidgetMeta {
     options?: WidgetOptions & {
-        primary?: {
-            enabled: boolean
-            title?: string
-        }
-
         create?: InternalWidgetOption
         edit?: InternalWidgetOption
 
-        export?: {
+        export: {
             // Part of the file name, by default taken from the widget title
             title?: string
-            enabled: boolean
+            show: boolean
         }
     }
-}
-
-export interface AppWidgetTableMeta extends WidgetTableMeta {
-    options?: AppWidgetMeta['options']
 }
 
 export interface WidgetFormPopupMeta extends Omit<WidgetFormMeta, 'type'> {

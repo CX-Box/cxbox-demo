@@ -1,5 +1,3 @@
-@import '../../assets/styles/theme.less';
-
 .logoContainer {
     display: flex;
     justify-content: flex-start;
@@ -36,25 +34,4 @@
 }
 
 .collapsed .navigationWrapper {
-}
-
-/* The emerging W3C standard
-that is currently Firefox-only */
-.navigationWrapper {
-    scrollbar-width: thin;
-    scrollbar-color: @primary-red transparent;
-}
-
-/* Works on Chrome/Edge/Safari */
-.navigationWrapper::-webkit-scrollbar {
-    width: 4px;
-}
-
-.navigationWrapper::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.navigationWrapper::-webkit-scrollbar-thumb {
-    background-color: @primary-red;
-    border-radius: 2px;
 }

@@ -1,11 +1,14 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import cn from 'classnames'
 import { Menu, Icon } from 'antd'
 import { changeLocation } from '@cxbox-ui/core'
-import styles from './ScreenNavigation.less'
 import { ClickParam } from 'antd/lib/menu'
 import { useSelector } from 'react-redux'
 import { AppState } from '../../interfaces/storeSlices'
 import Search from 'antd/lib/input/Search'
+import styles from './ScreenNavigation.less'
+
+const selectedItemClass = 'selectedItem'
 
 function ScreenNavigation() {
     const screens = useSelector((state: AppState) => state.session.screens)
@@ -18,6 +21,12 @@ function ScreenNavigation() {
 
     const { filteredValues: filteredScreens, handleSearch } = useLocalSearch({ values: screens, comparisonField: 'text' })
 
+    useEffect(() => {
+        // can't use .ant-menu-item-selected because dom nodes changes it too slowly
+        const selectedItem = document.querySelector(`.${styles.item}.${selectedItemClass}`)
+        selectedItem?.scrollIntoView()
+    }, [screenUrl])
+
     return (
         <div className={styles.menuContainer}>
             <div className={styles.search}>
@@ -26,7 +35,13 @@ function ScreenNavigation() {
             <Menu className={styles.container} selectedKeys={[screenUrl]} onClick={handleScreen} theme="dark">
                 {filteredScreens.map(item => {
                     return (
-                        <Menu.Item key={item.url} className={styles.item} title={item.text}>
+                        <Menu.Item
+                            key={item.url}
+                            className={cn(styles.item, {
+                                [selectedItemClass]: screenUrl === item.url
+                            })}
+                            title={item.text}
+                        >
                             <span className={styles.menuItemLink}>
                                 <Icon type={item.icon ? item.icon : 'coffee'} />
                                 <span>{item.text}</span>

@@ -1,3 +1,5 @@
+@import '../../assets/styles/theme.less';
+
 .menuItemLink {
     display: flex;
     align-items: center;
@@ -11,9 +13,14 @@
 
 .container {
     border-right: 0;
+    overflow-y: auto;
 }
 
-.menuContainer {}
+.menuContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
 
 .container:global(.ant-menu) {
     background: inherit;
@@ -83,8 +90,6 @@
     }
 }
 
-
-
 .container:global(.ant-menu-vertical) {
     border-right: 0;
 }
@@ -94,10 +99,7 @@
 }
 
 .search {
-    position: sticky;
-    top: 0;
-    z-index: 20;
-    margin: 0 24px 10px;
+    margin: 0 28px 10px 24px;
     width: auto;
 }
 
@@ -105,4 +107,25 @@
     .search {
         margin: 0;
     }
+}
+
+/* The emerging W3C standard
+that is currently Firefox-only */
+.container {
+    scrollbar-width: thin;
+    scrollbar-color: @primary-red transparent;
+}
+
+/* Works on Chrome/Edge/Safari */
+.container::-webkit-scrollbar {
+    width: 4px;
+}
+
+.container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.container::-webkit-scrollbar-thumb {
+    background-color: @primary-red;
+    border-radius: 2px;
 }

@@ -10,6 +10,8 @@
   line-height: 20px;
   width: 100%;
   max-width: 100vw;
+  // without it left menu takes all the height at the beginning of rendering and scroll to the current element doesn't work
+  flex-direction: row;
 }
 
 .appLayout, :global(.ant-layout) {

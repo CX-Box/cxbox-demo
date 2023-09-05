@@ -5,4 +5,8 @@ baseProfile: qodana.starter
 groups:
   - groupId: Platform
     groups:
-      - "Platform"
+      - "category:Platform"
+
+inspections:
+  - group: Platform
+    enabled: true

@@ -6,7 +6,7 @@
   "fields": [
     {
       "label": "editStep",
-      "key": "editStep",
+      "key": "editSt1ep",
       "type": "input"
     }
   ],

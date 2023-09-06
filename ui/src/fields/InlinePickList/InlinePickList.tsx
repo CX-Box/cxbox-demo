@@ -6,7 +6,7 @@ import cn from 'classnames'
 import { DataItem, PickMap } from '@cxbox-ui/core/interfaces/data'
 import { BaseFieldProps } from '@cxbox-ui/core/components/Field/Field'
 import { InlinePickListFieldMeta } from '@cxbox-ui/schema/dist/interfaces/widget'
-import { DataValue } from '@cxbox-ui/schema'
+import { DataValue, WidgetTypes } from '@cxbox-ui/schema'
 import { $do } from '../../actions/types'
 import { useDebounce } from '../../hooks/useDebounce'
 import ReadOnlyField from '../../components/ui/ReadOnlyField/ReadOnlyField'
@@ -41,6 +41,10 @@ const InlinePickList: React.FunctionComponent<Props> = ({
     const { key: fieldName, popupBcName, pickMap, searchSpec } = meta
     const data = useSelector((state: AppState) => (bcName && popupBcName && state.data[popupBcName]) || emptyData)
 
+    const popupWidget = useSelector((state: AppState) =>
+        state.view.widgets.find(i => i.bcName === popupBcName && i.type === WidgetTypes.PickListPopup)
+    )
+
     const processedSearchSpec = searchSpec || pickMap[fieldName]
     useEffect(() => {
         if (!processedSearchSpec) {
@@ -51,8 +55,8 @@ const InlinePickList: React.FunctionComponent<Props> = ({
     }, [processedSearchSpec, fieldName])
 
     const onClick = useCallback(
-        (bcName: string, pickMap: PickMap) => {
-            dispatch($do.showViewPopup({ bcName }))
+        (bcName: string, pickMap: PickMap, widgetName?: string) => {
+            dispatch($do.showViewPopup({ bcName, widgetName }))
             dispatch($do.viewPutPickMap({ map: pickMap, bcName }))
         },
         [dispatch]
@@ -76,9 +80,9 @@ const InlinePickList: React.FunctionComponent<Props> = ({
 
     const handleClick = React.useCallback(() => {
         if (!disabled) {
-            onClick(popupBcName, pickMap)
+            onClick(popupBcName, pickMap, popupWidget?.name)
         }
-    }, [disabled, popupBcName, pickMap, onClick])
+    }, [disabled, popupBcName, pickMap, onClick, popupWidget])
 
     const onChange = React.useCallback(
         (valueKey: string) => {
@@ -121,6 +125,7 @@ const InlinePickList: React.FunctionComponent<Props> = ({
                 disabled={disabled}
                 value={value ?? undefined}
                 allowClear={!!value}
+                clearIcon={<Icon type="close-circle" />}
                 showSearch
                 placeholder={placeholder ?? t('Enter value')}
                 defaultActiveFirstOption={false}

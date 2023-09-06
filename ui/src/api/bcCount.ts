@@ -1,8 +1,8 @@
 import { buildUrl, axiosGet } from '@cxbox-ui/core'
 import { BcCountParamsMap, BcCountResponse } from '../interfaces/bcCount'
 
-export function fetchBcCount(bcName: string, params: BcCountParamsMap = {}) {
-    const url = buildUrl`count/dashboard/` + bcName
+export function fetchBcCount(screenName: string, bcName: string, params: BcCountParamsMap = {}) {
+    const url = buildUrl`count/${screenName}/` + bcName
     const stringParams = new URLSearchParams()
     if (params) {
         Object.keys(params).forEach(i => {

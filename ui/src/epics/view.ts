@@ -17,9 +17,10 @@ const bcFetchCountEpic: CustomEpic = (action$, store) =>
             }
 
             const bcName = sourceWidget.bcName
+            const screenName = state.screen.screenName
             const filters = getFilters(state.screen.filters[bcName] || EMPTY_ARRAY)
             const bcUrl = buildBcUrl(bcName)
-            return fetchBcCount(bcUrl, filters).mergeMap(({ data }) =>
+            return fetchBcCount(screenName, bcUrl, filters).mergeMap(({ data }) =>
                 Observable.of(
                     $do.setBcCount({
                         bcName,

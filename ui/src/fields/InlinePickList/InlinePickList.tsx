@@ -4,8 +4,9 @@ import { useTranslation } from 'react-i18next'
 import { Icon, Select } from 'antd'
 import cn from 'classnames'
 import { DataItem, PickMap } from '@cxbox-ui/core/interfaces/data'
-import { ChangeDataItemPayload, BaseFieldProps } from '@cxbox-ui/core/components/Field/Field'
+import { BaseFieldProps } from '@cxbox-ui/core/components/Field/Field'
 import { InlinePickListFieldMeta } from '@cxbox-ui/schema/dist/interfaces/widget'
+import { DataValue } from '@cxbox-ui/schema'
 import { $do } from '../../actions/types'
 import { useDebounce } from '../../hooks/useDebounce'
 import ReadOnlyField from '../../components/ui/ReadOnlyField/ReadOnlyField'
@@ -49,13 +50,6 @@ const InlinePickList: React.FunctionComponent<Props> = ({
         }
     }, [processedSearchSpec, fieldName])
 
-    const onChange = useCallback(
-        (payload: ChangeDataItemPayload) => {
-            dispatch($do.changeDataItem(payload))
-        },
-        [dispatch]
-    )
-
     const onClick = useCallback(
         (bcName: string, pickMap: PickMap) => {
             dispatch($do.showViewPopup({ bcName }))
@@ -86,18 +80,24 @@ const InlinePickList: React.FunctionComponent<Props> = ({
         }
     }, [disabled, popupBcName, pickMap, onClick])
 
-    const handleChange = React.useCallback(
+    const onChange = React.useCallback(
         (valueKey: string) => {
             const row = data.find(item => item.id === valueKey)
+            const bcNameChanges: Record<string, DataValue> = {}
+
             Object.keys(pickMap).forEach(field => {
-                onChange({
+                bcNameChanges[field] = row ? row[pickMap[field]] : ''
+            })
+
+            dispatch(
+                $do.changeDataItem({
                     bcName: bcName || '',
                     cursor: cursor || '',
-                    dataItem: { [field]: row ? row[pickMap[field]] : '' }
+                    dataItem: bcNameChanges
                 })
-            })
+            )
         },
-        [onChange, pickMap, bcName, cursor, data]
+        [pickMap, bcName, cursor, data, dispatch]
     )
 
     if (readOnly) {
@@ -127,7 +127,7 @@ const InlinePickList: React.FunctionComponent<Props> = ({
                 showArrow={false}
                 filterOption={false}
                 onSearch={setSearchTerm}
-                onChange={handleChange}
+                onChange={onChange}
                 notFoundContent={null}
             >
                 {data.map(item => {

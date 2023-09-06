@@ -117,8 +117,9 @@ const InlinePickList: React.FunctionComponent<Props> = ({
     return (
         <span className={styles.inlinePickList}>
             <Select
+                className={cn(className, styles.select)}
                 disabled={disabled}
-                value={value}
+                value={value ?? undefined}
                 allowClear={!!value}
                 showSearch
                 placeholder={placeholder ?? t('Enter value')}
@@ -128,7 +129,6 @@ const InlinePickList: React.FunctionComponent<Props> = ({
                 onSearch={setSearchTerm}
                 onChange={handleChange}
                 notFoundContent={null}
-                className={className}
             >
                 {data.map(item => {
                     const title = item[pickMap[fieldName]] as string

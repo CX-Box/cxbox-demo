@@ -5,40 +5,59 @@
 
     :global {
         .ant-select {
+            width: 100%;
+
+            .ant-select-selection__placeholder {
+                padding-right: 11px;
+                padding-left: 11px;
+            }
+
+            .ant-select-search {
+                left: 0;
+
+                .ant-select-search__field {
+                    padding-right: 11px;
+                    padding-left: 11px;
+                }
+            }
+
             .ant-select-selection.ant-select-selection--single {
                 padding-right: 48px;
+
+                .ant-select-selection__rendered {
+                    margin: 0;
+                    padding-left: 11px;
+                }
             }
 
             .ant-select-selection__clear {
                 right: 43px;
                 transform: translateY(-50%);
                 margin: 0;
-                width: 14px;
-                height: 14px;
+                padding-left: 4px;
+                width: auto;
+                height: auto;
                 opacity: 1;
                 font-size: inherit;
                 color: rgba(0, 0, 0, 0.65);
+
+                svg {
+                    width: 14px;
+                    height: 14px;
+                }
             }
         }
     }
 }
 
-.select :global {
-    .ant-select-selection__placeholder {
-        padding-right: 11px;
-        padding-left: 11px;
-    }
-
-    .ant-select-search__field {
-        padding-right: 11px;
-        padding-left: 11px;
-    }
-}
-
 .buttonContainer {
     position: absolute;
-    top: 1px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
     right: 1px;
+    height: 100%;
     background-color: transparent;
     border-radius: 0 2px 2px 0;
     cursor: pointer;
@@ -46,16 +65,12 @@
     i {
         display: block;
         width: 32px;
-        height: 38px;
+        height: 100%;
         background: url('/assets/icons/folder.svg') no-repeat center right 12px;
 
         svg {
             display: none;
         }
-    }
-
-    svg {
-        display: none;
     }
 }
 

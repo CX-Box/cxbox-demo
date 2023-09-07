@@ -4,6 +4,17 @@
   height: 100%;
 }
 
+.appSpin {
+  height: inherit;
+  overflow: auto;
+}
+
+.appSpin > :global(.ant-spin-container) {
+  display: flex;
+  flex-direction: column;
+  height: inherit;
+}
+
 .appLayout {
   font-weight: 400;
   font-size: 14px;
@@ -39,5 +50,3 @@ body :global(.ant-popover) {
   padding-right: 56px;
   position: relative;
 }
-
-

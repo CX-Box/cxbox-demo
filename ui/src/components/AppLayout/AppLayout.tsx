@@ -13,10 +13,14 @@ import SystemNotifications from '../SystemNotifications/SystemNotifications'
 import ErrorPopup from '../containers/ErrorPopup/ErrorPopup'
 
 export const AppLayout: React.FC = () => {
+    const dispatch = useDispatch()
+
     const sessionActive = useSelector((state: AppState) => state.session.active)
     const logoutRequested = useSelector((state: AppState) => state.session.logout)
     const modalInvoke = useSelector((state: AppState) => state.view.modalInvoke)
-    const dispatch = useDispatch()
+
+    const { isMetaRefreshing, loginSpin } = useSelector((state: AppState) => state.session)
+    const appSpinning = isMetaRefreshing || loginSpin
 
     React.useEffect(() => {
         if (!sessionActive && !logoutRequested) {
@@ -26,17 +30,19 @@ export const AppLayout: React.FC = () => {
 
     return sessionActive ? (
         <Layout className={styles.root}>
-            <DevPanel />
-            <ErrorPopup />
-            {modalInvoke?.operation && <ModalInvoke />}
-            <SystemNotifications />
-            <Layout className={styles.appLayout}>
-                <AppSide />
-                <Layout.Content className={styles.mainContent}>
-                    <View />
-                    <AppBar />
-                </Layout.Content>
-            </Layout>
+            <Spin wrapperClassName={styles.appSpin} spinning={appSpinning}>
+                <DevPanel />
+                <ErrorPopup />
+                {modalInvoke?.operation && <ModalInvoke />}
+                <SystemNotifications />
+                <Layout className={styles.appLayout}>
+                    <AppSide />
+                    <Layout.Content className={styles.mainContent}>
+                        <View />
+                        <AppBar />
+                    </Layout.Content>
+                </Layout>
+            </Spin>
         </Layout>
     ) : (
         <div className={styles.spinContainer}>

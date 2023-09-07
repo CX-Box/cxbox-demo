@@ -1,9 +1,25 @@
 .inlinePickList {
-    display: table;
+    position: relative;
+    display: block;
     width: 100%;
-    :first-child {
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
+
+    :global {
+        .ant-select {
+            .ant-select-selection.ant-select-selection--single {
+                padding-right: 48px;
+            }
+
+            .ant-select-selection__clear {
+                right: 43px;
+                transform: translateY(-50%);
+                margin: 0;
+                width: 14px;
+                height: 14px;
+                opacity: 1;
+                font-size: inherit;
+                color: rgba(0, 0, 0, 0.65);
+            }
+        }
     }
 }
 
@@ -20,14 +36,27 @@
 }
 
 .buttonContainer {
-    display: table-cell;
-    background-color: #fafafa;
-    border: 1px solid #d9d9d9;
-    border-left: 0;
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    background-color: transparent;
     border-radius: 0 2px 2px 0;
-    width: 1px;
-    padding: 0 11px;
     cursor: pointer;
+
+    i {
+        display: block;
+        width: 32px;
+        height: 38px;
+        background: url('/assets/icons/folder.svg') no-repeat center right 12px;
+
+        svg {
+            display: none;
+        }
+    }
+
+    svg {
+        display: none;
+    }
 }
 
 .disabledButton {

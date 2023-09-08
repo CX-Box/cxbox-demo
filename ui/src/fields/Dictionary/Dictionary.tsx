@@ -1,20 +1,21 @@
 import React from 'react'
-import { DictionaryProps } from '@cxbox-ui/core/components/ui/Dictionary/Dictionary'
 import { useSelector } from 'react-redux'
-import { AppState } from '../../interfaces/storeSlices'
+import { DictionaryProps } from '@cxbox-ui/core/components/ui/Dictionary/Dictionary'
 import { buildBcUrl } from '@cxbox-ui/core'
-import styles from './Dictionary.module.css'
 import { RowMeta } from '@cxbox-ui/core/interfaces/rowMeta'
-import { EMPTY_ARRAY, opacitySuffix } from '../../constants/constants'
 import { Dictionary as CoreDictionary } from '@cxbox-ui/core'
+import { AppState } from '../../interfaces/storeSlices'
+import { EMPTY_ARRAY, opacitySuffix } from '../../constants/constants'
+import styles from './Dictionary.module.css'
 
 function Dictionary(props: DictionaryProps) {
-    const { value, meta, widgetName, backgroundColor } = props
+    const { value, meta, widgetName, backgroundColor, readOnly } = props
     const bcName = useSelector((state: AppState) => state.view.widgets?.find(i => i.name === widgetName)?.bcName)
     const bcUrl = bcName && buildBcUrl(bcName, true)
     const rowMeta = useSelector((state: AppState) => bcName && bcUrl && state.view.rowMeta[bcName]?.[bcUrl])
     const rowFieldMeta = (rowMeta as RowMeta)?.fields.find(field => field.key === meta?.key)
-    if (meta?.bgColorKey) {
+
+    if (readOnly) {
         return (
             <div
                 className={styles.coloredValue}

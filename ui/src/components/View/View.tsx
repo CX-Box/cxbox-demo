@@ -29,6 +29,7 @@ import { useSelector } from 'react-redux'
 import { AppState } from '../../interfaces/storeSlices'
 import ViewInfoLabel from '../DebugPanel/components/ViewInfoLabel'
 import PopupWidgetInfoLabel from '../DebugPanel/components/PopupWidgetInfoLabel'
+import FileUpload from '../../fields/FileUpload/FileUpload'
 
 const skipWidgetTypes: WidgetTypes[] = []
 
@@ -39,7 +40,8 @@ const customFields = {
     [FieldType.dictionary]: Dictionary,
     [FieldType.pickList]: PickListField,
     [FieldType.inlinePickList]: InlinePickList,
-    [CustomFieldTypes.MultipleSelect]: MultipleSelectField
+    [CustomFieldTypes.MultipleSelect]: MultipleSelectField,
+    [FieldType.fileUpload]: FileUpload
 }
 
 const customWidgets: Partial<Record<CustomWidgetTypes | WidgetTypes, CustomWidgetDescriptor>> = {

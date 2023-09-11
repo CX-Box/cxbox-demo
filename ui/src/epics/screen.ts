@@ -59,6 +59,22 @@ const processPreInvokeConfirm: Epic<AnyAction, AppState> = (action$, store) =>
         return Observable.empty()
     })
 
+const replaceTemporaryIdOnSavingEpic: Epic<AnyAction, AppState> = (action$, store) =>
+    action$.ofType(actionTypes.sendOperationSuccess, actionTypes.bcSaveDataSuccess).mergeMap(action => {
+        const state = store.getState()
+        const newCursor = action.payload.dataItem?.id
+
+        if (newCursor != null) {
+            window.location.href = `${window.location.href}`.replace(
+                `/${action.payload.bcName}/${state.bo.bc[action.payload.bcName].cursor}`,
+                `/${action.payload.bcName}/${newCursor}`
+            )
+        }
+
+        return Observable.empty()
+    })
+
 export const screenEpics = {
+    replaceTemporaryIdOnSavingEpic,
     processPreInvokeConfirm
 }

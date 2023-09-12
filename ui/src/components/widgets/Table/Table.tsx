@@ -1,5 +1,4 @@
 import React from 'react'
-import { WidgetTableMeta } from '@cxbox-ui/core/interfaces/widget'
 import { TableWidget } from '@cxbox-ui/core'
 import { ColumnProps } from 'antd/es/table'
 import { DataItem } from '@cxbox-ui/core/interfaces/data'
@@ -8,26 +7,31 @@ import { TableWidgetOwnProps } from '@cxbox-ui/core/components/widgets/TableWidg
 import ColumnTitle from '../../ColumnTitle/ColumnTitle'
 import { useExpandableForm } from './hooks/useExpandableForm'
 import styles from './Table.less'
-import { AppWidgetMeta } from '../../../interfaces/widget'
+import { AppWidgetMeta, AppWidgetTableMeta } from '../../../interfaces/widget'
 
+export type ControlColumn = { column: ColumnProps<DataItem>; position: 'left' | 'right' }
 interface TableProps extends TableWidgetOwnProps {
-    meta: WidgetTableMeta
+    meta: AppWidgetTableMeta
+    primaryColumn?: ControlColumn
 }
 
-function Table({ meta, ...rest }: TableProps) {
+function Table({ meta, primaryColumn, disablePagination, ...rest }: TableProps) {
     const { expandable, expandIcon, expandIconColumn, getExpandIconColumnIndex, expandedRowRender, expandedRowKeys } = useExpandableForm(
         meta as AppWidgetMeta
     )
 
     const controlColumns = React.useMemo(() => {
-        const resultColumns: Array<{ column: ColumnProps<DataItem>; position: 'left' | 'right' }> = []
+        const resultColumns: Array<ControlColumn> = []
+        if (meta.options?.primary?.enabled && primaryColumn) {
+            resultColumns.push(primaryColumn as any)
+        }
 
         if (expandIconColumn) {
             resultColumns.push({ column: expandIconColumn, position: 'right' })
         }
 
         return [...resultColumns]
-    }, [expandIconColumn])
+    }, [expandIconColumn, meta.options?.primary?.enabled, primaryColumn])
 
     return (
         <div className={styles.tableContainer}>
@@ -35,7 +39,7 @@ function Table({ meta, ...rest }: TableProps) {
                 meta={meta}
                 showRowActions={true}
                 controlColumns={controlColumns}
-                disablePagination
+                disablePagination={true}
                 {...rest}
                 columnTitleComponent={props => props && <ColumnTitle {...props} />}
                 expandedRowKeys={expandedRowKeys}
@@ -45,7 +49,7 @@ function Table({ meta, ...rest }: TableProps) {
                 expandIcon={expandIcon}
                 expandedRowRender={expandedRowRender}
             />
-            <Pagination meta={meta} />
+            {!disablePagination && <Pagination meta={meta} />}
         </div>
     )
 }

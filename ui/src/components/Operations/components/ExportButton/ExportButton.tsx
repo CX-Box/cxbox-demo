@@ -18,7 +18,7 @@ export const ExportButton: React.FC<ExportButtonProps> = ({ widgetMeta, exportWi
     const tableSorters = useSelector((state: AppState) => state.screen.sorters[bcName])
     const widgetData = useSelector((state: AppState) => state.data[bcName])
     const exportConfig = (widgetMeta as AppWidgetMeta).options?.export
-    const showExport = exportConfig?.show
+    const showExport = exportConfig?.enabled
     const title = exportConfig?.title ?? widgetMeta.title
     const filteredFields = useMemo(() => {
         return (widgetMeta.fields as WidgetListField[])?.filter(field => !field?.hidden)

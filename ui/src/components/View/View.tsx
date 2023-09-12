@@ -23,6 +23,7 @@ import DashboardList from '../widgets/DashboardList/DashboardList'
 import LevelMenu from '../widgets/LevelMenu/LevelMenu'
 import { Number } from '../../fields/NumberInput/NumberInput'
 import { FormPopup } from '../widgets/FormPopup/FormPopup'
+import MultivalueField from '../../fields/Multivalue/MultivalueField'
 import InlinePickList from '../../fields/InlinePickList/InlinePickList'
 import PickListField from '../../fields/PickListField/PickListField'
 import { useSelector } from 'react-redux'
@@ -38,6 +39,7 @@ const customFields = {
     [FieldType.percent]: Number,
     [FieldType.money]: Number,
     [FieldType.dictionary]: Dictionary,
+    [FieldType.multivalue]: MultivalueField,
     [FieldType.pickList]: PickListField,
     [FieldType.inlinePickList]: InlinePickList,
     [CustomFieldTypes.MultipleSelect]: MultipleSelectField,

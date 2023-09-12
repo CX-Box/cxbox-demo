@@ -2,7 +2,10 @@ import { actionTypes, AnyAction } from '../interfaces/actions'
 import { AppState } from '../interfaces/storeSlices'
 import { Session } from '@cxbox-ui/core/interfaces/session'
 
-export type CustomSession = Session & { logout: boolean }
+export type CustomSession = Session & {
+    logout: boolean
+    isMetaRefreshing: boolean
+}
 
 /**
  * Your initial state for this slice
@@ -11,7 +14,8 @@ export const initialState: CustomSession = {
     active: false,
     screens: [],
     loginSpin: false,
-    logout: false
+    logout: false,
+    isMetaRefreshing: false
 }
 
 export default function sessionReducer(state: CustomSession = initialState, action: AnyAction, store?: Readonly<AppState>): CustomSession {
@@ -32,6 +36,19 @@ export default function sessionReducer(state: CustomSession = initialState, acti
                 ...state,
                 active: true,
                 logout: false
+            }
+        }
+        case actionTypes.refreshMeta: {
+            return {
+                ...state,
+                isMetaRefreshing: true
+            }
+        }
+        case actionTypes.refreshMetaDone:
+        case actionTypes.refreshMetaFail: {
+            return {
+                ...state,
+                isMetaRefreshing: false
             }
         }
         default:

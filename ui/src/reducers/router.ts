@@ -1,30 +1,19 @@
-import { actionTypes, AnyAction } from '../interfaces/actions'
-import { AppState } from '../interfaces/storeSlices'
 import { Route } from '@cxbox-ui/core/interfaces/router'
-import { historyObj } from '@cxbox-ui/core'
+import { createReducer } from '@reduxjs/toolkit'
+import { createRouterReducerBuilderManager } from '@cxbox-ui/core/reducers'
+import { loginDone } from '@cxbox-ui/core/actions'
 
 /**
  * Your initial state for this slice
  */
-export const initialState: Route = { type: 'default' as any, path: '/', params: {}, screenName: undefined }
+const initialState: Route = { type: 'default' as any, path: '/', params: {}, screenName: undefined }
 
-export default function dataReducer(
-    state: Route = initialState,
-    action: AnyAction,
-    store?: Readonly<AppState>,
-    originalState?: Route
-): Route {
-    switch (action.type) {
-        case actionTypes.loginDone: {
-            return keycloakAwareParseLocation(historyObj.location)
-        }
-        /**
-         * Your reducers for this slice
-         */
-        default:
-            return state
-    }
-}
+export const routerReducer = createReducer(
+    initialState,
+    createRouterReducerBuilderManager(initialState).addCase(loginDone, (state, action) => {
+        state = keycloakAwareParseLocation(action.payload)
+    }).builder
+)
 
 /**
  * Copy of built-in parseLocation of Cxbox UI extended with a fix for malformed url, e.g.

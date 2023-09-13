@@ -1,42 +1,23 @@
-import { AnyAction, actionTypes } from '../interfaces/actions'
-import { AppState, ScreenState } from '../interfaces/storeSlices'
+import { createReducer } from '@reduxjs/toolkit'
+import { reducers } from '@cxbox-ui/core'
+import { changeMenuCollapsed, customAction } from '../actions/types'
 
 /**
  * Your initial state for this slice
  */
-export const initialState: ScreenState = {
-    menuCollapsed: false,
-    screenName: '',
-    bo: {
-        activeBcName: '',
-        bc: {}
-    },
-    views: [],
-    primaryView: '',
-    cachedBc: {},
-    filters: {},
-    sorters: {}
+const initialState = {
+    ...reducers.initialScreenState,
+    menuCollapsed: false
 }
 
-export default function screenReducer(state: ScreenState = initialState, action: AnyAction, store?: Readonly<AppState>): ScreenState {
-    switch (action.type) {
-        case actionTypes.changeMenuCollapsed: {
-            return {
-                ...state,
-                menuCollapsed: action.payload
-            }
-        }
-        /**
-         * Your reducers for this slice
-         */
-
-        /**
-         * An example reducer for custom action
-         */
-        case actionTypes.customAction: {
-            return state
-        }
-        default:
-            return state
-    }
-}
+export const screenReducer = createReducer(
+    initialState,
+    reducers
+        .createScreenReducerBuilderManager(initialState)
+        .addCase(changeMenuCollapsed, (state, action) => {
+            state.menuCollapsed = action.payload
+        })
+        .addCase(customAction, state => {
+            console.log(state)
+        }).builder
+)

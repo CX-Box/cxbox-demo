@@ -1,11 +1,9 @@
 import React from 'react'
 import { Menu } from 'antd'
-import { useDispatch, useSelector } from 'react-redux'
-import { AppState } from '../../../../interfaces/storeSlices'
-import { $do } from '@cxbox-ui/core'
+import { useAppSelector } from '../../../../store'
 
 export const UserMenuContent: React.FC = () => {
-    const { firstName, lastName, login, activeRole, roles } = useSelector((state: AppState) => {
+    const { firstName, lastName, login, activeRole, roles } = useAppSelector(state => {
         return {
             firstName: state.session.firstName,
             lastName: state.session.lastName,

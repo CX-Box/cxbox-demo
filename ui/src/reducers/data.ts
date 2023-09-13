@@ -1,18 +1,9 @@
-import { AnyAction } from '../interfaces/actions'
-import { AppState } from '../interfaces/storeSlices'
-import { DataState } from '@cxbox-ui/core/interfaces/data'
+import { reducers } from '@cxbox-ui/core'
+import { createReducer } from '@reduxjs/toolkit'
 
 /**
  * Your initial state for this slice
  */
-export const initialState: DataState = {}
+const initialState = {}
 
-export default function dataReducer(state: DataState = initialState, action: AnyAction, store?: Readonly<AppState>): DataState {
-    switch (action.type) {
-        /**
-         * Your reducers for this slice
-         */
-        default:
-            return state
-    }
-}
+export const dataReducer = createReducer(initialState, reducers.createDataReducerBuilderManager(initialState).builder)

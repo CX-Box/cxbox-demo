@@ -1,6 +1,5 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { AppState } from '../../interfaces/storeSlices'
 import SystemAlert from './components/SystemAlert'
 
 export default function SystemNotifications() {

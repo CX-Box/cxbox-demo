@@ -1,40 +1,23 @@
 import { actionTypes, AnyAction } from '../interfaces/actions'
 import { AppState } from '../interfaces/storeSlices'
-import { Session } from '@cxbox-ui/core/interfaces/session'
-
-export type CustomSession = Session & { logout: boolean }
+import { Session } from '@cxbox-ui/core/interfaces'
+import { reducers, actions } from '@cxbox-ui/core'
+import { createReducer } from '@reduxjs/toolkit'
 
 /**
- * Your initial state for this slice
+ * Your reducers for this slice
  */
-export const initialState: CustomSession = {
-    active: false,
-    screens: [],
-    loginSpin: false,
-    logout: false
-}
-
-export default function sessionReducer(state: CustomSession = initialState, action: AnyAction, store?: Readonly<AppState>): CustomSession {
-    switch (action.type) {
-        /**
-         * Your reducers for this slice
-         */
-        case actionTypes.logout: {
-            return {
-                ...state,
-                loginSpin: false,
-                active: false,
-                logout: true
-            }
-        }
-        case actionTypes.loginDone: {
-            return {
-                ...state,
-                active: true,
-                logout: false
-            }
-        }
-        default:
-            return state
-    }
-}
+export const sessionReducer = createReducer(
+    reducers.initialSessionState,
+    reducers
+        .createSessionReducerBuilderManager(reducers.initialSessionState)
+        .addCase(actions.logout, state => {
+            state.logout = true
+            state.active = false
+            state.loginSpin = false
+        })
+        .addCase(actions.loginDone, state => {
+            state.active = true
+            state.logout = false
+        }).builder
+)

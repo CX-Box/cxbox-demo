@@ -3,12 +3,11 @@ import { Menu } from 'antd'
 import { changeLocation } from '@cxbox-ui/core'
 import styles from './ScreenNavigation.module.css'
 import { ClickParam } from 'antd/lib/menu'
-import { useSelector } from 'react-redux'
-import { AppState } from '../../interfaces/storeSlices'
+import { useAppSelector } from '../../store'
 
 function ScreenNavigation() {
-    const screens = useSelector((state: AppState) => state.session.screens)
-    const screenName = useSelector((state: AppState) => state.router.screenName)
+    const screens = useAppSelector(state => state.session.screens)
+    const screenName = useAppSelector(state => state.router.screenName)
     const selectedScreen = screens.find(item => item.name === screenName) || screens.find(screen => screen.defaultScreen) || screens[0]
     const screenUrl = selectedScreen?.url ?? `/screen/${screenName}`
     const handleScreen = (e: ClickParam) => {

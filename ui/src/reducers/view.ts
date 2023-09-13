@@ -1,6 +1,7 @@
-import { actionTypes, AnyAction } from '../interfaces/actions'
-import { AppState } from '../interfaces/storeSlices'
-import { ViewState } from '@cxbox-ui/core/interfaces/view'
+import { reducers } from '@cxbox-ui/core'
+import { createReducer } from '@reduxjs/toolkit'
+import { setBcCount } from '../actions/types'
+import { ViewState } from '@cxbox-ui/core/interfaces'
 
 export type CustomView = ViewState & {
     bcRecordsCount: {
@@ -29,24 +30,13 @@ export const initialState: CustomView = {
     bcRecordsCount: {}
 }
 
-export default function viewReducer(state: CustomView = initialState, action: AnyAction, store?: Readonly<AppState>): CustomView {
-    switch (action.type) {
-        /**
-         * Your reducers for this slice
-         */
-
-        case actionTypes.setBcCount: {
-            const { bcName: bcCountName, count } = action.payload
-
-            return {
-                ...state,
-                bcRecordsCount: {
-                    ...state.bcRecordsCount,
-                    [bcCountName]: { count }
-                }
-            }
-        }
-        default:
-            return state
-    }
-}
+/**
+ * Your reducers for this slice
+ */
+export const viewReducer = createReducer(
+    initialState,
+    reducers.createViewReducerBuilderManager(initialState).addCase(setBcCount, (state, action) => {
+        const { bcName: bcCountName, count } = action.payload
+        state.bcRecordsCount[bcCountName].count = count
+    }).builder
+)

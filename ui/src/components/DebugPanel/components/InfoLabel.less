@@ -1,0 +1,33 @@
+@import '../../../assets/styles/theme';
+
+.container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.label {
+    font-size: 14px;
+    font-weight: bold;
+    color: @debug-text;
+}
+
+.element {
+    :global {
+        .ant-input {
+            border-color: @debug-main;
+            background: @debug-element;
+            color: @debug-text;
+        }
+
+        .ant-input-group-addon {
+            border-color: @debug-main;
+            background: @debug-element;
+            color: @debug-text;
+        }
+    }
+}
+
+.halfElement:global(.ant-input-group-wrapper) {
+    width: 150px;
+}

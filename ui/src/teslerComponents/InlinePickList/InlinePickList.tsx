@@ -11,7 +11,7 @@ import cn from 'classnames'
 import { useTranslation } from 'react-i18next'
 import { DataItem, PickMap } from '@cxbox-ui/core'
 import { useDebounce } from '@cxbox-ui/core'
-import { $do } from '@actions/types'
+import { $do } from '@actions'
 import { FrownOutlined } from '@ant-design/icons'
 
 interface InlinePickListOwnProps extends BaseFieldProps {

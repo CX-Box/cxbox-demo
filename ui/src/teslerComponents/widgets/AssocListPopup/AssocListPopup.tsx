@@ -1,6 +1,5 @@
 import React from 'react'
-import { connect, useSelector } from 'react-redux'
-import { Store } from '@interfaces/store'
+import { connect } from 'react-redux'
 import Popup, { PopupProps } from '@teslerComponents/ui/Popup/Popup'
 import HierarchyTable from '@teslerComponents/HierarchyTable/HierarchyTable'
 import AssocTable from './AssocTable'
@@ -8,13 +7,9 @@ import { Skeleton, Tag } from 'antd'
 import FullHierarchyTable from '@teslerComponents/FullHierarchyTable/FullHierarchyTable'
 import styles from '@teslerComponents/ui/Popup/Popup.less'
 import { DataValue } from '@cxbox-ui/schema'
-import { BcFilter, FilterType } from '@cxbox-ui/core'
-import { AssociatedItem } from '@cxbox-ui/core'
-import { WidgetTableMeta } from '@cxbox-ui/core'
-import { DataItem, PendingDataItem } from '@cxbox-ui/core'
-import { useAssocRecords } from '@cxbox-ui/core'
-import { createMapDispatchToProps } from '@cxbox-ui/core'
-import { $do } from '@actions/types'
+import { BcFilter, FilterType, AssociatedItem, WidgetTableMeta, DataItem, PendingDataItem } from '@cxbox-ui/core/interfaces'
+import { RootState, useAppSelector } from '@store'
+import { emptyAction } from '@cxbox-ui/core/actions'
 
 export interface IAssocListRecord {
     id: string
@@ -107,7 +102,7 @@ export const AssocListPopup = ({
         onClose()
     }, [pendingBcNames, onSave, onClose])
 
-    const viewName = useSelector((store: Store) => {
+    const viewName = useAppSelector(store => {
         return store.view.name
     })
 
@@ -129,7 +124,7 @@ export const AssocListPopup = ({
                       fieldName: associateFieldKey,
                       value: currentFilters
                   })
-                : $do.emptyAction(null)
+                : emptyAction()
         }
         onClose()
     }, [onFilter, onRemoveFilter, bcFilters, onClose, calleeBCName, associateFieldKey, selectedRecords, calleeWidgetName, viewName])
@@ -226,7 +221,7 @@ export const AssocListPopup = ({
     )
 }
 
-function mapStateToProps(store: Store, ownProps: IAssocListOwnProps) {
+function mapStateToProps(store: RootState, ownProps: IAssocListOwnProps) {
     const bcName = ownProps.widget?.bcName
     const bc = store.screen.bo.bc[bcName]
     const isFilter = store.view.popupData.isFilter

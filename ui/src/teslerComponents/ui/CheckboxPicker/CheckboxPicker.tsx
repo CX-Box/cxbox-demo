@@ -3,14 +3,13 @@ import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { Checkbox } from 'antd'
 import { CheckboxChangeEvent } from 'antd/es/checkbox'
-import { Store } from '@interfaces/store'
 import styles from './CheckboxPicker.less'
 import { ChangeDataItemPayload } from '@teslerComponents/Field/Field'
 import { DataValue } from '@cxbox-ui/schema'
-import { RowMetaField } from '@cxbox-ui/core'
-import { PendingDataItem } from '@cxbox-ui/core'
+import { RowMetaField, PendingDataItem } from '@cxbox-ui/core/interfaces'
 import { buildBcUrl } from '@cxbox-ui/core'
-import { $do } from '@actions/types'
+import { RootState } from '@store'
+import { changeDataItem } from '@cxbox-ui/core/actions'
 
 export interface CheckboxPickerOwnProps {
     fieldName: string
@@ -56,7 +55,7 @@ const CheckboxPicker: React.FC<CheckboxPickerProps> = ({ metaField, bcName, curs
     )
 }
 
-function mapStateToProps(store: Store, ownProps: CheckboxPickerOwnProps) {
+function mapStateToProps(store: RootState, ownProps: CheckboxPickerOwnProps) {
     const bcUrl = buildBcUrl(ownProps.bcName, true)
     const metaField = bcUrl && store.view.rowMeta[ownProps.bcName]?.[bcUrl]?.fields?.find(field => field.key === ownProps.fieldName)
     return {
@@ -67,7 +66,7 @@ function mapStateToProps(store: Store, ownProps: CheckboxPickerOwnProps) {
 function mapDispatchToProps(dispatch: Dispatch) {
     return {
         onChange: (payload: ChangeDataItemPayload) => {
-            dispatch($do.changeDataItem(payload))
+            dispatch(changeDataItem(payload))
         }
     }
 }

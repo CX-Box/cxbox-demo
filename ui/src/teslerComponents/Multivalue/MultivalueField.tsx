@@ -6,7 +6,7 @@ import MultivalueTag from '@teslerComponents/ui/Multivalue/MultivalueTag'
 import { WidgetTypes } from '@cxbox-ui/schema'
 import { MultivalueSingleValue } from '@cxbox-ui/core'
 import { MultivalueFieldMeta } from '@cxbox-ui/core'
-import { $do } from '@actions/types'
+import { $do } from '@actions'
 
 export interface MultivalueFieldOwnProps {
     widgetName: string // TODO: for future pagination support

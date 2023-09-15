@@ -1,10 +1,10 @@
 import { LoginResponse } from '@cxbox-ui/core/interfaces/session'
-import { SSO_AUTH } from '../actions/types'
+import { SSO_AUTH } from '@actions'
 import { AxiosError } from 'axios'
 import { keycloak, keycloakOptions } from '../keycloak'
 import { catchError, EMPTY, filter, from, mergeMap, of, switchMap } from 'rxjs'
 import { login, loginDone, loginFail, logout, logoutDone } from '@cxbox-ui/core/actions'
-import { RootEpic } from '../store'
+import { RootEpic } from '@store'
 
 const responseStatusMessages: Record<number, string> = {
     401: 'Unauthorized',

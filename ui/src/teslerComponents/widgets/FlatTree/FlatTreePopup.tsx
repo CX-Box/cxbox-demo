@@ -24,7 +24,7 @@ import { PopupFooter } from '@teslerComponents/ui/Popup/PopupFooter'
 import { useSingleSelect } from './useSingleSelect'
 import { useMultipleSelect } from './useMultipleSelect'
 import { WidgetTableMeta } from '@cxbox-ui/core'
-import { $do } from '@actions/types'
+import { $do } from '@actions'
 import { PickListPopup } from '@teslerComponents'
 
 /**

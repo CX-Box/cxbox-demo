@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 import cn from 'classnames'
 import styles from './ModalInvoke.less'
 import { OperationModalInvokeConfirm, OperationPostInvokeConfirmType, OperationPreInvokeType } from '@cxbox-ui/core'
-import { $do } from '@actions/types'
+import { $do } from '@actions'
 
 interface ModalInvokeOwnProps {
     className?: string

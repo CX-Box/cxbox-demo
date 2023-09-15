@@ -4,7 +4,7 @@ import { RootEpic } from '../store'
 import { catchError, EMPTY, filter, mergeMap, of } from 'rxjs'
 import { bcFetchDataSuccess } from '@cxbox-ui/core/actions'
 import { BcFilter } from '@cxbox-ui/core/interfaces'
-import { setBcCount } from '../actions/types'
+import { setBcCount } from '@actions'
 
 const bcFetchCountEpic: RootEpic = (action$, state$, { api }) =>
     action$.pipe(

@@ -7,12 +7,19 @@ import styles from './AssocListPopup.module.css'
 import Pagination from '../../ui/Pagination/Pagination'
 import OperationButton from '../../ui/OperationButton/OperationButton'
 import { useDispatch, useSelector } from 'react-redux'
-import { $do } from '../../../actions/types'
-import { AppState } from '../../../interfaces/storeSlices'
 import { BcFilter, FilterType } from '@cxbox-ui/core/interfaces/filters'
 import { DataItem } from '@cxbox-ui/core/interfaces/data'
 import { AssociatedItem } from '@cxbox-ui/core/interfaces/operation'
 import { EMPTY_ARRAY } from '../../../constants/constants'
+import { useAppSelector } from '../../../store'
+import {
+    bcAddFilter,
+    bcCancelPendingChanges,
+    bcForceUpdate,
+    bcRemoveFilter,
+    closeViewPopup,
+    saveAssociations
+} from '@cxbox-ui/core/actions'
 
 const emptyData: AssociatedItem[] = []
 
@@ -23,8 +30,8 @@ interface AssocListPopupProps {
 function AssocListPopup({ meta }: AssocListPopupProps) {
     const { bcName } = meta
     const isFullHierarchy = !!meta.options?.hierarchyFull
-    const { associateFieldKey, pendingDataChanges, data, bcFilters, isFilter, calleeBCName, calleeWidgetName, viewName } = useSelector(
-        (store: AppState) => {
+    const { associateFieldKey, pendingDataChanges, data, bcFilters, isFilter, calleeBCName, calleeWidgetName, viewName } = useAppSelector(
+        store => {
             const isFilter = store.view.popupData?.isFilter
             const calleeBCName = store.view.popupData?.calleeBCName
             const calleeWidgetName = store.view.popupData?.calleeWidgetName
@@ -54,37 +61,37 @@ function AssocListPopup({ meta }: AssocListPopupProps) {
     const selectedRecords = useAssocRecords(data, pendingDataChanges)
     const dispatch = useDispatch()
     const onClose = React.useCallback(() => {
-        dispatch($do.closeViewPopup({ bcName }))
+        dispatch(closeViewPopup({ bcName }))
         if (isFullHierarchy) {
-            dispatch($do.bcCancelPendingChanges({ bcNames: [bcName] }))
+            dispatch(bcCancelPendingChanges({ bcNames: [bcName] }))
         }
     }, [bcName, dispatch, isFullHierarchy])
     const onCancel = React.useCallback(() => {
-        dispatch($do.closeViewPopup({ bcName }))
+        dispatch(closeViewPopup({ bcName }))
         if (isFullHierarchy) {
-            dispatch($do.bcCancelPendingChanges({ bcNames: [bcName] }))
+            dispatch(bcCancelPendingChanges({ bcNames: [bcName] }))
         }
         onClose()
     }, [bcName, dispatch, isFullHierarchy, onClose])
     const onFilter = React.useCallback(
         (bcName: string, filter: BcFilter) => {
-            dispatch($do.bcAddFilter({ bcName, filter }))
-            dispatch($do.bcForceUpdate({ bcName }))
+            dispatch(bcAddFilter({ bcName, filter }))
+            dispatch(bcForceUpdate({ bcName }))
         },
         [dispatch]
     )
     const onRemoveFilter = React.useCallback(
         (bcName: string, filter: BcFilter) => {
-            dispatch($do.bcRemoveFilter({ bcName, filter }))
-            dispatch($do.bcForceUpdate({ bcName, widgetName: filter.widgetName }))
+            dispatch(bcRemoveFilter({ bcName, filter }))
+            dispatch(bcForceUpdate({ bcName, widgetName: filter.widgetName }))
         },
         [dispatch]
     )
     const onSave = React.useCallback(
         (bcName: string, bcNames: string[], isFullHierarchy: boolean) => {
-            dispatch($do.saveAssociations({ bcNames }))
+            dispatch(saveAssociations({ bcNames }))
             if (isFullHierarchy) {
-                dispatch($do.bcCancelPendingChanges({ bcNames: [bcName] }))
+                dispatch(bcCancelPendingChanges({ bcNames: [bcName] }))
             }
         },
         [dispatch]

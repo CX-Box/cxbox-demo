@@ -1,17 +1,16 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { AppState } from '@interfaces/storeSlices'
-import { $do } from '@actions/types'
 import { notification } from 'antd'
-import { Notification } from '@cxbox-ui/core'
+import { Notification } from '@cxbox-ui/core/interfaces'
 import { IconType } from 'antd/es/notification'
 import { useTranslation } from 'react-i18next'
 import { openButtonWarningNotification } from '@utils/notifications'
+import { useAppDispatch, useAppSelector } from '@store'
+import { removeNotifications } from '@cxbox-ui/core/actions'
 
 export function Notifications() {
     const { currentNotifications } = useNotifications()
     const { t } = useTranslation()
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
     useEffect(() => {
         if (!currentNotifications.length) {
@@ -82,7 +81,7 @@ const getUnusedNotifications = (newNotifications: Notification[], currentNotific
  *
  */
 function useNotifications() {
-    const notifications = useSelector((state: AppState) => state.session.notifications)
+    const notifications = useAppSelector(state => state.session.notifications)
     const [currentNotifications, setCurrentNotifications] = useState<typeof notifications>([])
 
     useEffect(() => {
@@ -91,11 +90,11 @@ function useNotifications() {
         }
     }, [currentNotifications, notifications])
 
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
-    const removeNotifications = useCallback(
+    const removeNotificationscb = useCallback(
         (notificationKeys: string[]) => {
-            dispatch($do.removeNotifications(notificationKeys))
+            dispatch(removeNotifications(notificationKeys))
             setCurrentNotifications([])
         },
         [dispatch]

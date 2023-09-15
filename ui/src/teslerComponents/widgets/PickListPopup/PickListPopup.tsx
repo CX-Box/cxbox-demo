@@ -17,7 +17,7 @@ import { RowMetaField } from '@cxbox-ui/core'
 import { FieldType } from '@cxbox-ui/core'
 import { buildBcUrl } from '@cxbox-ui/core'
 import { createMapDispatchToProps } from '@cxbox-ui/core'
-import { $do } from '@actions/types'
+import { $do } from '@actions'
 
 export interface PickListPopupActions {
     onChange: (payload: ChangeDataItemPayload) => void

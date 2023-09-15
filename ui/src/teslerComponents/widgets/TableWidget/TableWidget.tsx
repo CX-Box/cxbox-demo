@@ -23,7 +23,7 @@ import { FieldType, ViewSelectedCell } from '@cxbox-ui/core'
 import { Operation, OperationGroup } from '@cxbox-ui/core'
 import { BcFilter, FilterGroup } from '@cxbox-ui/core'
 import { buildBcUrl, parseFilters, useRowMenu } from '@cxbox-ui/core'
-import { $do } from '@actions/types'
+import { $do } from '@actions'
 
 type AdditionalAntdTableProps = Partial<Omit<TableProps<DataItem>, 'rowSelection'>>
 export interface TableWidgetOwnProps extends AdditionalAntdTableProps {

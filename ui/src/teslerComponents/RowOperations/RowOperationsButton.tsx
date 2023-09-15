@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux'
 import { DataItem } from '@cxbox-ui/schema'
 import RowOperationsMenu from './RowOperationsMenu'
 import { WidgetTableMeta } from '@cxbox-ui/core'
-import { $do } from '@actions/types'
+import { $do } from '@actions'
 import { useRowMenuInstance } from '@cxbox-ui/core'
 
 /**

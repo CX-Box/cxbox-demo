@@ -6,7 +6,7 @@ import { BaseFieldProps, ChangeDataItemPayload } from '@teslerComponents/Field/F
 import { Store } from '@interfaces/store'
 import { WidgetTypes } from '@cxbox-ui/schema'
 import { PickMap } from '@cxbox-ui/core'
-import { $do } from '@actions/types'
+import { $do } from '@actions'
 
 interface IPickListWidgetInputOwnProps extends BaseFieldProps {
     parentBCName: string

@@ -1,6 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit'
 import { reducers } from '@cxbox-ui/core'
-import { changeMenuCollapsed, customAction } from '../actions/types'
+import { changeMenuCollapsed, customAction } from '@actions'
 
 /**
  * Your initial state for this slice

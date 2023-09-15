@@ -5,7 +5,7 @@ import styles from './AppBar.module.css'
 import { Layout } from 'antd'
 import cn from 'classnames'
 import { WidgetTypes } from '@cxbox-ui/core/interfaces/widget'
-import { useAppSelector } from '../../store'
+import { useAppSelector } from '@store'
 
 function AppBar() {
     const widgets = useAppSelector(state => state.view.widgets)

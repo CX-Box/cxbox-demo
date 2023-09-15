@@ -1,10 +1,9 @@
 import React from 'react'
 import { Collapse } from 'antd'
-import { useSelector } from 'react-redux'
-import { Store } from '@interfaces/store'
 import FormattedJSON from './components/FormattedJSON'
 import WidgetInfoLabel from './components/WidgetInfoLabel'
-import { WidgetMeta } from '@cxbox-ui/core'
+import { WidgetMeta } from '@cxbox-ui/core/interfaces'
+import { useAppSelector } from '../../store'
 
 interface DebugPanelProps {
     widgetMeta: WidgetMeta
@@ -13,9 +12,9 @@ interface DebugPanelProps {
 const DebugPanel: React.FunctionComponent<DebugPanelProps> = props => {
     const { widgetMeta } = props
     const { Panel } = Collapse
-    const widget = useSelector((store: Store) => store.view.widgets.find(i => i.name === widgetMeta.name))
-    const bc = useSelector((store: Store) => store.screen.bo.bc[widgetMeta.bcName])
-    const data = useSelector((store: Store) => store.data[widgetMeta.bcName])
+    const widget = useAppSelector(store => store.view.widgets.find(i => i.name === widgetMeta.name))
+    const bc = useAppSelector(store => store.screen.bo.bc[widgetMeta.bcName])
+    const data = useAppSelector(store => store.data[widgetMeta.bcName])
     const widgetText = `"name": "${widget.name ?? ''}"`
     const titleText = `"title": "${widget.title ?? ''}"`
     const bcText = `"bc": "${widget.bcName ?? ''}"`

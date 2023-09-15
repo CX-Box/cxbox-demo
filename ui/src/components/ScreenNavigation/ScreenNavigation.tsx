@@ -2,7 +2,6 @@ import React from 'react'
 import { Menu } from 'antd'
 import { changeLocation } from '@cxbox-ui/core'
 import styles from './ScreenNavigation.module.css'
-import { ClickParam } from 'antd/lib/menu'
 import { useAppSelector } from '../../store'
 
 function ScreenNavigation() {

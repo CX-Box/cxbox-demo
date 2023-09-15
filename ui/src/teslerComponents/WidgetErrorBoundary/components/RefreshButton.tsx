@@ -2,7 +2,7 @@ import React from 'react'
 import { Button } from 'antd'
 import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { $do } from '@actions/types'
+import { $do } from '@actions'
 
 function RefreshButton() {
     const dispatch = useDispatch()

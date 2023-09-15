@@ -1,10 +1,9 @@
 import React from 'react'
 import { WidgetTableMeta } from '@cxbox-ui/core/interfaces/widget'
 import { Dropdown, Button } from 'antd'
-import { useDispatch } from 'react-redux'
-import { $do } from '../../../../actions/types'
-import { RowOperationsMenu } from '@cxbox-ui/core'
 import styles from './MenuColumn.module.css'
+import { bcSelectRecord } from '@cxbox-ui/core/actions'
+import { useAppDispatch } from '../../../../store'
 
 interface MenuColumnProps {
     meta: WidgetTableMeta
@@ -13,11 +12,11 @@ interface MenuColumnProps {
 
 function MenuColumn({ meta, rowKey }: MenuColumnProps) {
     const { bcName } = meta
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
     const [showMenu, setShowMenu] = React.useState(false)
 
     const handleFetchMeta = React.useCallback(() => {
-        dispatch($do.bcSelectRecord({ bcName, cursor: rowKey }))
+        dispatch(bcSelectRecord({ bcName, cursor: rowKey }))
     }, [bcName, rowKey, dispatch])
 
     const handleVisibleChange = React.useCallback(

@@ -7,7 +7,7 @@ import ActionLink from '@teslerComponents/ui/ActionLink/ActionLink'
 import { MultivalueSingleValue, RecordSnapshotState } from '@cxbox-ui/core'
 import { DrillDownType } from '@cxbox-ui/core'
 import { store } from '@cxbox-ui/core'
-import { $do } from '@actions/types'
+import { $do } from '@actions'
 
 export interface MultiValueListRecordOwnProps {
     multivalueSingleValue: MultivalueSingleValue

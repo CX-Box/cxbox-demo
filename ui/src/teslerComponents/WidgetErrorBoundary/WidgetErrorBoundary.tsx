@@ -2,7 +2,7 @@ import React from 'react'
 import DebugPanel from '@teslerComponents/DebugPanel/DebugPanel'
 import RefreshButton from './components/RefreshButton'
 import styles from './WidgetErrorBoundary.less'
-import { WidgetMeta } from '@cxbox-ui/core'
+import { WidgetMeta } from '@cxbox-ui/core/interfaces'
 
 interface ErrorBoundaryProps {
     meta?: WidgetMeta

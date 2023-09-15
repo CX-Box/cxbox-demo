@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 import styles from './RowOperationsMenu.less'
 import { WidgetMeta } from '@cxbox-ui/core'
 import { buildBcUrl, useWidgetOperations } from '@cxbox-ui/core'
-import { $do } from '@actions/types'
+import { $do } from '@actions'
 import { isOperationGroup, Operation } from '@cxbox-ui/core'
 import { FrownOutlined } from '@ant-design/icons'
 

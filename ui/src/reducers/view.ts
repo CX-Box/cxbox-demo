@@ -1,6 +1,6 @@
 import { reducers } from '@cxbox-ui/core'
 import { createReducer } from '@reduxjs/toolkit'
-import { setBcCount } from '../actions/types'
+import { setBcCount } from '@actions'
 import { ViewState } from '@cxbox-ui/core/interfaces'
 
 export type CustomView = ViewState & {

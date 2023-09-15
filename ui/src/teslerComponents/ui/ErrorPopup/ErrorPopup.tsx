@@ -7,7 +7,7 @@ import { Dispatch } from 'redux'
 import { connect } from 'react-redux'
 import { Store } from '@interfaces/store'
 import { ApplicationError, ApplicationErrorType, BusinessError, SystemError } from '@cxbox-ui/core'
-import { $do } from '@actions/types'
+import { $do } from '@actions'
 import { FrownOutlined } from '@ant-design/icons'
 
 export interface ErrorPopupOwnProps {

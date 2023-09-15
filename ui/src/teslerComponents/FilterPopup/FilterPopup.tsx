@@ -29,7 +29,7 @@ import { DataValue, FieldType } from '@cxbox-ui/schema'
 import { WidgetField } from '@cxbox-ui/core'
 import { BcFilter, FilterType } from '@cxbox-ui/core'
 import { getFilterType } from '@cxbox-ui/core'
-import { $do } from '@actions/types'
+import { $do } from '@actions'
 
 export interface FilterPopupProps {
     widgetName: string

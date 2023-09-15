@@ -12,7 +12,7 @@ import { AssociatedItem } from '@cxbox-ui/core'
 import { Route } from '@cxbox-ui/core'
 import { useAssocRecords } from '@cxbox-ui/core'
 import { FieldType } from '@cxbox-ui/core'
-import { $do } from '@actions/types'
+import { $do } from '@actions'
 
 interface SameBcHierarchyTableOwnProps {
     meta: WidgetTableMeta

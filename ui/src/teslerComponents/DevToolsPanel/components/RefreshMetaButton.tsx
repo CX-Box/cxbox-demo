@@ -2,7 +2,7 @@ import React from 'react'
 import { Button, Tooltip } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
-import { $do } from '@actions/types'
+import { $do } from '@actions'
 
 interface RefreshMetaButtonProps {
     className?: string

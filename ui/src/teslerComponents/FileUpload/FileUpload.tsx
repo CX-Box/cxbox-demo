@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next'
 import { ChangeDataItemPayload } from '@teslerComponents/Field/Field'
 import { DataItem } from '@cxbox-ui/core'
 import { applyParams, getFileUploadEndpoint } from '@cxbox-ui/core'
-import { $do } from '@actions/types'
+import { $do } from '@actions'
 import { FrownOutlined } from '@ant-design/icons'
 
 export interface FileUploadOwnProps {

@@ -8,7 +8,7 @@ import { WidgetInfoField, WidgetInfoMeta } from '@cxbox-ui/core'
 import { DataItem } from '@cxbox-ui/core'
 import { RowMetaField } from '@cxbox-ui/core'
 import { buildBcUrl, useFlatFormFields } from '@cxbox-ui/core'
-import { $do } from '@actions/types'
+import { $do } from '@actions'
 
 interface InfoWidgetOwnProps {
     meta: WidgetInfoMeta

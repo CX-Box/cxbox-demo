@@ -3,7 +3,7 @@ import { Button, Tooltip } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Store } from '@cxbox-ui/core'
-import { $do } from '@actions/types'
+import { $do } from '@actions'
 
 interface DebugModeButtonProps {
     className?: string

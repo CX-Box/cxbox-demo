@@ -6,7 +6,7 @@ import { Store } from '@interfaces/store'
 import { Popup } from '@teslerComponents/ui/Popup/Popup'
 import styles from './FileUploadPopup.less'
 import { getFileUploadEndpoint } from '@cxbox-ui/core'
-import { $do } from '@actions/types'
+import { $do } from '@actions'
 import { FrownOutlined } from '@ant-design/icons'
 
 /**

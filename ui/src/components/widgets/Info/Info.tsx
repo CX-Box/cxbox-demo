@@ -1,11 +1,10 @@
 import React from 'react'
 import { WidgetInfoMeta, WidgetInfoField } from '@cxbox-ui/core/interfaces/widget'
-import { useFlatFormFields } from '@cxbox-ui/core'
-import { useDispatch, useSelector } from 'react-redux'
-import { AppState } from '../../../interfaces/storeSlices'
-import { $do } from '../../../actions/types'
+// import { useFlatFormFields } from '@cxbox-ui/core
 import InfoRow from './components/InfoRow'
 import { Row } from 'antd'
+import { useAppDispatch, useAppSelector } from '../../../store'
+import { userDrillDown } from '@cxbox-ui/core/actions'
 
 interface InfoProps {
     meta: WidgetInfoMeta
@@ -19,11 +18,11 @@ interface InfoProps {
  */
 function Info({ meta }: InfoProps) {
     const { bcName, name, options } = meta
-    const cursor = useSelector((state: AppState) => state.screen.bo.bc[bcName]?.cursor || '')
-    const dispatch = useDispatch()
+    const cursor = useAppSelector(state => state.screen.bo.bc[bcName]?.cursor || '')
+    const dispatch = useAppDispatch()
     const handleDrillDown = React.useCallback(
         (dataId: string, fieldKey: string) => {
-            dispatch($do.userDrillDown({ widgetName: name, cursor: dataId, bcName, fieldKey }))
+            dispatch(userDrillDown({ widgetName: name, cursor: dataId, bcName, fieldKey }))
         },
         [dispatch, name, bcName]
     )

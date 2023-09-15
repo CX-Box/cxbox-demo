@@ -30,7 +30,7 @@ import { DataValue } from '@cxbox-ui/schema'
 import { RowMetaField } from '@cxbox-ui/core'
 import { FieldType, PendingValidationFails, PendingValidationFailsFormat } from '@cxbox-ui/core'
 import { buildBcUrl, useDrillDownUrl } from '@cxbox-ui/core'
-import { $do } from '@actions/types'
+import { $do } from '@actions'
 import { FrownOutlined } from '@ant-design/icons'
 
 interface FieldOwnProps {

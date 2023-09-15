@@ -2,7 +2,7 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Pagination as AntPagination } from 'antd'
 import styles from './Pagination.module.css'
-import { $do } from '../../../actions/types'
+import { $do } from '@actions'
 import { WidgetTableMeta } from '@cxbox-ui/core/interfaces/widget'
 import { AppState } from '../../../interfaces/storeSlices'
 

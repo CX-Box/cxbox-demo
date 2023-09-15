@@ -7,7 +7,7 @@ import { ReactComponent as FilterIcon } from './filter-solid.svg'
 import FilterPopup from '../FilterPopup/FilterPopup'
 import { FieldType, PickListFieldMeta, WidgetTypes, RowMetaField, useFilter, WidgetListField, MultivalueFieldMeta } from '@cxbox-ui/core'
 import { AppState } from '@interfaces/storeSlices'
-import { $do } from '@actions/types'
+import { $do } from '@actions'
 import { FilterField } from '@teslerComponents'
 
 export interface ColumnFilterProps {

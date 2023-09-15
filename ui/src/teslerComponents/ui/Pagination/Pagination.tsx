@@ -22,7 +22,7 @@ import { useTranslation } from 'react-i18next'
 import { Store } from '@interfaces/store'
 import styles from './Pagination.less'
 import { PaginationMode } from '@cxbox-ui/core'
-import { $do } from '@actions/types'
+import { $do } from '@actions'
 
 /**
  * Pagination component properties

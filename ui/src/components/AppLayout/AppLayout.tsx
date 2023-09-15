@@ -2,7 +2,6 @@ import React from 'react'
 import { Layout, Spin } from 'antd'
 import AppSide from '../AppSide/AppSide'
 import AppBar from '../AppBar/AppBar'
-import { useDispatch } from 'react-redux'
 import DevPanel from '../DevPanel/DevPanel'
 import styles from './AppLayout.module.css'
 import View from '../View/View'
@@ -10,7 +9,9 @@ import ModalInvoke from '../ModalInvoke/ModalInvoke'
 import SystemNotifications from '../SystemNotifications/SystemNotifications'
 import Notifications from '@components/Notifications/Notifications'
 import { useAppDispatch, useAppSelector } from '../../store'
-import { SSO_AUTH } from '../../actions/types'
+import { SSO_AUTH } from '@actions'
+
+const { Header } = Layout
 
 export const AppLayout: React.FC = () => {
     const sessionActive = useAppSelector(state => state.session.active)

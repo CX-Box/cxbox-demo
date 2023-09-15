@@ -17,7 +17,7 @@ import { RowMetaField } from '@cxbox-ui/core'
 import { AssociatedItem } from '@cxbox-ui/core'
 import { buildBcUrl, useAssocRecords } from '@cxbox-ui/core'
 import { FieldType } from '@cxbox-ui/core'
-import { $do } from '@actions/types'
+import { $do } from '@actions'
 import { getColumnWidth } from '@utils/hierarchy'
 import { FrownOutlined } from '@ant-design/icons'
 

@@ -8,7 +8,7 @@ import { PaginationMode, WidgetTableMeta } from '@cxbox-ui/core'
 import { AssociatedItem } from '@cxbox-ui/core'
 import { DataItem, PendingDataItem } from '@cxbox-ui/core'
 import { useAssocRecords } from '@cxbox-ui/core'
-import { $do } from '@actions/types'
+import { $do } from '@actions'
 
 export interface AssocTableOwnProps {
     meta: WidgetTableMeta

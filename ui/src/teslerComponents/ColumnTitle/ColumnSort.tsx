@@ -5,7 +5,7 @@ import { Store } from '@interfaces/store'
 import cn from 'classnames'
 import styles from './ColumnSort.less'
 import { BcSorter } from '@cxbox-ui/core'
-import { $do } from '@actions/types'
+import { $do } from '@actions'
 import { FrownOutlined } from '@ant-design/icons'
 
 export interface ColumnSortOwnProps {

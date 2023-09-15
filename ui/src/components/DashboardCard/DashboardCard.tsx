@@ -12,11 +12,18 @@ interface DashboardCardProps {
 }
 
 function DashboardCard({ children, meta }: DashboardCardProps) {
-    const title = (children as any)?.props?.meta?.title
+    const title = meta?.title
     const debugMode = useSelector((state: AppState) => state.session.debugMode || false)
 
     return (
-        <div className={styles.container}>
+        <div
+            className={styles.container}
+            data-test="WIDGET"
+            data-test-widget-type={meta.type}
+            data-test-widget-position={meta.position}
+            data-test-widget-title={title}
+            data-test-widget-name={meta.name}
+        >
             <Row justify="center">
                 <Col span={24}>
                     <DebugWidgetWrapper debugMode={debugMode} meta={meta}>

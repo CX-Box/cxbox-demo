@@ -15,7 +15,15 @@ function EmptyCard({ children, meta }: EmptyCardProps) {
     const debugMode = useSelector((state: AppState) => state.session.debugMode || false)
 
     return (
-        <Row justify="center" className={styles.container}>
+        <Row
+            className={styles.container}
+            data-test="WIDGET"
+            data-test-widget-type={meta.type}
+            data-test-widget-position={meta.position}
+            data-test-widget-title={meta.title}
+            data-test-widget-name={meta.name}
+            justify="center"
+        >
             <Col span={24}>
                 <DebugWidgetWrapper debugMode={debugMode} meta={meta}>
                     {children}

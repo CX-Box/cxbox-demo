@@ -32,7 +32,7 @@ function ScreenNavigation() {
             <div className={styles.search}>
                 <Search onSearch={handleSearch} />
             </div>
-            <Menu className={styles.container} selectedKeys={[screenUrl]} onClick={handleScreen} theme="dark">
+            <Menu className={styles.container} data-test="MAIN_MENU" selectedKeys={[screenUrl]} onClick={handleScreen} theme="dark">
                 {filteredScreens.map(item => {
                     return (
                         <Menu.Item
@@ -40,6 +40,7 @@ function ScreenNavigation() {
                             className={cn(styles.item, {
                                 [selectedItemClass]: screenUrl === item.url
                             })}
+                            data-test="MAIN_MENU_ITEM"
                             title={item.text}
                         >
                             <span className={styles.menuItemLink}>

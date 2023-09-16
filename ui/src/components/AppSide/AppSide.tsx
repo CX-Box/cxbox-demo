@@ -4,7 +4,7 @@ import { Layout } from 'antd'
 import logo from '../../assets/icons/logo.svg'
 import logoWide from '../../assets/icons/logo-wide.svg'
 import styles from './AppSide.module.css'
-import { useAppDispatch, useAppSelector } from '../../store'
+import { useAppDispatch, useAppSelector } from '@store'
 import { changeMenuCollapsed } from '@actions'
 
 function AppSide() {

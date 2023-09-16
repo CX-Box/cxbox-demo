@@ -7,7 +7,7 @@ import { WidgetInfoField, WidgetInfoMeta, LayoutRow } from '@cxbox-ui/core/inter
 import { RowMetaField } from '@cxbox-ui/core/interfaces/rowMeta'
 import { useSelector } from 'react-redux'
 import { AppState } from '../../../../interfaces/storeSlices'
-import { EMPTY_ARRAY } from '../../../../constants/constants'
+import { EMPTY_ARRAY } from '@constants'
 import { buildBcUrl } from '@cxbox-ui/core'
 
 export interface InfoRowProps {

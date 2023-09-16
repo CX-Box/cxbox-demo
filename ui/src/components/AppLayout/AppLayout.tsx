@@ -8,10 +8,8 @@ import View from '../View/View'
 import ModalInvoke from '../ModalInvoke/ModalInvoke'
 import SystemNotifications from '../SystemNotifications/SystemNotifications'
 import Notifications from '@components/Notifications/Notifications'
-import { useAppDispatch, useAppSelector } from '../../store'
+import { useAppDispatch, useAppSelector } from '@store'
 import { SSO_AUTH } from '@actions'
-
-const { Header } = Layout
 
 export const AppLayout: React.FC = () => {
     const sessionActive = useAppSelector(state => state.session.active)

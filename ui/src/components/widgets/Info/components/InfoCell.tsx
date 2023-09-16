@@ -5,7 +5,7 @@ import { DataItem, MultivalueSingleValue } from '@cxbox-ui/core/interfaces/data'
 import { FieldType } from '@cxbox-ui/core/interfaces/view'
 import { ActionLink, Field, MultiValueListRecord } from '@cxbox-ui/core'
 import InfoValueWrapper from './InfoValueWrapper'
-import { EMPTY_ARRAY } from '../../../../constants/constants'
+import { EMPTY_ARRAY } from '@constants'
 import { useSelector } from 'react-redux'
 import { AppState } from '../../../../interfaces/storeSlices'
 

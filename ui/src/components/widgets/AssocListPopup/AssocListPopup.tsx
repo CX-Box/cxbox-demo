@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { BcFilter, FilterType } from '@cxbox-ui/core/interfaces/filters'
 import { DataItem } from '@cxbox-ui/core/interfaces/data'
 import { AssociatedItem } from '@cxbox-ui/core/interfaces/operation'
-import { EMPTY_ARRAY } from '../../../constants/constants'
+import { EMPTY_ARRAY } from '@constants'
 import { useAppSelector } from '../../../store'
 import {
     bcAddFilter,

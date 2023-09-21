@@ -124,7 +124,10 @@ function ColumnFilter({ widgetName, widgetMeta, rowMeta, components }: ColumnFil
             visible={!isMultivalue && visible}
             onVisibleChange={handleVisibleChange}
         >
-            <div className={cn(styles.icon, { [styles.active]: (filter?.value?.toString()?.length as number) > 0 })}>
+            <div
+                className={cn(styles.icon, { [styles.active]: (filter?.value?.toString()?.length as number) > 0 })}
+                data-test-widget-list-header-column-filter={true}
+            >
                 <FilterIcon />
             </div>
         </Popover>

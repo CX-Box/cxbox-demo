@@ -54,6 +54,7 @@ function Operations(props: OperationsOwnProps) {
                         return removeRecordOperationWidgets.includes(widgetMeta.type) && item.scope === 'record' ? null : (
                             <Button
                                 key={item.type}
+                                data-test-widget-action-item={true}
                                 type={getButtonType({ widgetType: widgetMeta.type, index })}
                                 onClick={() => handleOperationClick(item)}
                             >

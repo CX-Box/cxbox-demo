@@ -95,10 +95,10 @@ export function useExpandableForm(currentWidgetMeta: AppWidgetMeta) {
     const isLoading = internalWidget && currentActiveRowId !== internalWidgetActiveCursor
 
     const expandedRowRender = useCallback(
-        () => (
+        (record: DataItem) => (
             <DebugWidgetWrapper debugMode={debugMode} meta={internalWidget}>
                 <Spin spinning={isLoading}>
-                    <ExpandedRow widgetMeta={internalWidget} operations={internalWidgetOperations} />
+                    <ExpandedRow widgetMeta={internalWidget} operations={internalWidgetOperations} record={record} />
                 </Spin>
             </DebugWidgetWrapper>
         ),

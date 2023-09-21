@@ -128,8 +128,12 @@ function AssocListPopup({ meta }: AssocListPopupProps) {
                     <>
                         <Pagination meta={meta} />
                         <div className={styles.actions}>
-                            <Button onClick={isFilter ? filterData : saveData}>{t('Save')}</Button>
-                            <Button onClick={onCancel}>{t('Cancel')}</Button>
+                            <Button data-test-widget-list-save={true} onClick={isFilter ? filterData : saveData}>
+                                {t('Save')}
+                            </Button>
+                            <Button data-test-widget-list-cancel={true} onClick={onCancel}>
+                                {t('Cancel')}
+                            </Button>
                         </div>
                     </>
                 )

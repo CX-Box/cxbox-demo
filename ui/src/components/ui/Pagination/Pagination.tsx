@@ -36,7 +36,7 @@ function Pagination({ meta }: PaginationProps) {
     }
 
     return (
-        <div className={styles.container}>
+        <div className={styles.container} data-test-widget-list-pagination={true}>
             <AntPagination
                 className={styles.pagination}
                 size="small"

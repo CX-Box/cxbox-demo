@@ -88,10 +88,10 @@ const FilterPopup: React.FC<FilterPopupProps> = props => {
         <Form onSubmit={handleApply} layout="vertical">
             {props.children}
             <div className={styles.operators}>
-                <Button className={styles.button} htmlType="submit">
+                <Button className={styles.button} data-test-filter-popup-apply={true} htmlType="submit">
                     {t('Apply')}
                 </Button>
-                <Button className={styles.button} onClick={handleCancel}>
+                <Button className={styles.button} data-test-filter-popup-clear={true} onClick={handleCancel}>
                     {t('Clear')}
                 </Button>
             </div>

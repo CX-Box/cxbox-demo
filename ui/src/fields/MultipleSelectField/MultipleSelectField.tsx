@@ -1,5 +1,5 @@
 import React from 'react'
-import { Select } from 'antd'
+import { Icon, Select } from 'antd'
 import { WidgetField } from '@cxbox-ui/core/interfaces/widget'
 import { buildBcUrl } from '@cxbox-ui/core'
 import { connect } from 'react-redux'
@@ -28,9 +28,11 @@ const MultipleSelectField: React.FunctionComponent<MultipleSelectFieldProps> = p
         return values?.map(item => {
             const valueIndex = value?.findIndex(v => v.value === item.value)
             return (
-                <Option key={item.value} label={item.value}>
+                <Option key={item.value} label={<div data-test-field-multipleselect-current-item={true}>{item.value}</div>}>
                     {valueIndex >= 0 ? <img alt="checkbox" src={checkbox} /> : <img alt="checkboxEmpty" src={checkboxEmpty} />}
-                    <span className={styles.span}>{item.value}</span>
+                    <span className={styles.span} data-test-field-multipleselect-item={true}>
+                        {item.value}
+                    </span>
                 </Option>
             )
         })
@@ -61,7 +63,13 @@ const MultipleSelectField: React.FunctionComponent<MultipleSelectFieldProps> = p
     }
 
     return (
-        <Select showArrow {...extendedProps} className={cn(styles.root, extendedProps.className, isOneLineStyle && styles.oneLine)}>
+        <Select
+            showArrow
+            {...extendedProps}
+            className={cn(styles.root, extendedProps.className, isOneLineStyle && styles.oneLine)}
+            suffixIcon={<Icon type="down" data-test-field-multipleselect-popup={true} />}
+            removeIcon={<Icon type="close" data-test-field-multipleselect-item-clear={true} />}
+        >
             {currentValues}
         </Select>
     )

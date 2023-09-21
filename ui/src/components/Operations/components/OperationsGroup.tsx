@@ -22,7 +22,12 @@ function OperationsGroup({ group, widgetType, onClick }: OperationsGroupProps) {
             <Menu>
                 {operations.map(operation => {
                     return (
-                        <Menu.Item key={operation.type} className={styles.subOperation} onClick={() => onClick(operation)}>
+                        <Menu.Item
+                            key={operation.type}
+                            className={styles.subOperation}
+                            data-test-widget-action-item={true}
+                            onClick={() => onClick(operation)}
+                        >
                             {operation.icon && <Icon type={operation.icon} />}
                             {operation.text}
                         </Menu.Item>
@@ -34,7 +39,7 @@ function OperationsGroup({ group, widgetType, onClick }: OperationsGroupProps) {
 
     return (
         <Dropdown trigger={['click']} overlay={operationsMenu} getPopupContainer={element => element.parentElement as HTMLElement}>
-            <Button key={group.text}>
+            <Button key={group.text} data-test-widget-action-group={true}>
                 <Icon type={group.icon} />
                 {group.text}
             </Button>

@@ -125,7 +125,7 @@ const InlinePickList: React.FunctionComponent<Props> = ({
                 disabled={disabled}
                 value={value ?? undefined}
                 allowClear={!!value}
-                clearIcon={<Icon type="close-circle" />}
+                clearIcon={<Icon data-test-field-inlinepicklist-clear={true} type="close-circle" />}
                 showSearch
                 placeholder={placeholder ?? t('Enter value')}
                 defaultActiveFirstOption={false}
@@ -139,7 +139,7 @@ const InlinePickList: React.FunctionComponent<Props> = ({
                     const title = item[pickMap[fieldName]] as string
                     return (
                         <Select.Option title={title} key={item.id} value={item.id}>
-                            <span>{title}</span>
+                            <span data-test-field-inlinepicklist-item={true}>{title}</span>
                         </Select.Option>
                     )
                 })}
@@ -148,7 +148,7 @@ const InlinePickList: React.FunctionComponent<Props> = ({
                 className={cn(styles.buttonContainer, { [styles.disabledButton]: disabled })}
                 onClick={!disabled ? handleClick : undefined}
             >
-                <Icon type="paper-clip" />
+                <Icon data-test-field-inlinepicklist-popup={true} type="paper-clip" />
             </span>
         </span>
     )

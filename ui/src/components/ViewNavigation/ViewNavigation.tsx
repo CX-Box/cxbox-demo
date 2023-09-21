@@ -35,9 +35,23 @@ export function ViewNavigation({ depth = 1, type = 'card' }: ViewNavigationProps
 
     return (
         <nav className={cn(styles.container, styles[type])}>
-            <Tabs activeKey={tabs?.find(item => item.selected)?.url} tabBarGutter={24} onChange={handleChange} type={type}>
+            <Tabs
+                data-test-widget-tabs={true}
+                data-test-widget-tabs-depth={depth}
+                activeKey={tabs?.find(item => item.selected)?.url}
+                tabBarGutter={24}
+                onChange={handleChange}
+                type={type}
+            >
                 {tabs?.map(item => (
-                    <Tabs.TabPane key={item.url} tab={<span className={styles.item}>{item.title}</span>} />
+                    <Tabs.TabPane
+                        key={item.url}
+                        tab={
+                            <span className={styles.item} data-test-navigation-tabs-item={true}>
+                                {item.title}
+                            </span>
+                        }
+                    />
                 ))}
             </Tabs>
         </nav>

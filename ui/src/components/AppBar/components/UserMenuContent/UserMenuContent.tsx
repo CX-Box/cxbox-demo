@@ -25,10 +25,12 @@ export const UserMenuContent: React.FC = () => {
     const sortedRoles = React.useMemo(() => roles?.sort(roleComparator), [roles])
 
     return (
-        <div className={styles.root}>
+        <div className={styles.root} data-test-menu-user={true}>
             <div className={cn(styles.loginContainer)}>
-                <span className={styles.fullName}>{fullName}</span>
-                <span>{login}</span>
+                <span className={styles.fullName} data-test-menu-user-info-fullName={true}>
+                    {fullName}
+                </span>
+                <span data-test-menu-user-info-login={true}>{login}</span>
             </div>
             <Divider className={styles.divider} />
             <div className={cn(styles.rolesList)}>
@@ -40,7 +42,12 @@ export const UserMenuContent: React.FC = () => {
                             })}
                             key={i.key}
                         >
-                            <Button className={styles.roleButton} type="link" onClick={createSwitchRoleHandler(i.key)}>
+                            <Button
+                                className={styles.roleButton}
+                                data-test-menu-user-role={true}
+                                type="link"
+                                onClick={createSwitchRoleHandler(i.key)}
+                            >
                                 {i.value}
                             </Button>
                         </div>
@@ -48,7 +55,7 @@ export const UserMenuContent: React.FC = () => {
                 })}
             </div>
             <Divider className={styles.divider} />
-            <Button className={cn(styles.signOut)} type="default" onClick={handleLogout} icon="logout">
+            <Button className={cn(styles.signOut)} data-test-menu-user-logout={true} type="default" onClick={handleLogout} icon="logout">
                 Log out
             </Button>
         </div>

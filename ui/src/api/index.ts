@@ -1,9 +1,9 @@
 import { Api as CXBoxApi, buildUrl } from '@cxbox-ui/core'
-import { BcCountParamsMap, BcCountResponse } from '../interfaces/bcCount'
+import { BcCountParamsMap, BcCountResponse } from '@interfaces/bcCount'
 import { keycloak, KEYCLOAK_MIN_VALIDITY } from '../keycloak'
 import { LoginResponse } from '@cxbox-ui/core/interfaces'
 import axios, { AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios'
-import { __API__ } from "@constants"
+import { __API__ } from '@constants'
 
 class Api extends CXBoxApi {
     fetchBcCount(bcName: string, params: BcCountParamsMap = {}) {

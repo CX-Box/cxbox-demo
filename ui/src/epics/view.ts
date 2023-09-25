@@ -1,6 +1,6 @@
 import { buildBcUrl, getFilters } from '@cxbox-ui/core'
 import { EMPTY_ARRAY } from '@constants'
-import { RootEpic } from '../store'
+import { RootEpic } from '@store'
 import { catchError, EMPTY, filter, mergeMap, of } from 'rxjs'
 import { bcFetchDataSuccess } from '@cxbox-ui/core/actions'
 import { BcFilter } from '@cxbox-ui/core/interfaces'

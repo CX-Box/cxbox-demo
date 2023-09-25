@@ -6,12 +6,11 @@ import tableStyles from '../Table/Table.module.css'
 import styles from './AssocListPopup.module.css'
 import Pagination from '../../ui/Pagination/Pagination'
 import OperationButton from '../../ui/OperationButton/OperationButton'
-import { useDispatch, useSelector } from 'react-redux'
 import { BcFilter, FilterType } from '@cxbox-ui/core/interfaces/filters'
 import { DataItem } from '@cxbox-ui/core/interfaces/data'
 import { AssociatedItem } from '@cxbox-ui/core/interfaces/operation'
 import { EMPTY_ARRAY } from '@constants'
-import { useAppSelector } from '../../../store'
+import { useAppDispatch, useAppSelector } from '@store'
 import {
     bcAddFilter,
     bcCancelPendingChanges,
@@ -59,7 +58,7 @@ function AssocListPopup({ meta }: AssocListPopupProps) {
         }
     )
     const selectedRecords = useAssocRecords(data, pendingDataChanges)
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
     const onClose = React.useCallback(() => {
         dispatch(closeViewPopup({ bcName }))
         if (isFullHierarchy) {

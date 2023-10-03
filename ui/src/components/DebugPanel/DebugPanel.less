@@ -1,0 +1,30 @@
+@import '../../assets/styles/theme';
+
+.debugPanel {
+    padding-top: 4px;
+    padding-bottom: 4px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 3px 5px;
+    margin: 1px;
+    border-radius: 3px;
+}
+
+.button {
+    border: 1px solid @debug-main;
+    height: 24px;
+    line-height: 22px;
+    background: @debug-element;
+    border-radius: 4px;
+    cursor: pointer;
+    color: @debug-text;
+}
+
+.buttonText {
+    margin-right: 5px;
+}
+
+.activeButton {
+    box-shadow: inset 0 0 4px 2px rgba(255, 255, 255, 0.25);
+}

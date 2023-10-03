@@ -12,6 +12,7 @@ import { ColumnProps } from 'antd/es/table'
 import { FieldType } from '@cxbox-ui/core/interfaces/view'
 import { $do } from '../../../../actions/types'
 import { Spin } from 'antd'
+import DebugWidgetWrapper from '../../../DebugWidgetWrapper/DebugWidgetWrapper'
 
 type ControlColumn = { column: ColumnProps<DataItem>; position: 'left' | 'right' }
 
@@ -62,6 +63,7 @@ export function useExpandableForm(currentWidgetMeta: AppWidgetMeta) {
     const { internalWidget, internalWidgetOperations, internalWidgetActiveCursor, isCreateStyle, isEditStyle } =
         useInternalWidgetSelector(currentWidgetMeta)
     const { cursor: currentActiveRowId } = useSelector((state: AppState) => state.view.recordForm)
+    const debugMode = useSelector((state: AppState) => state.session.debugMode || false)
 
     const dispatch = useDispatch()
 
@@ -94,11 +96,13 @@ export function useExpandableForm(currentWidgetMeta: AppWidgetMeta) {
 
     const expandedRowRender = useCallback(
         () => (
-            <Spin spinning={isLoading}>
-                <ExpandedRow widgetMeta={internalWidget} operations={internalWidgetOperations} />
-            </Spin>
+            <DebugWidgetWrapper debugMode={debugMode} meta={internalWidget}>
+                <Spin spinning={isLoading}>
+                    <ExpandedRow widgetMeta={internalWidget} operations={internalWidgetOperations} />
+                </Spin>
+            </DebugWidgetWrapper>
         ),
-        [internalWidget, internalWidgetOperations, isLoading]
+        [internalWidget, internalWidgetOperations, isLoading, debugMode]
     )
 
     const getExpandIconColumnIndex = (controlColumns: ControlColumn[]) => {

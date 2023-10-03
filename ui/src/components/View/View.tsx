@@ -1,5 +1,5 @@
 import React from 'react'
-import { CustomWidgetDescriptor, WidgetTypes } from '@cxbox-ui/core/interfaces/widget'
+import { CustomWidgetDescriptor, PopupWidgetTypes, WidgetTypes } from '@cxbox-ui/core/interfaces/widget'
 import Card from '../Card/Card'
 import { View as CxboxView } from '@cxbox-ui/core'
 import { CustomFieldTypes, CustomWidgetTypes } from '../../interfaces/widget'
@@ -25,6 +25,10 @@ import { Number } from '../../fields/NumberInput/NumberInput'
 import { FormPopup } from '../widgets/FormPopup/FormPopup'
 import InlinePickList from '../../fields/InlinePickList/InlinePickList'
 import PickListField from '../../fields/PickListField/PickListField'
+import { useSelector } from 'react-redux'
+import { AppState } from '../../interfaces/storeSlices'
+import ViewInfoLabel from '../DebugPanel/components/ViewInfoLabel'
+import PopupWidgetInfoLabel from '../DebugPanel/components/PopupWidgetInfoLabel'
 
 const skipWidgetTypes: WidgetTypes[] = []
 
@@ -56,15 +60,23 @@ const customWidgets: Partial<Record<CustomWidgetTypes | WidgetTypes, CustomWidge
 }
 
 function View() {
+    const debugMode = useSelector((state: AppState) => state.session.debugMode || false)
+    const widgets = useSelector((state: AppState) => state.view.widgets)
+
     return (
         <div className={styles.container}>
+            {debugMode && <ViewInfoLabel />}
+
             <CxboxView
                 customWidgets={customWidgets as Record<string, CustomWidgetDescriptor>}
                 customFields={customFields}
                 card={Card as any}
                 skipWidgetTypes={skipWidgetTypes}
                 customLayout={DashboardLayout}
+                disableDebugMode={true}
             />
+
+            {debugMode && widgets.filter(i => PopupWidgetTypes.includes(i.type)).map(i => <PopupWidgetInfoLabel key={i.name} meta={i} />)}
         </div>
     )
 }

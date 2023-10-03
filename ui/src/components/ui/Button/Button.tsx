@@ -7,7 +7,8 @@ import styles from './Button.less'
 export const customTypes = {
     formOperation: 'formOperation',
     formOperationYellow: 'formOperationYellow',
-    customDefault: 'customDefault'
+    customDefault: 'customDefault',
+    bar: 'bar'
 }
 
 type CustomTypes = keyof typeof customTypes

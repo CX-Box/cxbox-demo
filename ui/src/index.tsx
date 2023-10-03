@@ -12,7 +12,7 @@ import { axiosInstance } from './api/session'
 import { middlewares } from './middlewares'
 
 const App = (
-    <Provider customReducers={reducers} customEpics={epics} axiosInstance={axiosInstance()} customMiddlewares={middlewares}>
+    <Provider customReducers={reducers} customEpics={epics} axiosInstance={axiosInstance} customMiddlewares={middlewares}>
         <ConfigProvider locale={enUs}>
             <AppLayout />
         </ConfigProvider>

@@ -3,6 +3,7 @@ import { Store } from '@cxbox-ui/core/interfaces/store'
 import { DataState } from '@cxbox-ui/core/interfaces/data'
 import { CustomSession } from '../reducers/session'
 import { CustomView } from '../reducers/view'
+import { NotificationState } from './notification'
 
 /**
  * You can change typings or add new store slices here
@@ -12,6 +13,7 @@ export interface AppReducers extends Partial<Store> {
     data: DataState
     view: CustomView
     session: CustomSession
+    notification: NotificationState
 }
 
 export type AppState = Store & AppReducers

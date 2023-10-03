@@ -3,6 +3,7 @@ import dataReducer, { initialState as dataInitialState } from './data'
 import viewReducer, { initialState as viewInitialState } from './view'
 import sessionReducer, { initialState as sessionInitialState } from './session'
 import routerReducer, { initialState as routerInitialState } from './router'
+import notificationReducer, { initialState as notificationInitialState } from './notification'
 import { RootReducer } from '../interfaces/store'
 import { AppReducers } from '../interfaces/storeSlices'
 
@@ -10,6 +11,10 @@ export const reducers: RootReducer<AppReducers, any> = {
     screen: {
         initialState: screenInitialState,
         reducer: screenReducer
+    },
+    notification: {
+        initialState: notificationInitialState,
+        reducer: notificationReducer
     },
     data: {
         initialState: dataInitialState,

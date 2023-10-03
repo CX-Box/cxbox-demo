@@ -1,4 +1,4 @@
-import { AnyAction as CxboxAnyAction, AnyOfMap, createActionTypes, uActionsMap } from '@cxbox-ui/core'
+import { AnyOfMap, createActionTypes, uActionsMap } from '@cxbox-ui/core'
 import { Store } from 'redux'
 import { ActionsObservable as rActionsObservable } from 'redux-observable'
 import { Observable } from 'rxjs/Observable'
@@ -18,7 +18,7 @@ type ActionsMap = uActionsMap<CustomActionTypes>
 /**
  * Any action from application or from cxbox-ui
  */
-export type AnyAction = AnyOfMap<ActionsMap> | CxboxAnyAction
+export type AnyAction = AnyOfMap<ActionsMap> | { type: ' UNKNOWN ACTION '; payload?: any }
 
 /**
  * Action observable override for typed actions

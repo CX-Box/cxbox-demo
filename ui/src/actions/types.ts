@@ -2,6 +2,7 @@
  * This is a utility class for typing payload of redux actions
  */
 import { ActionPayloadTypes as CxboxActionPayloadTypes, createActionCreators } from '@cxbox-ui/core'
+import { DataItem } from '@cxbox-ui/core/interfaces/data'
 
 const z = null as any
 
@@ -63,6 +64,8 @@ export class CustomActionTypes extends CxboxActionPayloadTypes {
     showViewPopup: CxboxActionPayloadTypes['showViewPopup'] & {
         options?: { operation?: CxboxActionPayloadTypes['processPreInvoke'] }
     } = z
+
+    sendOperationSuccess: CxboxActionPayloadTypes['sendOperationSuccess'] & { dataItem?: DataItem } = z
 }
 
 /**

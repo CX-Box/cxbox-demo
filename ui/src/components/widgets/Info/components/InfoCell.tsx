@@ -51,14 +51,21 @@ function InfoCell({ field, colSpan, row, meta, cursor, onDrillDown }: ValueCellP
     )
 
     return (
-        <InfoValueWrapper key={field.key} row={row} colSpan={colSpan}>
-            {field.label?.length !== 0 && (
-                <div className={styles.labelArea}>
-                    <span className={styles.label}>{field.label}</span>
-                </div>
-            )}
-            <div className={styles.fieldData}>{ResultField}</div>
-        </InfoValueWrapper>
+        <div
+            data-test="FIELD"
+            data-test-field-type={field.type}
+            data-test-field-title={field.label || field.title}
+            data-test-field-key={field.key}
+        >
+            <InfoValueWrapper key={field.key} row={row} colSpan={colSpan}>
+                {field.label?.length !== 0 && (
+                    <div className={styles.labelArea}>
+                        <span className={styles.label}>{field.label}</span>
+                    </div>
+                )}
+                <div className={styles.fieldData}>{ResultField}</div>
+            </InfoValueWrapper>
+        </div>
     )
 }
 

@@ -25,6 +25,7 @@ function FilterField({ visible, ...props }: FilterFieldProps) {
         case FieldType.checkbox: {
             return (
                 <Checkbox
+                    data-test-filter-popup-select-value={true}
                     checked={value as boolean}
                     onChange={(e: CheckboxChangeEvent) => {
                         onChange(e.target.checked)
@@ -38,6 +39,7 @@ function FilterField({ visible, ...props }: FilterFieldProps) {
             const fieldMeta = widgetFieldMeta as NumberFieldMeta
             return (
                 <NumberInput
+                    data-test-filter-popup-value={true}
                     value={value as number}
                     type={widgetFieldMeta.type as any}
                     onChange={onChange}
@@ -72,7 +74,16 @@ function FilterField({ visible, ...props }: FilterFieldProps) {
                     />
                 )
             }
-            return <DatePicker autoFocus onChange={onChange} value={value as DataValue[]} format={getFormat()} open={visible} />
+            return (
+                <DatePicker
+                    data-test-filter-popup-value={true}
+                    autoFocus
+                    onChange={onChange}
+                    value={value as DataValue[]}
+                    format={getFormat()}
+                    open={visible}
+                />
+            )
         }
 
         default: {

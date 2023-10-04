@@ -47,7 +47,7 @@ export const ExportButton: React.FC<ExportButtonProps> = ({ widgetMeta, exportWi
     }
 
     return showExport ? (
-        <Button type="formOperation" icon="file-excel" onClick={handleClick}>
+        <Button data-test-widget-action-item={true} type="formOperation" icon="file-excel" onClick={handleClick}>
             Excel
         </Button>
     ) : null

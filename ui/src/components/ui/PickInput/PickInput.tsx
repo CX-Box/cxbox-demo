@@ -22,7 +22,8 @@ const PickInput: React.FunctionComponent<PickInputProps> = ({ disabled, value, p
 
     const { t } = useTranslation()
 
-    const clearButton = onClear && !disabled && value ? <Icon type="close-circle" onClick={onClear} /> : null
+    const clearButton =
+        onClear && !disabled && value ? <Icon data-test-field-picklist-clear={true} type="close-circle" onClick={onClear} /> : null
 
     return (
         <Input
@@ -37,6 +38,7 @@ const PickInput: React.FunctionComponent<PickInputProps> = ({ disabled, value, p
                     <Icon type="loading" spin />
                 ) : (
                     <Icon
+                        data-test-field-picklist-popup={true}
                         className={disabled ? styles.disabledButton : undefined}
                         type="paper-clip"
                         onClick={!disabled ? handleClick : undefined}

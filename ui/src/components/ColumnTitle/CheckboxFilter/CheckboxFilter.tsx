@@ -31,6 +31,7 @@ export const CheckboxFilter: React.FC<CheckboxFilterProps> = props => {
             <li className={cn(styles.listItem, styles.header)}>
                 <Checkbox
                     className={styles.checkbox}
+                    data-test-filter-popup-select-all={true}
                     indeterminate={props.value?.length > 0 && props.value.length < props.filterValues.length}
                     checked={props.value?.length === props.filterValues.length}
                     onChange={handleAll}
@@ -42,7 +43,13 @@ export const CheckboxFilter: React.FC<CheckboxFilterProps> = props => {
                     const checked = props.value?.some(filterValue => item.value === filterValue)
                     return (
                         <li className={styles.listItem} key={index}>
-                            <Checkbox checked={checked} className={styles.checkbox} value={item.value} onChange={handleCheckbox} />
+                            <Checkbox
+                                className={styles.checkbox}
+                                data-test-filter-popup-select-value={true}
+                                checked={checked}
+                                value={item.value}
+                                onChange={handleCheckbox}
+                            />
                             {item.value}
                         </li>
                     )

@@ -57,6 +57,7 @@ function RangePicker({ value, onChange, dateOnly, open, startOf, ...rest }: Rang
         <div className={styles.container}>
             <DatePicker
                 {...rest}
+                data-test-filter-popup-start-value={true}
                 placeholder={t('Start date')}
                 disabledDate={disabledStartDate}
                 onChange={(date: Moment | null, dateString: string) => {
@@ -68,6 +69,7 @@ function RangePicker({ value, onChange, dateOnly, open, startOf, ...rest }: Rang
             />
             <DatePicker
                 {...rest}
+                data-test-filter-popup-end-value={true}
                 placeholder={t('End date')}
                 disabledDate={disabledEndDate}
                 onChange={(date: Moment | null, dateString: string) => {

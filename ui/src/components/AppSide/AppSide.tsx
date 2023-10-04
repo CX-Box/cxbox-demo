@@ -18,9 +18,10 @@ function AppSide() {
 
     return (
         <Layout.Sider
+            className={cn(styles.side, menuCollapsed && styles.collapsed)}
+            data-test="LEFT_SIDER"
             theme="light"
             collapsed={menuCollapsed}
-            className={cn(styles.side, menuCollapsed && styles.collapsed)}
             collapsedWidth={48}
             width={256}
         >

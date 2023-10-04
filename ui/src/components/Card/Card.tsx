@@ -27,7 +27,14 @@ function Card({ meta, children, className }: CardProps) {
         <Row justify="center">
             <Col span={24}>
                 <DebugWidgetWrapper debugMode={debugMode} meta={meta}>
-                    <div className={cn(styles.container, className)}>
+                    <div
+                        className={cn(styles.container, className)}
+                        data-test="WIDGET"
+                        data-test-widget-type={meta.type}
+                        data-test-widget-position={meta.position}
+                        data-test-widget-title={meta.title}
+                        data-test-widget-name={meta.name}
+                    >
                         {meta.title && (
                             <h2 className={styles.widgetTitle}>
                                 <TemplatedTitle widgetName={meta.name} title={meta.title} />

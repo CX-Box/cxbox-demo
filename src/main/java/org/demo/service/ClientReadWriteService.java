@@ -1,33 +1,38 @@
 package org.demo.service;
 
 
+import static org.cxbox.api.data.dao.SpecificationUtils.and;
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
+import lombok.var;
+import org.cxbox.core.crudma.bc.BusinessComponent;
+import org.cxbox.core.crudma.impl.VersionAwareResponseService;
+import org.cxbox.core.dto.DrillDownType;
 import org.cxbox.core.dto.MessageType;
+import org.cxbox.core.dto.rowmeta.ActionResultDTO;
+import org.cxbox.core.dto.rowmeta.CreateResult;
+import org.cxbox.core.dto.rowmeta.PostAction;
 import org.cxbox.core.dto.rowmeta.PreAction;
+import org.cxbox.core.service.action.ActionAvailableChecker;
+import org.cxbox.core.service.action.ActionScope;
+import org.cxbox.core.service.action.Actions;
 import org.cxbox.core.util.session.SessionService;
 import org.demo.conf.cxbox.icon.ActionIcon;
 import org.demo.controller.CxboxRestController;
+import org.demo.dto.ClientWriteDTO;
 import org.demo.dto.ClientWriteDTO_;
 import org.demo.entity.Client;
 import org.demo.entity.Meeting;
 import org.demo.entity.enums.ClientEditStep;
 import org.demo.entity.enums.ClientStatus;
 import org.demo.entity.enums.FieldOfActivity;
+import org.demo.extension.FullTextSearchExt;
 import org.demo.repository.ClientRepository;
-import org.demo.dto.ClientWriteDTO;
-import org.cxbox.core.crudma.bc.BusinessComponent;
-import org.cxbox.core.crudma.impl.VersionAwareResponseService;
-import org.cxbox.core.dto.DrillDownType;
-import org.cxbox.core.dto.rowmeta.ActionResultDTO;
-import org.cxbox.core.dto.rowmeta.CreateResult;
-import org.cxbox.core.dto.rowmeta.PostAction;
-import org.cxbox.core.service.action.ActionScope;
-import org.cxbox.core.service.action.Actions;
-import java.util.Arrays;
 import org.demo.repository.MeetingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-
-import java.util.stream.Collectors;
 
 @SuppressWarnings({"java:S3252","java:S1186"})
 @Service
@@ -44,6 +49,13 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 
 	public ClientReadWriteService() {
 		super(ClientWriteDTO.class, Client.class, null, ClientReadWriteMeta.class);
+	}
+
+	@Override
+	protected Specification<Client> getSpecification(BusinessComponent bc) {
+		var fullTextSearchFilterParam = FullTextSearchExt.getFullTextSearchFilterParam(bc);
+		var specification = super.getSpecification(bc);
+		return fullTextSearchFilterParam.map(e -> and(clientRepository.getFullTextSearchSpecification(e), specification)).orElse(specification);
 	}
 
 	@Override
@@ -101,10 +113,10 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 									nextStep.getEditView() + CxboxRestController.clientEdit + "/" + bc.getId()
 							));
 				})
-				.available(bc -> {
+				.available(ActionAvailableChecker.and(ActionAvailableChecker.NOT_NULL_ID, bc -> {
 					Client client = clientRepository.getById(bc.getIdAsLong());
 					return ClientEditStep.getNextEditStep(client).isPresent();
-				})
+				}))
 				.add()
 				.newAction()
 				.scope(ActionScope.RECORD)
@@ -120,10 +132,10 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 									"/screen/client"
 							));
 				})
-				.available(bc -> {
+				.available(ActionAvailableChecker.and(ActionAvailableChecker.NOT_NULL_ID, bc -> {
 					Client client = clientRepository.getById(bc.getIdAsLong());
 					return !ClientEditStep.getNextEditStep(client).isPresent();
-				})
+				}))
 				.add()
 				.action("previous", "Back")
 				.scope(ActionScope.RECORD)
@@ -138,10 +150,10 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 									previousStep.getEditView() + CxboxRestController.clientEdit + "/" + bc.getId()
 							));
 				})
-				.available(bc -> {
+				.available(ActionAvailableChecker.and(ActionAvailableChecker.NOT_NULL_ID,bc -> {
 					Client client = clientRepository.getById(bc.getIdAsLong());
 					return ClientEditStep.getPreviousEditStep(client).isPresent();
-				})
+				}))
 				.add()
 				.cancelCreate().text("Cancel").available(bc -> true).add()
 				.create().text("Add").add()

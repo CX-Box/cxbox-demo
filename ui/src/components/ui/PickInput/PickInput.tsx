@@ -40,7 +40,7 @@ const PickInput: React.FunctionComponent<PickInputProps> = ({ disabled, value, p
                     <Icon
                         data-test-field-picklist-popup={true}
                         className={disabled ? styles.disabledButton : undefined}
-                        type="paper-clip"
+                        type="folder"
                         onClick={!disabled ? handleClick : undefined}
                     />
                 )

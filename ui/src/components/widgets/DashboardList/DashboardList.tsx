@@ -1,9 +1,9 @@
 import React from 'react'
-import { WidgetTableMeta } from '@cxbox-ui/core/interfaces/widget'
 import Table from '../Table/Table'
+import { AppWidgetTableMeta } from '../../../interfaces/widget'
 
 interface DashboardListProps {
-    meta: WidgetTableMeta
+    meta: AppWidgetTableMeta
 }
 
 function DashboardList({ meta }: DashboardListProps) {

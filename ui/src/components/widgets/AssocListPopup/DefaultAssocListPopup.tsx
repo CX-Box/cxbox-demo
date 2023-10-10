@@ -5,34 +5,38 @@ import styles from './AssocListPopup.less'
 import Pagination from '../../ui/Pagination/Pagination'
 import { EMPTY_ARRAY } from '@constants'
 import Button from '../../ui/Button/Button'
-import { actions, interfaces } from '@cxbox-ui/core'
+import { actions } from '@cxbox-ui/core'
 import { useAppDispatch, useAppSelector } from '@store'
 import { useAssocRecords } from '@hooks/useAssocRecords'
 import { AssocListPopup } from '@cxboxComponents'
 import { useTranslation } from 'react-i18next'
+import { DataItem } from '@cxbox-ui/schema'
+import { AssociatedItem, BcFilter, FilterType, WidgetTableMeta } from '@interfaces/core'
+import { shallowEqual } from 'react-redux'
 
-const emptyData: interfaces.AssociatedItem[] = []
+const emptyData: AssociatedItem[] = []
 
 interface DefaultAssocListPopupProps {
-    meta: interfaces.WidgetTableMeta
+    meta: WidgetTableMeta
 }
 
 function DefaultAssocListPopup({ meta }: DefaultAssocListPopupProps) {
     const { bcName } = meta
     const isFullHierarchy = !!meta.options?.hierarchyFull
     //TODO: REWORK, can cause memory leak
-    const { associateFieldKey, pendingDataChanges, data, bcFilters, isFilter, calleeBCName, calleeWidgetName, viewName } = useAppSelector(
-        state => {
+    const { associateFieldKey, pendingDataChanges, data, bcFilters, isFilter, calleeBCName, calleeWidgetName, viewName, calleeFieldKey } =
+        useAppSelector(state => {
             const isFilter = state.view.popupData?.isFilter
             const calleeBCName = state.view.popupData?.calleeBCName
             const calleeWidgetName = state.view.popupData?.calleeWidgetName
             const associateFieldKey = state.view.popupData?.associateFieldKey
+            const calleeFieldKey = state.view.popupData?.options?.calleeFieldKey
             let data = state.data[bcName] || emptyData
             const bcFilters = state.screen.filters?.[calleeBCName!] ?? EMPTY_ARRAY
-            const filterDataItems = bcFilters.find(filterItem => filterItem.fieldName === associateFieldKey)?.value as interfaces.DataItem[]
+            const filterDataItems = bcFilters.find(filterItem => filterItem.fieldName === associateFieldKey)?.value as DataItem[]
             if (isFilter && filterDataItems?.length > 0) {
                 data = data?.map(dataItem => {
-                    if (filterDataItems.includes(dataItem.id as unknown as interfaces.DataItem)) {
+                    if (filterDataItems.includes(dataItem.id as unknown as DataItem)) {
                         return {
                             ...dataItem,
                             _associate: true
@@ -46,15 +50,15 @@ function DefaultAssocListPopup({ meta }: DefaultAssocListPopupProps) {
             return {
                 associateFieldKey: associateFieldKey,
                 pendingDataChanges: state.view.pendingDataChanges[bcName],
-                data: data as interfaces.AssociatedItem[],
+                data: data as AssociatedItem[],
                 bcFilters,
                 isFilter,
                 calleeBCName,
                 calleeWidgetName,
-                viewName: state.view.name
+                viewName: state.view.name,
+                calleeFieldKey
             }
-        }
-    )
+        }, shallowEqual)
     const selectedRecords = useAssocRecords(data, pendingDataChanges)
     const dispatch = useAppDispatch()
     const onClose = React.useCallback(() => {
@@ -71,14 +75,14 @@ function DefaultAssocListPopup({ meta }: DefaultAssocListPopupProps) {
         onClose()
     }, [bcName, dispatch, isFullHierarchy, onClose])
     const onFilter = React.useCallback(
-        (bcName: string, filter: interfaces.BcFilter) => {
+        (bcName: string, filter: BcFilter) => {
             dispatch(actions.bcAddFilter({ bcName, filter }))
             dispatch(actions.bcForceUpdate({ bcName }))
         },
         [dispatch]
     )
     const onRemoveFilter = React.useCallback(
-        (bcName: string, filter: interfaces.BcFilter) => {
+        (bcName: string, filter: BcFilter) => {
             dispatch(actions.bcRemoveFilter({ bcName, filter }))
             dispatch(actions.bcForceUpdate({ bcName, widgetName: filter.widgetName }))
         },
@@ -102,8 +106,16 @@ function DefaultAssocListPopup({ meta }: DefaultAssocListPopupProps) {
     const filterData = React.useCallback(() => {
         const filterValue = selectedRecords.map(item => item.id)
         if (associateFieldKey && calleeBCName && filterValue.length > 0) {
+            const existingFilter = bcFilters.find(filter => {
+                return filter.fieldName === calleeFieldKey
+            })
+
+            if (existingFilter) {
+                dispatch(actions.bcRemoveFilter({ bcName: calleeBCName, filter: existingFilter as BcFilter }))
+            }
+
             onFilter(calleeBCName, {
-                type: interfaces.FilterType.equalsOneOf,
+                type: FilterType.equalsOneOf,
                 fieldName: associateFieldKey,
                 value: filterValue,
                 viewName,
@@ -113,14 +125,26 @@ function DefaultAssocListPopup({ meta }: DefaultAssocListPopupProps) {
             const currentFilters = bcFilters?.find(filterItem => filterItem.fieldName === associateFieldKey)?.value
             if (associateFieldKey && currentFilters && calleeBCName) {
                 onRemoveFilter?.(calleeBCName, {
-                    type: interfaces.FilterType.equalsOneOf,
+                    type: FilterType.equalsOneOf,
                     fieldName: associateFieldKey,
                     value: currentFilters
                 })
             }
         }
         onClose()
-    }, [onFilter, onRemoveFilter, bcFilters, onClose, calleeBCName, associateFieldKey, selectedRecords, calleeWidgetName, viewName])
+    }, [
+        selectedRecords,
+        associateFieldKey,
+        calleeBCName,
+        onClose,
+        bcFilters,
+        onFilter,
+        viewName,
+        calleeWidgetName,
+        calleeFieldKey,
+        dispatch,
+        onRemoveFilter
+    ])
 
     const { t } = useTranslation()
     return (

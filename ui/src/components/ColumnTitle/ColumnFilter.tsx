@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useEffect } from 'react'
-import { Popover } from 'antd'
+import { Button, Popover } from 'antd'
 import styles from './ColumnFilter.less'
 import cn from 'classnames'
 import { ReactComponent as FilterIcon } from './filter-solid.svg'
@@ -7,12 +7,15 @@ import { interfaces } from '@cxbox-ui/core'
 import FilterPopup from '../FilterPopup/FilterPopup'
 import FilterField from './FilterField'
 import { useAppDispatch, useAppSelector } from '@store'
-import { showViewPopup } from '@actions'
+import { FieldType, WidgetListField } from '@cxbox-ui/schema'
+import { RowMetaField } from '@cxbox-ui/core/dist/interfaces'
+import { actions } from '@actions'
+import { PickListFieldMeta } from '@cxbox-ui/schema/src/interfaces/widget'
 
 interface ColumnFilterProps {
     widgetName: string
-    widgetMeta: interfaces.WidgetListField
-    rowMeta: interfaces.RowMetaField
+    widgetMeta: WidgetListField
+    rowMeta: RowMetaField
 
     components?: {
         popup: React.ReactNode
@@ -24,10 +27,10 @@ function ColumnFilter({ widgetName, widgetMeta, rowMeta, components }: ColumnFil
     const bcName = widget?.bcName ?? ''
     const listFields = widget?.fields as interfaces.WidgetListField[]
     const effectiveFieldMeta = (listFields?.find(item => item.key === widgetMeta.filterBy) ?? widgetMeta) as interfaces.WidgetListField
-    const widgetOptions = widget?.options
     const filter = useAppSelector(state => state.screen.filters[bcName]?.find(item => item.fieldName === effectiveFieldMeta.key))
     const [value, setValue] = React.useState(filter?.value)
     const [visible, setVisible] = React.useState(false)
+
     const dispatch = useAppDispatch()
 
     React.useEffect(() => {
@@ -43,48 +46,51 @@ function ColumnFilter({ widgetName, widgetMeta, rowMeta, components }: ColumnFil
         )
     )
 
-    const isPickList = effectiveFieldMeta.type === interfaces.FieldType.pickList
-    const isMultivalue =
-        [interfaces.FieldType.multivalue, interfaces.FieldType.multivalueHover].includes(effectiveFieldMeta.type) || isPickList
+    const isPickList = effectiveFieldMeta.type === FieldType.pickList
+    const isMultivalue = [FieldType.multivalue, FieldType.multivalueHover].includes(effectiveFieldMeta.type)
     const { associateFieldKeyForPickList } = useAssociateFieldKeyForPickList(fieldMetaPickListField)
+
+    const showPopup = useCallback(() => {
+        dispatch(
+            actions.showViewPopup({
+                bcName: fieldMeta.popupBcName as string,
+                widgetName: assocWidget?.name,
+                calleeBCName: widget?.bcName,
+                calleeWidgetName: widget?.name,
+                assocValueKey: !isPickList ? fieldMetaMultivalue.assocValueKey : fieldMetaPickListField.pickMap[fieldMeta.key],
+                associateFieldKey: !isPickList
+                    ? fieldMetaMultivalue.associateFieldKey ?? fieldMeta.key
+                    : associateFieldKeyForPickList ?? fieldMeta.key,
+                isFilter: true,
+                options: {
+                    calleeFieldKey: fieldMeta.key
+                }
+            })
+        )
+    }, [
+        assocWidget?.name,
+        associateFieldKeyForPickList,
+        dispatch,
+        fieldMeta.key,
+        fieldMeta.popupBcName,
+        fieldMetaMultivalue.assocValueKey,
+        fieldMetaMultivalue.associateFieldKey,
+        fieldMetaPickListField.pickMap,
+        isPickList,
+        widget?.bcName,
+        widget?.name
+    ])
 
     const handleVisibleChange = useCallback(
         (eventVisible: boolean) => {
             if (isMultivalue && eventVisible) {
                 setVisible(false)
-
-                dispatch(
-                    showViewPopup({
-                        bcName: fieldMeta.popupBcName as string,
-                        widgetName: assocWidget?.name,
-                        calleeBCName: widget?.bcName,
-                        calleeWidgetName: widget?.name,
-                        assocValueKey: !isPickList ? fieldMetaMultivalue.assocValueKey : fieldMetaPickListField.pickMap[fieldMeta.key],
-                        associateFieldKey: !isPickList
-                            ? fieldMetaMultivalue.associateFieldKey ?? fieldMeta.key
-                            : associateFieldKeyForPickList ?? fieldMeta.key,
-                        isFilter: true
-                    })
-                )
+                showPopup()
             } else {
                 setVisible(!visible)
             }
         },
-        [
-            isMultivalue,
-            dispatch,
-            fieldMeta.popupBcName,
-            fieldMeta.key,
-            assocWidget?.name,
-            widget?.bcName,
-            widget?.name,
-            isPickList,
-            fieldMetaMultivalue.assocValueKey,
-            fieldMetaMultivalue.associateFieldKey,
-            fieldMetaPickListField.pickMap,
-            associateFieldKeyForPickList,
-            visible
-        ]
+        [isMultivalue, showPopup, visible]
     )
 
     const handleApply = useCallback(() => {
@@ -96,6 +102,11 @@ function ColumnFilter({ widgetName, widgetMeta, rowMeta, components }: ColumnFil
         setValue(undefined)
     }, [])
 
+    const handlePicklistFilterOpen = useCallback(() => {
+        setVisible(false)
+        showPopup()
+    }, [showPopup])
+
     const content = components?.popup ?? (
         <FilterPopup
             widgetName={widgetName}
@@ -105,14 +116,17 @@ function ColumnFilter({ widgetName, widgetMeta, rowMeta, components }: ColumnFil
             onCancel={handleClose}
             fieldType={effectiveFieldMeta.type}
         >
-            <FilterField
-                widgetFieldMeta={effectiveFieldMeta}
-                rowFieldMeta={rowMeta}
-                value={value}
-                onChange={setValue}
-                widgetOptions={widgetOptions}
-                visible={visible}
-            />
+            <div className={styles.filterContainer}>
+                <FilterField
+                    widgetFieldMeta={effectiveFieldMeta}
+                    rowFieldMeta={rowMeta}
+                    value={value}
+                    onChange={setValue}
+                    widgetOptions={widget?.options}
+                    visible={visible}
+                />
+                {isPickList && <Button icon="ellipsis" onClick={handlePicklistFilterOpen} />}
+            </div>
         </FilterPopup>
     )
 
@@ -135,7 +149,7 @@ function ColumnFilter({ widgetName, widgetMeta, rowMeta, components }: ColumnFil
 
 export default memo(ColumnFilter)
 
-function getAssociateFieldKeyForPickList(fieldMeta: interfaces.PickListFieldMeta) {
+function getAssociateFieldKeyForPickList(fieldMeta: PickListFieldMeta) {
     if (!fieldMeta?.pickMap) {
         return null
     }
@@ -149,8 +163,8 @@ function getAssociateFieldKeyForPickList(fieldMeta: interfaces.PickListFieldMeta
     }, null)
 }
 
-function useAssociateFieldKeyForPickList(fieldMeta: interfaces.PickListFieldMeta) {
-    const isPickList = fieldMeta.type === interfaces.FieldType.pickList
+export function useAssociateFieldKeyForPickList(fieldMeta: PickListFieldMeta) {
+    const isPickList = fieldMeta.type === FieldType.pickList
     const associateFieldKeyForPickList = getAssociateFieldKeyForPickList(fieldMeta)
 
     useEffect(() => {

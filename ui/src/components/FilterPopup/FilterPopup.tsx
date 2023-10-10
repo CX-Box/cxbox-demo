@@ -6,21 +6,24 @@ import React, { FormEvent } from 'react'
 import { Button, Form } from 'antd'
 import styles from './FilterPopup.less'
 import { CustomFieldTypes } from '@interfaces/widget'
-import { actions, interfaces } from '@cxbox-ui/core'
-import { useAppDispatch, useAppSelector } from '@store'
+import { useAppSelector } from '@store'
 import { useTranslation } from 'react-i18next'
+import { FieldType, WidgetField, WidgetTypes } from '@cxbox-ui/schema'
+import { useAssociateFieldKeyForPickList } from '../ColumnTitle/ColumnFilter'
+import { BcFilter, DataValue, FilterType } from '@interfaces/core'
+import { PickListFieldMeta } from '@cxbox-ui/schema/src/interfaces/widget'
+import { useDispatch } from 'react-redux'
+import { actions } from '@actions'
 
 interface FilterPopupProps {
     widgetName: string
     fieldKey: string
-    value: interfaces.DataValue | interfaces.DataValue[]
+    value: DataValue | DataValue[]
     children: React.ReactNode
-    fieldType?: interfaces.FieldType
+    fieldType?: FieldType
     onApply?: () => void
     onCancel?: () => void
 }
-
-const { FieldType, FilterType } = interfaces
 
 const FilterPopup: React.FC<FilterPopupProps> = props => {
     const widget = useAppSelector(state => {
@@ -32,23 +35,48 @@ const FilterPopup: React.FC<FilterPopupProps> = props => {
     const filter = useAppSelector(state => {
         return state.screen.filters[widget?.bcName as string]?.find(item => item.fieldName === props.fieldKey)
     })
-    const widgetMeta = (widget?.fields as interfaces.WidgetField[])?.find(item => item.key === props.fieldKey)
-    const dispatch = useAppDispatch()
+    const allFilters = useAppSelector(state => {
+        return state.screen.filters[widget?.bcName as string]
+    })
+    const widgetMeta = (widget?.fields as WidgetField[])?.find(item => item.key === props.fieldKey)
+    const fieldMetaPickListField = widgetMeta as PickListFieldMeta
+
+    const { associateFieldKeyForPickList } = useAssociateFieldKeyForPickList(fieldMetaPickListField)
+
+    const pickListPopupBcName = fieldMetaPickListField?.popupBcName
+
+    const picklistPopupWidget = useAppSelector(state => {
+        return state.view.widgets.find(item => {
+            return item.type === WidgetTypes.PickListPopup && item.bcName === pickListPopupBcName
+        })
+    })
+
+    const dispatch = useDispatch()
     const { t } = useTranslation()
+
     if (!widgetMeta) {
         return null
     }
 
     const handleApply = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        const newFilter: interfaces.BcFilter = {
-            type: [FieldType.date, FieldType.dateTime, FieldType.dateTimeWithSeconds].includes(props?.fieldType as interfaces.FieldType)
+        const newFilter: BcFilter = {
+            type: [FieldType.date, FieldType.dateTime, FieldType.dateTimeWithSeconds].includes(props?.fieldType as FieldType)
                 ? FilterType.range
                 : getFilterType(widgetMeta.type),
             value: props.value,
             fieldName: props.fieldKey,
             viewName,
             widgetName: widget?.name as string
+        }
+        if (FieldType.pickList) {
+            const foundPickListFilter = allFilters?.find(filter => {
+                return filter.fieldName === associateFieldKeyForPickList
+            })
+            if (foundPickListFilter) {
+                dispatch(actions.bcRemoveFilter({ bcName: widget?.bcName as string, filter: foundPickListFilter as BcFilter }))
+                picklistPopupWidget?.bcName && dispatch(actions.bcCancelPendingChanges({ bcNames: [picklistPopupWidget?.bcName] }))
+            }
         }
         if ((props.value === null || props.value === undefined) && FieldType.checkbox === props.fieldType) {
             dispatch(
@@ -59,7 +87,7 @@ const FilterPopup: React.FC<FilterPopupProps> = props => {
                 })
             )
         } else if (props.value === null || props.value === undefined) {
-            dispatch(actions.bcRemoveFilter({ bcName: widget?.bcName as string, filter: filter as interfaces.BcFilter }))
+            dispatch(actions.bcRemoveFilter({ bcName: widget?.bcName as string, filter: filter as BcFilter }))
         } else {
             dispatch(actions.bcAddFilter({ bcName: widget?.bcName as string, filter: newFilter, widgetName: widget?.name as string }))
         }
@@ -112,7 +140,7 @@ export default React.memo(FilterPopup)
  *
  * @param fieldType Field type
  */
-export function getFilterType(fieldType: interfaces.FieldType | CustomFieldTypes) {
+export function getFilterType(fieldType: FieldType | CustomFieldTypes) {
     switch (fieldType) {
         case CustomFieldTypes.MultipleSelect:
         case FieldType.radio:
@@ -123,6 +151,7 @@ export function getFilterType(fieldType: interfaces.FieldType | CustomFieldTypes
             return FilterType.specified
         }
         case FieldType.inlinePickList:
+        case FieldType.pickList:
         case FieldType.input:
         case FieldType.fileUpload:
         case FieldType.text: {

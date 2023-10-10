@@ -25,7 +25,7 @@ export const customAction = createAction<{ customMessage: string }>('customActio
  */
 export const showViewPopup = createAction<
     ReturnType<typeof actions.showViewPopup>['payload'] & {
-        options?: { operation?: ReturnType<typeof processPreInvoke>['payload'] }
+        options?: { operation?: ReturnType<typeof processPreInvoke>['payload']; calleeFieldKey?: string }
     }
 >('showViewPopup')
 

@@ -59,6 +59,9 @@ function FilterField({ visible, ...props }: FilterFieldProps) {
                 />
             )
         }
+        case FieldType.pickList: {
+            return <CoreFilterField {...props} widgetFieldMeta={{ ...props.widgetFieldMeta, type: FieldType.input }} />
+        }
         case FieldType.dateTimeWithSeconds:
         case FieldType.dateTime:
         case FieldType.date: {

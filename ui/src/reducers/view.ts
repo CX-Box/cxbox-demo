@@ -1,6 +1,6 @@
-import { actions, interfaces, reducers } from '@cxbox-ui/core'
-import { AnyAction, createReducer, isAnyOf } from '@reduxjs/toolkit'
-import { partialUpdateRecordForm, resetRecordForm, setBcCount, setRecordForm, showViewPopup } from '@actions'
+import { interfaces, reducers } from '@cxbox-ui/core'
+import { createReducer, isAnyOf } from '@reduxjs/toolkit'
+import { actions, partialUpdateRecordForm, resetRecordForm, setBcCount, setRecordForm, showViewPopup } from '@actions'
 
 interface ViewState extends interfaces.ViewState {
     bcRecordsCount: {
@@ -17,7 +17,8 @@ interface ViewState extends interfaces.ViewState {
     }
     popupData?: interfaces.PopupData & {
         options?: {
-            operation?: AnyAction['type']
+            operation?: ReturnType<typeof actions.processPreInvoke>['payload']
+            calleeFieldKey?: string
         }
     }
 }

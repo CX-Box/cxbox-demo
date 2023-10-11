@@ -24,6 +24,8 @@ export const notSortableFields: readonly (interfaces.FieldType | CustomFieldType
     FieldType.hint
 ]
 
+const rightAlignedFields: readonly (interfaces.FieldType | CustomFieldTypes)[] = [FieldType.number, FieldType.money, FieldType.percent]
+
 const ColumnTitle = ({ widgetName, widgetMeta, rowMeta }: ColumnTitleProps) => {
     if (!widgetMeta && !rowMeta) {
         return null
@@ -32,7 +34,15 @@ const ColumnTitle = ({ widgetName, widgetMeta, rowMeta }: ColumnTitleProps) => {
     const title = <TemplatedTitle widgetName={widgetName} title={widgetMeta.title} />
 
     if (!rowMeta) {
-        return <div>{title}</div>
+        return (
+            <div
+                className={cn({
+                    [styles.rightAlignment]: rightAlignedFields.includes(widgetMeta.type)
+                })}
+            >
+                {title}
+            </div>
+        )
     }
 
     const sort = !notSortableFields.includes(widgetMeta.type) && (
@@ -42,7 +52,7 @@ const ColumnTitle = ({ widgetName, widgetMeta, rowMeta }: ColumnTitleProps) => {
     const filter = rowMeta.filterable && <ColumnFilter widgetName={widgetName} widgetMeta={widgetMeta} rowMeta={rowMeta} />
 
     return (
-        <div className={cn(styles.container)}>
+        <div className={cn(styles.container, { [styles.rightAlignment]: rightAlignedFields.includes(widgetMeta.type) })}>
             {title}
             {filter}
             {sort}

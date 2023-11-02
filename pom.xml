@@ -10,7 +10,7 @@
   <parent>
     <groupId>org.cxbox</groupId>
     <artifactId>cxbox-starter-parent</artifactId>
-    <version>3.0.5-SNAPSHOT</version>
+    <version>3.0.5</version>
   </parent>
 
   <properties>
@@ -29,15 +29,6 @@
     <!--minio compatible version-->
     <okhttp3.version>4.8.1</okhttp3.version>
   </properties>
-
-  <repositories>
-    <repository>
-      <id>snapshots-repo</id>
-      <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
-      <releases/>
-      <snapshots/>
-    </repository>
-  </repositories>
 
   <dependencies>
     <dependency>

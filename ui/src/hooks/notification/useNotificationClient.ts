@@ -1,16 +1,16 @@
 import { useEffect, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { AxiosError } from 'axios'
-import { $do } from '../../actions/types'
-import { ApplicationErrorType } from '@cxbox-ui/core/interfaces/view'
+import { actions, interfaces } from '@cxbox-ui/core'
 import showSocketNotification from '../../components/Notification/ShowSocketNotification'
-import { getStoreInstance } from '@cxbox-ui/core'
-import { brokerURL, heartbeatIncoming, heartbeatOutgoing, reconnectDelay } from '../../constants/notification'
+import { brokerURL, heartbeatIncoming, heartbeatOutgoing, reconnectDelay } from '@constants/notification'
 import { Client } from '@stomp/stompjs'
-import { SocketNotification } from '../../interfaces/notification'
-import { createUserSubscribeUrl } from '../../utils/notification'
-import { useAppSelector } from '../useAppSelector'
+import { SocketNotification } from '@interfaces/notification'
+import { createUserSubscribeUrl } from '@utils/notification'
+import { useAppSelector } from '@store'
 import { IFrame } from '@stomp/stompjs/src/i-frame'
+
+const { ApplicationErrorType } = interfaces
 
 const notificationClient = new Client({
     brokerURL: brokerURL,
@@ -23,6 +23,8 @@ const notificationClient = new Client({
 })
 
 export function useNotificationClient(subscribeCallback?: (messageBody: SocketNotification) => void) {
+    const router = useAppSelector(state => state.router)
+
     const dispatch = useDispatch()
 
     const handleStompConnectRef = useRef<(frame: IFrame, subscribeUrl: string) => void>((frame, subscribeUrl) => {
@@ -31,7 +33,7 @@ export function useNotificationClient(subscribeCallback?: (messageBody: SocketNo
         const checkAndShowErrorMessage = (errorType: number, text: any) => {
             if (errorType === 1) {
                 dispatch(
-                    $do.showViewError({
+                    actions.showViewError({
                         error: {
                             type: ApplicationErrorType.SystemError,
                             error: { response: text } as AxiosError
@@ -44,7 +46,7 @@ export function useNotificationClient(subscribeCallback?: (messageBody: SocketNo
 
             if (errorType === 0) {
                 dispatch(
-                    $do.showViewError({
+                    actions.showViewError({
                         error: {
                             type: ApplicationErrorType.BusinessError,
                             message: text
@@ -66,11 +68,9 @@ export function useNotificationClient(subscribeCallback?: (messageBody: SocketNo
                 return
             }
 
-            const storeInstance = getStoreInstance()
-
             showSocketNotification({
-                route: storeInstance.getState().router,
-                dispatch: storeInstance.dispatch,
+                route: router,
+                dispatch,
                 time,
                 drillDownLink,
                 drillDownType,

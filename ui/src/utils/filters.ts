@@ -1,11 +1,12 @@
-import { BcFilter, FilterType } from '@cxbox-ui/core/interfaces/filters'
+import { interfaces } from '@cxbox-ui/core'
 
 const EMPTY_OBJECT = {}
 const normalizeFilterValue = (value: unknown) => {
     return typeof value === 'string' ? value : JSON.stringify(value)
 }
 
-export const convertFiltersIntoObject = (filters?: BcFilter[]) => {
+const { FilterType } = interfaces
+export const convertFiltersIntoObject = (filters?: interfaces.BcFilter[]) => {
     return (
         filters?.reduce((filtersObj: Record<string, any>, filter) => {
             // TODO remove this (if), when the back will support range

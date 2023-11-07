@@ -1,36 +1,36 @@
-import { AppWidgetMeta } from '../../../../interfaces/widget'
+import { AppWidgetMeta } from '@interfaces/widget'
 import React, { useCallback } from 'react'
-import { shallowEqual, useDispatch, useSelector } from 'react-redux'
-import { AppState } from '../../../../interfaces/storeSlices'
-import { WidgetFormMeta } from '@cxbox-ui/core/interfaces/widget'
-import { buildBcUrl } from '@cxbox-ui/core'
+import { shallowEqual, useDispatch } from 'react-redux'
+import { useAppSelector } from '@store'
+import { interfaces } from '@cxbox-ui/core'
 import { ExpandIconProps } from 'antd/lib/table'
-import { DataItem } from '@cxbox-ui/core/interfaces/data'
 import ExpandIcon from '../components/ExpandIcon'
 import ExpandedRow from '../components/ExpandedRow'
 import { ColumnProps } from 'antd/es/table'
-import { FieldType } from '@cxbox-ui/core/interfaces/view'
-import { $do } from '../../../../actions/types'
+import { resetRecordForm, setRecordForm } from '@actions'
 import { Spin } from 'antd'
 import DebugWidgetWrapper from '../../../DebugWidgetWrapper/DebugWidgetWrapper'
+import { buildBcUrl } from '@utils/buildBcUrl'
 
-type ControlColumn = { column: ColumnProps<DataItem>; position: 'left' | 'right' }
+const { FieldType } = interfaces
+
+type ControlColumn = { column: ColumnProps<interfaces.DataItem>; position: 'left' | 'right' }
 
 type WidgetMetaField = { type: string; hidden?: boolean }
 
-const EXPAND_ICON_COLUMN: ColumnProps<DataItem> = {
+const EXPAND_ICON_COLUMN: ColumnProps<interfaces.DataItem> = {
     title: '',
     width: '36px',
     key: '_expandIconField'
 }
 
 export function useInternalWidgetSelector(externalWidget: AppWidgetMeta) {
-    return useSelector((state: AppState) => {
+    return useAppSelector(state => {
         const widgetNameForCreate = externalWidget.options?.create?.widget
         const widgetNameForEdit = externalWidget.options?.edit?.widget
 
-        const widgetForCreate = state.view.widgets.find(widget => widgetNameForCreate === widget?.name) as WidgetFormMeta
-        const widgetForEdit = state.view.widgets.find(widget => widgetNameForEdit === widget?.name) as WidgetFormMeta
+        const widgetForCreate = state.view.widgets.find(widget => widgetNameForCreate === widget?.name) as interfaces.WidgetFormMeta
+        const widgetForEdit = state.view.widgets.find(widget => widgetNameForEdit === widget?.name) as interfaces.WidgetFormMeta
 
         const bcName = (widgetForCreate || widgetForEdit)?.bcName as string
         const bc = state.screen.bo.bc[bcName]
@@ -62,21 +62,21 @@ function isExpandColumn(item: ControlColumn) {
 export function useExpandableForm(currentWidgetMeta: AppWidgetMeta) {
     const { internalWidget, internalWidgetOperations, internalWidgetActiveCursor, isCreateStyle, isEditStyle } =
         useInternalWidgetSelector(currentWidgetMeta)
-    const { cursor: currentActiveRowId } = useSelector((state: AppState) => state.view.recordForm)
-    const debugMode = useSelector((state: AppState) => state.session.debugMode || false)
+    const { cursor: currentActiveRowId } = useAppSelector(state => state.view.recordForm)
+    const debugMode = useAppSelector(state => state.session.debugMode || false)
 
     const dispatch = useDispatch()
 
     const expandIcon = useCallback(
-        ({ expanded, record, onExpand }: ExpandIconProps<DataItem>) => {
+        ({ expanded, record, onExpand }: ExpandIconProps<interfaces.DataItem>) => {
             const handleExpand = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
                 onExpand(record, e)
 
                 if (expanded) {
-                    dispatch($do.resetRecordForm(null))
+                    dispatch(resetRecordForm())
                 } else {
                     dispatch(
-                        $do.setRecordForm({
+                        setRecordForm({
                             widgetName: currentWidgetMeta.name,
                             cursor: record.id,
                             bcName: currentWidgetMeta.bcName,
@@ -95,7 +95,7 @@ export function useExpandableForm(currentWidgetMeta: AppWidgetMeta) {
     const isLoading = internalWidget && currentActiveRowId !== internalWidgetActiveCursor
 
     const expandedRowRender = useCallback(
-        (record: DataItem) => (
+        (record: interfaces.DataItem) => (
             <DebugWidgetWrapper debugMode={debugMode} meta={internalWidget}>
                 <Spin spinning={isLoading}>
                     <ExpandedRow widgetMeta={internalWidget} operations={internalWidgetOperations} record={record} />

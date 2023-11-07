@@ -1,8 +1,7 @@
 import React from 'react'
-import { CustomWidgetDescriptor, PopupWidgetTypes, WidgetTypes } from '@cxbox-ui/core/interfaces/widget'
 import Card from '../Card/Card'
-import { View as CxboxView } from '@cxbox-ui/core'
-import { CustomFieldTypes, CustomWidgetTypes } from '../../interfaces/widget'
+import { View as CxboxView } from '@cxboxComponents'
+import { CustomFieldTypes, CustomWidgetTypes } from '@interfaces/widget'
 import MultipleSelectField from '../../fields/MultipleSelectField/MultipleSelectField'
 import Form from '../widgets/Form/Form'
 import Header from '../widgets/Header/Header'
@@ -12,7 +11,6 @@ import EmptyCard from '../EmptyCard/EmptyCard'
 import styles from './View.module.css'
 import Info from '../widgets/Info/Info'
 import Table from '../widgets/Table/Table'
-import { FieldType } from '@cxbox-ui/core/interfaces/view'
 import Dictionary from '../../fields/Dictionary/Dictionary'
 import Steps from '../widgets/Steps/Steps'
 import { DashboardLayout } from '../ui/DashboardLayout/DashboardLayout'
@@ -26,13 +24,15 @@ import { FormPopup } from '../widgets/FormPopup/FormPopup'
 import MultivalueField from '../../fields/Multivalue/MultivalueField'
 import InlinePickList from '../../fields/InlinePickList/InlinePickList'
 import PickListField from '../../fields/PickListField/PickListField'
-import { useSelector } from 'react-redux'
-import { AppState } from '../../interfaces/storeSlices'
+import { useAppSelector } from '@store'
 import ViewInfoLabel from '../DebugPanel/components/ViewInfoLabel'
 import PopupWidgetInfoLabel from '../DebugPanel/components/PopupWidgetInfoLabel'
 import FileUpload from '../../fields/FileUpload/FileUpload'
+import { interfaces } from '@cxbox-ui/core'
 
-const skipWidgetTypes: WidgetTypes[] = []
+const { PopupWidgetTypes, WidgetTypes, FieldType } = interfaces
+
+const skipWidgetTypes: interfaces.WidgetTypes[] = []
 
 const customFields = {
     [FieldType.number]: Number,
@@ -46,7 +46,7 @@ const customFields = {
     [FieldType.fileUpload]: FileUpload
 }
 
-const customWidgets: Partial<Record<CustomWidgetTypes | WidgetTypes, CustomWidgetDescriptor>> = {
+const customWidgets: Partial<Record<CustomWidgetTypes | interfaces.WidgetTypes, interfaces.CustomWidgetDescriptor>> = {
     [WidgetTypes.Form]: { component: Form },
     [WidgetTypes.Info]: { component: Info },
     [WidgetTypes.List]: { component: Table },
@@ -64,15 +64,15 @@ const customWidgets: Partial<Record<CustomWidgetTypes | WidgetTypes, CustomWidge
 }
 
 function View() {
-    const debugMode = useSelector((state: AppState) => state.session.debugMode || false)
-    const widgets = useSelector((state: AppState) => state.view.widgets)
+    const debugMode = useAppSelector(state => state.session.debugMode || false)
+    const widgets = useAppSelector(state => state.view.widgets)
 
     return (
         <div className={styles.container}>
             {debugMode && <ViewInfoLabel />}
 
             <CxboxView
-                customWidgets={customWidgets as Record<string, CustomWidgetDescriptor>}
+                customWidgets={customWidgets as Record<string, interfaces.CustomWidgetDescriptor>}
                 customFields={customFields}
                 card={Card as any}
                 skipWidgetTypes={skipWidgetTypes}

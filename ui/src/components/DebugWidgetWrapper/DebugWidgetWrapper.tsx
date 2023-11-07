@@ -1,12 +1,12 @@
 import React, { FC } from 'react'
-import { WidgetMeta, WidgetMetaAny } from '@cxbox-ui/core/interfaces/widget'
 import DebugPanel from '../DebugPanel/DebugPanel'
 import styles from './DebugWidgetWrapper.less'
+import { interfaces } from '@cxbox-ui/core'
 
 interface Props {
     children?: React.ReactNode
     debugMode: boolean
-    meta: WidgetMeta | WidgetMetaAny
+    meta: interfaces.WidgetMeta | interfaces.WidgetMetaAny
 }
 
 const DebugWidgetWrapper: FC<Props> = props => {

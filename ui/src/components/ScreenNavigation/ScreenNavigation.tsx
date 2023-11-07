@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import cn from 'classnames'
 import { Menu, Icon } from 'antd'
-import { changeLocation } from '@cxbox-ui/core'
 import { ClickParam } from 'antd/lib/menu'
-import { useSelector } from 'react-redux'
-import { AppState } from '../../interfaces/storeSlices'
+import { useAppSelector } from '@store'
 import Search from 'antd/lib/input/Search'
 import styles from './ScreenNavigation.less'
+import { useChangeLocation } from '@router'
 
 const selectedItemClass = 'selectedItem'
 
 function ScreenNavigation() {
-    const screens = useSelector((state: AppState) => state.session.screens)
-    const screenName = useSelector((state: AppState) => state.router.screenName)
+    const screens = useAppSelector(state => state.session.screens)
+    const screenName = useAppSelector(state => state.router.screenName)
     const selectedScreen = screens.find(item => item.name === screenName) || screens.find(screen => screen.defaultScreen) || screens[0]
     const screenUrl = selectedScreen?.url ?? `/screen/${screenName}`
+    const changeLocation = useChangeLocation()
     const handleScreen = (e: ClickParam) => {
         changeLocation(e.key)
     }

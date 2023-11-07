@@ -1,10 +1,12 @@
 import { AnyAction, Dispatch, MiddlewareAPI } from 'redux'
-import { AppState } from '../interfaces/storeSlices'
-import { actionTypes } from '../interfaces/actions'
-import { $do } from '../actions/types'
-import { OperationTypeCrud } from '@cxbox-ui/core/interfaces/operation'
-import { AppWidgetMeta } from '../interfaces/widget'
+import { RootState } from '@store'
+import { actions, interfaces } from '@cxbox-ui/core'
+import { AppWidgetMeta } from '@interfaces/widget'
 import { openNotification, OpenNotificationType } from './internalFormWidgetMiddleware.utils'
+import { partialUpdateRecordForm, resetRecordForm, setRecordForm } from '@actions'
+import { Middleware } from '@reduxjs/toolkit'
+
+const { OperationTypeCrud } = interfaces
 
 const TEXTS_FOR_UNSAVED_NOTIFICATION: Omit<OpenNotificationType, 'onOk' | 'onCancel'> = {
     okText: 'Save',
@@ -13,8 +15,8 @@ const TEXTS_FOR_UNSAVED_NOTIFICATION: Omit<OpenNotificationType, 'onOk' | 'onCan
     description: ''
 }
 
-export const internalFormWidgetMiddleware =
-    ({ getState, dispatch }: MiddlewareAPI<Dispatch<AnyAction>, AppState>) =>
+export const internalFormWidgetMiddleware: Middleware =
+    ({ getState, dispatch }: MiddlewareAPI<Dispatch<AnyAction>, RootState>) =>
     (next: Dispatch) =>
     (action: AnyAction) => {
         const state = getState()
@@ -26,18 +28,18 @@ export const internalFormWidgetMiddleware =
             const actionPayload = action.payload as { bcName: string; cursor: string }
 
             dispatch(
-                $do.bcSelectRecord({
+                actions.bcSelectRecord({
                     bcName: actionPayload.bcName,
                     cursor: actionPayload.cursor
                 })
             )
 
-            return { type: actionTypes.emptyAction }
+            return next(actions.emptyAction())
         }
 
         const cancelCreate = (action: AnyAction) => {
             return next(
-                $do.sendOperation({
+                actions.sendOperation({
                     bcName: action.payload.bcName,
                     operationType: OperationTypeCrud.cancelCreate,
                     widgetName: recordForm.widgetName
@@ -48,14 +50,14 @@ export const internalFormWidgetMiddleware =
         const resetRecordFormAfter = (action: AnyAction) => {
             next(action)
 
-            return next($do.resetRecordForm(null))
+            return next(resetRecordForm())
         }
 
         const setRecordFormAfterCreateSuccess = (action: AnyAction) => {
             next(action)
 
             dispatch(
-                $do.setRecordForm({
+                setRecordForm({
                     widgetName: recordForm.widgetName,
                     bcName: action.payload.bcName,
                     cursor: action.payload.dataItem.id,
@@ -64,7 +66,7 @@ export const internalFormWidgetMiddleware =
                 })
             )
 
-            return { type: actionTypes.emptyAction }
+            return next(actions.emptyAction())
         }
 
         const partialUpdateRecordFormForActionSuccessfullyCreate = (
@@ -73,7 +75,7 @@ export const internalFormWidgetMiddleware =
             internalWidgetName?: string
         ) => {
             dispatch(
-                $do.partialUpdateRecordForm({
+                partialUpdateRecordForm({
                     widgetName: internalWidgetName,
                     bcName: internalBcName
                 })
@@ -87,7 +89,7 @@ export const internalFormWidgetMiddleware =
                 ...TEXTS_FOR_UNSAVED_NOTIFICATION,
                 onOk: () => {
                     dispatch(
-                        $do.sendOperation({
+                        actions.sendOperation({
                             bcName: action.payload.bcName,
                             operationType: OperationTypeCrud.save,
                             widgetName: recordForm.widgetName,
@@ -96,13 +98,13 @@ export const internalFormWidgetMiddleware =
                     )
                 },
                 onCancel: () => {
-                    dispatch($do.bcCancelPendingChanges(null as any))
-                    dispatch($do.clearValidationFails(null))
+                    dispatch(actions.bcCancelPendingChanges(null as any))
+                    dispatch(actions.clearValidationFails(null))
                     next(action)
                 }
             })
 
-            return { type: actionTypes.emptyAction }
+            return next(actions.emptyAction())
         }
 
         const showNotificationAtChangeActiveForm = (action: AnyAction) => {
@@ -110,7 +112,7 @@ export const internalFormWidgetMiddleware =
                 ...TEXTS_FOR_UNSAVED_NOTIFICATION,
                 onOk: () => {
                     dispatch(
-                        $do.sendOperation({
+                        actions.sendOperation({
                             bcName: action.payload.bcName,
                             operationType: OperationTypeCrud.save,
                             widgetName: recordForm.widgetName,
@@ -119,11 +121,11 @@ export const internalFormWidgetMiddleware =
                     )
                 },
                 onCancel: () => {
-                    dispatch($do.bcCancelPendingChanges(null as any))
-                    dispatch($do.clearValidationFails(null))
+                    dispatch(actions.bcCancelPendingChanges(null as any))
+                    dispatch(actions.clearValidationFails(null))
                     next(action)
                     dispatch(
-                        $do.bcSelectRecord({
+                        actions.bcSelectRecord({
                             bcName: action.payload.bcName,
                             cursor: action.payload.cursor
                         })
@@ -131,7 +133,7 @@ export const internalFormWidgetMiddleware =
                 }
             })
 
-            return { type: actionTypes.emptyAction }
+            return next(actions.emptyAction())
         }
 
         const showNotificationAtSimpleRecordChange = (action: AnyAction) => {
@@ -139,7 +141,7 @@ export const internalFormWidgetMiddleware =
                 ...TEXTS_FOR_UNSAVED_NOTIFICATION,
                 onOk: () => {
                     dispatch(
-                        $do.sendOperation({
+                        actions.sendOperation({
                             bcName: action.payload.bcName,
                             operationType: OperationTypeCrud.save,
                             widgetName: recordForm.widgetName,
@@ -148,14 +150,14 @@ export const internalFormWidgetMiddleware =
                     )
                 },
                 onCancel: () => {
-                    dispatch($do.bcCancelPendingChanges(null as any))
-                    dispatch($do.clearValidationFails(null))
-                    next($do.resetRecordForm(null))
+                    dispatch(actions.bcCancelPendingChanges(null as any))
+                    dispatch(actions.clearValidationFails(null))
+                    next(resetRecordForm())
                     next(action)
                 }
             })
 
-            return { type: actionTypes.emptyAction }
+            return next(actions.emptyAction())
         }
 
         const showNotificationAtChangeRecordAfterCreate = (action: AnyAction) => {
@@ -163,7 +165,7 @@ export const internalFormWidgetMiddleware =
                 ...TEXTS_FOR_UNSAVED_NOTIFICATION,
                 onOk: () => {
                     dispatch(
-                        $do.sendOperation({
+                        actions.sendOperation({
                             bcName: action.payload.bcName,
                             operationType: OperationTypeCrud.save,
                             widgetName: recordForm.widgetName,
@@ -173,7 +175,7 @@ export const internalFormWidgetMiddleware =
                 },
                 onCancel: () => {
                     next(
-                        $do.sendOperation({
+                        actions.sendOperation({
                             bcName: action.payload.bcName,
                             operationType: OperationTypeCrud.cancelCreate,
                             widgetName: recordForm.widgetName
@@ -182,7 +184,7 @@ export const internalFormWidgetMiddleware =
                 }
             })
 
-            return { type: actionTypes.emptyAction }
+            return next(actions.emptyAction())
         }
 
         const previousCursor = state.screen.bo.bc[action.payload?.bcName]?.cursor
@@ -192,12 +194,16 @@ export const internalFormWidgetMiddleware =
         const isPreviousPendingDataChanges = previousPendingDataChanges ? !!Object.keys(previousPendingDataChanges).length : false
         const actionIsDependsOnRecordForm = action.payload?.bcName === recordForm.bcName
         const isSimpleChangeRecordForActiveRecordForm =
-            action.type === actionTypes.bcSelectRecord &&
+            action.type === actions.bcSelectRecord.toString() &&
             actionIsDependsOnRecordForm &&
             recordForm.cursor !== action.payload.cursor &&
             recordForm.active
-        const isChangeActiveRecordForm = action.type === actionTypes.setRecordForm && action.payload.cursor !== recordForm.cursor
-        const actionListForRecordFormReset = [actionTypes.bcSaveDataSuccess, actionTypes.sendOperationSuccess, actionTypes.bcNewDataFail]
+        const isChangeActiveRecordForm = action.type === setRecordForm.toString() && action.payload.cursor !== recordForm.cursor
+        const actionListForRecordFormReset = [
+            actions.bcSaveDataSuccess.toString(),
+            actions.sendOperationSuccess.toString(),
+            actions.bcNewDataFail.toString()
+        ]
 
         // Logic for change cursor before
         if ((isSimpleChangeRecordForActiveRecordForm || isChangeActiveRecordForm) && recordForm.create && isPreviousPendingDataChanges) {
@@ -226,7 +232,8 @@ export const internalFormWidgetMiddleware =
         // Logic for change cursor after
 
         // Logic for create operation before
-        const isCreateOperation = action.type === actionTypes.sendOperation && action.payload.operationType === OperationTypeCrud.create
+        const isCreateOperation =
+            action.type === actions.sendOperation.toString() && action.payload.operationType === OperationTypeCrud.create
         const widgetWithInternalWidgetCreate = isCreateOperation
             ? getWidgetWithInternalWidgetCreateForAction(state.view.widgets as AppWidgetMeta[], action)
             : undefined
@@ -244,7 +251,7 @@ export const internalFormWidgetMiddleware =
         }
 
         const isSuccessfulCreateForInternalWidget =
-            action.type === actionTypes.bcNewDataSuccess && recordForm.widgetName && actionIsDependsOnRecordForm
+            action.type === actions.bcNewDataSuccess.toString() && recordForm.widgetName && actionIsDependsOnRecordForm
 
         if (isSuccessfulCreateForInternalWidget) {
             return setRecordFormAfterCreateSuccess(action)
@@ -265,7 +272,7 @@ export const internalFormWidgetMiddleware =
                 ...TEXTS_FOR_UNSAVED_NOTIFICATION,
                 onOk: () => {
                     dispatch(
-                        $do.sendOperation({
+                        actions.sendOperation({
                             bcName: recordForm.bcName,
                             operationType: OperationTypeCrud.save,
                             widgetName: recordForm.widgetName,
@@ -274,16 +281,16 @@ export const internalFormWidgetMiddleware =
                     )
                 },
                 onCancel: () => {
-                    dispatch($do.bcCancelPendingChanges(null as any))
-                    dispatch($do.clearValidationFails(null))
+                    dispatch(actions.bcCancelPendingChanges(null as any))
+                    dispatch(actions.clearValidationFails(null))
                     next(action)
                 }
             })
 
-            return { type: actionTypes.emptyAction }
+            return next(actions.emptyAction())
         }
 
-        if (action.type === actionTypes.resetRecordForm && isCurrentPendingDataChanges) {
+        if (action.type === resetRecordForm.toString() && isCurrentPendingDataChanges) {
             return showNotificationAtRecordClose(action)
         }
         // Logic for closing the current record form after

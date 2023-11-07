@@ -1,0 +1,112 @@
+.popupModal {
+    :global {
+        .ant-modal-body {
+            padding: 3px;
+            height: 445px;
+            overflow-y: auto;
+        }
+
+        .ant-modal-close-x {
+            display: block;
+            font-style: normal;
+            // vertical-align: baseline;
+            text-align: center;
+            text-transform: none;
+            text-rendering: auto;
+            width: 24px;
+            height: 24px;
+            line-height: 24px;
+            font-size: 14px;
+        }
+
+        .ant-table-selection-column {
+            &:first-child {
+                width: 50px;
+                max-width: 50px;
+                min-width: 50px;
+            }
+        }
+    }
+}
+
+:global {
+    .ant-modal-mask {
+        z-index: 1056 !important;
+    }
+
+    .ant-modal-wrap {
+        z-index: 1057 !important;
+    }
+}
+
+.minimalWidthFix {
+    :global {
+        .ant-table-tbody > tr > td {
+            min-width: 200px;
+        }
+    }
+}
+
+.title {
+    font-size: 24px;
+}
+
+.footerContainer {
+    display: flex;
+    flex-direction: column;
+
+    .pagination {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .actions {
+        display: flex;
+        flex-direction: row;
+        margin: 5px 0 16px 0;
+
+        .buttonYellow {
+            border-color: #f7ad2b;
+            border-radius: 4px;
+            background: #f7ad2b;
+            color: #595959;
+            box-shadow: none;
+
+            &:hover {
+                border-color: #f7ad2b;
+                background: #f7ad2b;
+                color: #595959;
+            }
+        }
+
+        .buttonCancel {
+            border: none;
+            background: none;
+            color: #0088bb;
+        }
+    }
+}
+.tagArea {
+    overflow-y: auto;
+    max-height: 200px;
+    :global {
+        .ant-tag {
+            position: relative;
+            margin: 2px 2px 0px 2px;
+            padding-right: 20px;
+            line-height: 18px;
+            background: #ffffff;
+            white-space: initial;
+
+            .anticon {
+                position: absolute;
+                display: block;
+                top: 3px;
+                right: 6px;
+            }
+        }
+    }
+}
+

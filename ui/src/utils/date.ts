@@ -1,6 +1,6 @@
 import moment from 'moment'
-import { FieldType } from '@cxbox-ui/core/interfaces/view'
-import { dateFormat, DateFormat } from '../interfaces/date'
+import { dateFormat, DateFormat } from '@interfaces/date'
+import { interfaces } from '@cxbox-ui/core'
 
 export const getFormat = (showTime?: boolean, showSeconds?: boolean, monthYear?: boolean) => {
     if (showSeconds) {
@@ -26,11 +26,12 @@ export const convertDate = (date: string | null, withTime?: boolean, withSeconds
     return moment(date, dateFormat).format(getFormat(withTime, withSeconds, monthYear))
 }
 
+const { FieldType } = interfaces
 export const isDateField = (type: string) => {
-    return [FieldType.date, FieldType.dateTime, FieldType.dateTimeWithSeconds].includes(type as FieldType)
+    return [FieldType.date, FieldType.dateTime, FieldType.dateTimeWithSeconds].includes(type as interfaces.FieldType)
 }
 
-export type DateTypes = FieldType.date | FieldType.dateTime | FieldType.dateTimeWithSeconds
+export type DateTypes = typeof FieldType.date | typeof FieldType.dateTime | typeof FieldType.dateTimeWithSeconds
 
 export const getCurrentDate = (d: Date = new Date(), del: string = '-') => {
     const dd = String(d.getDate()).padStart(2, '0')

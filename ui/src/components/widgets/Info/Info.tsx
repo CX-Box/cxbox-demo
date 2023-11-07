@@ -1,14 +1,14 @@
 import React from 'react'
-import { WidgetInfoMeta, WidgetInfoField } from '@cxbox-ui/core/interfaces/widget'
-import { useFlatFormFields } from '@cxbox-ui/core'
-import { useDispatch, useSelector } from 'react-redux'
-import { AppState } from '../../../interfaces/storeSlices'
-import { $do } from '../../../actions/types'
+import { interfaces } from '@cxbox-ui/core'
+import { useDispatch } from 'react-redux'
+import { useAppSelector } from '@store'
+import { actions } from '@cxbox-ui/core'
 import InfoRow from './components/InfoRow'
 import { Row } from 'antd'
+import { useFlatFormFields } from '@hooks/useFlatFormFields'
 
 interface InfoProps {
-    meta: WidgetInfoMeta
+    meta: interfaces.WidgetInfoMeta
 }
 
 /**
@@ -19,16 +19,16 @@ interface InfoProps {
  */
 function Info({ meta }: InfoProps) {
     const { bcName, name, options } = meta
-    const cursor = useSelector((state: AppState) => state.screen.bo.bc[bcName]?.cursor || '')
+    const cursor = useAppSelector(state => state.screen.bo.bc[bcName]?.cursor || '')
     const dispatch = useDispatch()
     const handleDrillDown = React.useCallback(
         (dataId: string, fieldKey: string) => {
-            dispatch($do.userDrillDown({ widgetName: name, cursor: dataId, bcName, fieldKey }))
+            dispatch(actions.userDrillDown({ widgetName: name, cursor: dataId, bcName, fieldKey }))
         },
         [dispatch, name, bcName]
     )
 
-    const flattenWidgetFields = useFlatFormFields<WidgetInfoField>(meta.fields).filter(item => {
+    const flattenWidgetFields = useFlatFormFields<interfaces.WidgetInfoField>(meta.fields).filter(item => {
         return !item.hidden
     })
 

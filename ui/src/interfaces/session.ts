@@ -1,5 +1,5 @@
-import { LoginResponse as CoreLoginResponse } from '@cxbox-ui/core/interfaces/session'
+import { interfaces } from '@cxbox-ui/core'
 
-export interface LoginResponse extends CoreLoginResponse {
+export interface LoginResponse extends interfaces.LoginResponse {
     userId: string
 }

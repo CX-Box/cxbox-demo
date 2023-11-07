@@ -1,19 +1,18 @@
 import React, { useCallback } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import cn from 'classnames'
 import { useTranslation } from 'react-i18next'
 import { Icon, Upload } from 'antd'
 import { UploadFile } from 'antd/es/upload/interface'
-import { FileUploadFieldMeta } from '@cxbox-ui/schema/src/interfaces/widget'
-import { BaseFieldProps, ChangeDataItemPayload } from '@cxbox-ui/core/components/Field/Field'
-import { $do } from '../../actions/types'
-import { AppState } from '../../interfaces/storeSlices'
-import { applyParams, getFileUploadEndpoint } from '../../utils/api'
+import { applyParams, getFileUploadEndpoint } from '@utils/api'
 import styles from './FileUpload.less'
+import { BaseFieldProps, ChangeDataItemPayload } from '@cxboxComponents/Field/Field'
+import { actions, interfaces } from '@cxbox-ui/core'
+import { useAppDispatch, useAppSelector } from '@store'
+import { buildBcUrl } from '@utils/buildBcUrl'
 
 interface Props extends Omit<BaseFieldProps, 'meta'> {
     value: string
-    meta: FileUploadFieldMeta
+    meta: interfaces.FileUploadFieldMeta
     placeholder?: string
 }
 
@@ -27,37 +26,37 @@ const FileUpload: React.FunctionComponent<Props> = ({
     meta,
     value: fieldValue
 }) => {
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
     const { key: fieldName, fileIdKey, fileSource, snapshotKey, snapshotFileIdKey } = meta
 
-    const widgetMeta = useSelector((state: AppState) => state.view.widgets?.find(i => i.name === widgetName))
+    const widgetMeta = useAppSelector(state => state.view.widgets?.find(i => i.name === widgetName))
     const bcName = widgetMeta?.bcName
-    const fieldDataItem = useSelector((state: AppState) => (bcName && state.data[bcName]?.find(item => item.id === cursor)) || undefined)
+    const fieldDataItem = useAppSelector(state => (bcName && state.data[bcName]?.find(item => item.id === cursor)) || undefined)
 
-    const pendingData = useSelector((state: AppState) => (bcName && cursor && state.view.pendingDataChanges[bcName]?.[cursor]) || undefined)
+    const pendingData = useAppSelector(state => (bcName && cursor && state.view.pendingDataChanges[bcName]?.[cursor]) || undefined)
     const fileIdDelta = (!readOnly ? pendingData?.[fileIdKey] : null) as string
     const fileNameDelta = !readOnly && (pendingData?.[fieldName] as string)
 
     const onStartUpload = useCallback(() => {
-        dispatch($do.uploadFile(null))
+        dispatch(actions.uploadFile(null))
     }, [dispatch])
 
     const onDeleteFile = useCallback(
         (payload: ChangeDataItemPayload) => {
-            dispatch($do.changeDataItem(payload))
+            dispatch(actions.changeDataItem({ ...payload, bcUrl: buildBcUrl(payload.bcName, true) }))
         },
         [dispatch]
     )
 
     const onUploadFileFailed = useCallback(() => {
-        dispatch($do.uploadFileFailed(null))
+        dispatch(actions.uploadFileFailed(null))
     }, [dispatch])
 
     const onUploadFileDone = useCallback(
         (payload: ChangeDataItemPayload) => {
-            dispatch($do.changeDataItem(payload))
-            dispatch($do.uploadFileDone(null))
+            dispatch(actions.changeDataItem({ ...payload, bcUrl: buildBcUrl(payload.bcName, true) }))
+            dispatch(actions.uploadFileDone(null))
         },
         [dispatch]
     )

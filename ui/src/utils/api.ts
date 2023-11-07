@@ -1,5 +1,5 @@
-import qs from 'query-string'
-import { axiosInstance } from '../api/session'
+import queryString from 'query-string'
+import { CxBoxApiInstance } from '../api'
 
 type QueryParamsMap = Record<string, string | number>
 
@@ -11,7 +11,7 @@ export function applyRawParams(url: string, qso: Record<string, unknown>) {
     if (!qso) {
         return url
     }
-    const result = qs.stringify(qso, { encode: true })
+    const result = queryString.stringify(qso, { encode: true })
     return `${addTailControlSequences(url)}${result && `${result}`}`
 }
 
@@ -41,6 +41,8 @@ export function applyParams(url: string, qso: QueryParamsMap) {
  * @returns File upload endpoint
  */
 export function getFileUploadEndpoint() {
+    const axiosInstance = CxBoxApiInstance.api$.instance
+
     if (!axiosInstance.defaults.baseURL) {
         return '/file'
     }

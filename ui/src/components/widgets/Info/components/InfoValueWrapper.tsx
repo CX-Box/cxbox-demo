@@ -2,10 +2,10 @@ import cn from 'classnames'
 import React, { ReactNode } from 'react'
 import styles from './InfoValueWrapper.module.css'
 import { Col } from 'antd'
-import { LayoutRow } from '@cxbox-ui/core/interfaces/widget'
+import { interfaces } from '@cxbox-ui/core'
 
 interface ValueWrapperProps {
-    row: LayoutRow
+    row: interfaces.LayoutRow
     colSpan?: number
     children?: ReactNode
 }

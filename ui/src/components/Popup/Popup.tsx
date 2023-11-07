@@ -5,10 +5,9 @@ import styles from './Popup.less'
 import { ModalProps } from 'antd/lib/modal'
 import cn from 'classnames'
 import Pagination from '../ui/Pagination/Pagination'
-import { useSelector } from 'react-redux'
-import { AppState } from '../../interfaces/storeSlices'
-import { WidgetTableMeta } from '@cxbox-ui/core/interfaces/widget'
 import Button from '../ui/Button/Button'
+import { interfaces } from '@cxbox-ui/core'
+import { useAppSelector } from '@store'
 
 export interface PopupProps extends ModalProps {
     onOkHandler?: () => void
@@ -53,7 +52,7 @@ const Popup: FunctionComponent<PopupProps> = props => {
     } = props
     const computedTitle = typeof title !== 'string' ? title : <h1 className={styles.title}>{title}</h1>
     const computedWidth = width || (size ? widths[size] : widths.medium)
-    const widgetMeta = useSelector((state: AppState) => {
+    const widgetMeta = useAppSelector(state => {
         return state.view.widgets.find(widget => widget.name === widgetName)
     })
     const { t } = useTranslation()
@@ -63,7 +62,7 @@ const Popup: FunctionComponent<PopupProps> = props => {
             <div className={styles.footerContainer}>
                 {!disablePagination && widgetMeta && (
                     <div className={styles.pagination}>
-                        <Pagination meta={widgetMeta as WidgetTableMeta} />
+                        <Pagination meta={widgetMeta as interfaces.WidgetTableMeta} />
                     </div>
                 )}
                 <div className={styles.actions}>

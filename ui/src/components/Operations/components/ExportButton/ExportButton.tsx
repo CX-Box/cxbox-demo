@@ -1,29 +1,29 @@
 import React, { useMemo } from 'react'
-import { shallowEqual, useSelector } from 'react-redux'
-import { AppState } from '../../../../interfaces/storeSlices'
-import { WidgetListField, WidgetMeta } from '@cxbox-ui/core/interfaces/widget'
-import { ExportOptions, exportTable } from '../../../../utils/export'
+import { shallowEqual } from 'react-redux'
+import { ExportOptions, exportTable } from '@utils/export'
 import Button from '../../../ui/Button/Button'
-import { AppWidgetMeta } from '../../../../interfaces/widget'
+import { AppWidgetMeta } from '@interfaces/widget'
+import { interfaces } from '@cxbox-ui/core'
+import { useAppSelector } from '@store'
 
 interface ExportButtonProps {
-    widgetMeta: WidgetMeta
+    widgetMeta: interfaces.WidgetMeta
     exportWithDate?: boolean
 }
 
 export const ExportButton: React.FC<ExportButtonProps> = ({ widgetMeta, exportWithDate = false }) => {
-    const screenName = useSelector((store: AppState) => store.screen.screenName)
+    const screenName = useAppSelector(state => state.screen.screenName)
     const { bcName } = widgetMeta
-    const tableFilters = useSelector((state: AppState) => state.screen.filters[bcName])
-    const tableSorters = useSelector((state: AppState) => state.screen.sorters[bcName])
-    const widgetData = useSelector((state: AppState) => state.data[bcName])
+    const tableFilters = useAppSelector(state => state.screen.filters[bcName])
+    const tableSorters = useAppSelector(state => state.screen.sorters[bcName])
+    const widgetData = useAppSelector(state => state.data[bcName])
     const exportConfig = (widgetMeta as AppWidgetMeta).options?.export
     const showExport = exportConfig?.enabled
     const title = exportConfig?.title ?? widgetMeta.title
     const filteredFields = useMemo(() => {
-        return (widgetMeta.fields as WidgetListField[])?.filter(field => !field?.hidden)
+        return (widgetMeta.fields as interfaces.WidgetListField[])?.filter(field => !field?.hidden)
     }, [widgetMeta.fields])
-    const exportOptions: ExportOptions = useSelector((state: AppState) => {
+    const exportOptions: ExportOptions = useAppSelector(state => {
         const bc = state.screen.bo.bc[bcName]
 
         return {

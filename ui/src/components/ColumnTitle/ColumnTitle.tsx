@@ -1,21 +1,21 @@
 import React from 'react'
-import { WidgetListField } from '@cxbox-ui/core/interfaces/widget'
-import { RowMetaField } from '@cxbox-ui/core/interfaces/rowMeta'
 import ColumnFilter from './ColumnFilter'
-import { FieldType } from '@cxbox-ui/core/interfaces/view'
 import cn from 'classnames'
 import ColumnSort from './ColumnSort'
-import { TemplatedTitle } from '@cxbox-ui/core'
 import styles from './ColumnTitle.less'
-import { CustomFieldTypes } from '../../interfaces/widget'
+import { CustomFieldTypes } from '@interfaces/widget'
+import { interfaces } from '@cxbox-ui/core'
+import { TemplatedTitle } from '@cxboxComponents'
 
 interface ColumnTitleProps {
     widgetName: string
-    widgetMeta: WidgetListField
-    rowMeta: RowMetaField
+    widgetMeta: interfaces.WidgetListField
+    rowMeta: interfaces.RowMetaField
 }
 
-export const notSortableFields: readonly (FieldType | CustomFieldTypes)[] = [
+const { FieldType } = interfaces
+
+export const notSortableFields: readonly (interfaces.FieldType | CustomFieldTypes)[] = [
     CustomFieldTypes.MultipleSelect,
     FieldType.multivalue,
     FieldType.multivalueHover,

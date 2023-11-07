@@ -2,14 +2,13 @@ import React from 'react'
 import { Tag, Icon } from 'antd'
 import styles from './MultivalueTag.less'
 import cn from 'classnames'
-import { MultivalueSingleValue } from '@cxbox-ui/core/interfaces/data'
-import { MultivalueFieldMeta } from '@cxbox-ui/core/interfaces/widget'
+import { interfaces } from '@cxbox-ui/core'
 
 export interface MultivalueTagProps {
     disabled: boolean
     placeholder?: string
-    value: MultivalueSingleValue[]
-    widgetFieldMeta: MultivalueFieldMeta
+    value: interfaces.MultivalueSingleValue[]
+    widgetFieldMeta: interfaces.MultivalueFieldMeta
     /**
      * @deprecated TODO: Remove in 2.0.0 in favor of `widgetName`
      */
@@ -18,8 +17,8 @@ export interface MultivalueTagProps {
     loading?: boolean
     page: number
     metaError: string
-    onPopupOpen: (bcName: string, widgetFieldMeta: MultivalueFieldMeta, page: number, widgetName?: string) => void
-    onChange: (newValue: MultivalueSingleValue[], removedValue: MultivalueSingleValue) => void
+    onPopupOpen: (bcName: string, widgetFieldMeta: interfaces.MultivalueFieldMeta, page: number, widgetName?: string) => void
+    onChange: (newValue: interfaces.MultivalueSingleValue[], removedValue: interfaces.MultivalueSingleValue) => void
 }
 
 /**
@@ -51,7 +50,7 @@ const MultivalueTag: React.FunctionComponent<MultivalueTagProps> = ({
             if (!disabled) {
                 onChange(
                     value.filter(item => item.id !== recordId),
-                    value.find(item => item.id === recordId) as MultivalueSingleValue
+                    value.find(item => item.id === recordId) as interfaces.MultivalueSingleValue
                 )
             }
         },

@@ -1,4 +1,4 @@
-import { __WS_API__ } from './constants'
+import { __WS_API__ } from '../constants'
 
 export const brokerURL = `${__WS_API__}websocketnotification`
 

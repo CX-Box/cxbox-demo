@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from 'react'
-import { checkNewNotification, getNotificationCount, getNotificationList, setNotificationsRead } from '../../api/notification'
 import { useDispatch } from 'react-redux'
 import { AxiosError } from 'axios'
-import { useAppSelector } from '../useAppSelector'
-import { $do } from '../../actions/types'
 import { useNotificationClient } from './useNotificationClient'
 import { initialState } from '../../reducers/notification'
+import { useAppSelector } from '@store'
+import { changeNotification } from '@actions'
+import { CxBoxApiInstance as instance } from '../../api'
 
 export function useStompNotification({ check = false } = {}) {
     const notificationState = useAppSelector(state => state.notification)
@@ -13,9 +13,10 @@ export function useStompNotification({ check = false } = {}) {
     const dispatch = useDispatch()
 
     const checkNew = useCallback(() => {
-        checkNewNotification()
+        instance
+            .checkNewNotification()
             .then(response => {
-                dispatch($do.changeNotification({ unreadCount: response.data }))
+                dispatch(changeNotification({ unreadCount: response?.data }))
             })
             .catch((error: AxiosError) => {
                 console.error('Error when checking for new notifications', error)
@@ -23,11 +24,12 @@ export function useStompNotification({ check = false } = {}) {
     }, [dispatch])
 
     const getCount = useCallback(() => {
-        getNotificationCount()
+        instance
+            .getNotificationCount()
             .then(response => {
-                const count = response.data
+                const count = response?.data
                 if (count !== null) {
-                    dispatch($do.changeNotification({ count }))
+                    dispatch(changeNotification({ count }))
                 }
             })
             .catch((error: AxiosError) => {
@@ -37,10 +39,11 @@ export function useStompNotification({ check = false } = {}) {
 
     const getList = useCallback(
         (page: number = initialState.page, limit: number = initialState.limit) => {
-            getNotificationList(page, limit)
+            instance
+                .getNotificationList(page, limit)
                 .then(response => {
-                    if (response.success) {
-                        dispatch($do.changeNotification({ data: response.data }))
+                    if (response?.success) {
+                        dispatch(changeNotification({ data: response.data }))
                     }
                 })
                 .catch((error: AxiosError) => {
@@ -56,7 +59,8 @@ export function useStompNotification({ check = false } = {}) {
 
     const setRead = useCallback(
         (selectedRowKeys: (string | number)[]) => {
-            setNotificationsRead(selectedRowKeys)
+            instance
+                .setNotificationsRead(selectedRowKeys)
                 .then(data => {
                     getCount()
                     checkNew()
@@ -71,7 +75,7 @@ export function useStompNotification({ check = false } = {}) {
 
     const changePage = useCallback(
         (page: number, limit: number = initialState.limit) => {
-            dispatch($do.changeNotification({ page, limit }))
+            dispatch(changeNotification({ page, limit }))
             getList(page, limit)
         },
         [dispatch, getList]

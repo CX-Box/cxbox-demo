@@ -1,15 +1,14 @@
 import React from 'react'
 import { Divider } from 'antd'
-import { shallowEqual, useDispatch, useSelector } from 'react-redux'
-import { AppState } from '../../../../interfaces/storeSlices'
-import { $do } from '@cxbox-ui/core'
+import { shallowEqual, useDispatch } from 'react-redux'
+import { useAppSelector } from '@store'
+import { actions, interfaces } from '@cxbox-ui/core'
 import styles from './UserMenuContent.less'
 import cn from 'classnames'
 import Button from '../../../ui/Button/Button'
-import { UserRole } from '@cxbox-ui/core/interfaces/session'
 
 export const UserMenuContent: React.FC = () => {
-    const { firstName, lastName, login, activeRole, roles } = useSelector((state: AppState) => {
+    const { firstName, lastName, login, activeRole, roles } = useAppSelector(state => {
         return {
             firstName: state.session.firstName,
             lastName: state.session.lastName,
@@ -19,8 +18,11 @@ export const UserMenuContent: React.FC = () => {
         }
     }, shallowEqual)
     const dispatch = useDispatch()
-    const createSwitchRoleHandler = React.useCallback((roleKey: string) => () => dispatch($do.switchRole({ role: roleKey })), [dispatch])
-    const handleLogout = React.useCallback(() => dispatch($do.logout(null)), [dispatch])
+    const createSwitchRoleHandler = React.useCallback(
+        (roleKey: string) => () => dispatch(actions.switchRole({ role: roleKey })),
+        [dispatch]
+    )
+    const handleLogout = React.useCallback(() => dispatch(actions.logout(null)), [dispatch])
     const fullName = `${lastName} ${firstName}`
     const sortedRoles = React.useMemo(() => roles?.sort(roleComparator), [roles])
 
@@ -64,7 +66,7 @@ export const UserMenuContent: React.FC = () => {
 
 export default React.memo(UserMenuContent)
 
-function roleComparator(a: UserRole, b: UserRole) {
+function roleComparator(a: interfaces.UserRole, b: interfaces.UserRole) {
     if (a.value > b.value) {
         return 1
     }

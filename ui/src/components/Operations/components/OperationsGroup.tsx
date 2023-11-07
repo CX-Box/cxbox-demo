@@ -1,15 +1,14 @@
 import React from 'react'
-import { Operation, OperationGroup } from '@cxbox-ui/core/interfaces/operation'
+import { interfaces } from '@cxbox-ui/core'
 import { Dropdown, Icon, Menu } from 'antd'
 import styles from './OperationsGroup.less'
-import { removeRecordOperationWidgets } from '../../../interfaces/widget'
-import { WidgetTypes } from '@cxbox-ui/core/interfaces/widget'
+import { removeRecordOperationWidgets } from '@interfaces/widget'
 import Button from '../../ui/Button/Button'
 
 interface OperationsGroupProps {
-    group: OperationGroup
-    onClick: (operation: Operation) => void
-    widgetType: WidgetTypes | string
+    group: interfaces.OperationGroup
+    onClick: (operation: interfaces.Operation) => void
+    widgetType: interfaces.WidgetTypes | string
 }
 
 function OperationsGroup({ group, widgetType, onClick }: OperationsGroupProps) {

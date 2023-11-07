@@ -1,0 +1,56 @@
+.tableContainer {
+    position: relative;
+}
+
+.table {
+    overflow-x: auto;
+
+    :global{
+        .ant-table .ant-table-thead > tr > th {
+            padding: 11px 16px;
+            font-weight: 500;
+            color: rgba(0, 0, 0, 0.85);
+            background: #fff;
+            border-bottom: 1px solid #595959;
+
+            span {
+                font-size: 14px;
+            }
+        }
+
+        .ant-table-row {
+            vertical-align: top;
+
+            > td {
+                border: none;
+            }
+        }
+    }
+}
+
+.tableWithRowMenu {
+    tbody td:last-child {
+        padding-right: 30px;
+    }
+}
+
+.filtersContainer {
+    :global {
+        .ant-select {
+            padding-top: 10px;
+            padding-right: 10px;
+        }
+
+        .ant-select-selection {
+            border: none;
+
+            &:focus, &:active{
+                box-shadow: none;
+            }
+
+            &__rendered {
+                margin-left: 0;
+            }
+        }
+    }
+}

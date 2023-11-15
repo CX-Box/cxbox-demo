@@ -5,17 +5,18 @@ import org.cxbox.core.crudma.bc.BcIdentifier;
 import org.cxbox.core.crudma.bc.EnumBcIdentifier;
 import org.cxbox.core.crudma.bc.impl.AbstractEnumBcSupplier;
 import org.cxbox.core.crudma.bc.impl.BcDescription;
-import org.demo.service.ContactMultivalueService;
-import org.demo.service.DashboardClientActivitiesService;
 import org.demo.service.ClientContactService;
 import org.demo.service.ClientPickListService;
 import org.demo.service.ClientReadWriteService;
+import org.demo.service.ContactMultivalueService;
 import org.demo.service.ContactPickListService;
+import org.demo.service.DashboardClientActivitiesService;
 import org.demo.service.DashboardFilterService;
 import org.demo.service.DashboardSalesFunnelService;
 import org.demo.service.DashboardSalesRingProgressService;
 import org.demo.service.MeetingReadService;
 import org.demo.service.MeetingWriteService;
+import org.demo.service.MyDictionaryItemService;
 import org.demo.service.ResponsiblePickListService;
 import org.demo.service.SaleReadService;
 import org.demo.service.SaleWriteService;
@@ -50,7 +51,8 @@ public enum CxboxRestController implements EnumBcIdentifier {
 	dashboardFilter(DashboardFilterService.class),
 		dashboardClientActivities(dashboardFilter, DashboardClientActivitiesService.class),
 	dashboardSalesFunnel(dashboardFilter, DashboardSalesFunnelService.class),
-	dashboardSalesRingProgress(dashboardFilter, DashboardSalesRingProgressService.class);
+	dashboardSalesRingProgress(dashboardFilter, DashboardSalesRingProgressService.class),
+	testWidget(MyDictionaryItemService.class);
 
 	// @formatter:on
 

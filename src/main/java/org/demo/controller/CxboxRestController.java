@@ -11,13 +11,16 @@ import org.demo.service.DashboardClientActivitiesService;
 import org.demo.service.ClientContactService;
 import org.demo.service.ClientPickListService;
 import org.demo.service.ClientReadWriteService;
+import org.demo.service.ContactMultivalueService;
 import org.demo.service.ContactPickListService;
+import org.demo.service.DashboardClientActivitiesService;
 import org.demo.service.DashboardFilterService;
 import org.demo.service.DashboardSalesFunnelService;
 import org.demo.service.DashboardSalesRingProgressService;
 import org.demo.service.MeetingDocumentsWriteService;
 import org.demo.service.MeetingReadService;
 import org.demo.service.MeetingWriteService;
+import org.demo.service.MyDictionaryItemService;
 import org.demo.service.ResponsiblePickListService;
 import org.demo.service.SaleReadService;
 import org.demo.service.SaleWriteService;
@@ -54,6 +57,7 @@ public enum CxboxRestController implements EnumBcIdentifier {
 		dashboardClientActivities(dashboardFilter, DashboardClientActivitiesService.class),
 	dashboardSalesFunnel(dashboardFilter, DashboardSalesFunnelService.class),
 	dashboardSalesRingProgress(dashboardFilter, DashboardSalesRingProgressService.class),
+	testWidget(MyDictionaryItemService.class),
 	companySuggestionPickList(DadataCompanySuggestionPickListService.class);
 
 	// @formatter:on

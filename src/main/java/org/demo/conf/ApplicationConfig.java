@@ -18,6 +18,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ConcurrentTaskExecutor;
+import org.springframework.session.jdbc.PostgreSqlJdbcIndexedSessionRepositoryCustomizer;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.web.servlet.config.annotation.AsyncSupportConfigurer;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -36,6 +37,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableAsync
 @EntityScan({"org.cxbox", "org.demo"})
 public class ApplicationConfig {
+
+	@Bean
+	public PostgreSqlJdbcIndexedSessionRepositoryCustomizer postgreSqlJdbcIndexedSessionRepositoryCustomizer() {
+		return new PostgreSqlJdbcIndexedSessionRepositoryCustomizer();
+	}
 
 	@Bean
 	public WebMvcConfigurer corsConfigurer() {

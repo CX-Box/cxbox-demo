@@ -83,10 +83,51 @@
       </column>
     </createTable>
   </changeSet>
+  <changeSet author="initial" id="ADDITIONAL_FIELDS TABLE">
+    <createTable remarks="Добавленные поля" tableName="ADDITIONAL_FIELDS">
+      <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="USER_ID" remarks="Идентификатор пользователя" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="VIEW" remarks="Название VIEW" type="VARCHAR2(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="WIDGET" remarks="Название WIDGET" type="VARCHAR2(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="ORDER_FIELDS" remarks="Последовательность полей" type="VARCHAR2(400 BYTE)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="ADDED_TO_ADDITIONAL_FIELDS" remarks="Добавленные поля" type="VARCHAR2(4000 BYTE)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REMOVED_FROM_ADDITIONAL_FIELDS" remarks="Скрытые поля" type="VARCHAR2(4000 BYTE)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" remarks="Дата изменения"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
   <changeSet author="initial" id="BC_FILTER_GROUPS TABLE">
     <createTable remarks="Группы фильтров" tableName="BC_FILTER_GROUPS">
       <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
         <constraints primaryKey="true"/>
+      </column>
+      <column name="USER_ID" remarks="Идентификатор пользователя" type="NUMBER(19, 0)">
+        <constraints nullable="true"/>
       </column>
       <column name="NAME" remarks="Имя группы фильтров" type="VARCHAR2(255)">
         <constraints nullable="false"/>

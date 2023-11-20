@@ -33,7 +33,6 @@ server:
     session:
       cookie:
         http-only: true
-
 spring:
   servlet:
     multipart:
@@ -55,6 +54,7 @@ spring:
   jpa:
     properties:
       hibernate:
+        #id.db_structure_naming_strategy: legacy
         synonyms: true
         default_batch_fetch_size: 100
         order_updates: true
@@ -71,10 +71,20 @@ spring:
     hibernate:
       naming:
         physical-strategy: org.cxbox.model.core.hbn.ImprovedPhysicalNamingStrategy
-      ddl-auto: ${HIBERNATE_DDL_AUTO:update}
+
   main:
     allow-bean-definition-overriding: true
     banner-mode: off
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${FRONTEND_AUTH_SERVER_URL:http://localhost:9080/auth/realms/cxbox}
+          jwk-set-uri: http://localhost:9080/auth/realms/cxbox/protocol/openid-connect/certs
+token:
+  converter:
+    principal-attribute: preferred_username
+    resource-id: cxbox-keycloak-client
 
 keycloak:
   auth-server-url: ${BACKEND_AUTH_SERVER_URL:http://localhost:9080/auth}
@@ -94,3 +104,4 @@ minio:
   url: ${MINIO_URL:http://localhost:9000}
   bucket:
     name: ${MINIO_DEFAULT_BUCKETS:edcs3gnsadevb}
+

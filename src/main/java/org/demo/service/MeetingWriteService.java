@@ -12,7 +12,7 @@ import static org.demo.dto.MeetingDTO_.startDateTime;
 
 import java.util.Objects;
 import java.util.stream.Collectors;
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import lombok.val;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;

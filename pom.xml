@@ -10,27 +10,19 @@
   <parent>
     <groupId>org.cxbox</groupId>
     <artifactId>cxbox-starter-parent</artifactId>
-    <version>3.0.5</version>
+    <version>4.0.0-SNAPSHOT</version>
   </parent>
 
   <properties>
     <checktyle.config>src/main/resources/checkstyle-checker.xml</checktyle.config>
     <java.version>17</java.version>
-
     <!-- dependencies versions -->
-    <postgresql.version>42.2.27</postgresql.version>
-    <keycloak-spring-boot-starter.version>14.0.0</keycloak-spring-boot-starter.version>
-
-    <!--delete after fix https://github.com/spring-projects/spring-security/issues/9787-->
-    <spring-security.version>5.5.1</spring-security.version>
-    <spring-security-crypto.version>5.5.8</spring-security-crypto.version>
-    <minio.version>8.3.0</minio.version>
-
-    <!--minio compatible version-->
-    <okhttp3.version>4.8.1</okhttp3.version>
+    <postgresql.version>42.6.0</postgresql.version>
+    <minio.version>8.5.6</minio.version>
   </properties>
 
   <dependencies>
+
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-configuration-processor</artifactId>
@@ -51,25 +43,11 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-oauth2-client</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-crypto</artifactId>
-      <version>${spring-security-crypto.version}</version>
-    </dependency>
+
     <dependency>
       <groupId>io.minio</groupId>
       <artifactId>minio</artifactId>
       <version>${minio.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springdoc</groupId>
-      <artifactId>springdoc-openapi-ui</artifactId>
-      <version>1.5.13</version>
-    </dependency>
-    <dependency>
-      <groupId>org.keycloak</groupId>
-      <artifactId>keycloak-spring-boot-starter</artifactId>
-      <version>${keycloak-spring-boot-starter.version}</version>
     </dependency>
     <dependency>
       <groupId>org.liquibase</groupId>
@@ -83,7 +61,7 @@
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <scope>provided</scope>
+      <scope>optional</scope>
     </dependency>
     <dependency>
       <groupId>org.cxbox</groupId>
@@ -108,19 +86,13 @@
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+    </dependency>
 
   </dependencies>
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.keycloak.bom</groupId>
-        <artifactId>keycloak-adapter-bom</artifactId>
-        <version>${keycloak-spring-boot-starter.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
+
   <build>
     <finalName>cxbox-demo</finalName>
     <plugins>
@@ -137,6 +109,12 @@
         <configuration>
           <mainClass>org.demo.Application</mainClass>
           <classifier>exec</classifier>
+          <excludes>
+            <exclude>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok</artifactId>
+            </exclude>
+          </excludes>
         </configuration>
       </plugin>
 

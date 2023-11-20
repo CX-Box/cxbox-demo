@@ -71,6 +71,7 @@ public class ClientReadWriteMeta extends FieldMetaBuilder<ClientWriteDTO> {
 				.collect(Collectors.toList())
 		);*/
 		fields.enableFilter(ClientWriteDTO_.fullName);
+
 		fields.enableFilter(ClientWriteDTO_.address);
 		fields.enableFilter(ClientWriteDTO_.importance);
 		fields.setEnumFilterValues(fields, ClientWriteDTO_.importance, ClientImportance.values());

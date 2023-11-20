@@ -29,7 +29,6 @@ cxbox:
     view-allowed-roles-enabled: true
     base-lock-timer : ${BASE_LOCK_TIMER:1800}  #sec
     check-lock-interval: ${CHECK_LOCK_INTERVAL:1000}  #ms
-    # sec
   widget:
     fields:
       include-packages: org.cxbox.core.ui.model.json.field.subtypes, org.demo.conf.cxbox.meta

@@ -2,12 +2,9 @@ package org.demo.conf.security.keycloack;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import org.cxbox.api.data.dictionary.LOV;
 import org.demo.conf.security.cxboxkeycloak.CxboxKeycloakAccount;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 

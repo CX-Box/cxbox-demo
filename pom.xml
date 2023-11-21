@@ -16,7 +16,6 @@
   <properties>
     <checktyle.config>src/main/resources/checkstyle-checker.xml</checktyle.config>
     <java.version>17</java.version>
-    <!-- dependencies versions -->
     <postgresql.version>42.6.0</postgresql.version>
     <minio.version>8.5.6</minio.version>
   </properties>

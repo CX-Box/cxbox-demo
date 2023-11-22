@@ -5,6 +5,7 @@ import static org.cxbox.api.service.session.InternalAuthorizationService.SystemU
 
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.cxbox.api.data.dictionary.LOV;
 import org.cxbox.api.service.session.InternalAuthorizationService;
@@ -52,7 +53,7 @@ public class CxboxAuthUserRepository {
 	//TODO>>taken "as is" from real project - refactor
 	private Long upsertUserAndRoles(String login, Set<String> roles) {
 		return txService.invokeInNewTx(() -> {
-			authzService.loginAs(authzService.createAuthentication(VANILLA));
+
 			User user = null;
 			try {
 				user = getUserByLogin(login.toUpperCase());
@@ -60,7 +61,13 @@ public class CxboxAuthUserRepository {
 					upsert(login, roles.stream().findFirst().orElse(null));
 				}
 				user = getUserByLogin(login.toUpperCase());
-				userRoleService.upsertUserRoles(user.getId(), new ArrayList<>(roles));
+				Set<String> currentRoles = user.getUserRoleList().stream().map(e -> e.getInternalRoleCd().getKey())
+						.collect(Collectors.toSet());
+				if (!(currentRoles.containsAll(roles) && roles.containsAll(currentRoles))) {
+					authzService.loginAs(authzService.createAuthentication(VANILLA));
+					userRoleService.upsertUserRoles(user.getId(), new ArrayList<>(roles));
+				}
+
 			} catch (Exception e) {
 				log.error(e.getLocalizedMessage(), e);
 			}

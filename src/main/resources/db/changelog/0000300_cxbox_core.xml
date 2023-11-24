@@ -679,6 +679,12 @@
       </column>
       <column name="INTERNAL_ROLE_CD" remarks="TYPE = INTERNAL_ROLE Внутренняя роль в Системе"
         type="VARCHAR2(255)"/>
+<!-- Caused by: liquibase.exception.DatabaseException: ORA-00904: "FALSE": недопустимый идентификатор
+ [Failed SQL: (904) CREATE TABLE SYSTEM.USER_ROLE (ID NUMBER(19, 0) NOT NULL, USER_ID NUMBER(19, 0) NOT NULL,
+ INTERNAL_ROLE_CD VARCHAR2(255), ACTIVE NUMBER(1) DEFAULT false, MAIN NUMBER(1) DEFAULT false, CREATED_DATE TIMESTAMP(6)
+ DEFAULT current_timestamp NOT NULL, UPDATED_DATE TIMESTAMP(6) DEFAULT current_timestamp NOT NULL, CREATED_BY_USER_ID
+ NUMBER(19, 0) DEFAULT 1 NOT NULL, LAST_UPD_BY_USER_ID NUMBER(19, 0) DEFAULT 1 NOT NULL, DIVISION_ID NUMBER(19, 0), VSTAMP NUMBER(19, 0)
+ DEFAULT 0 NOT NULL, CONSTRAINT PK_USER_ROLE PRIMARY KEY (ID))] -->
       <column defaultValueNumeric="false" name="ACTIVE" remarks="Признак активности роли" type="BOOLEAN"/>
       <column defaultValueNumeric="false" name="MAIN" remarks="Признак основная роль (последняя выбранная роль)"
         type="BOOLEAN"/>
@@ -812,10 +818,14 @@
   <changeSet author="initial" id="BC_FILTER_GROUPS INDEXES">
     <addUniqueConstraint columnNames="NAME, BC" constraintName="BC_FILTER_GROUPS_UNIQUE"
       tableName="BC_FILTER_GROUPS"/>
-    <createIndex indexName="BC_FILTER_GROUPS_UNIQUE_INDEX" tableName="BC_FILTER_GROUPS" unique="true">
-      <column name="NAME"/>
-      <column name="BC"/>
-    </createIndex>
+
+<!--    Caused by: liquibase.exception.DatabaseException: ORA-01408: этот список столбцов уже индексирован
+ [Failed SQL: (1408) CREATE UNIQUE INDEX SYSTEM.BC_FILTER_GROUPS_UNIQUE_INDEX ON SYSTEM.BC_FILTER_GROUPS(NAME, BC)] -->
+
+<!--    <createIndex indexName="BC_FILTER_GROUPS_UNIQUE_INDEX" tableName="BC_FILTER_GROUPS" unique="true">-->
+<!--      <column name="NAME"/>-->
+<!--      <column name="BC"/>-->
+<!--    </createIndex>-->
     <createIndex indexName="BC_FILTER_GROUPS_IND2" tableName="BC_FILTER_GROUPS">
       <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"/>
     </createIndex>

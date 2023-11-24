@@ -3,6 +3,7 @@ package org.demo.service.action;
 import com.google.common.collect.ImmutableMap;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.cxbox.core.dto.DrillDownType;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.PostAction;
@@ -16,13 +17,21 @@ import org.demo.dto.MeetingDTO;
 import org.demo.entity.Meeting;
 import org.demo.entity.enums.MeetingStatus;
 import org.demo.repository.MeetingRepository;
+import org.demo.service.MailSenderService;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MeetingStatusModelActionProvider {
 
 	private final MeetingRepository meetingRepository;
+
+	private final MailSenderService mailSenderService;
+
+	private final String mail = "CXBOX.mailForTest@gmail.com";
+
+	private final String messageTemplate = "Status: %s; \nMeeting Result: %s";
 
 	public ActionsBuilder<MeetingDTO> getMeetingActions() {
 		ActionsBuilder<MeetingDTO> builder = Actions.builder();
@@ -30,8 +39,17 @@ public class MeetingStatusModelActionProvider {
 				.forEach(status -> builder.newAction().action(status.getValue(), status.getButton())
 						.invoker((bc, dto) -> {
 							Meeting meeting = meetingRepository.getById(Long.parseLong(bc.getId()));
-							meeting.getStatus().transition(status, meeting);
+							status.transition(status, meeting);
+
 							if (meeting.getStatus().equals(MeetingStatus.COMPLETED)) {
+								mailSenderService.send(mail, meeting.getAgenda(),
+										String.format(messageTemplate,
+												MeetingStatus.COMPLETED.getValue(), meeting.getResult()
+										)
+								);
+							}
+
+							if (meeting.getStatus().equals(MeetingStatus.IN_COMPLETION)) {
 								return new ActionResultDTO<MeetingDTO>().setAction(PostAction.drillDown(
 										DrillDownType.INNER,
 										"/screen/meeting/view/meetingedit/"

@@ -2,15 +2,15 @@ package org.demo.service;
 
 import java.util.Optional;
 import org.cxbox.api.data.dto.rowmeta.FieldDTO;
+import org.cxbox.core.crudma.bc.impl.InnerBcDescription;
 import org.cxbox.core.dto.DrillDownType;
+import org.cxbox.core.dto.rowmeta.FieldsMeta;
+import org.cxbox.core.dto.rowmeta.RowDependentFieldsMeta;
+import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.MeetingDTO;
 import org.demo.dto.MeetingDTO_;
 import org.demo.entity.enums.MeetingStatus;
-import org.cxbox.core.crudma.bc.impl.InnerBcDescription;
-import org.cxbox.core.dto.rowmeta.FieldsMeta;
-import org.cxbox.core.dto.rowmeta.RowDependentFieldsMeta;
-import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S3252", "java:S1186"})
@@ -21,7 +21,7 @@ public class MeetingWriteMeta extends FieldMetaBuilder<MeetingDTO> {
 	public void buildRowDependentMeta(RowDependentFieldsMeta<MeetingDTO> fields, InnerBcDescription bcDescription,
 			Long id, Long parentId) {
 		fields.setEnabled(MeetingDTO_.additionalContacts);
-		if (MeetingStatus.COMPLETED.equals(fields.get(MeetingDTO_.status).getCurrentValue())) {
+		if (MeetingStatus.IN_COMPLETION.equals(fields.get(MeetingDTO_.status).getCurrentValue())) {
 			fields.setEnabled(
 					MeetingDTO_.notes,
 					MeetingDTO_.result

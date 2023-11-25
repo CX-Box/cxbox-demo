@@ -1,12 +1,12 @@
 package org.demo.conf;
 
 
-import org.cxbox.api.service.session.CxboxAuthenticationService;
 import org.cxbox.core.config.properties.UIProperties;
 import org.cxbox.core.metahotreload.conf.properties.MetaConfigurationProperties;
 import org.demo.conf.security.cxboxkeycloak.CxboxAuthUserRepository;
 import org.demo.conf.security.keycloack.KeycloakJwtTokenConverter;
 import org.demo.conf.security.keycloack.TokenConverterProperties;
+import org.demo.service.core.UserService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,17 +23,17 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 @Configuration
 public class SecurityConfig {
 
-	private final CxboxAuthenticationService cxboxAuthenticationService;
+	private final UserService userService;
 	private final UIProperties uiProperties;
 	private final MetaConfigurationProperties metaConfigurationProperties;
 	private final KeycloakJwtTokenConverter keycloakJwtTokenConverter;
 
-	public SecurityConfig(CxboxAuthenticationService cxboxAuthenticationService, UIProperties uiProperties, MetaConfigurationProperties metaConfigurationProperties, @Qualifier("tokenConverterProperties") TokenConverterProperties properties, CxboxAuthUserRepository cxboxAuthUserRepository) {
-		this.cxboxAuthenticationService = cxboxAuthenticationService;
+	public SecurityConfig(UserService userService, UIProperties uiProperties, MetaConfigurationProperties metaConfigurationProperties, @Qualifier("tokenConverterProperties") TokenConverterProperties properties, CxboxAuthUserRepository cxboxAuthUserRepository) {
+		this.userService = userService;
 		this.uiProperties = uiProperties;
 		this.metaConfigurationProperties = metaConfigurationProperties;
 		this.keycloakJwtTokenConverter = new KeycloakJwtTokenConverter(new JwtGrantedAuthoritiesConverter(), properties,
-				cxboxAuthUserRepository
+				this.userService, cxboxAuthUserRepository
 		);
 	}
 

@@ -9,8 +9,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.cxbox.api.data.dictionary.LOV;
+import org.cxbox.api.service.session.CxboxUserDetails;
+import org.cxbox.api.service.session.CxboxUserDetailsInterface;
 import org.demo.conf.security.cxboxkeycloak.CxboxAuthUserRepository;
-import org.demo.conf.security.cxboxkeycloak.CxboxKeycloakAccount;
+import org.demo.entity.core.User;
+import org.demo.service.core.UserService;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.NonNull;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,13 +27,15 @@ public class KeycloakJwtTokenConverter implements Converter<Jwt, KeycloakAuthent
 	private static final String ROLE_PREFIX = "ROLE_";
 	private final JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter;
 	private final TokenConverterProperties properties;
+	private final UserService userService;
 	private final CxboxAuthUserRepository cxboxAuthUserRepository;
 
 	public KeycloakJwtTokenConverter(
 			JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter,
-			TokenConverterProperties properties, CxboxAuthUserRepository cxboxAuthUserRepository) {
+			TokenConverterProperties properties, UserService userService, CxboxAuthUserRepository cxboxAuthUserRepository) {
 		this.jwtGrantedAuthoritiesConverter = jwtGrantedAuthoritiesConverter;
 		this.properties = properties;
+		this.userService = userService;
 		this.cxboxAuthUserRepository = cxboxAuthUserRepository;
 	}
 
@@ -50,17 +55,16 @@ public class KeycloakJwtTokenConverter implements Converter<Jwt, KeycloakAuthent
 
 		String login = jwt.getClaimAsString(properties.getPrincipalAttribute()).toUpperCase();
 
-		Long userId = cxboxAuthUserRepository.getUserIdOrElseCreate(
+		User user = cxboxAuthUserRepository.getUserIdOrElseCreate(
 				login,
 				roles.stream().map(SimpleGrantedAuthority::getAuthority).collect(Collectors.toSet())
 		);
 
-		CxboxKeycloakAccount cxboxKeycloakAccount = new CxboxKeycloakAccount()
-				.setId(userId)
-				.setUsername(login)
-				.setAuthorities(new HashSet<>(roles))
-				.setUserRole(new LOV(roles.stream().findFirst().get().getAuthority()));
-		return new KeycloakAuthenticationToken(jwt, authorities, properties.getPrincipalAttribute(), cxboxKeycloakAccount);
+		CxboxUserDetailsInterface userDetails = userService.createUserDetails(
+				user,
+				new LOV(roles.stream().findFirst().get().getAuthority())
+		);
+		return new KeycloakAuthenticationToken(jwt, authorities, properties.getPrincipalAttribute(), userDetails);
 
 
 	}

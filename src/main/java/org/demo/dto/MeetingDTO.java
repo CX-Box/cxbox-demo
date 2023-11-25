@@ -19,11 +19,12 @@ import org.cxbox.core.util.filter.provider.impl.DateTimeValueProvider;
 import org.cxbox.core.util.filter.provider.impl.EnumValueProvider;
 import org.cxbox.core.util.filter.provider.impl.MultiFieldValueProvider;
 import org.cxbox.model.core.entity.BaseEntity;
-import org.cxbox.model.core.entity.User;
+
 import org.demo.conf.cxbox.core.multivaluePrimary.MultivalueExt;
 import org.demo.entity.Client;
 import org.demo.entity.Contact;
 import org.demo.entity.Meeting;
+import org.demo.entity.core.User;
 import org.demo.entity.enums.MeetingStatus;
 
 @Getter

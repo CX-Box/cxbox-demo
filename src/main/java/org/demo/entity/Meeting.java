@@ -6,9 +6,10 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import lombok.EqualsAndHashCode;
+import org.demo.entity.core.User;
 import org.demo.entity.enums.MeetingStatus;
 import org.cxbox.model.core.entity.BaseEntity;
-import org.cxbox.model.core.entity.User;
+
 import java.time.LocalDateTime;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

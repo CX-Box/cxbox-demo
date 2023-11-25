@@ -34,7 +34,7 @@ import org.demo.entity.Meeting;
 import org.demo.repository.ClientRepository;
 import org.demo.repository.ContactRepository;
 import org.demo.repository.MeetingRepository;
-import org.demo.repository.UserRepository;
+import org.demo.repository.core.UserRepository;
 import org.demo.service.action.MeetingStatusModelActionProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -24,6 +24,7 @@ import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
 import java.util.Arrays;
 import org.demo.repository.MeetingRepository;
+import org.demo.repository.core.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +39,9 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 
 	@Autowired
 	private MeetingRepository meetingRepository;
+
+	@Autowired
+	private UserRepository userRepository;
 
 	@Autowired
 	private SessionService sessionService;
@@ -170,7 +174,7 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 								.invoker((bc, data) -> {
 									Client client = clientRepository.getById(bc.getIdAsLong());
 									Meeting meeting = meetingRepository.save(new Meeting()
-											.setResponsible(sessionService.getSessionUser())
+											.setResponsible(userRepository.getReferenceById(sessionService.getSessionUser().getId()))
 											.setClient(client)
 									);
 									return new ActionResultDTO<ClientWriteDTO>()

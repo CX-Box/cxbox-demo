@@ -1,19 +1,18 @@
 version: '2.1'
 
 services:
-  dbbr-local-oracle:
+  oracle:
     image: gvenzl/oracle-xe:latest
     environment:
-      - ORACLE_PWD=PASSWORD
-#      - APP_USER=PASSWORD
-#      - APP_USER_PASSWORD=PASSWORD
+      - ORACLE_PASSWORD=PASSWORD
+      - APP_USER=app
+      - APP_USER_PASSWORD=app
+      - COMMENT=use with DATABASE_DRIVER=oracle.jdbc.driver.OracleDriver;DATABASE_PASSWORD=app;DATABASE_URL=jdbc:oracle:thin:@localhost:1523/XEPDB1;DATABASE_USER=app
     ports:
       - "1523:1521"
       - "5501:5500"
     expose:
       -  1521
-    networks:
-      - dbbr-local-network
   keycloak:
     image: jboss/keycloak:12.0.4
     command:

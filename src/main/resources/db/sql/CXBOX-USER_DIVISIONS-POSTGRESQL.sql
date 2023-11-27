@@ -1,3 +1,4 @@
+
 CREATE OR REPLACE VIEW USER_DIVISIONS (USER_ID, DIVISIONS) AS
 SELECT u.id         AS user_id,
        ud.divisions as divisions
@@ -8,7 +9,6 @@ FROM users u
       FROM user_role ur,
            division d
       WHERE ur.division_id = d.id
-      group by ur.id
-     ) ud
+      group by ur.id) ud
      on u.id = ud.user_id;
 

@@ -2,9 +2,9 @@
   <configuration default="false" name="Application_oracle" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <envs>
       <env name="DATABASE_DRIVER" value="oracle.jdbc.driver.OracleDriver" />
-      <env name="DATABASE_PASSWORD" value="PASSWORD" />
-      <env name="DATABASE_URL" value="jdbc:oracle:thin:@localhost:1523:xe" />
-      <env name="DATABASE_USER" value="system" />
+      <env name="DATABASE_PASSWORD" value="app" />
+      <env name="DATABASE_URL" value="jdbc:oracle:thin:@localhost:1523/XEPDB1" />
+      <env name="DATABASE_USER" value="app" />
     </envs>
     <module name="cxbox-demo" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="org.demo.Application" />

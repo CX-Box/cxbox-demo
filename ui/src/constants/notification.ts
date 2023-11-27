@@ -2,7 +2,7 @@
 
 import { __WS_API__ } from './constants'
 
-export const brokerURL = __WS_API__
+export const brokerURL = `${__WS_API__}topic`
 export const subscribeUrl = '/user/queue/websocket.reply'
 
 export const reconnectDelay = 5000

@@ -3,7 +3,6 @@ package org.demo.service.action;
 import com.google.common.collect.ImmutableMap;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.cxbox.core.dto.DrillDownType;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.PostAction;

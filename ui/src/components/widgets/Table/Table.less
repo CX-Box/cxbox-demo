@@ -2,6 +2,7 @@
 
 // table header
 .tableContainer div[class*="TableWidget__tableContainer"] {
+    position: relative;
     :global {
         .ant-table .ant-table-thead > tr > th {
             padding: 11px 16px;
@@ -89,4 +90,12 @@
 :global(.ant-col:not(.ant-col-24) .ant-col) .tableContainer {
     padding-right: 24px;
 }
+
+.operations {
+    display: flex;
+
+    margin-bottom: 10px;
+}
+
+.settingButton {}
 

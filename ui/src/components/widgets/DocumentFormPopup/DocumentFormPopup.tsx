@@ -1,7 +1,7 @@
 import { actions } from '@actions'
 import { Spin } from 'antd'
 import React, { useCallback } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import styles from './DocumentFormPopup.less'
 import Form from '../Form/Form'
 import { WidgetFormPopupMeta } from '@interfaces/widget'

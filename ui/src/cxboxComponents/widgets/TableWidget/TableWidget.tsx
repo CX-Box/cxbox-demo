@@ -123,6 +123,7 @@ export const TableWidget: FunctionComponent<TableWidgetProps> = props => {
         onRemoveFilters,
         onApplyFilter,
         onForceUpdate,
+        onRow: customHandleRow,
         ...rest
     } = props
     /**
@@ -293,9 +294,10 @@ export const TableWidget: FunctionComponent<TableWidgetProps> = props => {
     }, [filterGroups, filterGroupName, filtersExist, props.limitBySelf, t, handleAddFilters, handleRemoveFilters, handleShowAll])
 
     const [operationsRef, parentRef, onRow] = useRowMenu() // NOSONAR(S6440) hook is called conditionally, fix later
-    const handleRow = (record: interfaces.DataItem) => {
+    const handleRow = (record: interfaces.DataItem, index: number) => {
         return {
             ...onRow(record),
+            ...customHandleRow?.(record, index),
             'data-test-widget-list-row-id': record.id,
             'data-test-widget-list-row-type': 'Row'
         } as any

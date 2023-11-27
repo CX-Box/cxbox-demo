@@ -105,7 +105,7 @@ export function useExpandableForm(currentWidgetMeta: AppWidgetMeta) {
         [internalWidget, internalWidgetOperations, isLoading, debugMode]
     )
 
-    const getExpandIconColumnIndex = (controlColumns: ControlColumn[]) => {
+    const getExpandIconColumnIndex = (controlColumns: ControlColumn[], externalVisibleFields?: WidgetMetaField[]) => {
         if (!internalWidget) {
             return undefined
         }
@@ -119,7 +119,7 @@ export function useExpandableForm(currentWidgetMeta: AppWidgetMeta) {
         }
 
         const widgetFields = currentWidgetMeta.fields as WidgetMetaField[]
-        const visibleWidgetFields = widgetFields?.filter(item => item.type !== FieldType.hidden && !item.hidden)
+        const visibleWidgetFields = externalVisibleFields ?? widgetFields?.filter(item => item.type !== FieldType.hidden && !item.hidden)
 
         return leftControlColumns.length + visibleWidgetFields?.length + rightControlColumns.findIndex(isExpandColumn)
     }

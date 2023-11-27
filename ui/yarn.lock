@@ -15905,6 +15905,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-drag-listview@npm:2.0.0":
+  version: 2.0.0
+  resolution: "react-drag-listview@npm:2.0.0"
+  dependencies:
+    babel-runtime: "npm:^6.26.0"
+    prop-types: "npm:^15.5.8"
+  checksum: 7580ca4c1a14e460ac52ce05f8baba80ee8920cf27189c03548121e95aa1bf5c9a8d2e6cdf7d3209b58020fbb17f1da57d60f843ef05202672f0f4afedd60255
+  languageName: node
+  linkType: hard
+
 "react-error-overlay@npm:6.0.9":
   version: 6.0.9
   resolution: "react-error-overlay@npm:6.0.9"
@@ -18705,6 +18715,7 @@ __metadata:
     react: "npm:17.0.2"
     react-app-alias: "npm:2.2.2"
     react-dom: "npm:17.0.2"
+    react-drag-listview: "npm:2.0.0"
     react-file-viewer: "npm:1.2.1"
     react-i18next: "npm:13.2.1"
     react-pdf: "npm:7.7.0"

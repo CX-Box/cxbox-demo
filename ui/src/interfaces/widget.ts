@@ -120,6 +120,11 @@ export interface AppWidgetMeta extends interfaces.WidgetMeta {
             enabled?: boolean
             placeholder?: string
         }
+
+        additional?: {
+            enabled: boolean
+            fields: string[]
+        }
     }
 }
 

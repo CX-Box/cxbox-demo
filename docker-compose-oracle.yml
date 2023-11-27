@@ -1,0 +1,55 @@
+version: '2.1'
+
+services:
+  oracle:
+    image: gvenzl/oracle-xe:latest
+    environment:
+      - ORACLE_PASSWORD=PASSWORD
+      - APP_USER=app
+      - APP_USER_PASSWORD=app
+      - COMMENT=use with DATABASE_DRIVER=oracle.jdbc.driver.OracleDriver;DATABASE_PASSWORD=app;DATABASE_URL=jdbc:oracle:thin:@localhost:1523/XEPDB1;DATABASE_USER=app
+    ports:
+      - "1523:1521"
+      - "5501:5500"
+    expose:
+      -  1521
+  keycloak:
+    image: jboss/keycloak:12.0.4
+    command:
+      [
+        '-b',
+        '0.0.0.0',
+        '-Dkeycloak.migration.action=import',
+        '-Dkeycloak.migration.provider=dir',
+        '-Dkeycloak.migration.dir=/opt/jboss/keycloak/realm-config',
+        '-Dkeycloak.migration.strategy=IGNORE_EXISTING',
+        '-Djboss.socket.binding.port-offset=1000',
+        '-Dkeycloak.profile.feature.upload_scripts=enabled'
+      ]
+    volumes:
+      - ./docker/keycloak-config:/opt/jboss/keycloak/realm-config
+      - ./.tmp/keycloak-db:/opt/jboss/keycloak/standalone/data
+    environment:
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
+      - DB_VENDOR=h2
+    ports:
+      - "9080:9080"
+      - "9443:9443"
+      - "10990:10990"
+  cxbox_minio:
+    image: bitnami/minio:2022.2.12
+    expose:
+      - 9000
+      - 9001
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: "4eb6a7db8b58994ea61b"
+      MINIO_ROOT_PASSWORD: "prCv8t9LGRH18FB5pLr5jqDZ/dixZkb9cFajueGW"
+      MINIO_DEFAULT_BUCKETS: "edcs3gnsadevb"
+
+networks:
+  dbbr-local-network:
+    driver: bridge

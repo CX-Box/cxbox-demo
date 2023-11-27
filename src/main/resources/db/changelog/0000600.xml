@@ -4,16 +4,19 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd"
   logicalFilePath="db/changelog/0000600.xml">
 
+  <property name="now" value="current_timestamp" dbms="postgresql"/>
+  <property name="now" value="sysdate" dbms="oracle"/>
+
   <changeSet id="main demo tables" author="ryalalov">
     <createTable tableName="CLIENT">
       <column name="ID" remarks="Identifier" type="NUMBER(19, 0)">
         <constraints primaryKey="true"/>
       </column>
-      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" remarks="Creation date"
+      <column defaultValueComputed="${now}" name="CREATED_DATE" remarks="Creation date"
         type="TIMESTAMP(6)">
         <constraints nullable="false"/>
       </column>
-      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" remarks="Last updated date"
+      <column defaultValueComputed="${now}" name="UPDATED_DATE" remarks="Last updated date"
         type="TIMESTAMP(6)">
         <constraints nullable="false"/>
       </column>
@@ -39,11 +42,11 @@
       <column name="ID" remarks="Identifier" type="NUMBER(19, 0)">
         <constraints primaryKey="true"/>
       </column>
-      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" remarks="Creation date"
+      <column defaultValueComputed="${now}" name="CREATED_DATE" remarks="Creation date"
         type="TIMESTAMP(6)">
         <constraints nullable="false"/>
       </column>
-      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" remarks="Last updated date"
+      <column defaultValueComputed="${now}" name="UPDATED_DATE" remarks="Last updated date"
         type="TIMESTAMP(6)">
         <constraints nullable="false"/>
       </column>
@@ -60,14 +63,14 @@
       <column name="PHONE_NUMBER" type="VARCHAR(13)"/>
       <column name="EMAIL" type="VARCHAR(50)"/>
       <column name="CLIENT_ID" type="NUMBER(19, 0)">
-        <constraints foreignKeyName="REF_CLIENT" references="CLIENT"/>
+        <constraints foreignKeyName="CONTACT_REF_CLIENT" references="CLIENT"/>
       </column>
     </createTable>
 
     <createTable tableName="FIELD_OF_ACTIVITY">
       <column name="VALUE" type="VARCHAR(50)"/>
       <column name="CLIENT_ID" type="NUMBER(19, 0)">
-        <constraints foreignKeyName="REF_CLIENT" references="CLIENT"/>
+        <constraints foreignKeyName="FIELD_OF_ACTIVITY_REF_CLIENT" references="CLIENT"/>
       </column>
     </createTable>
   </changeSet>
@@ -97,11 +100,11 @@
           referencedTableName="CONTACT"/>
       </column>
 
-      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" remarks="Creation date"
+      <column defaultValueComputed="${now}" name="CREATED_DATE" remarks="Creation date"
         type="TIMESTAMP(6)">
         <constraints nullable="false"/>
       </column>
-      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" remarks="Last updated date"
+      <column defaultValueComputed="${now}" name="UPDATED_DATE" remarks="Last updated date"
         type="TIMESTAMP(6)">
         <constraints nullable="false"/>
       </column>
@@ -147,19 +150,19 @@
       <column name="USER_ID" type="NUMBER(19, 0)">
         <constraints nullable="false" foreignKeyName="FILTER_USER_ID" references="USERS"/>
       </column>
-      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" remarks="Creation date"
+      <column defaultValueComputed="${now}" name="CREATED_DATE" remarks="Creation date"
         type="TIMESTAMP(6)">
         <constraints nullable="false"/>
       </column>
-      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" remarks="Last updated date"
+      <column defaultValueComputed="${now}" name="UPDATED_DATE" remarks="Last updated date"
         type="TIMESTAMP(6)">
         <constraints nullable="false"/>
       </column>
       <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
-        <constraints nullable="false" foreignKeyName="FILTER_CREATED_BY" references="USERS"/>
+        <constraints nullable="false" foreignKeyName="DASHBOARD_FILTER_CREATED_BY" references="USERS"/>
       </column>
       <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
-        <constraints nullable="false" foreignKeyName="FILTER_LAST_UPD_BY" references="USERS"/>
+        <constraints nullable="false" foreignKeyName="DASHBOARD_FILTER_LAST_UPD_BY" references="USERS"/>
       </column>
       <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
         <constraints nullable="false"/>
@@ -173,19 +176,19 @@
       <column name="DASHBOARD_FILTER_ID" type="NUMBER(19, 0)">
         <constraints foreignKeyName="REF_DASHBOARD_FILTER" references="DASHBOARD_FILTER"/>
       </column>
-      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" remarks="Creation date"
+      <column defaultValueComputed="${now}" name="CREATED_DATE" remarks="Creation date"
         type="TIMESTAMP(6)">
         <constraints nullable="false"/>
       </column>
-      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" remarks="Last updated date"
+      <column defaultValueComputed="${now}" name="UPDATED_DATE" remarks="Last updated date"
         type="TIMESTAMP(6)">
         <constraints nullable="false"/>
       </column>
       <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
-        <constraints nullable="false" foreignKeyName="FILTER_CREATED_BY" references="USERS"/>
+        <constraints nullable="false" foreignKeyName="FILTER_FOA_CREATED_BY" references="USERS"/>
       </column>
       <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
-        <constraints nullable="false" foreignKeyName="FILTER_LAST_UPD_BY" references="USERS"/>
+        <constraints nullable="false" foreignKeyName="FILTER_FOA_LAST_UPD_BY" references="USERS"/>
       </column>
       <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
         <constraints nullable="false"/>
@@ -208,19 +211,19 @@
       </column>
       <column name="SUM" type="NUMBER(19, 0)">
       </column>
-      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" remarks="Creation date"
+      <column defaultValueComputed="${now}" name="CREATED_DATE" remarks="Creation date"
         type="TIMESTAMP(6)">
         <constraints nullable="false"/>
       </column>
-      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" remarks="Last updated date"
+      <column defaultValueComputed="${now}" name="UPDATED_DATE" remarks="Last updated date"
         type="TIMESTAMP(6)">
         <constraints nullable="false"/>
       </column>
       <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
-        <constraints nullable="false" foreignKeyName="FILTER_CREATED_BY" references="USERS"/>
+        <constraints nullable="false" foreignKeyName="SALE_CREATED_BY" references="USERS"/>
       </column>
       <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
-        <constraints nullable="false" foreignKeyName="FILTER_LAST_UPD_BY" references="USERS"/>
+        <constraints nullable="false" foreignKeyName="SALE_LAST_UPD_BY" references="USERS"/>
       </column>
       <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
         <constraints nullable="false"/>
@@ -259,8 +262,8 @@
       file="db/data/MEETING.csv">
       <column header="ID" name="ID" type="STRING"/>
       <column header="agenda" name="agenda" type="STRING"/>
-      <column header="start_date_time" name="start_date_time" type="STRING"/>
-      <column header="end_date_time" name="end_date_time" type="STRING"/>
+      <column header="start_date_time" name="start_date_time" type="datetime"/>
+      <column header="end_date_time" name="end_date_time" type="datetime"/>
       <column header="address" name="address" type="STRING"/>
       <column header="notes" name="notes" type="STRING"/>
       <column header="result" name="result" type="STRING"/>

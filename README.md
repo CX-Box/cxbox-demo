@@ -67,7 +67,7 @@ widgets, fields, layouts (views), navigation (screens).
 * docker
 * docker-compose
 
-## Getting started
+## Getting started with Postgres
 
 * [download Demo](https://github.com/CX-Box/cxbox-demo) source code
 
@@ -80,7 +80,7 @@ mvn clean install -PUI
 
 * start environment
 
-```
+```bash
 docker-compose up -d
 ```
 

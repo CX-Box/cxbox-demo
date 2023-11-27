@@ -86,6 +86,7 @@ keycloak:
   ssl-required: none
 springdoc:
   packages-to-scan: org.demo
+  show-actuator: true
 
 minio:
   access:
@@ -94,3 +95,12 @@ minio:
   url: ${MINIO_URL:http://localhost:9000}
   bucket:
     name: ${MINIO_DEFAULT_BUCKETS:edcs3gnsadevb}
+management:
+  endpoint:
+    metrics:
+      enabled: true
+  endpoints:
+    enabled-by-default: true
+    web:
+      exposure:
+        include: 'metrics'

@@ -1,11 +1,22 @@
 package org.demo.service;
 
-import org.demo.dto.SocketNotificationErrorDTO;
+import java.util.List;
+import org.cxbox.model.core.entity.User;
+import org.demo.dto.NotificationDTO;
+import org.demo.dto.SocketNotificationDTO;
+import org.demo.entity.Notification;
+
 
 public interface NotificationService {
 
-	void sendSuccessfulNotification(String destination, String text,  String link);
+	Notification sendAndSave(SocketNotificationDTO notification, User notificationOwner);
 
-	void sendErrorNotification(String destination, String text, SocketNotificationErrorDTO error);
+	List<NotificationDTO> getNotifications(Integer page, Integer limit);
+
+	Long getNotificationCount();
+
+	void markAsRead(List<Long> notificationId);
+
+	void delete(List<Long> ids);
 
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.cxbox.core.dto.DrillDownType;
 import org.demo.dto.SocketNotificationDTO;
 import org.demo.dto.SocketNotificationErrorDTO;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -28,6 +29,7 @@ public class NotificationServiceImpl implements NotificationService {
 						.time(LocalDateTime.now())
 						.drillDownLink(link)
 						.drillDownLabel(link)
+						.drillDownType(DrillDownType.EXTERNAL_NEW.getValue())
 						.text(text)
 						.build())
 		);

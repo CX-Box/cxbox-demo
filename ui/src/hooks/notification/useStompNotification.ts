@@ -5,6 +5,7 @@ import { AxiosError } from 'axios'
 import { useAppSelector } from '../useAppSelector'
 import { $do } from '../../actions/types'
 import { useNotificationClient } from './useNotificationClient'
+import { initialState } from '../../reducers/notification'
 
 export function useStompNotification() {
     const notificationState = useAppSelector(state => state.notification)
@@ -25,7 +26,7 @@ export function useStompNotification() {
     }, [dispatch])
 
     const getList = useCallback(
-        (page: number = notificationState.page, limit: number = notificationState.limit) => {
+        (page: number = initialState.page, limit: number = initialState.limit) => {
             getNotificationList(page, limit)
                 .then(response => {
                     if (response.success) {
@@ -36,7 +37,7 @@ export function useStompNotification() {
                     console.error('Error while loading notification list', error)
                 })
         },
-        [dispatch, notificationState.limit, notificationState.page]
+        [dispatch]
     )
 
     const getCurrentPage = useCallback(() => {
@@ -58,11 +59,11 @@ export function useStompNotification() {
     )
 
     const changePage = useCallback(
-        (page: number, limit: number = notificationState.limit) => {
+        (page: number, limit: number = initialState.limit) => {
             dispatch($do.changeNotification({ page, limit }))
             getList(page, limit)
         },
-        [dispatch, getList, notificationState.limit]
+        [dispatch, getList]
     )
 
     useNotificationClient(messageBody => {

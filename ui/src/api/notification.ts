@@ -11,7 +11,7 @@ export function getNotificationList(page: number, limit: number) {
         _limit: limit
     }
 
-    const url = applyParams(buildUrl` notification/get-notifications`, queryStringObject)
+    const url = applyParams(buildUrl`notification/get-notifications`, queryStringObject)
 
     return axiosGet<NotificationsResponse>(url).toPromise()
 }

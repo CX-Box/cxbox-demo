@@ -1,5 +1,5 @@
 import { axiosInstance, HEADERS } from './session'
-import { axiosGet, buildUrl, axiosPut } from '@cxbox-ui/core'
+import { axiosGet, buildUrl, axiosPost } from '@cxbox-ui/core'
 import { NotificationCountResponse, NotificationsResponse } from '../interfaces/notification'
 import { __API__ } from '../constants/constants'
 import { applyParams } from '../utils/api'
@@ -11,17 +11,17 @@ export function getNotificationList(page: number, limit: number) {
         _limit: limit
     }
 
-    const url = applyParams(buildUrl`notifications`, queryStringObject)
+    const url = applyParams(buildUrl`get-notifications`, queryStringObject)
 
     return axiosGet<NotificationsResponse>(url).toPromise()
 }
 
 export function getNotificationCount() {
-    return axiosGet<NotificationCountResponse>(buildUrl`notifications/count`).toPromise()
+    return axiosGet<NotificationCountResponse>(buildUrl`count-notifications`).toPromise()
 }
 
 export function setNotificationsRead(selectedRowKeys: (number | string)[]) {
-    return axiosPut<any>(buildUrl`notifications`, selectedRowKeys).toPromise()
+    return axiosPost<any>(buildUrl`mark-notification-as-read`, selectedRowKeys).toPromise()
 }
 
 /**
@@ -36,7 +36,7 @@ export function getMessageDownloadFileEndpoint(link: string) {
 }
 
 export function deleteNotifications(selectedRowKeys: number[]) {
-    return fetch(`${__API__}notifications`, {
+    return fetch(`${__API__}delete-notification`, {
         headers: {
             ...HEADERS,
             'Content-type': 'application/json'

@@ -1,52 +1,67 @@
 package org.demo.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
-import org.cxbox.core.dto.DrillDownType;
+import org.cxbox.core.util.session.SessionService;
+import org.cxbox.model.core.entity.User;
+import org.demo.dto.NotificationDTO;
 import org.demo.dto.SocketNotificationDTO;
-import org.demo.dto.SocketNotificationErrorDTO;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.demo.entity.Notification;
+import org.demo.repository.NotificationRepository;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class NotificationServiceImpl implements NotificationService {
 
-	private final SimpMessagingTemplate simpMessagingTemplate;
+	private final NotificationRepository notificationRepository;
 
-	private final ObjectMapper objectMapper;
+	private final SessionService sessionService;
+
+	private final WebSocketNotificationService webSocketNotificationService;
 
 	@Override
-	@SneakyThrows
-	public void sendSuccessfulNotification(String destination, String text, String link) {
+	public Notification sendAndSave(SocketNotificationDTO socketNotificationDTO, User notificationOwner) {
 
-		simpMessagingTemplate.convertAndSend(
-				destination,
-				objectMapper.writeValueAsString(SocketNotificationDTO.builder()
-						.title("Successfully")
-						.time(LocalDateTime.now())
-						.drillDownLink(link)
-						.drillDownLabel(link)
-						.drillDownType(DrillDownType.EXTERNAL_NEW.getValue())
-						.text(text)
-						.build())
-		);
+		webSocketNotificationService.send(socketNotificationDTO);
+
+		Notification notification = notificationRepository.save(Notification.builder()
+				.user(notificationOwner)
+				.text(socketNotificationDTO.getText())
+				.isRead(false)
+				.createTime(socketNotificationDTO.getTime())
+				.build());
+
+		return notification;
 	}
 
 	@Override
-	@SneakyThrows
-	public void sendErrorNotification(String destination, String text, SocketNotificationErrorDTO error) {
-		simpMessagingTemplate.convertAndSend(
-				destination,
-				objectMapper.writeValueAsString(SocketNotificationDTO.builder()
-						.title("Not Successful")
-						.error(error)
-						.time(LocalDateTime.now())
-						.text(text)
-						.build())
-		);
+	public List<NotificationDTO> getNotifications(Integer page, Integer limit) {
+		return notificationRepository.findAllByUser(
+						sessionService.getSessionUser(),
+						PageRequest.of(page, limit)
+				)
+				.map(NotificationDTO::new)
+				.toList();
+	}
+
+	@Override
+	public Long getNotificationCount() {
+		return notificationRepository.countByUser(sessionService.getSessionUser());
+	}
+
+	@Override
+	@Transactional
+	public void markAsRead(List<Long> ids) {
+		notificationRepository.markAsRead(ids);
+	}
+
+	@Override
+	@Transactional
+	public void delete(List<Long> ids) {
+		notificationRepository.deleteAllById(ids);
 	}
 
 }

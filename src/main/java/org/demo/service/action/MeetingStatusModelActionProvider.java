@@ -11,6 +11,7 @@ import org.cxbox.core.dto.rowmeta.PreActionType;
 import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
 import org.cxbox.core.service.action.ActionsBuilder;
+import org.cxbox.core.util.session.SessionService;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.MeetingDTO;
 import org.demo.entity.Meeting;
@@ -27,12 +28,15 @@ public class MeetingStatusModelActionProvider {
 
 	private final MailSenderService mailSenderService;
 
+	private final SessionService service;
+
 	private final String mail = "CXBOX.mailForTest@gmail.com";
 
 	private final String messageTemplate = "Status: %s; \nMeeting Result: %s";
 
 	public ActionsBuilder<MeetingDTO> getMeetingActions() {
 		ActionsBuilder<MeetingDTO> builder = Actions.builder();
+
 		Arrays.stream(MeetingStatus.values()).sequential()
 				.forEach(status -> builder.newAction().action(status.getValue(), status.getButton())
 						.invoker((bc, dto) -> {
@@ -44,7 +48,7 @@ public class MeetingStatusModelActionProvider {
 								mailSenderService.send(mail, meeting.getAgenda(),
 										String.format(messageTemplate,
 												MeetingStatus.COMPLETED.getValue(), meeting.getResult()
-										)
+										), service.getSessionUser()
 								);
 							}
 
@@ -73,4 +77,5 @@ public class MeetingStatusModelActionProvider {
 						.add());
 		return builder;
 	}
+
 }

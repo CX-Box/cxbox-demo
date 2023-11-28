@@ -4,7 +4,7 @@ export const __API__ =
 export const __WS_API__ = `ws://${
     process.env.NODE_ENV === 'production'
         ? document.location.host + process.env.REACT_APP_CXBOX_API_URL
-        : document.location.host + process.env.REACT_APP_CXBOX_API_URL_DEV
+        : 'localhost:8080' + process.env.REACT_APP_CXBOX_API_URL_DEV
 }`
 
 export const EMPTY_OBJECT = {}

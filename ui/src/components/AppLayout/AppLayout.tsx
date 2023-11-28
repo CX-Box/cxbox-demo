@@ -11,9 +11,11 @@ import View from '../View/View'
 import ModalInvoke from '../ModalInvoke/ModalInvoke'
 import SystemNotifications from '../SystemNotifications/SystemNotifications'
 import ErrorPopup from '../containers/ErrorPopup/ErrorPopup'
+import { Login } from '../Login/Login'
 
 export const AppLayout: React.FC = () => {
     const dispatch = useDispatch()
+    const noSSO = Boolean(process.env['REACT_APP_NO_SSO'])
 
     const sessionActive = useSelector((state: AppState) => state.session.active)
     const logoutRequested = useSelector((state: AppState) => state.session.logout)
@@ -23,7 +25,7 @@ export const AppLayout: React.FC = () => {
     const appSpinning = isMetaRefreshing || loginSpin
 
     React.useEffect(() => {
-        if (!sessionActive && !logoutRequested) {
+        if (!sessionActive && !logoutRequested && !noSSO) {
             dispatch({ type: SSO_AUTH })
         }
     }, [sessionActive, logoutRequested, dispatch])
@@ -45,9 +47,7 @@ export const AppLayout: React.FC = () => {
             </Spin>
         </Layout>
     ) : (
-        <div className={styles.spinContainer}>
-            <Spin size="large" />
-        </div>
+        <div className={styles.spinContainer}>{noSSO ? <Login /> : <Spin size="large" />}</div>
     )
 }
 

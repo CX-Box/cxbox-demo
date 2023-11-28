@@ -41,6 +41,8 @@ export function axiosInstance() {
             ...{ ClientId: __CLIENT_ID__ }
         }
     })
-    instance.interceptors.request.use(tokenInterceptor, () => Promise.reject())
+    if (!process.env['REACT_APP_NO_SSO']) {
+        instance.interceptors.request.use(tokenInterceptor, () => Promise.reject())
+    }
     return instance
 }

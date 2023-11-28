@@ -1,5 +1,5 @@
 import { axiosInstance, HEADERS } from './session'
-import { axiosGet, buildUrl, axiosPost } from '@cxbox-ui/core'
+import { axiosGet, axiosPost } from '@cxbox-ui/core'
 import { NotificationCountResponse, NotificationsResponse } from '../interfaces/notification'
 import { __API__ } from '../constants/constants'
 import { applyParams } from '../utils/api'
@@ -11,17 +11,17 @@ export function getNotificationList(page: number, limit: number) {
         _limit: limit
     }
 
-    const url = applyParams(buildUrl`notification/get-notifications`, queryStringObject)
+    const url = applyParams('notification/get-notifications', queryStringObject)
 
     return axiosGet<NotificationsResponse>(url).toPromise()
 }
 
 export function getNotificationCount() {
-    return axiosGet<NotificationCountResponse>(buildUrl`notification/count-notifications`).toPromise()
+    return axiosGet<NotificationCountResponse>('notification/count-notifications').toPromise()
 }
 
 export function setNotificationsRead(selectedRowKeys: (number | string)[]) {
-    return axiosPost<any>(buildUrl`notification/mark-notification-as-read`, selectedRowKeys).toPromise()
+    return axiosPost<any>('notification/mark-notification-as-read', selectedRowKeys).toPromise()
 }
 
 /**

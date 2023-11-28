@@ -11,17 +11,17 @@ export function getNotificationList(page: number, limit: number) {
         _limit: limit
     }
 
-    const url = applyParams(buildUrl`get-notifications`, queryStringObject)
+    const url = applyParams(buildUrl` notification/get-notifications`, queryStringObject)
 
     return axiosGet<NotificationsResponse>(url).toPromise()
 }
 
 export function getNotificationCount() {
-    return axiosGet<NotificationCountResponse>(buildUrl`count-notifications`).toPromise()
+    return axiosGet<NotificationCountResponse>(buildUrl`notification/count-notifications`).toPromise()
 }
 
 export function setNotificationsRead(selectedRowKeys: (number | string)[]) {
-    return axiosPost<any>(buildUrl`mark-notification-as-read`, selectedRowKeys).toPromise()
+    return axiosPost<any>(buildUrl`notification/mark-notification-as-read`, selectedRowKeys).toPromise()
 }
 
 /**
@@ -36,7 +36,7 @@ export function getMessageDownloadFileEndpoint(link: string) {
 }
 
 export function deleteNotifications(selectedRowKeys: number[]) {
-    return fetch(`${__API__}delete-notification`, {
+    return fetch(`${__API__}notification/delete-notification`, {
         headers: {
             ...HEADERS,
             'Content-type': 'application/json'

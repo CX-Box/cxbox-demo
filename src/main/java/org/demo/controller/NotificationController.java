@@ -22,13 +22,12 @@ public class NotificationController {
 
 	private final NotificationService notificationService;
 
-
 	@GetMapping(value = "/get-notifications")
 	public ResponseDTO getNotifications(
-			@RequestParam(defaultValue = "0") Integer page,
-			@RequestParam(defaultValue = "5") Integer limit) {
+			@RequestParam(name = "_page", defaultValue = "1") Integer page,
+			@RequestParam(name = "_limit", defaultValue = "5") Integer limit) {
 
-		return ResponseBuilder.build(notificationService.getNotifications(page, limit));
+		return ResponseBuilder.build(notificationService.getNotifications(page - 1, limit));
 	}
 
 	@GetMapping(value = "/count-notifications")
@@ -52,7 +51,8 @@ public class NotificationController {
 
 	@GetMapping("/check-new-notification")
 	public ResponseDTO checkReadNotification(
-			@RequestParam(defaultValue = "false") Boolean mark) {
+			@RequestParam(name = "_mark", defaultValue = "false") Boolean mark) {
+
 		return ResponseBuilder.build(notificationService.getCountWithMark(mark));
 	}
 

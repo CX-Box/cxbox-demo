@@ -20,4 +20,6 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
 
 	Long countByUser(User user);
 
+	Long countByUserAndIsRead(User user, Boolean isRead);
+
 }

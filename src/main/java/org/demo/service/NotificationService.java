@@ -19,4 +19,5 @@ public interface NotificationService {
 
 	void delete(List<Long> ids);
 
+	Long getCountWithMark(Boolean mark);
 }

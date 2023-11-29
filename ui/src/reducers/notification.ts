@@ -17,11 +17,15 @@ export default function notificationReducer(
 ): NotificationState {
     switch (action.type) {
         case actionTypes.changeNotification:
-            return {
+            const newState = {
                 ...state,
-                ...action.payload,
-                page: action.payload.page ?? initialState.page,
-                limit: action.payload.limit ?? initialState.limit
+                ...action.payload
+            }
+
+            return {
+                ...newState,
+                page: newState.page ?? initialState.page,
+                limit: newState.limit ?? initialState.limit
             }
         default:
             return state

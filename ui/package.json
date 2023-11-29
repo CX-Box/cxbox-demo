@@ -5,6 +5,8 @@
   "scripts": {
     "start": "craco start",
     "build": "cross-env CI=false craco build --config craco.prod.config.js && npm run rename",
+    "start-noKeycloak": "cross-env REACT_APP_NO_SSO=true craco start",
+    "build-noKeycloak": "cross-env REACT_APP_NO_SSO=true CI=false craco build --config craco.prod.config.js && npm run rename",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint ./src",

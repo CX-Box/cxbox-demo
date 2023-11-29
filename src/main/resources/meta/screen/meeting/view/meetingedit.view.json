@@ -51,6 +51,6 @@
     }
   ],
   "rolesAllowed": [
-   "CXBOX_USER"
+   "CXBOX_USER", "ADMIN"
   ]
 }

@@ -1,5 +1,7 @@
 app:
   ui-path: /ui
+  auth-basic:
+    enabled: ${AUTH_BASIC_ENABLED:true}
   keycloak:
     realm: cxbox
     auth-server-url: ${FRONTEND_AUTH_SERVER_URL:http://localhost:9080/auth}
@@ -27,7 +29,7 @@ cxbox:
     use-servlet-context-path: false
 
 server:
-  port : 8080
+  port: 8080
   forward-headers-strategy: framework
   servlet:
     session:

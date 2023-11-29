@@ -38,8 +38,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: example@gmail.com  #  For local development, you can use your own data, or use those prepared
-    password: example            #  from the CXBOX-1 ticket or the secrets of the EMAIL_DATA repository
+    username: ${MAIL_USER}  #  For local development, you can use your own data, or use those prepared
+    password: ${MAIL_PASSWORD}          #  from the CXBOX-1 ticket or the secrets of the EMAIL_DATA repository
     properties:
       mail:
         smtp:

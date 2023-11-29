@@ -88,3 +88,6 @@ jobs:
             cd /home/cxbox/demo
             sudo docker compose -f docker-compose-prod.yml up -d --wait -t 60
             docker ps
+          env:
+            MAIL_USER: ${{ secrets.MAIL_USER }}
+            MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}

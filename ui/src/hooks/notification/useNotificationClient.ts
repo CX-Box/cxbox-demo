@@ -101,4 +101,6 @@ export function useNotificationClient(subscribeCallback?: (messageBody: SocketNo
             notificationClient.activate()
         }
     }, [])
+
+    return notificationClient
 }

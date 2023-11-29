@@ -1,5 +1,5 @@
-import { useCallback } from 'react'
-import { getNotificationCount, getNotificationList, setNotificationsRead } from '../../api/notification'
+import { useCallback, useEffect, useState } from 'react'
+import { checkNewNotification, getNotificationCount, getNotificationList, setNotificationsRead } from '../../api/notification'
 import { useDispatch } from 'react-redux'
 import { AxiosError } from 'axios'
 import { useAppSelector } from '../useAppSelector'
@@ -12,12 +12,22 @@ export function useStompNotification() {
 
     const dispatch = useDispatch()
 
+    const checkNew = useCallback(() => {
+        checkNewNotification()
+            .then(response => {
+                dispatch($do.changeNotification({ unreadCount: response.data }))
+            })
+            .catch((error: AxiosError) => {
+                console.error('Error when checking for new notifications', error)
+            })
+    }, [dispatch])
+
     const getCount = useCallback(() => {
         getNotificationCount()
             .then(response => {
-                const data = response.data
-                if (data !== null) {
-                    dispatch($do.changeNotification({ count: data }))
+                const count = response.data
+                if (count !== null) {
+                    dispatch($do.changeNotification({ count }))
                 }
             })
             .catch((error: AxiosError) => {
@@ -41,8 +51,8 @@ export function useStompNotification() {
     )
 
     const getCurrentPage = useCallback(() => {
-        getList()
-    }, [getList])
+        getList(notificationState.page, notificationState.limit)
+    }, [getList, notificationState.limit, notificationState.page])
 
     const setRead = useCallback(
         (selectedRowKeys: (string | number)[]) => {
@@ -69,13 +79,24 @@ export function useStompNotification() {
     useNotificationClient(messageBody => {
         getList(messageBody.page, messageBody.limit)
         getCount()
+        checkNew()
     })
+
+    const [isInitialization, setIsInitialization] = useState(true)
+
+    useEffect(() => {
+        if (isInitialization) {
+            checkNew()
+            setIsInitialization(false)
+        }
+    }, [checkNew, isInitialization])
 
     return {
         state: notificationState,
         getCount,
         setRead,
         getList,
+        checkNew,
         getCurrentPage,
         changePage
     }

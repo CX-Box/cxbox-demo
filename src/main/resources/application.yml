@@ -18,7 +18,7 @@ cxbox:
     view-allowed-roles-enabled: true
   widget:
     fields:
-      include-packages: org.cxbox.core.ui.model.json.field.subtypes, org.demo.conf.cxbox.meta
+      include-packages: org.cxbox.meta, org.demo.conf.cxbox.meta
   api:
     path: /api/v1
     use-servlet-context-path: false

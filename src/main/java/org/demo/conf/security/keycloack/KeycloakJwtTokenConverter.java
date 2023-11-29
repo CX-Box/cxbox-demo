@@ -1,7 +1,6 @@
 package org.demo.conf.security.keycloack;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -9,7 +8,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.cxbox.api.data.dictionary.LOV;
-import org.cxbox.api.service.session.CxboxUserDetails;
 import org.cxbox.api.service.session.CxboxUserDetailsInterface;
 import org.demo.conf.security.cxboxkeycloak.CxboxAuthUserRepository;
 import org.demo.entity.core.User;

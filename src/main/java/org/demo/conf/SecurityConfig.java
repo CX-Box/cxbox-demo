@@ -2,7 +2,7 @@ package org.demo.conf;
 
 
 import org.cxbox.core.config.properties.UIProperties;
-import org.cxbox.core.metahotreload.conf.properties.MetaConfigurationProperties;
+import org.cxbox.meta.metahotreload.conf.properties.MetaConfigurationProperties;
 import org.demo.conf.security.cxboxkeycloak.CxboxAuthUserRepository;
 import org.demo.conf.security.keycloack.KeycloakJwtTokenConverter;
 import org.demo.conf.security.keycloack.TokenConverterProperties;

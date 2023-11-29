@@ -1,9 +1,10 @@
 package org.demo.conf.cxbox.meta;
 
-import org.cxbox.core.ui.field.CxboxWidgetField;
-import org.cxbox.core.ui.model.json.field.FieldMeta;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.cxbox.meta.ui.field.CxboxWidgetField;
+import org.cxbox.meta.ui.model.json.field.FieldMeta;
 
 @EqualsAndHashCode(callSuper = true)
 @Data

@@ -6,6 +6,7 @@ import org.cxbox.api.service.tx.ITransactionStatus;
 import org.cxbox.core.config.APIConfig;
 import org.cxbox.core.config.CoreApplicationConfig;
 import org.cxbox.core.config.UIConfig;
+import org.cxbox.meta.MetaApplicationConfig;
 import org.cxbox.model.core.config.PersistenceJPAConfig;
 import org.cxbox.model.core.tx.CxboxJpaTransactionManagerForceActiveAware;
 import java.util.concurrent.Executors;
@@ -27,6 +28,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @RequiredArgsConstructor
 @Import({
 		CoreApplicationConfig.class,
+		MetaApplicationConfig.class,
 		PersistenceJPAConfig.class,
 		UIConfig.class,
 		APIConfig.class

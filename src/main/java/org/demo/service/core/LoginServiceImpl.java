@@ -17,10 +17,10 @@
 package org.demo.service.core;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.cxbox.api.ScreenResponsibilityService;
 import org.cxbox.api.data.dictionary.CoreDictionaries.SystemPref;
 import org.cxbox.api.data.dictionary.LOV;
 import org.cxbox.api.data.dictionary.SimpleDictionary;
@@ -28,13 +28,9 @@ import org.cxbox.api.service.session.CoreSessionService;
 import org.cxbox.api.service.session.IUser;
 import org.cxbox.api.system.SystemSettings;
 import org.cxbox.core.dto.LoggedUser;
-import org.cxbox.core.dto.data.view.ScreenResponsibility;
-import org.cxbox.core.metahotreload.conf.properties.MetaConfigurationProperties;
-import org.cxbox.core.service.ScreenResponsibilityService;
-import org.cxbox.core.service.UIService;
 import org.cxbox.core.util.session.LoginService;
 import org.cxbox.core.util.session.SessionService;
-import org.demo.service.core.UserRoleService;
+import org.cxbox.meta.metahotreload.conf.properties.MetaConfigurationProperties;
 import org.demo.entity.core.User;
 import org.demo.repository.core.UserRepository;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -55,8 +51,6 @@ public class LoginServiceImpl implements LoginService {
 	private final UserRoleService userRoleService;
 
 	private final SystemSettings systemSettings;
-
-	private final UIService uiService;
 
 	private final UserRepository userRepository;
 
@@ -84,8 +78,8 @@ public class LoginServiceImpl implements LoginService {
 				.activeRole(activeUserRole.getKey())
 				.roles(userRoleService.getUserRoles(userRepository.getById(user.getId())))
 				// TODO: Remove screens from response in 3.0 in favor of separate ScreenController endpoint
-				.screens(getScreens(user, activeUserRole))
-				.userSettings(uiService.getUserSettings())
+				.screens(screenResponsibilityService.getScreens(user, activeUserRole))
+				.userSettings(null)
 				.featureSettings(this.getFeatureSettings())
 				.systemUrl(systemSettings.getValue(SystemPref.SYSTEM_URL))
 				.language(LocaleContextHolder.getLocale().getLanguage())
@@ -104,19 +98,6 @@ public class LoginServiceImpl implements LoginService {
 		LOV userRole = new LOV(role);
 		userDetails.setUserRole(userRole);
 		userRoleService.updateMainUserRole(user, userRole);
-	}
-
-	/**
-	 * Get all available screens with respect of user role
-	 * @deprecated TODO: Remove in 3.0 in favor of separate ScreenController endpoint
-	 *
-	 * @param user Active session user
-	 * @param userRole User role
-	 * @return JsonNode Available screens
-	 */
-	@Deprecated
-	private List<ScreenResponsibility> getScreens(IUser<Long> user, LOV userRole) {
-		return screenResponsibilityService.getScreens(user, userRole);
 	}
 
 	/**

@@ -4,13 +4,10 @@ package org.demo.conf.security.cxboxkeycloak;
 import static org.cxbox.api.service.session.InternalAuthorizationService.SystemUsers.VANILLA;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.cxbox.api.data.dictionary.LOV;
-import org.cxbox.api.service.session.CxboxUserDetails;
-import org.cxbox.api.service.session.CxboxUserDetailsInterface;
 import org.cxbox.api.service.session.InternalAuthorizationService;
 import org.cxbox.api.service.tx.TransactionService;
 import org.cxbox.core.util.SQLExceptions;

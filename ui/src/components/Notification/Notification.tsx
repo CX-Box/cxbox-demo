@@ -108,9 +108,7 @@ export function Notification(props: NotificationProps) {
     return (
         <div>
             <Button className={styles.notification} type="bar" onClick={() => toggleModalVisibility(true)}>
-                {(notification.state.count?.notificationCountUnread as number) > 0 && (
-                    <span className={styles.dot}>{notification.state.count?.notificationCountUnread}</span>
-                )}
+                {(notification.state.unreadCount as number) > 0 && <span className={styles.dot}>{notification.state.unreadCount}</span>}
                 <Icon type="bell" style={{ marginBottom: '-4px' }} />
             </Button>
             <div ref={containerRef} className={cn(styles.popupContainer, styles.closeIcon)}>
@@ -130,7 +128,7 @@ export function Notification(props: NotificationProps) {
                                 rowKey="id"
                                 rowClassName={record => (!record.isRead ? styles.notificationUnread : '')}
                                 columns={columns}
-                                dataSource={notification.state.data?.content}
+                                dataSource={notification.state.data}
                                 rowSelection={{
                                     selectedRowKeys,
                                     onChange: (selectedRows: any) => {

@@ -1,6 +1,6 @@
 import { axiosInstance, HEADERS } from './session'
 import { axiosGet, axiosPost } from '@cxbox-ui/core'
-import { NotificationCountResponse, NotificationsResponse } from '../interfaces/notification'
+import { NotificationCheckNewResponse, NotificationCountResponse, NotificationsResponse } from '../interfaces/notification'
 import { __API__ } from '../constants/constants'
 import { applyParams } from '../utils/api'
 import { fileControllerMapping } from '../constants/notification'
@@ -22,6 +22,10 @@ export function getNotificationCount() {
 
 export function setNotificationsRead(selectedRowKeys: (number | string)[]) {
     return axiosPost<any>('notification/mark-notification-as-read', selectedRowKeys).toPromise()
+}
+
+export function checkNewNotification() {
+    return axiosGet<NotificationCheckNewResponse>('/notification/check-new-notification').toPromise()
 }
 
 /**

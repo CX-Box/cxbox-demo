@@ -67,7 +67,7 @@ const PaginationNotification = (props: PaginationNotificationProps) => {
     const pagesToShow = PAGES_TO_SHOW
     const showSelectOptions = true
     const { changePage: changeNotificationPage, state: notificationState } = useStompNotification()
-    const notificationCount = notificationState.count?.notificationCountTotal
+    const notificationCount = notificationState.count
     const limit = notificationState.page
     const page = notificationState.limit
     const pageCount = Math.ceil((notificationCount ?? 0) / limit)

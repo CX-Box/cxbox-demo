@@ -1,41 +1,33 @@
 import { ApplicationErrorType } from '@cxbox-ui/core/interfaces/view'
 
 export interface NotificationState {
-    data?: PageContent
-    count?: NotificationCountData
+    data?: Notification[]
+    count?: number
     page: number
     limit: number
+    unreadCount?: number
 }
 
-export interface Notifications {
+export interface Notification {
     id: string
-    fileId: string
-    jmsId: string
-    notificationType: string
-    reportType: string
-    createdDate: string
-    description: string
-    isDeleted: boolean
+    createTime: string
     isRead: boolean
+    text: string
 }
 
 export interface NotificationsResponse {
-    data: PageContent
+    data: Notification[]
     success: boolean
 }
 
-export interface PageContent {
-    content: Notifications[]
-    totalElements: number
-}
-
 export interface NotificationCountResponse {
-    data: NotificationCountData
+    data: number
+    success: boolean
 }
 
-export interface NotificationCountData {
-    notificationCountUnread: number
-    notificationCountTotal: number
+export interface NotificationCheckNewResponse {
+    data: number
+    success: boolean
 }
 
 export interface SocketNotification {

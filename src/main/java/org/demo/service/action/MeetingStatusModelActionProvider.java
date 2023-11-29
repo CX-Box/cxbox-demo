@@ -2,6 +2,7 @@ package org.demo.service.action;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Arrays;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.cxbox.core.dto.DrillDownType;
@@ -14,10 +15,11 @@ import org.cxbox.core.service.action.Actions;
 import org.cxbox.core.service.action.ActionsBuilder;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.MeetingDTO;
+import org.demo.entity.Contact;
 import org.demo.entity.Meeting;
 import org.demo.entity.enums.MeetingStatus;
 import org.demo.repository.MeetingRepository;
-import org.demo.service.MailSenderService;
+import org.demo.service.MailSendingService;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,9 +29,7 @@ public class MeetingStatusModelActionProvider {
 
 	private final MeetingRepository meetingRepository;
 
-	private final MailSenderService mailSenderService;
-
-	private final String mail = "CXBOX.mailForTest@gmail.com";
+	private final MailSendingService mailSendingService;
 
 	private final String messageTemplate = "Status: %s; \nMeeting Result: %s";
 
@@ -40,12 +40,11 @@ public class MeetingStatusModelActionProvider {
 						.invoker((bc, dto) -> {
 							Meeting meeting = meetingRepository.getById(Long.parseLong(bc.getId()));
 							status.transition(status, meeting);
-
 							if (meeting.getStatus().equals(MeetingStatus.COMPLETED)) {
-								mailSenderService.send(mail, meeting.getAgenda(),
-										String.format(messageTemplate,
-												MeetingStatus.COMPLETED.getValue(), meeting.getResult()
-										)
+								mailSendingService.send(
+										Optional.ofNullable(meeting).map(Meeting::getContact).map(Contact::getEmail),
+										meeting.getAgenda(),
+										String.format(messageTemplate, MeetingStatus.COMPLETED.getValue(), meeting.getResult())
 								);
 							}
 

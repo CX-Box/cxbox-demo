@@ -23,6 +23,9 @@ services:
   cxbox-demo-node-1:
     image: 'cxbox/cxbox-demo:latest'
     environment:
+      MAIL_HOST: 'smtp.gmail.com'
+      MAIL_USER: 'cxbox.mail.test@gmail.com'
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
       FRONTEND_AUTH_SERVER_URL: 'http://demo.cxbox.org/auth/'
       BACKEND_AUTH_SERVER_URL: 'http://demo.cxbox.org/auth/'
       HIBERNATE_DDL_AUTO: 'none'
@@ -49,6 +52,9 @@ services:
   cxbox-demo-node-2:
     image: 'cxbox/cxbox-demo:latest'
     environment:
+      MAIL_HOST: 'smtp.gmail.com'
+      MAIL_USER: 'cxbox.mail.test@gmail.com'
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
       FRONTEND_AUTH_SERVER_URL: 'http://demo.cxbox.org/auth/'
       BACKEND_AUTH_SERVER_URL: 'http://demo.cxbox.org/auth/'
       HIBERNATE_DDL_AUTO: 'none'

@@ -50,6 +50,11 @@ public class NotificationController {
 		notificationService.delete(notificationId);
 	}
 
+	@GetMapping("/check-new-notification")
+	public ResponseDTO checkReadNotification(
+			@RequestParam(defaultValue = "false") Boolean mark) {
+		return ResponseBuilder.build(notificationService.getCountWithMark(mark));
+	}
 
 }
 

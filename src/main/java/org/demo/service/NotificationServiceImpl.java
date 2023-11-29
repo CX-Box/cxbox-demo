@@ -64,4 +64,9 @@ public class NotificationServiceImpl implements NotificationService {
 		notificationRepository.deleteAllById(ids);
 	}
 
+	@Override
+	public Long getCountWithMark(Boolean mark) {
+		return notificationRepository.countByUserAndIsRead(sessionService.getSessionUser(), mark);
+	}
+
 }

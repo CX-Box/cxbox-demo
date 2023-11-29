@@ -59,13 +59,14 @@ export function useStompNotification() {
             setNotificationsRead(selectedRowKeys)
                 .then(data => {
                     getCount()
+                    checkNew()
                     getList(notificationState.page, notificationState.limit)
                 })
                 .catch((error: AxiosError) => {
                     console.error(error)
                 })
         },
-        [getCount, getList, notificationState.limit, notificationState.page]
+        [checkNew, getCount, getList, notificationState.limit, notificationState.page]
     )
 
     const changePage = useCallback(

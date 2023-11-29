@@ -35,6 +35,17 @@ server:
         http-only: true
 
 spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: example@gmail.com  #  For local development, you can use your own data, or use those prepared
+    password: example            #  from the CXBOX-1 ticket or the secrets of the EMAIL_DATA repository
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
   servlet:
     multipart:
       enabled: true
@@ -71,7 +82,7 @@ spring:
     hibernate:
       naming:
         physical-strategy: org.cxbox.model.core.hbn.ImprovedPhysicalNamingStrategy
-      ddl-auto: ${HIBERNATE_DDL_AUTO:none}
+      ddl-auto: ${HIBERNATE_DDL_AUTO:update}
   main:
     allow-bean-definition-overriding: true
     banner-mode: off

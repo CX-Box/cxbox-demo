@@ -35,60 +35,46 @@ server:
         http-only: true
 
 spring:
-    mail:
-      host: smtp.gmail.com
-      port: 587
-      username: ${MAIL_USER}              #  For local development, you can use your own data, or use those prepared
-      password: ${MAIL_PASSWORD}          #  from the CXBOX-1 ticket or the secrets of the EMAIL_DATA repository
-      properties:
-        mail:
-          smtp:
-            auth: true
-            starttls:
-              enable: true
-    servlet:
-      multipart:
-        enabled: true
-        max-file-size: 1GB
-        max-request-size: 1GB
-    websocket:
-      endpointToConnect: /websocketnotification
-      topic: /user/queue/websocket.reply
-    datasource:
-      name: primaryDS
-      driver-class-name: ${DATABASE_DRIVER:org.postgresql.Driver}
-      url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/postgres}
-      username: ${DATABASE_USER:postgres}
-      password: ${DATABASE_PASSWORD:postgres}
-    liquibase:
-      change-log: classpath:/db/db.changelog-master.xml
-      drop-first: true
-      contexts: local
-    cache:
-      type: SIMPLE
-    jpa:
-      properties:
-        hibernate:
-          synonyms: true
-          default_batch_fetch_size: 100
-          order_updates: true
-          order_inserts: true
-          batch_versioned_data: true
-          batch_fetch_style: DYNAMIC
-          criteria:
-            literal_handling_mode: BIND
-          connection:
-            includeSynonyms: true
-            charSet: UTF-8
-          jdbc:
-            batch_size: 100
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 1GB
+      max-request-size: 1GB
+  datasource:
+    name: primaryDS
+    driver-class-name: ${DATABASE_DRIVER:org.postgresql.Driver}
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/postgres}
+    username: ${DATABASE_USER:postgres}
+    password: ${DATABASE_PASSWORD:postgres}
+  liquibase:
+    change-log: classpath:/db/db.changelog-master.xml
+    drop-first: true
+    contexts: local
+  cache:
+    type: SIMPLE
+  jpa:
+    properties:
       hibernate:
-        naming:
-          physical-strategy: org.cxbox.model.core.hbn.ImprovedPhysicalNamingStrategy
-        ddl-auto: ${HIBERNATE_DDL_AUTO:update}
-    main:
-      allow-bean-definition-overriding: true
-      banner-mode: off
+        synonyms: true
+        default_batch_fetch_size: 100
+        order_updates: true
+        order_inserts: true
+        batch_versioned_data: true
+        batch_fetch_style: DYNAMIC
+        criteria:
+          literal_handling_mode: BIND
+        connection:
+          includeSynonyms: true
+          charSet: UTF-8
+        jdbc:
+          batch_size: 100
+    hibernate:
+      naming:
+        physical-strategy: org.cxbox.model.core.hbn.ImprovedPhysicalNamingStrategy
+      ddl-auto: ${HIBERNATE_DDL_AUTO:none}
+  main:
+    allow-bean-definition-overriding: true
+    banner-mode: off
 
 keycloak:
   auth-server-url: ${BACKEND_AUTH_SERVER_URL:http://localhost:9080/auth}
@@ -100,6 +86,7 @@ keycloak:
   ssl-required: none
 springdoc:
   packages-to-scan: org.demo
+  show-actuator: true
 
 minio:
   access:
@@ -108,3 +95,12 @@ minio:
   url: ${MINIO_URL:http://localhost:9000}
   bucket:
     name: ${MINIO_DEFAULT_BUCKETS:edcs3gnsadevb}
+management:
+  endpoint:
+    metrics:
+      enabled: true
+  endpoints:
+    enabled-by-default: true
+    web:
+      exposure:
+        include: 'metrics'

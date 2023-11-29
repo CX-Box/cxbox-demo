@@ -37,6 +37,8 @@ services:
       MINIO_URL: 'http://cxbox_minio:9000'
       MINIO_DEFAULT_BUCKETS: 'edcs3gnsadevb'
       JAVA_TOOL_OPTIONS: '-agentlib:jdwp=transport=dt_socket,server=y,address=8989,suspend=n'
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+      MAIL_USER: ${MAIL_USER}
     expose:
       - 8080
     ports:
@@ -63,6 +65,8 @@ services:
       MINIO_URL: 'http://cxbox_minio:9000'
       MINIO_DEFAULT_BUCKETS: 'edcs3gnsadevb'
       JAVA_TOOL_OPTIONS: '-agentlib:jdwp=transport=dt_socket,server=y,address=8989,suspend=n'
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+      MAIL_USER: ${MAIL_USER}
     expose:
       - 8080
     ports:

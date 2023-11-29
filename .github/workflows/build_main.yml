@@ -86,6 +86,8 @@ jobs:
           password: ${{ secrets.CXBOX_DEMO_SSH_PASSWORD }}
           port: 22
           script: |
+            export MAIL_USER=${{ secrets.MAIL_USER }}
+            export MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}
             sudo chmod -R 777 /home/cxbox/demo || true
             cd /home/cxbox/demo
             sudo docker compose -f docker-compose-prod.yml up -d --wait -t 60

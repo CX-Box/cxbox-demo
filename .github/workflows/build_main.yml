@@ -76,6 +76,20 @@ jobs:
           source: "docker,docker-compose-prod.yml"
           target: /home/cxbox/demo
           rm: true
+      - name: prepare - add docker env varialbes populated from secrets
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: 188.124.37.74
+          username: ${{ secrets.CXBOX_DEMO_SSH_USER }}
+          password: ${{ secrets.CXBOX_DEMO_SSH_PASSWORD }}
+          port: 22
+          script: |
+            sudo mkdir /home/cxbox/demo || true
+            sudo chmod -R 777 /home/cxbox/demo || true
+            cd /home/cxbox/demo
+            echo "MAIL_PASSWORD=$MAIL_PASSWORD" > '.env'
+        env:
+          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
       - name: start
         uses: appleboy/ssh-action@v0.1.10
         with:

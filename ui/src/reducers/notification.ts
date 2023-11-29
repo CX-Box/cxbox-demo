@@ -17,7 +17,12 @@ export default function notificationReducer(
 ): NotificationState {
     switch (action.type) {
         case actionTypes.changeNotification:
-            return { ...state, ...action.payload }
+            return {
+                ...state,
+                ...action.payload,
+                page: action.payload.page ?? initialState.page,
+                limit: action.payload.limit ?? initialState.limit
+            }
         default:
             return state
     }

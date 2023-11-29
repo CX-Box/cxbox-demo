@@ -68,8 +68,8 @@ const PaginationNotification = (props: PaginationNotificationProps) => {
     const showSelectOptions = true
     const { changePage: changeNotificationPage, state: notificationState } = useStompNotification()
     const notificationCount = notificationState.count
-    const limit = notificationState.page
-    const page = notificationState.limit
+    const page = notificationState.page
+    const limit = notificationState.limit
     const pageCount = Math.ceil((notificationCount ?? 0) / limit)
     const showPagination = pageCount > 1
     const [limitOptions, setLimitOptions] = React.useState(LIMIT_OPTIONS)

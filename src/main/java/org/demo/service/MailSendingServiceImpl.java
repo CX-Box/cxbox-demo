@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MailSendingServiceImpl implements MailSenderService {
 
-
 	private final JavaMailSender javaMailSender;
 
 	private final NotificationService notificationService;

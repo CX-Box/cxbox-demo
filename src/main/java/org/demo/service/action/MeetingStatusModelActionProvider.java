@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class MeetingStatusModelActionProvider {
 
 	private final MeetingRepository meetingRepository;

@@ -3,6 +3,7 @@
  */
 import { ActionPayloadTypes as CxboxActionPayloadTypes, createActionCreators } from '@cxbox-ui/core'
 import { DataItem } from '@cxbox-ui/core/interfaces/data'
+import { NotificationState } from '../interfaces/notification'
 
 const z = null as any
 
@@ -66,6 +67,8 @@ export class CustomActionTypes extends CxboxActionPayloadTypes {
     } = z
 
     sendOperationSuccess: CxboxActionPayloadTypes['sendOperationSuccess'] & { dataItem?: DataItem } = z
+
+    changeNotification: Partial<NotificationState> = z
 }
 
 /**

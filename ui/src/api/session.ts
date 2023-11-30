@@ -31,7 +31,7 @@ function tokenInterceptor(rqConfig: AxiosRequestConfig) {
     })
 }
 
-export function axiosInstance() {
+function createAxiosInstance() {
     const instance = axios.create({
         baseURL: __API__,
         timeout: __AJAX_TIMEOUT__,
@@ -46,3 +46,5 @@ export function axiosInstance() {
     }
     return instance
 }
+
+export const axiosInstance = createAxiosInstance()

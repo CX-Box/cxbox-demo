@@ -54,6 +54,9 @@ spring:
       enabled: true
       max-file-size: 1GB
       max-request-size: 1GB
+  websocket:
+    endpointToConnect: /websocketnotification
+    topic: /user/queue/websocket.reply
   datasource:
     name: primaryDS
     driver-class-name: ${DATABASE_DRIVER:org.postgresql.Driver}

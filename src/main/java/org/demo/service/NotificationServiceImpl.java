@@ -31,7 +31,6 @@ public class NotificationServiceImpl implements NotificationService {
 				.user(notificationOwner)
 				.text(socketNotificationDTO.getText())
 				.isRead(false)
-				.createTime(socketNotificationDTO.getTime())
 				.build());
 
 		return notification;

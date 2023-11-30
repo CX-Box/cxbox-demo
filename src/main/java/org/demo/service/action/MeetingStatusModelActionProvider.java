@@ -12,6 +12,7 @@ import org.cxbox.core.dto.rowmeta.PreActionType;
 import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
 import org.cxbox.core.service.action.ActionsBuilder;
+import org.cxbox.core.util.session.SessionService;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.MeetingDTO;
 import org.demo.entity.Contact;
@@ -29,6 +30,8 @@ public class MeetingStatusModelActionProvider {
 
 	private final MailSendingService mailSendingService;
 
+	private final SessionService sessionService;
+
 	private final String messageTemplate = "Status: %s; \nMeeting Result: %s";
 
 	public ActionsBuilder<MeetingDTO> getMeetingActions() {
@@ -42,7 +45,8 @@ public class MeetingStatusModelActionProvider {
 								mailSendingService.send(
 										Optional.ofNullable(meeting).map(Meeting::getContact).map(Contact::getEmail),
 										meeting.getAgenda(),
-										String.format(messageTemplate, MeetingStatus.COMPLETED.getValue(), meeting.getResult())
+										String.format(messageTemplate, MeetingStatus.COMPLETED.getValue(), meeting.getResult()),
+										sessionService.getSessionUser()
 								);
 							}
 

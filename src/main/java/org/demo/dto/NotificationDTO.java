@@ -21,7 +21,7 @@ public class NotificationDTO {
 		this.id = notification.getId();
 		this.isRead = notification.getIsRead();
 		this.text = notification.getText();
-		this.createTime = notification.getCreateTime();
+		this.createTime = notification.getCreatedDate();
 	}
 
 }

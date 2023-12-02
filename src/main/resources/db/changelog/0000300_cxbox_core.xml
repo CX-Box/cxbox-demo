@@ -46,6 +46,33 @@
       </column>
     </createTable>
   </changeSet>
+  <changeSet author="initial" id="USER_DIVISIONS TABLE">
+    <createTable remarks="Пользовательский раздел" tableName="USER_DIVISIONS">
+      <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="DIVISIONS" remarks="Разделы" type="VARCHAR2(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="${now}" name="CREATED_DATE" remarks="Дата создания"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="${now}" name="UPDATED_DATE" remarks="Дата изменения"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
   <changeSet author="initial" id="NOTIFICATION TABLE">
     <createTable remarks="Уведомления" tableName="NOTIFICATION">
       <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
@@ -643,6 +670,9 @@
       <column name="ORIG_DEPT_CODE" remarks="Дочерний департамент" type="VARCHAR2(255)"/>
       <column name="TIMEZONE" type="VARCHAR2(255 BYTE)"/>
       <column name="LOCALE" type="VARCHAR2(20 BYTE)"/>
+      <column defaultValue="null" name="USER_DIVISIONS_ID" type="NUMBER(19, 0)">
+        <constraints nullable="true"/>
+      </column>
       <column defaultValueComputed="${now}" name="CREATED_DATE" type="TIMESTAMP(6)">
         <constraints nullable="false"/>
       </column>
@@ -1224,6 +1254,11 @@
       constraintName="FK__USER_UPDATED_BY" deferrable="false" initiallyDeferred="false"
       onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
       referencedTableName="USERS" validate="true"/>
+    <addForeignKeyConstraint baseColumnNames="USER_DIVISIONS_ID" baseTableName="USERS"
+      constraintName="FK_USER_DIVISIONS" deferrable="true" initiallyDeferred="true"
+      onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
+      referencedTableName="USER_DIVISIONS" validate="true"/>
+
   </changeSet>
   <changeSet author="initial" id="USER_ROLE CONSTRAINTS">
     <addForeignKeyConstraint baseColumnNames="CREATED_BY_USER_ID" baseTableName="USER_ROLE"

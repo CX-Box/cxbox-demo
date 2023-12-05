@@ -5,6 +5,7 @@ import { Session } from '@cxbox-ui/core/interfaces/session'
 export type CustomSession = Session & {
     logout: boolean
     isMetaRefreshing: boolean
+    userId?: string
 }
 
 /**
@@ -35,7 +36,8 @@ export default function sessionReducer(state: CustomSession = initialState, acti
             return {
                 ...state,
                 active: true,
-                logout: false
+                logout: false,
+                userId: action.payload.userId
             }
         }
         case actionTypes.refreshMeta: {

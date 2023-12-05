@@ -24,7 +24,7 @@ export function Notification(props: NotificationProps) {
     const { t } = useTranslation()
     const [selectedRowKeys, setSelectedRowKeys] = useState([])
     const [visible, toggleVisible] = useToggle(false)
-    const notification = useStompNotification()
+    const notification = useStompNotification({ check: true })
     const { setRead, getList } = notification
 
     const containerRef = useRef<HTMLDivElement>(null)

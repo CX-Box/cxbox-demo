@@ -3,6 +3,7 @@ package org.demo.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.cxbox.model.core.entity.User;
 import org.demo.dto.SocketNotificationDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -16,16 +17,18 @@ public class WebSocketNotificationServiceImpl implements WebSocketNotificationSe
 
 	private final ObjectMapper objectMapper;
 
+	@Value("${spring.websocket.prefix}")
+	private String prefix;
 
-	@Value("${spring.websocket.topic}")
-	private final String topic;
+	@Value("${spring.websocket.urlPath}")
+	private String urlPath;
 
 	@Override
 	@SneakyThrows
-	public void send(SocketNotificationDTO socketNotificationDTO) {
+	public void send(SocketNotificationDTO socketNotificationDTO, User currentUser) {
 
 		simpMessagingTemplate.convertAndSend(
-				topic,
+				prefix + "/" + currentUser.getId() + urlPath,
 				objectMapper.writeValueAsString(socketNotificationDTO)
 		);
 	}

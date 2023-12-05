@@ -3,6 +3,7 @@ package org.demo.service;
 import static org.cxbox.api.service.session.InternalAuthorizationService.VANILLA;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.cxbox.api.service.session.InternalAuthorizationService;
@@ -56,7 +57,7 @@ public class MailSendingService {
 						.drillDownType(DrillDownType.EXTERNAL_NEW.getValue())
 						.drillDownLabel(link)
 						.drillDownLink(HTTP + link)
-						.time(LocalDateTime.now())
+						.time(LocalDateTime.now(ZoneOffset.UTC))
 						.build(), currentUser);
 
 			} catch (MailParseException | MailPreparationException e) {
@@ -90,7 +91,7 @@ public class MailSendingService {
 		return SocketNotificationDTO.builder()
 				.title("Not Successful")
 				.text("Email not sent to " + mailTo)
-				.time(LocalDateTime.now())
+				.time(LocalDateTime.now(ZoneOffset.UTC))
 				.error(new SocketNotificationErrorDTO(type, message))
 				.build();
 	}

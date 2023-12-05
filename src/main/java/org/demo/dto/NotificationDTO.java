@@ -1,6 +1,7 @@
 package org.demo.dto;
 
-import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import lombok.Getter;
 import lombok.Setter;
 import org.demo.entity.Notification;
@@ -15,13 +16,13 @@ public class NotificationDTO {
 
 	private String text;
 
-	private LocalDateTime createTime;
+	private ZonedDateTime createTime;
 
 	public NotificationDTO(Notification notification) {
 		this.id = notification.getId();
 		this.isRead = notification.getIsRead();
 		this.text = notification.getText();
-		this.createTime = notification.getCreatedDate();
+		this.createTime = ZonedDateTime.of(notification.getCreatedDateUtc(), ZoneId.of("Z"));
 	}
 
 }

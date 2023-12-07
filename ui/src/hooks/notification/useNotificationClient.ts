@@ -5,10 +5,12 @@ import { $do } from '../../actions/types'
 import { ApplicationErrorType } from '@cxbox-ui/core/interfaces/view'
 import showSocketNotification from '../../components/Notification/ShowSocketNotification'
 import { getStoreInstance } from '@cxbox-ui/core'
-import { brokerURL, heartbeatIncoming, heartbeatOutgoing, reconnectDelay, subscribeUrl } from '../../constants/notification'
+import { brokerURL, heartbeatIncoming, heartbeatOutgoing, reconnectDelay } from '../../constants/notification'
 import { Client } from '@stomp/stompjs'
-import { frameCallbackType } from '@stomp/stompjs/src/types'
 import { SocketNotification } from '../../interfaces/notification'
+import { createUserSubscribeUrl } from '../../utils/notification'
+import { useAppSelector } from '../useAppSelector'
+import { IFrame } from '@stomp/stompjs/src/i-frame'
 
 const notificationClient = new Client({
     brokerURL: brokerURL,
@@ -23,7 +25,7 @@ const notificationClient = new Client({
 export function useNotificationClient(subscribeCallback?: (messageBody: SocketNotification) => void) {
     const dispatch = useDispatch()
 
-    const handleStompConnectRef = useRef<frameCallbackType>(frame => {
+    const handleStompConnectRef = useRef<(frame: IFrame, subscribeUrl: string) => void>((frame, subscribeUrl) => {
         console.info('---->>>> Connect Success', frame)
 
         const checkAndShowErrorMessage = (errorType: number, text: any) => {
@@ -84,10 +86,12 @@ export function useNotificationClient(subscribeCallback?: (messageBody: SocketNo
         })
     })
 
+    const userId = useAppSelector(state => state.session.userId)
+
     useEffect(() => {
-        if (!notificationClient.active) {
+        if (!notificationClient.active && userId) {
             notificationClient.onConnect = frame => {
-                handleStompConnectRef.current(frame)
+                handleStompConnectRef.current(frame, createUserSubscribeUrl(userId))
             }
 
             notificationClient.onStompError = frame => {
@@ -100,7 +104,7 @@ export function useNotificationClient(subscribeCallback?: (messageBody: SocketNo
 
             notificationClient.activate()
         }
-    }, [])
+    }, [userId])
 
     return notificationClient
 }

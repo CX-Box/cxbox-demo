@@ -7,7 +7,7 @@ import { $do } from '../../actions/types'
 import { useNotificationClient } from './useNotificationClient'
 import { initialState } from '../../reducers/notification'
 
-export function useStompNotification() {
+export function useStompNotification({ check = false } = {}) {
     const notificationState = useAppSelector(state => state.notification)
 
     const dispatch = useDispatch()
@@ -86,11 +86,11 @@ export function useStompNotification() {
     const [isInitialization, setIsInitialization] = useState(true)
 
     useEffect(() => {
-        if (isInitialization) {
+        if (check && isInitialization) {
             checkNew()
             setIsInitialization(false)
         }
-    }, [checkNew, isInitialization])
+    }, [check, checkNew, isInitialization])
 
     return {
         state: notificationState,

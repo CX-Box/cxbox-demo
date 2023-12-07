@@ -1,6 +1,5 @@
 import { CustomEpic, actionTypes, AnyAction } from '../interfaces/actions'
 import { getBasicAuthRequest } from '../api/session'
-import { LoginResponse } from '@cxbox-ui/core/interfaces/session'
 import { Observable } from 'rxjs/Observable'
 import { $do, SSO_AUTH } from '../actions/types'
 import { AxiosError } from 'axios'
@@ -31,7 +30,7 @@ const loginEpic: CustomEpic = (action$, store) =>
             const login = action.payload && action.payload.login
             const password = action.payload && action.payload.password
             return getBasicAuthRequest(login, password)
-                .mergeMap((data: LoginResponse) => {
+                .mergeMap(data => {
                     return Observable.of(
                         $do.loginDone({
                             devPanelEnabled: data.devPanelEnabled,
@@ -40,7 +39,8 @@ const loginEpic: CustomEpic = (action$, store) =>
                             firstName: data.firstName,
                             lastName: data.lastName,
                             login: data.login,
-                            screens: data.screens
+                            screens: data.screens,
+                            userId: data.userId
                         })
                     )
                 })

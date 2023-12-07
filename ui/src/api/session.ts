@@ -1,8 +1,8 @@
 import { axiosGet, buildUrl } from '@cxbox-ui/core'
-import { LoginResponse } from '@cxbox-ui/core/interfaces/session'
 import axios, { AxiosRequestConfig } from 'axios'
 import { keycloak, KEYCLOAK_MIN_VALIDITY } from '../keycloak'
 import { __API__ } from '../constants/constants'
+import { LoginResponse } from '../interfaces/session'
 
 const __AJAX_TIMEOUT__ = 900000
 const __CLIENT_ID__: number = Date.now()

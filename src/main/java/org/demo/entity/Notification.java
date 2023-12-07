@@ -1,5 +1,6 @@
 package org.demo.entity;
 
+import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -37,5 +38,10 @@ public class Notification extends BaseEntity {
 	 * Message text
 	 */
 	private String text;
+
+	/**
+	 * Create date UTC format
+	 */
+	private LocalDateTime createdDateUtc;
 
 }

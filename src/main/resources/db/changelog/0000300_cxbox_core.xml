@@ -60,6 +60,10 @@
       <column name="TEXT" remarks="Текст уведомления" type="VARCHAR2(4000 BYTE)">
         <constraints nullable="false"/>
       </column>
+      <column name="CREATED_DATE_UTC" remarks="Дата создания UTC"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
       <column defaultValueComputed="${now}" name="CREATED_DATE" remarks="Дата создания"
         type="TIMESTAMP(6)">
         <constraints nullable="false"/>

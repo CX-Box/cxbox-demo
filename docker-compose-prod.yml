@@ -39,6 +39,12 @@ services:
       MINIO_SECRET_KEY: 'prCv8t9LGRH18FB5pLr5jqDZ/dixZkb9cFajueGW'
       MINIO_URL: 'http://cxbox_minio:9000'
       MINIO_DEFAULT_BUCKETS: 'edcs3gnsadevb'
+      ACTIVEMQ_ADMIN_LOGIN: admin
+      ACTIVEMQ_ADMIN_PASSWORD: admin
+      ACTIVEMQ_HOST: activemq
+      ACTIVEMQ_PORT: 61616
+      ACTIVEMQ_BROKER_TYPE: activemq
+      STOMP_PORT: 61613
       JAVA_TOOL_OPTIONS: '-agentlib:jdwp=transport=dt_socket,server=y,address=8989,suspend=n'
     expose:
       - 8080
@@ -68,6 +74,11 @@ services:
       MINIO_SECRET_KEY: 'prCv8t9LGRH18FB5pLr5jqDZ/dixZkb9cFajueGW'
       MINIO_URL: 'http://cxbox_minio:9000'
       MINIO_DEFAULT_BUCKETS: 'edcs3gnsadevb'
+      ACTIVEMQ_ADMIN_LOGIN: 'admin'
+      ACTIVEMQ_ADMIN_PASSWORD: 'admin'
+      ACTIVEMQ_HOST: 'activemq'
+      ACTIVEMQ_PORT: 61613
+      ACTIVEMQ_BROKER_TYPE: 'simple'
       JAVA_TOOL_OPTIONS: '-agentlib:jdwp=transport=dt_socket,server=y,address=8989,suspend=n'
     expose:
       - 8080
@@ -77,6 +88,7 @@ services:
     restart: always
     depends_on:
       - cxbox_postgres
+      - activemq
 
   keycloak:
     image: jboss/keycloak:12.0.4
@@ -124,3 +136,16 @@ services:
       MINIO_ROOT_PASSWORD: "prCv8t9LGRH18FB5pLr5jqDZ/dixZkb9cFajueGW"
       MINIO_DEFAULT_BUCKETS: "edcs3gnsadevb"
 
+  activemq:
+    image: symptoma/activemq:latest
+    environment:
+      ACTIVEMQ_ADMIN_LOGIN: admin
+      ACTIVEMQ_ADMIN_PASSWORD: admin
+      ACTIVEMQ_HOST: localhost
+      ACTIVEMQ_PORT: 61616
+    ports:
+      - "127.0.0.1:61616:61616"
+      - "127.0.0.1:8161:8161"
+      - "127.0.0.1:61613:61613"
+    volumes:
+      - ./data:/var/lib/activemq/data

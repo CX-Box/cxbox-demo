@@ -1,5 +1,7 @@
 package org.demo.service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.cxbox.core.util.session.SessionService;
@@ -25,12 +27,13 @@ public class NotificationServiceImpl implements NotificationService {
 	@Override
 	public Notification sendAndSave(SocketNotificationDTO socketNotificationDTO, User notificationOwner) {
 
-		webSocketNotificationService.send(socketNotificationDTO);
+		webSocketNotificationService.send(socketNotificationDTO, notificationOwner);
 
 		Notification notification = notificationRepository.save(Notification.builder()
 				.user(notificationOwner)
 				.text(socketNotificationDTO.getText())
 				.isRead(false)
+				.createdDateUtc(LocalDateTime.now(ZoneOffset.UTC))
 				.build());
 
 		return notification;

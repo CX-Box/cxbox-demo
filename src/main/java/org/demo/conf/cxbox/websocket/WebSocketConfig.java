@@ -19,7 +19,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 	@Value("${spring.websocket.prefix}")
 	private String prefix;
 
-	@Value("${app.broker-type}")
+	@Value("${app.stomp.broker-type}")
 	private String brokerType;
 
 	@Value("${spring.websocket.endpointToConnect}")
@@ -28,13 +28,16 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 	@Value("${cxbox.api.path}")
 	private String api;
 
+	@Value("${app.stomp.stomp-post}")
+	private Integer stompPort;
+
 	@Override
 	public void configureMessageBroker(MessageBrokerRegistry config) {
 		if ("activemq".equalsIgnoreCase(brokerType)) {
 			config.enableStompBrokerRelay(prefix)
 					.setRelayHost(properties.getHost())
 					.setClientLogin(properties.getUser())
-					.setRelayPort(properties.getStompPost())
+					.setRelayPort(stompPort)
 					.setClientPasscode(properties.getPassword())
 					.setSystemLogin(properties.getUser())
 					.setSystemPasscode(properties.getPassword());

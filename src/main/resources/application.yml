@@ -9,7 +9,9 @@ app:
     resource: cxbox-keycloak-client
     public-client: true
     cors: true
-  broker-type: ${ACTIVEMQ_BROKER_TYPE:simple}
+  stomp:
+    stomp-post: ${STOMP_PORT:61613}
+    broker-type: ${BROKER_TYPE:simple}
 
 cxbox:
   bean:
@@ -56,7 +58,7 @@ spring:
       max-file-size: 1GB
       max-request-size: 1GB
   websocket:
-    endpointToConnect: /websocketnotification
+    endpointToConnect: ${WEBSOCKET_ENDPOINT:/websocketnotification}
     prefix: /user
     urlPath: /queue/websocket.reply
   datasource:
@@ -100,7 +102,6 @@ spring:
     broker-url: tcp://${ACTIVEQM_HOST:localhost}:${ACTIVEMQ_PORT:61616}
     host: ${ACTIVEMQ_HOST:localhost}
     port: ${ACTIVEMQ_PORT:61616}
-    stomp-post: ${STOMP_PORT:61613}
 
 keycloak:
   auth-server-url: ${BACKEND_AUTH_SERVER_URL:http://localhost:9080/auth}

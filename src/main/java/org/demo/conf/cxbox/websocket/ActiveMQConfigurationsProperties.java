@@ -13,7 +13,6 @@ public class ActiveMQConfigurationsProperties {
 
 	private String user;
 
-	private Integer stompPost;
-
 	private String host;
+
 }

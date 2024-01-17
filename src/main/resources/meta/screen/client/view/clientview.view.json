@@ -25,6 +25,11 @@
       "gridWidth": 24
     },
     {
+      "widgetName": "clientViewAdditionalInfo",
+      "position": 35,
+      "gridWidth": 24
+    },
+    {
       "widgetName": "contactListHeader",
       "position": 40,
       "gridWidth": 24

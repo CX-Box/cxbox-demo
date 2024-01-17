@@ -1,0 +1,40 @@
+{
+  "name": "clientViewAdditionalInfo",
+  "title": "General information",
+  "type": "AdditionalInfo",
+  "bc": "client",
+  "fields": [
+    {
+      "label": "Client Name",
+      "key": "fullName",
+      "type": "input"
+    },
+    {
+      "label": "Address",
+      "key": "address",
+      "type": "input"
+    }
+  ],
+  "options": {
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "fullName",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "address",
+              "span": 12
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

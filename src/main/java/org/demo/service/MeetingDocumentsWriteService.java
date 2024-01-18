@@ -2,7 +2,6 @@ package org.demo.service;
 
 import static org.demo.dto.MeetingDocumentsDTO_.notes;
 
-import javax.persistence.EntityManager;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.DrillDownType;
@@ -16,17 +15,11 @@ import org.cxbox.model.core.entity.BaseEntity_;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.MeetingDocumentsDTO;
 import org.demo.dto.MeetingDocumentsDTO_;
-import org.demo.entity.Client;
-import org.demo.entity.Contact;
-import org.demo.entity.Contact_;
 import org.demo.entity.Meeting;
 import org.demo.entity.MeetingDocuments;
 import org.demo.entity.MeetingDocuments_;
-import org.demo.repository.ClientRepository;
-import org.demo.repository.ContactRepository;
 import org.demo.repository.MeetingDocumentsRepository;
 import org.demo.repository.MeetingRepository;
-import org.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -53,6 +46,7 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 		);
 
 	}
+
 	@Override
 	protected CreateResult<MeetingDocumentsDTO> doCreateEntity(MeetingDocuments entity, BusinessComponent bc) {
 		Meeting meeting = meetingRepository.findById(bc.getParentIdAsLong()).orElse(null);

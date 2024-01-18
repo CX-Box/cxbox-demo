@@ -122,6 +122,37 @@
     </createTable>
   </changeSet>
 
+
+  <changeSet id="meetingDocuments table" author="kuzin">
+    <createTable tableName="MEETING_DOCUMENTS">
+      <column name="ID" remarks="Identifier" type="NUMBER(19, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="NOTES" type="VARCHAR(200)"/>
+      <column name="FILE" type="VARCHAR(255)"/>
+
+      <column defaultValueComputed="${now}" name="CREATED_DATE" remarks="Creation date"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="${now}" name="UPDATED_DATE" remarks="Last updated date"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false" foreignKeyName="MEETING_CREATED_BY" referencedColumnNames="ID"
+          referencedTableName="USERS"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false" foreignKeyName="MEETING_LAST_UPD_BY" referencedColumnNames="ID"
+          referencedTableName="USERS"/>
+      </column>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
   <changeSet id="meeting table primary" author="iborisenko">
     <addColumn tableName="MEETING">
       <column name="additional_contact_primary_id" type="NUMBER(19, 0)">

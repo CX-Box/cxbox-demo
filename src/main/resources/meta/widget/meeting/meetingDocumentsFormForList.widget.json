@@ -1,0 +1,47 @@
+{
+  "name": "meetingDocumentsFormForList",
+  "title": "",
+  "type": "Form",
+  "bc": "meetingDocumentEdit",
+  "fields": [
+    {
+      "label": "Notes",
+      "key": "notes",
+      "type": "input"
+    },
+    {
+      "label": "File",
+      "key": "file",
+      "type": "fileUpload",
+      "fileIdKey": "fileId"
+    }
+  ],
+  "options": {
+    "actionGroups": {
+      "include": [
+        "save",
+        "cancel-create"
+      ]
+    },
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "file",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "notes",
+              "span": 12
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

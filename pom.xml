@@ -257,10 +257,9 @@
                 <phase>generate-sources</phase>
                 <configuration>
                   <workingDirectory>${project.basedir}/ui</workingDirectory>
-                  <executable>npm</executable>
+                  <executable>yarn</executable>
                   <arguments>
                     <argument>install</argument>
-                    <argument>--legacy-peer-deps</argument>
                   </arguments>
                 </configuration>
                 <goals>
@@ -272,9 +271,8 @@
                 <phase>generate-sources</phase>
                 <configuration>
                   <workingDirectory>${project.basedir}/ui</workingDirectory>
-                  <executable>npm</executable>
+                  <executable>yarn</executable>
                   <arguments>
-                    <argument>run</argument>
                     <argument>build</argument>
                   </arguments>
                 </configuration>

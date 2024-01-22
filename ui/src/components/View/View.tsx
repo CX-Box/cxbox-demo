@@ -29,10 +29,11 @@ import ViewInfoLabel from '../DebugPanel/components/ViewInfoLabel'
 import PopupWidgetInfoLabel from '../DebugPanel/components/PopupWidgetInfoLabel'
 import FileUpload from '../../fields/FileUpload/FileUpload'
 import { interfaces } from '@cxbox-ui/core'
+import { AdditionalInfoWidget } from '@components/widgets/AdditionalInfo/AdditionalInfoWidget'
 
 const { PopupWidgetTypes, WidgetTypes, FieldType } = interfaces
 
-const skipWidgetTypes: interfaces.WidgetTypes[] = []
+const skipWidgetTypes: (interfaces.WidgetTypes | CustomWidgetTypes)[] = [CustomWidgetTypes.AdditionalInfo]
 
 const customFields = {
     [FieldType.number]: Number,
@@ -56,6 +57,7 @@ const customWidgets: Partial<Record<CustomWidgetTypes | interfaces.WidgetTypes, 
     [CustomWidgetTypes.RingProgress]: { component: RingProgress, card: DashboardCard },
     [CustomWidgetTypes.DashboardList]: { component: DashboardList, card: DashboardCard },
     [CustomWidgetTypes.FormPopup]: { component: FormPopup },
+    [CustomWidgetTypes.AdditionalInfo]: { component: AdditionalInfoWidget, card: null },
     [WidgetTypes.AssocListPopup]: AssocListPopup,
     [WidgetTypes.PickListPopup]: PickListPopup,
     [WidgetTypes.SecondLevelMenu]: { component: LevelMenu, card: EmptyCard },

@@ -9,7 +9,8 @@ export enum CustomWidgetTypes {
     Steps = 'Steps',
     Funnel = 'Funnel',
     RingProgress = 'RingProgress',
-    DashboardList = 'DashboardList'
+    DashboardList = 'DashboardList',
+    AdditionalInfo = 'AdditionalInfo'
 }
 
 export const removeRecordOperationWidgets: Array<interfaces.WidgetTypes | string> = [interfaces.WidgetTypes.List]

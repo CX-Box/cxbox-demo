@@ -1,28 +1,27 @@
 {
-  "name": "meetingEditResult",
-  "title": "Meeting Results",
-  "type": "Form",
+  "name": "meetingResultFormPopup",
+  "title": "Approval",
+  "type": "FormPopup",
   "bc": "meetingEdit",
   "fields": [
     {
       "label": "Notes",
       "key": "notes",
+      "type": "hint"
+    },
+    {
+      "label": "Results",
+      "key": "result",
       "type": "text"
     }
   ],
   "options": {
-    "actionGroups": {
-      "include": [
-        "saveAndContinue",
-        "cancel-create"
-      ]
-    },
     "layout": {
       "rows": [
         {
           "cols": [
             {
-              "fieldKey": "notes",
+              "fieldKey": "result",
               "span": 12
             }
           ]
@@ -30,7 +29,7 @@
         {
           "cols": [
             {
-              "fieldKey": "result",
+              "fieldKey": "notes",
               "span": 12
             }
           ]

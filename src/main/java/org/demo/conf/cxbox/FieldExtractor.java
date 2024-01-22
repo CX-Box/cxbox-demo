@@ -27,7 +27,8 @@ public class FieldExtractor extends BaseFieldExtractor {
 				"AdditionalInfo",
 				"Funnel",
 				"RingProgress",
-				"DashboardList"
+				"DashboardList",
+				"FormPopup"
 		);
 	}
 

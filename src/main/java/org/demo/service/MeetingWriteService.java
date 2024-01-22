@@ -13,6 +13,7 @@ import static org.demo.dto.MeetingDTO_.startDateTime;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
+import lombok.NonNull;
 import lombok.val;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
@@ -21,9 +22,11 @@ import org.cxbox.core.dto.multivalue.MultivalueFieldSingleValue;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.cxbox.core.dto.rowmeta.PostAction;
+import org.cxbox.core.dto.rowmeta.PreAction;
 import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
 import org.cxbox.core.service.action.ActionsBuilder;
+import org.demo.conf.cxbox.action.ActionsExt;
 import org.demo.conf.cxbox.core.multivaluePrimary.MultivalueExt;
 import org.demo.conf.cxbox.icon.ActionIcon;
 import org.demo.controller.CxboxRestController;
@@ -81,7 +84,9 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 					.map(Long::parseLong)
 					.map(e -> entityManager.getReference(Contact.class, e))
 					.collect(Collectors.toList()));
-			val primary = data.getAdditionalContacts().getValues().stream().filter(e -> e.getOptions().get(MultivalueExt.PRIMARY) != null && e.getOptions().get(MultivalueExt.PRIMARY).equalsIgnoreCase(Boolean.TRUE.toString())).findAny();
+			val primary = data.getAdditionalContacts().getValues().stream()
+					.filter(e -> e.getOptions().get(MultivalueExt.PRIMARY) != null && e.getOptions().get(MultivalueExt.PRIMARY)
+							.equalsIgnoreCase(Boolean.TRUE.toString())).findAny();
 			primary.ifPresent(s -> entity.setAdditionalContactPrimaryId(Long.parseLong(s.getId())));
 		}
 		setIfChanged(data, agenda, entity::setAgenda);
@@ -132,6 +137,7 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 				.scope(ActionScope.RECORD)
 				.withAutoSaveBefore()
 				.action("saveAndContinue", "Save")
+				.withPreAction(confirmWithComment("Approval"))
 				.invoker((bc, dto) -> new ActionResultDTO<MeetingDTO>().setAction(
 						PostAction.drillDown(
 								DrillDownType.INNER,
@@ -140,6 +146,10 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 				.add()
 				.cancelCreate().text("Cancel").available(bc -> true).add()
 				.build();
+	}
+
+	private static PreAction confirmWithComment(@NonNull String actionText) {
+		return ActionsExt.confirmWithCustomWidget(actionText + "?", "meetingResultFormPopup", "Approve", "Cancel");
 	}
 
 	private ActionsBuilder<MeetingDTO> addEditAction(ActionsBuilder<MeetingDTO> builder) {

@@ -84,7 +84,9 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 					.map(Long::parseLong)
 					.map(e -> entityManager.getReference(Contact.class, e))
 					.collect(Collectors.toList()));
-			val primary = data.getAdditionalContacts().getValues().stream().filter(e -> e.getOptions().get(MultivalueExt.PRIMARY) != null && e.getOptions().get(MultivalueExt.PRIMARY).equalsIgnoreCase(Boolean.TRUE.toString())).findAny();
+			val primary = data.getAdditionalContacts().getValues().stream()
+					.filter(e -> e.getOptions().get(MultivalueExt.PRIMARY) != null && e.getOptions().get(MultivalueExt.PRIMARY)
+							.equalsIgnoreCase(Boolean.TRUE.toString())).findAny();
 			primary.ifPresent(s -> entity.setAdditionalContactPrimaryId(Long.parseLong(s.getId())));
 		}
 		setIfChanged(data, agenda, entity::setAgenda);
@@ -145,6 +147,7 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 				.cancelCreate().text("Cancel").available(bc -> true).add()
 				.build();
 	}
+
 	private static PreAction confirmWithComment(@NonNull String actionText) {
 		return ActionsExt.confirmWithCustomWidget(actionText + "?", "meetingResultFormPopup", "Approve", "Cancel");
 	}

@@ -8,11 +8,24 @@
       "label": "Notes",
       "key": "notes",
       "type": "hint"
+    },
+    {
+      "label": "Results",
+      "key": "result",
+      "type": "text"
     }
   ],
   "options": {
     "layout": {
       "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "result",
+              "span": 12
+            }
+          ]
+        },
         {
           "cols": [
             {

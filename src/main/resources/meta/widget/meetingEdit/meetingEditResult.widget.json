@@ -8,11 +8,6 @@
       "label": "Notes",
       "key": "notes",
       "type": "text"
-    },
-    {
-      "label": "Results",
-      "key": "result",
-      "type": "text"
     }
   ],
   "options": {

@@ -137,7 +137,7 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 				.scope(ActionScope.RECORD)
 				.withAutoSaveBefore()
 				.action("saveAndContinue", "Save")
-				.withPreAction(confirmWithComment("Approval"))
+				//.withPreAction(confirmWithComment("Approval"))
 				.invoker((bc, dto) -> new ActionResultDTO<MeetingDTO>().setAction(
 						PostAction.drillDown(
 								DrillDownType.INNER,

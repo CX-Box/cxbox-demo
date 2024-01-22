@@ -1,0 +1,27 @@
+{
+  "name": "meetingResultFormPopup",
+  "title": "Approval",
+  "type": "FormPopup",
+  "bc": "meetingEdit",
+  "fields": [
+    {
+      "label": "Notes",
+      "key": "notes",
+      "type": "hint"
+    }
+  ],
+  "options": {
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "notes",
+              "span": 12
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

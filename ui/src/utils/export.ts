@@ -1,12 +1,14 @@
-import { FieldType } from '@cxbox-ui/core/interfaces/view'
-import { DataItem, DataValue, MultivalueSingleValue } from '@cxbox-ui/core/interfaces/data'
-import { buildBcUrl, fetchBcData } from '@cxbox-ui/core'
-import { BcFilter, BcSorter } from '@cxbox-ui/core/interfaces/filters'
 import moment from 'moment'
 import { exportXlsx } from './exportExcel'
 import { convertFiltersIntoObject } from './filters'
 import { getCurrentDate, getFormattedDateString } from './date'
-import { TableWidgetField } from '../interfaces/widget'
+import { TableWidgetField } from '@interfaces/widget'
+import { interfaces } from '@cxbox-ui/core'
+import { CxBoxApiInstance } from '../api'
+import { lastValueFrom, map } from 'rxjs'
+import { buildBcUrl } from '@utils/buildBcUrl'
+
+const { FieldType } = interfaces
 
 export type ExportOptions = { page?: number; limit?: number }
 
@@ -27,8 +29,8 @@ export async function exportTable(
     fileName: string,
     withDate: boolean,
     hasData: boolean,
-    filters?: BcFilter[],
-    sorters?: BcSorter[],
+    filters?: interfaces.BcFilter[],
+    sorters?: interfaces.BcSorter[],
     { page = 1, limit = 5 }: ExportOptions = {},
     exportType: string = 'excel'
 ) {
@@ -42,20 +44,17 @@ export async function exportTable(
         sortersObj[fieldString] = sorter.fieldName
     })
 
-    let fullData: DataItem[] = []
+    let fullData: interfaces.DataItem[] = []
 
     if (hasData) {
-        const resultData = await fetchBcData(screenName, url, {
-            ...filtersObj,
-            ...sortersObj,
-            _export: 'Excel',
-            ...getPaginationParamsForExportTable(limit, page)
-        })
-            .map(response => response.data)
-            .toPromise()
-            .catch(err => {
-                console.log(err)
-            })
+        const resultData = await lastValueFrom(
+            CxBoxApiInstance.fetchBcData(screenName, url, {
+                ...filtersObj,
+                ...sortersObj,
+                _export: 'Excel',
+                ...getPaginationParamsForExportTable(limit, page)
+            }).pipe(map(response => response.data))
+        )
         if (resultData) {
             fullData = resultData
         }
@@ -76,12 +75,12 @@ export async function exportTable(
 /**
  * Converts values before sending to excel:
  */
-export function valueMapper(value: DataValue, isExcel: boolean, fieldMeta?: TableWidgetField) {
+export function valueMapper(value: interfaces.DataValue, isExcel: boolean, fieldMeta?: TableWidgetField) {
     let result: any
 
     switch (fieldMeta?.type) {
         case FieldType.checkbox: {
-            result = value ? 'Да' : 'Нет'
+            result = value ? 'Yes' : 'No'
             break
         }
         case FieldType.date:
@@ -94,7 +93,7 @@ export function valueMapper(value: DataValue, isExcel: boolean, fieldMeta?: Tabl
             result = (value as number) / 100
             break
         case FieldType.multivalue:
-            result = Array.isArray(value) ? (value as MultivalueSingleValue[]).map(mvValue => mvValue.value).join(', ') : null
+            result = Array.isArray(value) ? (value as interfaces.MultivalueSingleValue[]).map(mvValue => mvValue.value).join(', ') : null
             break
         default: {
             result = typeof value !== 'object' ? value : null

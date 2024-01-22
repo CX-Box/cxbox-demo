@@ -1,29 +1,29 @@
 import { AnyAction, Dispatch, MiddlewareAPI } from 'redux'
-import { AppState } from '../interfaces/storeSlices'
-import { ActionPayloadTypes, coreActions } from '@cxbox-ui/core'
-import { $do } from '../actions/types'
-import { PendingDataItem } from '@cxbox-ui/core/interfaces/data'
+import { RootState } from '@store'
+import { interfaces } from '@cxbox-ui/core'
+import { actions } from '@cxbox-ui/core'
+import { Middleware } from '@reduxjs/toolkit'
 
-export const resetBlankValuesMiddleware =
-    ({ getState, dispatch }: MiddlewareAPI<Dispatch<AnyAction>, AppState>) =>
+export const resetBlankValuesMiddleware: Middleware =
+    ({ getState, dispatch }: MiddlewareAPI<Dispatch<AnyAction>, RootState>) =>
     (next: Dispatch) =>
     (action: AnyAction) => {
-        if (action.type === coreActions.changeDataItem) {
-            const { dataItem: oldDataItem, ...payload } = action.payload as ActionPayloadTypes['changeDataItem']
+        if (action.type === actions.changeDataItem.toString()) {
+            const { dataItem: oldDataItem, ...payload } = action.payload as ReturnType<typeof actions.changeDataItem>['payload']
 
-            return next($do.changeDataItem({ ...payload, dataItem: normalizeDataItem(oldDataItem) }))
+            return next(actions.changeDataItem({ ...payload, dataItem: normalizeDataItem(oldDataItem) }))
         }
 
-        if (action.type === coreActions.changeDataItems) {
-            const { dataItems: oldDataItems, ...payload } = action.payload as ActionPayloadTypes['changeDataItems']
+        if (action.type === actions.changeDataItems.toString()) {
+            const { dataItems: oldDataItems, ...payload } = action.payload as ReturnType<typeof actions.changeDataItems>['payload']
 
-            return next($do.changeDataItems({ ...payload, dataItems: oldDataItems.map(normalizeDataItem) }))
+            return next(actions.changeDataItems({ ...payload, dataItems: oldDataItems.map(normalizeDataItem) }))
         }
 
         return next(action)
     }
 
-function normalizeDataItem(dataItem: PendingDataItem) {
+function normalizeDataItem(dataItem: interfaces.PendingDataItem) {
     return Object.entries(dataItem).reduce((acc, [key, value]) => {
         if (typeof value === 'string' && !value) {
             acc[key] = null
@@ -32,5 +32,5 @@ function normalizeDataItem(dataItem: PendingDataItem) {
         }
 
         return acc
-    }, {} as PendingDataItem)
+    }, {} as interfaces.PendingDataItem)
 }

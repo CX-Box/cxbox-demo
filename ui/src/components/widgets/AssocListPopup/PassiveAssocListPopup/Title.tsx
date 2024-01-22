@@ -2,7 +2,7 @@ import React from 'react'
 import styles from './Title.less'
 import { Tag } from 'antd'
 import { usePassiveAssociations } from '../hooks/usePassiveAssociations'
-import { useAppSelector } from '../../../../hooks/useAppSelector'
+import { useAppSelector } from '@store'
 
 type TagType = { id: string; _value: string; _closable?: boolean; options?: Record<string, any> }
 
@@ -11,11 +11,15 @@ interface TitleProps {
 }
 
 function Title({ title }: TitleProps) {
-    const assocValueKey = useAppSelector(store => store.view.popupData?.assocValueKey ?? '')
+    const assocValueKey = useAppSelector(state => state.view.popupData?.assocValueKey ?? '')
 
     const { values: selectedRecords, selectItem } = usePassiveAssociations()
 
-    const tags: TagType[] = selectedRecords.map(item => ({ ...item, _value: String(item.value || ''), _closable: true }))
+    const tags = selectedRecords.map((item: any) => ({
+        ...item,
+        _value: String(item.value || ''),
+        _closable: true
+    })) as TagType[]
 
     return tags.length ? (
         <div>

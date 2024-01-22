@@ -1,10 +1,10 @@
 import React from 'react'
 import ViewNavigation from '../../ViewNavigation/ViewNavigation'
-import { getNavigationDepth } from '../../../utils/getNavigationDepth'
-import { WidgetMeta } from '@cxbox-ui/core/interfaces/widget'
+import { getNavigationDepth } from '@utils/getNavigationDepth'
+import { interfaces } from '@cxbox-ui/core'
 
 interface LevelMenuProps {
-    meta?: WidgetMeta
+    meta?: interfaces.WidgetMeta
 }
 
 function LevelMenu({ meta }: LevelMenuProps) {

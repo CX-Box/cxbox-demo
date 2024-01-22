@@ -1,19 +1,19 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { AppState } from '../../interfaces/storeSlices'
-import { $do } from '../../actions/types'
+import { useDispatch } from 'react-redux'
+import { actions } from '@cxbox-ui/core'
 import { Form, Input, Button, Icon } from 'antd'
 import styles from './Login.less'
+import { useAppSelector } from '@store'
 
 export const Login: React.FC = () => {
     const dispatch = useDispatch()
-    const spin = useSelector((state: AppState) => state.session.loginSpin)
-    const errorMsg = useSelector((state: AppState) => state.session.errorMsg)
+    const spin = useAppSelector(state => state.session.loginSpin)
+    const errorMsg = useAppSelector(state => state.session.errorMsg)
     const [login, setLogin] = React.useState('vanilla')
     const [password, setPassword] = React.useState('vanilla')
 
     const onLogin = (login: string, password: string) => {
-        dispatch($do.login({ login, password }))
+        dispatch(actions.login({ login, password }))
     }
 
     const handleLogin = (event: React.ChangeEvent<HTMLInputElement>) => {

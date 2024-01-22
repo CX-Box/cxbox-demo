@@ -1,9 +1,8 @@
-import { actionTypes, AnyAction } from '../interfaces/actions'
-import { AppState } from '../interfaces/storeSlices'
-import { PopupData, ViewState } from '@cxbox-ui/core/interfaces/view'
-import { CustomActionTypes } from '../actions/types'
+import { actions, interfaces, reducers } from '@cxbox-ui/core'
+import { AnyAction, createReducer, isAnyOf } from '@reduxjs/toolkit'
+import { partialUpdateRecordForm, resetRecordForm, setBcCount, setRecordForm, showViewPopup } from '@actions'
 
-export type CustomView = ViewState & {
+interface ViewState extends interfaces.ViewState {
     bcRecordsCount: {
         [bcName: string]: {
             count: number
@@ -16,17 +15,15 @@ export type CustomView = ViewState & {
         cursor: string
         create: boolean
     }
-    popupData?: PopupData & {
+    popupData?: interfaces.PopupData & {
         options?: {
-            operation?: CustomActionTypes['processPreInvoke']
+            operation?: AnyAction['type']
         }
     }
 }
 
-/**
- * Your initial state for this slice
- */
-export const initialState: CustomView = {
+const initialState: ViewState = {
+    ...reducers.initialViewState,
     rowMeta: {},
     pendingDataChanges: {},
     id: -1,
@@ -49,66 +46,24 @@ export const initialState: CustomView = {
     }
 }
 
-export default function viewReducer(state: CustomView = initialState, action: AnyAction, store?: Readonly<AppState>): CustomView {
-    switch (action.type) {
-        /**
-         * Your reducers for this slice
-         */
+const viewReducerBuilder = reducers
+    .createViewReducerBuilderManager(initialState)
+    .addCase(setBcCount, (state, action) => {
+        const { bcName: bcCountName, count } = action.payload
+        state.bcRecordsCount[bcCountName] = { count }
+    })
+    .addCase(setRecordForm, (state, action) => {
+        state.recordForm = action.payload
+    })
+    .addCase(partialUpdateRecordForm, (state, action) => {
+        state.recordForm = { ...state.recordForm, ...action.payload }
+    })
+    .addMatcher(isAnyOf(showViewPopup), (state, action) => {
+        const { options } = action.payload
+        state.popupData = { ...state.popupData, options }
+    })
+    .addMatcher(isAnyOf(actions.selectView, resetRecordForm), state => {
+        state.recordForm = { ...initialState.recordForm }
+    }).builder
 
-        case actionTypes.setBcCount: {
-            const { bcName: bcCountName, count } = action.payload
-
-            return {
-                ...state,
-                bcRecordsCount: {
-                    ...state.bcRecordsCount,
-                    [bcCountName]: { count }
-                }
-            }
-        }
-
-        case actionTypes.setRecordForm: {
-            return {
-                ...state,
-                recordForm: {
-                    ...action.payload
-                }
-            }
-        }
-
-        case actionTypes.partialUpdateRecordForm: {
-            return {
-                ...state,
-                recordForm: {
-                    ...state.recordForm,
-                    ...action.payload
-                }
-            }
-        }
-
-        case actionTypes.selectView:
-        case actionTypes.resetRecordForm: {
-            return {
-                ...state,
-                recordForm: {
-                    ...initialState.recordForm
-                }
-            }
-        }
-
-        case actionTypes.showViewPopup: {
-            const { options } = action.payload as CustomActionTypes['showViewPopup']
-
-            return {
-                ...state,
-                popupData: {
-                    ...state.popupData,
-                    options
-                }
-            }
-        }
-
-        default:
-            return state
-    }
-}
+export const viewReducer = createReducer(initialState, viewReducerBuilder)

@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
-import { $do, ErrorPopup as CoreErrorPopup } from '@cxbox-ui/core'
-import { useDispatch, useSelector } from 'react-redux'
-import { AppState } from '../../../interfaces/storeSlices'
+import { useAppDispatch, useAppSelector } from '@store'
+import { actions } from '@cxbox-ui/core'
+import { default as CoreErrorPopup } from '@cxboxComponents/ui/ErrorPopup/ErrorPopup'
 
 function ErrorPopup() {
     const { error, closeError } = useErrorPopup()
@@ -12,12 +12,12 @@ function ErrorPopup() {
 export default React.memo(ErrorPopup)
 
 function useErrorPopup() {
-    const error = useSelector((state: AppState) => state.view.error)
+    const error = useAppSelector(state => state.view.error)
 
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
     const closeError = useCallback(() => {
-        dispatch($do.closeViewError(null))
+        dispatch(actions.closeViewError(null))
     }, [dispatch])
 
     return {

@@ -1,4 +1,6 @@
-import { WidgetTypes } from '@cxbox-ui/core/interfaces/widget'
+import { interfaces } from '@cxbox-ui/core'
+
+const { WidgetTypes } = interfaces
 
 export function getNavigationDepth(type?: string) {
     switch (type) {

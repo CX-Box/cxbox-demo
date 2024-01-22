@@ -1,22 +1,21 @@
 import React from 'react'
 import { Icon, Select } from 'antd'
-import { WidgetField } from '@cxbox-ui/core/interfaces/widget'
-import { buildBcUrl } from '@cxbox-ui/core'
 import { connect } from 'react-redux'
-import { MultivalueSingleValue } from '@cxbox-ui/core/interfaces/data'
 import { SelectProps } from 'antd/lib/select'
 import styles from './MultipleSelectField.less'
 import checkbox from '../../assets/icons/checkbox.svg'
 import checkboxEmpty from '../../assets/icons/checkboxEmpty.svg'
-import { AppState } from '../../interfaces/storeSlices'
+import { RootState } from '@store'
 import cn from 'classnames'
+import { interfaces } from '@cxbox-ui/core'
+import { buildBcUrl } from '@utils/buildBcUrl'
 
 interface MultipleSelectFieldProps {
-    value: MultivalueSingleValue[]
+    value: interfaces.MultivalueSingleValue[]
     values: Array<{ value: string }>
-    meta: WidgetField
+    meta: interfaces.WidgetField
     widgetName: string
-    onChange?: (value: MultivalueSingleValue[]) => void
+    onChange?: (value: interfaces.MultivalueSingleValue[]) => void
     readOnly: boolean
 }
 
@@ -40,7 +39,7 @@ const MultipleSelectField: React.FunctionComponent<MultipleSelectFieldProps> = p
 
     const handleOnChange = React.useCallback(
         (v: string[]) => {
-            const result: MultivalueSingleValue[] = []
+            const result: interfaces.MultivalueSingleValue[] = []
             v.map(item => result.push({ id: item, value: item }))
             onChange?.(result)
         },
@@ -75,7 +74,7 @@ const MultipleSelectField: React.FunctionComponent<MultipleSelectFieldProps> = p
     )
 }
 
-export function mapStateToProps(state: AppState, ownProps: MultipleSelectFieldProps) {
+export function mapStateToProps(state: RootState, ownProps: MultipleSelectFieldProps) {
     const widget = state.view.widgets.find(item => item.name === ownProps.widgetName)
     const bcName = widget?.bcName
     const bcRowMeta = bcName && state.view.rowMeta[bcName]

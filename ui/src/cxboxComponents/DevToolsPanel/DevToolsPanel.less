@@ -1,0 +1,36 @@
+.container {
+    background: #3d4042;
+
+    :global {
+        .ant-layout-header {
+            padding: 0 30px;
+            height: 30px;
+            line-height: 30px;
+            background: transparent;
+        }
+        .ant-btn {
+            border: none;
+            background-color: transparent;
+            border-radius: 0;
+            color: white;
+
+            &:hover {
+                background-color: #525867;
+            }
+            &:focus {
+                background-color: #525867;
+            }
+            &:active {
+                background-color: #636773;
+            }
+        }
+    }
+}
+
+.wrapper {
+    margin-right: 5px;
+}
+
+.controlsWrapper {
+    display: flex;
+}

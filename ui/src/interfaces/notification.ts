@@ -1,4 +1,4 @@
-import { ApplicationErrorType } from '@cxbox-ui/core/interfaces/view'
+import { interfaces } from '@cxbox-ui/core'
 
 export interface NotificationState {
     data?: Notification[]
@@ -31,7 +31,7 @@ export interface NotificationCheckNewResponse {
 }
 
 export interface SocketNotification {
-    errorType?: ApplicationErrorType.BusinessError | ApplicationErrorType.SystemError
+    errorType?: interfaces.ApplicationErrorType.BusinessError | interfaces.ApplicationErrorType.SystemError
     title?: string
     time?: string
     text?: string

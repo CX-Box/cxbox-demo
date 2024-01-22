@@ -1,10 +1,10 @@
 import React from 'react'
-import { WidgetMeta } from '@cxbox-ui/core/interfaces/widget'
 import DebugPanel from '../DebugPanel'
 import styles from './PopupWidgetInfoLabel.less'
+import { interfaces } from '@cxbox-ui/core'
 
 interface Props {
-    meta: WidgetMeta
+    meta: interfaces.WidgetMeta
 }
 
 const PopupWidgetInfoLabel: React.FC<Props> = props => {

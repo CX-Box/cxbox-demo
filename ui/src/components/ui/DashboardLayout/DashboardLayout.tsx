@@ -1,13 +1,13 @@
 import React from 'react'
 import { Row, Col } from 'antd'
-import { Widget } from '@cxbox-ui/core'
-import { CustomWidgetDescriptor, WidgetTypes } from '@cxbox-ui/core/interfaces/widget'
-import { AppWidgetMeta, CustomWidgetTypes } from '../../../interfaces/widget'
-import { createSkipWidgetList } from '../../../utils/createSkipWidgetList'
+import { AppWidgetMeta, CustomWidgetTypes } from '@interfaces/widget'
+import { createSkipWidgetList } from '@utils/createSkipWidgetList'
+import { interfaces } from '@cxbox-ui/core'
+import Widget from '@cxboxComponents/Widget/Widget'
 
 export interface DashboardLayoutProps {
     widgets: AppWidgetMeta[]
-    customWidgets?: Record<string, CustomWidgetDescriptor>
+    customWidgets?: Record<string, interfaces.CustomWidgetDescriptor>
     skipWidgetTypes?: string[]
     customSpinner?: (props: any) => React.ReactElement<any>
     card?: (props: any) => React.ReactElement<any>
@@ -56,10 +56,12 @@ function groupByRow<WidgetMeta extends AppWidgetMeta>(widgets: WidgetMeta[], ski
     return byRow
 }
 
+const { WidgetTypes } = interfaces
+
 const popupWidgets = [WidgetTypes.AssocListPopup, WidgetTypes.PickListPopup, WidgetTypes.FlatTreePopup, CustomWidgetTypes.FormPopup]
 function getColWidth(widget: AppWidgetMeta) {
     // this is necessary so that the popup widget does not affect the formation of the grid
-    const needFullWidth = popupWidgets.includes(widget.type as WidgetTypes)
+    const needFullWidth = popupWidgets.includes(widget.type as interfaces.WidgetTypes)
 
     return needFullWidth ? 24 : widget.gridWidth
 }

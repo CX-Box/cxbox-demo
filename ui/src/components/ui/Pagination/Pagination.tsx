@@ -1,32 +1,31 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { Pagination as AntPagination } from 'antd'
 import styles from './Pagination.less'
-import { $do } from '../../../actions/types'
-import { WidgetTableMeta } from '@cxbox-ui/core/interfaces/widget'
-import { AppState } from '../../../interfaces/storeSlices'
+import { actions, interfaces } from '@cxbox-ui/core'
+import { useAppSelector } from '@store'
 
 export interface PaginationProps {
-    meta: WidgetTableMeta
+    meta: interfaces.WidgetTableMeta
 }
 
 function Pagination({ meta }: PaginationProps) {
     const dispatch = useDispatch()
 
     const { bcName, limit: metaLimit } = meta
-    const { bcLimit, page } = useSelector((state: AppState) => {
+    const { bcLimit, page } = useAppSelector(state => {
         const bc = state.screen.bo.bc[bcName]
         return {
             bcLimit: bc?.limit,
             page: bc?.page
         }
     })
-    const total = useSelector((state: AppState) => state.view.bcRecordsCount[bcName]?.count)
+    const total = useAppSelector(state => state.view.bcRecordsCount[bcName]?.count)
     const limit = metaLimit || bcLimit
 
     const handlePageChange = React.useCallback(
         (p: number) => {
-            dispatch($do.bcChangePage({ bcName, page: p }))
+            dispatch(actions.bcChangePage({ bcName, page: p }))
         },
         [dispatch, bcName]
     )

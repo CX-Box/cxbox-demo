@@ -1,19 +1,19 @@
 import React from 'react'
 import { Button, Icon, notification } from 'antd'
 import { ArgsProps } from 'antd/lib/notification'
-import { DrillDownType, Route } from '@cxbox-ui/core/interfaces/router'
 import cn from 'classnames'
 import { ButtonProps } from 'antd/lib/button'
 import { Dispatch } from 'redux'
 import styles from './ShowSocketNotification.less'
-import { SocketNotification } from '../../interfaces/notification'
-import { getMessageDownloadFileEndpoint } from '../../api/notification'
-import { $do } from '@cxbox-ui/core'
+import { SocketNotification } from '@interfaces/notification'
+import { actions, interfaces } from '@cxbox-ui/core'
+import { CxBoxApiInstance } from '../../api'
 
 interface NotificationProps extends Omit<ArgsProps, 'icon'>, SocketNotification {
-    route: Route
+    route: interfaces.Route
     dispatch: Dispatch
 }
+
 function showSocketNotification(props: NotificationProps) {
     const { route, dispatch, time, icon, iconColor, drillDownLink = '', drillDownType, drillDownLabel, className, ...rest } = props
     let key = `open${Date.now()}`
@@ -24,7 +24,7 @@ function showSocketNotification(props: NotificationProps) {
         btnOptions = {
             ...btnOptions,
             target: '_blank',
-            href: getMessageDownloadFileEndpoint(drillDownLink),
+            href: CxBoxApiInstance.getMessageDownloadFileEndpoint(drillDownLink),
             onClick: () => {
                 notification.destroy()
             }
@@ -35,7 +35,7 @@ function showSocketNotification(props: NotificationProps) {
         btnOptions = {
             ...btnOptions,
             onClick: () => {
-                dispatch($do.drillDown({ url: drillDownLink, drillDownType: drillDownType as DrillDownType, route }))
+                dispatch(actions.drillDown({ url: drillDownLink, drillDownType: drillDownType as interfaces.DrillDownType, route }))
                 // notification.close(key) // uncomment if needed
             }
         }

@@ -1,33 +1,17 @@
-import { actionTypes, AnyAction } from '../interfaces/actions'
-import { AppState } from '../interfaces/storeSlices'
-import { NotificationState } from '../interfaces/notification'
+import { NotificationState } from '@interfaces/notification'
+import { createReducer } from '@reduxjs/toolkit'
+import { changeNotification } from '@actions'
 
 /**
  * Your initial state for this slice
  */
-export const initialState: NotificationState = {
-    page: 1,
-    limit: 5
-}
+export const initialState: NotificationState = { page: 1, limit: 5 }
 
-export default function notificationReducer(
-    state: NotificationState = initialState,
-    action: AnyAction,
-    store?: Readonly<AppState>
-): NotificationState {
-    switch (action.type) {
-        case actionTypes.changeNotification:
-            const newState = {
-                ...state,
-                ...action.payload
-            }
+export const notificationReducer = createReducer(initialState, builder => {
+    builder.addCase(changeNotification, (state, action) => {
+        Object.assign(state, action.payload)
 
-            return {
-                ...newState,
-                page: newState.page ?? initialState.page,
-                limit: newState.limit ?? initialState.limit
-            }
-        default:
-            return state
-    }
-}
+        state.page = state.page ?? initialState.page
+        state.limit = state.limit ?? initialState.limit
+    })
+})

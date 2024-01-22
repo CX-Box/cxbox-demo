@@ -3,24 +3,22 @@ import { Col, Row } from 'antd'
 import styles from './InfoRow.module.css'
 import cn from 'classnames'
 import InfoCell from './InfoCell'
-import { WidgetInfoField, WidgetInfoMeta, LayoutRow } from '@cxbox-ui/core/interfaces/widget'
-import { RowMetaField } from '@cxbox-ui/core/interfaces/rowMeta'
-import { useSelector } from 'react-redux'
-import { AppState } from '../../../../interfaces/storeSlices'
-import { EMPTY_ARRAY } from '../../../../constants/constants'
-import { buildBcUrl } from '@cxbox-ui/core'
+import { useAppSelector } from '@store'
+import { EMPTY_ARRAY } from '@constants'
+import { interfaces } from '@cxbox-ui/core'
+import { buildBcUrl } from '@utils/buildBcUrl'
 
 export interface InfoRowProps {
-    meta: WidgetInfoMeta
-    flattenWidgetFields: WidgetInfoField[]
+    meta: interfaces.WidgetInfoMeta
+    flattenWidgetFields: interfaces.WidgetInfoField[]
     onDrillDown: (widgetName: string, cursor: string, bcName: string, fieldKey: string) => void
-    row: LayoutRow
+    row: interfaces.LayoutRow
     cursor: string
 }
 function InfoRow({ meta, flattenWidgetFields, onDrillDown, row, cursor }: InfoRowProps) {
     const bcUrl = buildBcUrl(meta.bcName, true)
-    const fields = useSelector((state: AppState) =>
-        bcUrl ? state.view.rowMeta[meta.bcName]?.[bcUrl]?.fields : (EMPTY_ARRAY as RowMetaField[])
+    const fields = useAppSelector(state =>
+        bcUrl ? state.view.rowMeta[meta.bcName]?.[bcUrl]?.fields : (EMPTY_ARRAY as interfaces.RowMetaField[])
     )
 
     const totalWidth = row.cols.reduce((prev, current) => prev + (current.span ?? 0), 0)
@@ -33,7 +31,7 @@ function InfoRow({ meta, flattenWidgetFields, onDrillDown, row, cursor }: InfoRo
                         return fieldMeta ? !fieldMeta.hidden : true
                     })
                     .map((col, colIndex) => {
-                        const field = flattenWidgetFields.find(i => i.key === col.fieldKey) as WidgetInfoField
+                        const field = flattenWidgetFields.find(i => i.key === col.fieldKey) as interfaces.WidgetInfoField
                         return (
                             <InfoCell
                                 key={colIndex}

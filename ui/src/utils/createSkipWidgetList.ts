@@ -1,4 +1,4 @@
-import { AppWidgetMeta } from '../interfaces/widget'
+import { AppWidgetMeta } from '@interfaces/widget'
 
 export const createSkipWidgetList = <WidgetMeta extends AppWidgetMeta>(widgets: WidgetMeta[]) => {
     return Object.keys(

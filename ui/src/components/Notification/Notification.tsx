@@ -7,13 +7,13 @@ import { AxiosError } from 'axios'
 import styles from './Notification.less'
 import { getDefaultModalBodyHeight } from './Notification.utils'
 import markAsReadIcon from './img/markAsRead.svg'
-import { useToggle } from '../../hooks/useToggle'
+import { useToggle } from '@hooks/useToggle'
 import { columns, DEFAULT_MODAL_WIDTH } from './Notification.constants'
 import { useTranslation } from 'react-i18next'
 import PaginationNotification from './PaginationNotification'
-import { useStompNotification } from '../../hooks/notification'
-import { deleteNotifications } from '../../api/notification'
+import { useStompNotification } from '@hooks/notification'
 import Button from '../ui/Button/Button'
+import { CxBoxApiInstance as instance } from '../../api'
 
 interface NotificationProps {}
 
@@ -62,7 +62,7 @@ export function Notification(props: NotificationProps) {
 
     const deleteSelectedRows = () => {
         if (selectedRowKeys.length > 0) {
-            return deleteNotifications(selectedRowKeys).then(
+            return instance.deleteNotifications(selectedRowKeys).then(
                 () => {
                     setSelectedRowKeys([])
                     notification.getCount()

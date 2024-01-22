@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { DatePickerProps as AntdDatePickerProps } from 'antd/lib/date-picker/interface'
 import { DatePicker as CoreDatePicker } from 'antd'
-import { DataValue } from '@cxbox-ui/core/interfaces/data'
 import { dateFormat } from '../../interfaces/date'
 import moment from 'moment'
 import { Moment } from 'moment/moment'
+import { interfaces } from '@cxbox-ui/core'
 
 interface DatePickerProps extends Omit<AntdDatePickerProps, 'value' | 'onChange' | 'onOpenChange'> {
-    value: DataValue[]
-    onChange: (value: DataValue[]) => void
+    value: interfaces.DataValue[]
+    onChange: (value: interfaces.DataValue[]) => void
 }
 
 function DatePicker(props: DatePickerProps) {

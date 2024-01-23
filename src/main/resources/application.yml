@@ -12,6 +12,12 @@ app:
   stomp:
     stomp-post: ${STOMP_PORT:61613}
     broker-type: ${BROKER_TYPE:simple}
+  activemq:
+    password: ${ACTIVEMQ_ADMIN_PASSWORD:admin}
+    user: ${ACTIVEMQ_ADMIN_LOGIN:admin}
+    broker-url: tcp://${ACTIVEQM_HOST:localhost}:${ACTIVEMQ_PORT:61616}
+    host: ${ACTIVEMQ_HOST:localhost}
+    port: ${ACTIVEMQ_PORT:61616}
 
 cxbox:
   bean:
@@ -96,12 +102,6 @@ spring:
   main:
     allow-bean-definition-overriding: true
     banner-mode: off
-  activemq:
-    password: ${ACTIVEMQ_ADMIN_PASSWORD:admin}
-    user: ${ACTIVEMQ_ADMIN_LOGIN:admin}
-    broker-url: tcp://${ACTIVEQM_HOST:localhost}:${ACTIVEMQ_PORT:61616}
-    host: ${ACTIVEMQ_HOST:localhost}
-    port: ${ACTIVEMQ_PORT:61616}
 
 keycloak:
   auth-server-url: ${BACKEND_AUTH_SERVER_URL:http://localhost:9080/auth}

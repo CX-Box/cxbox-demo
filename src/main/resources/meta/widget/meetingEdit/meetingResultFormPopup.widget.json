@@ -1,6 +1,6 @@
 {
   "name": "meetingResultFormPopup",
-  "title": "Approval",
+  "title": "Approval and Save",
   "type": "FormPopup",
   "bc": "meetingEdit",
   "fields": [
@@ -22,7 +22,7 @@
           "cols": [
             {
               "fieldKey": "result",
-              "span": 12
+              "span": 24
             }
           ]
         },
@@ -30,7 +30,7 @@
           "cols": [
             {
               "fieldKey": "notes",
-              "span": 12
+              "span": 24
             }
           ]
         }

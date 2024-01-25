@@ -48,6 +48,11 @@
       "widgetName": "meetingEditResult",
       "position": 70,
       "gridWidth": 24
+    },
+    {
+      "widgetName": "meetingResultFormPopup",
+      "position": 80,
+      "gridWidth": 24
     }
   ],
   "rolesAllowed": [

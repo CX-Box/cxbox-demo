@@ -137,7 +137,7 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 				.scope(ActionScope.RECORD)
 				.withAutoSaveBefore()
 				.action("saveAndContinue", "Save")
-				//.withPreAction(confirmWithComment("Approval"))
+				.withPreAction(confirmWithComment("Approval"))
 				.invoker((bc, dto) -> new ActionResultDTO<MeetingDTO>().setAction(
 						PostAction.drillDown(
 								DrillDownType.INNER,
@@ -149,7 +149,7 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 	}
 
 	private static PreAction confirmWithComment(@NonNull String actionText) {
-		return ActionsExt.confirmWithCustomWidget(actionText + "?", "meetingResultFormPopup", "Approve", "Cancel");
+		return ActionsExt.confirmWithCustomWidget(actionText + "?", "meetingResultFormPopup", "Approve and Save", "Cancel");
 	}
 
 	private ActionsBuilder<MeetingDTO> addEditAction(ActionsBuilder<MeetingDTO> builder) {

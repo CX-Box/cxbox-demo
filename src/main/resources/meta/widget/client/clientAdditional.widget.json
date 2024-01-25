@@ -1,0 +1,13 @@
+{
+  "name": "clientAdditional",
+  "title": "General information",
+  "type": "AdditionalInfo",
+  "bc": "client",
+  "fields": [
+    {
+      "label": "Full Name",
+      "key": "fullName",
+      "type": "input"
+    }
+  ]
+}

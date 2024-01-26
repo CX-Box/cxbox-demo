@@ -38,6 +38,11 @@
       "widgetName": "contactViewList",
       "position": 50,
       "gridWidth": 24
+    },
+    {
+      "widgetName": "clientAdditional",
+      "position": 60,
+      "gridWidth": 24
     }
   ],
   "rolesAllowed": [

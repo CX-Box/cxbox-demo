@@ -1,13 +1,39 @@
 {
   "name": "clientAdditional",
-  "title": "General information",
+  "title": "Additional information",
   "type": "AdditionalInfo",
   "bc": "client",
   "fields": [
     {
-      "label": "Full Name",
-      "key": "fullName",
-      "type": "input"
+      "label": "Importance",
+      "key": "importance",
+      "type": "dictionary"
+    },
+    {
+      "label": "Brief",
+      "key": "brief",
+      "type": "fileUpload",
+      "fileIdKey": "briefId"
     }
-  ]
+  ],
+  "layout": {
+    "rows": [
+      {
+        "cols": [
+          {
+            "fieldKey": "importance",
+            "span": 12
+          }
+        ]
+      },
+      {
+        "cols": [
+          {
+            "fieldKey": "brief",
+            "span": 12
+          }
+        ]
+      }
+    ]
+  }
 }

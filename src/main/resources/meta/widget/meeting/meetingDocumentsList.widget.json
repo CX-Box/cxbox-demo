@@ -32,6 +32,7 @@
     "actionGroups": {
       "include": [
         "create",
+        "multiFileUpload",
         "edit",
         "actions"
       ]

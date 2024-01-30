@@ -30,10 +30,16 @@ import PopupWidgetInfoLabel from '../DebugPanel/components/PopupWidgetInfoLabel'
 import FileUpload from '../../fields/FileUpload/FileUpload'
 import { interfaces } from '@cxbox-ui/core'
 import { AdditionalInfoWidget } from '@components/widgets/AdditionalInfo/AdditionalInfoWidget'
+import { WidgetTypes } from '@cxbox-ui/schema'
 
-const { PopupWidgetTypes, WidgetTypes, FieldType } = interfaces
+// TODO We need to remove PopupWidgetTypes from the core and replace imports throughout the entire project
+const { PopupWidgetTypes, FieldType } = interfaces
 
-const skipWidgetTypes: (interfaces.WidgetTypes | CustomWidgetTypes)[] = [CustomWidgetTypes.AdditionalInfo]
+const customPopupWidgetTypes: CustomWidgetTypes[] = [CustomWidgetTypes.FormPopup]
+
+const allPopupWidgetTypes: string[] = [...customPopupWidgetTypes, ...PopupWidgetTypes]
+
+const skipWidgetTypes: (WidgetTypes | CustomWidgetTypes)[] = [CustomWidgetTypes.AdditionalInfo]
 
 const customFields = {
     [FieldType.number]: Number,
@@ -56,7 +62,7 @@ const customWidgets: Partial<Record<CustomWidgetTypes | interfaces.WidgetTypes, 
     [CustomWidgetTypes.Funnel]: { component: Funnel, card: DashboardCard },
     [CustomWidgetTypes.RingProgress]: { component: RingProgress, card: DashboardCard },
     [CustomWidgetTypes.DashboardList]: { component: DashboardList, card: DashboardCard },
-    [CustomWidgetTypes.FormPopup]: { component: FormPopup },
+    [CustomWidgetTypes.FormPopup]: { component: FormPopup, card: null },
     [CustomWidgetTypes.AdditionalInfo]: { component: AdditionalInfoWidget, card: null },
     [WidgetTypes.AssocListPopup]: AssocListPopup,
     [WidgetTypes.PickListPopup]: PickListPopup,
@@ -82,7 +88,8 @@ function View() {
                 disableDebugMode={true}
             />
 
-            {debugMode && widgets.filter(i => PopupWidgetTypes.includes(i.type)).map(i => <PopupWidgetInfoLabel key={i.name} meta={i} />)}
+            {debugMode &&
+                widgets.filter(i => allPopupWidgetTypes.includes(i.type)).map(i => <PopupWidgetInfoLabel key={i.name} meta={i} />)}
         </div>
     )
 }

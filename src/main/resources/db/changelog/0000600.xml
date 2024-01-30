@@ -280,6 +280,14 @@
       <column header="bc" name="bc" type="STRING"/>
       <column header="filters" name="filters" type="STRING"/>
     </loadUpdateData>
+    <loadUpdateData tableName="BC_PROPERTIES" primaryKey="ID" separator=";" quotchar="'"
+      file="db/data/BC_PROPERTIES.csv">
+      <column header="ID" name="ID" type="NUMERIC"/>
+      <column header="BC" name="BC" type="STRING"/>
+      <column header="PAGE_LIMIT" name="PAGE_LIMIT" type="NUMERIC"/>
+      <column header="SORT" name="SORT" type="STRING"/>
+      <column header="FILTER" name="FILTER" type="STRING"/>
+    </loadUpdateData>
   </changeSet>
 
 </databaseChangeLog>

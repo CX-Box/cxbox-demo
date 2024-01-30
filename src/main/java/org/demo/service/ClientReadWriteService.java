@@ -5,7 +5,6 @@ import static org.cxbox.api.data.dao.SpecificationUtils.and;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
-import lombok.var;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.DrillDownType;

@@ -1,13 +1,15 @@
-import { reducers, interfaces, actions } from '@cxbox-ui/core'
-import { changeMenuCollapsed, customAction, sendOperationSuccess } from '@actions'
+import { reducers, interfaces } from '@cxbox-ui/core'
+import { actions, changeMenuCollapsed, customAction, sendOperationSuccess } from '@actions'
 import { createReducer, isAnyOf } from '@reduxjs/toolkit'
 
 interface ScreenState extends interfaces.ScreenState {
     menuCollapsed: boolean
+    fullTextFilter: Record<string, string>
 }
 
 const initialState: ScreenState = {
     ...reducers.initialScreenState,
+    fullTextFilter: {},
     menuCollapsed: false
 }
 
@@ -21,6 +23,11 @@ const screenReducerBuilder = reducers
          * An example reducer for custom action
          */
         console.log(action.payload)
+    })
+    .addCase(actions.changeBcFullTextFilter, (state, action) => {
+        const { bcName, fullTextFilterValue } = action.payload
+
+        state.fullTextFilter[bcName] = fullTextFilterValue
     })
     .addMatcher(isAnyOf(sendOperationSuccess, actions.bcSaveDataSuccess), (state, action) => {
         if (action.payload.dataItem) {

@@ -63,6 +63,11 @@ export interface AppWidgetMeta extends interfaces.WidgetMeta {
             title?: string
             enabled: boolean
         }
+
+        fullTextSearch?: {
+            enabled?: boolean
+            placeholder?: string
+        }
     }
 }
 

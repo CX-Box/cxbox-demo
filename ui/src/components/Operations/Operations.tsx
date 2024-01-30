@@ -5,18 +5,19 @@ import { useAppSelector } from '@store'
 import styles from './Operations.less'
 import { useDispatch } from 'react-redux'
 import OperationsGroup from './components/OperationsGroup'
-import { removeRecordOperationWidgets } from '@interfaces/widget'
+import { AppWidgetMeta, removeRecordOperationWidgets } from '@interfaces/widget'
 import Button, { customTypes } from '../ui/Button/Button'
 import { ExportButton } from './components/ExportButton/ExportButton'
 import cn from 'classnames'
 import { useWidgetOperations } from '@hooks/useWidgetOperations'
+import TextSearchInput from '@components/Operations/components/TextSearchInput/TextSearchInput'
 
 const { isOperationGroup, WidgetTypes } = interfaces
 
 export interface OperationsOwnProps {
     className?: string
     bcName: string
-    widgetMeta: interfaces.WidgetMeta
+    widgetMeta: AppWidgetMeta
     operations: Array<interfaces.Operation | interfaces.OperationGroup>
 }
 
@@ -66,6 +67,9 @@ function Operations(props: OperationsOwnProps) {
                     })}
                     <ExportButton widgetMeta={widgetMeta} />
                 </>
+            )}
+            {widgetMeta.options?.fullTextSearch?.enabled && (
+                <TextSearchInput bcName={bcName} placeholder={widgetMeta.options?.fullTextSearch?.placeholder} />
             )}
         </div>
     )

@@ -33,6 +33,10 @@
     }
   ],
   "options": {
+    "fullTextSearch": {
+      "enabled": true,
+      "placeholder": "Find by Client or Address"
+    },
     "actionGroups": {
       "include": [
         "create",

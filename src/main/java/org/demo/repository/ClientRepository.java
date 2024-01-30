@@ -1,11 +1,30 @@
 package org.demo.repository;
 
 import org.demo.entity.Client;
+import org.demo.entity.Client_;
+import org.demo.extension.FullTextSearchExt;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Long>, JpaSpecificationExecutor<Client> {
+
+	default Specification<Client> getFullTextSearchSpecification(String value) {
+		return getAddressLikeIgnoreCaseSpecification(value)
+				.or(getFullNameLikeIgnoreCaseSpecification(value));
+	}
+
+	default Specification<Client> getFullNameLikeIgnoreCaseSpecification(String value) {
+		return (root, query, cb) -> FullTextSearchExt.likeIgnoreCase(value, cb, root.get(Client_.fullName));
+	}
+
+
+	default Specification<Client> getAddressLikeIgnoreCaseSpecification(String value) {
+		return (root, query, cb) -> FullTextSearchExt.likeIgnoreCase(value, cb, root.get(Client_.address));
+	}
+
+
 
 }

@@ -7,6 +7,7 @@ import { applyParams } from '@utils/api'
 import { NotificationCheckNewResponse, NotificationCountResponse, NotificationsResponse } from '@interfaces/notification'
 import { fileControllerMapping } from '@constants/notification'
 import { LoginResponse } from '@interfaces/session'
+import { useFullTextInterceptor } from './interceptors'
 
 class Api extends CXBoxApi {
     fetchBcCount(screenName: string, bcName: string, params: BcCountParamsMap = {}) {
@@ -118,5 +119,6 @@ const instance = axios.create({
 if (!process.env['REACT_APP_NO_SSO']) {
     instance.interceptors.request.use(tokenInterceptor, () => Promise.reject())
 }
+instance.interceptors.request.use(useFullTextInterceptor)
 
 export const CxBoxApiInstance = new Api(instance)

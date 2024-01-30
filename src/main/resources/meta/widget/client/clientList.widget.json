@@ -33,6 +33,9 @@
     }
   ],
   "options": {
+    "fullTextSearch": {
+      "enabled": true
+    },
     "actionGroups": {
       "include": [
         "create",

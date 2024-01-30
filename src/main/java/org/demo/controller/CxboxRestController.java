@@ -14,6 +14,7 @@ import org.demo.service.ContactPickListService;
 import org.demo.service.DashboardFilterService;
 import org.demo.service.DashboardSalesFunnelService;
 import org.demo.service.DashboardSalesRingProgressService;
+import org.demo.service.MeetingDocumentsWriteService;
 import org.demo.service.MeetingReadService;
 import org.demo.service.MeetingWriteService;
 import org.demo.service.ResponsiblePickListService;
@@ -39,6 +40,7 @@ public enum CxboxRestController implements EnumBcIdentifier {
 		contactEdit(clientEdit, ClientContactService.class),
 		contactEditAssoc(clientEdit, ClientContactService.class),
 	meeting(MeetingReadService.class),
+		meetingDocumentEdit(meeting, MeetingDocumentsWriteService.class),
 	meetingEdit(MeetingWriteService.class),
 	contactAssocListPopup(meetingEdit, ContactMultivalueService.class),
 		responsiblePickListPopup(meetingEdit, ResponsiblePickListService.class),

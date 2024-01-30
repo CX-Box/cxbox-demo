@@ -1,0 +1,41 @@
+{
+  "name": "meetingDocumentsList",
+  "title": "",
+  "type": "List",
+  "bc": "meetingDocumentEdit",
+  "fields": [
+    {
+      "title": "Document ID",
+      "key": "id",
+      "type": "input",
+      "drillDown": "true"
+    },
+    {
+      "title": "File",
+      "key": "file",
+      "type": "fileUpload",
+      "fileIdKey": "fileId"
+    },
+    {
+      "title": "Notes",
+      "key": "notes",
+      "type": "input"
+    }
+  ],
+  "options": {
+    "create": {
+      "widget": "meetingDocumentsFormForList"
+    },
+    "edit": {
+      "widget": "meetingDocumentsFormForList"
+    },
+    "actionGroups": {
+      "include": [
+        "create",
+        "multiFileUpload",
+        "edit",
+        "actions"
+      ]
+    }
+  }
+}

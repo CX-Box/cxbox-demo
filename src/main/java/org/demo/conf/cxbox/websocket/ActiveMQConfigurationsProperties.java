@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix = "spring.activemq")
+@ConfigurationProperties(prefix = "app.activemq")
 @Getter
 @Setter
 public class ActiveMQConfigurationsProperties {

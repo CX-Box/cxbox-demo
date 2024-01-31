@@ -1,7 +1,8 @@
 import { interfaces } from '@cxbox-ui/core'
 
 export enum CustomFieldTypes {
-    MultipleSelect = 'multipleSelect'
+    MultipleSelect = 'multipleSelect',
+    Time = 'time'
 }
 
 export enum CustomWidgetTypes {

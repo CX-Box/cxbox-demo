@@ -9,6 +9,7 @@ import { RootState } from '@store'
 import { interfaces } from '@cxbox-ui/core'
 import { useFlatFormFields } from '@hooks/useFlatFormFields'
 import { buildBcUrl } from '@utils/buildBcUrl'
+import { useTranslation } from 'react-i18next'
 
 const { FieldType, PendingValidationFailsFormat } = interfaces
 
@@ -20,7 +21,7 @@ interface FormWidgetProps extends FormWidgetOwnProps {
     cursor: string
     fields?: interfaces.RowMetaField[]
     metaErrors?: Record<string, string>
-    missingFields?: Record<string, string> | interfaces.PendingValidationFails
+    missingFields?: Record<string, string>
 }
 
 /**
@@ -29,6 +30,7 @@ interface FormWidgetProps extends FormWidgetOwnProps {
  * @category Widgets
  */
 export const FormWidget: FunctionComponent<FormWidgetProps> = ({ meta, fields, missingFields, metaErrors, cursor }) => {
+    const { t } = useTranslation()
     const hiddenKeys: string[] = []
     const flattenWidgetFields = useFlatFormFields<interfaces.WidgetFormField>(meta.fields).filter(item => {
         const isHidden = item.type === FieldType.hidden || item.hidden
@@ -72,7 +74,7 @@ export const FormWidget: FunctionComponent<FormWidgetProps> = ({ meta, fields, m
                                                     )
                                                 }
                                                 validateStatus={error ? 'error' : undefined}
-                                                help={error ? <div data-test-error-text={true}>{error}</div> : undefined}
+                                                help={error ? <div data-test-error-text={true}>{t(error)}</div> : undefined}
                                             >
                                                 <Field
                                                     bcName={bcName}
@@ -90,7 +92,7 @@ export const FormWidget: FunctionComponent<FormWidgetProps> = ({ meta, fields, m
                 })}
             </Row>
         )
-    }, [bcName, name, cursor, flattenWidgetFields, missingFields, metaErrors, hiddenKeys, fields, meta])
+    }, [bcName, name, cursor, flattenWidgetFields, missingFields, metaErrors, hiddenKeys, fields, meta, t])
 
     return (
         <Form colon={false} layout="vertical">
@@ -110,7 +112,7 @@ function mapStateToProps(state: RootState, ownProps: FormWidgetOwnProps) {
     const missingFields =
         state.view.pendingValidationFailsFormat === PendingValidationFailsFormat.target
             ? (state.view.pendingValidationFails as interfaces.PendingValidationFails)?.[bcName]?.[cursor]
-            : state.view.pendingValidationFails
+            : (state.view.pendingValidationFails as Record<string, string>)
     return {
         cursor,
         fields,

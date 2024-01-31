@@ -4,13 +4,15 @@ import { actions } from '@cxbox-ui/core'
 import { Form, Input, Button, Icon } from 'antd'
 import styles from './Login.less'
 import { useAppSelector } from '@store'
+import { useTranslation } from 'react-i18next'
 
 export const Login: React.FC = () => {
     const dispatch = useDispatch()
     const spin = useAppSelector(state => state.session.loginSpin)
-    const errorMsg = useAppSelector(state => state.session.errorMsg)
+    const errorMsg = useAppSelector(state => state.session.errorMsg) ?? ''
     const [login, setLogin] = React.useState('vanilla')
     const [password, setPassword] = React.useState('vanilla')
+    const { t } = useTranslation()
 
     const onLogin = (login: string, password: string) => {
         dispatch(actions.login({ login, password }))
@@ -41,7 +43,7 @@ export const Login: React.FC = () => {
                 <Button block autoFocus loading={spin} type="primary" htmlType="submit">
                     Sign in
                 </Button>
-                <span className={styles.error}>{errorMsg}</span>
+                <span className={styles.error}>{t(errorMsg)}</span>
             </Form.Item>
         </Form>
     )

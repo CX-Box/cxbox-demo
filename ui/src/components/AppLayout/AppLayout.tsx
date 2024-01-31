@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Layout, Spin } from 'antd'
 import AppSide from '../AppSide/AppSide'
 import AppBar from '../AppBar/AppBar'
@@ -12,10 +12,6 @@ import ErrorPopup from '../containers/ErrorPopup/ErrorPopup'
 import { useAppDispatch, useAppSelector } from '@store'
 import Notifications from '@components/Notifications/Notifications'
 import { Login } from '../Login/Login'
-
-import { createHashHistory } from 'history'
-
-export const historyObj = createHashHistory()
 
 export const AppLayout: React.FC = () => {
     const dispatch = useAppDispatch()
@@ -33,14 +29,6 @@ export const AppLayout: React.FC = () => {
             dispatch(SSO_AUTH())
         }
     }, [sessionActive, logoutRequested, dispatch])
-
-    const path = useAppSelector(state => state.router.path)
-
-    useEffect(() => {
-        if (path.length) {
-            // historyObj.push(path)
-        }
-    }, [path])
 
     return sessionActive ? (
         <Layout className={styles.root}>

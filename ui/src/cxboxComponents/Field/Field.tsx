@@ -27,6 +27,7 @@ import { interfaces, actions } from '@cxbox-ui/core'
 import { RootState } from '@store'
 import { useDrillDownUrl } from '@hooks/useDrillDownUrl'
 import { buildBcUrl } from '@utils/buildBcUrl'
+import { useTranslation } from 'react-i18next'
 
 interface FieldOwnProps {
     widgetFieldMeta: interfaces.WidgetField
@@ -137,6 +138,7 @@ export const Field: FunctionComponent<FieldProps> = ({
     onChange,
     onDrillDown
 }) => {
+    const { t } = useTranslation()
     const [localValue, setLocalValue] = React.useState<string | null>(null)
     let resultField: React.ReactChild | null = null
     const drillDownUrl = useDrillDownUrl(bcName, widgetFieldMeta, cursor)
@@ -181,7 +183,7 @@ export const Field: FunctionComponent<FieldProps> = ({
         widgetName,
         meta: widgetFieldMeta,
         className: cn(className),
-        metaError,
+        metaError: t(metaError),
         disabled,
         placeholder,
         readOnly,
@@ -437,7 +439,7 @@ export const Field: FunctionComponent<FieldProps> = ({
             <Tooltip
                 placement={tooltipPlacement}
                 overlayClassName={styles.error}
-                title={metaError}
+                title={t(metaError)}
                 getPopupContainer={trigger => trigger.parentElement as HTMLElement}
             >
                 <div>
@@ -477,7 +479,7 @@ function mapStateToProps(state: RootState, ownProps: FieldOwnProps) {
             ? (state.view.pendingValidationFails as interfaces.PendingValidationFails)?.[ownProps.bcName]?.[ownProps.cursor]?.[
                   ownProps.widgetFieldMeta.key
               ]
-            : state.view.pendingValidationFails?.[ownProps.widgetFieldMeta.key]
+            : (state.view.pendingValidationFails?.[ownProps.widgetFieldMeta.key] as string)
     const metaError = (missing as string) || (rowMeta?.errors?.[ownProps.widgetFieldMeta.key] as string)
     const pendingValue = state.view.pendingDataChanges[ownProps.bcName]?.[ownProps.cursor]?.[ownProps.widgetFieldMeta.key]
     const widget = state.view.widgets.find(item => item.name === ownProps.widgetName)

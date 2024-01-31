@@ -19,10 +19,13 @@ export function Notifications() {
 
         currentNotifications.forEach(currentNotification => {
             if (isDefaultNotification(currentNotification)) {
+                const message = t(currentNotification.message, currentNotification.options?.messageOptions)
+                const description = typeof currentNotification.description === 'string' ? t(currentNotification.description) : undefined
+
                 notification[currentNotification.type as IconType]({
                     key: currentNotification.key,
-                    message: currentNotification.message,
-                    description: currentNotification.description,
+                    message,
+                    description,
                     duration: currentNotification.duration
                 })
             }
@@ -39,8 +42,8 @@ export function Notifications() {
 
                 openButtonWarningNotification(
                     t('Attention'),
-                    currentNotification.message,
-                    buttonText,
+                    t(currentNotification.message, currentNotification.options?.messageOptions),
+                    t(buttonText),
                     currentNotification.duration,
                     handleButtonClick,
                     currentNotification.key

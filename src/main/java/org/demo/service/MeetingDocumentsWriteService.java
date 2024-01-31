@@ -34,6 +34,9 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 	@Autowired
 	private MeetingRepository meetingRepository;
 
+	@Autowired
+	CustomFileServices customFileServices;
+
 	public MeetingDocumentsWriteService() {
 		super(MeetingDocumentsDTO.class, MeetingDocuments.class, null, MeetingDocumentsWriteMeta.class);
 	}
@@ -63,6 +66,10 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 		}
 		if (data.isFieldChanged(MeetingDocumentsDTO_.file)) {
 			entity.setFile(data.getFile());
+			if (data.getFileId() != null) {
+				entity.setFieldKeyForContentType(customFileServices.getStatData(data.getFileId()).contentType());
+				entity.setFieldKeyForBase64(customFileServices.getObject(data.getFileId()));
+			}
 		}
 		setIfChanged(data, notes, entity::setNotes);
 

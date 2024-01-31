@@ -1,9 +1,19 @@
 {
   "name": "meetingDocumentsList",
   "title": "",
-  "type": "List",
+  "type": "DocumentList",
   "bc": "meetingDocumentEdit",
   "fields": [
+    {
+      "title": "Field Key For Content Type",
+      "key": "fieldKeyForContentType",
+      "type": "hidden"
+    },
+    {
+      "title": "Field Key For Base 64",
+      "key": "fieldKeyForBase64",
+      "type": "hidden"
+    },
     {
       "title": "Document ID",
       "key": "id",
@@ -23,19 +33,26 @@
     }
   ],
   "options": {
-    "create": {
-      "widget": "meetingDocumentsFormForList"
-    },
-    "edit": {
-      "widget": "meetingDocumentsFormForList"
-    },
-    "actionGroups": {
-      "include": [
-        "create",
-        "multiFileUpload",
-        "edit",
-        "actions"
-      ]
+    "documentPreview": {
+      "fieldKeyForBase64": "fieldKeyForBase64",
+      "fieldKeyForContentType": "fieldKeyForContentType",
+      "type": "base64",
+      "edit": {
+        "widget": "meetingDocumentPopupForm"
+      },
+      "create": {
+        "widget": "meetingDocumentsFormForList"
+      },
+      "edit": {
+        "widget": "meetingDocumentsFormForList"
+      },
+      "actionGroups": {
+        "include": [
+          "create",
+          "multiFileUpload",
+          "edit",
+          "actions"
+        ]
+      }
     }
   }
-}

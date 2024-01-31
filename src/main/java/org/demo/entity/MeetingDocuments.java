@@ -27,7 +27,14 @@ public class MeetingDocuments extends BaseEntity {
 	@Column
 	private String fileId;
 
+	@Column
+	private String fieldKeyForContentType;
+
+	@Column
+	private byte[] fieldKeyForBase64;
+
 	@ManyToOne
 	@JoinColumn(name = "MEETING_ID")
 	private Meeting meeting;
+
 }

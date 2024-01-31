@@ -1,0 +1,17 @@
+{
+  "name": "meetingDocumentPopupForm",
+  "title": "",
+  "type": "DocumentFormPopup",
+  "bc": "meetingDocumentEdit",
+  "fields": [
+    {
+      "label": "",
+      "key": "file",
+      "type": "documentPreview",
+      "fieldKeyForContentType": "fieldKeyForContentType"
+    }
+  ],
+  "options": {
+   }
+
+}

@@ -6,6 +6,8 @@ import org.cxbox.core.util.session.CoreSessionServiceImpl;
 import org.cxbox.model.core.dao.JpaDao;
 import org.cxbox.model.core.entity.User;
 import org.cxbox.model.core.entity.User_;
+import org.demo.entity.AppUser;
+import org.demo.entity.AppUser_;
 import org.keycloak.adapters.springsecurity.account.SimpleKeycloakAccount;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +58,7 @@ public class CxboxKeycloakCoreSessionService extends CoreSessionServiceImpl {
 		);
 
 		txService.invokeInTx(() -> {
-			User user = getUserByLogin(token.getAccount().getKeycloakSecurityContext().getToken().getName().toUpperCase());
+			AppUser user = getUserByLogin(token.getAccount().getKeycloakSecurityContext().getToken().getName().toUpperCase());
 			details.setId(user.getId());
 			details.setUsername(user.getLogin());
 			details.setUserRole(user.getInternalRole());
@@ -71,10 +73,10 @@ public class CxboxKeycloakCoreSessionService extends CoreSessionServiceImpl {
 		return details;
 	}
 
-	private User getUserByLogin(String login) {
+	private AppUser getUserByLogin(String login) {
 		return jpaDao.getSingleResultOrNull(
-				User.class,
-				(root, cq, cb) -> cb.equal(cb.upper(root.get(User_.login)), login.toUpperCase())
+				AppUser.class,
+				(root, cq, cb) -> cb.equal(cb.upper(root.get(AppUser_.login)), login.toUpperCase())
 		);
 	}
 

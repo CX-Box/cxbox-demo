@@ -1,13 +1,71 @@
 {
   "name": "dashboardFilter",
-  "title": "Filters",
+  "title": "Поиск задачи",
   "type": "Form",
   "bc": "dashboardFilter",
   "fields": [
     {
-      "label": "Field of Activity",
-      "key": "fieldOfActivity",
+      "label": "Номер задачи",
+      "key": "taskId",
+      "type": "input"
+    },
+    {
+      "label": "Вид задач",
+      "key": "taskTypes",
       "type": "multipleSelect"
+    },
+    {
+      "label": "Решение по задаче",
+      "key": "taskResolutions",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Статусы",
+      "key": "taskStatuses",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Тип участника",
+      "key": "memberTypes",
+      "type": "multipleSelect"
+    },
+    {
+      "label": "Участники",
+      "key": "members",
+      "type": "multivalue",
+      "displayedKey": "membersDisplayedKey",
+      "popupBcName": "appUserAssocListPopup",
+      "assocValueKey": "fullUserName"
+    },
+    {
+      "label": "Дата регистрации",
+      "key": "registratinDateFrom",
+      "type": "dateTime"
+    },
+    {
+      "label": "\u0000",
+      "key": "registratinDateTo",
+      "type": "dateTime"
+    },
+    {
+      "label": "Дата выполнения",
+      "key": "endDateTimeFrom",
+      "type": "dateTime"
+    },
+    {
+      "label": "\u0000",
+      "key": "endDateTimeTo",
+      "type": "dateTime"
+    },
+    {
+      "label": "Дата начала",
+      "key": "startDateTimeFrom",
+      "type": "dateTime"
+    },
+    {
+      "label": "\u0000",
+      "key": "startDateTimeTo",
+      "type": "dateTime"
     }
   ],
   "options": {
@@ -21,8 +79,68 @@
         {
           "cols": [
             {
-              "fieldKey": "fieldOfActivity",
+              "fieldKey": "taskId",
               "span": 12
+            },
+            {
+              "fieldKey": "taskResolutions",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "members",
+              "span": 12
+            },
+            {
+              "fieldKey": "memberTypes",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "taskStatuses",
+              "span": 12
+            },
+            {
+              "fieldKey": "taskTypes",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "registratinDateFrom",
+              "span": 6
+            },
+            {
+              "fieldKey": "registratinDateTo",
+              "span": 6
+            },
+            {
+              "fieldKey": "endDateTimeFrom",
+              "span": 6
+            },
+            {
+              "fieldKey": "endDateTimeTo",
+              "span": 6
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "startDateTimeFrom",
+              "span": 6
+            },
+            {
+              "fieldKey": "startDateTimeTo",
+              "span": 6
             }
           ]
         }

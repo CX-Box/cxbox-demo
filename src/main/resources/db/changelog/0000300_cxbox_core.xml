@@ -54,6 +54,8 @@
       <column name="USER_ID" remarks="ID пользователя" type="NUMBER(19, 0)">
         <constraints nullable="false"/>
       </column>
+
+
       <column name="IS_READ" remarks="Прочитано ли уведомление" type="BOOLEAN">
         <constraints nullable="false"/>
       </column>
@@ -624,6 +626,7 @@
 
   <changeSet author="initial" id="USERS TABLE">
     <createTable remarks="Пользователи" tableName="USERS">
+
       <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
         <constraints primaryKey="true"/>
       </column>

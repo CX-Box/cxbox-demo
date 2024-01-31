@@ -5,34 +5,54 @@
   "bc": "meetingEdit",
   "fields": [
     {
-      "label": "Agenda",
+      "label": "Статус задачи",
+      "key": "status",
+      "type": "dictionary"
+    },
+    {
+      "label": "Решение",
+      "key": "resolution",
+      "type": "dictionary"
+    },
+    {
+      "label": "Название",
       "key": "agenda",
       "type": "input"
     },
     {
-      "label": "Start Date",
-      "key": "startDateTime",
+      "label": "Заказчик",
+      "key": "customer",
+      "type": "inline-pickList",
+      "popupBcName": "userPickListPopup",
+      "pickMap": {
+        "customerId": "id",
+        "customer": "fullUserName"
+      }
+    },
+    {
+      "label": "Куратор",
+      "key": "curator",
+      "type": "inline-pickList",
+      "popupBcName": "userPickListPopup",
+      "pickMap": {
+        "curatorId": "id",
+        "curator": "fullUserName"
+      }
+    },
+    {
+      "label": "Исполнитель",
+      "key": "responsibleName",
+      "type": "pickList",
+      "popupBcName": "responsiblePickListPopup",
+      "pickMap": {
+        "responsibleName": "name",
+        "responsibleId": "id"
+      }
+    },
+    {
+      "label": "Срок",
+      "key": "slaDate",
       "type": "dateTime"
-    },
-    {
-      "label": "Client Name",
-      "key": "clientName",
-      "type": "pickList",
-      "popupBcName": "clientPickListPopup",
-      "pickMap": {
-        "clientName": "fullName",
-        "clientId": "id"
-      }
-    },
-    {
-      "label": "Contact",
-      "key": "contactName",
-      "type": "pickList",
-      "popupBcName": "contactPickListPopup",
-      "pickMap": {
-        "contactName": "fullName",
-        "contactId": "id"
-      }
     }
   ],
   "options": {
@@ -44,27 +64,61 @@
     },
     "layout": {
       "rows": [
+
         {
           "cols": [
             {
               "fieldKey": "agenda",
-              "span": 7
-            },
-            {
-              "fieldKey": "startDateTime",
-              "span": 7
-            },
-            {
-              "fieldKey": "clientName",
-              "span": 7
+              "span": 12
             }
           ]
         },
         {
           "cols": [
             {
-              "fieldKey": "contactName",
-              "span": 6
+              "fieldKey": "customer",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "curator",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "responsibleName",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "slaDate",
+              "span": 12
+            }
+          ]
+        },
+
+        {
+          "cols": [
+            {
+              "fieldKey": "resolution",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "status",
+              "span": 12
             }
           ]
         }

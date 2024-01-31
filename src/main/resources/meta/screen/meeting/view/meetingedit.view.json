@@ -5,53 +5,63 @@
   "url": "/screen/meeting/view/meetingedit",
   "widgets": [
     {
-      "widgetName": "contactAssocListPopup",
-      "position": 2,
-      "gridWidth": 24
-    },
-    {
-      "widgetName": "SecondLevelMenu",
+      "widgetName": "userPickListPopup",
       "position": 0,
       "gridWidth": 24
     },
     {
-      "widgetName": "meetingEditHeader",
+      "widgetName": "contactAssocListPopup",
       "position": 10,
       "gridWidth": 24
     },
     {
-      "widgetName": "responsiblePickListPopup",
+      "widgetName": "meetingEditHeader",
       "position": 20,
       "gridWidth": 24
     },
     {
-      "widgetName": "clientPickListPopup",
+      "widgetName": "SecondLevelMenu",
       "position": 30,
       "gridWidth": 24
     },
     {
-      "widgetName": "contactPickListPopup",
+      "widgetName": "responsiblePickListPopup",
       "position": 40,
       "gridWidth": 24
     },
     {
-      "widgetName": "meetingEdit",
+      "widgetName": "clientPickListPopup",
       "position": 50,
       "gridWidth": 24
     },
     {
-      "widgetName": "meetingEditClientInfo",
+      "widgetName": "contactPickListPopup",
       "position": 60,
       "gridWidth": 24
     },
     {
-      "widgetName": "meetingEditResult",
+      "widgetName": "meetingEdit",
       "position": 70,
       "gridWidth": 24
     },
     {
-      "widgetName": "meetingResultFormPopup",
+      "widgetName": "meetingDocumentsList",
       "position": 80,
+      "gridWidth": 12
+    },
+    {
+      "widgetName": "meetingDocumentsFormForList",
+      "position": 90,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "meetingEditResult",
+      "position": 100,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "meetingResultFormPopup",
+      "position": 110,
       "gridWidth": 24
     },
     {
@@ -66,6 +76,7 @@
     }
   ],
   "rolesAllowed": [
-   "CXBOX_USER", "ADMIN"
+    "CXBOX_USER",
+    "ADMIN"
   ]
 }

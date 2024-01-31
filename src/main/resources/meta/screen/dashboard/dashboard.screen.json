@@ -2,11 +2,11 @@
   "name": "dashboard",
   "icon": "pie-chart",
   "order": 3,
-  "title": "Dashboard",
+  "title": "Отбор бизнес задач",
   "navigation": {
     "menu": [
       {
-        "title": "Dashboard",
+        "title": "Отбор бизнес задач",
         "child": [
           {
             "viewName": "dashboard"

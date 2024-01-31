@@ -25,6 +25,11 @@ public class MeetingReadMeta extends FieldMetaBuilder<MeetingDTO> {
 				DrillDownType.INNER,
 				"/screen/meeting/view/meetingview/" + CxboxRestController.meeting + "/" + id
 		);
+		fields.setDrilldown(
+				MeetingDTO_.link,
+				DrillDownType.INNER,
+				"/screen/meeting/view/meetingview/" + CxboxRestController.meeting + "/" + id
+		);
 		if (Optional.ofNullable(fields.get(MeetingDTO_.clientId)).map(FieldDTO::getCurrentValue).isPresent()) {
 			fields.setDrilldown(
 					MeetingDTO_.clientName,

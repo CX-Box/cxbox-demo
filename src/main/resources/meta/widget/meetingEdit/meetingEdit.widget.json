@@ -1,51 +1,39 @@
 {
   "name": "meetingEdit",
-  "title": "General information",
+  "title": "",
   "type": "Form",
   "bc": "meetingEdit",
   "fields": [
     {
-      "label": "Additional Contacts",
-      "key": "additionalContacts",
-      "displayedKey": "additionalContactsDisplayedKey",
-      "type": "multivalue",
-      "popupBcName": "contactAssocListPopup",
-      "assocValueKey": "fullName"
+      "label": "Процесс",
+      "key": "process",
+      "type": "dictionary"
     },
     {
-      "label": "Agenda",
-      "key": "agenda",
+      "label": "Номер",
+      "key": "id",
+      "type": "input",
+      "drillDown": "true"
+    },
+    {
+      "label": "Объект договор",
+      "key": "object",
       "type": "input"
     },
     {
-      "label": "Start Date",
-      "key": "startDateTime",
-      "type": "dateTime"
+      "label": "Вид",
+      "key": "type",
+      "type": "dictionary"
     },
     {
-      "label": "End Date",
-      "key": "endDateTime",
-      "type": "dateTime"
+      "label": "Решение",
+      "key": "resolution",
+      "type": "dictionary"
     },
     {
-      "label": "Status",
-      "key": "status",
-      "type": "hidden"
-    },
-    {
-      "label": "Address",
-      "key": "address",
-      "type": "text"
-    },
-    {
-      "label": "Responsible",
-      "key": "responsibleName",
-      "type": "pickList",
-      "popupBcName": "responsiblePickListPopup",
-      "pickMap": {
-        "responsibleName": "name",
-        "responsibleId": "id"
-      }
+      "label": "Название",
+      "key": "agenda",
+      "type": "input"
     }
   ],
   "options": {
@@ -58,6 +46,10 @@
         {
           "cols": [
             {
+              "fieldKey": "id",
+              "span": 12
+            },
+            {
               "fieldKey": "agenda",
               "span": 12
             }
@@ -66,19 +58,11 @@
         {
           "cols": [
             {
-              "fieldKey": "startDateTime",
-              "span": 6
+              "fieldKey": "object",
+              "span": 12
             },
             {
-              "fieldKey": "endDateTime",
-              "span": 6
-            }
-          ]
-        },
-        {
-          "cols": [
-            {
-              "fieldKey": "address",
+              "fieldKey": "process",
               "span": 12
             }
           ]
@@ -86,15 +70,11 @@
         {
           "cols": [
             {
-              "fieldKey": "responsibleName",
+              "fieldKey": "type",
               "span": 12
-            }
-          ]
-        },
-        {
-          "cols": [
+            },
             {
-              "fieldKey": "additionalContacts",
+              "fieldKey": "resolution",
               "span": 12
             }
           ]

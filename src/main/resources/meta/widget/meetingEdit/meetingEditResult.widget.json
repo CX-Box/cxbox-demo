@@ -1,12 +1,67 @@
 {
   "name": "meetingEditResult",
-  "title": "Meeting Results",
+  "title": "",
   "type": "Form",
   "bc": "meetingEdit",
   "fields": [
     {
-      "label": "Notes",
-      "key": "notes",
+      "label": "Дата регистрации",
+      "key": "registratinDate",
+      "type": "dateTime"
+    },
+    {
+      "label": "Заказчик",
+      "key": "customer",
+      "type": "inline-pickList",
+      "popupBcName": "userPickListPopup",
+      "pickMap": {
+        "customerId": "id",
+        "customer": "fullUserName"
+      }
+    },
+    {
+      "label": "Куратор",
+      "key": "curator",
+      "type": "inline-pickList",
+      "popupBcName": "userPickListPopup",
+      "pickMap": {
+        "curatorId": "id",
+        "curator": "fullUserName"
+      }
+    },
+    {
+      "label": "Дата SLA",
+      "key": "slaDate",
+      "type": "dateTime"
+    },
+    {
+      "label": "Дата начала",
+      "key": "startDateTime",
+      "type": "dateTime"
+    },
+    {
+      "label": "Дата выполнения",
+      "key": "endDateTime",
+      "type": "dateTime"
+    },
+    {
+      "label": "Статус задачи",
+      "key": "status",
+      "type": "dictionary"
+    },
+    {
+      "label": "Исполнитель",
+      "key": "responsibleName",
+      "type": "pickList",
+      "popupBcName": "responsiblePickListPopup",
+      "pickMap": {
+        "responsibleName": "name",
+        "responsibleId": "id"
+      }
+    },
+    {
+      "label": "Описание",
+      "key": "description",
       "type": "text"
     }
   ],
@@ -22,8 +77,60 @@
         {
           "cols": [
             {
-              "fieldKey": "notes",
+              "fieldKey": "registratinDate",
               "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "customer",
+              "span": 12
+            },
+            {
+              "fieldKey": "slaDate",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "curator",
+              "span": 12
+            },
+            {
+              "fieldKey": "startDateTime",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "responsibleName",
+              "span": 12
+            },
+            {
+              "fieldKey": "endDateTime",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "status",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "description",
+              "span": 24
             }
           ]
         }

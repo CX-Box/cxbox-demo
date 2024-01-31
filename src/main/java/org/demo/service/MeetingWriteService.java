@@ -26,6 +26,7 @@ import org.cxbox.core.dto.rowmeta.PreAction;
 import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
 import org.cxbox.core.service.action.ActionsBuilder;
+import org.cxbox.model.core.entity.User;
 import org.demo.conf.cxbox.action.ActionsExt;
 import org.demo.conf.cxbox.core.multivaluePrimary.MultivalueExt;
 import org.demo.conf.cxbox.icon.ActionIcon;
@@ -76,6 +77,37 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 
 	@Override
 	protected ActionResultDTO<MeetingDTO> doUpdateEntity(Meeting entity, MeetingDTO data, BusinessComponent bc) {
+		if (data.isFieldChanged(MeetingDTO_.description)) {
+			entity.setDescription(data.getDescription());
+		}
+		if (data.isFieldChanged(MeetingDTO_.slaDate)) {
+			entity.setSlaDate(data.getSlaDate());
+		}
+		if (data.isFieldChanged(MeetingDTO_.process)) {
+			entity.setProcess(data.getProcess());
+		}
+		if (data.isFieldChanged(MeetingDTO_.customerId)) {
+			entity.setCustomerEntity(data.getCustomerId() != null
+					? entityManager.getReference(User.class, data.getCustomerId())
+					: null);
+		}
+		if (data.isFieldChanged(MeetingDTO_.curatorId)) {
+			entity.setCuratorEntity(data.getCuratorId() != null
+					? entityManager.getReference(User.class, data.getCuratorId())
+					: null);
+		}
+		if (data.isFieldChanged(MeetingDTO_.registratinDate)) {
+			entity.setRegistratinDate(data.getRegistratinDate());
+		}
+		if (data.isFieldChanged(MeetingDTO_.resolution)) {
+			entity.setResolution(data.getResolution());
+		}
+		if (data.isFieldChanged(MeetingDTO_.type)) {
+			entity.setType(data.getType());
+		}
+		if (data.isFieldChanged(MeetingDTO_.object)) {
+			entity.setObject(data.getObject());
+		}
 		if (data.isFieldChanged(MeetingDTO_.additionalContacts)) {
 			entity.getAdditionalContacts().clear();
 			entity.getAdditionalContacts().addAll(data.getAdditionalContacts().getValues().stream()
@@ -124,7 +156,7 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 	@Override
 	public Actions<MeetingDTO> getActions() {
 		return Actions.<MeetingDTO>builder()
-				.create().text("Add").add()
+				.create().text("Новая задача").add()
 				.save().add()
 				.addGroup(
 						"actions",
@@ -136,7 +168,7 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 				.newAction()
 				.scope(ActionScope.RECORD)
 				.withAutoSaveBefore()
-				.action("saveAndContinue", "Save")
+				.action("saveAndContinue", "Сохранить изменения ")
 				.withPreAction(confirmWithComment("Approval"))
 				.invoker((bc, dto) -> new ActionResultDTO<MeetingDTO>().setAction(
 						PostAction.drillDown(
@@ -144,7 +176,7 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 								"/screen/meeting/view/meetingview/" + CxboxRestController.meeting + "/" + bc.getId()
 						)))
 				.add()
-				.cancelCreate().text("Cancel").available(bc -> true).add()
+				.cancelCreate().text("Закрыть задачу").available(bc -> true).add()
 				.build();
 	}
 

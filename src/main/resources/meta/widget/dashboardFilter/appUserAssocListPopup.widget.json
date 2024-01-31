@@ -1,0 +1,18 @@
+{
+  "title": "appUserAssocListPopup title",
+  "name": "appUserAssocListPopup",
+  "type": "AssocListPopup",
+  "bc": "appUserAssocListPopup",
+  "fields": [
+    {
+      "title": "Номер",
+      "key": "id",
+      "type": "text"
+    },
+    {
+      "title": "ФИО",
+      "key": "fullUserName",
+      "type": "input"
+    }
+  ]
+}

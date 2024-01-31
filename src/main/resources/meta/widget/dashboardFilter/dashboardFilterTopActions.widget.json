@@ -1,0 +1,15 @@
+{
+  "name": "dashboardFilterTopActions",
+  "title": "",
+  "type": "Form",
+  "bc": "dashboardFilter",
+  "fields": [],
+  "options": {
+    "actionGroups": {
+      "include": [
+        "getNewTask"
+      ]
+    }
+  }
+}
+

@@ -5,6 +5,7 @@ import org.cxbox.core.crudma.bc.BcIdentifier;
 import org.cxbox.core.crudma.bc.EnumBcIdentifier;
 import org.cxbox.core.crudma.bc.impl.AbstractEnumBcSupplier;
 import org.cxbox.core.crudma.bc.impl.BcDescription;
+import org.demo.service.AppUserMultivalueService;
 import org.demo.service.ContactMultivalueService;
 import org.demo.service.DashboardClientActivitiesService;
 import org.demo.service.ClientContactService;
@@ -20,6 +21,7 @@ import org.demo.service.MeetingWriteService;
 import org.demo.service.ResponsiblePickListService;
 import org.demo.service.SaleReadService;
 import org.demo.service.SaleWriteService;
+import org.demo.service.UserPickService;
 import org.springframework.stereotype.Component;
 
 /**
@@ -42,6 +44,7 @@ public enum CxboxRestController implements EnumBcIdentifier {
 	meeting(MeetingReadService.class),
 		meetingDocumentEdit(meeting, MeetingDocumentsWriteService.class),
 	meetingEdit(MeetingWriteService.class),
+	userPickListPopup(meetingEdit, UserPickService.class),
 	contactAssocListPopup(meetingEdit, ContactMultivalueService.class),
 		responsiblePickListPopup(meetingEdit, ResponsiblePickListService.class),
 		clientPickListPopup(meetingEdit, ClientPickListService.class),
@@ -50,6 +53,7 @@ public enum CxboxRestController implements EnumBcIdentifier {
 	saleEdit(SaleWriteService.class),
 		clientSalePickListPopup(saleEdit, ClientPickListService.class),
 	dashboardFilter(DashboardFilterService.class),
+	appUserAssocListPopup(dashboardFilter, AppUserMultivalueService.class),
 		dashboardClientActivities(dashboardFilter, DashboardClientActivitiesService.class),
 	dashboardSalesFunnel(dashboardFilter, DashboardSalesFunnelService.class),
 	dashboardSalesRingProgress(dashboardFilter, DashboardSalesRingProgressService.class);

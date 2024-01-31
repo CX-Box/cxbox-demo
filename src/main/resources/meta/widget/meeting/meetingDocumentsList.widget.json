@@ -5,6 +5,7 @@
   "bc": "meetingDocumentEdit",
   "fields": [
     {
+      "title": "Документ",
       "title": "Field Key For Content Type",
       "key": "fieldKeyForContentType",
       "type": "hidden"
@@ -15,19 +16,18 @@
       "type": "hidden"
     },
     {
-      "title": "Document ID",
-      "key": "id",
-      "type": "input",
-      "drillDown": "true"
-    },
-    {
       "title": "File",
       "key": "file",
       "type": "fileUpload",
       "fileIdKey": "fileId"
     },
     {
-      "title": "Notes",
+      "title": "Тип",
+      "key": "documentType",
+      "type": "dictionary"
+    },
+    {
+      "title": "Комментарий",
       "key": "notes",
       "type": "input"
     }
@@ -42,7 +42,6 @@
     "actionGroups": {
       "include": [
         "create",
-        "multiFileUpload",
         "edit",
         "actions"
       ]

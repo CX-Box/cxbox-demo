@@ -2,7 +2,9 @@
 
 package org.demo.service;
 
+import org.cxbox.model.core.entity.User_;
 import org.demo.dto.DashboardClientActivitiesDTO;
+import org.demo.entity.AppUser_;
 import org.demo.entity.Client;
 import org.demo.entity.Client_;
 import org.demo.entity.DashboardFilter;
@@ -40,7 +42,7 @@ public class DashboardClientActivitiesService extends VersionAwareResponseServic
 	private Specification<Client> getFilterSpecification(BusinessComponent bc) {
 		DashboardFilter dashboardFilter = dashboardFilterRepository.findOne(
 				(root, cq, cb) -> cb.equal(root.get(
-						DashboardFilter_.userId), bc.getParentIdAsLong())
+						DashboardFilter_.user).get(AppUser_.id), bc.getParentIdAsLong())
 		).orElse(null);
 		if (dashboardFilter == null) {
 			return (root, cq, cb) -> cb.and();

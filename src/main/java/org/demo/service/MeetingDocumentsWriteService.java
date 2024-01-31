@@ -62,6 +62,9 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 	@Override
 	protected ActionResultDTO<MeetingDocumentsDTO> doUpdateEntity(MeetingDocuments entity, MeetingDocumentsDTO data,
 			BusinessComponent bc) {
+		if (data.isFieldChanged(MeetingDocumentsDTO_.documentType)) {
+			entity.setDocumentType(data.getDocumentType());
+		}
 		if (data.isFieldChanged(MeetingDocumentsDTO_.fileId)) {
 			entity.setFileId(data.getFileId());
 		}
@@ -89,8 +92,9 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 	@Override
 	public Actions<MeetingDocumentsDTO> getActions() {
 		return Actions.<MeetingDocumentsDTO>builder()
-				.create().text("Add").add()
-				.save().add()
+				.create().text("Добавить").add()
+				.delete().text("Удалить").add()
+				.save().text("Сохранить").add()
 				.newAction()
 				.scope(ActionScope.RECORD)
 				.withAutoSaveBefore()

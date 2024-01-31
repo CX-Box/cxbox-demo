@@ -42,7 +42,7 @@
     {
       "widgetName": "meetingDocumentsFormForList",
       "position": 70,
-      "gridWidth": 24
+      "gridWidth": 12
     }
   ],
   "rolesAllowed": [

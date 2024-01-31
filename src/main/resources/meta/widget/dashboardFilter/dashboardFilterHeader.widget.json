@@ -1,0 +1,9 @@
+{
+  "name": "dashboardFilterHeader",
+  "title": "Отбор бизнес задач",
+  "type": "HeaderWidget",
+  "bc": "dashboardFilter",
+  "fields": [
+  ]
+}
+

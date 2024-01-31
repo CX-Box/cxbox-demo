@@ -1,5 +1,9 @@
 package org.demo.conf.security.cxboxkeycloak;
 
+import org.demo.entity.AppUser;
+import org.demo.entity.AppUser_;
+import org.demo.entity.DashboardFilter;
+import org.demo.repository.AppUserRepository;
 import org.demo.repository.DepartmentRepository;
 import org.demo.repository.UserRepository;
 import org.cxbox.api.data.dictionary.LOV;
@@ -33,7 +37,7 @@ import static org.cxbox.api.service.session.InternalAuthorizationService.VANILLA
 public class CxboxKeycloakAuthenticationProvider extends KeycloakAuthenticationProvider {
 
 	@Autowired
-	private UserRepository userRepository;
+	private AppUserRepository userRepository;
 
 	@Autowired
 	private DepartmentRepository departmentRepository;
@@ -71,7 +75,7 @@ public class CxboxKeycloakAuthenticationProvider extends KeycloakAuthenticationP
 	private void upsertUserAndRoles(AccessToken accessToken, Set<String> roles) {
 		txService.invokeInNewTx(() -> {
 			authzService.loginAs(authzService.createAuthentication(VANILLA));
-			User user = null;
+			AppUser user = null;
 			try {
 				user = getUserByLogin(accessToken.getName().toUpperCase());
 				if (user == null) {
@@ -92,18 +96,21 @@ public class CxboxKeycloakAuthenticationProvider extends KeycloakAuthenticationP
 	}
 
 	//Note>>taken "as is" from real project - refactor
-	public User upsert(AccessToken accessToken, String role) {
+	public AppUser upsert(AccessToken accessToken, String role) {
 		txService.invokeInNewTx(() -> {
 					authzService.loginAs(authzService.createAuthentication(VANILLA));
 					for (int i = 1; i <= 10; i++) {
-						User existing = getUserByLogin(accessToken.getName().toUpperCase());
+						AppUser existing = getUserByLogin(accessToken.getName().toUpperCase());
 						if (existing != null) {
 							jpaDao.lockAndRefresh(existing, LockOptions.WAIT_FOREVER);
 							updateUser(accessToken, role, existing);
 							return existing;
 						}
 						try {
-							User newUser = new User();
+							AppUser newUser = new AppUser();
+							DashboardFilter dashboardFilter = new DashboardFilter();
+							dashboardFilter.setUser(newUser);
+							newUser.setDashboardFilter(dashboardFilter);
 							updateUser(accessToken, role, newUser);
 							Long id = txService.invokeNoTx(() -> userRepository.save(newUser).getId());
 							return userRepository.findById(id);
@@ -122,14 +129,14 @@ public class CxboxKeycloakAuthenticationProvider extends KeycloakAuthenticationP
 		return null;
 	}
 
-	private User getUserByLogin(String login) {
+	private AppUser getUserByLogin(String login) {
 		return userRepository.findOne(
-				(root, cq, cb) -> cb.equal(cb.upper(root.get(User_.login)), login.toUpperCase())
+				(root, cq, cb) -> cb.equal(cb.upper(root.get(AppUser_.login)), login.toUpperCase())
 		).orElse(null);
 	}
 
 
-	private void updateUser(AccessToken accessToken, String role, User user) {
+	private void updateUser(AccessToken accessToken, String role, AppUser user) {
 		if (user.getLogin() == null) {
 			user.setLogin(accessToken.getName().toUpperCase());
 		}

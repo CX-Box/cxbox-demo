@@ -5,41 +5,55 @@
   "bc": "meetingEdit",
   "fields": [
     {
-      "title": "Meeting",
+      "title": "Номер",
       "key": "id",
       "type": "input",
       "drillDown": "true"
     },
     {
-      "title": "Agenda",
+      "title": "Название",
       "key": "agenda",
       "type": "input"
     },
     {
-      "title": "Start Date",
-      "key": "startDateTime",
+      "title": "Заказчик",
+      "key": "customer",
+      "type": "inline-pickList",
+      "popupBcName": "userPickListPopup",
+      "pickMap": {
+        "customerId": "id",
+        "customer": "fullUserName"
+      }
+    },
+    {
+      "title": "Куратор",
+      "key": "curator",
+      "type": "inline-pickList",
+      "popupBcName": "userPickListPopup",
+      "pickMap": {
+        "curatorId": "id",
+        "curator": "fullUserName"
+      }
+    },
+    {
+      "title": "Исполнитель",
+      "key": "responsibleName",
+      "type": "pickList",
+      "popupBcName": "responsiblePickListPopup",
+      "pickMap": {
+        "responsibleName": "name",
+        "responsibleId": "id"
+      }
+    },
+    {
+      "title": "Срок",
+      "key": "slaDate",
       "type": "dateTime"
     },
     {
-      "title": "Status",
-      "key": "status",
-      "type": "input"
-    },
-    {
-      "title": "clientId",
-      "key": "clientId",
-      "type": "input",
-      "hidden": "true"
-    },
-    {
-      "title": "Client Name",
-      "key": "clientName",
-      "type": "input"
-    },
-    {
-      "title": "Contact",
-      "key": "contactName",
-      "type": "input"
+      "title": "Решение",
+      "key": "resolution",
+      "type": "dictionary"
     }
   ],
   "options": {

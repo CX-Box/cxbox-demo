@@ -5,6 +5,16 @@
   "url": "/screen/meeting/view/meetinglist",
   "widgets": [
     {
+      "widgetName": "responsiblePickListPopup",
+      "position": 2,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "userPickListPopup",
+      "position": 2,
+      "gridWidth": 24
+    },
+    {
       "widgetName": "meetingListHeader",
       "position": 0,
       "gridWidth": 24

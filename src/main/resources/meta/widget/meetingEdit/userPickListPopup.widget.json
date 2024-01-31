@@ -1,0 +1,18 @@
+{
+  "title": "userPickListPopup title",
+  "name": "userPickListPopup",
+  "type": "PickListPopup",
+  "bc": "userPickListPopup",
+  "fields": [
+    {
+      "title": "Full User Name",
+      "key": "fullUserName",
+      "type": "input"
+    },
+    {
+      "title": "id",
+      "key": "id",
+      "type": "text"
+    }
+  ]
+}

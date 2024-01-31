@@ -1,6 +1,6 @@
 {
   "name": "meetingEditHeader",
-  "title": "Meeting",
+  "title": "${agenda}",
   "type": "HeaderWidget",
   "bc": "meetingEdit",
   "fields": []

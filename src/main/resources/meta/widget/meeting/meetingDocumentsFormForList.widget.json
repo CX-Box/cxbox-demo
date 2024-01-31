@@ -7,10 +7,15 @@
     {
       "label": "Notes",
       "key": "notes",
-      "type": "input"
+      "type": "text"
     },
     {
-      "label": "File",
+      "label": "Тип документа",
+      "key": "documentType",
+      "type": "dictionary"
+    },
+    {
+      "label": "Файл",
       "key": "file",
       "type": "fileUpload",
       "fileIdKey": "fileId"
@@ -19,8 +24,10 @@
   "options": {
     "actionGroups": {
       "include": [
+        "edit",
         "save",
-        "cancel-create"
+        "cancel-create",
+        "delete"
       ]
     },
     "layout": {
@@ -29,6 +36,14 @@
           "cols": [
             {
               "fieldKey": "file",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "documentType",
               "span": 12
             }
           ]

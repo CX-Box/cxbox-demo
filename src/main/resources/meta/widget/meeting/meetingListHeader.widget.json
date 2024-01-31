@@ -1,6 +1,6 @@
 {
   "name": "meetingListHeader",
-  "title": "Meeting List",
+  "title": "Список задач",
   "type": "HeaderWidget",
   "bc": "meetingEdit",
   "fields": []

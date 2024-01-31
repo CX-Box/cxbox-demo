@@ -2,11 +2,11 @@
   "name": "meeting",
   "icon": "calendar",
   "order": 1,
-  "title": "Meeting",
+  "title": "Задачи",
   "navigation": {
     "menu": [
       {
-        "title": "Meetings",
+        "title": "Формуляр",
         "child": [
           {
             "viewName": "meetinglist"

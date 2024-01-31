@@ -3,6 +3,7 @@ package org.demo.entity;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import lombok.EqualsAndHashCode;
@@ -19,6 +20,9 @@ import javax.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.demo.entity.enums.ProcessEnum;
+import org.demo.entity.enums.ResolutionEnum;
+import org.demo.entity.enums.TypeEnum;
 
 @Entity
 @Table(name = "MEETING")
@@ -63,5 +67,38 @@ public class Meeting extends BaseEntity {
 	)
 	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	private List<Contact> additionalContacts = new ArrayList<>();
+
+	@Column
+	private String object;
+
+	@Enumerated(value = EnumType.STRING)
+	@Column
+	private TypeEnum type;
+
+	@Enumerated(value = EnumType.STRING)
+	@Column
+	private ResolutionEnum resolution;
+
+	@Column
+	private LocalDateTime registratinDate;
+
+	@JoinColumn(name = "CUSTOMER_ID")
+	@ManyToOne
+	private User customerEntity;
+
+
+	@JoinColumn(name = "CURATOR_ID")
+	@ManyToOne
+	private User curatorEntity;
+
+	@Enumerated(value = EnumType.STRING)
+	@Column
+	private ProcessEnum process;
+
+	@Column
+	private LocalDateTime slaDate;
+
+	@Column
+	private String description;
 
 }

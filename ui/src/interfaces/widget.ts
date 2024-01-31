@@ -2,11 +2,14 @@ import { interfaces } from '@cxbox-ui/core'
 
 export enum CustomFieldTypes {
     MultipleSelect = 'multipleSelect',
+    DocumentPreview = 'documentPreview',
     Time = 'time'
 }
 
 export enum CustomWidgetTypes {
     FormPopup = 'FormPopup',
+    DocumentList = 'DocumentList',
+    DocumentFormPopup = 'DocumentFormPopup',
     Steps = 'Steps',
     Funnel = 'Funnel',
     RingProgress = 'RingProgress',
@@ -44,13 +47,58 @@ export type TableWidgetField = interfaces.WidgetListFieldBase & {
     excelWidth?: number
 }
 
+export type DocumentPreviewType = 'base64' | 'dataUrl' | 'fileUrl' | 'generatedFileUrl'
+
+export type DocumentPreviewFieldMeta = Omit<interfaces.WidgetFieldBase, 'type'> & {
+    type: CustomFieldTypes.DocumentPreview
+    previewType: DocumentPreviewType
+    fieldKeyForContentType?: string
+    fieldKeyForFileName?: string
+}
+
 type InternalWidgetOption = {
     widget: string
     style: 'inlineForm' | 'popup' | 'inline' | 'none'
 }
 
+export type DocumentPreviewBase64Option = {
+    type: 'base64'
+    fieldKeyForBase64: string
+    fieldKeyForContentType: string
+}
+
+export type DocumentPreviewDataUrlOption = {
+    type: 'dataUrl'
+    fieldKeyForUrl: string
+}
+
+export type DocumentPreviewFileUrlOption = {
+    type: 'fileUrl'
+    fieldKeyForUrl: string
+}
+
+export type DocumentPreviewGeneratedFileUrlOption = {
+    type: 'generatedFileUrl'
+    fieldKeyForUrl: string
+    fieldKeyForContentType: string
+}
+
 export interface AppWidgetMeta extends interfaces.WidgetMeta {
     options?: interfaces.WidgetOptions & {
+        documentPreview?: {
+            type: string
+            edit: {
+                widget: string
+            }
+            fieldKeyForImageTitle?: string
+            imageSizeOnList?: number
+        } & (
+            | DocumentPreviewBase64Option
+            | DocumentPreviewDataUrlOption
+            | DocumentPreviewFileUrlOption
+            | DocumentPreviewGeneratedFileUrlOption
+        )
+
         primary?: {
             enabled: boolean
             title?: string

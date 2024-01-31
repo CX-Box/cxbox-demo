@@ -6,7 +6,7 @@ import { actions, interfaces } from '@cxbox-ui/core'
 import { useAppSelector } from '@store'
 
 export interface PaginationProps {
-    meta: interfaces.WidgetTableMeta
+    meta: interfaces.WidgetMeta
 }
 
 function Pagination({ meta }: PaginationProps) {

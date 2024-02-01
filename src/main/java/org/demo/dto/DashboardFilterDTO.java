@@ -17,8 +17,8 @@ import org.cxbox.core.util.filter.provider.impl.StringValueProvider;
 import org.demo.entity.AppUser;
 import org.demo.entity.DashboardFilter;
 import org.demo.entity.enums.MemberTypesEnum;
-import org.demo.entity.enums.TaskResolutionsEnum;
-import org.demo.entity.enums.TaskStatusesEnum;
+import org.demo.entity.enums.ResolutionEnum;
+import org.demo.entity.enums.MeetingStatus;
 import org.demo.entity.enums.TypeEnum;
 
 @Getter
@@ -71,8 +71,8 @@ public class DashboardFilterDTO extends DataResponseDTO {
 		this.taskId = user.getTaskId();
 		this.taskStatuses = Optional.ofNullable(user.getTaskStatuses())
 				.map(el -> Splitter.on(",").trimResults().omitEmptyStrings().splitToList(el).stream()
-						.map(TaskStatusesEnum::valueOf)
-						.collect(MultivalueField.toMultivalueField(Enum::name, TaskStatusesEnum::getValue)))
+						.map(MeetingStatus::valueOf)
+						.collect(MultivalueField.toMultivalueField(Enum::name, MeetingStatus::getValue)))
 				.orElse(null);
 		this.memberTypes = Optional.ofNullable(user.getMemberTypes())
 				.map(el -> Splitter.on(",").trimResults().omitEmptyStrings().splitToList(el).stream()
@@ -98,8 +98,8 @@ public class DashboardFilterDTO extends DataResponseDTO {
 				.orElse(null);
 		this.taskResolutions = Optional.ofNullable(user.getTaskResolutions())
 				.map(el -> Splitter.on(",").trimResults().omitEmptyStrings().splitToList(el).stream()
-						.map(TaskResolutionsEnum::valueOf)
-						.collect(MultivalueField.toMultivalueField(Enum::name, TaskResolutionsEnum::getValue)))
+						.map(ResolutionEnum::valueOf)
+						.collect(MultivalueField.toMultivalueField(Enum::name, ResolutionEnum::getValue)))
 				.orElse(null);
 	}
 

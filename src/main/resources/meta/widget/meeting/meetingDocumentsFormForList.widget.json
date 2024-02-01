@@ -5,7 +5,7 @@
   "bc": "meetingDocumentEdit",
   "fields": [
     {
-      "label": "Notes",
+      "label": "Комментарий",
       "key": "notes",
       "type": "text"
     },

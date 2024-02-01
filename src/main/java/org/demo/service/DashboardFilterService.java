@@ -5,13 +5,17 @@ import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
+import org.cxbox.core.dto.DrillDownType;
 import org.cxbox.core.dto.multivalue.MultivalueField;
 import org.cxbox.core.dto.multivalue.MultivalueFieldSingleValue;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
+import org.cxbox.core.dto.rowmeta.PostAction;
 import org.cxbox.core.service.action.Actions;
 import org.cxbox.core.util.session.SessionService;
 import org.cxbox.model.core.entity.User_;
+import org.demo.controller.CxboxRestController;
+import org.demo.dto.ContactDTO;
 import org.demo.dto.DashboardFilterDTO;
 import org.demo.dto.DashboardFilterDTO_;
 import org.demo.entity.AppUser;
@@ -19,8 +23,8 @@ import org.demo.entity.DashboardFilter;
 import org.demo.entity.DashboardFilter_;
 import org.demo.entity.enums.FieldOfActivity;
 import org.demo.entity.enums.MemberTypesEnum;
-import org.demo.entity.enums.TaskResolutionsEnum;
-import org.demo.entity.enums.TaskStatusesEnum;
+import org.demo.entity.enums.ResolutionEnum;
+import org.demo.entity.enums.MeetingStatus;
 import org.demo.entity.enums.TypeEnum;
 import org.demo.repository.AppUserRepository;
 import org.demo.repository.DashboardFilterRepository;
@@ -73,7 +77,7 @@ DashboardFilterService extends VersionAwareResponseService<DashboardFilterDTO, D
 			entity.setTaskResolutions(
 					data.getTaskResolutions().getValues()
 							.stream()
-							.map(v -> TaskResolutionsEnum.getByValue(v.getValue()))
+							.map(v -> ResolutionEnum.getByValue(v.getValue()))
 							.map(Enum::name)
 							.collect(Collectors.joining(",", ",", ",")));
 		}
@@ -124,7 +128,7 @@ DashboardFilterService extends VersionAwareResponseService<DashboardFilterDTO, D
 			entity.setTaskStatuses(
 					data.getTaskStatuses().getValues()
 							.stream()
-							.map(v -> TaskStatusesEnum.getByValue(v.getValue()))
+							.map(v -> MeetingStatus.getByValue(v.getValue()))
 							.map(Enum::name)
 							.collect(Collectors.joining(",", ",", ",")));
 		}
@@ -173,7 +177,12 @@ DashboardFilterService extends VersionAwareResponseService<DashboardFilterDTO, D
 
 		return Actions.<DashboardFilterDTO>builder()
 				.action("filter", "Найти задачу")
-				.invoker((bc, dto) -> new ActionResultDTO<>())
+				.invoker((bc, dto) -> new ActionResultDTO<DashboardFilterDTO>()
+						.setAction(PostAction.drillDown(
+								DrillDownType.INNER,
+								"/screen/meeting"
+
+						)))
 				.available(bc -> true).withAutoSaveBefore()
 				.add()
 

@@ -10,9 +10,9 @@ import com.fasterxml.jackson.annotation.JsonValue;
 @Getter
 @AllArgsConstructor
 public enum DocumentTypeEnum {
-	HIGH("High"),
-	MIDDLE("Middle"),
-	LOW("Low");
+	ARG_CANCEL_REq("Заявление на расторжение договора"),
+	PASS("Паспорт"),
+	REG("Регистрация");
 
 	@JsonValue
 	private final String value;

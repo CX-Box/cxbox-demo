@@ -169,12 +169,12 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 				.scope(ActionScope.RECORD)
 				.withAutoSaveBefore()
 				.action("saveAndContinue", "Сохранить изменения ")
-				.withPreAction(confirmWithComment("Approval"))
-				.invoker((bc, dto) -> new ActionResultDTO<MeetingDTO>().setAction(
+				//.withPreAction(confirmWithComment("Approval"))
+				.invoker((bc, dto) -> new ActionResultDTO<MeetingDTO>()/*.setAction(
 						PostAction.drillDown(
 								DrillDownType.INNER,
 								"/screen/meeting/view/meetingview/" + CxboxRestController.meeting + "/" + bc.getId()
-						)))
+						))*/)
 				.add()
 				.cancelCreate().text("Закрыть задачу").available(bc -> true).add()
 				.build();
@@ -196,6 +196,16 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 								"/screen/meeting/view/meetingedit/" +
 										CxboxRestController.meetingEdit + "/" +
 										bc.getId()
+						)))
+				.add()
+				.newAction()
+				.action("back", "Назад")
+				.scope(ActionScope.RECORD)
+				.withoutAutoSaveBefore()
+				.invoker((bc, data) -> new ActionResultDTO<MeetingDTO>()
+						.setAction(PostAction.drillDown(
+								DrillDownType.INNER,
+								"/screen/dashboard"
 						)))
 				.add();
 	}

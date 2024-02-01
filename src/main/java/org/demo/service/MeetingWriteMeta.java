@@ -25,18 +25,18 @@ public class MeetingWriteMeta extends FieldMetaBuilder<MeetingDTO> {
 			Long id, Long parentId) {
 		fields.setEnabled(MeetingDTO_.description);
 		fields.setEnabled(MeetingDTO_.slaDate);
-		fields.setEnumValues(MeetingDTO_.process, ProcessEnum.values());
-		fields.setEnabled(MeetingDTO_.process);
+		/*fields.setEnumValues(MeetingDTO_.process, ProcessEnum.values());
+		fields.setEnabled(MeetingDTO_.process);*/
 		fields.setEnabled(MeetingDTO_.customerId);
 		fields.setEnabled(MeetingDTO_.customer);
 		fields.setEnabled(MeetingDTO_.curatorId);
 		fields.setEnabled(MeetingDTO_.curator);
-		fields.setEnabled(MeetingDTO_.registratinDate);
+		/*fields.setEnabled(MeetingDTO_.registratinDate);*/
 		fields.setEnumValues(MeetingDTO_.resolution, ResolutionEnum.values());
 		fields.setEnabled(MeetingDTO_.resolution);
 		fields.setEnumValues(MeetingDTO_.type, TypeEnum.values());
 		fields.setEnabled(MeetingDTO_.type);
-		fields.setEnabled(MeetingDTO_.object);
+		/*fields.setEnabled(MeetingDTO_.object);*/
 		fields.setEnabled(MeetingDTO_.additionalContacts);
 		fields.setEnabled(MeetingDTO_.status);
 		fields.setEnumValues(MeetingDTO_.status, MeetingStatus.values());

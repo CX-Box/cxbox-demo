@@ -9,8 +9,8 @@ import org.cxbox.core.dto.rowmeta.RowDependentFieldsMeta;
 import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
 import java.util.Arrays;
 import org.demo.entity.enums.MemberTypesEnum;
-import org.demo.entity.enums.TaskResolutionsEnum;
-import org.demo.entity.enums.TaskStatusesEnum;
+import org.demo.entity.enums.ResolutionEnum;
+import org.demo.entity.enums.MeetingStatus;
 import org.demo.entity.enums.TypeEnum;
 import org.springframework.stereotype.Service;
 
@@ -24,8 +24,8 @@ public class DashboardFilterMeta extends FieldMetaBuilder<DashboardFilterDTO> {
 			Long id, Long parentId) {
 		fields.setDictionaryTypeWithCustomValues(
 				DashboardFilterDTO_.taskResolutions,
-				Arrays.stream(TaskResolutionsEnum.values())
-						.map(TaskResolutionsEnum::getValue)
+				Arrays.stream(ResolutionEnum.values())
+						.map(ResolutionEnum::getValue)
 						.toArray(String[]::new)
 		);
 		fields.setEnabled(DashboardFilterDTO_.taskResolutions);
@@ -44,8 +44,8 @@ public class DashboardFilterMeta extends FieldMetaBuilder<DashboardFilterDTO> {
 				.map(MemberTypesEnum::getValue)
 				.toArray(String[]::new));
 		fields.setEnabled(DashboardFilterDTO_.memberTypes);
-		fields.setDictionaryTypeWithCustomValues(DashboardFilterDTO_.taskStatuses, Arrays.stream(TaskStatusesEnum.values())
-				.map(TaskStatusesEnum::getValue)
+		fields.setDictionaryTypeWithCustomValues(DashboardFilterDTO_.taskStatuses, Arrays.stream(MeetingStatus.values())
+				.map(MeetingStatus::getValue)
 				.toArray(String[]::new));
 		fields.setEnabled(DashboardFilterDTO_.taskStatuses);
 		fields.setEnabled(DashboardFilterDTO_.taskId);

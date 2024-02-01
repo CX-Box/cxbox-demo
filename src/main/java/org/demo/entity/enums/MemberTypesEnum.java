@@ -9,10 +9,10 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 @Getter
 @AllArgsConstructor
-public enum MemberTypesEnum {
-	HIGH("High"),
-	MIDDLE("Middle"),
-	LOW("Low");
+public enum 	MemberTypesEnum {
+	CUSTOMER("Заказчик"),
+	CURATOR("Куратор"),
+	RESPONSIBLE("Исполнитель");
 
 	@JsonValue
 	private final String value;

@@ -80,15 +80,31 @@
       <column name="ID" remarks="Identifier" type="NUMBER(19, 0)">
         <constraints primaryKey="true"/>
       </column>
+
+      <column name="type" type="VARCHAR(200)"/>
+     <!-- <column name="resolution" type="VARCHAR(200)"/>-->
+      <column name="object" type="VARCHAR(200)"/>
+      <column name="process" type="VARCHAR(200)"/>
+
+
       <column name="AGENDA" type="VARCHAR(200)"/>
       <column name="STATUS" type="VARCHAR(200)"/>
+      <column name="SLA_DATE" type="TIMESTAMP(6)"/>
       <column name="START_DATE_TIME" type="TIMESTAMP(6)"/>
       <column name="END_DATE_TIME" type="TIMESTAMP(6)"/>
       <column name="ADDRESS" type="VARCHAR(200)"/>
       <column name="NOTES" type="VARCHAR(200)"/>
-      <column name="RESULT" type="VARCHAR(200)"/>
+      <!--<column name="RESULT" type="VARCHAR(200)"/>-->
       <column name="RESPONSIBLE_ID" type="NUMBER(19, 0)">
         <constraints nullable="true" foreignKeyName="MEETING_RESPONSIBLE_ID" referencedColumnNames="ID"
+          referencedTableName="USERS"/>
+      </column>
+      <column name="CUSTOMER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="true" foreignKeyName="MEETING_CUSTOMER_ID" referencedColumnNames="ID"
+          referencedTableName="USERS"/>
+      </column>
+      <column name="CURATOR_ID" type="NUMBER(19, 0)">
+        <constraints nullable="true" foreignKeyName="MEETING_CURATOR_ID" referencedColumnNames="ID"
           referencedTableName="USERS"/>
       </column>
       <column name="CLIENT_ID" type="NUMBER(19, 0)">
@@ -292,13 +308,22 @@
     <loadUpdateData tableName="MEETING" primaryKey="ID" encoding="UTF-8" separator="," quotchar="&quot;"
       file="db/data/MEETING.csv">
       <column header="ID" name="ID" type="STRING"/>
+
+      <column header="type" name="type" type="STRING"/>
+      <!--<column header="resolution" name="resolution" type="STRING"/>-->
+      <column header="object" name="object" type="STRING"/>
+      <column header="process" name="process" type="STRING"/>
+
       <column header="agenda" name="agenda" type="STRING"/>
+      <column header="sla_date" name="sla_date" type="datetime"/>
       <column header="start_date_time" name="start_date_time" type="datetime"/>
       <column header="end_date_time" name="end_date_time" type="datetime"/>
       <column header="address" name="address" type="STRING"/>
       <column header="notes" name="notes" type="STRING"/>
-      <column header="result" name="result" type="STRING"/>
+     <!-- <column header="result" name="result" type="STRING"/>-->
       <column header="responsible_id" name="responsible_id" type="STRING"/>
+      <column header="customer_id" name="CUSTOMER_ID" type="STRING"/>
+      <column header="curator_id" name="CURATOR_ID" type="STRING"/>
       <column header="client_id" name="client_id" type="STRING"/>
       <column header="contact_id" name="contact_id" type="STRING"/>
       <column header="created_by_user_id" name="created_by_user_id" type="STRING"/>

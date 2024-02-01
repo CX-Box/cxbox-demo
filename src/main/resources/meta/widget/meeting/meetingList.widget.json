@@ -65,9 +65,7 @@
     },
     "actionGroups": {
       "include": [
-        "create",
-        "edit",
-        "actions"
+        "back"
       ]
     }
   }

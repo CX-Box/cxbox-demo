@@ -1,2 +1,5 @@
 ﻿ID;FIRST_NAME;LAST_NAME;PATRONYMIC;LOGIN;PASSWORD;INTERNAL_ROLE_CD;USER_PRINCIPAL_NAME;PHONE;EMAIL;FULL_USER_NAME;TITLE;DEPT_ID;ORIG_DEPT_CODE;TIMEZONE
 1;"User";"System";;"vanilla";{noop}vanilla;"ADMIN";"vanilla@localhost";;"vanilla@localhost";"System User";null;0;"DIT";null
+2;"Наталья";"Невзорова";;"nnevzorova";{noop}nnevzorova;"CXBOX_USER";"nnevzorova@localhost";;"nnevzorova@localhost";"Невзорова Н";null;0;"DIT";null
+3;"Евгения";"Деринченко";;"ederinchenko";{noop}ederinchenko;"CXBOX_USER";"ederinchenko@localhost";;"ederinchenko@localhost";"Деринченко Е";null;0;"DIT";null
+4;"Елизавета";"Орлова";;"eorlova";{noop}eorlova;"CXBOX_USER";"eorlova@localhost";;"eorlova@localhost";"Орлова Елизавета";null;0;"DIT";null

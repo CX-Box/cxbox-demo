@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
@@ -78,4 +79,11 @@ public enum MeetingStatus {
 	public abstract List<MeetingStatus> available(@NonNull Meeting meeting);
 
 	public abstract void transition(@NonNull MeetingStatus meetingStatus, @NonNull Meeting meeting);
+
+	public static MeetingStatus getByValue(@NonNull String value) {
+		return Arrays.stream(MeetingStatus.values())
+				.filter(enm -> Objects.equals(enm.getValue(), value))
+				.findFirst()
+				.orElse(null);
+	}
 }

@@ -1,6 +1,7 @@
 package org.demo.service;
 
 import lombok.Getter;
+import org.demo.dto.AppUserMultivalueDTO_;
 import org.springframework.stereotype.Service;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
@@ -27,6 +28,9 @@ public class AppUserMultivalueService extends
 	protected ActionResultDTO<org.demo.dto.AppUserMultivalueDTO> doUpdateEntity(org.demo.entity.AppUser entity,
 			org.demo.dto.AppUserMultivalueDTO data,
 			BusinessComponent bc) {
+		if (data.isFieldChanged(AppUserMultivalueDTO_.email)) {
+			entity.setEmail(data.getEmail());
+		}
 		return null;
 	}
 

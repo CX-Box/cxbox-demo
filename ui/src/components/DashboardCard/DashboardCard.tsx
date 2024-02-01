@@ -1,19 +1,18 @@
 import React from 'react'
 import { Col, Row } from 'antd'
-import { useSelector } from 'react-redux'
-import { WidgetMeta } from '@cxbox-ui/core/interfaces/widget'
-import { AppState } from '../../interfaces/storeSlices'
 import DebugWidgetWrapper from '../DebugWidgetWrapper/DebugWidgetWrapper'
 import styles from './DashboardCard.module.css'
+import { useAppSelector } from '@store'
+import { interfaces } from '@cxbox-ui/core'
 
 interface DashboardCardProps {
     children?: React.ReactNode
-    meta: WidgetMeta
+    meta: interfaces.WidgetMeta
 }
 
 function DashboardCard({ children, meta }: DashboardCardProps) {
     const title = meta?.title
-    const debugMode = useSelector((state: AppState) => state.session.debugMode || false)
+    const debugMode = useAppSelector(state => state.session.debugMode || false)
 
     return (
         <div

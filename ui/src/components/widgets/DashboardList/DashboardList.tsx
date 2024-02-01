@@ -1,6 +1,6 @@
 import React from 'react'
 import Table from '../Table/Table'
-import { AppWidgetTableMeta } from '../../../interfaces/widget'
+import { AppWidgetTableMeta } from '@interfaces/widget'
 
 interface DashboardListProps {
     meta: AppWidgetTableMeta

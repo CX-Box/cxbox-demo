@@ -1,33 +1,35 @@
 import React from 'react'
-import { $do, useWidgetOperations } from '@cxbox-ui/core'
-import { isOperationGroup, Operation, OperationGroup } from '@cxbox-ui/core/interfaces/operation'
-import { WidgetMeta, WidgetTypes } from '@cxbox-ui/core/interfaces/widget'
+import { actions, interfaces } from '@cxbox-ui/core'
 import { Icon } from 'antd'
-import { AppState } from '../../interfaces/storeSlices'
+import { useAppSelector } from '@store'
 import styles from './Operations.less'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import OperationsGroup from './components/OperationsGroup'
-import { removeRecordOperationWidgets } from '../../interfaces/widget'
+import { AppWidgetMeta, removeRecordOperationWidgets } from '@interfaces/widget'
 import Button, { customTypes } from '../ui/Button/Button'
 import { ExportButton } from './components/ExportButton/ExportButton'
 import cn from 'classnames'
+import { useWidgetOperations } from '@hooks/useWidgetOperations'
+import TextSearchInput from '@components/Operations/components/TextSearchInput/TextSearchInput'
+
+const { isOperationGroup, WidgetTypes } = interfaces
 
 export interface OperationsOwnProps {
     className?: string
     bcName: string
-    widgetMeta: WidgetMeta
-    operations: Array<Operation | OperationGroup>
+    widgetMeta: AppWidgetMeta
+    operations: Array<interfaces.Operation | interfaces.OperationGroup>
 }
 
 function Operations(props: OperationsOwnProps) {
     const { bcName, widgetMeta, operations, className } = props
-    const metaInProgress = useSelector((store: AppState) => store.view.metaInProgress[bcName])
+    const metaInProgress = useAppSelector(state => state.view.metaInProgress[bcName])
     const dispatch = useDispatch()
     const currentOperations = useWidgetOperations(operations, widgetMeta).filter(item => item.type !== 'file-upload-save')
     const handleOperationClick = React.useCallback(
-        (operation: Operation) => {
+        (operation: interfaces.Operation) => {
             dispatch(
-                $do.sendOperation({
+                actions.sendOperation({
                     bcName,
                     operationType: operation.type,
                     widgetName: widgetMeta.name,
@@ -45,7 +47,7 @@ function Operations(props: OperationsOwnProps) {
                 <Button loading />
             ) : (
                 <>
-                    {currentOperations.map((item: Operation | OperationGroup, index) => {
+                    {currentOperations.map((item: interfaces.Operation | interfaces.OperationGroup, index) => {
                         if (isOperationGroup(item)) {
                             return (
                                 <OperationsGroup key={item.type} group={item} widgetType={widgetMeta.type} onClick={handleOperationClick} />
@@ -65,6 +67,9 @@ function Operations(props: OperationsOwnProps) {
                     })}
                     <ExportButton widgetMeta={widgetMeta} />
                 </>
+            )}
+            {widgetMeta.options?.fullTextSearch?.enabled && (
+                <TextSearchInput bcName={bcName} placeholder={widgetMeta.options?.fullTextSearch?.placeholder} />
             )}
         </div>
     )

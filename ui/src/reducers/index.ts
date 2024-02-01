@@ -1,30 +1,16 @@
-import screenReducer, { initialState as screenInitialState } from './screen'
-import dataReducer, { initialState as dataInitialState } from './data'
-import viewReducer, { initialState as viewInitialState } from './view'
-import sessionReducer, { initialState as sessionInitialState } from './session'
-import routerReducer, { initialState as routerInitialState } from './router'
-import { RootReducer } from '../interfaces/store'
-import { AppReducers } from '../interfaces/storeSlices'
+import { screenReducer } from './screen'
+import { dataReducer } from './data'
+import { viewReducer } from './view'
+import { sessionReducer } from './session'
+import { routerReducer } from './router'
+import { combineReducers } from '@reduxjs/toolkit'
+import { notificationReducer } from './notification'
 
-export const reducers: RootReducer<AppReducers, any> = {
-    screen: {
-        initialState: screenInitialState,
-        reducer: screenReducer
-    },
-    data: {
-        initialState: dataInitialState,
-        reducer: dataReducer
-    },
-    view: {
-        initialState: viewInitialState,
-        reducer: viewReducer
-    },
-    session: {
-        initialState: sessionInitialState,
-        reducer: sessionReducer
-    },
-    router: {
-        initialState: routerInitialState,
-        reducer: routerReducer
-    }
-}
+export const rootReducer = combineReducers({
+    screen: screenReducer,
+    data: dataReducer,
+    view: viewReducer,
+    session: sessionReducer,
+    router: routerReducer,
+    notification: notificationReducer
+})

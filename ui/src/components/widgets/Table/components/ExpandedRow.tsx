@@ -1,15 +1,13 @@
 import React from 'react'
-import { WidgetFormMeta } from '@cxbox-ui/core/interfaces/widget'
-import { Operation, OperationGroup } from '@cxbox-ui/core/interfaces/operation'
-import { DataItem } from '@cxbox-ui/core/interfaces/data'
 import Operations from '../../../Operations/Operations'
 import Form from '../../Form/Form'
 import styles from './ExpandedRow.module.css'
+import { interfaces } from '@cxbox-ui/core'
 
 interface ExpandedRowProps {
-    widgetMeta?: WidgetFormMeta
-    operations?: Array<Operation | OperationGroup>
-    record: DataItem
+    widgetMeta?: interfaces.WidgetFormMeta
+    operations?: Array<interfaces.Operation | interfaces.OperationGroup>
+    record: interfaces.DataItem
 }
 
 function ExpandedRow({ widgetMeta, operations, record }: ExpandedRowProps) {

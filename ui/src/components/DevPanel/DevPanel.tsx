@@ -1,10 +1,9 @@
 import React from 'react'
-import { DevToolsPanel } from '@cxbox-ui/core'
-import { useSelector } from 'react-redux'
-import { AppState } from '../../interfaces/storeSlices'
+import { useAppSelector } from '@store'
+import { DevToolsPanel } from '@cxboxComponents'
 
 const DevPanel: React.FunctionComponent = () => {
-    const showCondition = useSelector((state: AppState) => state.session.devPanelEnabled)
+    const showCondition = useAppSelector(state => state.session.devPanelEnabled)
     if (!showCondition) {
         return null
     }

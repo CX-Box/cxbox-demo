@@ -1,10 +1,9 @@
 import React from 'react'
 import { RingProgress } from '@ant-design/plots'
 import styles from './RingProgress.less'
-import { RingProgressWidgetMeta } from '../../../interfaces/widget'
-import { useSelector } from 'react-redux'
-import { AppState } from '../../../interfaces/storeSlices'
+import { RingProgressWidgetMeta } from '@interfaces/widget'
 import { Statistic, StyleAttr } from '@antv/g2plot/lib/types'
+import { useAppSelector } from '@store'
 
 interface RingProgressProps {
     meta: RingProgressWidgetMeta
@@ -13,7 +12,7 @@ interface RingProgressProps {
 function PrjRingProgress({ meta }: RingProgressProps) {
     const { bcName } = meta
     const text = meta.options.ringProgressOptions.text
-    const { numberFieldValue, descriptionFieldValue, percentFieldValue } = useSelector((state: AppState) => {
+    const { numberFieldValue, descriptionFieldValue, percentFieldValue } = useAppSelector(state => {
         const cursor = state.screen.bo.bc[bcName]?.cursor
         const data = state.data[bcName]?.find(i => i.id === cursor)
         return {

@@ -1,12 +1,11 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
 import InfoLabel from './InfoLabel'
-import { AppState } from '../../../interfaces/storeSlices'
+import { useAppSelector } from '@store'
 import styles from './ViewInfoLabel.less'
 
 const ViewInfoLabel: React.FunctionComponent = () => {
-    const screenName = useSelector((store: AppState) => store.screen.screenName) ?? ''
-    const viewName = useSelector((store: AppState) => store.view.name) ?? ''
+    const screenName = useAppSelector(state => state.screen.screenName) ?? ''
+    const viewName = useAppSelector(state => state.view.name) ?? ''
     const screenInfo = [`"name": "${screenName}"`]
     const viewInfo = [`"name": "${viewName}"`]
 

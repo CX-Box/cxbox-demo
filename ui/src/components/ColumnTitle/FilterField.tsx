@@ -1,21 +1,21 @@
 import React from 'react'
-import { FilterField as CoreFilterField, NumberInput } from '@cxbox-ui/core'
-import { ColumnFilterControlProps } from '@cxbox-ui/core/components/ui/FilterField/FilterField'
-import { FieldType } from '@cxbox-ui/core/interfaces/view'
-import { DataValue } from '@cxbox-ui/core/interfaces/data'
 import { CheckboxFilter } from './CheckboxFilter/CheckboxFilter'
-import { CustomFieldTypes } from '../../interfaces/widget'
-import { NumberFieldMeta } from '@cxbox-ui/schema/dist/interfaces/widget'
-import { getFormat } from '../../utils/date'
+import { CustomFieldTypes } from '@interfaces/widget'
+import { getFormat } from '@utils/date'
 import RangePicker from './RangePicker'
 import DatePicker from './DatePicker'
-import { DateFieldTypes } from '../../interfaces/date'
+import { DateFieldTypes } from '@interfaces/date'
 import { CheckboxChangeEvent } from 'antd/lib/checkbox'
 import { Checkbox } from 'antd'
+import { interfaces } from '@cxbox-ui/core'
+import { ColumnFilterControlProps } from '@cxboxComponents/ui/FilterField/FilterField'
+import { NumberInput, FilterField as CoreFilterField } from '@cxboxComponents'
 
 interface FilterFieldProps extends ColumnFilterControlProps {
     visible?: boolean
 }
+
+const { FieldType } = interfaces
 
 function FilterField({ visible, ...props }: FilterFieldProps) {
     const { widgetFieldMeta, value, onChange, rowFieldMeta } = props
@@ -36,7 +36,7 @@ function FilterField({ visible, ...props }: FilterFieldProps) {
         case FieldType.number:
         case FieldType.money:
         case FieldType.percent:
-            const fieldMeta = widgetFieldMeta as NumberFieldMeta
+            const fieldMeta = widgetFieldMeta as interfaces.NumberFieldMeta
             return (
                 <NumberInput
                     data-test-filter-popup-value={true}
@@ -53,7 +53,7 @@ function FilterField({ visible, ...props }: FilterFieldProps) {
             return (
                 <CheckboxFilter
                     title={widgetFieldMeta.title}
-                    value={value as DataValue[]}
+                    value={value as interfaces.DataValue[]}
                     filterValues={rowFieldMeta.filterValues ? rowFieldMeta.filterValues : []}
                     onChange={onChange}
                 />
@@ -65,7 +65,7 @@ function FilterField({ visible, ...props }: FilterFieldProps) {
             if (props.widgetOptions?.filterDateByRange) {
                 return (
                     <RangePicker
-                        value={props.value as DataValue[]}
+                        value={props.value as interfaces.DataValue[]}
                         onChange={onChange}
                         format={getFormat(fieldType === FieldType.dateTime, fieldType === FieldType.dateTimeWithSeconds)}
                         startOf={getStartOf(fieldType)}
@@ -79,7 +79,7 @@ function FilterField({ visible, ...props }: FilterFieldProps) {
                     data-test-filter-popup-value={true}
                     autoFocus
                     onChange={onChange}
-                    value={value as DataValue[]}
+                    value={value as interfaces.DataValue[]}
                     format={getFormat()}
                     open={visible}
                 />

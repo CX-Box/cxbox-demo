@@ -1,11 +1,10 @@
 import React from 'react'
 import { Funnel as AntFunnel } from '@ant-design/plots'
-import { FunnelWidgetMeta } from '../../../interfaces/widget'
-import { useSelector } from 'react-redux'
-import { AppState } from '../../../interfaces/storeSlices'
+import { FunnelWidgetMeta } from '@interfaces/widget'
+import { useAppSelector } from '@store'
 import { Types } from '@antv/g2'
 import { Label } from '@antv/g2plot/lib/types/label'
-import { DataItem } from '@cxbox-ui/core/interfaces/data'
+import { interfaces } from '@cxbox-ui/core'
 
 interface FunnelProps {
     meta: FunnelWidgetMeta
@@ -13,9 +12,7 @@ interface FunnelProps {
 
 function Funnel({ meta }: FunnelProps) {
     const { bcName } = meta
-    const { data } = useSelector((state: AppState) => {
-        return { data: state.data[bcName] }
-    })
+    const data = useAppSelector(state => state.data[bcName])
     const sortedData = data?.slice().sort(sorter)
     const funnelData = sortedData?.map(i => ({ id: i.funnelKey, value: i.amount }))
     const color = sortedData?.map(i => i.color) as Array<string>
@@ -48,7 +45,7 @@ function Funnel({ meta }: FunnelProps) {
     )
 }
 
-function sorter(a: DataItem, b: DataItem) {
+function sorter(a: interfaces.DataItem, b: interfaces.DataItem) {
     return parseInt(b.amount as string) - parseInt(a.amount as string)
 }
 

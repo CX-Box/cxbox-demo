@@ -1,10 +1,9 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
-import { AppState } from '../../interfaces/storeSlices'
+import { useAppSelector } from '@store'
 import SystemAlert from './components/SystemAlert'
 
 export default function SystemNotifications() {
-    const systemNotifications = useSelector((state: AppState) => state.view.systemNotifications)
+    const systemNotifications = useAppSelector(state => state.view.systemNotifications)
     return (
         <>
             {systemNotifications?.map(i => (

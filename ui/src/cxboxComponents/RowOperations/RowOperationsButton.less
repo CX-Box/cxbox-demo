@@ -1,0 +1,30 @@
+.floatMenu .dots svg {
+    width: 24px;
+    height: 24px;
+}
+
+.dots {
+    /* Do not remove; used as selector for tests */
+}
+
+.floatMenu {
+    display: none;
+    position: absolute;
+    right: 5px;
+    width: 24px;
+    height: 24px;
+    text-align: center;
+    border-radius: 50%;
+    z-index: 1000;
+    cursor: pointer;
+    background: #fff;
+    :global{
+        .ant-btn:not(.ant-btn-circle):not(.ant-btn-circle-outline).ant-btn-icon-only {
+            border: none;
+            width: 24px;
+            height: 24px;
+            padding: 0;
+            border-radius: 16px;
+        }
+    }
+}

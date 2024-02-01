@@ -4,9 +4,8 @@ import { Dispatch } from 'redux'
 import { Icon } from 'antd'
 import cn from 'classnames'
 import styles from './ColumnSort.less'
-import { BcSorter } from '@cxbox-ui/core/interfaces/filters'
-import { $do } from '../../actions/types'
-import { AppState } from '../../interfaces/storeSlices'
+import { actions, interfaces } from '@cxbox-ui/core'
+import { RootState } from '@store'
 
 export interface ColumnSortOwnProps {
     className?: string
@@ -15,7 +14,7 @@ export interface ColumnSortOwnProps {
 }
 
 export interface ColumnSortProps extends ColumnSortOwnProps {
-    sorter?: BcSorter
+    sorter?: interfaces.BcSorter
     /**
      * @deprecated TODO: Remove in 2.0.0 in favor of widget name
      */
@@ -25,7 +24,7 @@ export interface ColumnSortProps extends ColumnSortOwnProps {
      */
     page?: number
     infinitePagination: boolean
-    onSort: (bcName: string, sorter: BcSorter, page: number, widgetName: string, infinitePagination: boolean) => void
+    onSort: (bcName: string, sorter: interfaces.BcSorter, page: number, widgetName: string, infinitePagination: boolean) => void
 }
 
 export const ColumnSort: FunctionComponent<ColumnSortProps> = props => {
@@ -38,7 +37,7 @@ export const ColumnSort: FunctionComponent<ColumnSortProps> = props => {
     }
 
     const handleSort = () => {
-        const sorter: BcSorter = {
+        const sorter: interfaces.BcSorter = {
             fieldName: props.fieldKey,
             direction: !props.sorter ? 'desc' : props.sorter.direction === 'asc' ? 'desc' : 'asc'
         }
@@ -55,12 +54,12 @@ export const ColumnSort: FunctionComponent<ColumnSortProps> = props => {
     )
 }
 
-function mapStateToProps(store: AppState, ownProps: ColumnSortOwnProps) {
-    const widget = store.view.widgets.find(item => item.name === ownProps.widgetName)
+function mapStateToProps(state: RootState, ownProps: ColumnSortOwnProps) {
+    const widget = state.view.widgets.find(item => item.name === ownProps.widgetName)
     const bcName = widget?.bcName as string
-    const sorter = store.screen.sorters[bcName]?.find(item => item.fieldName === ownProps.fieldKey)
-    const page = store.screen.bo.bc[bcName]?.page
-    const infinitePagination = !!store.view.infiniteWidgets?.includes(ownProps.widgetName)
+    const sorter = state.screen.sorters[bcName]?.find(item => item.fieldName === ownProps.fieldKey)
+    const page = state.screen.bo.bc[bcName]?.page
+    const infinitePagination = !!state.view.infiniteWidgets?.includes(ownProps.widgetName)
     return {
         bcName,
         infinitePagination,
@@ -71,11 +70,11 @@ function mapStateToProps(store: AppState, ownProps: ColumnSortOwnProps) {
 
 function mapDispatchToProps(dispatch: Dispatch) {
     return {
-        onSort: (bcName: string, sorter: BcSorter, page: number, widgetName: string, infinitePagination: boolean) => {
-            dispatch($do.bcAddSorter({ bcName, sorter }))
+        onSort: (bcName: string, sorter: interfaces.BcSorter, page: number, widgetName: string, infinitePagination: boolean) => {
+            dispatch(actions.bcAddSorter({ bcName, sorter }))
             infinitePagination
                 ? dispatch(
-                      $do.bcFetchDataPages({
+                      actions.bcFetchDataPages({
                           bcName: bcName,
                           widgetName: widgetName,
                           from: 1,
@@ -83,7 +82,7 @@ function mapDispatchToProps(dispatch: Dispatch) {
                       })
                   )
                 : dispatch(
-                      $do.bcForceUpdate({
+                      actions.bcForceUpdate({
                           bcName: bcName,
                           widgetName: widgetName
                       })

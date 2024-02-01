@@ -2,18 +2,15 @@ import React, { FunctionComponent } from 'react'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { DataValue, WidgetTypes } from '@cxbox-ui/schema'
-import { MultivalueFieldMeta, WidgetMeta } from '@cxbox-ui/core/interfaces/widget'
-import { useAppSelector } from '../../hooks/useAppSelector'
-import { Store } from '@cxbox-ui/core/interfaces/store'
-import { $do } from '../../actions/types'
-import { MultivalueSingleValue } from '@cxbox-ui/core/interfaces/data'
+import { RootState, useAppSelector } from '@store'
+import { actions, interfaces } from '@cxbox-ui/core'
 import MultivalueTag from './MultivalueTag'
 
 export interface MultivalueFieldOwnProps {
     disabled?: boolean
     metaError?: string
     placeholder?: string
-    meta: MultivalueFieldMeta
+    meta: interfaces.MultivalueFieldMeta
     widgetName?: string
     value: DataValue
 }
@@ -28,13 +25,13 @@ export interface MultivalueFieldProps extends MultivalueFieldOwnProps {
         popupBcName: string,
         cursor: string,
         associateFieldKey: string,
-        newValue: MultivalueSingleValue[],
-        removedItem: MultivalueSingleValue
+        newValue: interfaces.MultivalueSingleValue[],
+        removedItem: interfaces.MultivalueSingleValue
     ) => void
-    onMultivalueAssocOpen: (bcName: string, widgetFieldMeta: MultivalueFieldMeta, page: number, widgetName?: string) => void
-    widgetFieldMeta: MultivalueFieldMeta
+    onMultivalueAssocOpen: (bcName: string, widgetFieldMeta: interfaces.MultivalueFieldMeta, page: number, widgetName?: string) => void
+    widgetFieldMeta: interfaces.MultivalueFieldMeta
     bcName: string
-    defaultValue: MultivalueSingleValue[]
+    defaultValue: interfaces.MultivalueSingleValue[]
 }
 
 /**
@@ -44,11 +41,13 @@ export interface MultivalueFieldProps extends MultivalueFieldOwnProps {
  */
 const MultivalueField: FunctionComponent<MultivalueFieldProps> = props => {
     // TODO 2.0.0: assocWidget should be found by widgetName
-    const assocWidget = useAppSelector(store =>
-        store.view.widgets.find((widget: WidgetMeta) => widget.bcName === props.popupBcName && widget.type === WidgetTypes.AssocListPopup)
+    const assocWidget = useAppSelector(state =>
+        state.view.widgets.find(
+            (widget: interfaces.WidgetMeta) => widget.bcName === props.popupBcName && widget.type === WidgetTypes.AssocListPopup
+        )
     )
 
-    const onRemove = (newValue: MultivalueSingleValue[], removedItem: MultivalueSingleValue) => {
+    const onRemove = (newValue: interfaces.MultivalueSingleValue[], removedItem: interfaces.MultivalueSingleValue) => {
         props.onRemove(props.bcName, props.popupBcName, props.cursor, props.fieldKey, newValue, removedItem)
     }
 
@@ -68,17 +67,17 @@ const MultivalueField: FunctionComponent<MultivalueFieldProps> = props => {
     )
 }
 
-export const emptyMultivalue: MultivalueSingleValue[] = []
+export const emptyMultivalue: interfaces.MultivalueSingleValue[] = []
 
-function mapStateToProps(store: Store, { value, ...ownProps }: MultivalueFieldOwnProps) {
+function mapStateToProps(state: RootState, { value, ...ownProps }: MultivalueFieldOwnProps) {
     const widgetFieldMeta = ownProps.meta
-    const widget = store.view.widgets.find(widget => widget.name === ownProps.widgetName)
+    const widget = state.view.widgets.find(widget => widget.name === ownProps.widgetName)
     const bcName = widget?.bcName as string
 
     const popupBcName = widgetFieldMeta?.popupBcName
     return {
-        defaultValue: Array.isArray(value) && value.length > 0 ? (value as MultivalueSingleValue[]) : emptyMultivalue,
-        cursor: store.screen.bo.bc[bcName]?.cursor as string,
+        defaultValue: Array.isArray(value) && value.length > 0 ? (value as interfaces.MultivalueSingleValue[]) : emptyMultivalue,
+        cursor: state.screen.bo.bc[bcName]?.cursor as string,
         page: 0,
         popupBcName: popupBcName as string,
         assocValueKey: widgetFieldMeta.assocValueKey as string,
@@ -90,9 +89,9 @@ function mapStateToProps(store: Store, { value, ...ownProps }: MultivalueFieldOw
 
 function mapDispatchToProps(dispatch: Dispatch) {
     return {
-        onMultivalueAssocOpen: (bcName: string, widgetFieldMeta: MultivalueFieldMeta, page: number, widgetName?: string) => {
+        onMultivalueAssocOpen: (bcName: string, widgetFieldMeta: interfaces.MultivalueFieldMeta, page: number, widgetName?: string) => {
             dispatch(
-                $do.showViewPopup({
+                actions.showViewPopup({
                     assocValueKey: widgetFieldMeta.assocValueKey,
                     bcName: widgetFieldMeta.popupBcName as string,
                     calleeBCName: bcName,
@@ -106,11 +105,11 @@ function mapDispatchToProps(dispatch: Dispatch) {
             popupBcName: string,
             cursor: string,
             associateFieldKey: string,
-            dataItem: MultivalueSingleValue[],
-            removedItem: MultivalueSingleValue
+            dataItem: interfaces.MultivalueSingleValue[],
+            removedItem: interfaces.MultivalueSingleValue
         ) => {
             dispatch(
-                $do.removeMultivalueTag({
+                actions.removeMultivalueTag({
                     bcName,
                     popupBcName,
                     cursor,

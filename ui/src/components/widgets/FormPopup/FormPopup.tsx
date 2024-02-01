@@ -1,41 +1,39 @@
-import { $do } from '@cxbox-ui/core'
-import { WidgetTypes } from '@cxbox-ui/core/interfaces/widget'
 import { Skeleton } from 'antd'
 import React, { useCallback } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { AppState } from '../../../interfaces/storeSlices'
 import styles from './FormPopup.less'
 import Form from '../Form/Form'
-import { WidgetFormPopupMeta } from '../../../interfaces/widget'
-import { OperationPreInvokeCustom } from '../../../interfaces/operation'
+import { WidgetFormPopupMeta } from '@interfaces/widget'
+import { OperationPreInvokeCustom } from '@interfaces/operation'
 import Popup from '../../Popup/Popup'
+import { useAppDispatch, useAppSelector } from '@store'
+import { actions, interfaces } from '@cxbox-ui/core'
 
 export interface FormPopupProps {
     meta: WidgetFormPopupMeta
 }
 
 export function FormPopup(props: FormPopupProps) {
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
     const bcName = props.meta.bcName
-    const popupData = useSelector((state: AppState) => state.view.popupData)
+    const popupData = useAppSelector(state => state.view.popupData)
     const showed = popupData?.bcName === bcName
-    const bc = useSelector((state: AppState) => state.screen.bo.bc[bcName])
+    const bc = useAppSelector(state => state.screen.bo.bc[bcName])
     const bcLoading = bc && bc.loading
 
     const onClose = useCallback(() => {
-        dispatch($do.bcCancelPendingChanges({ bcNames: [bcName] }))
-        dispatch($do.closeViewPopup({ bcName }))
+        dispatch(actions.bcCancelPendingChanges({ bcNames: [bcName] }))
+        dispatch(actions.closeViewPopup({ bcName }))
     }, [bcName, dispatch])
 
     const onSave = React.useCallback(() => {
         if (!bcLoading && popupData?.options?.operation) {
             dispatch(
-                $do.sendOperation({
+                actions.sendOperation({
                     ...popupData?.options?.operation,
                     confirm: 'ok'
                 })
             )
-            dispatch($do.closeViewPopup({ bcName }))
+            dispatch(actions.closeViewPopup({ bcName }))
         }
     }, [bcLoading, popupData?.options?.operation, dispatch, bcName])
 
@@ -65,7 +63,7 @@ export function FormPopup(props: FormPopupProps) {
                     <Form
                         meta={{
                             ...props.meta,
-                            type: WidgetTypes.Form
+                            type: interfaces.WidgetTypes.Form
                         }}
                     />
                 </div>

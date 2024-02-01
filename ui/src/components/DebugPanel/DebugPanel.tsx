@@ -1,16 +1,15 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import { Icon, Modal } from 'antd'
-import { useSelector } from 'react-redux'
 import cn from 'classnames'
-import { WidgetMeta } from '@cxbox-ui/core/interfaces/widget'
+import { interfaces } from '@cxbox-ui/core'
 import FormattedJSON from './components/FormattedJSON'
 import WidgetInfoLabel from './components/WidgetInfoLabel'
-import { AppState } from '../../interfaces/storeSlices'
 import styles from './DebugPanel.less'
+import { useAppSelector } from '@store'
 
 interface DebugPanelProps {
     className?: string
-    widgetMeta: WidgetMeta
+    widgetMeta: interfaces.WidgetMeta
 }
 
 const DebugPanel: React.FunctionComponent<DebugPanelProps> = props => {
@@ -23,9 +22,9 @@ const DebugPanel: React.FunctionComponent<DebugPanelProps> = props => {
         setIsContentVisible(prevState => !prevState)
     }, [])
 
-    const widget = useSelector((store: AppState) => store.view.widgets.find(i => i.name === widgetMeta.name))
-    const bc = useSelector((store: AppState) => store.screen.bo.bc[widgetMeta.bcName])
-    const data = useSelector((store: AppState) => store.data[widgetMeta.bcName])
+    const widget = useAppSelector(state => state.view.widgets.find(i => i.name === widgetMeta.name))
+    const bc = useAppSelector(state => state.screen.bo.bc[widgetMeta.bcName])
+    const data = useAppSelector(state => state.data[widgetMeta.bcName])
 
     const modalContent = useMemo(() => {
         return [

@@ -1,15 +1,15 @@
 import React from 'react'
-import { TableWidget } from '@cxbox-ui/core'
+import { TableWidget } from '@cxboxComponents'
 import { ColumnProps } from 'antd/es/table'
-import { DataItem } from '@cxbox-ui/core/interfaces/data'
 import Pagination from '../../ui/Pagination/Pagination'
-import { TableWidgetOwnProps } from '@cxbox-ui/core/components/widgets/TableWidget/TableWidget'
 import ColumnTitle from '../../ColumnTitle/ColumnTitle'
 import { useExpandableForm } from './hooks/useExpandableForm'
 import styles from './Table.less'
-import { AppWidgetMeta, AppWidgetTableMeta } from '../../../interfaces/widget'
+import { AppWidgetMeta, AppWidgetTableMeta } from '@interfaces/widget'
+import { TableWidgetOwnProps } from '@cxboxComponents/widgets/TableWidget/TableWidget'
+import { interfaces } from '@cxbox-ui/core'
 
-export type ControlColumn = { column: ColumnProps<DataItem>; position: 'left' | 'right' }
+export type ControlColumn = { column: ColumnProps<interfaces.DataItem>; position: 'left' | 'right' }
 interface TableProps extends TableWidgetOwnProps {
     meta: AppWidgetTableMeta
     primaryColumn?: ControlColumn

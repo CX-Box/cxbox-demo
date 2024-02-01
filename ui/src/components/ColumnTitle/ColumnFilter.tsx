@@ -1,22 +1,18 @@
 import React, { memo, useCallback, useEffect } from 'react'
 import { Popover } from 'antd'
-import { useDispatch, useSelector } from 'react-redux'
 import styles from './ColumnFilter.less'
 import cn from 'classnames'
 import { ReactComponent as FilterIcon } from './filter-solid.svg'
-import { PickListFieldMeta, WidgetTypes } from '@cxbox-ui/schema'
-import { WidgetListField, MultivalueFieldMeta } from '@cxbox-ui/core/interfaces/widget'
-import { RowMetaField } from '@cxbox-ui/core/interfaces/rowMeta'
-import { AppState } from '../../interfaces/storeSlices'
-import { FieldType } from '@cxbox-ui/core/interfaces/view'
-import { $do } from '../../actions/types'
+import { interfaces } from '@cxbox-ui/core'
 import FilterPopup from '../FilterPopup/FilterPopup'
 import FilterField from './FilterField'
+import { useAppDispatch, useAppSelector } from '@store'
+import { showViewPopup } from '@actions'
 
 interface ColumnFilterProps {
     widgetName: string
-    widgetMeta: WidgetListField
-    rowMeta: RowMetaField
+    widgetMeta: interfaces.WidgetListField
+    rowMeta: interfaces.RowMetaField
 
     components?: {
         popup: React.ReactNode
@@ -24,29 +20,32 @@ interface ColumnFilterProps {
 }
 
 function ColumnFilter({ widgetName, widgetMeta, rowMeta, components }: ColumnFilterProps) {
-    const widget = useSelector((state: AppState) => state.view.widgets.find(item => item.name === widgetName))
+    const widget = useAppSelector(state => state.view.widgets.find(item => item.name === widgetName))
     const bcName = widget?.bcName ?? ''
-    const listFields = widget?.fields as WidgetListField[]
-    const effectiveFieldMeta = (listFields?.find(item => item.key === widgetMeta.filterBy) ?? widgetMeta) as WidgetListField
+    const listFields = widget?.fields as interfaces.WidgetListField[]
+    const effectiveFieldMeta = (listFields?.find(item => item.key === widgetMeta.filterBy) ?? widgetMeta) as interfaces.WidgetListField
     const widgetOptions = widget?.options
-    const filter = useSelector((state: AppState) => state.screen.filters[bcName]?.find(item => item.fieldName === effectiveFieldMeta.key))
+    const filter = useAppSelector(state => state.screen.filters[bcName]?.find(item => item.fieldName === effectiveFieldMeta.key))
     const [value, setValue] = React.useState(filter?.value)
     const [visible, setVisible] = React.useState(false)
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
     React.useEffect(() => {
         setValue(filter?.value)
     }, [filter?.value])
 
-    const fieldMeta = effectiveFieldMeta as MultivalueFieldMeta | PickListFieldMeta
-    const fieldMetaMultivalue = effectiveFieldMeta as MultivalueFieldMeta
-    const fieldMetaPickListField = effectiveFieldMeta as PickListFieldMeta
-    const assocWidget = useSelector((state: AppState) =>
-        state.view.widgets.find(item => item.bcName === fieldMetaPickListField.popupBcName && item.type === WidgetTypes.AssocListPopup)
+    const fieldMeta = effectiveFieldMeta as interfaces.MultivalueFieldMeta | interfaces.PickListFieldMeta
+    const fieldMetaMultivalue = effectiveFieldMeta as interfaces.MultivalueFieldMeta
+    const fieldMetaPickListField = effectiveFieldMeta as interfaces.PickListFieldMeta
+    const assocWidget = useAppSelector(state =>
+        state.view.widgets.find(
+            item => item.bcName === fieldMetaPickListField.popupBcName && item.type === interfaces.WidgetTypes.AssocListPopup
+        )
     )
 
-    const isPickList = effectiveFieldMeta.type === FieldType.pickList
-    const isMultivalue = [FieldType.multivalue, FieldType.multivalueHover].includes(effectiveFieldMeta.type) || isPickList
+    const isPickList = effectiveFieldMeta.type === interfaces.FieldType.pickList
+    const isMultivalue =
+        [interfaces.FieldType.multivalue, interfaces.FieldType.multivalueHover].includes(effectiveFieldMeta.type) || isPickList
     const { associateFieldKeyForPickList } = useAssociateFieldKeyForPickList(fieldMetaPickListField)
 
     const handleVisibleChange = useCallback(
@@ -55,7 +54,7 @@ function ColumnFilter({ widgetName, widgetMeta, rowMeta, components }: ColumnFil
                 setVisible(false)
 
                 dispatch(
-                    $do.showViewPopup({
+                    showViewPopup({
                         bcName: fieldMeta.popupBcName as string,
                         widgetName: assocWidget?.name,
                         calleeBCName: widget?.bcName,
@@ -136,7 +135,7 @@ function ColumnFilter({ widgetName, widgetMeta, rowMeta, components }: ColumnFil
 
 export default memo(ColumnFilter)
 
-function getAssociateFieldKeyForPickList(fieldMeta: PickListFieldMeta) {
+function getAssociateFieldKeyForPickList(fieldMeta: interfaces.PickListFieldMeta) {
     if (!fieldMeta?.pickMap) {
         return null
     }
@@ -150,8 +149,8 @@ function getAssociateFieldKeyForPickList(fieldMeta: PickListFieldMeta) {
     }, null)
 }
 
-function useAssociateFieldKeyForPickList(fieldMeta: PickListFieldMeta) {
-    const isPickList = fieldMeta.type === FieldType.pickList
+function useAssociateFieldKeyForPickList(fieldMeta: interfaces.PickListFieldMeta) {
+    const isPickList = fieldMeta.type === interfaces.FieldType.pickList
     const associateFieldKeyForPickList = getAssociateFieldKeyForPickList(fieldMeta)
 
     useEffect(() => {

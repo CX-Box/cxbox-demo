@@ -7,11 +7,15 @@ import { useDispatch } from 'react-redux'
 import 'rc-image/assets/index.css'
 import { actions } from '@actions'
 import { AppWidgetMeta, DocumentPreviewBase64Option, DocumentPreviewDataUrlOption, DocumentPreviewFileUrlOption } from '@interfaces/widget'
-import { createDataUrl, getFileIconFromUrl, isImageFileType, isImageUrl } from '@utils/documentPreview'
+import { createDataUrl, getFileIconFromUrl, isImageFileType, isImageUrl, isPdfType, isPdfUrl } from '@utils/documentPreview'
 import { Empty, Icon } from 'antd'
 import { DataItem } from '@cxbox-ui/schema'
 import { useAppSelector } from '@store'
 import { useTranslation } from 'react-i18next'
+import { Document, Page, pdfjs } from 'react-pdf'
+
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`
+
 interface DocumentListProps {
     meta: AppWidgetMeta
 }
@@ -23,7 +27,7 @@ function DocumentList({ meta }: DocumentListProps) {
     const { t } = useTranslation()
     const { bcName } = meta
     const data = useAppSelector(state => state.data[bcName] ?? emptyData)
-    const { getUrl, getTitle, isImageFile, imageSizeOnList, popupWidget } = useDocumentPreviewOption(meta)
+    const { getUrl, getTitle, isImageFile, imageSizeOnList, popupWidget, isPdfFile } = useDocumentPreviewOption(meta)
 
     const dispatch = useDispatch()
 
@@ -49,6 +53,12 @@ function DocumentList({ meta }: DocumentListProps) {
         }
     }
 
+    const [numPages, setNumPages] = useState<number>()
+
+    function onDocumentLoadSuccess({ numPages }: { numPages: number }): void {
+        setNumPages(numPages)
+    }
+
     return (
         <div className={cn(styles.root)}>
             <div className={cn(styles.previewGroup)}>
@@ -66,6 +76,24 @@ function DocumentList({ meta }: DocumentListProps) {
                                     height={imageSizeOnList}
                                     onClick={createClickHandler(item.id)}
                                 />
+                            )
+                        } else if (isPdfFile(item)) {
+                            content = (
+                                <span
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'flex-start',
+                                        height: imageSizeOnList,
+                                        width: imageSizeOnList,
+                                        overflow: 'hidden'
+                                    }}
+                                    className={styles.fileWrapper}
+                                    onClick={createClickHandler(item.id)}
+                                >
+                                    <Document file={url}>
+                                        <Page height={imageSizeOnList} pageNumber={1} />
+                                    </Document>
+                                </span>
                             )
                         } else {
                             content = (
@@ -169,11 +197,26 @@ function useDocumentPreviewOption(meta: AppWidgetMeta) {
         return false
     }
 
+    const isPdfFile = (dataItem: Record<string, string>) => {
+        if (type === 'base64' || type === 'generatedFileUrl') {
+            const { fieldKeyForContentType } = documentPreview as DocumentPreviewBase64Option
+
+            return isPdfType(dataItem[fieldKeyForContentType])
+        } else if (type === 'fileUrl' || type === 'dataUrl') {
+            const { fieldKeyForUrl } = documentPreview as DocumentPreviewDataUrlOption | DocumentPreviewFileUrlOption
+
+            return isPdfUrl(dataItem[fieldKeyForUrl])
+        }
+
+        return false
+    }
+
     return {
         getTitle,
         getUrl,
         imageSizeOnList: documentPreview?.imageSizeOnList ?? defaultImageSize,
         popupWidget,
+        isPdfFile,
         isImageFile
     }
 }

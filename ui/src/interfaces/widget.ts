@@ -90,6 +90,7 @@ export interface AppWidgetMeta extends interfaces.WidgetMeta {
             edit: {
                 widget: string
             }
+            enabledPdfViewer?: boolean
             fieldKeyForImageTitle?: string
             imageSizeOnList?: number
         } & (

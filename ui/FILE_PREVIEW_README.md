@@ -1,6 +1,7 @@
 # Example meta for document viewing
 
 ## List of documents
+
 ```json
 {
   "name": "meetingDocumentList",
@@ -12,6 +13,7 @@
     "documentPreview": {
       "fieldKeyForBase64": "responsibleName",
       "fieldKeyForContentType": "responsibleName",
+      "enabledPdfViewer": false,
       "type": "base64",
       "edit": {
         "widget": "meetingPopupForm"
@@ -38,6 +40,7 @@
     {
       "label": "",
       "key": "agenda",
+      "previewType": "base64",
       "type": "documentPreview",
       "fieldKeyForContentType": "responsibleName"
     },
@@ -123,6 +126,7 @@
     fieldKeyForContentType: string - field containing the mime type for the file (type === base64 | type === generatedFileUrl)
     fieldKeyForUrl: string - field containing file url or data url (type !== base64)
     fieldKeyForImageTitle?: string - optional field, the value of which will be used as a signature
+    enabledPdfViewer?: boolean
     edit:{
       widget: string - the name of the popup widget that will open when you click on a file from the list
     }

@@ -5,8 +5,6 @@ import styles from './FileViewer.less'
 import ReactFileViewer from './ReactFileViewer'
 import cn from 'classnames'
 import PdfViewer from './PdfViewer'
-import parseDataUrl from 'parse-data-url'
-import { useObjectUrlForBase64 } from '@hooks/useObjectUrlForBase64'
 import { extension, lookup } from 'mime-types'
 import { saveAs } from 'file-saver'
 import { DocumentPreviewType } from '@interfaces/widget'
@@ -54,41 +52,33 @@ const FileViewer = forwardRef<FileViewerHandlers | undefined, FileViewerProps>(
     ) => {
         let viewer: JSX.Element
 
-        const { url: normalizedUrl = '', calculatedContentType, extension } = useUrlAdapter(previewType, url, contentType)
+        const { calculatedContentType, extension } = useContentTypeAdapter(previewType, url, contentType)
 
         useImperativeHandle(
             ref,
             () => {
                 return {
                     download: (fileNameWithoutExt: string) => {
-                        saveAs(normalizedUrl, `${fileNameWithoutExt}.${extension}`)
+                        saveAs(url, `${fileNameWithoutExt}.${extension}`)
                     }
                 }
             },
-            [extension, normalizedUrl]
+            [extension, url]
         )
 
         const displayType = getFileDisplayType(calculatedContentType)
 
         switch (displayType) {
             case 'image': {
-                viewer = (
-                    <Image
-                        preview={false}
-                        alt={alt}
-                        src={normalizedUrl}
-                        style={{ maxHeight: height }}
-                        wrapperClassName={styles.imageWrapper}
-                    />
-                )
+                viewer = <Image preview={false} alt={alt} src={url} style={{ maxHeight: height }} wrapperClassName={styles.imageWrapper} />
                 break
             }
             case 'pdf': {
-                viewer = <PdfViewer src={normalizedUrl} width={width} height={height} hideToolbar={hideToolbar} />
+                viewer = <PdfViewer src={url} width={width} height={height} hideToolbar={hideToolbar} />
                 break
             }
             default: {
-                viewer = <ReactFileViewer url={normalizedUrl} extension={extension} height={height} />
+                viewer = <ReactFileViewer url={url} extension={extension} height={height} />
 
                 break
             }
@@ -112,32 +102,15 @@ const FileViewer = forwardRef<FileViewerHandlers | undefined, FileViewerProps>(
 
 export default FileViewer
 
-/**
- * Checks the type of url (file url, data url). file url is returned unchanged. If data-url(base64), then an objectUrl is created based on it.
- *
- * @param fileOrDataUrl
- */
-function useUrlAdapter(previewType: DocumentPreviewType, fileOrDataUrl: string, contentType?: string) {
-    const parsedDataUrl = parseDataUrl(fileOrDataUrl)
-    const { objectUrl, file } = useObjectUrlForBase64(
-        parsedDataUrl && parsedDataUrl.base64 ? parsedDataUrl.data : null,
-        parsedDataUrl && parsedDataUrl.base64 ? parsedDataUrl.contentType : ''
-    )
-
+function useContentTypeAdapter(previewType: DocumentPreviewType, fileOrDataUrl: string, contentType?: string) {
     let calculatedContentType = contentType
 
     if (previewType === 'fileUrl') {
         calculatedContentType = lookup(getUrlExtension(fileOrDataUrl)) || ''
     }
 
-    if (parsedDataUrl && parsedDataUrl.base64) {
-        calculatedContentType = parsedDataUrl.contentType
-    }
-
     return {
-        url: parsedDataUrl && parsedDataUrl.base64 ? objectUrl : fileOrDataUrl,
         calculatedContentType: calculatedContentType,
-        extension: (contentType && extension(contentType)) || '',
-        fileExists: file instanceof Blob
+        extension: (calculatedContentType && extension(calculatedContentType)) || ''
     }
 }

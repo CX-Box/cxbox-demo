@@ -5,30 +5,34 @@ import { Icon, Skeleton } from 'antd'
 import { Button } from 'antd'
 import cn from 'classnames'
 import styles from './DocumentPreview.less'
-import { shallowEqual } from 'react-redux'
+import { shallowEqual, useDispatch } from 'react-redux'
 import { createDataUrl, isImageFileType } from '@utils/documentPreview'
 import { BaseFieldProps } from '@cxboxComponents/Field/Field'
 import { useAppSelector } from '@store'
+import { WidgetMeta } from '@cxbox-ui/core/dist/interfaces'
+import { actions } from '@actions'
 
 interface DocumentPreviewProps extends Omit<BaseFieldProps, 'meta'> {
     meta: DocumentPreviewFieldMeta
-    value?: string
+    value?: string | null
 }
 
 function DocumentPreview({ value, meta: fieldMeta, widgetName }: DocumentPreviewProps) {
     const previewType = fieldMeta.previewType
     const fieldKeyForContentType = fieldMeta.fieldKeyForContentType
     const fieldKeyForFileName = fieldMeta.fieldKeyForFileName
-    const { contentType, fileName } = useAppSelector(state => {
+    const { contentType, fileName, widget } = useAppSelector(state => {
         const widget = state.view.widgets.find(widget => widget.name === widgetName)
         const bc = widget?.bcName ? state.screen.bo.bc[widget.bcName] : undefined
         const record = bc ? state.data[bc.name]?.find(i => i.id === bc.cursor) : undefined
 
         return {
-            contentType: record?.[fieldKeyForContentType as string] as string,
-            fileName: record?.[fieldKeyForFileName as string] as string
+            widget,
+            contentType: record?.[fieldKeyForContentType as string] as string | null,
+            fileName: record?.[fieldKeyForFileName as string] as string | null
         }
     }, shallowEqual)
+    const { onNext, onPrevious, disableCarouselButtons } = useCarouselButtons(widget)
 
     const { zoomIn, zoomOut, resetZoom, zoom, toggleFullScreen, isFullScreen, isNormalZoom, isMinZoom, isMaxZoom } = useFileOperation()
 
@@ -36,13 +40,14 @@ function DocumentPreview({ value, meta: fieldMeta, widgetName }: DocumentPreview
 
     const handleDownloadFile = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
         event.preventDefault()
-        fileViewerRef.current?.download(fileName)
+        fileViewerRef.current?.download(fileName ?? 'unknown')
     }
-    const url = previewType === 'base64' ? createDataUrl(contentType, value) : value
+    const url =
+        previewType === 'base64' && typeof contentType === 'string' && typeof value === 'string' ? createDataUrl(contentType, value) : value
     // TODO: Rewrite the implementation. Use one FileViewer component. Combine simpleViewer and fullScreenViewer.
     const simpleViewer = (
         <>
-            {url && !isFullScreen ? (
+            {url && contentType && !isFullScreen ? (
                 <FileViewer
                     ref={fileViewerRef}
                     onDoubleClick={toggleFullScreen}
@@ -55,11 +60,17 @@ function DocumentPreview({ value, meta: fieldMeta, widgetName }: DocumentPreview
                 <Skeleton />
             )}
             <div className={styles.simpleToolBar}>
+                <Button disabled={disableCarouselButtons} onClick={onPrevious}>
+                    <Icon type="left" />
+                </Button>
                 <Button disabled={!url} onClick={toggleFullScreen}>
                     <Icon type="fullscreen" />
                 </Button>
                 <Button disabled={!url} onClick={handleDownloadFile}>
                     <Icon type="download" />
+                </Button>
+                <Button disabled={disableCarouselButtons} onClick={onNext}>
+                    <Icon type="right" />
                 </Button>
             </div>
         </>
@@ -97,7 +108,7 @@ function DocumentPreview({ value, meta: fieldMeta, widgetName }: DocumentPreview
     }
 
     const fullScreenViewer =
-        url && isFullScreen ? (
+        url && contentType && isFullScreen ? (
             <div className={cn(styles.fullScreen)} onClick={handleOuterZoneClick}>
                 <Button className={cn(styles.closeButton)} type="dashed" shape="circle" icon="close" onClick={handleCloseClick} />
                 <FileViewer
@@ -167,5 +178,65 @@ function useFileOperation() {
         isMinZoom,
         isNormalZoom,
         toggleFullScreen
+    }
+}
+
+function useCarouselButtons(widget?: WidgetMeta) {
+    const { bc, record, data } = useAppSelector(state => {
+        const bc = widget?.bcName ? state.screen.bo.bc[widget.bcName] : undefined
+        const record = bc ? state.data[bc.name]?.find(i => i.id === bc.cursor) : undefined
+        const data = bc ? state.data[bc.name] : undefined
+
+        return {
+            bc: bc,
+            record: record,
+            data: data
+        }
+    }, shallowEqual)
+
+    const dispatch = useDispatch()
+
+    const disableCarouselButtons = data?.length === 0
+
+    const onPrevious = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+        event.preventDefault()
+        if (bc && data && record && data.length > 1) {
+            let index = data.indexOf(record)
+            if (index === 0) {
+                index = data.length - 1
+            } else {
+                index--
+            }
+            dispatch(
+                actions.bcSelectRecord({
+                    bcName: bc.name,
+                    cursor: data[index].id as string
+                })
+            )
+        }
+    }
+
+    const onNext = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+        event.preventDefault()
+        if (bc && data && record && data.length > 1) {
+            let index = data.indexOf(record)
+            if (index === data.length - 1) {
+                index = 0
+            } else {
+                index++
+            }
+            dispatch(
+                actions.bcSelectRecord({
+                    bcName: bc.name,
+                    cursor: data[index].id as string
+                })
+            )
+        }
+    }
+
+    return {
+        onNext,
+        onPrevious,
+        disableCarouselButtons
     }
 }

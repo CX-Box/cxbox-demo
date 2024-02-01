@@ -24,7 +24,7 @@ export const base64toBlob = (base64: string, contentType: string = '', sliceSize
     return new Blob(byteArrays, { type: contentType })
 }
 
-export function createDataUrl(contentType: string, base64: string = '') {
+export function createDataUrl(contentType: string | null, base64: string | null) {
     // data:[<mediatype>][;base64],<data>
     return `data:${contentType};base64,${base64}`
 }

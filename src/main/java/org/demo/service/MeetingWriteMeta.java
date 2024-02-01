@@ -38,6 +38,8 @@ public class MeetingWriteMeta extends FieldMetaBuilder<MeetingDTO> {
 		fields.setEnabled(MeetingDTO_.type);
 		fields.setEnabled(MeetingDTO_.object);
 		fields.setEnabled(MeetingDTO_.additionalContacts);
+		fields.setEnabled(MeetingDTO_.status);
+		fields.setEnumValues(MeetingDTO_.status, MeetingStatus.values());
 		if (fields.get(MeetingDTO_.status) != null && MeetingStatus.IN_COMPLETION.equals(fields.get(MeetingDTO_.status)
 				.getCurrentValue())) {
 			fields.setEnabled(

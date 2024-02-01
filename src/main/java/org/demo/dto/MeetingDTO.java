@@ -115,7 +115,7 @@ public class MeetingDTO extends DataResponseDTO {
 		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy hh:mm");
 
 		this.id = meeting.getId().toString();
-		this.link = "\uD83D\uDD89";
+		this.link = "🖉";
 		this.agenda = meeting.getAgenda();
 		this.startDateTime = meeting.getStartDateTime();
 		this.endDateTime = meeting.getEndDateTime();

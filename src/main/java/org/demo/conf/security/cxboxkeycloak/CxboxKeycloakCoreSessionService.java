@@ -1,11 +1,10 @@
 package org.demo.conf.security.cxboxkeycloak;
 
+import java.util.stream.Collectors;
 import org.cxbox.api.service.session.CxboxUserDetailsInterface;
 import org.cxbox.api.service.tx.TransactionService;
 import org.cxbox.core.util.session.CoreSessionServiceImpl;
 import org.cxbox.model.core.dao.JpaDao;
-import org.cxbox.model.core.entity.User;
-import org.cxbox.model.core.entity.User_;
 import org.demo.entity.AppUser;
 import org.demo.entity.AppUser_;
 import org.keycloak.adapters.springsecurity.account.SimpleKeycloakAccount;
@@ -15,8 +14,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
-
-import java.util.stream.Collectors;
 
 @Primary
 @Component

@@ -12,7 +12,7 @@ import org.demo.entity.Meeting;
 @Getter
 @AllArgsConstructor
 public enum MeetingStatus {
-	IN_COMPLETION("In_completion", "Complete") {
+	IN_COMPLETION("Рассмотрение", "Рассмотрение") {
 		@Override
 		public List<MeetingStatus> available(@NonNull Meeting meeting) {
 			return Collections.singletonList(COMPLETED);
@@ -24,7 +24,7 @@ public enum MeetingStatus {
 		}
 	},
 
-	COMPLETED("Completed", "Finish") {
+	COMPLETED("Завершена", "Завершить") {
 		@Override
 		public List<MeetingStatus> available(@NonNull Meeting meeting) {
 			return Collections.singletonList(IN_PROGRESS);
@@ -36,7 +36,7 @@ public enum MeetingStatus {
 		}
 	},
 
-	IN_PROGRESS("In progress", "Start Meeting") {
+	IN_PROGRESS("Ожидание", "Ожидание") {
 		@Override
 		public List<MeetingStatus> available(@NonNull Meeting meeting) {
 			return Arrays.asList(IN_COMPLETION, CANCELLED);
@@ -47,7 +47,7 @@ public enum MeetingStatus {
 			meeting.setStatus(meetingStatus);
 		}
 	},
-	NOT_STARTED("Not started", "") {
+	NOT_STARTED("Не начата", "") {
 		@Override
 		public List<MeetingStatus> available(@NonNull Meeting meeting) {
 			return Arrays.asList(CANCELLED, IN_PROGRESS);
@@ -58,7 +58,7 @@ public enum MeetingStatus {
 			meeting.setStatus(meetingStatus);
 		}
 	},
-	CANCELLED("Cancelled", "Cancel Meeting") {
+	CANCELLED("Отменена", "Отменить") {
 		@Override
 		public List<MeetingStatus> available(@NonNull Meeting meeting) {
 			return Collections.singletonList(IN_PROGRESS);

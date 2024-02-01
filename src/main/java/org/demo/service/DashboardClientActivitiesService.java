@@ -2,7 +2,13 @@
 
 package org.demo.service;
 
-import org.cxbox.model.core.entity.User_;
+import java.util.Set;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
+import org.cxbox.core.crudma.bc.BusinessComponent;
+import org.cxbox.core.crudma.impl.VersionAwareResponseService;
+import org.cxbox.core.dto.rowmeta.ActionResultDTO;
+import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.demo.dto.DashboardClientActivitiesDTO;
 import org.demo.entity.AppUser_;
 import org.demo.entity.Client;
@@ -11,13 +17,6 @@ import org.demo.entity.DashboardFilter;
 import org.demo.entity.DashboardFilter_;
 import org.demo.entity.enums.FieldOfActivity;
 import org.demo.repository.DashboardFilterRepository;
-import org.cxbox.core.crudma.bc.BusinessComponent;
-import org.cxbox.core.crudma.impl.VersionAwareResponseService;
-import org.cxbox.core.dto.rowmeta.ActionResultDTO;
-import org.cxbox.core.dto.rowmeta.CreateResult;
-import java.util.Set;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;

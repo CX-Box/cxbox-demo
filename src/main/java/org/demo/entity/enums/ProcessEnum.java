@@ -10,9 +10,12 @@ import com.fasterxml.jackson.annotation.JsonValue;
 @Getter
 @AllArgsConstructor
 public enum ProcessEnum {
-	HIGH("High"),
-	MIDDLE("Middle"),
-	LOW("Low");
+	CURATOR_MISTAKE("Окончание в связи с ошибкой куратора"),
+	CLIENT_MISTAKE("Окончание в связи с ошибкой клиента"),
+	DONE_WITH_MONEY_BACK("Возврат премии при досрочном расторжении договора"),
+	DONE_WITHOUT_MONEY_BACK("Реализация с возвратом ДС"),
+	CANCEL("Отмена прекращения"),
+	DONE("Реализация");
 
 	@JsonValue
 	private final String value;

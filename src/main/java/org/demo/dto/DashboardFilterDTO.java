@@ -4,6 +4,9 @@ import com.google.common.base.Splitter;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.cxbox.api.data.dto.DataResponseDTO;
 import org.cxbox.core.dto.multivalue.MultivalueField;
@@ -11,16 +14,12 @@ import org.cxbox.core.util.filter.SearchParameter;
 import org.cxbox.core.util.filter.provider.impl.DateTimeValueProvider;
 import org.cxbox.core.util.filter.provider.impl.LongValueProvider;
 import org.cxbox.core.util.filter.provider.impl.StringValueProvider;
-import org.cxbox.model.core.entity.User;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.demo.entity.AppUser;
 import org.demo.entity.DashboardFilter;
 import org.demo.entity.enums.MemberTypesEnum;
 import org.demo.entity.enums.TaskResolutionsEnum;
 import org.demo.entity.enums.TaskStatusesEnum;
-import org.demo.entity.enums.TaskTypesEnum;
+import org.demo.entity.enums.TypeEnum;
 
 @Getter
 @Setter
@@ -94,8 +93,8 @@ public class DashboardFilterDTO extends DataResponseDTO {
 		this.startDateTimeTo = user.getStartDateTimeTo();
 		this.taskTypes = Optional.ofNullable(user.getTaskTypes())
 				.map(el -> Splitter.on(",").trimResults().omitEmptyStrings().splitToList(el).stream()
-						.map(TaskTypesEnum::valueOf)
-						.collect(MultivalueField.toMultivalueField(Enum::name, TaskTypesEnum::getValue)))
+						.map(TypeEnum::valueOf)
+						.collect(MultivalueField.toMultivalueField(Enum::name, TypeEnum::getValue)))
 				.orElse(null);
 		this.taskResolutions = Optional.ofNullable(user.getTaskResolutions())
 				.map(el -> Splitter.on(",").trimResults().omitEmptyStrings().splitToList(el).stream()

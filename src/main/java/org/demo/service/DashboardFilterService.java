@@ -1,10 +1,17 @@
 package org.demo.service;
 
-import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
-import org.cxbox.api.data.ResultPage;
+import org.cxbox.core.crudma.bc.BusinessComponent;
+import org.cxbox.core.crudma.impl.VersionAwareResponseService;
+import org.cxbox.core.dto.multivalue.MultivalueField;
 import org.cxbox.core.dto.multivalue.MultivalueFieldSingleValue;
+import org.cxbox.core.dto.rowmeta.ActionResultDTO;
+import org.cxbox.core.dto.rowmeta.CreateResult;
+import org.cxbox.core.service.action.Actions;
+import org.cxbox.core.util.session.SessionService;
+import org.cxbox.model.core.entity.User_;
 import org.demo.dto.DashboardFilterDTO;
 import org.demo.dto.DashboardFilterDTO_;
 import org.demo.entity.AppUser;
@@ -14,19 +21,9 @@ import org.demo.entity.enums.FieldOfActivity;
 import org.demo.entity.enums.MemberTypesEnum;
 import org.demo.entity.enums.TaskResolutionsEnum;
 import org.demo.entity.enums.TaskStatusesEnum;
-import org.demo.entity.enums.TaskTypesEnum;
+import org.demo.entity.enums.TypeEnum;
 import org.demo.repository.AppUserRepository;
 import org.demo.repository.DashboardFilterRepository;
-import org.cxbox.core.crudma.bc.BusinessComponent;
-import org.cxbox.core.crudma.impl.VersionAwareResponseService;
-import org.cxbox.core.dto.multivalue.MultivalueField;
-import org.cxbox.core.dto.rowmeta.ActionResultDTO;
-import org.cxbox.core.dto.rowmeta.CreateResult;
-import org.cxbox.core.service.action.Actions;
-import org.cxbox.core.util.session.SessionService;
-import org.cxbox.model.core.entity.User;
-import org.cxbox.model.core.entity.User_;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -84,7 +81,7 @@ DashboardFilterService extends VersionAwareResponseService<DashboardFilterDTO, D
 			entity.setTaskTypes(
 					data.getTaskTypes().getValues()
 							.stream()
-							.map(v -> TaskTypesEnum.getByValue(v.getValue()))
+							.map(v -> TypeEnum.getByValue(v.getValue()))
 							.map(Enum::name)
 							.collect(Collectors.joining(",", ",", ",")));
 		}

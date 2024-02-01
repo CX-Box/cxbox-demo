@@ -10,9 +10,11 @@ import com.fasterxml.jackson.annotation.JsonValue;
 @Getter
 @AllArgsConstructor
 public enum TypeEnum {
-	HIGH("High"),
-	MIDDLE("Middle"),
-	LOW("Low");
+	PAY_REQ("Заявка на платеж"),
+	AGREEMENT_CHANGE("Изменение условий договора"),
+	OPERATION("Операционная заявка"),
+	AGREEMENT_STOP("Прекращение договора"),
+	DOCS_REVIEW("уточнение недостающих документов");
 
 	@JsonValue
 	private final String value;

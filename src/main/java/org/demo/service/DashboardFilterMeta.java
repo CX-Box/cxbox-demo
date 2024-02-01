@@ -11,7 +11,7 @@ import java.util.Arrays;
 import org.demo.entity.enums.MemberTypesEnum;
 import org.demo.entity.enums.TaskResolutionsEnum;
 import org.demo.entity.enums.TaskStatusesEnum;
-import org.demo.entity.enums.TaskTypesEnum;
+import org.demo.entity.enums.TypeEnum;
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S3252", "java:S1186"})
@@ -29,8 +29,8 @@ public class DashboardFilterMeta extends FieldMetaBuilder<DashboardFilterDTO> {
 						.toArray(String[]::new)
 		);
 		fields.setEnabled(DashboardFilterDTO_.taskResolutions);
-		fields.setDictionaryTypeWithCustomValues(DashboardFilterDTO_.taskTypes, Arrays.stream(TaskTypesEnum.values())
-				.map(TaskTypesEnum::getValue)
+		fields.setDictionaryTypeWithCustomValues(DashboardFilterDTO_.taskTypes, Arrays.stream(TypeEnum.values())
+				.map(TypeEnum::getValue)
 				.toArray(String[]::new));
 		fields.setEnabled(DashboardFilterDTO_.taskTypes);
 		fields.setEnabled(DashboardFilterDTO_.startDateTimeTo);

@@ -10,9 +10,12 @@ import com.fasterxml.jackson.annotation.JsonValue;
 @Getter
 @AllArgsConstructor
 public enum ResolutionEnum {
-	HIGH("High"),
-	MIDDLE("Middle"),
-	LOW("Low");
+	CURATOR_MISTAKE("Ошибка куратора"),
+	CLIENT_MISTAKE("Ошибка клиента"),
+	DONE_WITH_MONEY_BACK("Реализована с возвратом ДС"),
+	DONE_WITHOUT_MONEY_BACK("Реализована без возврата ДС"),
+	CANCEL("Отмена прекращения"),
+	DONE("Реализована");
 
 	@JsonValue
 	private final String value;

@@ -1,19 +1,21 @@
 package org.demo.conf.security.cxboxkeycloak;
 
-import org.demo.entity.AppUser;
-import org.demo.entity.AppUser_;
-import org.demo.entity.DashboardFilter;
-import org.demo.repository.AppUserRepository;
-import org.demo.repository.DepartmentRepository;
-import org.demo.repository.UserRepository;
+import static org.cxbox.api.service.session.InternalAuthorizationService.VANILLA;
+
+import java.util.ArrayList;
+import java.util.Set;
+import lombok.extern.slf4j.Slf4j;
 import org.cxbox.api.data.dictionary.LOV;
 import org.cxbox.api.service.session.InternalAuthorizationService;
 import org.cxbox.api.service.tx.TransactionService;
 import org.cxbox.core.service.impl.UserRoleService;
 import org.cxbox.core.util.SQLExceptions;
 import org.cxbox.model.core.dao.JpaDao;
-import org.cxbox.model.core.entity.*;
-import lombok.extern.slf4j.Slf4j;
+import org.demo.entity.AppUser;
+import org.demo.entity.AppUser_;
+import org.demo.entity.DashboardFilter;
+import org.demo.repository.AppUserRepository;
+import org.demo.repository.DepartmentRepository;
 import org.hibernate.LockOptions;
 import org.keycloak.adapters.springsecurity.account.SimpleKeycloakAccount;
 import org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticationProvider;
@@ -25,11 +27,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.Set;
-
-import static org.cxbox.api.service.session.InternalAuthorizationService.VANILLA;
 
 @SuppressWarnings({"java:S1874", "java:S5804", "SpringJavaAutowiredFieldsWarningInspection"})
 @Component

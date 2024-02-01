@@ -38,7 +38,7 @@ function DocumentPreview({ value, meta: fieldMeta, widgetName }: DocumentPreview
         event.preventDefault()
         fileViewerRef.current?.download(fileName)
     }
-    const url = previewType === 'base64' ? createDataUrl(contentType, value) : value // MY переписать
+    const url = previewType === 'base64' ? createDataUrl(contentType, value) : value
     // TODO: Rewrite the implementation. Use one FileViewer component. Combine simpleViewer and fullScreenViewer.
     const simpleViewer = (
         <>

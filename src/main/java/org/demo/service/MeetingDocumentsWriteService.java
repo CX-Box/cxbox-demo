@@ -23,6 +23,7 @@ import org.demo.repository.MeetingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Base64Utils;
 
 @SuppressWarnings({"java:S3252", "java:S1186"})
 @Service
@@ -33,6 +34,9 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 
 	@Autowired
 	private MeetingRepository meetingRepository;
+
+	@Autowired
+	CustomFileServices customFileServices;
 
 	public MeetingDocumentsWriteService() {
 		super(MeetingDocumentsDTO.class, MeetingDocuments.class, null, MeetingDocumentsWriteMeta.class);
@@ -63,6 +67,10 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 		}
 		if (data.isFieldChanged(MeetingDocumentsDTO_.file)) {
 			entity.setFile(data.getFile());
+			if (data.getFileId() != null) {
+				entity.setFieldKeyForContentType(customFileServices.getStatData(data.getFileId()).contentType());
+				entity.setFieldKeyForBase64(Base64Utils.encode(customFileServices.getObject(data.getFileId())));
+			}
 		}
 		setIfChanged(data, notes, entity::setNotes);
 

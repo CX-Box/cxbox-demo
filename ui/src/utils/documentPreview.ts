@@ -50,6 +50,10 @@ export const isImageUrl = (url: string = '') => {
     return isImageFileUrl(url) || isImageDataUrl(url)
 }
 
+export const isPdfUrl = (url: string = '') => {
+    return false // TODO дописать
+}
+
 export const isExcelType = (contentTypeOrExtension: string) => {
     return [types.xls, types.xlxs].includes(contentTypeOrExtension) || /(xls|xlsx)$/i.test(contentTypeOrExtension)
 }

@@ -5,7 +5,6 @@
   "bc": "meetingDocumentEdit",
   "fields": [
     {
-      "title": "Документ",
       "title": "Field Key For Content Type",
       "key": "fieldKeyForContentType",
       "type": "hidden"

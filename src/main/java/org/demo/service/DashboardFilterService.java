@@ -14,8 +14,6 @@ import org.cxbox.core.dto.rowmeta.PostAction;
 import org.cxbox.core.service.action.Actions;
 import org.cxbox.core.util.session.SessionService;
 import org.cxbox.model.core.entity.User_;
-import org.demo.controller.CxboxRestController;
-import org.demo.dto.ContactDTO;
 import org.demo.dto.DashboardFilterDTO;
 import org.demo.dto.DashboardFilterDTO_;
 import org.demo.entity.AppUser;

@@ -5,6 +5,17 @@
   "bc": "meetingDocumentEdit",
   "fields": [
     {
+      "label": "Комментарий",
+      "key": "notes",
+      "type": "input"
+    },
+    {
+      "label": "",
+      "key": "documentType",
+      "type": "hint"
+    },
+
+    {
       "label": "",
       "key": "fieldKeyForBase64",
       "previewType": "base64",
@@ -15,6 +26,22 @@
   "options": {
     "layout": {
       "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "documentType",
+              "span": 24
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "notes",
+              "span": 24
+            }
+          ]
+        },
         {
           "cols": [
             {

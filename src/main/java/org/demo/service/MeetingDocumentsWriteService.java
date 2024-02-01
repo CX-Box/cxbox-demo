@@ -106,12 +106,6 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 						)))
 				.add()
 				.cancelCreate().text("Cancel").available(bc -> true).add()
-				.newAction()
-				.action("multiFileUpload", "Add files")
-				.scope(ActionScope.BC)
-				.withoutAutoSaveBefore()
-				.invoker((bc, data) -> new ActionResultDTO<>())
-				.add()
 				.build();
 	}
 

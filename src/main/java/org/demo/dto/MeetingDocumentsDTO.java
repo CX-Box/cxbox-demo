@@ -22,14 +22,12 @@ public class MeetingDocumentsDTO extends DataResponseDTO {
 
 	private String fileId;
 
-	@SearchParameter(name = "documentType", provider = EnumValueProvider.class)
-	private DocumentTypeEnum documentType;
-
-	private String type;
-
 	private String fieldKeyForBase64;
 
 	private String fieldKeyForContentType;
+
+	@SearchParameter(name = "documentType", provider = EnumValueProvider.class)
+	private DocumentTypeEnum documentType;
 
 	public MeetingDocumentsDTO(MeetingDocuments meeting) {
 		this.id = meeting.getId().toString();

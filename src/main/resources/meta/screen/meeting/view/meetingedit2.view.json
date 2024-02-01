@@ -1,8 +1,8 @@
 {
-  "name": "meetingedit",
+  "name": "meetingedit2",
   "title": "Meeting Edit",
   "template": "DashboardView",
-  "url": "/screen/meeting/view/meetingedit",
+  "url": "/screen/meeting/view/meetingedit2",
   "widgets": [
     {
       "widgetName": "userPickListPopup",
@@ -25,43 +25,28 @@
       "gridWidth": 24
     },
     {
-      "widgetName": "responsiblePickListPopup",
-      "position": 40,
-      "gridWidth": 24
-    },
-    {
-      "widgetName": "clientPickListPopup",
-      "position": 50,
-      "gridWidth": 24
-    },
-    {
-      "widgetName": "contactPickListPopup",
-      "position": 60,
-      "gridWidth": 24
-    },
-    {
       "widgetName": "meetingEdit",
       "position": 70,
       "gridWidth": 24
     },
     {
-      "widgetName": "meetingDocumentsList",
+      "widgetName": "meetingDocumentPopupForm",
       "position": 80,
       "gridWidth": 24
     },
     {
+      "widgetName": "meetingDocumentsList",
+      "position": 86,
+      "gridWidth": 12
+    },
+    {
+      "widgetName": "meetingDocumentsViewList",
+      "position": 86,
+      "gridWidth": 12
+    },
+    {
       "widgetName": "meetingEditResult",
       "position": 100,
-      "gridWidth": 24
-    },
-    {
-      "widgetName": "meetingResultFormPopup",
-      "position": 110,
-      "gridWidth": 24
-    },
-    {
-      "widgetName": "meetingDocumentsFormForList",
-      "position": 120,
       "gridWidth": 24
     }
   ],

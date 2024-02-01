@@ -18,6 +18,14 @@
             "viewName": "meetingview"
           }
         ]
+      },
+      {
+        "title": "Формуляр 2",
+        "child": [
+          {
+            "viewName": "meetingedit2"
+          }
+        ]
       }
     ]
   }

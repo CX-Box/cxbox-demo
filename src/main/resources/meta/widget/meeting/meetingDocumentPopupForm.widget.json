@@ -13,6 +13,17 @@
     }
   ],
   "options": {
-   }
-
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "fieldKeyForBase64",
+              "span": 24
+            }
+          ]
+        }
+      ]
+    }
+  }
 }

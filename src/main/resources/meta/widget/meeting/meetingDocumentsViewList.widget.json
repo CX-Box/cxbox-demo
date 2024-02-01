@@ -4,6 +4,11 @@
   "type": "DocumentList",
   "bc": "meetingDocumentEdit",
   "fields": [
+    {
+      "title": "Notes",
+      "key": "notes",
+      "type": "hidden"
+    }
   ],
   "options": {
     "documentPreview": {

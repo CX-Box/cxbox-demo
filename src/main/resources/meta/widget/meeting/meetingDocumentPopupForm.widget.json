@@ -5,6 +5,11 @@
   "bc": "meetingDocumentEdit",
   "fields": [
     {
+      "label": "Notes",
+      "key": "notes",
+      "type": "input"
+    },
+    {
       "label": "",
       "key": "fieldKeyForBase64",
       "previewType": "base64",
@@ -15,6 +20,14 @@
   "options": {
     "layout": {
       "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "notes",
+              "span": 24
+            }
+          ]
+        },
         {
           "cols": [
             {

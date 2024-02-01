@@ -8,9 +8,10 @@ import 'rc-image/assets/index.css'
 import { actions } from '@actions'
 import { AppWidgetMeta, DocumentPreviewBase64Option, DocumentPreviewDataUrlOption, DocumentPreviewFileUrlOption } from '@interfaces/widget'
 import { createDataUrl, getFileIconFromUrl, isImageFileType, isImageUrl } from '@utils/documentPreview'
-import { Icon } from 'antd'
+import { Empty, Icon } from 'antd'
 import { DataItem } from '@cxbox-ui/schema'
 import { useAppSelector } from '@store'
+import { useTranslation } from 'react-i18next'
 interface DocumentListProps {
     meta: AppWidgetMeta
 }
@@ -19,11 +20,10 @@ const emptyData: DataItem[] = []
 const defaultImageSize = 200
 
 function DocumentList({ meta }: DocumentListProps) {
+    const { t } = useTranslation()
     const { bcName } = meta
-
-    const { getUrl, getTitle, isImageFile, imageSizeOnList, popupWidget } = useDocumentPreviewOption(meta)
-
     const data = useAppSelector(state => state.data[bcName] ?? emptyData)
+    const { getUrl, getTitle, isImageFile, imageSizeOnList, popupWidget } = useDocumentPreviewOption(meta)
 
     const dispatch = useDispatch()
 
@@ -52,42 +52,48 @@ function DocumentList({ meta }: DocumentListProps) {
     return (
         <div className={cn(styles.root)}>
             <div className={cn(styles.previewGroup)}>
-                {data.map((item: Record<string, any>, index) => {
-                    let content: JSX.Element
-                    const url = getUrl(item)
+                {data.length > 0 ? (
+                    data.map((item: Record<string, any>, index) => {
+                        let content: JSX.Element
+                        const url = getUrl(item)
 
-                    if (isImageFile(item)) {
-                        content = (
-                            <Image
-                                preview={false}
-                                src={url}
-                                width={imageSizeOnList}
-                                height={imageSizeOnList}
-                                onClick={createClickHandler(item.id)}
-                            />
-                        )
-                    } else {
-                        content = (
-                            <span
-                                style={{
-                                    height: imageSizeOnList,
-                                    width: imageSizeOnList
-                                }}
-                                className={styles.fileWrapper}
-                                onClick={createClickHandler(item.id)}
-                            >
-                                <Icon type={getFileIconFromUrl(url)} />
-                            </span>
-                        )
-                    }
+                        if (isImageFile(item)) {
+                            content = (
+                                <Image
+                                    preview={false}
+                                    src={url}
+                                    width={imageSizeOnList}
+                                    height={imageSizeOnList}
+                                    onClick={createClickHandler(item.id)}
+                                />
+                            )
+                        } else {
+                            content = (
+                                <span
+                                    style={{
+                                        height: imageSizeOnList,
+                                        width: imageSizeOnList
+                                    }}
+                                    className={styles.fileWrapper}
+                                    onClick={createClickHandler(item.id)}
+                                >
+                                    <Icon type={getFileIconFromUrl(url)} />
+                                </span>
+                            )
+                        }
 
-                    return (
-                        <div className={styles.card} key={item.id ?? index} style={{ width: imageSizeOnList }}>
-                            {content}
-                            {getTitle(item)}
-                        </div>
-                    )
-                })}
+                        return (
+                            <div className={styles.card} key={item.id ?? index} style={{ width: imageSizeOnList }}>
+                                {content}
+                                {getTitle(item)}
+                            </div>
+                        )
+                    })
+                ) : (
+                    <div className={styles.empty}>
+                        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={t('No data')} />
+                    </div>
+                )}
             </div>
             <Pagination meta={meta} />
         </div>

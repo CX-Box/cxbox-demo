@@ -53,6 +53,16 @@
       "widgetName": "meetingResultFormPopup",
       "position": 80,
       "gridWidth": 24
+    },
+    {
+      "widgetName": "meetingDocumentPopupForm",
+      "position": 80,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "meetingDocumentsViewList",
+      "position": 90,
+      "gridWidth": 24
     }
   ],
   "rolesAllowed": [

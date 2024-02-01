@@ -6,7 +6,8 @@
   "fields": [
     {
       "label": "",
-      "key": "file",
+      "key": "fieldKeyForBase64",
+      "previewType": "base64",
       "type": "documentPreview",
       "fieldKeyForContentType": "fieldKeyForContentType"
     }

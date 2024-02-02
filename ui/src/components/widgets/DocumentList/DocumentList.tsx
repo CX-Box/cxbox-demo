@@ -101,7 +101,7 @@ function DocumentList({ meta }: DocumentListProps) {
                                         width: imageSizeOnList
                                     }}
                                     className={styles.fileWrapper}
-                                    onClick={item?.id ? createClickHandler(item?.id) : undefined}
+                                    onClick={createClickHandler(item?.id)}
                                 >
                                     <Icon type={getFileIconFromUrl(url)} />
                                 </span>

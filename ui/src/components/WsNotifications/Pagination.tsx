@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
 import { Icon, Select } from 'antd'
 import cn from 'classnames'
-import styles from './PaginationNotification.less'
-import { generateRange } from '../../utils/range'
-import { useStompNotification } from '../../hooks/notification'
+import styles from './Pagination.less'
+import { generateRange } from '@utils/range'
+import { useStompNotification } from '@components/WsNotifications/hooks'
 
 export interface PaginationNotificationOwnProps {
     onChangePage?: () => void
@@ -63,7 +63,7 @@ const generateDisplayedPageNumbers = (pageCount: number, currentPage: number, pa
     return pageNumbers
 }
 
-const PaginationNotification = (props: PaginationNotificationProps) => {
+const Pagination = (props: PaginationNotificationProps) => {
     const pagesToShow = PAGES_TO_SHOW
     const showSelectOptions = true
     const { changePage: changeNotificationPage, state: notificationState } = useStompNotification()
@@ -172,4 +172,4 @@ const PaginationNotification = (props: PaginationNotificationProps) => {
     )
 }
 
-export default PaginationNotification
+export default Pagination

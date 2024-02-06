@@ -1,5 +1,5 @@
 import React from 'react'
-import { DEFAULT_MODAL_BODY_HEIGHT, DEFAULT_MODAL_HEIGHT } from './Notification.constants'
+import { DEFAULT_MODAL_BODY_HEIGHT, DEFAULT_MODAL_HEIGHT } from './WsNotifications.constants'
 
 export const getDefaultModalBodyHeight = (modalContainerRef: React.MutableRefObject<any>) => {
     const headerHeight = modalContainerRef?.current?.querySelector('.ant-modal-header')?.offsetHeight

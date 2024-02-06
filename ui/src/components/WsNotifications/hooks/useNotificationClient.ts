@@ -2,11 +2,11 @@ import { useEffect, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { AxiosError } from 'axios'
 import { actions, interfaces } from '@cxbox-ui/core'
-import showSocketNotification from '../../components/Notification/ShowSocketNotification'
+import showSocketNotification from '../ShowSocketNotification'
 import { brokerURL, heartbeatIncoming, heartbeatOutgoing, reconnectDelay } from '@constants/notification'
 import { Client } from '@stomp/stompjs'
 import { SocketNotification } from '@interfaces/notification'
-import { createUserSubscribeUrl } from '@utils/notification'
+import { createUserSubscribeUrl } from '../utils'
 import { useAppSelector } from '@store'
 import { IFrame } from '@stomp/stompjs/src/i-frame'
 
@@ -14,9 +14,6 @@ const { ApplicationErrorType } = interfaces
 
 const notificationClient = new Client({
     brokerURL: brokerURL,
-    debug: function (str: string) {
-        console.log(str)
-    },
     reconnectDelay: reconnectDelay,
     heartbeatIncoming: heartbeatIncoming,
     heartbeatOutgoing: heartbeatOutgoing
@@ -28,8 +25,6 @@ export function useNotificationClient(subscribeCallback?: (messageBody: SocketNo
     const dispatch = useDispatch()
 
     const handleStompConnectRef = useRef<(frame: IFrame, subscribeUrl: string) => void>((frame, subscribeUrl) => {
-        console.info('---->>>> Connect Success', frame)
-
         const checkAndShowErrorMessage = (errorType: number, text: any) => {
             if (errorType === 1) {
                 dispatch(
@@ -92,14 +87,6 @@ export function useNotificationClient(subscribeCallback?: (messageBody: SocketNo
         if (!notificationClient.active && userId) {
             notificationClient.onConnect = frame => {
                 handleStompConnectRef.current(frame, createUserSubscribeUrl(userId))
-            }
-
-            notificationClient.onStompError = frame => {
-                console.error('---->>>> Stomp Error', frame)
-            }
-
-            notificationClient.onWebSocketError = event => {
-                console.error('---->>>> WebSocket Error', event)
             }
 
             notificationClient.activate()

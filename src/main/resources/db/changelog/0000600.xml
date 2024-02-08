@@ -160,6 +160,13 @@
     </addColumn>
   </changeSet>
 
+  <changeSet id="meetingdoc table field_key_for_content_type" author="agelfman">
+    <addColumn tableName="MEETING_DOCUMENTS">
+      <column name="field_key_for_content_type" type="VARCHAR(50)">
+      </column>
+    </addColumn>
+  </changeSet>
+
   <changeSet id="meeting table primary" author="iborisenko">
     <addColumn tableName="MEETING">
       <column name="additional_contact_primary_id" type="NUMBER(19, 0)">

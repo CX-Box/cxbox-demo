@@ -174,13 +174,6 @@
     </addColumn>
   </changeSet>
 
-  <changeSet id="meetingdoc table field_id" author="agelfman">
-    <dropColumn tableName="MEETING_DOCUMENTS">
-      <column name="field_id" type="VARCHAR(50)">
-      </column>
-    </dropColumn>
-  </changeSet>
-
   <changeSet id="meetingdoc table file_id" author="agelfman">
     <addColumn tableName="MEETING_DOCUMENTS">
       <column name="file_id" type="VARCHAR(50)">

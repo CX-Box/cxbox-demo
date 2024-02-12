@@ -19,6 +19,7 @@ import org.demo.service.MeetingWriteService;
 import org.demo.service.ResponsiblePickListService;
 import org.demo.service.SaleReadService;
 import org.demo.service.SaleWriteService;
+import org.demo.service.lov.LovExternalReadService;
 import org.springframework.stereotype.Component;
 
 /**
@@ -32,7 +33,11 @@ import org.springframework.stereotype.Component;
 @Getter
 public enum CxboxRestController implements EnumBcIdentifier {
 
+
 	// @formatter:on
+	lovExternal(LovExternalReadService.class),
+
+
 	client(ClientReadWriteService.class),
 		contact(client, ClientContactService.class),
 	clientEdit(ClientReadWriteService.class),

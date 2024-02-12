@@ -1,11 +1,11 @@
 package org.demo.microservice.repository;
 
-import static org.demo.entity.ListOfValues_;
-import static org.demo.entity.LovHierarchy_;
 
 import org.cxbox.model.core.entity.BaseEntity_;
 import org.demo.core.querylang.springdata.core.QueryLanguageRepository;
 import org.demo.microservice.entity.ListOfValues;
+import org.demo.microservice.entity.ListOfValues_;
+import org.demo.microservice.entity.LovHierarchy_;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

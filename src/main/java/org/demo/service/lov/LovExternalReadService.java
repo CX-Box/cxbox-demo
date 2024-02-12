@@ -1,5 +1,6 @@
 package org.demo.service.lov;
 
+
 import static org.demo.controller.CxboxRestController.lovExternal;
 import static org.demo.dto.LovDTO_.additionalParameter1;
 import static org.demo.dto.LovDTO_.additionalParameter2;
@@ -46,7 +47,7 @@ public class LovExternalReadService extends ExternalVersionAwareResponseService<
 		setIfChanged(data, typeName, entity::setTypeName);
 		setIfChanged(data, code, entity::setCode);
 		setIfChanged(data, orderBy, entity::setOrderBy);
-		setMappedIfChanged(data, inactiveFlag, entity::setInactiveFlag, Object::toString);
+		setIfChanged(data, inactiveFlag, entity::setInactiveFlag);
 		setIfChanged(data, externalCode, entity::setExternalCode);
 		setIfChanged(data, additionalParameter1, entity::setAdditionalParameter1);
 		setIfChanged(data, additionalParameter2, entity::setAdditionalParameter2);

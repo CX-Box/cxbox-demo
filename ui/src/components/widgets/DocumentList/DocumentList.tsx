@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import cn from 'classnames'
+import 'react-pdf/dist/Page/AnnotationLayer.css'
+import 'react-pdf/dist/Page/TextLayer.css'
 import styles from './DocumentList.less'
 import Pagination from '../../ui/Pagination/Pagination'
 import Image from 'rc-image'
@@ -13,8 +15,10 @@ import { DataItem } from '@cxbox-ui/schema'
 import { useAppSelector } from '@store'
 import { useTranslation } from 'react-i18next'
 import { Document, Page, pdfjs } from 'react-pdf'
+// @ts-ignore
+import worker from 'pdfjs-dist/webpack'
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`
+pdfjs.GlobalWorkerOptions.workerSrc = worker
 
 interface DocumentListProps {
     meta: AppWidgetMeta
@@ -26,13 +30,13 @@ const defaultImageSize = 200
 function DocumentList({ meta }: DocumentListProps) {
     const { t } = useTranslation()
     const { bcName } = meta
-    const data = useAppSelector(state => state.data[bcName] ?? emptyData)
-    const { getUrl, getTitle, isImageFile, imageSizeOnList, popupWidget, isPdfFile } = useDocumentPreviewOption(meta)
+    const data = useAppSelector(state => state.data[bcName] ?? emptyData) as Record<string, string | null>[]
+    const { getUrl, getTitle, showImageViewer, imageSizeOnList, popupWidget, showPdfViewer } = useDocumentPreviewOption(meta)
 
     const dispatch = useDispatch()
 
-    const createClickHandler = (id: string) => () => {
-        if (popupWidget) {
+    const createClickHandler = (id: string | null) => () => {
+        if (popupWidget && id) {
             dispatch(
                 actions.bcSelectRecord({
                     bcName: popupWidget.bcName,
@@ -46,28 +50,22 @@ function DocumentList({ meta }: DocumentListProps) {
                     bcName: popupWidget.bcName
                 })
             )
-        } else {
+        } else if (!popupWidget) {
             console.error(
                 'Option "documentPreview.popupWidgetName" is missing in the meta for the widget, or corresponding popup widget is missing.'
             )
         }
     }
 
-    const [numPages, setNumPages] = useState<number>()
-
-    function onDocumentLoadSuccess({ numPages }: { numPages: number }): void {
-        setNumPages(numPages)
-    }
-
     return (
         <div className={cn(styles.root)}>
             <div className={cn(styles.previewGroup)}>
                 {data.length > 0 ? (
-                    data.map((item: Record<string, any>, index) => {
+                    data.map((item, index) => {
                         let content: JSX.Element
                         const url = getUrl(item)
 
-                        if (isImageFile(item)) {
+                        if (showImageViewer(item)) {
                             content = (
                                 <Image
                                     preview={false}
@@ -77,7 +75,7 @@ function DocumentList({ meta }: DocumentListProps) {
                                     onClick={createClickHandler(item.id)}
                                 />
                             )
-                        } else if (isPdfFile(item)) {
+                        } else if (showPdfViewer(item)) {
                             content = (
                                 <span
                                     style={{
@@ -103,7 +101,7 @@ function DocumentList({ meta }: DocumentListProps) {
                                         width: imageSizeOnList
                                     }}
                                     className={styles.fileWrapper}
-                                    onClick={createClickHandler(item.id)}
+                                    onClick={createClickHandler(item?.id)}
                                 >
                                     <Icon type={getFileIconFromUrl(url)} />
                                 </span>
@@ -111,9 +109,9 @@ function DocumentList({ meta }: DocumentListProps) {
                         }
 
                         return (
-                            <div className={styles.card} key={item.id ?? index} style={{ width: imageSizeOnList }}>
+                            <div className={styles.card} key={item?.id ?? index} style={{ width: imageSizeOnList }}>
                                 {content}
-                                {getTitle(item)}
+                                {item ? getTitle(item) : ''}
                             </div>
                         )
                     })
@@ -163,7 +161,7 @@ function useDocumentPreviewOption(meta: AppWidgetMeta) {
 
     const type = options?.documentPreview?.type
 
-    const getUrl = (dataItem: Record<string, string>) => {
+    const getUrl = (dataItem: Record<string, string | null>) => {
         if (!isValidMetaOption) {
             return
         }
@@ -171,44 +169,48 @@ function useDocumentPreviewOption(meta: AppWidgetMeta) {
         if (type === 'base64') {
             const { fieldKeyForBase64, fieldKeyForContentType } = documentPreview as DocumentPreviewBase64Option
 
-            return createDataUrl(dataItem[fieldKeyForContentType], dataItem[fieldKeyForBase64]) as string
+            return createDataUrl(dataItem[fieldKeyForContentType], dataItem[fieldKeyForBase64])
         } else if (type === 'fileUrl' || type === 'dataUrl' || type === 'generatedFileUrl') {
             const { fieldKeyForUrl } = documentPreview as DocumentPreviewDataUrlOption | DocumentPreviewFileUrlOption
 
-            return dataItem[fieldKeyForUrl]
+            return dataItem[fieldKeyForUrl] as string
         }
     }
 
-    const getTitle = (dataItem: Record<string, string>) => {
+    const getTitle = (dataItem: Record<string, string | null>) => {
         return documentPreview?.fieldKeyForImageTitle ? dataItem[documentPreview?.fieldKeyForImageTitle] : null
     }
 
-    const isImageFile = (dataItem: Record<string, string>) => {
+    const isImageFile = (dataItem: Record<string, string | null>) => {
         if (type === 'base64' || type === 'generatedFileUrl') {
             const { fieldKeyForContentType } = documentPreview as DocumentPreviewBase64Option
 
-            return isImageFileType(dataItem[fieldKeyForContentType])
+            return isImageFileType(dataItem[fieldKeyForContentType] ?? '')
         } else if (type === 'fileUrl' || type === 'dataUrl') {
             const { fieldKeyForUrl } = documentPreview as DocumentPreviewDataUrlOption | DocumentPreviewFileUrlOption
 
-            return isImageUrl(dataItem[fieldKeyForUrl])
+            return isImageUrl(dataItem[fieldKeyForUrl] ?? '')
         }
 
         return false
     }
 
-    const isPdfFile = (dataItem: Record<string, string>) => {
+    const isPdfFile = (dataItem: Record<string, string | null>) => {
         if (type === 'base64' || type === 'generatedFileUrl') {
             const { fieldKeyForContentType } = documentPreview as DocumentPreviewBase64Option
 
-            return isPdfType(dataItem[fieldKeyForContentType])
+            return isPdfType(dataItem[fieldKeyForContentType] ?? '')
         } else if (type === 'fileUrl' || type === 'dataUrl') {
             const { fieldKeyForUrl } = documentPreview as DocumentPreviewDataUrlOption | DocumentPreviewFileUrlOption
 
-            return isPdfUrl(dataItem[fieldKeyForUrl])
+            return isPdfUrl(dataItem[fieldKeyForUrl] ?? '')
         }
 
         return false
+    }
+
+    const showPdfViewer = (dataItem: Record<string, string | null>) => {
+        return documentPreview?.enabledPdfViewer && isPdfFile(dataItem)
     }
 
     return {
@@ -216,7 +218,7 @@ function useDocumentPreviewOption(meta: AppWidgetMeta) {
         getUrl,
         imageSizeOnList: documentPreview?.imageSizeOnList ?? defaultImageSize,
         popupWidget,
-        isPdfFile,
-        isImageFile
+        showPdfViewer,
+        showImageViewer: isImageFile
     }
 }

@@ -5,26 +5,7 @@ export const parseDataUrl = (str: string) => {
     return parseDataUrlExternal(str)
 }
 
-export const base64toBlob = (base64: string, contentType: string = '', sliceSize: number = 512) => {
-    const byteCharacters = atob(base64)
-    const byteArrays = []
-
-    for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-        const slice = byteCharacters.slice(offset, offset + sliceSize)
-
-        const byteNumbers = new Array(slice.length)
-        for (let i = 0; i < slice.length; i++) {
-            byteNumbers[i] = slice.charCodeAt(i)
-        }
-
-        const byteArray = new Uint8Array(byteNumbers)
-        byteArrays.push(byteArray)
-    }
-
-    return new Blob(byteArrays, { type: contentType })
-}
-
-export function createDataUrl(contentType: string, base64: string = '') {
+export function createDataUrl(contentType: string | null, base64: string | null) {
     // data:[<mediatype>][;base64],<data>
     return `data:${contentType};base64,${base64}`
 }
@@ -50,8 +31,12 @@ export const isImageUrl = (url: string = '') => {
     return isImageFileUrl(url) || isImageDataUrl(url)
 }
 
+export const isPdfDataUrl = (url: string): boolean => /^data:application\/pdf\//.test(url)
+
+export const isPdfFileUrl = (url: string): boolean => isPdfType(getUrlExtension(url))
+
 export const isPdfUrl = (url: string = '') => {
-    return false // TODO дописать
+    return isPdfFileUrl(url) || isPdfDataUrl(url)
 }
 
 export const isExcelType = (contentTypeOrExtension: string) => {

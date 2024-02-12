@@ -9,6 +9,7 @@
     "documentPreview": {
       "fieldKeyForBase64": "fieldKeyForBase64",
       "fieldKeyForContentType": "fieldKeyForContentType",
+      "enabledPdfViewer": true,
       "type": "base64",
       "edit": {
         "widget": "meetingDocumentPopupForm"

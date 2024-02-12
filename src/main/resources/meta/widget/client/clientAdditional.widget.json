@@ -16,24 +16,26 @@
       "fileIdKey": "briefId"
     }
   ],
-  "layout": {
-    "rows": [
-      {
-        "cols": [
-          {
-            "fieldKey": "importance",
-            "span": 12
-          }
-        ]
-      },
-      {
-        "cols": [
-          {
-            "fieldKey": "brief",
-            "span": 12
-          }
-        ]
-      }
-    ]
+  "options": {
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "brief",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "importance",
+              "span": 12
+            }
+          ]
+        }
+      ]
+    }
   }
 }

@@ -183,9 +183,14 @@
 
   <changeSet id="meetingdoc table meeting_id" author="agelfman">
     <addColumn tableName="MEETING_DOCUMENTS">
-      <column name="meeting_id" type="NUMBER(19, 0)">
+      <column name="meeting_id" type="VARCHAR(50)">
       </column>
     </addColumn>
+  </changeSet>
+
+  <changeSet id="meetingdoc table update meeting_id" author="agelfman">
+    <modifyDataType tableName="MEETING_DOCUMENTS"
+      columnName="meeting_id" newDataType="NUMBER(19, 0)"/>
   </changeSet>
 
   <changeSet id="meeting table primary" author="iborisenko">

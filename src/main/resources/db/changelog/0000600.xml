@@ -188,7 +188,6 @@
     </addColumn>
   </changeSet>
 
-
   <changeSet id="meeting table primary" author="iborisenko">
     <addColumn tableName="MEETING">
       <column name="additional_contact_primary_id" type="NUMBER(19, 0)">
@@ -355,6 +354,11 @@
       <column header="SORT" name="SORT" type="STRING"/>
       <column header="FILTER" name="FILTER" type="STRING"/>
     </loadUpdateData>
+  </changeSet>
+
+  <changeSet id="meetingdoc table update meeting_id" author="agelfman">
+    <modifyDataType tableName="MEETING_DOCUMENTS"
+      columnName="meeting_id" newDataType="NUMBER(19, 0)"/>
   </changeSet>
 
 </databaseChangeLog>

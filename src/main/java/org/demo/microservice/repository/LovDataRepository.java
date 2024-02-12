@@ -1,7 +1,7 @@
 package org.demo.microservice.repository;
 
-import static org.demo.entity.ListOfValues_.parents;
-import static org.demo.entity.LovHierarchy_.parentLov;
+import static org.demo.entity.ListOfValues_;
+import static org.demo.entity.LovHierarchy_;
 
 import org.cxbox.model.core.entity.BaseEntity_;
 import org.demo.core.querylang.springdata.core.QueryLanguageRepository;
@@ -17,7 +17,7 @@ public interface LovDataRepository extends JpaRepository<ListOfValues, Long>, Jp
 
 	static Specification<ListOfValues> byParentId(final Long parentId) {
 		return Specification.where((root, cq, cb) -> cb.equal(
-				root.join(parents).get(parentLov).get(BaseEntity_.id),
+				root.join(ListOfValues_.parents).get(LovHierarchy_.parentLov).get(BaseEntity_.id),
 				parentId
 		));
 	}

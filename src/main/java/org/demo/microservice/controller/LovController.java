@@ -7,7 +7,6 @@ import org.demo.microservice.dto.DictDTO;
 import org.demo.microservice.entity.ListOfValues;
 import org.demo.microservice.repository.LovDataRepository;
 import org.demo.microservice.service.LovMapper;
-import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +39,7 @@ public class LovController /*implements QueryLanguageController<DictDTO, Long>*/
 
 	//	@Override
 	@GetMapping
-	public ResponseEntity<Page<DictDTO>> getAll(@ParameterObject final Pageable pageable,
+	public ResponseEntity<Page<DictDTO>> getAll(final Pageable pageable,
 			final FilterParameters<DictDTO> parameters) {
 		final var specification = lovDataRepository.getSpecification(parameters, DictDTO.class);
 		final var entityPageable = lovDataRepository.getEntityPageable(pageable, DictDTO.class);
@@ -80,7 +79,7 @@ public class LovController /*implements QueryLanguageController<DictDTO, Long>*/
 		}
 		//TODO id convert long
 		final ListOfValues entity = lovMapper.updateEntityByDto(
-				lovDataRepository.findById(request.getId()).orElseThrow(),
+				lovDataRepository.findById(Long.valueOf(request.getId())).orElseThrow(),
 				request
 		);
 		return ResponseEntity.ok().body(lovMapper.toDto(lovDataRepository.save(entity)));

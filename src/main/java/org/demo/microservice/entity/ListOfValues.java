@@ -10,20 +10,19 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.cxbox.model.core.entity.BaseEntity;
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "t_list_of_values")
+@Getter
+@Setter
+@NoArgsConstructor
+@EqualsAndHashCode(of = {}, callSuper = true)
 public class ListOfValues extends BaseEntity {
 
 	@Column(name = "value")

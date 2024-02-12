@@ -356,9 +356,4 @@
     </loadUpdateData>
   </changeSet>
 
-  <changeSet id="meetingdoc table update meeting_id" author="agelfman">
-    <modifyDataType tableName="MEETING_DOCUMENTS"
-      columnName="meeting_id" newDataType="NUMBER(19, 0)"/>
-  </changeSet>
-
 </databaseChangeLog>

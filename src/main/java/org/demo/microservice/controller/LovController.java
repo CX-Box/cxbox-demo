@@ -1,12 +1,17 @@
 package org.demo.microservice.controller;
 
+import static org.cxbox.api.service.session.InternalAuthorizationService.SystemUsers.VANILLA;
+
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.cxbox.api.service.session.InternalAuthorizationService;
+import org.cxbox.core.util.session.SessionService;
 import org.demo.core.querylang.common.FilterParameters;
 import org.demo.microservice.dto.DictDTO;
 import org.demo.microservice.entity.ListOfValues;
 import org.demo.microservice.repository.LovDataRepository;
 import org.demo.microservice.service.LovMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -24,16 +29,19 @@ import org.springframework.web.bind.annotation.RestController;
 @Transactional
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/lov")
+@RequestMapping("/rest/api/v1/lov")
 public class LovController /*implements QueryLanguageController<DictDTO, Long>*/ {
 
 	private final LovDataRepository lovDataRepository;
 
 	private final LovMapper lovMapper;
 
+	private final InternalAuthorizationService authzService;
+
 	//	@Override
 	@GetMapping("/{id}")
 	public ResponseEntity<DictDTO> getOne(@PathVariable final Long id) {
+		authzService.loginAs(authzService.createAuthentication(VANILLA));
 		return ResponseEntity.ok().body(lovDataRepository.findById(id).map(lovMapper::toDto).orElse(null));
 	}
 
@@ -41,6 +49,7 @@ public class LovController /*implements QueryLanguageController<DictDTO, Long>*/
 	@GetMapping
 	public ResponseEntity<Page<DictDTO>> getAll(final Pageable pageable,
 			final FilterParameters<DictDTO> parameters) {
+		authzService.loginAs(authzService.createAuthentication(VANILLA));
 		final var specification = lovDataRepository.getSpecification(parameters, DictDTO.class);
 		final var entityPageable = lovDataRepository.getEntityPageable(pageable, DictDTO.class);
 		return ResponseEntity.ok().body(lovDataRepository.findAll(specification, entityPageable).map(lovMapper::toDto));
@@ -49,6 +58,7 @@ public class LovController /*implements QueryLanguageController<DictDTO, Long>*/
 	//	@Override
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> delete(@PathVariable final Long id) {
+		authzService.loginAs(authzService.createAuthentication(VANILLA));
 		//TODO проверка на то, что справочник деактивирован
 		lovDataRepository.deleteById(id);
 		return ResponseEntity.ok().build();
@@ -61,6 +71,7 @@ public class LovController /*implements QueryLanguageController<DictDTO, Long>*/
 	//	@Override
 	@PostMapping
 	public ResponseEntity<DictDTO> create(@RequestBody final DictDTO request) {
+		authzService.loginAs(authzService.createAuthentication(VANILLA));
 		if (request.getId() != null) {
 			throw new IllegalArgumentException("Id must be null for creation process");
 		}
@@ -74,6 +85,7 @@ public class LovController /*implements QueryLanguageController<DictDTO, Long>*/
 	//	@Override
 	@PutMapping
 	public ResponseEntity<DictDTO> update(@RequestBody final DictDTO request) {
+		authzService.loginAs(authzService.createAuthentication(VANILLA));
 		if (request.getId() == null) {
 			throw new IllegalArgumentException("Id mustn't be null for update process");
 		}

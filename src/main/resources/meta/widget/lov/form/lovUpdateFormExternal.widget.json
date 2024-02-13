@@ -1,0 +1,137 @@
+{
+  "name": "lovUpdateFormExternal",
+  "title": "",
+  "type": "Form",
+  "bc": "lovExternal",
+  "fields": [
+    {
+      "label": "Значение",
+      "key": "value",
+      "type": "input"
+    },
+    {
+      "label": "Описание",
+      "key": "descriptionText",
+      "type": "input"
+    },
+    {
+      "label": "Тип",
+      "key": "typeName",
+      "type": "input"
+    },
+    {
+      "label": "Код",
+      "key": "code",
+      "type": "input"
+    },
+    {
+      "label": "Порядковый номер",
+      "key": "orderBy",
+      "type": "input"
+    },
+    {
+      "label": "Деактивирован",
+      "key": "inactiveFlag",
+      "type": "checkbox"
+    },
+    {
+      "label": "Внешний код",
+      "key": "externalCode",
+      "type": "input"
+    },
+    {
+      "label": "Параметр 1",
+      "key": "additionalParameter1",
+      "type": "input"
+    },
+    {
+      "label": "Параметр 2",
+      "key": "additionalParameter2",
+      "type": "input"
+    }
+  ],
+  "options": {
+    "actionGroups": {
+      "include": [
+        "saveAndBack",
+        "save"
+      ]
+    },
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "value",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "descriptionText",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "typeName",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "code",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "orderBy",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "inactiveFlag",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "externalCode",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "additionalParameter1",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "additionalParameter2",
+              "span": 12
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

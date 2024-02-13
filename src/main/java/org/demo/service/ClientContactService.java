@@ -1,5 +1,6 @@
 package org.demo.service;
 
+import java.util.Map;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.ContactDTO_;
 import org.demo.entity.Client;
@@ -91,7 +92,14 @@ public class ClientContactService extends VersionAwareResponseService<ContactDTO
 				.text("Add contact")
 				.add()
 				.associate()
-				.text("Add Existing")
+				.withCustomParameter(Map.of("type", "multiFileUpload"))
+				.text("Add Files")
+				/*
+				.add()
+				.associate()
+				.withCustomParameter(Map.of("type", "bc"))
+				.text("Add Existing Contact")
+				*/
 				.add()
 				.newAction()
 				.action("save_and_go_to_client_edit_contacts", "save")
@@ -117,6 +125,20 @@ public class ClientContactService extends VersionAwareResponseService<ContactDTO
 
 						)))
 				.add()
+				.newAction()
+				.action("cancel", "Cancel")
+				.scope(ActionScope.BC)
+				.withoutAutoSaveBefore()
+				.invoker((bc, dto) -> new ActionResultDTO<ContactDTO>()
+						.setAction(PostAction.drillDown(
+								DrillDownType.INNER,
+								"/screen/client/view/clienteditcontacts/"
+										+ CxboxRestController.clientEdit + "/"
+										+ bc.getParentIdAsLong()
+
+						)))
+				.add()
+
 				.newAction()
 				.action("cancel", "Cancel")
 				.scope(ActionScope.BC)

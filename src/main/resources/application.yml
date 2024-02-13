@@ -7,6 +7,8 @@ app:
     resource: cxbox-keycloak-client
     public-client: true
     cors: true
+  integrations:
+    lov-server-url: ${LOV_SERVER_URL:http://localhost:8080/rest/api/v1/lov}
 
 cxbox:
   bean:
@@ -47,7 +49,7 @@ spring:
     password: ${DATABASE_PASSWORD:postgres}
   liquibase:
     change-log: classpath:/db/db.changelog-master.xml
-    drop-first: true
+
     contexts: local
   cache:
     type: SIMPLE
@@ -68,6 +70,8 @@ spring:
           charSet: UTF-8
         jdbc:
           batch_size: 100
+        hbm2ddl:
+          auto: update
     hibernate:
       naming:
         physical-strategy: org.cxbox.model.core.hbn.ImprovedPhysicalNamingStrategy

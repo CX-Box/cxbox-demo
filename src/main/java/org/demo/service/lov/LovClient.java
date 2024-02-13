@@ -25,6 +25,8 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class LovClient implements RequestHelper {
 
+	public static final String API_V_1_LOV = "";
+
 	private final IntegrationConfiguration integrationConfig;
 
 	private final RestTemplate restTemplate;
@@ -33,7 +35,7 @@ public class LovClient implements RequestHelper {
 
 	public ResponseEntity<RestResponsePage<DictDTO>> getAll(final BusinessComponent bc) {
 		return restTemplate.exchange(
-				integrationURLBuilder.getURLWithQueryParams(bc, integrationConfig.getLovServerUrl() + "/lov").build()
+				integrationURLBuilder.getURLWithQueryParams(bc, integrationConfig.getLovServerUrl() + API_V_1_LOV).build()
 						.normalize().encode().toUriString(),
 				GET, null, new ParameterizedTypeReference<>() {
 				}
@@ -42,7 +44,7 @@ public class LovClient implements RequestHelper {
 
 	public ResponseEntity<DictDTO> getOne(final Long id) {
 		return restTemplate.exchange(
-				fromUriString(integrationConfig.getLovServerUrl() + "/lov/{id}").build().expand(id).normalize().encode()
+				fromUriString(integrationConfig.getLovServerUrl() + API_V_1_LOV + "/{id}").build().expand(id).normalize().encode()
 						.toUriString(),
 				GET, null, DictDTO.class
 		);
@@ -50,7 +52,7 @@ public class LovClient implements RequestHelper {
 
 	public ResponseEntity<Void> delete(final Long id) {
 		return restTemplate.exchange(
-				fromUriString(integrationConfig.getLovServerUrl() + "/lov/{id}").build().expand(id).normalize().encode()
+				fromUriString(integrationConfig.getLovServerUrl() + API_V_1_LOV + "/{id}").build().expand(id).normalize().encode()
 						.toUriString(),
 				DELETE, null, Void.class
 		);
@@ -58,14 +60,14 @@ public class LovClient implements RequestHelper {
 
 	public ResponseEntity<DictDTO> create(final DictDTO dto) {
 		return restTemplate.exchange(
-				fromUriString(integrationConfig.getLovServerUrl() + "/lov").build().normalize().encode().toUriString(),
+				fromUriString(integrationConfig.getLovServerUrl() + API_V_1_LOV).build().normalize().encode().toUriString(),
 				POST, new HttpEntity<>(dto), DictDTO.class
 		);
 	}
 
 	public ResponseEntity<DictDTO> update(final DictDTO dto) {
 		return restTemplate.exchange(
-				fromUriString(integrationConfig.getLovServerUrl() + "/lov").build().normalize().encode().toUriString(),
+				fromUriString(integrationConfig.getLovServerUrl() + API_V_1_LOV).build().normalize().encode().toUriString(),
 				PUT, new HttpEntity<>(dto), DictDTO.class
 		);
 	}

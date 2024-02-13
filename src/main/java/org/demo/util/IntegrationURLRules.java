@@ -1,6 +1,9 @@
 package org.demo.util;
 
+import static org.demo.core.querylang.common.FilterParameters.FILTER_FIELD_PREFIX;
+
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import lombok.Getter;
@@ -31,7 +34,11 @@ public enum IntegrationURLRules {
 	),
 	FILTER(GpnQueryParameters.CONTAINS_PREFIX, (bc, builder) -> {
 		Map<String, String> containsParameters = BcParseHelper.getContainsParameters(bc);
-		containsParameters.forEach(builder::queryParam);
+		for (Entry<String, String> entry : containsParameters.entrySet()) {
+			String key = entry.getKey();
+			String value = entry.getValue();
+			builder.queryParam(FILTER_FIELD_PREFIX + key, value);
+		}
 	}
 	);
 

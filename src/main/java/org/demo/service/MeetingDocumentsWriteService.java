@@ -1,11 +1,21 @@
 package org.demo.service;
 
+import static org.demo.conf.cxbox.controller.CxboxDemoMinioFileController.FILENAME_FIELD;
 import static org.demo.dto.MeetingDocumentsDTO_.notes;
 
+import io.minio.MinioClient;
+import io.minio.StatObjectArgs;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import lombok.SneakyThrows;
+import org.cxbox.api.data.dto.AssociateDTO;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.DrillDownType;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
+import org.cxbox.core.dto.rowmeta.AssociateResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.cxbox.core.dto.rowmeta.PostAction;
 import org.cxbox.core.service.action.ActionScope;
@@ -21,6 +31,7 @@ import org.demo.entity.MeetingDocuments_;
 import org.demo.repository.MeetingDocumentsRepository;
 import org.demo.repository.MeetingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Base64Utils;
@@ -34,6 +45,12 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 
 	@Autowired
 	private MeetingRepository meetingRepository;
+
+	@Autowired
+	private MinioClient minioClient; //TODO>>refactor to decouple code with CxboxDemoMinioFileController
+
+	@Value("${minio.bucket.name}")
+	String defaultBucketName; //TODO>>refactor to decouple code with CxboxDemoMinioFileController
 
 	@Autowired
 	CustomFileServices customFileServices;
@@ -86,6 +103,38 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 		));
 	}
 
+
+	@Override
+	protected AssociateResultDTO doAssociate(List<AssociateDTO> data, BusinessComponent bc) {
+		List<MeetingDocuments> meetingDocuments = fileUpload(bc, data);
+		List<MeetingDocumentsDTO> collect = meetingDocuments.stream().map(e -> entityToDto(bc, e))
+				.collect(Collectors.toList());
+		return new AssociateResultDTO((List) collect)
+				.setAction(PostAction.refreshBc(bc));
+	}
+
+	@SneakyThrows
+	private List<MeetingDocuments> fileUpload(BusinessComponent bc, List<AssociateDTO> fileIds) {
+		List<MeetingDocuments> meetingDocumentsList = new ArrayList<>();
+		for (AssociateDTO item : fileIds) {
+			var meetingDocuments = new MeetingDocuments();
+			var fileId = item.getId();
+			meetingDocuments.setMeeting(meetingRepository.findById(bc.getParentIdAsLong()).get());
+			meetingDocuments.setFileId(fileId);
+			var statObjectResponse = minioClient.statObject(StatObjectArgs
+					.builder()
+					.bucket(defaultBucketName)
+					.object(fileId)
+					.build()
+			);
+			var fileName = statObjectResponse.userMetadata().get(FILENAME_FIELD);
+			meetingDocuments.setFile(fileName);
+			meetingDocumentsList.add(meetingDocumentsRepository.save(meetingDocuments));
+
+		}
+		return meetingDocumentsList;
+	}
+
 	@Override
 	public Actions<MeetingDocumentsDTO> getActions() {
 		return Actions.<MeetingDocumentsDTO>builder()
@@ -102,11 +151,15 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 						)))
 				.add()
 				.cancelCreate().text("Cancel").available(bc -> true).add()
-				.newAction()
+				/*.newAction()
 				.action("multiFileUpload", "Add files")
 				.scope(ActionScope.BC)
 				.withoutAutoSaveBefore()
 				.invoker((bc, data) -> new ActionResultDTO<>())
+				.add()*/
+				.associate()
+				.withCustomParameter(Map.of("type", "multiFileUpload"))
+				.text("Add Files")
 				.add()
 				.build();
 	}

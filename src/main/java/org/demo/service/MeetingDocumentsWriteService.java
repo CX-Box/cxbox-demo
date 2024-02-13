@@ -161,7 +161,7 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 				.add()*/
 				.associate()
 				.withPreAction(PreAction.confirm("Do you want to save changes to meeting (if any) and upload multiple files to meeting documents?"))
-				.withCustomParameter(Map.of("type", "multiFileUpload"))
+				.withCustomParameter(Map.of("subtype", "multiFileUpload"))
 				.text("Add Files")
 				.add()
 				.delete().text("Delete file").add()

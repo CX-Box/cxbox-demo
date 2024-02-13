@@ -42,9 +42,9 @@
     "actionGroups": {
       "include": [
         "create",
-        "multiFileUpload",
+        "associate",
         "edit",
-        "actions"
+        "delete"
       ]
     }
   }

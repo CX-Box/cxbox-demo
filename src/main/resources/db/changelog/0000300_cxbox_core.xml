@@ -1392,8 +1392,7 @@
   </changeSet>
 
   <changeSet author="load bc properties" id="bc properties" runOnChange="true" runAlways="true">
-    <delete tableName="bc_properties"/>
-    <loadUpdateData tableName="BC_PROPERTIES" primaryKey="ID" separator="," quotchar="'"
+    <loadUpdateData tableName="BC_PROPERTIES" primaryKey="ID" separator=";" quotchar="'"
       file="db/data/BC_PROPERTIES.csv">
       <column header="ID" name="ID" type="NUMERIC"/>
       <column header="BC" name="BC" type="STRING"/>

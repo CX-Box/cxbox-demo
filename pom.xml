@@ -10,8 +10,17 @@
   <parent>
     <groupId>org.cxbox</groupId>
     <artifactId>cxbox-starter-parent</artifactId>
-    <version>3.0.5</version>
+    <version>3.0.6-SNAPSHOT</version>
   </parent>
+
+  <repositories>
+    <repository>
+      <id>snapshots-repo</id>
+      <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+      <releases/>
+      <snapshots/>
+    </repository>
+  </repositories>
 
   <properties>
     <checktyle.config>src/main/resources/checkstyle-checker.xml</checktyle.config>

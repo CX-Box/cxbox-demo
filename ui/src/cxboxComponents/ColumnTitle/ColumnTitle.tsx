@@ -33,6 +33,8 @@ export const notSortableFields: readonly interfaces.FieldType[] = [
     FieldType.hint
 ]
 
+const rightAlignedFields = [FieldType.number, FieldType.money, FieldType.percent]
+
 /**
  *
  * @param props
@@ -42,9 +44,19 @@ export const ColumnTitle: React.FC<ColumnTitleProps> = props => {
     if (!props.widgetMeta && !props.rowMeta) {
         return null
     }
+
     const title = <TemplatedTitle widgetName={props.widgetName} title={props.widgetMeta.title} />
+
     if (!props.rowMeta) {
-        return <div>{title}</div>
+        return (
+            <div
+                className={cn({
+                    [styles.rightAlignment]: rightAlignedFields.includes(props.widgetMeta.type)
+                })}
+            >
+                {title}
+            </div>
+        )
     }
 
     const sort = !notSortableFields.includes(props.widgetMeta.type) && (
@@ -59,7 +71,11 @@ export const ColumnTitle: React.FC<ColumnTitleProps> = props => {
             <ColumnFilter widgetName={props.widgetName} widgetMeta={props.widgetMeta} rowMeta={props.rowMeta} />
         ))
     return (
-        <div className={cn(styles.container, props.className)}>
+        <div
+            className={cn(styles.container, props.className, {
+                [styles.rightAlignment]: rightAlignedFields.includes(props.widgetMeta.type)
+            })}
+        >
             {title}
             {filter}
             {sort}

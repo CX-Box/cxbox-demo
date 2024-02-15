@@ -8,6 +8,7 @@ import { NotificationCheckNewResponse, NotificationCountResponse, NotificationsR
 import { fileControllerMapping } from '@constants/notification'
 import { LoginResponse } from '@interfaces/session'
 import { useFullTextInterceptor } from './interceptors'
+import { TableSettingsItem } from '@interfaces/tableSettings'
 
 class Api extends CXBoxApi {
     fetchBcCount(screenName: string, bcName: string, params: BcCountParamsMap = {}) {
@@ -86,6 +87,34 @@ class Api extends CXBoxApi {
             method: 'DELETE',
             body: JSON.stringify(selectedRowKeys)
         })
+    }
+
+    createPersonalSetting(data: Omit<TableSettingsItem, 'id'>[]) {
+        return this.api$.post<{
+            success: boolean
+            data: {
+                id: string
+                vstamp: number
+                view: string
+                widget: string
+            }
+        }>('/personalAdditionalFields', { data })
+    }
+
+    updatePersonalSetting(data: Omit<TableSettingsItem, 'id'>[]) {
+        return this.api$.put<{
+            success: boolean
+            data: {
+                id: string
+                vstamp: number
+                view: string
+                widget: string
+            }
+        }>('/personalAdditionalFields', { data })
+    }
+
+    deletePersonalSetting(id: string) {
+        return this.api$.delete('/personalAdditionalFields', { data: [id] } as AxiosRequestConfig)
     }
 }
 

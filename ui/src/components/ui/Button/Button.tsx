@@ -8,7 +8,8 @@ export const customTypes = {
     formOperation: 'formOperation',
     formOperationYellow: 'formOperationYellow',
     customDefault: 'customDefault',
-    bar: 'bar'
+    bar: 'bar',
+    empty: 'empty'
 }
 
 type CustomTypes = keyof typeof customTypes
@@ -37,6 +38,10 @@ function isCustomType(type?: string) {
 function normalizeButtonType(type?: string): DefaultTypes | undefined {
     if (!isCustomType(type)) {
         return type as DefaultTypes
+    }
+
+    if (type === 'empty') {
+        return 'link'
     }
 
     return undefined

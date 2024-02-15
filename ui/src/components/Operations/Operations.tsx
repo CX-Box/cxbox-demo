@@ -7,7 +7,6 @@ import { useDispatch } from 'react-redux'
 import OperationsGroup from './components/OperationsGroup'
 import { AppWidgetMeta, removeRecordOperationWidgets } from '@interfaces/widget'
 import Button, { customTypes } from '../ui/Button/Button'
-import { ExportButton } from './components/ExportButton/ExportButton'
 import cn from 'classnames'
 import { useWidgetOperations } from '@hooks/useWidgetOperations'
 import TextSearchInput from '@components/Operations/components/TextSearchInput/TextSearchInput'
@@ -46,27 +45,22 @@ function Operations(props: OperationsOwnProps) {
             {metaInProgress ? (
                 <Button loading />
             ) : (
-                <>
-                    {currentOperations.map((item: interfaces.Operation | interfaces.OperationGroup, index) => {
-                        if (isOperationGroup(item)) {
-                            return (
-                                <OperationsGroup key={item.type} group={item} widgetType={widgetMeta.type} onClick={handleOperationClick} />
-                            )
-                        }
-                        return removeRecordOperationWidgets.includes(widgetMeta.type) && item.scope === 'record' ? null : (
-                            <Button
-                                key={item.type}
-                                data-test-widget-action-item={true}
-                                type={getButtonType({ widgetType: widgetMeta.type, index })}
-                                onClick={() => handleOperationClick(item)}
-                            >
-                                {item.icon && <Icon type={item.icon} />}
-                                {item.text}
-                            </Button>
-                        )
-                    })}
-                    <ExportButton widgetMeta={widgetMeta} />
-                </>
+                currentOperations.map((item: interfaces.Operation | interfaces.OperationGroup, index) => {
+                    if (isOperationGroup(item)) {
+                        return <OperationsGroup key={item.type} group={item} widgetType={widgetMeta.type} onClick={handleOperationClick} />
+                    }
+                    return removeRecordOperationWidgets.includes(widgetMeta.type) && item.scope === 'record' ? null : (
+                        <Button
+                            key={item.type}
+                            data-test-widget-action-item={true}
+                            type={getButtonType({ widgetType: widgetMeta.type, index })}
+                            onClick={() => handleOperationClick(item)}
+                        >
+                            {item.icon && <Icon type={item.icon} />}
+                            {item.text}
+                        </Button>
+                    )
+                })
             )}
             {widgetMeta.options?.fullTextSearch?.enabled && (
                 <TextSearchInput bcName={bcName} placeholder={widgetMeta.options?.fullTextSearch?.placeholder} />

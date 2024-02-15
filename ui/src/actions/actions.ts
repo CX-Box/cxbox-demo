@@ -1,11 +1,9 @@
-/**
- * This is a utility class for typing payload of redux actions
- */
 import { createAction } from '@reduxjs/toolkit'
 import { actions, interfaces } from '@cxbox-ui/core'
 import { OperationPreInvokeCustom } from '@interfaces/operation'
 import { NotificationState } from '@interfaces/notification'
 import { LoginResponse } from '@interfaces/session'
+import { TableSettingsItem, TableSettingsList, TableSettingsMap } from '@interfaces/tableSettings'
 
 export const SSO_AUTH = createAction('SSO_AUTH')
 
@@ -73,3 +71,11 @@ export const changeBcFullTextFilter = createAction<{
     bcName: string
     fullTextFilterValue: string
 }>('changeBcFullTextFilter')
+
+export const initTableSettings = createAction<{ rawSettings: TableSettingsList | TableSettingsMap }>('initTableSettings')
+
+export const changeTableSettings = createAction<
+    Pick<TableSettingsItem, 'view' | 'widget'> & Partial<Omit<TableSettingsItem, 'view' | 'widget'>>
+>('changeTableSettings')
+
+export const resetTableSettings = createAction<Pick<TableSettingsItem, 'view' | 'widget'>>('resetTableSettings')

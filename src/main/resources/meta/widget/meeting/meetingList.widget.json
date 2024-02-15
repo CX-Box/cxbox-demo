@@ -43,6 +43,9 @@
     }
   ],
   "options": {
+    "additional": {
+      "enabled": true
+    },
     "create": {
       "widget": "meetingFormForList"
     },

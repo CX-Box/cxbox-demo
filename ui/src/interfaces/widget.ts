@@ -3,7 +3,8 @@ import { interfaces } from '@cxbox-ui/core'
 export enum CustomFieldTypes {
     MultipleSelect = 'multipleSelect',
     DocumentPreview = 'documentPreview',
-    Time = 'time'
+    Time = 'time',
+    SuggestionPickList = 'suggestionPickList'
 }
 
 export enum CustomWidgetTypes {
@@ -14,7 +15,8 @@ export enum CustomWidgetTypes {
     Funnel = 'Funnel',
     RingProgress = 'RingProgress',
     DashboardList = 'DashboardList',
-    AdditionalInfo = 'AdditionalInfo'
+    AdditionalInfo = 'AdditionalInfo',
+    SuggestionPickList = 'SuggestionPickList'
 }
 
 export const removeRecordOperationWidgets: Array<interfaces.WidgetTypes | string> = [interfaces.WidgetTypes.List]
@@ -127,4 +129,16 @@ export interface AppWidgetTableMeta extends interfaces.WidgetTableMeta {
 
 export interface WidgetFormPopupMeta extends Omit<interfaces.WidgetFormMeta, 'type'> {
     type: CustomWidgetTypes.FormPopup
+}
+
+export interface SuggestionPickListWidgetMeta extends interfaces.WidgetMeta {
+    type: CustomWidgetTypes.SuggestionPickList
+    fields: Array<{
+        title: string
+        key: string
+    }>
+}
+
+export interface SuggestionPickListField extends Omit<interfaces.PickListFieldMeta, 'type'> {
+    type: CustomFieldTypes.SuggestionPickList
 }

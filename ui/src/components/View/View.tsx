@@ -35,6 +35,7 @@ import DocumentList from '../widgets/DocumentList/DocumentList'
 import DocumentPreviewField from '../../fields/DocumentPreview/DocumentPreview'
 import { DocumentFormPopup } from '../widgets/DocumentFormPopup/DocumentFormPopup'
 import TimeField from '../../fields/TimePicker/TimePickerField'
+import SuggestionPickListField from '../../fields/SuggestionPickList/SuggestionPickList'
 
 // TODO We need to remove PopupWidgetTypes from the core and replace imports throughout the entire project
 const { PopupWidgetTypes, FieldType } = interfaces
@@ -56,7 +57,8 @@ const customFields = {
     [CustomFieldTypes.MultipleSelect]: MultipleSelectField,
     [CustomFieldTypes.DocumentPreview]: DocumentPreviewField,
     [FieldType.fileUpload]: FileUpload,
-    [CustomFieldTypes.Time]: TimeField
+    [CustomFieldTypes.Time]: TimeField,
+    [CustomFieldTypes.SuggestionPickList]: SuggestionPickListField
 }
 
 const customWidgets: Partial<Record<CustomWidgetTypes | interfaces.WidgetTypes, interfaces.CustomWidgetDescriptor>> = {

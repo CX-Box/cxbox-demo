@@ -1,5 +1,21 @@
 .tableContainer {
     position: relative;
+
+    :global{
+        .ant-select-selection-selected-value {
+            margin-right: 10px;
+        }
+
+        .ant-select-selection {
+            .ant-select-arrow {
+                width: 16px;
+            }
+
+            &__clear {
+                width: 16px;
+            }
+        }
+    }
 }
 
 .table {

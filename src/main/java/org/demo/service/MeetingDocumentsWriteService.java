@@ -14,12 +14,10 @@ import org.cxbox.api.data.dto.AssociateDTO;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.DrillDownType;
-import org.cxbox.core.dto.MessageType;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.AssociateResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.cxbox.core.dto.rowmeta.PostAction;
-import org.cxbox.core.dto.rowmeta.PreAction;
 import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
 import org.cxbox.core.service.action.ActionsBuilder;
@@ -112,7 +110,7 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 		List<MeetingDocumentsDTO> collect = meetingDocuments.stream().map(e -> entityToDto(bc, e))
 				.collect(Collectors.toList());
 		return new AssociateResultDTO((List) collect)
-				.setAction(PostAction.showMessage(MessageType.INFO, "Files successfully downloaded"));
+				.setAction(PostAction.refreshBc(bc));
 	}
 
 	@SneakyThrows
@@ -160,11 +158,9 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 				.invoker((bc, data) -> new ActionResultDTO<>())
 				.add()*/
 				.associate()
-				.withPreAction(PreAction.confirm("Do you want to save changes to meeting (if any) and upload multiple files to meeting documents?"))
-				.withCustomParameter(Map.of("subtype", "multiFileUpload"))
+				.withCustomParameter(Map.of("type", "multiFileUpload"))
 				.text("Add Files")
 				.add()
-				.delete().text("Delete file").add()
 				.build();
 	}
 

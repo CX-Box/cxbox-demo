@@ -72,6 +72,7 @@ public class MeetingWriteMeta extends FieldMetaBuilder<MeetingDTO> {
 	@Override
 	public void buildIndependentMeta(FieldsMeta<MeetingDTO> fields, InnerBcDescription bcDescription, Long parentId) {
 		fields.enableFilter(MeetingDTO_.additionalContacts);
+		fields.enableFilter(MeetingDTO_.clientName);
 		fields.setForceActive(MeetingDTO_.clientId);
 		fields.setForceActive(MeetingDTO_.startDateTime);
 		fields.setForceActive(MeetingDTO_.endDateTime);

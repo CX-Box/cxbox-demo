@@ -191,6 +191,7 @@ export const TableWidget: FunctionComponent<TableWidgetProps> = props => {
                                     widgetFieldMeta={item}
                                     readonly={!editMode}
                                     forceFocus={editMode}
+                                    className={styles.tableField}
                                 />
                             </div>
                         )

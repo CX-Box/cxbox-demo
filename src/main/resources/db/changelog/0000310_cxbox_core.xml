@@ -51,5 +51,13 @@
     </addColumn>
   </changeSet>
 
+  <changeSet id="ADDITIONAL_FIELDS ADD DATE" author="initial">
+  <addColumn tableName="ADDITIONAL_FIELDS">
+  <column defaultValueComputed="current_timestamp" name="CREATED_DATE" remarks="Дата создания"
+    type="TIMESTAMP(6)">
+    <constraints nullable="false"/>
+  </column>
 
+  </addColumn>
+  </changeSet>
 </databaseChangeLog>

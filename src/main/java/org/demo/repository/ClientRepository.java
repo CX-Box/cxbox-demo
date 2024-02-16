@@ -1,7 +1,9 @@
 package org.demo.repository;
 
+import java.util.List;
 import org.demo.entity.Client;
 import org.demo.entity.Client_;
+import org.demo.entity.enums.ClientStatus;
 import org.demo.extension.FullTextSearchExt;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -23,6 +25,10 @@ public interface ClientRepository extends JpaRepository<Client, Long>, JpaSpecif
 
 	default Specification<Client> getAddressLikeIgnoreCaseSpecification(String value) {
 		return (root, query, cb) -> FullTextSearchExt.likeIgnoreCase(value, cb, root.get(Client_.address));
+	}
+
+	default Specification<Client> statusIn(List<ClientStatus> clientStatusList) {
+		return (root, query, cb) -> root.get(Client_.status).in(clientStatusList);
 	}
 
 

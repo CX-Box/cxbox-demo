@@ -24,6 +24,7 @@ public class DashboardWidgetsFieldExtractor extends BaseFieldExtractor {
 	@Override
 	public List<String> getSupportedTypes() {
 		return Lists.newArrayList(
+				"StatsBlock",
 				"AdditionalInfo",
 				"Funnel",
 				"RingProgress",

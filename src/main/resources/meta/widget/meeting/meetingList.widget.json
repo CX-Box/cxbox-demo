@@ -34,7 +34,12 @@
     {
       "title": "Client Name",
       "key": "clientName",
-      "type": "input"
+      "type": "pickList",
+      "popupBcName": "clientPickListPopup",
+      "pickMap": {
+        "clientName": "fullName",
+        "clientId": "id"
+      }
     },
     {
       "title": "Contact",

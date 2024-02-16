@@ -20,6 +20,8 @@ import ReactDragListView from 'react-drag-listview'
 import { Checkbox, Icon, Menu, Modal, Transfer } from 'antd'
 import DropdownSetting from './components/DropdownSetting'
 import Operations from '../../Operations/Operations'
+import FilterSettingModal from './components/FilterSettingModal'
+import { usePresetFilterSettings } from './hooks/usePresetFilterSettings'
 
 export type ControlColumn = { column: ColumnProps<interfaces.DataItem>; position: 'left' | 'right' }
 interface TableProps extends TableWidgetOwnProps {
@@ -33,6 +35,7 @@ function Table({ meta, primaryColumn, disablePagination, ...rest }: TableProps) 
 
     const controlColumns = React.useMemo(() => {
         const resultColumns: Array<ControlColumn> = []
+
         if (meta.options?.primary?.enabled && primaryColumn) {
             resultColumns.push(primaryColumn as any)
         }
@@ -78,6 +81,17 @@ function Table({ meta, primaryColumn, disablePagination, ...rest }: TableProps) 
         [changeColumnsVisibility]
     )
 
+    const { visible: filterSettingVisible, toggleVisibility: toggleFilterSettingVisible } = useVisibility(false)
+
+    const { saveCurrentFiltersAsGroup, filterGroups, removeFilterGroup, filtersExist } = usePresetFilterSettings(meta.bcName)
+
+    const handleSaveFilterGroup = useCallback(
+        (values: { name: string }) => {
+            saveCurrentFiltersAsGroup(values.name)
+        },
+        [saveCurrentFiltersAsGroup]
+    )
+
     const { t } = useTranslation()
 
     const dispatch = useDispatch()
@@ -96,7 +110,9 @@ function Table({ meta, primaryColumn, disablePagination, ...rest }: TableProps) 
 
     const { showExport, exportTable } = useExportTable({ widget: meta })
 
-    const showSettings = showColumnSettings || showExport
+    const showSaveFiltersButton = normalizedMeta.options?.filterSetting?.enabled
+
+    const showSettings = showSaveFiltersButton || showColumnSettings || showExport
 
     return (
         <div className={styles.tableContainer}>
@@ -126,6 +142,11 @@ function Table({ meta, primaryColumn, disablePagination, ...rest }: TableProps) 
                                         <Icon type="file-excel" style={{ fontSize: 14, marginLeft: 4 }} />
                                     </Menu.Item>
                                 )}
+                                {showSaveFiltersButton && (
+                                    <Menu.Item key="4" onClick={toggleFilterSettingVisible}>
+                                        {t('Save filters')}
+                                    </Menu.Item>
+                                )}
                             </Menu>
                         }
                     />
@@ -143,6 +164,15 @@ function Table({ meta, primaryColumn, disablePagination, ...rest }: TableProps) 
                     listStyle={{ width: '44%' }}
                 />
             </Modal>
+
+            <FilterSettingModal
+                filtersExist={filtersExist}
+                onDelete={removeFilterGroup}
+                filterGroups={filterGroups}
+                visible={filterSettingVisible}
+                onCancel={toggleFilterSettingVisible}
+                onSubmit={handleSaveFilterGroup}
+            />
 
             <ReactDragListView.DragColumn onDragEnd={changeOrder} nodeSelector="th">
                 <TableWidget

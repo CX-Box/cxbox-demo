@@ -1,10 +1,16 @@
-import { reducers, interfaces } from '@cxbox-ui/core'
+import { interfaces, reducers } from '@cxbox-ui/core'
 import { actions, changeMenuCollapsed, customAction, sendOperationSuccess } from '@actions'
 import { createReducer, isAnyOf } from '@reduxjs/toolkit'
+import { BcMetaState } from '@cxbox-ui/core/dist/interfaces'
+import { FilterGroup } from '@interfaces/filters'
 
 interface ScreenState extends interfaces.ScreenState {
     menuCollapsed: boolean
     fullTextFilter: Record<string, string>
+    bo: {
+        activeBcName: string
+        bc: Record<string, BcMetaState & { filterGroups?: FilterGroup[] }>
+    }
 }
 
 const initialState: ScreenState = {
@@ -28,6 +34,28 @@ const screenReducerBuilder = reducers
         const { bcName, fullTextFilterValue } = action.payload
 
         state.fullTextFilter[bcName] = fullTextFilterValue
+    })
+    .addCase(actions.removeFilterGroup, (state, action) => {
+        const removedFilterGroup = action.payload
+
+        state.bo.bc[removedFilterGroup.bc] = state.bo.bc[removedFilterGroup.bc] ?? {}
+
+        state.bo.bc[removedFilterGroup.bc].filterGroups = state.bo.bc[removedFilterGroup.bc as string].filterGroups?.filter(
+            filterGroup => filterGroup.name !== removedFilterGroup.name
+        )
+    })
+    .addCase(actions.addFilterGroup, (state, action) => {
+        const newFilterGroup = { ...action.payload, personal: true }
+
+        state.bo.bc[newFilterGroup.bc]?.filterGroups?.push(newFilterGroup)
+    })
+    .addCase(actions.updateIdForFilterGroup, (state, { payload: newFilterGroup }) => {
+        const newFilterGroupIndex =
+            state.bo.bc[newFilterGroup.bc].filterGroups?.findIndex(filterGroup => filterGroup.name === newFilterGroup.name) ?? -1
+
+        if (newFilterGroupIndex !== -1) {
+            ;(state.bo.bc[newFilterGroup.bc].filterGroups as FilterGroup[])[newFilterGroupIndex].id = newFilterGroup.id
+        }
     })
     .addMatcher(isAnyOf(sendOperationSuccess, actions.bcSaveDataSuccess), (state, action) => {
         if (action.payload.dataItem) {

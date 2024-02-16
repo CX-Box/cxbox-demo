@@ -125,6 +125,10 @@ export interface AppWidgetMeta extends interfaces.WidgetMeta {
             enabled: boolean
             fields: string[]
         }
+
+        filterSetting?: {
+            enabled: boolean
+        }
     }
 }
 

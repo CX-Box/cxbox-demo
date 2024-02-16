@@ -4,6 +4,7 @@ import { OperationPreInvokeCustom } from '@interfaces/operation'
 import { NotificationState } from '@interfaces/notification'
 import { LoginResponse } from '@interfaces/session'
 import { TableSettingsItem, TableSettingsList, TableSettingsMap } from '@interfaces/tableSettings'
+import { FilterGroup } from '@interfaces/filters'
 
 export const SSO_AUTH = createAction('SSO_AUTH')
 
@@ -79,3 +80,9 @@ export const changeTableSettings = createAction<
 >('changeTableSettings')
 
 export const resetTableSettings = createAction<Pick<TableSettingsItem, 'view' | 'widget'>>('resetTableSettings')
+
+export const updateIdForFilterGroup = createAction<{ name: string; bc: string; id: string }>('updateIdForFilterGroup')
+
+export const addFilterGroup = createAction<FilterGroup & { bc: string }>('addFilterGroup')
+
+export const removeFilterGroup = createAction<{ name: string; bc: string; id?: string }>('removeFilterGroup')

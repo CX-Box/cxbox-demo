@@ -9,6 +9,7 @@ import { fileControllerMapping } from '@constants/notification'
 import { LoginResponse } from '@interfaces/session'
 import { useFullTextInterceptor } from './interceptors'
 import { TableSettingsItem } from '@interfaces/tableSettings'
+import { FilterGroup } from '@interfaces/filters'
 
 class Api extends CXBoxApi {
     fetchBcCount(screenName: string, bcName: string, params: BcCountParamsMap = {}) {
@@ -115,6 +116,14 @@ class Api extends CXBoxApi {
 
     deletePersonalSetting(id: string) {
         return this.api$.delete('/personalAdditionalFields', { data: [id] } as AxiosRequestConfig)
+    }
+
+    saveFilterGroup(data: { filterGroups: FilterGroup[] }) {
+        return this.api$.post<{ data: { id: string }[] }>('personalFilterGroups', { data: data || {} }, undefined)
+    }
+
+    deleteFilterGroup(filterGroupId: number) {
+        return this.api$.delete<{ data: unknown }>(`personalFilterGroups`, { data: [filterGroupId] } as AxiosRequestConfig)
     }
 }
 

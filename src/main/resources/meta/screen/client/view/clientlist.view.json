@@ -10,8 +10,13 @@
       "gridWidth": 24
     },
     {
-      "widgetName": "clientList",
+      "widgetName": "clientStats",
       "position": 10,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "clientList",
+      "position": 20,
       "gridWidth": 24
     }
   ],

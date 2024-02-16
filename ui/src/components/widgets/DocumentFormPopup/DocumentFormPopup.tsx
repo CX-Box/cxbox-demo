@@ -14,9 +14,9 @@ export interface DocumentFormPopupProps {
 }
 
 export function DocumentFormPopup({ meta }: DocumentFormPopupProps) {
-    const { bcName } = meta
+    const { bcName, name } = meta
     const popupData = useAppSelector(state => state.view.popupData)
-    const showed = popupData?.bcName === bcName
+    const showed = popupData?.bcName === bcName && name === popupData?.widgetName
 
     const dispatch = useDispatch()
     const bcLoading = useAppSelector(state => state.screen.bo.bc[bcName])?.loading

@@ -158,7 +158,7 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 				.invoker((bc, data) -> new ActionResultDTO<>())
 				.add()*/
 				.associate()
-				.withCustomParameter(Map.of("type", "multiFileUpload"))
+				.withCustomParameter(Map.of("subtype", "multiFileUpload"))
 				.text("Add Files")
 				.add()
 				.build();

@@ -13,6 +13,11 @@
       "widgetName": "clientList",
       "position": 10,
       "gridWidth": 24
+    },
+    {
+      "widgetName": "testWidget",
+      "position": 1,
+      "gridWidth": 24
     }
   ],
   "rolesAllowed": [

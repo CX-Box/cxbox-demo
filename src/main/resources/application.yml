@@ -79,6 +79,8 @@ spring:
     change-log: classpath:/db/db.changelog-master.xml
     drop-first: true
     contexts: local
+  session:
+    store-type: jdbc
   cache:
     type: SIMPLE
   jpa:

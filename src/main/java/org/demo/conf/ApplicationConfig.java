@@ -1,6 +1,8 @@
 package org.demo.conf;
 
+import java.util.concurrent.Executors;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.cxbox.api.config.CxboxBeanProperties;
 import org.cxbox.api.service.tx.ITransactionStatus;
 import org.cxbox.core.config.APIConfig;
@@ -8,8 +10,6 @@ import org.cxbox.core.config.CoreApplicationConfig;
 import org.cxbox.core.config.UIConfig;
 import org.cxbox.model.core.config.PersistenceJPAConfig;
 import org.cxbox.model.core.tx.CxboxJpaTransactionManagerForceActiveAware;
-import java.util.concurrent.Executors;
-import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;

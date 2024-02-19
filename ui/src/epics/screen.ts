@@ -69,7 +69,7 @@ export const replaceTemporaryIdOnSavingEpic: RootEpic = (action$, state$) =>
 
             if (newCursor != null) {
                 window.location.href = `${window.location.href}`.replace(
-                    `/${action.payload.bcName}/${state.screen.bo.bc[action.payload.bcName]?.cursor}`,
+                    `/${action.payload.bcName}/-1`,
                     `/${action.payload.bcName}/${newCursor}`
                 )
             }

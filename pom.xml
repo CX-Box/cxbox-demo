@@ -215,14 +215,13 @@
             <version>1.6.0</version>
             <executions>
               <execution>
-                <id>exec-npm-install</id>
+                <id>exec-yarn-install</id>
                 <phase>generate-sources</phase>
                 <configuration>
                   <workingDirectory>${project.basedir}/ui</workingDirectory>
-                  <executable>npm</executable>
+                  <executable>yarn</executable>
                   <arguments>
                     <argument>install</argument>
-                    <argument>--legacy-peer-deps</argument>
                   </arguments>
                 </configuration>
                 <goals>
@@ -230,13 +229,12 @@
                 </goals>
               </execution>
               <execution>
-                <id>exec-npm-run-build</id>
+                <id>exec-yarn-run-build</id>
                 <phase>generate-sources</phase>
                 <configuration>
                   <workingDirectory>${project.basedir}/ui</workingDirectory>
-                  <executable>npm</executable>
+                  <executable>yarn</executable>
                   <arguments>
-                    <argument>run</argument>
                     <argument>build</argument>
                   </arguments>
                 </configuration>

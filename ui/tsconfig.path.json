@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "@assets/*": ["./assets/*"],
+      "@assets": ["./assets"],
+      "@components/*": ["./components/*"],
+      "@components": ["./components"],
+      "@cxboxComponents/*": ["./cxboxComponents/*"],
+      "@cxboxComponents": ["./cxboxComponents"],
+      "@constants/*": ["./constants/*"],
+      "@constants": ["./constants"],
+      "@interfaces/*": ["./interfaces/*"],
+      "@interfaces": ["./interfaces"],
+      "@actions/*": ["./actions/*"],
+      "@actions": ["./actions"],
+      "@utils/*": ["./utils/*"],
+      "@utils": ["./utils"],
+      "@hooks/*": ["./hooks/*"],
+      "@hooks": ["./hooks"],
+      "@imports/*": ["./imports/*"],
+      "@imports": ["./imports"],
+      "@store": ["./store"],
+      "@router": ["./router"],
+      "@i18n": ["./i18n"]
+    }
+  }
+}

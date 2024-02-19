@@ -1,10 +1,10 @@
 import React, { FunctionComponent } from 'react'
-import { WidgetMeta } from '@cxbox-ui/core/interfaces/widget'
 import styles from './Header.less'
-import { TemplatedTitle } from '@cxbox-ui/core'
+import { interfaces } from '@cxbox-ui/core'
+import { TemplatedTitle } from '@cxboxComponents'
 
 interface HeaderProps {
-    meta: WidgetMeta
+    meta: interfaces.WidgetMeta
 }
 
 const TitleContainer: FunctionComponent<{ title: string }> = ({ title }) => {

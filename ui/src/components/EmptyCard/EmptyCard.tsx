@@ -1,18 +1,17 @@
 import React from 'react'
 import { Col, Row } from 'antd'
-import { useSelector } from 'react-redux'
-import { WidgetMeta } from '@cxbox-ui/core/interfaces/widget'
 import DebugWidgetWrapper from '../DebugWidgetWrapper/DebugWidgetWrapper'
-import { AppState } from '../../interfaces/storeSlices'
 import styles from './EmptyCard.module.css'
+import { interfaces } from '@cxbox-ui/core'
+import { useAppSelector } from '@store'
 
 interface EmptyCardProps {
     children?: React.ReactNode
-    meta: WidgetMeta
+    meta: interfaces.WidgetMeta
 }
 
 function EmptyCard({ children, meta }: EmptyCardProps) {
-    const debugMode = useSelector((state: AppState) => state.session.debugMode || false)
+    const debugMode = useAppSelector(state => state.session.debugMode || false)
 
     return (
         <Row

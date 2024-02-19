@@ -1,13 +1,11 @@
 import React, { useMemo } from 'react'
 import { TableRowSelection } from 'antd/lib/table'
-import { PaginationMode } from '@cxbox-ui/core/interfaces/widget'
-import { AssociatedItem } from '@cxbox-ui/core/interfaces/operation'
-import { DataItem } from '@cxbox-ui/core/interfaces/data'
 import Table, { ControlColumn } from '../../Table/Table'
-import { AppWidgetTableMeta } from '../../../../interfaces/widget'
+import { AppWidgetTableMeta } from '@interfaces/widget'
 import { Checkbox } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { usePassiveAssociations } from '../hooks/usePassiveAssociations'
+import { interfaces } from '@cxbox-ui/core'
 
 export interface AssocTableProps {
     meta: AppWidgetTableMeta
@@ -17,7 +15,7 @@ export interface AssocTableProps {
 export const AssocTable = ({ ...props }: AssocTableProps) => {
     const { values: selectedRecords, selectAllItems, selectItem, changeItem } = usePassiveAssociations()
 
-    const rowSelection: TableRowSelection<AssociatedItem> = {
+    const rowSelection: TableRowSelection<interfaces.AssociatedItem> = {
         type: 'checkbox',
         selectedRowKeys: selectedRecords.map(item => item.id),
         onSelect: selectItem,
@@ -54,8 +52,8 @@ export const AssocTable = ({ ...props }: AssocTableProps) => {
     return (
         <Table
             meta={props.meta}
-            rowSelection={rowSelection as TableRowSelection<DataItem>}
-            paginationMode={PaginationMode.page}
+            rowSelection={rowSelection as TableRowSelection<interfaces.DataItem>}
+            paginationMode={interfaces.PaginationMode.page}
             disablePagination={props.disablePagination}
             primaryColumn={primaryColumn}
         />

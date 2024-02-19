@@ -1,25 +1,23 @@
 import React from 'react'
 import styles from './InfoCell.less'
-import { LayoutRow, WidgetInfoMeta, WidgetInfoField } from '@cxbox-ui/core/interfaces/widget'
-import { DataItem, MultivalueSingleValue } from '@cxbox-ui/core/interfaces/data'
-import { FieldType } from '@cxbox-ui/core/interfaces/view'
-import { ActionLink, Field, MultiValueListRecord } from '@cxbox-ui/core'
+import { ActionLink, Field, MultiValueListRecord } from '@cxboxComponents'
 import InfoValueWrapper from './InfoValueWrapper'
-import { EMPTY_ARRAY } from '../../../../constants/constants'
-import { useSelector } from 'react-redux'
-import { AppState } from '../../../../interfaces/storeSlices'
+import { EMPTY_ARRAY } from '@constants'
+import { useAppSelector } from '@store'
+import { interfaces } from '@cxbox-ui/core'
+const { FieldType } = interfaces
 
 export interface ValueCellProps {
-    row: LayoutRow
+    row: interfaces.LayoutRow
     colSpan: number
     cursor: string
-    meta: WidgetInfoMeta
-    field: WidgetInfoField
+    meta: interfaces.WidgetInfoMeta
+    field: interfaces.WidgetInfoField
     onDrillDown: (widgetName: string, cursor: string, bcName: string, fieldKey: string) => void
 }
 function InfoCell({ field, colSpan, row, meta, cursor, onDrillDown }: ValueCellProps) {
     const isMultiValue = field.type === FieldType.multivalue
-    const data: DataItem = useSelector((state: AppState) => state.data[meta.bcName]?.find(i => i.id === cursor)) as DataItem
+    const data: interfaces.DataItem = useAppSelector(state => state.data[meta.bcName]?.find(i => i.id === cursor)) as interfaces.DataItem
 
     const dataId = data?.id
     const separateDrillDownTitle = field.drillDown && (field.drillDownTitle || (field.drillDownTitleKey && data[field.drillDownTitleKey]))
@@ -28,7 +26,7 @@ function InfoCell({ field, colSpan, row, meta, cursor, onDrillDown }: ValueCellP
     }, [onDrillDown, meta, dataId, field.key])
 
     const ResultField = isMultiValue ? (
-        ((data[field.key] || EMPTY_ARRAY) as MultivalueSingleValue[]).map((multiValueSingleValue, index) => {
+        ((data[field.key] || EMPTY_ARRAY) as interfaces.MultivalueSingleValue[]).map((multiValueSingleValue, index) => {
             return <MultiValueListRecord key={index} isFloat={false} multivalueSingleValue={multiValueSingleValue} />
         })
     ) : (

@@ -1,10 +1,9 @@
 import FileSaver from 'file-saver'
 import { valueMapper } from './export'
 import { Alignment, Borders, Fill, Workbook, Worksheet } from 'exceljs'
-import { DataItem } from '@cxbox-ui/core/interfaces/data'
-import { FieldType } from '@cxbox-ui/core/interfaces/view'
-import { DateFormat } from '../interfaces/date'
-import { TableWidgetField } from '../interfaces/widget'
+import { DateFormat } from '@interfaces/date'
+import { TableWidgetField } from '@interfaces/widget'
+import { interfaces } from '@cxbox-ui/core'
 
 const maxDigitWidthPx = 7 // Calibri 11 point font
 
@@ -20,7 +19,7 @@ const cellBorder = {
 }
 
 export const exportXlsx = (
-    columns: DataItem[],
+    columns: interfaces.DataItem[],
     filteredFieldsMeta: TableWidgetField[],
     fieldsMeta: TableWidgetField[],
     keys: string[],
@@ -85,6 +84,8 @@ function setColumnWidths(sheet: Worksheet, columns: TableWidgetField[]) {
     })
 }
 
+const { FieldType } = interfaces
+
 /**
  * Inserts a cap into the sheet: top stamp, column groups, columns
  *
@@ -93,7 +94,7 @@ function setColumnWidths(sheet: Worksheet, columns: TableWidgetField[]) {
  * @param data
  * @param currentDate
  */
-function buildHeader(sheet: Worksheet, fieldsMeta: TableWidgetField[], data: DataItem[], currentDate?: string) {
+function buildHeader(sheet: Worksheet, fieldsMeta: TableWidgetField[], data: interfaces.DataItem[], currentDate?: string) {
     const filteredFieldsMeta = fieldsMeta.reduce<TableWidgetField[]>((result, fieldMeta) => {
         if (!fieldMeta.hidden && fieldMeta.type !== FieldType.hidden) {
             return [...result, fieldMeta]
@@ -135,7 +136,7 @@ function buildFooter(sheet: Worksheet) {
 function setStyles(
     sheet: Worksheet, // Excel.Worksheet
     fieldsMeta: TableWidgetField[],
-    items: DataItem[],
+    items: interfaces.DataItem[],
     offset: number
 ) {
     const alignment = {
@@ -147,7 +148,7 @@ function setStyles(
         const numberFormat = getNumberFormat(meta.type)
         items.forEach((item, rowIndex) => {
             const cell = sheet.getCell(offset + rowIndex + 1, index + 1)
-            const currentFormat = item.type ? getNumberFormat(item.type as FieldType) : numberFormat
+            const currentFormat = item.type ? getNumberFormat(item.type as interfaces.FieldType) : numberFormat
             cell.numFmt = currentFormat
             cell.alignment = alignment as Partial<Alignment>
             cell.border = cellBorder as Partial<Borders>
@@ -168,7 +169,7 @@ function setStyles(
 /**
  * Sets the format of numeric fields (and dates, which can be stored as numbers in Excel)
  */
-function getNumberFormat(type: FieldType) {
+function getNumberFormat(type: interfaces.FieldType) {
     switch (type) {
         case FieldType.date: {
             return DateFormat.outputDateFormat

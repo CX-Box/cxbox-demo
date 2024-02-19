@@ -1,10 +1,9 @@
 import { useCallback, useMemo } from 'react'
-import { useAppSelector } from '../../../../hooks/useAppSelector'
-import { MultivalueSingleValue } from '../../../../interfaces/data'
+import { useAppSelector } from '@store'
+import { MultivalueSingleValue } from '@interfaces/data'
 import { shallowEqual, useDispatch } from 'react-redux'
-import { DataItem } from '@cxbox-ui/core/interfaces/data'
-import { $do } from '../../../../actions/types'
-import { PopupData } from '@cxbox-ui/core/interfaces/view'
+import { actions, interfaces } from '@cxbox-ui/core'
+import { buildBcUrl } from '@utils/buildBcUrl'
 
 function useMultivalueValues() {
     const { selectedItemsFromCalleePendingData, selectedItemsFromCalleeData } = useAppSelector(state => {
@@ -30,7 +29,7 @@ function useMultivalueValues() {
 
 function useMultivalueHandlers(currentValues: MultivalueSingleValue[]) {
     const { bcName, cursor, associateFieldKey, assocValueKey } = useAppSelector(state => {
-        const { calleeBCName = '', associateFieldKey = '', assocValueKey = '' } = state.view.popupData as PopupData
+        const { calleeBCName = '', associateFieldKey = '', assocValueKey = '' } = state.view.popupData as interfaces.PopupData
         const calleeBc = state.screen.bo.bc[calleeBCName]
 
         return {
@@ -46,8 +45,9 @@ function useMultivalueHandlers(currentValues: MultivalueSingleValue[]) {
     const changeDataItem = useCallback(
         (value: MultivalueSingleValue[]) => {
             dispatch(
-                $do.changeDataItem({
+                actions.changeDataItem({
                     bcName,
+                    bcUrl: buildBcUrl(bcName, true),
                     cursor,
                     dataItem: {
                         [associateFieldKey]: value
@@ -103,7 +103,7 @@ function useMultivalueHandlers(currentValues: MultivalueSingleValue[]) {
     )
 
     const selectAllItems = useCallback(
-        (selected: boolean, selectedRows: DataItem[], changedRows: DataItem[]) => {
+        (selected: boolean, selectedRows: interfaces.DataItem[], changedRows: interfaces.DataItem[]) => {
             const newValue = [...currentValues]
 
             if (selected) {

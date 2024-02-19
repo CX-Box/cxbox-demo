@@ -5,15 +5,15 @@
 import React, { FormEvent } from 'react'
 import { Button, Form } from 'antd'
 import styles from './FilterPopup.less'
-import { useDispatch, useSelector } from 'react-redux'
+import { CustomFieldTypes } from '@interfaces/widget'
+import { useAppSelector } from '@store'
 import { useTranslation } from 'react-i18next'
-import { FieldType } from '@cxbox-ui/schema'
-import { DataValue } from '@cxbox-ui/core/interfaces/data'
-import { AppState } from '../../interfaces/storeSlices'
-import { WidgetField } from '@cxbox-ui/core/interfaces/widget'
-import { BcFilter, FilterType } from '@cxbox-ui/core/interfaces/filters'
-import { $do } from '../../actions/types'
-import { CustomFieldTypes } from '../../interfaces/widget'
+import { FieldType, WidgetField, WidgetTypes } from '@cxbox-ui/schema'
+import { useAssociateFieldKeyForPickList } from '../ColumnTitle/ColumnFilter'
+import { BcFilter, DataValue, FilterType } from '@interfaces/core'
+import { PickListFieldMeta } from '@cxbox-ui/schema/src/interfaces/widget'
+import { useDispatch } from 'react-redux'
+import { actions } from '@actions'
 
 interface FilterPopupProps {
     widgetName: string
@@ -26,18 +26,34 @@ interface FilterPopupProps {
 }
 
 const FilterPopup: React.FC<FilterPopupProps> = props => {
-    const widget = useSelector((store: AppState) => {
-        return store.view.widgets.find(item => item.name === props.widgetName)
+    const widget = useAppSelector(state => {
+        return state.view.widgets.find(item => item.name === props.widgetName)
     })
-    const viewName = useSelector((store: AppState) => {
-        return store.view.name
+    const viewName = useAppSelector(state => {
+        return state.view.name
     })
-    const filter = useSelector((store: AppState) => {
-        return store.screen.filters[widget?.bcName as string]?.find(item => item.fieldName === props.fieldKey)
+    const filter = useAppSelector(state => {
+        return state.screen.filters[widget?.bcName as string]?.find(item => item.fieldName === props.fieldKey)
+    })
+    const allFilters = useAppSelector(state => {
+        return state.screen.filters[widget?.bcName as string]
     })
     const widgetMeta = (widget?.fields as WidgetField[])?.find(item => item.key === props.fieldKey)
+    const fieldMetaPickListField = widgetMeta as PickListFieldMeta
+
+    const { associateFieldKeyForPickList } = useAssociateFieldKeyForPickList(fieldMetaPickListField)
+
+    const pickListPopupBcName = fieldMetaPickListField?.popupBcName
+
+    const picklistPopupWidget = useAppSelector(state => {
+        return state.view.widgets.find(item => {
+            return item.type === WidgetTypes.PickListPopup && item.bcName === pickListPopupBcName
+        })
+    })
+
     const dispatch = useDispatch()
     const { t } = useTranslation()
+
     if (!widgetMeta) {
         return null
     }
@@ -53,22 +69,31 @@ const FilterPopup: React.FC<FilterPopupProps> = props => {
             viewName,
             widgetName: widget?.name as string
         }
+        if (FieldType.pickList) {
+            const foundPickListFilter = allFilters?.find(filter => {
+                return filter.fieldName === associateFieldKeyForPickList
+            })
+            if (foundPickListFilter) {
+                dispatch(actions.bcRemoveFilter({ bcName: widget?.bcName as string, filter: foundPickListFilter as BcFilter }))
+                picklistPopupWidget?.bcName && dispatch(actions.bcCancelPendingChanges({ bcNames: [picklistPopupWidget?.bcName] }))
+            }
+        }
         if ((props.value === null || props.value === undefined) && FieldType.checkbox === props.fieldType) {
             dispatch(
-                $do.bcAddFilter({
+                actions.bcAddFilter({
                     bcName: widget?.bcName as string,
                     filter: { ...newFilter, value: false },
                     widgetName: widget?.name as string
                 })
             )
         } else if (props.value === null || props.value === undefined) {
-            dispatch($do.bcRemoveFilter({ bcName: widget?.bcName as string, filter: filter as BcFilter }))
+            dispatch(actions.bcRemoveFilter({ bcName: widget?.bcName as string, filter: filter as BcFilter }))
         } else {
-            dispatch($do.bcAddFilter({ bcName: widget?.bcName as string, filter: newFilter, widgetName: widget?.name as string }))
+            dispatch(actions.bcAddFilter({ bcName: widget?.bcName as string, filter: newFilter, widgetName: widget?.name as string }))
         }
         // FullHierarchy has its own implementation of data search without backend query filtered data
         if (!widget?.options?.hierarchyFull) {
-            dispatch($do.bcForceUpdate({ bcName: widget?.bcName as string }))
+            dispatch(actions.bcForceUpdate({ bcName: widget?.bcName as string }))
         }
         props.onApply?.()
     }
@@ -76,9 +101,9 @@ const FilterPopup: React.FC<FilterPopupProps> = props => {
     const handleCancel = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
         e.preventDefault()
         if (filter) {
-            dispatch($do.bcRemoveFilter({ bcName: widget?.bcName as string, filter }))
+            dispatch(actions.bcRemoveFilter({ bcName: widget?.bcName as string, filter }))
             if (!widget?.options?.hierarchyFull) {
-                dispatch($do.bcForceUpdate({ bcName: widget?.bcName as string }))
+                dispatch(actions.bcForceUpdate({ bcName: widget?.bcName as string }))
             }
         }
         props.onCancel?.()
@@ -126,6 +151,7 @@ export function getFilterType(fieldType: FieldType | CustomFieldTypes) {
             return FilterType.specified
         }
         case FieldType.inlinePickList:
+        case FieldType.pickList:
         case FieldType.input:
         case FieldType.fileUpload:
         case FieldType.text: {

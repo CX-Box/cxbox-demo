@@ -1,13 +1,12 @@
 import React from 'react'
 import cn from 'classnames'
-import { PickListPopup as CorePickListPopup } from '@cxbox-ui/core'
+import { PickListPopup as CorePickListPopup } from '@cxboxComponents'
 import tableStyles from '../Table/Table.less'
 import styles from './PickListPopup.module.css'
 import Pagination from '../../ui/Pagination/Pagination'
-import { AppState } from '../../../interfaces/storeSlices'
-import { useSelector } from 'react-redux'
 import AssocListPopup from '../AssocListPopup/AssocListPopup'
-import { AppWidgetTableMeta } from '../../../interfaces/widget'
+import { AppWidgetTableMeta } from '@interfaces/widget'
+import { useAppSelector } from '@store'
 
 interface PickListPopupProps {
     meta: AppWidgetTableMeta
@@ -41,5 +40,5 @@ function PickListPopup({ meta }: PickListPopupProps) {
 export default React.memo(PickListPopup)
 
 function useShowAssocFilter() {
-    return useSelector((state: AppState) => !!state.view.popupData?.isFilter)
+    return useAppSelector(state => !!state.view.popupData?.isFilter)
 }

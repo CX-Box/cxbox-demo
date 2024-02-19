@@ -1,21 +1,25 @@
-import React from 'react'
-import { WidgetListField } from '@cxbox-ui/core/interfaces/widget'
-import { RowMetaField } from '@cxbox-ui/core/interfaces/rowMeta'
+import React, { useCallback } from 'react'
 import ColumnFilter from './ColumnFilter'
-import { FieldType } from '@cxbox-ui/core/interfaces/view'
 import cn from 'classnames'
 import ColumnSort from './ColumnSort'
-import { TemplatedTitle } from '@cxbox-ui/core'
 import styles from './ColumnTitle.less'
-import { CustomFieldTypes } from '../../interfaces/widget'
+import { CustomFieldTypes } from '@interfaces/widget'
+import { interfaces } from '@cxbox-ui/core'
+import { TemplatedTitle } from '@cxboxComponents'
+import { Icon } from 'antd'
+import Button from '../ui/Button/Button'
 
 interface ColumnTitleProps {
     widgetName: string
-    widgetMeta: WidgetListField
-    rowMeta: RowMetaField
+    widgetMeta: interfaces.WidgetListField
+    rowMeta: interfaces.RowMetaField
+    onClose?: (fieldKey: string) => void
+    showCloseButton?: boolean
 }
 
-export const notSortableFields: readonly (FieldType | CustomFieldTypes)[] = [
+const { FieldType } = interfaces
+
+export const notSortableFields: readonly (interfaces.FieldType | CustomFieldTypes)[] = [
     CustomFieldTypes.MultipleSelect,
     FieldType.multivalue,
     FieldType.multivalueHover,
@@ -24,7 +28,24 @@ export const notSortableFields: readonly (FieldType | CustomFieldTypes)[] = [
     FieldType.hint
 ]
 
-const ColumnTitle = ({ widgetName, widgetMeta, rowMeta }: ColumnTitleProps) => {
+const rightAlignedFields: readonly (interfaces.FieldType | CustomFieldTypes)[] = [FieldType.number, FieldType.money, FieldType.percent]
+
+const ColumnTitle = ({ widgetName, widgetMeta, rowMeta, onClose, showCloseButton }: ColumnTitleProps) => {
+    const handleColumnClose = useCallback(() => {
+        onClose?.(widgetMeta.key)
+    }, [onClose, widgetMeta.key])
+
+    const close = (
+        <Button
+            type="empty"
+            style={{ visibility: showCloseButton ? 'visible' : 'hidden' }}
+            className={styles.closeButton}
+            onClick={handleColumnClose}
+        >
+            <Icon type="close" />
+        </Button>
+    )
+
     if (!widgetMeta && !rowMeta) {
         return null
     }
@@ -32,7 +53,15 @@ const ColumnTitle = ({ widgetName, widgetMeta, rowMeta }: ColumnTitleProps) => {
     const title = <TemplatedTitle widgetName={widgetName} title={widgetMeta.title} />
 
     if (!rowMeta) {
-        return <div>{title}</div>
+        return (
+            <div
+                className={cn({
+                    [styles.rightAlignment]: rightAlignedFields.includes(widgetMeta.type)
+                })}
+            >
+                {title}
+            </div>
+        )
     }
 
     const sort = !notSortableFields.includes(widgetMeta.type) && (
@@ -42,10 +71,11 @@ const ColumnTitle = ({ widgetName, widgetMeta, rowMeta }: ColumnTitleProps) => {
     const filter = rowMeta.filterable && <ColumnFilter widgetName={widgetName} widgetMeta={widgetMeta} rowMeta={rowMeta} />
 
     return (
-        <div className={cn(styles.container)}>
+        <div className={cn(styles.container, { [styles.rightAlignment]: rightAlignedFields.includes(widgetMeta.type) })}>
             {title}
             {filter}
             {sort}
+            {close}
         </div>
     )
 }

@@ -1,0 +1,21 @@
+@import '../../../../assets/styles/theme.less';
+
+.container {
+    :global {
+        .ant-input {
+            border-radius: 2px;
+            font-size: 16px;
+            border-color: @brown-grey;
+        }
+        .anticon {
+            font-size: 24px;
+            color: @brown-grey;
+        }
+        .ant-input-affix-wrapper .ant-input-prefix {
+            left: 8px;
+        }
+        .ant-input-affix-wrapper .ant-input:not(:first-child) {
+            padding-left: 38px;
+        }
+    }
+}

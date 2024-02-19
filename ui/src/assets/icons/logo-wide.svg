@@ -3,12 +3,10 @@
 <svg width="208" height="50" version="1.1" id="svg_null" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	viewBox="0 0 457.2 109.2" style="enable-background:new 0 0 457.2 109.2;" xml:space="preserve">
 <style type="text/css">
-	.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#595959;}
-	.st1{fill-rule:evenodd;clip-rule:evenodd;fill:#595959;}
-	.st2{fill-rule:evenodd;clip-rule:evenodd;fill:#595959;fill-opacity:0.7;}
-	.st3{fill-rule:evenodd;clip-rule:evenodd;fill:#595959;fill-opacity:0.7;}
-	.st4{opacity:0.74;}
-	.st5{fill:#595959;}
+	.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#B91B5F;}
+	.st1{fill-rule:evenodd;clip-rule:evenodd;fill:#833F91;}
+	.st2{fill-rule:evenodd;clip-rule:evenodd;fill:#B91B5F;fill-opacity:0.7;}
+	.st3{fill-rule:evenodd;clip-rule:evenodd;fill:#833F91;fill-opacity:0.7;}
 	.st6{font-family:'Stencil';}
 	.st7{font-size:62.2802px;}
 	.st8{letter-spacing:0.8;}
@@ -29,6 +27,6 @@
 	<polygon id="shape.accent_00000005944962738607481630000018012638429138346163_" class="st2" points="15.6,78.5 60.7,109.2
 	60.9,91.5 15.9,60.7 "/>
 	<g class="st4">
-	<text transform="matrix(1.1886 0 0 1 115.0958 77.1963)" class="st5 st6 st7 st8">CXBox</text>
+	<text transform="matrix(1.1886 0 0 1 115.0958 77.1963)" class="st1 st6 st7 st8">CXBox</text>
 </g>
 </svg>

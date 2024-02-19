@@ -1,5 +1,5 @@
 import queryString from 'query-string'
-import { axiosInstance as axiosInstanceFunction } from '../api/session'
+import { CxBoxApiInstance } from '../api'
 
 type QueryParamsMap = Record<string, string | number>
 
@@ -41,7 +41,7 @@ export function applyParams(url: string, qso: QueryParamsMap) {
  * @returns File upload endpoint
  */
 export function getFileUploadEndpoint() {
-    const axiosInstance = axiosInstanceFunction()
+    const axiosInstance = CxBoxApiInstance.api$.instance
 
     if (!axiosInstance.defaults.baseURL) {
         return '/file'

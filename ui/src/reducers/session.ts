@@ -1,57 +1,58 @@
-import { actionTypes, AnyAction } from '../interfaces/actions'
-import { AppState } from '../interfaces/storeSlices'
-import { Session } from '@cxbox-ui/core/interfaces/session'
+import { interfaces, reducers } from '@cxbox-ui/core'
+import { createReducer } from '@reduxjs/toolkit'
+import { createSettingMap, createSettingPath } from '@utils/tableSettings'
+import { TableSettingsMap } from '@interfaces/tableSettings'
+import { actions } from '@actions'
+import { SessionScreen } from '@interfaces/session'
 
-export type CustomSession = Session & {
+interface Session extends interfaces.Session {
     logout: boolean
-    isMetaRefreshing: boolean
+    userId?: string
+    tableSettings: TableSettingsMap | null
+    screens: SessionScreen[]
 }
 
-/**
- * Your initial state for this slice
- */
-export const initialState: CustomSession = {
+const initialState: Session = {
+    ...reducers.initialSessionState,
     active: false,
     screens: [],
     loginSpin: false,
     logout: false,
-    isMetaRefreshing: false
+    notifications: [],
+    isMetaRefreshing: false,
+    tableSettings: null
 }
 
-export default function sessionReducer(state: CustomSession = initialState, action: AnyAction, store?: Readonly<AppState>): CustomSession {
-    switch (action.type) {
-        /**
-         * Your reducers for this slice
-         */
-        case actionTypes.logout: {
-            return {
-                ...state,
-                loginSpin: false,
-                active: false,
-                logout: true
-            }
-        }
-        case actionTypes.loginDone: {
-            return {
-                ...state,
-                active: true,
-                logout: false
-            }
-        }
-        case actionTypes.refreshMeta: {
-            return {
-                ...state,
-                isMetaRefreshing: true
-            }
-        }
-        case actionTypes.refreshMetaDone:
-        case actionTypes.refreshMetaFail: {
-            return {
-                ...state,
-                isMetaRefreshing: false
-            }
-        }
-        default:
-            return state
-    }
-}
+const sessionReducerBuilder = reducers
+    .createSessionReducerBuilderManager(initialState)
+    .addCase(actions.initTableSettings, (state, action) => {
+        const { rawSettings } = action.payload
+
+        state.tableSettings = Array.isArray(rawSettings) ? createSettingMap(rawSettings) : rawSettings
+    })
+    .addCase(actions.changeTableSettings, (state, action) => {
+        const partialSetting = action.payload
+        const settingPath = createSettingPath(partialSetting) as string
+
+        state.tableSettings = state.tableSettings ?? {}
+
+        const prevSetting = state.tableSettings[settingPath]
+
+        state.tableSettings[settingPath] = prevSetting
+            ? { ...prevSetting, ...partialSetting }
+            : {
+                  orderFields: [],
+                  addedToAdditionalFields: [],
+                  removedFromAdditionalFields: [],
+                  ...partialSetting
+              }
+    })
+    .addCase(actions.resetTableSettings, (state, action) => {
+        const settingPath = createSettingPath(action.payload) as string
+
+        state.tableSettings = state.tableSettings ?? {}
+
+        state.tableSettings[settingPath] = null
+    }).builder
+
+export const sessionReducer = createReducer(initialState, sessionReducerBuilder)

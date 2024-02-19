@@ -3,16 +3,16 @@ import { Checkbox } from 'antd'
 import { CheckboxChangeEvent } from 'antd/lib/checkbox'
 import cn from 'classnames'
 import styles from './CheckboxFilter.less'
-import { DataValue } from '@cxbox-ui/core/interfaces/data'
+import { interfaces } from '@cxbox-ui/core'
 
 export interface CheckboxFilterProps {
     title: string
-    value: DataValue[]
+    value: interfaces.DataValue[]
     filterValues: Array<{ value: string }>
-    onChange?: (values: DataValue[]) => void
+    onChange?: (values: interfaces.DataValue[]) => void
 }
 
-const emptyValue: DataValue[] = []
+const emptyValue: interfaces.DataValue[] = []
 
 export const CheckboxFilter: React.FC<CheckboxFilterProps> = props => {
     const handleCheckbox = (e: CheckboxChangeEvent) => {

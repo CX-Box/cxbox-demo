@@ -1,17 +1,17 @@
 import React, { useCallback, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Icon, Select } from 'antd'
 import cn from 'classnames'
-import { DataItem, PickMap } from '@cxbox-ui/core/interfaces/data'
-import { BaseFieldProps } from '@cxbox-ui/core/components/Field/Field'
 import { InlinePickListFieldMeta } from '@cxbox-ui/schema/dist/interfaces/widget'
 import { DataValue, WidgetTypes } from '@cxbox-ui/schema'
-import { $do } from '../../actions/types'
-import { useDebounce } from '../../hooks/useDebounce'
+import { actions, interfaces } from '@cxbox-ui/core'
+import { useDebounce } from '@hooks/useDebounce'
 import ReadOnlyField from '../../components/ui/ReadOnlyField/ReadOnlyField'
-import { AppState } from '../../interfaces/storeSlices'
+import { useAppSelector } from '@store'
 import styles from './InlinePickList.less'
+import { BaseFieldProps } from '@cxboxComponents/Field/Field'
+import { buildBcUrl } from '@utils/buildBcUrl'
 
 interface Props extends Omit<BaseFieldProps, 'meta'> {
     meta: InlinePickListFieldMeta
@@ -19,7 +19,7 @@ interface Props extends Omit<BaseFieldProps, 'meta'> {
     placeholder?: string
 }
 
-const emptyData: DataItem[] = []
+const emptyData: interfaces.DataItem[] = []
 
 const InlinePickList: React.FunctionComponent<Props> = ({
     widgetName,
@@ -36,12 +36,12 @@ const InlinePickList: React.FunctionComponent<Props> = ({
     const dispatch = useDispatch()
     const { t } = useTranslation()
 
-    const widgetMeta = useSelector((state: AppState) => state.view.widgets?.find(i => i.name === widgetName))
+    const widgetMeta = useAppSelector(state => state.view.widgets?.find(i => i.name === widgetName))
     const bcName = widgetMeta?.bcName
     const { key: fieldName, popupBcName, pickMap, searchSpec } = meta
-    const data = useSelector((state: AppState) => (bcName && popupBcName && state.data[popupBcName]) || emptyData)
+    const data = useAppSelector(state => (bcName && popupBcName && state.data[popupBcName]) || emptyData)
 
-    const popupWidget = useSelector((state: AppState) =>
+    const popupWidget = useAppSelector(state =>
         state.view.widgets.find(i => i.bcName === popupBcName && i.type === WidgetTypes.PickListPopup)
     )
 
@@ -55,16 +55,16 @@ const InlinePickList: React.FunctionComponent<Props> = ({
     }, [processedSearchSpec, fieldName])
 
     const onClick = useCallback(
-        (bcName: string, pickMap: PickMap, widgetName?: string) => {
-            dispatch($do.showViewPopup({ bcName, widgetName }))
-            dispatch($do.viewPutPickMap({ map: pickMap, bcName }))
+        (bcName: string, pickMap: interfaces.PickMap, widgetName?: string) => {
+            dispatch(actions.showViewPopup({ bcName, widgetName }))
+            dispatch(actions.viewPutPickMap({ map: pickMap, bcName }))
         },
         [dispatch]
     )
 
     const onSearch = useCallback(
         (bcName: string, searchSpec: string, searchString: string) => {
-            dispatch($do.inlinePickListFetchDataRequest({ bcName, searchSpec, searchString }))
+            dispatch(actions.inlinePickListFetchDataRequest({ bcName, searchSpec, searchString }))
         },
         [dispatch]
     )
@@ -94,8 +94,9 @@ const InlinePickList: React.FunctionComponent<Props> = ({
             })
 
             dispatch(
-                $do.changeDataItem({
+                actions.changeDataItem({
                     bcName: bcName || '',
+                    bcUrl: buildBcUrl(bcName || '', true),
                     cursor: cursor || '',
                     dataItem: bcNameChanges
                 })

@@ -1,6 +1,7 @@
 .container {
     display: flex;
     word-break: normal;
+    position: relative;
 }
 
 .sort {
@@ -9,4 +10,14 @@
 
 .container:hover .sort {
     visibility: visible;
+}
+
+.closeButton {
+    position: relative;
+    right: -10px;
+    top: -10px;
+}
+
+.rightAlignment {
+    justify-content: flex-end;
 }

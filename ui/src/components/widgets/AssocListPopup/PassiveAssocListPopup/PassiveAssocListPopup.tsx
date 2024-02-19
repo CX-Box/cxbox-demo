@@ -1,15 +1,16 @@
 import React from 'react'
 import cn from 'classnames'
-import { AssocListPopup as CoreAssocListPopup, useTranslation } from '@cxbox-ui/core'
+import { AssocListPopup as CoreAssocListPopup } from '@cxboxComponents'
 import tableStyles from '../../Table/Table.less'
 import assocListStyles from '../AssocListPopup.less'
 import Pagination from '../../../ui/Pagination/Pagination'
 import { useDispatch } from 'react-redux'
-import { $do } from '../../../../actions/types'
 import Button from '../../../ui/Button/Button'
 import AssocTable from './AssocTable'
-import { AppWidgetTableMeta } from '../../../../interfaces/widget'
+import { AppWidgetTableMeta } from '@interfaces/widget'
 import Title from './Title'
+import { actions } from '@cxbox-ui/core'
+import { useTranslation } from 'react-i18next'
 
 interface PassiveAssocListPopupProps {
     meta: AppWidgetTableMeta
@@ -19,7 +20,7 @@ function PassiveAssocListPopup({ meta }: PassiveAssocListPopupProps) {
     const dispatch = useDispatch()
 
     const onClose = React.useCallback(() => {
-        dispatch($do.closeViewPopup({ bcName: meta.bcName }))
+        dispatch(actions.closeViewPopup({ bcName: meta.bcName }))
     }, [meta.bcName, dispatch])
 
     const { t } = useTranslation()

@@ -1,5 +1,5 @@
 import React from 'react'
-import { ModalInvoke as CxboxModalInvoke } from '@cxbox-ui/core'
+import { ModalInvoke as CxboxModalInvoke } from '@cxboxComponents'
 import styles from './ModalInvoke.less'
 
 function ModalInvoke() {

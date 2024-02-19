@@ -1,9 +1,9 @@
 import React, { RefAttributes } from 'react'
 import { Input } from 'antd'
 import { InputProps } from 'antd/es/input'
-import { BaseFieldProps } from '@cxbox-ui/core/components/Field/Field'
 import { fractionsRound, NumberInputFormat, NumberTypes } from './formaters'
 import ReadOnlyField from '../../components/ui/ReadOnlyField/ReadOnlyField'
+import { BaseFieldProps } from '@cxboxComponents/Field/Field'
 
 export interface CoreNumberInputProps extends BaseFieldProps {
     onChange?: (value: number) => void

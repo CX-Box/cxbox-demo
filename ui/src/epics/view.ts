@@ -1,38 +1,36 @@
-import { CustomEpic, actionTypes } from '../interfaces/actions'
-import { Observable } from 'rxjs/Observable'
-import { $do } from '../actions/types'
-import { buildBcUrl, getFilters } from '@cxbox-ui/core'
-import { fetchBcCount } from '../api/bcCount'
-import { EMPTY_ARRAY } from '../constants/constants'
+import { RootEpic } from '@store'
+import { catchError, EMPTY, filter, mergeMap, of } from 'rxjs'
+import { actions, utils } from '@cxbox-ui/core'
+import { EMPTY_ARRAY } from '@constants'
+import { setBcCount } from '@actions'
+import { buildBcUrl } from '@utils/buildBcUrl'
+import { AxiosError } from 'axios'
 
-const bcFetchCountEpic: CustomEpic = (action$, store) =>
-    action$
-        .ofType(actionTypes.bcFetchDataSuccess)
-        .mergeMap(action => {
-            const state = store.getState()
+const bcFetchCountEpic: RootEpic = (action$, state$, { api }) =>
+    action$.pipe(
+        filter(actions.bcFetchDataSuccess.match),
+        mergeMap(action => {
+            const state = state$.value
             const sourceWidget = state.view.widgets?.find(i => i.bcName === action.payload.bcName)
 
             if (!sourceWidget) {
-                return Observable.empty()
+                return EMPTY
             }
 
             const bcName = sourceWidget.bcName
             const screenName = state.screen.screenName
-            const filters = getFilters(state.screen.filters[bcName] || EMPTY_ARRAY)
+            const filters = utils.getFilters(state.screen.filters[bcName] || EMPTY_ARRAY)
             const bcUrl = buildBcUrl(bcName)
-            return fetchBcCount(screenName, bcUrl, filters).mergeMap(({ data }) =>
-                Observable.of(
-                    $do.setBcCount({
-                        bcName,
-                        count: data
-                    })
-                )
+            return api.fetchBcCount(screenName, bcUrl, filters).pipe(
+                mergeMap(({ data }) => of(setBcCount({ bcName, count: data }))),
+                catchError((error: AxiosError) => utils.createApiErrorObservable(error))
             )
+        }),
+        catchError(err => {
+            console.error(err)
+            return EMPTY
         })
-        .catch(error => {
-            console.error(error)
-            return Observable.empty<never>()
-        })
+    )
 
 export const viewEpics = {
     bcFetchCountEpic

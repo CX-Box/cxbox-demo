@@ -17,6 +17,7 @@ import org.cxbox.core.dto.multivalue.MultivalueField;
 import org.cxbox.core.util.filter.SearchParameter;
 import org.cxbox.core.util.filter.provider.impl.DateTimeValueProvider;
 import org.cxbox.core.util.filter.provider.impl.EnumValueProvider;
+import org.cxbox.core.util.filter.provider.impl.LongValueProvider;
 import org.cxbox.core.util.filter.provider.impl.MultiFieldValueProvider;
 import org.cxbox.model.core.entity.BaseEntity;
 import org.cxbox.model.core.entity.User;
@@ -59,6 +60,7 @@ public class MeetingDTO extends DataResponseDTO {
 	@SearchParameter(name = "client.fullName")
 	private String clientName;
 
+	@SearchParameter(name = "client.id", provider = LongValueProvider.class)
 	private Long clientId;
 
 	private Long contactId;

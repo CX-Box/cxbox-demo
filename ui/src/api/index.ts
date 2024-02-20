@@ -93,29 +93,33 @@ class Api extends CXBoxApi {
     createPersonalSetting(data: Omit<TableSettingsItem, 'id'>[]) {
         return this.api$.post<{
             success: boolean
-            data: {
-                id: string
-                vstamp: number
-                view: string
-                widget: string
-            }
+            data: [
+                {
+                    id: string
+                    vstamp: number
+                    view: string
+                    widget: string
+                }
+            ]
         }>('/personalAdditionalFields', { data })
     }
 
     updatePersonalSetting(data: Omit<TableSettingsItem, 'id'>[]) {
         return this.api$.put<{
             success: boolean
-            data: {
-                id: string
-                vstamp: number
-                view: string
-                widget: string
-            }
+            data: [
+                {
+                    id: string
+                    vstamp: number
+                    view: string
+                    widget: string
+                }
+            ]
         }>('/personalAdditionalFields', { data })
     }
 
     deletePersonalSetting(id: string) {
-        return this.api$.delete('/personalAdditionalFields', { data: [id] } as AxiosRequestConfig)
+        return this.api$.delete('/personalAdditionalFields', { data: { data: [id] } } as AxiosRequestConfig)
     }
 
     saveFilterGroup(data: { filterGroups: FilterGroup[] }) {

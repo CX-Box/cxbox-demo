@@ -10,10 +10,11 @@ import { useAppSelector } from '@store'
 import { useTranslation } from 'react-i18next'
 import { FieldType, WidgetField, WidgetTypes } from '@cxbox-ui/schema'
 import { useAssociateFieldKeyForPickList } from '../ColumnTitle/ColumnFilter'
-import { BcFilter, DataValue, FilterType } from '@interfaces/core'
+import { BcFilter, DataValue, FilterType as CoreFilterType } from '@interfaces/core'
 import { PickListFieldMeta } from '@cxbox-ui/schema/src/interfaces/widget'
 import { useDispatch } from 'react-redux'
 import { actions } from '@actions'
+import { FilterType } from '@interfaces/filters'
 
 interface FilterPopupProps {
     widgetName: string
@@ -61,9 +62,9 @@ const FilterPopup: React.FC<FilterPopupProps> = props => {
     const handleApply = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         const newFilter: BcFilter = {
-            type: [FieldType.date, FieldType.dateTime, FieldType.dateTimeWithSeconds].includes(props?.fieldType as FieldType)
+            type: ([FieldType.date, FieldType.dateTime, FieldType.dateTimeWithSeconds].includes(props?.fieldType as FieldType)
                 ? FilterType.range
-                : getFilterType(widgetMeta.type),
+                : getFilterType(widgetMeta.type)) as CoreFilterType,
             value: props.value,
             fieldName: props.fieldKey,
             viewName,

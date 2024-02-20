@@ -5,6 +5,9 @@ import { TimePickerProps } from 'antd/lib/time-picker'
 import ReadOnlyField from '../../components/ui/ReadOnlyField/ReadOnlyField'
 import { WidgetFieldBase } from '@cxbox-ui/schema'
 import { BaseFieldProps } from '@cxboxComponents/Field/Field'
+import { useVisibility } from '@components/widgets/Table/hooks/useVisibility'
+import Button from '@components/ui/Button/Button'
+import { useTranslation } from 'react-i18next'
 
 export const enum TimeFormat {
     outputHourFormat = 'HH',
@@ -12,16 +15,16 @@ export const enum TimeFormat {
     outputSecondFormat = 'ss',
     outputMinuteSecondsFormat = 'mm:ss',
     outputHourMinuteFormat = 'HH:mm',
-    outputHourMinuteAFormat = 'HH:mm A',
+    outputHourMinuteAFormat = 'hh:mm A',
     outputFullTimeFormat = 'HH:mm:ss',
-    outputFullTimeAFormat = 'HH:mm:ss A'
+    outputFullTimeAFormat = 'hh:mm:ss A'
 }
 
-const aDateFormats = [TimeFormat.outputHourMinuteAFormat, TimeFormat.outputFullTimeAFormat]
+export const aDateFormats = [TimeFormat.outputHourMinuteAFormat, TimeFormat.outputFullTimeAFormat]
 
-const isoLocalFormatter = (date: moment.Moment) => date.format('YYYY-MM-DD[T]HH:mm:ss')
+export const isoLocalFormatter = (date: moment.Moment) => date.format('YYYY-MM-DD[T]HH:mm:ss')
 
-interface ITimePickerFieldMeta extends WidgetFieldBase {
+export interface ITimePickerFieldMeta extends WidgetFieldBase {
     format: TimeFormat
     hourStep?: number
     minuteStep?: number
@@ -38,6 +41,8 @@ export interface ITimePickerProps extends BaseFieldProps {
     filterValue?: string
     meta: ITimePickerFieldMeta
     popupContainer?: HTMLElement
+    popupClassName?: string
+    enabledAddon?: boolean
 }
 
 const TimePickerField: React.FunctionComponent<ITimePickerProps> = ({
@@ -51,8 +56,16 @@ const TimePickerField: React.FunctionComponent<ITimePickerProps> = ({
     onDrillDown,
     onChange,
     placeholder,
+    popupClassName,
+    enabledAddon,
     ...props
 }) => {
+    const { t } = useTranslation()
+
+    const { visible, changeVisibility } = useVisibility()
+
+    const handleClose = () => changeVisibility(false)
+
     const { secondStep = 1, hourStep = 1, minuteStep = 1, format = TimeFormat.outputFullTimeAFormat } = meta
 
     const handleChange = React.useCallback(
@@ -75,6 +88,7 @@ const TimePickerField: React.FunctionComponent<ITimePickerProps> = ({
     const extendedProps: TimePickerProps = {
         ...props,
         className: className,
+        popupClassName: popupClassName,
         value: momentObject,
         disabled,
         format,
@@ -108,7 +122,15 @@ const TimePickerField: React.FunctionComponent<ITimePickerProps> = ({
         )
     }
 
-    return <TimePicker {...extendedProps} />
+    const addon = enabledAddon
+        ? () => (
+              <Button size="small" type="primary" onClick={handleClose}>
+                  {t('Ok')}
+              </Button>
+          )
+        : undefined
+
+    return <TimePicker {...extendedProps} open={visible} onOpenChange={changeVisibility} addon={addon} />
 }
 
 export default React.memo(TimePickerField)

@@ -40,15 +40,20 @@ export function useTableSetting(widget: AppWidgetMeta, serviceFields?: string[])
     }, [widget.fields])
 
     const updateSetting = useCallback(
-        (partialSetting: Partial<Omit<TableSettingsItem, 'view' | 'widget'>>) => {
+        (partialSetting: Partial<Omit<TableSettingsItem, 'view' | 'widget'>>, withoutRequest: boolean = false) => {
             if (settingPath) {
                 dispatch(actions.changeTableSettings({ view: viewName, widget: widgetName, ...partialSetting }))
+
+                if (withoutRequest) {
+                    return
+                }
 
                 Object.keys(partialSetting).forEach(key => {
                     if ((partialSetting as Record<string, any>)[key] === undefined) {
                         delete (partialSetting as Record<string, any>)[key]
                     }
                 })
+
                 const data = [
                     {
                         view: viewName,
@@ -62,9 +67,11 @@ export function useTableSetting(widget: AppWidgetMeta, serviceFields?: string[])
 
                 if (!setting?.id) {
                     firstValueFrom(CxBoxApiInstance.createPersonalSetting(data)).then(response => {
-                        if (response.data.id) {
-                            dispatch(actions.changeTableSettings({ view: viewName, widget: widgetName, id: response.data.id }))
-                        }
+                        response.data?.forEach(item => {
+                            if (item.id) {
+                                dispatch(actions.changeTableSettings({ view: viewName, widget: widgetName, id: item.id }))
+                            }
+                        })
                     })
                 } else {
                     CxBoxApiInstance.updatePersonalSetting(data)
@@ -91,7 +98,7 @@ export function useTableSetting(widget: AppWidgetMeta, serviceFields?: string[])
 
         if (currentSetting && id) {
             firstValueFrom(CxBoxApiInstance.deletePersonalSetting(id)).catch(() => {
-                updateSetting(currentSetting)
+                updateSetting(currentSetting, true)
             })
         }
     }, [dispatch, settingPath, settingsMap, updateSetting, viewName, widgetName])

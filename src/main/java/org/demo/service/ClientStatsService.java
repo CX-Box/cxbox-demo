@@ -64,7 +64,7 @@ public class ClientStatsService extends AbstractCrudmaService {
 				.setColor("#4D83E7")
 				.setIcon("pie-chart") //same as in screen.json icon
 				.setDescription("In Progress Clients. Press to filter List below");
-		inactiveClients.setId(IN_PROGRESS_CLIENTS);
+		inProgressClients.setId(IN_PROGRESS_CLIENTS);
 		result.add(inProgressClients);
 		return ResultPage.of(result, result.size());
 	}

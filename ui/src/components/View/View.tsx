@@ -36,6 +36,7 @@ import DocumentPreviewField from '../../fields/DocumentPreview/DocumentPreview'
 import { DocumentFormPopup } from '../widgets/DocumentFormPopup/DocumentFormPopup'
 import TimeField from '../../fields/TimePicker/TimePickerField'
 import SuggestionPickListField from '../../fields/SuggestionPickList/SuggestionPickList'
+import { StatsBlock } from '@components/widgets/StatsBlock/StatsBlock'
 
 // TODO We need to remove PopupWidgetTypes from the core and replace imports throughout the entire project
 const { PopupWidgetTypes, FieldType } = interfaces
@@ -78,7 +79,8 @@ const customWidgets: Partial<Record<CustomWidgetTypes | interfaces.WidgetTypes, 
     [WidgetTypes.PickListPopup]: PickListPopup,
     [WidgetTypes.SecondLevelMenu]: { component: LevelMenu, card: EmptyCard },
     [WidgetTypes.ThirdLevelMenu]: { component: LevelMenu, card: EmptyCard },
-    [WidgetTypes.FourthLevelMenu]: { component: LevelMenu, card: EmptyCard }
+    [WidgetTypes.FourthLevelMenu]: { component: LevelMenu, card: EmptyCard },
+    [CustomWidgetTypes.StatsBlock]: { component: StatsBlock, card: EmptyCard }
 }
 
 function View() {
@@ -88,7 +90,6 @@ function View() {
     return (
         <div className={styles.container}>
             {debugMode && <ViewInfoLabel />}
-
             <CxboxView
                 customWidgets={customWidgets as Record<string, interfaces.CustomWidgetDescriptor>}
                 customFields={customFields}
@@ -97,7 +98,6 @@ function View() {
                 customLayout={DashboardLayout}
                 disableDebugMode={true}
             />
-
             {debugMode &&
                 widgets.filter(i => allPopupWidgetTypes.includes(i.type)).map(i => <PopupWidgetInfoLabel key={i.name} meta={i} />)}
         </div>

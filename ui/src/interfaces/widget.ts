@@ -16,7 +16,8 @@ export enum CustomWidgetTypes {
     RingProgress = 'RingProgress',
     DashboardList = 'DashboardList',
     AdditionalInfo = 'AdditionalInfo',
-    SuggestionPickList = 'SuggestionPickList'
+    SuggestionPickList = 'SuggestionPickList',
+    StatsBlock = 'StatsBlock'
 }
 
 export const removeRecordOperationWidgets: Array<interfaces.WidgetTypes | string> = [interfaces.WidgetTypes.List]
@@ -128,6 +129,13 @@ export interface AppWidgetMeta extends interfaces.WidgetMeta {
 
         filterSetting?: {
             enabled: boolean
+        }
+
+        stats?: {
+            valueFieldKey?: string
+            titleFieldKey?: string
+            iconFieldKey?: string
+            descriptionFieldKey?: string
         }
     }
 }

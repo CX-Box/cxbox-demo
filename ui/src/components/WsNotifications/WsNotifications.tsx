@@ -1,26 +1,25 @@
 import React, { useCallback, useRef, useState } from 'react'
 import { Icon, Modal, Table } from 'antd'
 import { useEffect } from 'react'
-
 import cn from 'classnames'
 import { AxiosError } from 'axios'
-import styles from './Notification.less'
-import { getDefaultModalBodyHeight } from './Notification.utils'
+import styles from './WsNotifications.less'
+import { getDefaultModalBodyHeight } from './WsNotifications.utils'
 import markAsReadIcon from './img/markAsRead.svg'
 import { useToggle } from '@hooks/useToggle'
-import { columns, DEFAULT_MODAL_WIDTH } from './Notification.constants'
+import { columns, DEFAULT_MODAL_WIDTH } from './WsNotifications.constants'
 import { useTranslation } from 'react-i18next'
-import PaginationNotification from './PaginationNotification'
-import { useStompNotification } from '@hooks/notification'
+import Pagination from './Pagination'
 import Button from '../ui/Button/Button'
 import { CxBoxApiInstance as instance } from '../../api'
+import { useStompNotification } from '@components/WsNotifications/hooks'
 
 interface NotificationProps {}
 
 /**
  * Do not reuse
  */
-export function Notification(props: NotificationProps) {
+export function WsNotifications(props: NotificationProps) {
     const { t } = useTranslation()
     const [selectedRowKeys, setSelectedRowKeys] = useState([])
     const [visible, toggleVisible] = useToggle(false)
@@ -100,56 +99,58 @@ export function Notification(props: NotificationProps) {
     const footer = (
         <div className={styles.footerContainer}>
             <div className={styles.pagination}>
-                <PaginationNotification />
+                <Pagination />
             </div>
         </div>
     )
 
     return (
-        <div>
+        <>
             <Button className={styles.notification} type="bar" onClick={() => toggleModalVisibility(true)}>
                 {(notification.state.unreadCount as number) > 0 && <span className={styles.dot}>{notification.state.unreadCount}</span>}
                 <Icon type="bell" style={{ marginBottom: '-4px' }} />
             </Button>
-            <div ref={containerRef} className={cn(styles.popupContainer, styles.closeIcon)}>
-                <Modal
-                    closable={true}
-                    getContainer={false}
-                    visible={visible}
-                    onCancel={() => toggleModalVisibility(false)}
-                    bodyStyle={{ height: getDefaultModalBodyHeight(containerRef) }}
-                    width={DEFAULT_MODAL_WIDTH}
-                    title={title}
-                    footer={footer}
-                >
-                    <div ref={tableRef} className={styles.tableWidgetContainer}>
-                        <div className={styles.tableContainer}>
-                            <Table
-                                rowKey="id"
-                                rowClassName={record => (!record.isRead ? styles.notificationUnread : '')}
-                                columns={columns}
-                                dataSource={notification.state.data}
-                                rowSelection={{
-                                    selectedRowKeys,
-                                    onChange: (selectedRows: any) => {
-                                        setSelectedRowKeys(selectedRows)
-                                    }
-                                }}
-                                pagination={false}
-                                onRow={(record, rowIndex) => {
-                                    return {
-                                        onClick: () => {
-                                            if (!record.isRead) {
-                                                notification.setRead([record.id])
+            {visible && (
+                <div ref={containerRef} className={cn(styles.popupContainer, styles.closeIcon)}>
+                    <Modal
+                        closable={true}
+                        getContainer={false}
+                        visible={visible}
+                        onCancel={() => toggleModalVisibility(false)}
+                        bodyStyle={{ height: getDefaultModalBodyHeight(containerRef) }}
+                        width={DEFAULT_MODAL_WIDTH}
+                        title={title}
+                        footer={footer}
+                    >
+                        <div ref={tableRef} className={styles.tableWidgetContainer}>
+                            <div className={styles.tableContainer}>
+                                <Table
+                                    rowKey="id"
+                                    rowClassName={record => (!record.isRead ? styles.notificationUnread : '')}
+                                    columns={columns}
+                                    dataSource={notification.state.data}
+                                    rowSelection={{
+                                        selectedRowKeys,
+                                        onChange: (selectedRows: any) => {
+                                            setSelectedRowKeys(selectedRows)
+                                        }
+                                    }}
+                                    pagination={false}
+                                    onRow={(record, rowIndex) => {
+                                        return {
+                                            onClick: () => {
+                                                if (!record.isRead) {
+                                                    notification.setRead([record.id])
+                                                }
                                             }
                                         }
-                                    }
-                                }}
-                            />
+                                    }}
+                                />
+                            </div>
                         </div>
-                    </div>
-                </Modal>
-            </div>
-        </div>
+                    </Modal>
+                </div>
+            )}
+        </>
     )
 }

@@ -2,10 +2,10 @@ import { useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { AxiosError } from 'axios'
 import { useNotificationClient } from './useNotificationClient'
-import { initialState } from '../../reducers/notification'
 import { useAppSelector } from '@store'
 import { changeNotification } from '@actions'
-import { CxBoxApiInstance as instance } from '../../api'
+import { CxBoxApiInstance as instance } from '../../../api'
+import { initialState } from '../../../reducers/notification'
 
 export function useStompNotification({ check = false } = {}) {
     const notificationState = useAppSelector(state => state.notification)

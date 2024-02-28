@@ -17,7 +17,7 @@ import { actions } from '@actions'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import { useExportTable } from '@components/widgets/Table/hooks/useExportTable'
 import ReactDragListView, { DragListViewProps } from 'react-drag-listview'
-import { Checkbox, Icon, Menu, Modal, Transfer } from 'antd'
+import { Icon, Menu, Modal, Transfer } from 'antd'
 import DropdownSetting from './components/DropdownSetting'
 import Operations from '../../Operations/Operations'
 import FilterSettingModal from './components/FilterSettingModal'
@@ -134,14 +134,10 @@ function Table({ meta, primaryColumn, disablePagination, ...rest }: TableProps) 
                                 {showColumnSettings && (
                                     <Menu.ItemGroup key="additionalColumns" title={t('Additional columns')}>
                                         <Menu.Item key="0" onClick={toggleTransferVisible}>
-                                            {t('Change visibility')}
+                                            {t('Change')}
                                         </Menu.Item>
-                                        <Menu.Item key="1" onClick={toggleCloseButtonVisibility}>
-                                            {t('Enable close buttons')}
-                                            <Checkbox checked={showCloseButton} style={{ marginLeft: 5 }} />
-                                        </Menu.Item>
-                                        <Menu.Item key="2" onClick={resetSetting}>
-                                            {t('Reset table settings')}
+                                        <Menu.Item key="1" onClick={resetSetting}>
+                                            {t('Reset')}
                                         </Menu.Item>
                                     </Menu.ItemGroup>
                                 )}

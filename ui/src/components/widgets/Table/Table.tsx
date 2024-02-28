@@ -16,8 +16,8 @@ import { useDispatch } from 'react-redux'
 import { actions } from '@actions'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import { useExportTable } from '@components/widgets/Table/hooks/useExportTable'
-import ReactDragListView from 'react-drag-listview'
-import { Checkbox, Icon, Menu, Modal, Transfer } from 'antd'
+import ReactDragListView, { DragListViewProps } from 'react-drag-listview'
+import { Icon, Menu, Modal, Transfer } from 'antd'
 import DropdownSetting from './components/DropdownSetting'
 import Operations from '../../Operations/Operations'
 import FilterSettingModal from './components/FilterSettingModal'
@@ -114,6 +114,13 @@ function Table({ meta, primaryColumn, disablePagination, ...rest }: TableProps) 
 
     const showSettings = showSaveFiltersButton || showColumnSettings || showExport
 
+    const dragColumnProps: DragListViewProps = showColumnSettings
+        ? {
+              onDragEnd: changeOrder,
+              nodeSelector: 'th'
+          }
+        : { onDragEnd: () => {} }
+
     return (
         <div className={styles.tableContainer}>
             <div className={styles.operations}>
@@ -124,28 +131,30 @@ function Table({ meta, primaryColumn, disablePagination, ...rest }: TableProps) 
                         buttonClassName={styles.settingButton}
                         overlay={
                             <Menu>
-                                {showColumnSettings && [
-                                    <Menu.Item key="0" onClick={toggleTransferVisible}>
-                                        {t('Change visibility')}
-                                    </Menu.Item>,
-                                    <Menu.Item key="1" onClick={toggleCloseButtonVisibility}>
-                                        {t('Enable close buttons')}
-                                        <Checkbox checked={showCloseButton} style={{ marginLeft: 5 }} />
-                                    </Menu.Item>,
-                                    <Menu.Item key="2" onClick={resetSetting}>
-                                        {t('Reset table settings')}
-                                    </Menu.Item>
-                                ]}
+                                {showColumnSettings && (
+                                    <Menu.ItemGroup key="additionalColumns" title={t('Additional columns')}>
+                                        <Menu.Item key="0" onClick={toggleTransferVisible}>
+                                            {t('Change')}
+                                        </Menu.Item>
+                                        <Menu.Item key="1" onClick={resetSetting}>
+                                            {t('Reset')}
+                                        </Menu.Item>
+                                    </Menu.ItemGroup>
+                                )}
                                 {showExport && (
-                                    <Menu.Item key="3" onClick={exportTable}>
-                                        {t('Export to Excel')}
-                                        <Icon type="file-excel" style={{ fontSize: 14, marginLeft: 4 }} />
-                                    </Menu.Item>
+                                    <Menu.ItemGroup key="export" title={t('Export')}>
+                                        <Menu.Item key="3" onClick={exportTable}>
+                                            {t('Export to Excel')}
+                                            <Icon type="file-excel" style={{ fontSize: 14, marginLeft: 4 }} />
+                                        </Menu.Item>
+                                    </Menu.ItemGroup>
                                 )}
                                 {showSaveFiltersButton && (
-                                    <Menu.Item key="4" onClick={toggleFilterSettingVisible}>
-                                        {t('Save filters')}
-                                    </Menu.Item>
+                                    <Menu.ItemGroup key="filtersSettings" title={t('Filters settings')}>
+                                        <Menu.Item key="4" onClick={toggleFilterSettingVisible}>
+                                            {t('Save filters')}
+                                        </Menu.Item>
+                                    </Menu.ItemGroup>
                                 )}
                             </Menu>
                         }
@@ -174,7 +183,7 @@ function Table({ meta, primaryColumn, disablePagination, ...rest }: TableProps) 
                 onSubmit={handleSaveFilterGroup}
             />
 
-            <ReactDragListView.DragColumn onDragEnd={changeOrder} nodeSelector="th">
+            <ReactDragListView.DragColumn {...dragColumnProps}>
                 <TableWidget
                     meta={normalizedMeta}
                     showRowActions={true}
@@ -191,7 +200,7 @@ function Table({ meta, primaryColumn, disablePagination, ...rest }: TableProps) 
                     expandIcon={expandIcon}
                     expandedRowRender={expandedRowRender}
                     rowClassName={record => (record.id === bc.cursor ? 'ant-table-row-selected' : '')}
-                    onHeaderRow={() => ({ onDoubleClick: showSettings ? toggleCloseButtonVisibility : undefined })}
+                    onHeaderRow={() => ({ onDoubleClick: showColumnSettings ? toggleCloseButtonVisibility : undefined })}
                     onRow={record => ({
                         onDoubleClick: needRowSelectRecord ? () => changeCursor(record.id) : undefined
                     })}

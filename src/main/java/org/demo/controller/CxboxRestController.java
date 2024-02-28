@@ -21,6 +21,7 @@ import org.demo.service.MeetingWriteService;
 import org.demo.service.ResponsiblePickListService;
 import org.demo.service.SaleReadService;
 import org.demo.service.SaleWriteService;
+import org.demo.service.ClientStatsService;
 import org.springframework.stereotype.Component;
 
 /**
@@ -35,6 +36,7 @@ import org.springframework.stereotype.Component;
 public enum CxboxRestController implements EnumBcIdentifier {
 
 	// @formatter:on
+	clientStats(ClientStatsService.class),
 	client(ClientReadWriteService.class),
 		contact(client, ClientContactService.class),
 	clientEdit(ClientReadWriteService.class),

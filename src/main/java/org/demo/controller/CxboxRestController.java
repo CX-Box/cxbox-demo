@@ -24,6 +24,7 @@ import org.demo.service.SaleWriteService;
 import org.demo.service.lov.LovExternalReadService;
 import org.demo.service.ClientStatsService;
 import org.demo.service.lov.LovExternalReadService;
+import org.demo.service.ClientStatsService;
 import org.springframework.stereotype.Component;
 
 /**

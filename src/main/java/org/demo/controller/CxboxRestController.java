@@ -1,7 +1,7 @@
 package org.demo.controller;
 
 import lombok.Getter;
-import org.cxbox.core.crudma.bc.BcIdentifier;
+import org.cxbox.api.data.BcIdentifier;
 import org.cxbox.core.crudma.bc.EnumBcIdentifier;
 import org.cxbox.core.crudma.bc.impl.AbstractEnumBcSupplier;
 import org.cxbox.core.crudma.bc.impl.BcDescription;
@@ -21,6 +21,7 @@ import org.demo.service.MeetingWriteService;
 import org.demo.service.ResponsiblePickListService;
 import org.demo.service.SaleReadService;
 import org.demo.service.SaleWriteService;
+import org.demo.service.lov.LovExternalReadService;
 import org.demo.service.ClientStatsService;
 import org.demo.service.lov.LovExternalReadService;
 import org.springframework.stereotype.Component;

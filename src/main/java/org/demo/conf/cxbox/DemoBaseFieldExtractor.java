@@ -3,26 +3,30 @@ package org.demo.conf.cxbox;
 import static org.cxbox.api.util.i18n.LocalizationFormatter.i18n;
 
 import com.google.common.collect.ImmutableSet;
-import org.cxbox.core.ui.field.FieldExtractor;
-import org.cxbox.core.ui.field.link.LinkFieldExtractor;
-import org.cxbox.core.ui.model.BcField;
-import org.cxbox.core.ui.model.BcField.Attribute;
-import org.cxbox.core.ui.model.MultivalueField;
-import org.cxbox.core.ui.model.PickListField;
-import org.cxbox.core.ui.model.json.field.FieldMeta;
-import org.cxbox.core.ui.model.json.field.FieldMeta.FieldMetaBase.MultiSourceInfo;
-import org.cxbox.core.ui.model.json.field.subtypes.MultivalueFieldMeta;
-import org.cxbox.core.ui.model.json.field.subtypes.PickListFieldMeta;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.cxbox.core.util.JuelUtils;
 import org.cxbox.core.util.JuelUtils.Property;
-import org.cxbox.model.ui.entity.Widget;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
+import org.cxbox.meta.entity.Widget;
+import org.cxbox.meta.ui.field.FieldExtractor;
+import org.cxbox.meta.ui.model.BcField;
+import org.cxbox.meta.ui.model.BcField.Attribute;
+import org.cxbox.meta.ui.model.MultivalueField;
+import org.cxbox.meta.ui.model.PickListField;
+import org.cxbox.meta.ui.model.json.field.FieldMeta;
+import org.cxbox.meta.ui.model.json.field.FieldMeta.FieldMetaBase.MultiSourceInfo;
+import org.cxbox.meta.ui.model.json.field.subtypes.MultivalueFieldMeta;
+import org.cxbox.meta.ui.model.json.field.subtypes.PickListFieldMeta;
+import org.cxbox.meta.ui.field.link.LinkFieldExtractor;
 
+@RequiredArgsConstructor
 public abstract class DemoBaseFieldExtractor implements FieldExtractor {
+
+	private final LinkFieldExtractor linkFieldExtractor;
 
 	private static Set<String> PICKLIST_TYPES = ImmutableSet.of(
 			"pickList",
@@ -57,7 +61,7 @@ public abstract class DemoBaseFieldExtractor implements FieldExtractor {
 			}
 			widgetFields.addAll(extractFieldsFromMultiValue(widget, getMultivalueField(fieldMetaBase)));
 			widgetFields.addAll(extractFieldsFromTitle(widget, i18n(fieldMetaBase.getTitle())));
-			widgetFields.addAll(LinkFieldExtractor.extract(widget, fieldMetaBase));
+			widgetFields.addAll(linkFieldExtractor.extract(widget, fieldMetaBase));
 			if (fieldMetaBase.getMultisource() != null) {
 				for (final MultiSourceInfo multiSourceInfo : fieldMetaBase.getMultisource()) {
 					widgetFields.add(new BcField(widget.getBc(), multiSourceInfo.getKey())

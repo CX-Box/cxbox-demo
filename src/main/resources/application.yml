@@ -1,7 +1,7 @@
 app:
   ui-path: /ui
   auth-basic:
-    enabled: ${AUTH_BASIC_ENABLED:true}
+    enabled: ${AUTH_BASIC_ENABLED:false}
   keycloak:
     realm: cxbox
     auth-server-url: ${FRONTEND_AUTH_SERVER_URL:http://localhost:9080/auth}
@@ -16,8 +16,11 @@ app:
     password: ${ACTIVEMQ_ADMIN_PASSWORD:admin}
     user: ${ACTIVEMQ_ADMIN_LOGIN:admin}
     broker-url: tcp://${ACTIVEQM_HOST:localhost}:${ACTIVEMQ_PORT:61616}
-    host: ${ACTIVEMQ_HOST:localhost}
+    host: ${ACTIVEMQ_HOST:}
     port: ${ACTIVEMQ_PORT:61616}
+  integrations:
+    lov-server-url: ${LOV_SERVER_URL:http://localhost:8080/rest/api/v1/lov}
+
 
 cxbox:
   bean:
@@ -31,7 +34,7 @@ cxbox:
     check-lock-interval: ${CHECK_LOCK_INTERVAL:1000}  #ms
   widget:
     fields:
-      include-packages: org.cxbox.core.ui.model.json.field.subtypes, org.demo.conf.cxbox.meta
+      include-packages: org.cxbox.meta, org.demo.conf.cxbox.meta
   api:
     path: /api/v1
     use-servlet-context-path: false
@@ -97,13 +100,26 @@ spring:
           charSet: UTF-8
         jdbc:
           batch_size: 100
+        hbm2ddl:
+          auto: ${HIBERNATE_DDL_AUTO:update}
     hibernate:
       naming:
         physical-strategy: org.cxbox.model.core.hbn.ImprovedPhysicalNamingStrategy
-      ddl-auto: ${HIBERNATE_DDL_AUTO:update}
+
   main:
     allow-bean-definition-overriding: true
     banner-mode: off
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${FRONTEND_AUTH_SERVER_URL:http://localhost:9080/auth/realms/cxbox}
+          jwk-set-uri: http://localhost:9080/auth/realms/cxbox/protocol/openid-connect/certs
+
+token:
+  converter:
+    principal-attribute: preferred_username
+    resource-id: cxbox-keycloak-client
 
 keycloak:
   auth-server-url: ${BACKEND_AUTH_SERVER_URL:http://localhost:9080/auth}
@@ -135,7 +151,7 @@ management:
       exposure:
         include: 'metrics'
 
-integration:
-  dadata:
+dadata:
+  client:
+    token: ${DADATA_API_KEY:885218b4321600b90d4161c85bc11766cd6810c1}
     base-url: ${DADATA_URL:https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest}
-    api-key: ${DADATA_API_KEY:885218b4321600b90d4161c85bc11766cd6810c1}

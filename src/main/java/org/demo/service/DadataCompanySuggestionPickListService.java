@@ -1,5 +1,10 @@
 package org.demo.service;
 
+import com.kuliginstepan.dadata.client.DadataClient;
+import com.kuliginstepan.dadata.client.domain.Suggestion;
+import com.kuliginstepan.dadata.client.domain.organization.Organization;
+import com.kuliginstepan.dadata.client.domain.organization.OrganizationRequestBuilder;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -10,10 +15,6 @@ import org.cxbox.api.data.ResultPage;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.AbstractCrudmaService;
 import org.cxbox.core.exception.ClientException;
-import org.demo.client.DadataClient;
-import org.demo.client.request.PartySuggestionRequestDto;
-import org.demo.client.response.PartySuggestionResponseDto;
-import org.demo.client.response.PartySuggestionResponseDto.Suggestion;
 import org.demo.dto.CompanySuggestionDTO;
 import org.springframework.stereotype.Service;
 
@@ -42,13 +43,10 @@ public class DadataCompanySuggestionPickListService extends AbstractCrudmaServic
 		Integer countParameter = getBcParameter(bc, SEARCH_COUNT_PARAMETER)
 				.filter(StringUtils::isNumeric)
 				.map(Integer::parseInt)
-				.orElse(null);
-		PartySuggestionRequestDto suggestionRq = PartySuggestionRequestDto.builder()
-				.query(query)
-				.count(countParameter)
-				.build();
-		PartySuggestionResponseDto partySuggestionResponse = dadataClient.getPartySuggestion(suggestionRq);
-		return partySuggestionResponse.getSuggestions()
+				.orElse(10);
+		List<Suggestion<Organization>> list = dadataClient.suggestOrganization(
+				OrganizationRequestBuilder.create(query).count(countParameter).build()).collectList().block();
+		return Optional.ofNullable(list).orElseGet(ArrayList::new)
 				.stream()
 				.map(this::mapToSuggestionDataResponseDTO)
 				.collect(Collectors.toList());
@@ -61,7 +59,7 @@ public class DadataCompanySuggestionPickListService extends AbstractCrudmaServic
 	}
 
 
-	private CompanySuggestionDTO mapToSuggestionDataResponseDTO(Suggestion suggestion) {
+	private CompanySuggestionDTO mapToSuggestionDataResponseDTO(Suggestion<Organization> suggestion) {
 		return CompanySuggestionDTO.builder()
 				.id(UUID.randomUUID().toString())
 				.value(suggestion.getValue())

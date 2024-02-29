@@ -19,7 +19,8 @@ import org.demo.entity.Contact;
 import org.demo.entity.Meeting;
 import org.demo.entity.enums.MeetingStatus;
 import org.demo.repository.MeetingRepository;
-import org.demo.service.MailSendingService;
+import org.demo.repository.core.UserRepository;
+import org.demo.service.core.mail.MailSendingService;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -31,6 +32,8 @@ public class MeetingStatusModelActionProvider {
 	private final MailSendingService mailSendingService;
 
 	private final SessionService sessionService;
+
+	private final UserRepository userRepository;
 
 	private final String messageTemplate = "Status: %s; \nMeeting Result: %s";
 
@@ -46,7 +49,7 @@ public class MeetingStatusModelActionProvider {
 										Optional.ofNullable(meeting).map(Meeting::getContact).map(Contact::getEmail),
 										meeting.getAgenda(),
 										String.format(messageTemplate, MeetingStatus.COMPLETED.getValue(), meeting.getResult()),
-										sessionService.getSessionUser()
+										userRepository.getReferenceById(sessionService.getSessionUser().getId())
 								);
 							}
 

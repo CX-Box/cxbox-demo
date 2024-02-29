@@ -30,6 +30,7 @@ import org.demo.entity.MeetingDocuments;
 import org.demo.entity.MeetingDocuments_;
 import org.demo.repository.MeetingDocumentsRepository;
 import org.demo.repository.MeetingRepository;
+import org.demo.service.core.file.CustomFileServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.domain.Specification;

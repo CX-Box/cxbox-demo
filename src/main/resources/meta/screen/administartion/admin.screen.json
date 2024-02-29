@@ -1,0 +1,30 @@
+{
+  "name": "admin",
+  "icon": "calendar",
+  "title": "Администрирование",
+  "order": 4,
+  "primaryViewName": "lovlistexternal",
+  "primaryViews": [
+    "lovlistexternal"
+  ],
+  "navigation": {
+    "menu": [
+      {
+        "title": "External Администрирование справочников",
+        "child": [
+          {
+            "viewName": "lovlistexternal"
+          },
+          {
+            "viewName": "lovCreateExternal",
+            "hidden": true
+          },
+          {
+            "viewName": "lovUpdateExternal",
+            "hidden": true
+          }
+        ]
+      }
+    ]
+  }
+}

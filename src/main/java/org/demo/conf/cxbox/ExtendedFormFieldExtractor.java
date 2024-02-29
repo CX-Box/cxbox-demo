@@ -3,16 +3,21 @@ package org.demo.conf.cxbox;
 import static org.cxbox.api.util.i18n.LocalizationFormatter.i18n;
 
 import com.google.common.collect.ImmutableList;
-import org.cxbox.core.ui.model.BcField;
-import org.cxbox.core.ui.model.json.field.FieldGroup;
-import org.cxbox.core.ui.model.json.field.FieldMeta;
+import java.util.Set;
 import org.cxbox.core.util.JsonUtils;
-import org.cxbox.model.ui.entity.Widget;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import org.cxbox.meta.entity.Widget;
+import org.cxbox.meta.ui.field.link.LinkFieldExtractor;
+import org.cxbox.meta.ui.model.BcField;
+import org.cxbox.meta.ui.model.json.field.FieldGroup;
+import org.cxbox.meta.ui.model.json.field.FieldMeta;
 
 public class ExtendedFormFieldExtractor extends DemoBaseFieldExtractor {
+
+	public ExtendedFormFieldExtractor(LinkFieldExtractor linkFieldExtractor) {
+		super(linkFieldExtractor);
+	}
 
 	@Override
 	public Set<BcField> extract(Widget widget) {

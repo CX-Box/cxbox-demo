@@ -1,0 +1,7 @@
+{
+  "name": "lovListHeaderExternal",
+  "title": "External Список справочных значений",
+  "type": "HeaderWidget",
+  "bc": "lovExternal",
+  "fields": []
+}

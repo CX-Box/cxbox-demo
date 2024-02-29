@@ -1,0 +1,62 @@
+{
+  "name": "lovlistExternal",
+  "title": "",
+  "type": "List",
+  "bc": "lovExternal",
+  "fields": [
+    {
+      "title": "Значение",
+      "key": "value",
+      "type": "input"
+    },
+    {
+      "title": "Описание",
+      "key": "descriptionText",
+      "type": "input"
+    },
+    {
+      "title": "Тип",
+      "key": "typeName",
+      "type": "input"
+    },
+    {
+      "title": "Код",
+      "key": "code",
+      "type": "input",
+      "drillDown": true
+    },
+    {
+      "title": "Порядковый номер",
+      "key": "orderBy",
+      "type": "input"
+    },
+    {
+      "title": "Деактивирован",
+      "key": "inactiveFlag",
+      "type": "checkbox"
+    },
+    {
+      "title": "Внешний код",
+      "key": "externalCode",
+      "type": "input"
+    },
+    {
+      "title": "Параметр 1",
+      "key": "additionalParameter1",
+      "type": "input"
+    },
+    {
+      "title": "Параметр 2",
+      "key": "additionalParameter2",
+      "type": "input"
+    }
+  ],
+  "options": {
+    "actionGroups": {
+      "include": [
+        "change",
+        "deleteLov"
+      ]
+    }
+  }
+}

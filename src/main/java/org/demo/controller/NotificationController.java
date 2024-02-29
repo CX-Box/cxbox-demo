@@ -6,7 +6,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.cxbox.core.dto.ResponseDTO;
 import org.cxbox.core.util.ResponseBuilder;
-import org.demo.service.NotificationService;
+import org.demo.service.core.notification.NotificationService;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -63,11 +63,11 @@ export const Popup: FunctionComponent<PopupProps> = props => {
                     </div>
                 )}
                 <div className={styles.actions}>
-                    <Button onClick={onOkHandler} className={styles.buttonYellow}>
-                        {defaultOkText ?? t('Save')}
-                    </Button>
                     <Button onClick={onCancelHandler} className={styles.buttonCancel}>
                         {defaultCancelText ?? t('Cancel')}
+                    </Button>
+                    <Button onClick={onOkHandler} className={styles.buttonRed}>
+                        {defaultOkText ?? t('Save')}
                     </Button>
                 </div>
             </div>

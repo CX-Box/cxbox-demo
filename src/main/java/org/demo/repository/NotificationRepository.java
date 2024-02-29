@@ -1,8 +1,8 @@
 package org.demo.repository;
 
 import java.util.List;
-import org.cxbox.model.core.entity.User;
 import org.demo.entity.Notification;
+import org.demo.entity.core.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

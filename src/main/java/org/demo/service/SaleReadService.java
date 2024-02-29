@@ -23,7 +23,7 @@ public class SaleReadService extends VersionAwareResponseService<SaleDTO, Sale> 
 	private SaleRepository saleRepository;
 
 	public SaleReadService() {
-		super(SaleDTO.class, Sale.class, null, SaleMeta.class);
+		super(SaleDTO.class, Sale.class, null, SaleReadMeta.class);
 	}
 
 	@Override

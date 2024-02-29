@@ -7,7 +7,6 @@ import java.util.stream.Stream;
 import org.cxbox.core.crudma.CrudmaActionHolder.CrudmaAction;
 import org.cxbox.core.crudma.CrudmaEvent;
 import org.cxbox.core.crudma.bc.BusinessComponent;
-import org.demo.conf.security.cxboxkeycloak.CxboxKeycloakAccount;
 import org.springframework.context.ApplicationListener;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -44,11 +43,8 @@ public class CrudmaEventListener implements ApplicationListener<CrudmaEvent> {
 	public static String getUserLogin() {
 		return Stream.of(SecurityContextHolder.getContext())
 				.map(SecurityContext::getAuthentication)
-				.map(Authentication::getDetails)
-				.filter(CxboxKeycloakAccount.class::isInstance)
-				.map(CxboxKeycloakAccount.class::cast)
+				.map(Authentication::getName)
 				.findFirst()
-				.map(CxboxKeycloakAccount::getUsername)
 				.orElse(null);
 	}
 

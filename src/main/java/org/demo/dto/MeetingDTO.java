@@ -1,7 +1,7 @@
 package org.demo.dto;
 
 import static java.util.Optional.ofNullable;
-import static org.demo.conf.cxbox.core.multivaluePrimary.MultivalueExt.PRIMARY;
+import static org.demo.core.multivaluePrimary.MultivalueExt.PRIMARY;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -20,8 +20,8 @@ import org.cxbox.core.util.filter.provider.impl.EnumValueProvider;
 import org.cxbox.core.util.filter.provider.impl.LongValueProvider;
 import org.cxbox.core.util.filter.provider.impl.MultiFieldValueProvider;
 import org.cxbox.model.core.entity.BaseEntity;
-import org.cxbox.model.core.entity.User;
-import org.demo.conf.cxbox.core.multivaluePrimary.MultivalueExt;
+import org.demo.entity.core.User;
+import org.demo.core.multivaluePrimary.MultivalueExt;
 import org.demo.entity.Client;
 import org.demo.entity.Contact;
 import org.demo.entity.Meeting;

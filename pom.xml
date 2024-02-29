@@ -10,24 +10,16 @@
   <parent>
     <groupId>org.cxbox</groupId>
     <artifactId>cxbox-starter-parent</artifactId>
-    <version>3.0.6-SNAPSHOT</version>
+    <version>4.0.0-M2-SNAPSHOT</version>
   </parent>
 
   <properties>
     <checktyle.config>src/main/resources/checkstyle-checker.xml</checktyle.config>
     <java.version>17</java.version>
-
+    <mapstruct.version>1.5.5.Final</mapstruct.version>
     <!-- dependencies versions -->
-    <keycloak-spring-boot-starter.version>14.0.0</keycloak-spring-boot-starter.version>
-
-    <!--delete after fix https://github.com/spring-projects/spring-security/issues/9787-->
-    <spring-cloud.version>2020.0.6</spring-cloud.version>
-    <spring-security.version>5.5.1</spring-security.version>
-    <spring-security-crypto.version>5.5.8</spring-security-crypto.version>
     <minio.version>8.3.0</minio.version>
 
-    <!--minio compatible version-->
-    <okhttp3.version>4.8.1</okhttp3.version>
   </properties>
 
   <repositories>
@@ -40,6 +32,10 @@
   </repositories>
 
   <dependencies>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-activemq</artifactId>
@@ -70,10 +66,6 @@
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
     </dependency>
     <dependency>
@@ -85,14 +77,11 @@
       <artifactId>spring-boot-starter-oauth2-client</artifactId>
     </dependency>
     <dependency>
-    <groupId>org.springframework.cloud</groupId>
-    <artifactId>spring-cloud-starter-openfeign</artifactId>
-  </dependency>
-    <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-crypto</artifactId>
-      <version>${spring-security-crypto.version}</version>
+      <groupId>com.github.kuliginstepan</groupId>
+      <artifactId>dadata-client</artifactId>
+      <version>4.0.0</version>
     </dependency>
+
     <dependency>
       <groupId>io.minio</groupId>
       <artifactId>minio</artifactId>
@@ -103,11 +92,7 @@
       <artifactId>springdoc-openapi-ui</artifactId>
       <version>1.5.13</version>
     </dependency>
-    <dependency>
-      <groupId>org.keycloak</groupId>
-      <artifactId>keycloak-spring-boot-starter</artifactId>
-      <version>${keycloak-spring-boot-starter.version}</version>
-    </dependency>
+
     <dependency>
       <groupId>org.liquibase</groupId>
       <artifactId>liquibase-core</artifactId>
@@ -115,7 +100,7 @@
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
-      <version>42.2.27</version>
+      <version>42.6.0</version>
     </dependency>
     <!--see README_DB.MD
     <dependency>
@@ -134,7 +119,9 @@
     </dependency>
     <dependency>
       <groupId>org.cxbox</groupId>
-      <artifactId>cxbox-crudma</artifactId>
+      <artifactId>cxbox-starter-meta</artifactId>
+      <version>4.0.0-M2-SNAPSHOT</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.cxbox</groupId>
@@ -152,25 +139,19 @@
       <scope>test</scope>
     </dependency>
 
+    <dependency>
+      <groupId>org.mapstruct</groupId>
+      <artifactId>mapstruct</artifactId>
+      <version>${mapstruct.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mapstruct</groupId>
+      <artifactId>mapstruct-processor</artifactId>
+      <version>${mapstruct.version}</version>
+    </dependency>
   </dependencies>
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.keycloak.bom</groupId>
-        <artifactId>keycloak-adapter-bom</artifactId>
-        <version>${keycloak-spring-boot-starter.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.cloud</groupId>
-        <artifactId>spring-cloud-dependencies</artifactId>
-        <version>${spring-cloud.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
+
   <build>
     <finalName>cxbox-demo</finalName>
     <plugins>

@@ -9,7 +9,7 @@
       <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
         <constraints primaryKey="true"/>
       </column>
-      <column name="USER_ID" remarks="Идентификатор пользователя" type="NUMBER(19, 0)">
+      <column name="USER_ID" remarks="Идентификатор пользователя" type="VARCHAR2(255)">
         <constraints nullable="false"/>
       </column>
       <column name="VIEW" remarks="Название VIEW" type="VARCHAR2(255)">
@@ -45,7 +45,7 @@
 
   <changeSet id="BC_FILTER_GROUPS TABLE_USER" author="initial">
     <addColumn tableName="BC_FILTER_GROUPS">
-      <column name="USER_ID" type="NUMBER(19, 0)" remarks="Идентификатор пользователя">
+      <column name="USER_ID" type="VARCHAR2(255)" remarks="Идентификатор пользователя">
         <constraints nullable="true"/>
       </column>
     </addColumn>

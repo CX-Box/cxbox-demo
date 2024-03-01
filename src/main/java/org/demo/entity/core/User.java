@@ -31,7 +31,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.cxbox.api.data.dictionary.LOV;
-import org.cxbox.api.service.session.IUser;
 import org.cxbox.model.core.entity.BaseEntity;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;

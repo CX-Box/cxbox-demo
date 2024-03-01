@@ -1,6 +1,6 @@
 {
   "name": "lovCreateExternal",
-  "title": "Редактирование записи справочника",
+  "title": "Editing a Dictionary entry",
   "template": "DashboardView",
   "url": "/screen/admin/view/lovCreateExternal",
   "widgets": [

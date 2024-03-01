@@ -58,8 +58,8 @@ public class LovExternalReadService extends ExternalVersionAwareResponseService<
 	@Override
 	public Actions<LovDTO> getActions() {
 		return Actions.<LovDTO>builder()
-				.create().text("Создать").available(bc -> true).add()
-				.action("change", "Редактировать")
+				.create().text("Create").available(bc -> true).add()
+				.action("change", "Edit")
 				.available(bc -> true)
 				.scope(ActionScope.RECORD)
 				.invoker(((bc, data) -> new ActionResultDTO<LovDTO>().setAction(
@@ -68,9 +68,9 @@ public class LovExternalReadService extends ExternalVersionAwareResponseService<
 								"/screen/admin/view/lovUpdateExternal/" + lovExternal + "/" + bc.getId()
 						)
 				))).add()
-				.action("deleteLov", "Удалить")
+				.action("deleteLov", "Delete")
 				.withPreAction(PreAction.confirm(
-						"Убедитесь что запись деактивирована. \n\nВы точно хотите удалить данную запись справочника?"))
+						"Make sure the entry is deactivated. \n\nAre you sure you want to delete this directory entry?"))
 				.scope(ActionScope.RECORD)
 				.invoker((bc, data) -> {
 					getBaseDao().delete(bc);
@@ -81,21 +81,24 @@ public class LovExternalReadService extends ExternalVersionAwareResponseService<
 							)
 					);
 				}).add()
-				.action("saveAndBack", "Сохранить")
+				.action("saveAndBack", "Save and back")
 				.available(bc -> true)
-				.invoker(this::save)
+				.invoker((bc, data1) -> {
+					ActionResultDTO<LovDTO> result = save(bc, data1);
+					return result.setAction(PostAction.drillDown(DrillDownType.INNER, "/screen/admin"));
+				})
 				.add()
-				.save().text("Сохранить")
+				.save().text("Save")
 				.available(bc -> true)
 				.add()
 				.build();
 	}
 
-	//TODO>>если кастом экшн завершает создание сохранением в микросервисе который меняет id с временного на постоянный,
-	// то обязательно сообщить фронту новый id вернув new ActionResultDTO<>(entityToDto(bc, dto)).
-	// в остальных случаях достаточно new ActionResultDTO<>()
-	// т.е. простое правило есть getBaseDao().flush(bc); => есть сохранение в микросервис -> надо new ActionResultDTO<>(entityToDto(bc, dto)).
-	// Иначе достаточно new ActionResultDTO<>()
+	//TODO>>if a custom action completes its creation by saving it in a microservice that changes the id from temporary to permanent,
+// then be sure to inform the front of the new id by returning new ActionResultDTO<>(entityToDto(bc, dto)).
+// in other cases new ActionResultDTO<>() is enough
+// i.e. a simple rule is getBaseDao().flush(bc); => there is saving to a microservice -> you need new ActionResultDTO<>(entityToDto(bc, dto)).
+// Otherwise, new ActionResultDTO<>() is enough
 	private ActionResultDTO<LovDTO> save(BusinessComponent bc, LovDTO data) {
 		getBaseDao().flush(bc);
 		DictDTO dto = getBaseDao().getById(bc);

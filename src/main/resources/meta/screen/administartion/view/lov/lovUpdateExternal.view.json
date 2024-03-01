@@ -1,6 +1,6 @@
 {
   "name": "lovUpdateExternal",
-  "title": "Обновление записи справочника",
+  "title": "Updating a Dictionary entry",
   "template": "DashboardView",
   "url": "/screen/admin/view/lovUpdateExternal",
   "widgets": [

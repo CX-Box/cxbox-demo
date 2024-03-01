@@ -5,47 +5,47 @@
   "bc": "lovExternal",
   "fields": [
     {
-      "label": "Значение",
+      "label": "Value",
       "key": "value",
       "type": "input"
     },
     {
-      "label": "Описание",
+      "label": "Description Text",
       "key": "descriptionText",
       "type": "input"
     },
     {
-      "label": "Тип",
+      "label": "Type",
       "key": "typeName",
       "type": "input"
     },
     {
-      "label": "Код",
+      "label": "Code",
       "key": "code",
       "type": "input"
     },
     {
-      "label": "Порядковый номер",
+      "label": "Order By",
       "key": "orderBy",
       "type": "input"
     },
     {
-      "label": "Деактивирован",
+      "label": "Inactive Flag",
       "key": "inactiveFlag",
       "type": "checkbox"
     },
     {
-      "label": "Внешний код",
+      "label": "External Code",
       "key": "externalCode",
       "type": "input"
     },
     {
-      "label": "Параметр 1",
+      "label": "Additional Parameter 1",
       "key": "additionalParameter1",
       "type": "input"
     },
     {
-      "label": "Параметр 2",
+      "label": "Additional Parameter 2",
       "key": "additionalParameter2",
       "type": "input"
     }

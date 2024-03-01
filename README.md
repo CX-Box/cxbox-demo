@@ -75,7 +75,7 @@ widgets, fields, layouts (views), navigation (screens).
 * install dependencies and build back-end and front-end
 
 ```
-mvn clean install -PUI
+mvn clean install -PUI -U
 ```
 
 * start environment

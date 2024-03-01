@@ -1,6 +1,6 @@
 {
   "name": "lovListHeaderExternal",
-  "title": "External Список справочных значений",
+  "title": "External List of Dictionary values",
   "type": "HeaderWidget",
   "bc": "lovExternal",
   "fields": []

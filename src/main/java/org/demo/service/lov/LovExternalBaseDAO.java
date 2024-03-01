@@ -49,7 +49,7 @@ public class LovExternalBaseDAO extends AbstractExternalBaseDAO<DictDTO> impleme
 
 	@Override
 	public DictDTO create(final BusinessComponent bc, final DictDTO entity) {
-		entity.setId(null); //убираем временный id (при создании смежная система ждет пустой)
+		entity.setId(null); //remove the temporary id (when created, the adjacent system waits empty)
 		return Optional.ofNullable(lovClient.create(entity).getBody()).orElseThrow();
 	}
 

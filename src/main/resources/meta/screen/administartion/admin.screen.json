@@ -1,7 +1,7 @@
 {
   "name": "admin",
   "icon": "calendar",
-  "title": "Администрирование",
+  "title": "Administration",
   "order": 4,
   "primaryViewName": "lovlistexternal",
   "primaryViews": [
@@ -10,7 +10,7 @@
   "navigation": {
     "menu": [
       {
-        "title": "External Администрирование справочников",
+        "title": "External Administration",
         "child": [
           {
             "viewName": "lovlistexternal"

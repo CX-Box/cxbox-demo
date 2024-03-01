@@ -1,6 +1,6 @@
 {
   "name": "lovlistexternal",
-  "title": "Список справочных значений",
+  "title": "List of Dictionary values",
   "template": "DashboardView",
   "url": "/screen/admin/view/lovlistexternal",
   "widgets": [

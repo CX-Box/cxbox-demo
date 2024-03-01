@@ -277,6 +277,80 @@
       </column>
       <column name="SUM" type="NUMBER(19, 0)">
       </column>
+
+      <column defaultValueComputed="${now}" name="CREATED_DATE" remarks="Creation date"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="${now}" name="UPDATED_DATE" remarks="Last updated date"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false" foreignKeyName="SALE_CREATED_BY" references="USERS"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false" foreignKeyName="SALE_LAST_UPD_BY" references="USERS"/>
+      </column>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="t_list_of_values table" author="iborisenko">
+    <createTable tableName="t_list_of_values">
+      <column name="ID" remarks="Identifier" type="NUMBER(19, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="value" type="VARCHAR(255)"/>
+      <column name="description_text" type="VARCHAR(255)"/>
+      <column name="type_name" type="VARCHAR(255)"/>
+      <column name="code" type="VARCHAR(255)"/>
+      <column name="order_by" type="NUMBER(19, 0)"/>
+      <column defaultValueNumeric="0" name="inactive_flag" type="BOOLEAN">
+        <constraints nullable="false"/>
+      </column>
+      <column name="external_code" type="VARCHAR(255)"/>
+      <column name="additional_parameter_1" type="VARCHAR(255)"/>
+      <column name="additional_parameter_2" type="VARCHAR(255)"/>
+      <column  name="primary_child_id" type="NUMBER(19, 0)">
+        <constraints nullable="true" foreignKeyName="t_list_of_values_primary_child" referencedColumnNames="ID"
+          referencedTableName="t_list_of_values"/>
+      </column>
+      <column defaultValueComputed="${now}" name="CREATED_DATE" remarks="Creation date"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="${now}" name="UPDATED_DATE" remarks="Last updated date"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false" foreignKeyName="SALE_CREATED_BY" references="USERS"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false" foreignKeyName="SALE_LAST_UPD_BY" references="USERS"/>
+      </column>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="t_lov_hierarchy table" author="iborisenko">
+    <createTable tableName="t_lov_hierarchy">
+      <column name="ID" remarks="Identifier" type="NUMBER(19, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column  name="parent_lov_id" type="NUMBER(19, 0)">
+        <constraints nullable="false" foreignKeyName="t_lov_hierarchy_parent" referencedColumnNames="ID"
+          referencedTableName="t_list_of_values"/>
+      </column>
+      <column  name="child_lov_id" type="NUMBER(19, 0)">
+        <constraints nullable="false" foreignKeyName="t_lov_hierarchy_child" referencedColumnNames="ID"
+          referencedTableName="t_list_of_values"/>
+      </column>
       <column defaultValueComputed="${now}" name="CREATED_DATE" remarks="Creation date"
         type="TIMESTAMP(6)">
         <constraints nullable="false"/>

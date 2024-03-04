@@ -1,6 +1,6 @@
 package org.demo.microservice.repository;
 
-import org.demo.core.querylang.springdata.core.QueryLanguageRepository;
+import org.demo.microservice.core.querylang.springdata.core.QueryLanguageRepository;
 import org.demo.microservice.entity.LovHierarchy;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

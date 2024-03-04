@@ -4,7 +4,7 @@ import java.util.List;
 import org.demo.entity.Client;
 import org.demo.entity.Client_;
 import org.demo.entity.enums.ClientStatus;
-import org.demo.extension.FullTextSearchExt;
+import org.demo.conf.cxbox.extension.fulltextsearch.FullTextSearchExt;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

@@ -8,14 +8,14 @@ For more details about this options see [docs](https://www.keycloak.org/docs/lat
 
 ##### 2 Backend configuration
 
- `src/main/resources/application.yaml -> keycloak:`
+ `src/main/resources/application.yaml -> oidc:`
 
 For more details about this options see [docs](https://www.keycloak.org/docs/latest/securing_apps/#_spring_boot_adapter)
 
 ##### 3 Adding new user
-1) We use `use-resource-role-mappings: true` in `application.yml`, so roles must be added at "client" level. To add new role go to Configure -> Clients, then drill-down in "cxbox-keycloak-client", select tab "Roles" and press "Add role"
+1) We use `use-resource-role-mappings: true` in `application.yml`, so roles must be added at "client" level. To add new role go to Configure -> Clients, then drill-down in "cxbox-oidc-client", select tab "Roles" and press "Add role"
 2) Create user [docs](https://www.keycloak.org/docs/latest/getting_started/#creating-a-realm-and-a-user)
-3) In "Client Roles" select "cxbox-keycloak-client" and add at least one role  [docs](https://wjw465150.gitbooks.io/keycloak-documentation/content/server_admin/topics/roles/user-role-mappings.html)
+3) In "Client Roles" select "cxbox-oidc-client" and add at least one role  [docs](https://wjw465150.gitbooks.io/keycloak-documentation/content/server_admin/topics/roles/user-role-mappings.html)
 4) Add new roles in dictionary, e.g. add them in CXBOX-DICTIONARY_ITEM.csv. For example, if you added role "NEW_ROLE", then csv will have this line:
 ```
 ID;DICTIONARY_TYPE_ID;TYPE;KEY;VALUE;ACTIVE;DISPLAY_ORDER;DESCRIPTION

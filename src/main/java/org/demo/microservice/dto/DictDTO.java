@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-import org.demo.core.querylang.common.SearchParameter;
+import org.demo.microservice.core.querylang.common.SearchParameter;
 
 @Getter
 @Setter

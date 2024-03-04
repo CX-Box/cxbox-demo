@@ -22,7 +22,7 @@
     "realmRoles" : [ "uma_authorization", "offline_access" ],
     "clientRoles" : {
       "account" : [ "view-profile", "manage-account" ],
-      "cxbox-keycloak-client" : [ "CXBOX_USER" ]
+      "cxbox-oidc-client" : [ "CXBOX_USER" ]
     },
     "notBefore" : 0,
     "groups" : [ ]

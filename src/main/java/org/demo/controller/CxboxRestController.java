@@ -5,26 +5,13 @@ import org.cxbox.api.data.BcIdentifier;
 import org.cxbox.core.crudma.bc.EnumBcIdentifier;
 import org.cxbox.core.crudma.bc.impl.AbstractEnumBcSupplier;
 import org.cxbox.core.crudma.bc.impl.BcDescription;
-import org.demo.service.ContactMultivalueService;
-import org.demo.service.DadataCompanySuggestionPickListService;
-import org.demo.service.DashboardClientActivitiesService;
-import org.demo.service.ClientContactService;
-import org.demo.service.ClientPickListService;
-import org.demo.service.ClientReadWriteService;
-import org.demo.service.ContactPickListService;
-import org.demo.service.DashboardFilterService;
-import org.demo.service.DashboardSalesFunnelService;
-import org.demo.service.DashboardSalesRingProgressService;
-import org.demo.service.MeetingDocumentsWriteService;
-import org.demo.service.MeetingReadService;
-import org.demo.service.MeetingWriteService;
-import org.demo.service.ResponsiblePickListService;
-import org.demo.service.SaleReadService;
-import org.demo.service.SaleWriteService;
-import org.demo.service.lov.LovExternalReadService;
-import org.demo.service.ClientStatsService;
-import org.demo.service.lov.LovExternalReadService;
-import org.demo.service.ClientStatsService;
+
+import org.demo.service.cxbox.custom.*;
+import org.demo.service.cxbox.external.clientstats.ClientStatsReadService;
+import org.demo.service.cxbox.external.dadatacompany.CompanyReadService;
+import org.demo.service.cxbox.external.salestats.DashboardSalesFunnelService;
+import org.demo.service.cxbox.inner.*;
+import org.demo.service.cxbox.external.lov.LovReadService;
 import org.springframework.stereotype.Component;
 
 /**
@@ -39,8 +26,8 @@ import org.springframework.stereotype.Component;
 public enum CxboxRestController implements EnumBcIdentifier {
 
 	// @formatter:on
-	clientStats(ClientStatsService.class),
-	lovExternal(LovExternalReadService.class),
+	clientStats(ClientStatsReadService.class),
+	lovExternal(LovReadService.class),
 
 	client(ClientReadWriteService.class),
 		contact(client, ClientContactService.class),
@@ -61,7 +48,7 @@ public enum CxboxRestController implements EnumBcIdentifier {
 		dashboardClientActivities(dashboardFilter, DashboardClientActivitiesService.class),
 	dashboardSalesFunnel(dashboardFilter, DashboardSalesFunnelService.class),
 	dashboardSalesRingProgress(dashboardFilter, DashboardSalesRingProgressService.class),
-	companySuggestionPickList(DadataCompanySuggestionPickListService.class);
+	companySuggestionPickList(CompanyReadService.class);
 
 	// @formatter:on
 

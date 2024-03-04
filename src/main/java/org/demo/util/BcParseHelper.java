@@ -18,7 +18,7 @@ public class BcParseHelper {
 		for (Map.Entry<String, String> entry : bc.getParameters().getParameters().entrySet()) {
 			String operation = entry.getKey();
 			String fieldName = entry.getValue();
-			if (operation.startsWith(GpnQueryParameters.SORT_PARAM)) {
+			if (operation.startsWith(ExternalQueryParameters.SORT_PARAM)) {
 				String[] splitOperation = operation.split("\\.");
 				return Optional.of(Pair.of(fieldName, splitOperation[splitOperation.length - 1]));
 			}
@@ -29,7 +29,7 @@ public class BcParseHelper {
 	public static Map<String, String> getContainsParameters(final BusinessComponent bc) {
 		Map<String, String> containsMap = new HashMap<>();
 		bc.getParameters().getParameters().forEach((operation, field) -> {
-			if (operation.endsWith(GpnQueryParameters.CONTAINS_PREFIX)) {
+			if (operation.endsWith(ExternalQueryParameters.CONTAINS_PREFIX)) {
 				containsMap.put(operation, field);
 			}
 		});

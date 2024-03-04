@@ -5,7 +5,7 @@ import static org.cxbox.api.service.session.InternalAuthorizationService.SystemU
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.cxbox.api.service.session.InternalAuthorizationService;
-import org.demo.core.querylang.common.FilterParameters;
+import org.demo.microservice.core.querylang.common.FilterParameters;
 import org.demo.microservice.dto.DictDTO;
 import org.demo.microservice.entity.ListOfValues;
 import org.demo.microservice.repository.LovDataRepository;

@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class SaleStatsDAO extends AbstractAnySourceBaseDAO<DashboardSalesFunnelDTO> implements
+public class SaleStatsDao extends AbstractAnySourceBaseDAO<DashboardSalesFunnelDTO> implements
 		AnySourceBaseDAO<DashboardSalesFunnelDTO> {
 
 	private final MeetingRepository meetingRepository;

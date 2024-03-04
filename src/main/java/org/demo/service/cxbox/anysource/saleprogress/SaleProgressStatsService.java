@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class SaleProgressStatsService extends AnySourceVersionAwareResponseService<SalesProgressStatsDTO, SalesProgressStatsDTO> {
 
 	public SaleProgressStatsService() {
-		super(SalesProgressStatsDTO.class, SalesProgressStatsDTO.class, SaleProgressStatsMeta.class, SaleProgressStatsDAO.class);
+		super(SalesProgressStatsDTO.class, SalesProgressStatsDTO.class, SaleProgressStatsMeta.class, SaleProgressStatsDao.class);
 	}
 
 	@Override

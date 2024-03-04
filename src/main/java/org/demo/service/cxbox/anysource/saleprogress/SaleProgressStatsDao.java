@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class SaleProgressStatsDAO extends AbstractAnySourceBaseDAO<SalesProgressStatsDTO> implements
+public class SaleProgressStatsDao extends AbstractAnySourceBaseDAO<SalesProgressStatsDTO> implements
 		AnySourceBaseDAO<SalesProgressStatsDTO> {
 
 	private final SaleRepository saleRepository;

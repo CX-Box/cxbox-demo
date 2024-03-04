@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class ClientStatsService extends AnySourceVersionAwareResponseService<ClientStatsDTO, ClientStatsDTO> {
 
 	public ClientStatsService() {
-		super(ClientStatsDTO.class, ClientStatsDTO.class, ClientStatsMeta.class, ClientStatsDAO.class);
+		super(ClientStatsDTO.class, ClientStatsDTO.class, ClientStatsMeta.class, ClientStatsDao.class);
 	}
 
 	@Override

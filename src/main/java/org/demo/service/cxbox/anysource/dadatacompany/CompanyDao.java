@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class CompanyDAO extends AbstractAnySourceBaseDAO<CompanySuggestionDTO> implements
+public class CompanyDao extends AbstractAnySourceBaseDAO<CompanySuggestionDTO> implements
 		AnySourceBaseDAO<CompanySuggestionDTO> {
 
 	private static final String SEARCH_QUERY_PARAMETER = "query";

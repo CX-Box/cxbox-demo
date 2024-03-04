@@ -7,8 +7,13 @@ export function useVisibility(defaultVisibility: boolean = false) {
         setVisible(prevState => !prevState)
     }, [])
 
+    const changeVisibility = useCallback((visible: boolean) => {
+        setVisible(visible)
+    }, [])
+
     return {
         visible,
-        toggleVisibility
+        toggleVisibility,
+        changeVisibility
     }
 }

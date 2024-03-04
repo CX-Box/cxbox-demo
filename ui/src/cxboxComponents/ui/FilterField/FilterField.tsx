@@ -10,6 +10,9 @@ import RangePicker from './components/RangePicker'
 import { CheckboxFilter } from '@cxboxComponents/ui/CheckboxFilter/CheckboxFilter'
 import { getFormat } from '@cxboxComponents/ui/DatePickerField/DatePickerField'
 import { interfaces } from '@cxbox-ui/core'
+import { CustomFieldTypes } from '@interfaces/widget'
+import TimePickerField, { ITimePickerFieldMeta } from '../../../fields/TimePicker/TimePickerField'
+import styles from './FilterField.less'
 
 export interface ColumnFilterControlProps {
     widgetFieldMeta: interfaces.WidgetListField
@@ -27,7 +30,7 @@ const { FieldType } = interfaces
  * @category Components
  */
 export const ColumnFilterControl: React.FC<ColumnFilterControlProps> = props => {
-    switch (props.widgetFieldMeta.type) {
+    switch (props.widgetFieldMeta.type as string) {
         case FieldType.dictionary:
         case FieldType.pickList: {
             return (
@@ -115,6 +118,20 @@ export const ColumnFilterControl: React.FC<ColumnFilterControlProps> = props => 
                     }}
                     value={props.value ? moment(props.value as string, moment.ISO_8601) : null}
                     format={getFormat()}
+                />
+            )
+        }
+        case CustomFieldTypes.Time: {
+            const { widgetFieldMeta, value, onChange } = props
+            return (
+                <TimePickerField
+                    meta={widgetFieldMeta as ITimePickerFieldMeta}
+                    value={value as string}
+                    onChange={onChange}
+                    readOnly={false}
+                    className={styles.timeFilter}
+                    popupClassName={styles.timeFilterPopup}
+                    enabledAddon={true}
                 />
             )
         }

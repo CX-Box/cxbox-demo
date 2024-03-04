@@ -308,7 +308,7 @@
         "containerId" : "88e14ed0-79d9-40c0-b97a-42016a5d2a29",
         "attributes" : { }
       } ],
-      "cxbox-keycloak-client" : [ {
+      "cxbox-oidc-client" : [ {
         "id" : "b433ea07-b72e-4de2-a507-499ebce48c14",
         "name" : "ADMIN",
         "composite" : false,
@@ -563,7 +563,7 @@
     "optionalClientScopes" : [ "address", "phone", "offline_access", "microprofile-jwt" ]
   }, {
     "id" : "4a726c64-c69e-4ec8-8df1-bdb983a902c3",
-    "clientId" : "cxbox-keycloak-client",
+    "clientId" : "cxbox-oidc-client",
     "surrogateAuthRequired" : false,
     "enabled" : true,
     "alwaysDisplayInConsole" : false,

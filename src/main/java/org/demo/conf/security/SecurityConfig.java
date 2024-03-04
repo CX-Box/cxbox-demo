@@ -8,10 +8,10 @@ import org.cxbox.core.config.properties.UIProperties;
 import org.cxbox.meta.metahotreload.conf.properties.MetaConfigurationProperties;
 import org.demo.conf.security.basic.AuthBasicConfigProperties;
 import org.demo.conf.security.basic.CustomBasicAuthenticationEntryPoint;
-import org.demo.conf.security.cxboxkeycloak.CxboxAuthUserRepository;
-import org.demo.conf.security.keycloack.KeycloakJwtTokenConverter;
-import org.demo.conf.security.keycloack.TokenConverterProperties;
-import org.demo.service.core.user.UserService;
+import org.demo.conf.security.oidc.CxboxAuthUserRepository;
+import org.demo.conf.security.oidc.OidcJwtTokenConverter;
+import org.demo.conf.security.oidc.TokenConverterProperties;
+import org.demo.conf.cxbox.customization.role.UserService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -35,7 +35,7 @@ public class SecurityConfig {
 	private final UserService userService;
 	private final UIProperties uiProperties;
 	private final MetaConfigurationProperties metaConfigurationProperties;
-	private final KeycloakJwtTokenConverter keycloakJwtTokenConverter;
+	private final OidcJwtTokenConverter oidcJwtTokenConverter;
 	private final AuthBasicConfigProperties authBasicConfigProperties;
 
 	public SecurityConfig(UserService userService, UIProperties uiProperties, MetaConfigurationProperties metaConfigurationProperties, @Qualifier("tokenConverterProperties") TokenConverterProperties properties, CxboxAuthUserRepository cxboxAuthUserRepository,
@@ -44,7 +44,7 @@ public class SecurityConfig {
 		this.uiProperties = uiProperties;
 		this.metaConfigurationProperties = metaConfigurationProperties;
 		this.authBasicConfigProperties = authBasicConfigProperties;
-		this.keycloakJwtTokenConverter = new KeycloakJwtTokenConverter(new JwtGrantedAuthoritiesConverter(), properties,
+		this.oidcJwtTokenConverter = new OidcJwtTokenConverter(new JwtGrantedAuthoritiesConverter(), properties,
 				this.userService, cxboxAuthUserRepository
 		);
 	}
@@ -81,6 +81,8 @@ public class SecurityConfig {
 						.requestMatchers("/rest/**").permitAll()
 						.requestMatchers("/css/**").permitAll()
 						.requestMatchers(uiProperties.getPath() + "/**").permitAll()
+						.requestMatchers("/").permitAll()
+						.requestMatchers("").permitAll()
 						.requestMatchers("/api/v1/file/**").permitAll()
 						.requestMatchers("/api/v1/auth/**").permitAll()
 						.requestMatchers("/**").fullyAuthenticated());
@@ -89,7 +91,7 @@ public class SecurityConfig {
 		} else {
 			http
 					.oauth2ResourceServer(oauth2ResourceServer -> oauth2ResourceServer
-							.jwt(jwt -> jwt.jwtAuthenticationConverter(keycloakJwtTokenConverter)));
+							.jwt(jwt -> jwt.jwtAuthenticationConverter(oidcJwtTokenConverter)));
 		}
 		return http.build();
 	}

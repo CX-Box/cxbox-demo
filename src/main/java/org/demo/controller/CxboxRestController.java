@@ -5,26 +5,24 @@ import org.cxbox.api.data.BcIdentifier;
 import org.cxbox.core.crudma.bc.EnumBcIdentifier;
 import org.cxbox.core.crudma.bc.impl.AbstractEnumBcSupplier;
 import org.cxbox.core.crudma.bc.impl.BcDescription;
-import org.demo.service.ContactMultivalueService;
-import org.demo.service.DadataCompanySuggestionPickListService;
-import org.demo.service.DashboardClientActivitiesService;
-import org.demo.service.ClientContactService;
-import org.demo.service.ClientPickListService;
-import org.demo.service.ClientReadWriteService;
-import org.demo.service.ContactPickListService;
-import org.demo.service.DashboardFilterService;
-import org.demo.service.DashboardSalesFunnelService;
-import org.demo.service.DashboardSalesRingProgressService;
-import org.demo.service.MeetingDocumentsWriteService;
-import org.demo.service.MeetingReadService;
-import org.demo.service.MeetingWriteService;
-import org.demo.service.ResponsiblePickListService;
-import org.demo.service.SaleReadService;
-import org.demo.service.SaleWriteService;
-import org.demo.service.lov.LovExternalReadService;
-import org.demo.service.ClientStatsService;
-import org.demo.service.lov.LovExternalReadService;
-import org.demo.service.ClientStatsService;
+import org.demo.service.cxbox.anysource.clientstats.ClientStatsService;
+import org.demo.service.cxbox.anysource.dadatacompany.CompanyService;
+import org.demo.service.cxbox.anysource.lov.LovReadService;
+import org.demo.service.cxbox.anysource.saleprogress.SaleProgressStatsService;
+import org.demo.service.cxbox.anysource.salestats.SaleStatsService;
+import org.demo.service.cxbox.inner.ClientContactService;
+import org.demo.service.cxbox.inner.ClientPickListService;
+import org.demo.service.cxbox.inner.ClientReadWriteService;
+import org.demo.service.cxbox.inner.ContactMultivalueService;
+import org.demo.service.cxbox.inner.ContactPickListService;
+import org.demo.service.cxbox.inner.DashboardClientActivitiesService;
+import org.demo.service.cxbox.inner.DashboardFilterService;
+import org.demo.service.cxbox.inner.MeetingDocumentsWriteService;
+import org.demo.service.cxbox.inner.MeetingReadService;
+import org.demo.service.cxbox.inner.MeetingWriteService;
+import org.demo.service.cxbox.inner.ResponsiblePickListService;
+import org.demo.service.cxbox.inner.SaleReadService;
+import org.demo.service.cxbox.inner.SaleWriteService;
 import org.springframework.stereotype.Component;
 
 /**
@@ -40,7 +38,7 @@ public enum CxboxRestController implements EnumBcIdentifier {
 
 	// @formatter:on
 	clientStats(ClientStatsService.class),
-	lovExternal(LovExternalReadService.class),
+	lovExternal(LovReadService.class),
 
 	client(ClientReadWriteService.class),
 		contact(client, ClientContactService.class),
@@ -59,9 +57,9 @@ public enum CxboxRestController implements EnumBcIdentifier {
 		clientSalePickListPopup(saleEdit, ClientPickListService.class),
 	dashboardFilter(DashboardFilterService.class),
 		dashboardClientActivities(dashboardFilter, DashboardClientActivitiesService.class),
-	dashboardSalesFunnel(dashboardFilter, DashboardSalesFunnelService.class),
-	dashboardSalesRingProgress(dashboardFilter, DashboardSalesRingProgressService.class),
-	companySuggestionPickList(DadataCompanySuggestionPickListService.class);
+	dashboardSalesFunnel(dashboardFilter, SaleStatsService.class),
+	dashboardSalesRingProgress(dashboardFilter, SaleProgressStatsService.class),
+	companySuggestionPickList(CompanyService.class);
 
 	// @formatter:on
 

@@ -13,19 +13,9 @@ public class ClientConfiguration {
 
 	@Bean
 	@Primary
-	public RestTemplate restTemplate(final RestTemplateBuilder builder/*,
-                                     final LogbookClientHttpRequestInterceptor logbookClientHttpRequestInterceptor,
-                                     final RequestResponseInterceptor requestResponseInterceptor*/) {
+	public RestTemplate restTemplate(final RestTemplateBuilder builder) {
 		return builder
-				/*.requestFactory(this::getRequestFactory)
-				.additionalInterceptors(requestResponseInterceptor, logbookClientHttpRequestInterceptor)*/
 				.build();
 	}
-/*
-    private ClientHttpRequestFactory getRequestFactory() {
-        return new BufferingClientHttpRequestFactory(
-                new HttpComponentsClientHttpRequestFactory(HttpClients.createDefault())
-        );
-    }*/
 
 }

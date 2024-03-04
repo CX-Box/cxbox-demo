@@ -2,7 +2,7 @@ package org.demo.microservice.repository;
 
 
 import org.cxbox.model.core.entity.BaseEntity_;
-import org.demo.core.querylang.springdata.core.QueryLanguageRepository;
+import org.demo.microservice.core.querylang.springdata.core.QueryLanguageRepository;
 import org.demo.microservice.entity.ListOfValues;
 import org.demo.microservice.entity.ListOfValues_;
 import org.demo.microservice.entity.LovHierarchy_;

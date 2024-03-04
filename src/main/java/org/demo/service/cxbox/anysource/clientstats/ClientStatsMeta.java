@@ -1,8 +1,8 @@
 package org.demo.service.cxbox.anysource.clientstats;
 
-import static org.demo.service.cxbox.anysource.clientstats.ClientStatsDAO.INACTIVE_CLIENTS_ID;
-import static org.demo.service.cxbox.anysource.clientstats.ClientStatsDAO.IN_PROGRESS_CLIENTS;
-import static org.demo.service.cxbox.anysource.clientstats.ClientStatsDAO.NEW_CLIENTS_ID;
+import static org.demo.service.cxbox.anysource.clientstats.ClientStatsDao.INACTIVE_CLIENTS_ID;
+import static org.demo.service.cxbox.anysource.clientstats.ClientStatsDao.IN_PROGRESS_CLIENTS;
+import static org.demo.service.cxbox.anysource.clientstats.ClientStatsDao.NEW_CLIENTS_ID;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

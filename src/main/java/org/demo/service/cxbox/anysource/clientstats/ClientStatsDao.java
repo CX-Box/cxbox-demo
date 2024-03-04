@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class ClientStatsDAO extends AbstractAnySourceBaseDAO<ClientStatsDTO> implements
+public class ClientStatsDao extends AbstractAnySourceBaseDAO<ClientStatsDTO> implements
 		AnySourceBaseDAO<ClientStatsDTO> {
 
 	public static final int ROWS_TOTAL = 3;

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class SaleStatsService extends AnySourceVersionAwareResponseService<DashboardSalesFunnelDTO, DashboardSalesFunnelDTO> {
 
 	public SaleStatsService() {
-		super(DashboardSalesFunnelDTO.class, DashboardSalesFunnelDTO.class, SaleStatsMeta.class, SaleStatsDAO.class);
+		super(DashboardSalesFunnelDTO.class, DashboardSalesFunnelDTO.class, SaleStatsMeta.class, SaleStatsDao.class);
 	}
 
 	@Override

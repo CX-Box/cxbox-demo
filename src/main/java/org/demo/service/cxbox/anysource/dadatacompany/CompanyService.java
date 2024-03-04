@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class CompanyService extends AnySourceVersionAwareResponseService<CompanySuggestionDTO, CompanySuggestionDTO> {
 
 	public CompanyService() {
-		super(CompanySuggestionDTO.class, CompanySuggestionDTO.class, CompanyMeta.class, CompanyDAO.class);
+		super(CompanySuggestionDTO.class, CompanySuggestionDTO.class, CompanyMeta.class, CompanyDao.class);
 	}
 
 	@Override

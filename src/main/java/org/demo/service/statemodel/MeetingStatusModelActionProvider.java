@@ -14,7 +14,7 @@ import org.cxbox.core.service.action.Actions;
 import org.cxbox.core.service.action.ActionsBuilder;
 import org.cxbox.core.util.session.SessionService;
 import org.demo.controller.CxboxRestController;
-import org.demo.dto.MeetingDTO;
+import org.demo.dto.cxbox.inner.MeetingDTO;
 import org.demo.entity.Contact;
 import org.demo.entity.Meeting;
 import org.demo.entity.enums.MeetingStatus;

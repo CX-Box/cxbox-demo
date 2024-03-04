@@ -371,6 +371,44 @@
     </createTable>
   </changeSet>
 
+  <changeSet author="initial" id="NOTIFICATION TABLE">
+    <createTable remarks="Уведомления" tableName="NOTIFICATION">
+      <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="USER_ID" remarks="ID пользователя" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="IS_READ" remarks="Прочитано ли уведомление" type="BOOLEAN">
+        <constraints nullable="false"/>
+      </column>
+      <column name="TEXT" remarks="Текст уведомления" type="VARCHAR2(4000 BYTE)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="CREATED_DATE_UTC" remarks="Дата создания UTC"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="${now}" name="CREATED_DATE" remarks="Дата создания"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="${now}" name="UPDATED_DATE" remarks="Дата изменения"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
   <changeSet id="local example data" author="initial" runOnChange="true" context="local">
     <loadUpdateData tableName="CLIENT" primaryKey="ID" encoding="UTF-8" separator="," quotchar="&quot;"
       file="db/data/CLIENT.csv">

@@ -5,13 +5,24 @@ import org.cxbox.api.data.BcIdentifier;
 import org.cxbox.core.crudma.bc.EnumBcIdentifier;
 import org.cxbox.core.crudma.bc.impl.AbstractEnumBcSupplier;
 import org.cxbox.core.crudma.bc.impl.BcDescription;
-
-import org.demo.service.cxbox.custom.*;
-import org.demo.service.cxbox.external.clientstats.ClientStatsReadService;
-import org.demo.service.cxbox.external.dadatacompany.CompanyReadService;
-import org.demo.service.cxbox.external.salestats.DashboardSalesFunnelService;
-import org.demo.service.cxbox.inner.*;
-import org.demo.service.cxbox.external.lov.LovReadService;
+import org.demo.service.cxbox.anysource.clientstats.ClientStatsService;
+import org.demo.service.cxbox.anysource.dadatacompany.CompanyService;
+import org.demo.service.cxbox.anysource.lov.LovReadService;
+import org.demo.service.cxbox.anysource.saleprogress.SaleProgressStatsService;
+import org.demo.service.cxbox.anysource.salestats.SaleStatsService;
+import org.demo.service.cxbox.inner.ClientContactService;
+import org.demo.service.cxbox.inner.ClientPickListService;
+import org.demo.service.cxbox.inner.ClientReadWriteService;
+import org.demo.service.cxbox.inner.ContactMultivalueService;
+import org.demo.service.cxbox.inner.ContactPickListService;
+import org.demo.service.cxbox.inner.DashboardClientActivitiesService;
+import org.demo.service.cxbox.inner.DashboardFilterService;
+import org.demo.service.cxbox.inner.MeetingDocumentsWriteService;
+import org.demo.service.cxbox.inner.MeetingReadService;
+import org.demo.service.cxbox.inner.MeetingWriteService;
+import org.demo.service.cxbox.inner.ResponsiblePickListService;
+import org.demo.service.cxbox.inner.SaleReadService;
+import org.demo.service.cxbox.inner.SaleWriteService;
 import org.springframework.stereotype.Component;
 
 /**
@@ -26,7 +37,7 @@ import org.springframework.stereotype.Component;
 public enum CxboxRestController implements EnumBcIdentifier {
 
 	// @formatter:on
-	clientStats(ClientStatsReadService.class),
+	clientStats(ClientStatsService.class),
 	lovExternal(LovReadService.class),
 
 	client(ClientReadWriteService.class),
@@ -46,9 +57,9 @@ public enum CxboxRestController implements EnumBcIdentifier {
 		clientSalePickListPopup(saleEdit, ClientPickListService.class),
 	dashboardFilter(DashboardFilterService.class),
 		dashboardClientActivities(dashboardFilter, DashboardClientActivitiesService.class),
-	dashboardSalesFunnel(dashboardFilter, DashboardSalesFunnelService.class),
-	dashboardSalesRingProgress(dashboardFilter, DashboardSalesRingProgressService.class),
-	companySuggestionPickList(CompanyReadService.class);
+	dashboardSalesFunnel(dashboardFilter, SaleStatsService.class),
+	dashboardSalesRingProgress(dashboardFilter, SaleProgressStatsService.class),
+	companySuggestionPickList(CompanyService.class);
 
 	// @formatter:on
 

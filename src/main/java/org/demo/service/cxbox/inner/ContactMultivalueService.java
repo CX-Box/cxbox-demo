@@ -1,13 +1,13 @@
 package org.demo.service.cxbox.inner;
 
 import lombok.Getter;
-import org.demo.dto.ContactMultivalueDTO;
-import org.demo.entity.Contact;
-import org.springframework.stereotype.Service;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
+import org.demo.dto.cxbox.inner.ContactMultivalueDTO;
+import org.demo.entity.Contact;
+import org.springframework.stereotype.Service;
 
 @Getter
 @Service

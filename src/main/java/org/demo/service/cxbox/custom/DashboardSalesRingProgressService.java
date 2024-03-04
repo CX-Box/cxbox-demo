@@ -1,16 +1,16 @@
 package org.demo.service.cxbox.custom;
 
 import com.google.common.collect.ImmutableList;
-import org.demo.dto.DashboardSalesRingProgressDTO;
-import org.demo.entity.Sale;
-import org.demo.entity.enums.SaleStatus;
-import org.demo.repository.SaleRepository;
+import java.util.List;
+import java.util.Objects;
 import org.cxbox.api.data.ResultPage;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.AbstractCrudmaService;
 import org.cxbox.core.dto.rowmeta.MetaDTO;
-import java.util.List;
-import java.util.Objects;
+import org.demo.dto.cxbox.anysource.SalesProgressStatsDTO;
+import org.demo.entity.Sale;
+import org.demo.entity.enums.SaleStatus;
+import org.demo.repository.SaleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +22,8 @@ public class DashboardSalesRingProgressService extends AbstractCrudmaService {
 	private SaleRepository saleRepository;
 
 	@Override
-	public ResultPage<DashboardSalesRingProgressDTO> getAll(BusinessComponent bc) {
-		DashboardSalesRingProgressDTO dto = new DashboardSalesRingProgressDTO();
+	public ResultPage<SalesProgressStatsDTO> getAll(BusinessComponent bc) {
+		SalesProgressStatsDTO dto = new SalesProgressStatsDTO();
 		List<Sale> sales = saleRepository.findAll();
 		long allSalesSum = sales.stream().map(Sale::getSum).filter(Objects::nonNull).mapToLong(Long::longValue)
 				.sum();

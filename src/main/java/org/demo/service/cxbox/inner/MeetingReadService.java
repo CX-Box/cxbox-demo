@@ -1,11 +1,5 @@
 package org.demo.service.cxbox.inner;
 
-import org.cxbox.core.service.action.CxboxActionIconSpecifier;
-import org.demo.conf.cxbox.customization.icon.ActionIcon;
-import org.demo.controller.CxboxRestController;
-import org.demo.dto.MeetingDTO;
-import org.demo.entity.Meeting;
-import org.demo.repository.MeetingRepository;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.DrillDownType;
@@ -15,7 +9,13 @@ import org.cxbox.core.dto.rowmeta.PostAction;
 import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
 import org.cxbox.core.service.action.ActionsBuilder;
+import org.cxbox.core.service.action.CxboxActionIconSpecifier;
 import org.cxbox.core.util.session.SessionService;
+import org.demo.conf.cxbox.customization.icon.ActionIcon;
+import org.demo.controller.CxboxRestController;
+import org.demo.dto.cxbox.inner.MeetingDTO;
+import org.demo.entity.Meeting;
+import org.demo.repository.MeetingRepository;
 import org.demo.repository.core.UserRepository;
 import org.demo.service.statemodel.MeetingStatusModelActionProvider;
 import org.springframework.stereotype.Service;

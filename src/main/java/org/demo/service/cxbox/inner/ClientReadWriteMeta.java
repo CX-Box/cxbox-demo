@@ -1,19 +1,19 @@
 package org.demo.service.cxbox.inner;
 
+import java.util.Arrays;
+import org.cxbox.core.crudma.bc.impl.InnerBcDescription;
 import org.cxbox.core.dto.DrillDownType;
+import org.cxbox.core.dto.rowmeta.FieldsMeta;
+import org.cxbox.core.dto.rowmeta.RowDependentFieldsMeta;
+import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
 import org.demo.controller.CxboxRestController;
-import org.demo.dto.ClientReadDTO_;
-import org.demo.dto.ClientWriteDTO_;
+import org.demo.dto.cxbox.inner.ClientReadDTO_;
+import org.demo.dto.cxbox.inner.ClientWriteDTO;
+import org.demo.dto.cxbox.inner.ClientWriteDTO_;
 import org.demo.entity.enums.ClientEditStep;
 import org.demo.entity.enums.ClientImportance;
 import org.demo.entity.enums.ClientStatus;
 import org.demo.entity.enums.FieldOfActivity;
-import org.demo.dto.ClientWriteDTO;
-import org.cxbox.core.crudma.bc.impl.InnerBcDescription;
-import org.cxbox.core.dto.rowmeta.FieldsMeta;
-import org.cxbox.core.dto.rowmeta.RowDependentFieldsMeta;
-import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
-import java.util.Arrays;
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S3252","java:S1186"})

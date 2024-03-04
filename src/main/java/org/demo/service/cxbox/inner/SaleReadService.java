@@ -1,9 +1,5 @@
 package org.demo.service.cxbox.inner;
 
-import org.demo.controller.CxboxRestController;
-import org.demo.dto.SaleDTO;
-import org.demo.entity.Sale;
-import org.demo.repository.SaleRepository;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.DrillDownType;
@@ -12,6 +8,10 @@ import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.cxbox.core.dto.rowmeta.PostAction;
 import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
+import org.demo.controller.CxboxRestController;
+import org.demo.dto.cxbox.inner.SaleDTO;
+import org.demo.entity.Sale;
+import org.demo.repository.SaleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

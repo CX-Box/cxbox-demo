@@ -1,6 +1,5 @@
 package org.demo.conf.cxbox.extension.notification;
 
-import org.demo.dto.SocketNotificationDTO;
 import org.demo.entity.core.User;
 
 public interface WebSocketNotificationService {

@@ -1,8 +1,6 @@
 package org.demo.conf.cxbox.extension.notification;
 
 import java.util.List;
-import org.demo.dto.NotificationDTO;
-import org.demo.dto.SocketNotificationDTO;
 import org.demo.entity.Notification;
 import org.demo.entity.core.User;
 

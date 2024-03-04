@@ -1,15 +1,15 @@
 package org.demo.service.cxbox.inner;
 
-import org.demo.dto.ContactDTO;
-import org.demo.entity.Contact;
-import org.demo.entity.Contact_;
-import org.demo.entity.Meeting;
-import org.demo.repository.MeetingRepository;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.cxbox.model.core.entity.BaseEntity_;
+import org.demo.dto.cxbox.inner.ContactDTO;
+import org.demo.entity.Contact;
+import org.demo.entity.Contact_;
+import org.demo.entity.Meeting;
+import org.demo.repository.MeetingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;

@@ -1,11 +1,11 @@
 package org.demo.service.cxbox.inner;
 
-import org.demo.dto.ClientReadDTO;
-import org.demo.entity.Client;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
+import org.demo.dto.cxbox.inner.ClientReadDTO;
+import org.demo.entity.Client;
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S3252","java:S1186"})

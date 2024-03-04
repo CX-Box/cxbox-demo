@@ -4,8 +4,8 @@ import org.cxbox.core.crudma.bc.impl.InnerBcDescription;
 import org.cxbox.core.dto.rowmeta.FieldsMeta;
 import org.cxbox.core.dto.rowmeta.RowDependentFieldsMeta;
 import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
-import org.demo.dto.MeetingDocumentsDTO;
-import org.demo.dto.MeetingDocumentsDTO_;
+import org.demo.dto.cxbox.inner.MeetingDocumentsDTO;
+import org.demo.dto.cxbox.inner.MeetingDocumentsDTO_;
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S3252", "java:S1186"})

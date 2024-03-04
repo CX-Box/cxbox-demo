@@ -2,14 +2,7 @@
 
 package org.demo.service.cxbox.inner;
 
-import org.demo.dto.DashboardFilterDTO;
-import org.demo.dto.DashboardFilterDTO_;
-import org.demo.entity.DashboardFilter;
-import org.demo.entity.DashboardFilter_;
-import org.demo.entity.core.User;
-import org.demo.entity.core.User_;
-import org.demo.entity.enums.FieldOfActivity;
-import org.demo.repository.DashboardFilterRepository;
+import java.util.stream.Collectors;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.multivalue.MultivalueField;
@@ -17,7 +10,14 @@ import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.cxbox.core.service.action.Actions;
 import org.cxbox.core.util.session.SessionService;
-import java.util.stream.Collectors;
+import org.demo.dto.cxbox.inner.DashboardFilterDTO;
+import org.demo.dto.cxbox.inner.DashboardFilterDTO_;
+import org.demo.entity.DashboardFilter;
+import org.demo.entity.DashboardFilter_;
+import org.demo.entity.core.User;
+import org.demo.entity.core.User_;
+import org.demo.entity.enums.FieldOfActivity;
+import org.demo.repository.DashboardFilterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;

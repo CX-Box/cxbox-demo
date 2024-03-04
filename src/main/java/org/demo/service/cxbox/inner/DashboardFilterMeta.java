@@ -1,13 +1,13 @@
 package org.demo.service.cxbox.inner;
 
-import org.demo.dto.DashboardFilterDTO;
-import org.demo.dto.DashboardFilterDTO_;
-import org.demo.entity.enums.FieldOfActivity;
+import java.util.Arrays;
 import org.cxbox.core.crudma.bc.impl.InnerBcDescription;
 import org.cxbox.core.dto.rowmeta.FieldsMeta;
 import org.cxbox.core.dto.rowmeta.RowDependentFieldsMeta;
 import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
-import java.util.Arrays;
+import org.demo.dto.cxbox.inner.DashboardFilterDTO;
+import org.demo.dto.cxbox.inner.DashboardFilterDTO_;
+import org.demo.entity.enums.FieldOfActivity;
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S3252","java:S1186"})

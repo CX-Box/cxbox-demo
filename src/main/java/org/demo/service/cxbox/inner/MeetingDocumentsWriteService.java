@@ -1,7 +1,7 @@
 package org.demo.service.cxbox.inner;
 
 import static org.demo.conf.cxbox.customization.file.CxboxDemoMinioFileController.FILENAME_FIELD;
-import static org.demo.dto.MeetingDocumentsDTO_.notes;
+import static org.demo.dto.cxbox.inner.MeetingDocumentsDTO_.notes;
 
 import io.minio.MinioClient;
 import io.minio.StatObjectArgs;
@@ -22,15 +22,15 @@ import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
 import org.cxbox.core.service.action.ActionsBuilder;
 import org.cxbox.model.core.entity.BaseEntity_;
+import org.demo.conf.cxbox.customization.file.CustomFileServices;
 import org.demo.controller.CxboxRestController;
-import org.demo.dto.MeetingDocumentsDTO;
-import org.demo.dto.MeetingDocumentsDTO_;
+import org.demo.dto.cxbox.inner.MeetingDocumentsDTO;
+import org.demo.dto.cxbox.inner.MeetingDocumentsDTO_;
 import org.demo.entity.Meeting;
 import org.demo.entity.MeetingDocuments;
 import org.demo.entity.MeetingDocuments_;
 import org.demo.repository.MeetingDocumentsRepository;
 import org.demo.repository.MeetingRepository;
-import org.demo.conf.cxbox.customization.file.CustomFileServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.domain.Specification;

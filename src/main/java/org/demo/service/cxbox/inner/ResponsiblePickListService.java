@@ -1,10 +1,10 @@
 package org.demo.service.cxbox.inner;
 
-import org.demo.dto.ResponsibleDTO;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
+import org.demo.dto.cxbox.inner.ResponsibleDTO;
 import org.demo.entity.core.User;
 import org.springframework.stereotype.Service;
 

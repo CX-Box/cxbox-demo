@@ -8,8 +8,8 @@ import org.cxbox.core.dto.rowmeta.FieldsMeta;
 import org.cxbox.core.dto.rowmeta.RowDependentFieldsMeta;
 import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
 import org.demo.controller.CxboxRestController;
-import org.demo.dto.MeetingDTO;
-import org.demo.dto.MeetingDTO_;
+import org.demo.dto.cxbox.inner.MeetingDTO;
+import org.demo.dto.cxbox.inner.MeetingDTO_;
 import org.demo.entity.enums.MeetingStatus;
 import org.springframework.stereotype.Service;
 

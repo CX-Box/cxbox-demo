@@ -420,28 +420,7 @@
   </changeSet>
 
 
-  <changeSet author="initial" id="SCREEN TABLE">
-    <createTable remarks="Экран" tableName="SCREEN">
-      <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
-        <constraints primaryKey="true"/>
-      </column>
-      <column name="PRIMARY_VIEW_NAME" remarks="Идентификатор VIEW по умолчанию" type="VARCHAR2(255)"/>
-      <column defaultValue="[]" name="PRIMARY_VIEWS" remarks="Массив VIEW по умолчанию" type="CLOB"/>
-      <column name="NAME" remarks="Название" type="VARCHAR2(255)"/>
-      <column name="TITLE" remarks="Заголовок" type="VARCHAR2(255)"/>
-      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" type="TIMESTAMP(6)"/>
-      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" type="TIMESTAMP(6)"/>
-      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
-        <constraints nullable="false"/>
-      </column>
-      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
-        <constraints nullable="false"/>
-      </column>
-      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
-        <constraints nullable="false"/>
-      </column>
-    </createTable>
-  </changeSet>
+
   <changeSet author="initial" id="NAVIGATION_GROUP TABLE">
     <createTable remarks="Группы вью" tableName="NAVIGATION_GROUP">
       <column name="ID" remarks="Идентификатор" type="VARCHAR2(255)">
@@ -709,19 +688,6 @@
       <column name="DEPT_ID"/>
     </createIndex>
   </changeSet>
-  <changeSet author="initial" id="SCREEN INDEXES">
-    <addUniqueConstraint columnNames="NAME" constraintName="UK_SCREEN_NAME" tableName="SCREEN"/>
-    <createIndex indexName="UK_SCREEN_NAME_INDEX" tableName="SCREEN" unique="true">
-      <column name="NAME"/>
-    </createIndex>
-
-    <createIndex indexName="SCREEN_IND1" tableName="SCREEN">
-      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID"/>
-    </createIndex>
-    <createIndex indexName="SCREEN_IND2" tableName="SCREEN">
-      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"/>
-    </createIndex>
-  </changeSet>
 
   <changeSet author="initial" id="USER_ROLE INDEXES">
     <addUniqueConstraint columnNames="USER_ID, INTERNAL_ROLE_CD" constraintName="USER_ROLE_UNIQUE"
@@ -938,17 +904,6 @@
       referencedColumnNames="ID" referencedTableName="USERS" validate="true"/>
   </changeSet>
 
-  <changeSet author="initial" id="SCREEN CONSTRAINTS">
-    <addForeignKeyConstraint baseColumnNames="CREATED_BY_USER_ID" baseTableName="SCREEN"
-      constraintName="FK_SCREEN_CREATED_BY" deferrable="false" initiallyDeferred="false"
-      onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
-      referencedTableName="USERS" validate="true"/>
-    <addForeignKeyConstraint baseColumnNames="LAST_UPD_BY_USER_ID" baseTableName="SCREEN"
-      constraintName="FK__SCREEN_UPDATED_BY" deferrable="false" initiallyDeferred="false"
-      onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
-      referencedTableName="USERS" validate="true"/>
-  </changeSet>
-
   <changeSet author="initial" id="USERS CONSTRAINTS">
     <addForeignKeyConstraint baseColumnNames="CREATED_BY_USER_ID" baseTableName="USERS"
       constraintName="FK_USER_CREATED_BY" deferrable="false" initiallyDeferred="false"
@@ -982,10 +937,6 @@
 
   </changeSet>
   <changeSet author="initial" id="NAVIGATION_GROUP CONSTRAINTS">
-    <addForeignKeyConstraint baseColumnNames="SCREEN_NAME" baseTableName="NAVIGATION_GROUP"
-      constraintName="FK_VIEW_GROUP_SCREEN_NAME" deferrable="false" initiallyDeferred="false"
-      onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="NAME"
-      referencedTableName="SCREEN" validate="true"/>
     <addForeignKeyConstraint baseColumnNames="PARENT_ID" baseTableName="NAVIGATION_GROUP"
       constraintName="FK_VIEW_GROUP_VIEW_GROUP" deferrable="false" initiallyDeferred="false"
       onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"

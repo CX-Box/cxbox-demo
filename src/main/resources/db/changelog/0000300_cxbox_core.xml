@@ -419,53 +419,6 @@
     </createTable>
   </changeSet>
 
-
-
-  <changeSet author="initial" id="NAVIGATION_GROUP TABLE">
-    <createTable remarks="Группы вью" tableName="NAVIGATION_GROUP">
-      <column name="ID" remarks="Идентификатор" type="VARCHAR2(255)">
-        <constraints primaryKey="true" primaryKeyName="PK_NAVIGATION_GROUP"/>
-      </column>
-      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" remarks="Дата создания"
-        type="TIMESTAMP(6)">
-        <constraints nullable="false"/>
-      </column>
-      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" remarks="Дата изменения"
-        type="TIMESTAMP(6)">
-        <constraints nullable="false"/>
-      </column>
-      <column name="TYPE_CD" remarks="Тип группы" type="VARCHAR2(255)"/>
-      <column name="SCREEN_NAME" remarks="Экран" type="VARCHAR2(255)"/>
-      <column name="TITLE" remarks="Название" type="VARCHAR2(1000)"/>
-      <column name="PARENT_ID" remarks="Родительская группа" type="VARCHAR2(255)"/>
-      <column name="SEQ" remarks="Порядок" type="NUMBER(19, 0)"/>
-      <column name="DESCRIPTION" remarks="Описание" type="VARCHAR2(1000)"/>
-      <column name="DEFAULT_VIEW" remarks="Порядок" type="VARCHAR2(255)"/>
-      <column name="HIDDEN" remarks="Скрыто" type="NUMBER(1)"/>
-    </createTable>
-  </changeSet>
-  <changeSet author="initial" id="NAVIGATION_VIEW TABLE">
-    <createTable remarks="Связь вью с группами" tableName="NAVIGATION_VIEW">
-      <column name="ID" remarks="Идентификатор" type="VARCHAR2(255)">
-        <constraints primaryKey="true" primaryKeyName="PK_NAVIGATION_VIEW"/>
-      </column>
-      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" remarks="Дата создания"
-        type="TIMESTAMP(6)">
-        <constraints nullable="false"/>
-      </column>
-      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" remarks="Дата изменения"
-        type="TIMESTAMP(6)">
-        <constraints nullable="false"/>
-      </column>
-      <column name="TYPE_CD" remarks="Тип группы" type="VARCHAR2(255)"/>
-      <column name="VIEW_NAME" remarks="Вью" type="VARCHAR2(255)"/>
-      <column name="SCREEN_NAME" remarks="Экран" type="VARCHAR2(255)"/>
-      <column name="PARENT_GROUP_ID" remarks="Группа" type="VARCHAR2(255)"/>
-      <column name="SEQ" remarks="Порядок" type="NUMBER(19, 0)"/>
-      <column name="DESCRIPTION" remarks="Описание" type="VARCHAR2(1000)"/>
-      <column name="HIDDEN" remarks="Скрыто" type="NUMBER(1)"/>
-    </createTable>
-  </changeSet>
   <changeSet author="initial" id="SEARCH_SPEC TABLE">
     <createTable remarks="Критерии поиска" tableName="SEARCH_SPEC">
       <column name="ID" type="NUMBER(19, 0)">
@@ -746,18 +699,6 @@
     </createIndex>
   </changeSet>
 
-  <changeSet author="initial" id="NAVIGATION_VIEW INDEXES">
-    <createIndex indexName="navigation_view_screen_name_type_cd_index" tableName="NAVIGATION_VIEW">
-      <column name="screen_name"/>
-      <column name="type_cd"/>
-    </createIndex>
-    <createIndex indexName="navigation_view_screen_name_type_cd_seq_index" tableName="NAVIGATION_VIEW">
-      <column name="screen_name"/>
-      <column name="type_cd"/>
-      <column name="seq"/>
-    </createIndex>
-  </changeSet>
-
   <changeSet author="initial" id="SYSTEM_SETTINGS CONSTRAINTS">
     <addForeignKeyConstraint baseColumnNames="CREATED_BY_USER_ID" baseTableName="SYSTEM_SETTINGS"
       constraintName="FK_SYS_SETTINGS_CREATED_BY" deferrable="false"
@@ -927,20 +868,6 @@
     <addForeignKeyConstraint baseColumnNames="USER_ID" baseTableName="USER_ROLE" constraintName="FK_USER_USER_ROLE"
       deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
       referencedColumnNames="ID" referencedTableName="USERS" validate="true"/>
-  </changeSet>
-
-  <changeSet author="initial" id="NAVIGATION_VIEW CONSTRAINTS">
-    <addForeignKeyConstraint baseColumnNames="PARENT_GROUP_ID" baseTableName="NAVIGATION_VIEW"
-      constraintName="FK_VIEW_GROUP_DATA_VIEW_GROUP" deferrable="false"
-      initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
-      referencedColumnNames="ID" referencedTableName="NAVIGATION_GROUP" validate="true"/>
-
-  </changeSet>
-  <changeSet author="initial" id="NAVIGATION_GROUP CONSTRAINTS">
-    <addForeignKeyConstraint baseColumnNames="PARENT_ID" baseTableName="NAVIGATION_GROUP"
-      constraintName="FK_VIEW_GROUP_VIEW_GROUP" deferrable="false" initiallyDeferred="false"
-      onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
-      referencedTableName="NAVIGATION_GROUP" validate="true"/>
   </changeSet>
 
   <changeSet author="initial" id="SEARCH_SPEC CONSTRAINTS">

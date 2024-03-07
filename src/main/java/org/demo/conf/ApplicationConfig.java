@@ -6,8 +6,10 @@ import org.cxbox.api.service.tx.ITransactionStatus;
 import org.cxbox.core.config.APIConfig;
 import org.cxbox.core.config.ControllerScan;
 import org.cxbox.core.config.CoreApplicationConfig;
+import org.cxbox.core.config.LocalizationConfig;
 import org.cxbox.core.config.UIConfig;
 import org.cxbox.meta.MetaApplicationConfig;
+import org.cxbox.meta.metahotreload.conf.MetaHotReloadConfiguration;
 import org.cxbox.model.core.config.PersistenceJPAConfig;
 import org.cxbox.model.core.tx.CxboxJpaTransactionManagerForceActiveAware;
 import java.util.concurrent.Executors;
@@ -31,11 +33,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 @RequiredArgsConstructor
 @Import({
+		MetaHotReloadConfiguration.class,
 		MetaApplicationConfig.class,
 		CoreApplicationConfig.class,
 		PersistenceJPAConfig.class,
 		UIConfig.class,
-		APIConfig.class
+		APIConfig.class,
+		LocalizationConfig.class
 })
 @ControllerScan({"org.cxbox.meta"})
 @EnableJpaRepositories(basePackages = "org.demo")

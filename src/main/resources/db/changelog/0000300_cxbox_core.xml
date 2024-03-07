@@ -166,30 +166,6 @@
     </createTable>
   </changeSet>
 
-  <changeSet author="initial" id="SYSTEM_SETTINGS TABLE">
-    <createTable remarks="Системные настройки" tableName="SYSTEM_SETTINGS">
-      <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
-        <constraints primaryKey="true"/>
-      </column>
-      <column name="KEY" remarks="Ключ" type="VARCHAR2(255)"/>
-      <column name="VALUE" remarks="Значение" type="VARCHAR2(1500)"/>
-      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" type="TIMESTAMP(6)">
-        <constraints nullable="false"/>
-      </column>
-      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" type="TIMESTAMP(6)">
-        <constraints nullable="false"/>
-      </column>
-      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
-        <constraints nullable="false"/>
-      </column>
-      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
-        <constraints nullable="false"/>
-      </column>
-      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
-        <constraints nullable="false"/>
-      </column>
-    </createTable>
-  </changeSet>
   <changeSet author="initial" id="DICTIONARY_ITEM TABLE">
     <createTable remarks="Значения простых справочников" tableName="DICTIONARY_ITEM">
       <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
@@ -609,18 +585,7 @@
     <addPrimaryKey columnNames="ID, LANGUAGE" constraintName="DICTIONARY_ITEM_TR_PK"
       tableName="DICTIONARY_ITEM_TR"/>
   </changeSet>
-  <changeSet author="initial" id="SYSTEM_SETTINGS INDEXES">
-    <addUniqueConstraint columnNames="KEY" constraintName="SYS_SETTINGS_UNIQUE_KEY" tableName="SYSTEM_SETTINGS"/>
-    <createIndex indexName="SYS_SETTINGS_UNIQUE_KEY_INDEX" tableName="SYSTEM_SETTINGS" unique="true">
-      <column name="KEY"/>
-    </createIndex>
-    <createIndex indexName="SYS_SETTINGS_IND1" tableName="SYSTEM_SETTINGS">
-      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID"/>
-    </createIndex>
-    <createIndex indexName="SYS_SETTINGS_IND2" tableName="SYSTEM_SETTINGS">
-      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"/>
-    </createIndex>
-  </changeSet>
+
 
   <changeSet author="initial" id="USERS INDEXES">
     <addUniqueConstraint columnNames="LOGIN" constraintName="UK_LOGIN_NAME" tableName="USERS"/>
@@ -699,16 +664,6 @@
     </createIndex>
   </changeSet>
 
-  <changeSet author="initial" id="SYSTEM_SETTINGS CONSTRAINTS">
-    <addForeignKeyConstraint baseColumnNames="CREATED_BY_USER_ID" baseTableName="SYSTEM_SETTINGS"
-      constraintName="FK_SYS_SETTINGS_CREATED_BY" deferrable="false"
-      initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
-      referencedColumnNames="ID" referencedTableName="USERS" validate="true"/>
-    <addForeignKeyConstraint baseColumnNames="LAST_UPD_BY_USER_ID" baseTableName="SYSTEM_SETTINGS"
-      constraintName="FK_SYS_SETTINGS_UPDATED_BY" deferrable="false"
-      initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
-      referencedColumnNames="ID" referencedTableName="USERS" validate="true"/>
-  </changeSet>
   <changeSet author="initial" id="DICTIONARY_ITEM CONSTRAINTS">
     <addForeignKeyConstraint baseColumnNames="DICTIONARY_TYPE_ID" baseTableName="DICTIONARY_ITEM"
       constraintName="CONS_DICTIONARY_TYPE_ID" deferrable="true" initiallyDeferred="true"
@@ -926,15 +881,6 @@
     </loadData>
   </changeSet>
 
-  <changeSet id="SYSTEM SETTINGS" author="initial" runOnChange="true">
-    <loadUpdateData tableName="SYSTEM_SETTINGS" primaryKey="KEY" encoding="UTF-8" separator=";" quotchar="&quot;"
-      file="db/data/CXBOX-SYSTEM_SETTINGS.csv">
-      <column header="ID" name="ID" type="SEQUENCE"/>
-      <column header="KEY" name="KEY" type="STRING"/>
-      <column header="VALUE" name="VALUE" type="STRING"/>
-    </loadUpdateData>
-  </changeSet>
-
   <changeSet author="initial" id="DICTIONARIES" runOnChange="true">
     <delete tableName="DICTIONARY_ITEM_TR"/>
 
@@ -962,7 +908,6 @@
       select ID, 'ru' as LANGUAGE, VALUE as VALUE
       from DICTIONARY_ITEM;
     </sql>
-
 
   </changeSet>
 

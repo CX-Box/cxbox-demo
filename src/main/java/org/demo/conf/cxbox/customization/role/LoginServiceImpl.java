@@ -16,18 +16,17 @@
 
 package org.demo.conf.cxbox.customization.role;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.cxbox.api.ScreenResponsibilityService;
-import org.cxbox.api.data.dictionary.CoreDictionaries.SystemPref;
 import org.cxbox.api.data.dictionary.LOV;
 import org.cxbox.api.data.dictionary.SimpleDictionary;
 import org.cxbox.api.service.session.CoreSessionService;
 import org.cxbox.api.service.session.IUser;
-import org.cxbox.api.system.SystemSettings;
+import org.cxbox.core.config.properties.UIProperties;
 import org.cxbox.core.dto.LoggedUser;
 import org.cxbox.core.util.session.LoginService;
 import org.cxbox.core.util.session.SessionService;
@@ -51,13 +50,13 @@ public class LoginServiceImpl implements LoginService {
 
 	private final UserRoleService userRoleService;
 
-	private final SystemSettings systemSettings;
-
 	private final UserRepository userRepository;
 
 	private final ScreenResponsibilityService screenResponsibilityService;
 
 	private final MetaConfigurationProperties metaConfigurationProperties;
+
+	private final UIProperties uiProperties;
 
 	/**
 	 * Build info for active session user for specific role
@@ -88,7 +87,7 @@ public class LoginServiceImpl implements LoginService {
 				.principalName(userEntity.getUserPrincipalName())
 				.phone(userEntity.getPhone())
 				.featureSettings(this.getFeatureSettings())
-				.systemUrl(systemSettings.getValue(SystemPref.SYSTEM_URL))
+				.systemUrl(uiProperties.getSystemUrl())
 				.language(LocaleContextHolder.getLocale().getLanguage())
 				.timezone(LocaleContextHolder.getTimeZone().getID())
 				.devPanelEnabled(metaConfigurationProperties.isDevPanelEnabled())
@@ -116,8 +115,6 @@ public class LoginServiceImpl implements LoginService {
 	 * Following keys were supported historically: FEATURE_COMMENTS, FEATURE_NOTIFICATIONS, FEATURE_HIDE_SYSTEM_ERRORS
 	 */
 	public Collection<SimpleDictionary> getFeatureSettings() {
-		return systemSettings.select(key -> key.startsWith("FEATURE_"))
-				.map(p -> new SimpleDictionary(p.getKey(), p.getValue()))
-				.collect(Collectors.toList());
+		return new ArrayList<>();
 	}
 }

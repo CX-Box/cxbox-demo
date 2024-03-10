@@ -145,3 +145,9 @@ dadata:
   client:
     token: ${DADATA_API_KEY:885218b4321600b90d4161c85bc11766cd6810c1}
     base-url: ${DADATA_URL:https://suggestions.dadata.ru/suggestions/api/4_1/rs/}
+
+decorator:
+  datasource:
+    datasource-proxy:
+      query:
+        enable-logging: true

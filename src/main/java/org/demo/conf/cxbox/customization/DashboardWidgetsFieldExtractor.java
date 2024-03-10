@@ -1,11 +1,11 @@
 package org.demo.conf.cxbox.customization;
 
 import com.google.common.collect.Lists;
-import java.util.Set;
-import org.cxbox.core.util.JsonUtils;
 import java.util.HashSet;
 import java.util.List;
-import org.cxbox.meta.entity.Widget;
+import java.util.Set;
+import org.cxbox.core.util.JsonUtils;
+import org.cxbox.meta.data.WidgetDTO;
 import org.cxbox.meta.ui.field.BaseFieldExtractor;
 import org.cxbox.meta.ui.field.link.LinkFieldExtractor;
 import org.cxbox.meta.ui.model.BcField;
@@ -20,7 +20,7 @@ public class DashboardWidgetsFieldExtractor extends BaseFieldExtractor {
 	}
 
 	@Override
-	public Set<BcField> extract(Widget widget) {
+	public Set<BcField> extract(WidgetDTO widget) {
 		final Set<BcField> widgetFields = new HashSet<>(extractFieldsFromTitle(widget, widget.getTitle()));
 		for (final FieldMeta field : JsonUtils.readValue(FieldMeta[].class, widget.getFields())) {
 			widgetFields.addAll(extract(widget, field));

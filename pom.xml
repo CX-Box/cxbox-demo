@@ -5,12 +5,12 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>cxbox-demo</artifactId>
   <packaging>jar</packaging>
-  <version>1.0.0</version>
+  <version>4.0.0-M2</version>
 
   <parent>
     <groupId>org.cxbox</groupId>
     <artifactId>cxbox-starter-parent</artifactId>
-    <version>4.0.0-M2-SNAPSHOT</version>
+    <version>4.0.0-M2</version>
   </parent>
 
   <properties>
@@ -32,6 +32,11 @@
   </repositories>
 
   <dependencies>
+    <dependency>
+      <groupId>com.github.gavlyukovskiy</groupId>
+      <artifactId>datasource-proxy-spring-boot-starter</artifactId>
+      <version>1.9.1</version>
+    </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
@@ -120,7 +125,7 @@
     <dependency>
       <groupId>org.cxbox</groupId>
       <artifactId>cxbox-starter-meta</artifactId>
-      <version>4.0.0-M2-SNAPSHOT</version>
+      <version>4.0.0-M2</version>
       <scope>compile</scope>
     </dependency>
     <dependency>

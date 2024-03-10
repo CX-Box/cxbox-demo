@@ -30,8 +30,6 @@ cxbox:
     dev-panel-enabled: ${DEV_PANEL_ENABLED:true}
     directory: ${META_DIRECTORY:file:./src/main/resources/meta}
     view-allowed-roles-enabled: true
-    base-lock-timer: ${BASE_LOCK_TIMER:1800}  #sec
-    check-lock-interval: ${CHECK_LOCK_INTERVAL:1000}  #ms
   widget:
     fields:
       include-packages: org.cxbox.meta, org.demo.conf.cxbox
@@ -101,7 +99,7 @@ spring:
         jdbc:
           batch_size: 100
         hbm2ddl:
-          auto: ${HIBERNATE_DDL_AUTO:update}
+          auto: ${HIBERNATE_DDL_AUTO:none}
     hibernate:
       naming:
         physical-strategy: org.cxbox.model.core.hbn.ImprovedPhysicalNamingStrategy
@@ -147,3 +145,9 @@ dadata:
   client:
     token: ${DADATA_API_KEY:885218b4321600b90d4161c85bc11766cd6810c1}
     base-url: ${DADATA_URL:https://suggestions.dadata.ru/suggestions/api/4_1/rs/}
+
+decorator:
+  datasource:
+    datasource-proxy:
+      query:
+        enable-logging: true

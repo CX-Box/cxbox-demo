@@ -3,16 +3,17 @@ package org.demo.conf.cxbox.customization;
 import static org.cxbox.api.util.i18n.LocalizationFormatter.i18n;
 
 import com.google.common.collect.ImmutableSet;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.cxbox.core.util.JuelUtils;
 import org.cxbox.core.util.JuelUtils.Property;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Map.Entry;
-import java.util.Set;
-import org.cxbox.meta.entity.Widget;
+import org.cxbox.meta.data.WidgetDTO;
 import org.cxbox.meta.ui.field.FieldExtractor;
+import org.cxbox.meta.ui.field.link.LinkFieldExtractor;
 import org.cxbox.meta.ui.model.BcField;
 import org.cxbox.meta.ui.model.BcField.Attribute;
 import org.cxbox.meta.ui.model.MultivalueField;
@@ -21,7 +22,6 @@ import org.cxbox.meta.ui.model.json.field.FieldMeta;
 import org.cxbox.meta.ui.model.json.field.FieldMeta.FieldMetaBase.MultiSourceInfo;
 import org.cxbox.meta.ui.model.json.field.subtypes.MultivalueFieldMeta;
 import org.cxbox.meta.ui.model.json.field.subtypes.PickListFieldMeta;
-import org.cxbox.meta.ui.field.link.LinkFieldExtractor;
 
 @RequiredArgsConstructor
 public abstract class DemoBaseFieldExtractor implements FieldExtractor {
@@ -34,7 +34,7 @@ public abstract class DemoBaseFieldExtractor implements FieldExtractor {
 			"suggestionPickList"
 	);
 
-	protected Set<BcField> extract(final Widget widget, final FieldMeta fieldMeta) {
+	protected Set<BcField> extract(final WidgetDTO widget, final FieldMeta fieldMeta) {
 		final Set<BcField> widgetFields = new HashSet<>();
 		final Set<BcField> pickListFields = new HashSet<>();
 		if (fieldMeta instanceof FieldMeta.FieldContainer) {
@@ -48,12 +48,12 @@ public abstract class DemoBaseFieldExtractor implements FieldExtractor {
 			for (final PickListField pickList : getPickLists(fieldMetaBase)) {
 				if (pickList.getPickMap() != null) {
 					for (final Entry<String, String> entry : pickList.getPickMap().entrySet()) {
-						widgetFields.add(new BcField(widget.getBc(), entry.getKey())
-								.putAttribute(Attribute.WIDGET_ID, widget.getId())
+						widgetFields.add(new BcField(widget.getBcName(), entry.getKey())
+								.putAttribute(Attribute.WIDGET_NAME, widget.getName())
 						);
 						pickListFields.add(new BcField(pickList.getPickListBc(), entry.getValue())
-								.putAttribute(Attribute.WIDGET_ID, widget.getId())
-								.putAttribute(Attribute.PARENT_BC, widget.getBc())
+								.putAttribute(Attribute.WIDGET_NAME, widget.getName())
+								.putAttribute(Attribute.PARENT_BC, widget.getBcName())
 								.putAttribute(Attribute.PARENT_FIELD, entry.getKey())
 						);
 					}
@@ -64,13 +64,13 @@ public abstract class DemoBaseFieldExtractor implements FieldExtractor {
 			widgetFields.addAll(linkFieldExtractor.extract(widget, fieldMetaBase));
 			if (fieldMetaBase.getMultisource() != null) {
 				for (final MultiSourceInfo multiSourceInfo : fieldMetaBase.getMultisource()) {
-					widgetFields.add(new BcField(widget.getBc(), multiSourceInfo.getKey())
-							.putAttribute(Attribute.WIDGET_ID, widget.getId())
+					widgetFields.add(new BcField(widget.getBcName(), multiSourceInfo.getKey())
+							.putAttribute(Attribute.WIDGET_NAME, widget.getName())
 					);
 				}
 			}
-			final BcField widgetField = new BcField(widget.getBc(), fieldMetaBase.getKey())
-					.putAttribute(Attribute.WIDGET_ID, widget.getId())
+			final BcField widgetField = new BcField(widget.getBcName(), fieldMetaBase.getKey())
+					.putAttribute(Attribute.WIDGET_NAME, widget.getName())
 					.putAttribute(Attribute.TYPE, fieldMetaBase.getType())
 					.putAttribute(Attribute.ICON_TYPE_KEY, fieldMetaBase.getIconTypeKey())
 					.putAttribute(Attribute.HINT_KEY, fieldMetaBase.getHintKey())
@@ -81,19 +81,19 @@ public abstract class DemoBaseFieldExtractor implements FieldExtractor {
 		return widgetFields;
 	}
 
-	private List<BcField> extractFieldsFromMultiValue(Widget widget, MultivalueField multivalueField) {
+	private List<BcField> extractFieldsFromMultiValue(WidgetDTO widget, MultivalueField multivalueField) {
 		List<BcField> result = new ArrayList<>();
 		if (multivalueField == null) {
 			return result;
 		}
 		if (multivalueField.getAssocValueKey() != null) {
 			result.add(new BcField(multivalueField.getPopupBcName(), multivalueField.getAssocValueKey())
-					.putAttribute(Attribute.WIDGET_ID, widget.getId())
+					.putAttribute(Attribute.WIDGET_NAME, widget.getName())
 			);
 		}
 		if (multivalueField.getDisplayedKey() != null) {
-			result.add(new BcField(widget.getBc(), multivalueField.getDisplayedKey())
-					.putAttribute(Attribute.WIDGET_ID, widget.getId())
+			result.add(new BcField(widget.getBcName(), multivalueField.getDisplayedKey())
+					.putAttribute(Attribute.WIDGET_NAME, widget.getName())
 			);
 		}
 		return result;
@@ -121,7 +121,7 @@ public abstract class DemoBaseFieldExtractor implements FieldExtractor {
 		return pickLists;
 	}
 
-	protected Set<BcField> extractFieldsFromTitle(final Widget widget, final String title) {
+	protected Set<BcField> extractFieldsFromTitle(final WidgetDTO widget, final String title) {
 		final HashSet<BcField> fields = new HashSet<>();
 		if (title == null) {
 			return fields;
@@ -129,8 +129,8 @@ public abstract class DemoBaseFieldExtractor implements FieldExtractor {
 		final String templateWithoutDefault = title
 				.replaceAll("\\$\\{(\\w*)(:[\\wа-яА-ЯёЁ\\-,. ]*)?}", "\\$\\{$1}");
 		for (final Property property : JuelUtils.getProperties(templateWithoutDefault)) {
-			fields.add(new BcField(widget.getBc(), property.getIdentifier())
-					.putAttribute(Attribute.WIDGET_ID, widget.getId())
+			fields.add(new BcField(widget.getBcName(), property.getIdentifier())
+					.putAttribute(Attribute.WIDGET_NAME, widget.getName())
 			);
 		}
 		return fields;

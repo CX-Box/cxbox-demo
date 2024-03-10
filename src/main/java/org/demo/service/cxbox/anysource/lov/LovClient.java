@@ -12,7 +12,6 @@ import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.demo.microservice.dto.DictDTO;
 import org.demo.util.IntegrationConfiguration;
 import org.demo.util.IntegrationURLBuilder;
-import org.demo.util.RequestHelper;
 import org.demo.util.RestResponsePage;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -23,7 +22,7 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class LovClient implements RequestHelper {
+public class LovClient {
 
 	public static final String API_V_1_LOV = "";
 

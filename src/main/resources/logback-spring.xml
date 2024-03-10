@@ -8,6 +8,8 @@
     </encoder>
   </appender>
 
+  <logger name="net.ttddyy.dsproxy.listener" level="DEBUG"/>
+
   <root level="INFO">
     <appender-ref ref="STDOUT"/>
   </root>

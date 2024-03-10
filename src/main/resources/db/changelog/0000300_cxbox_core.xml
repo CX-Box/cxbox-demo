@@ -4,45 +4,7 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd"
   logicalFilePath="db/changelog/0000300_cxbox_core.xml">
 
-  <changeSet author="initial" id="BC TABLE">
-    <createTable remarks="Бизнес-компоненты" tableName="BC">
-      <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
-        <constraints primaryKey="true"/>
-      </column>
-      <column name="NAME" remarks="Название бизнес-компонента" type="VARCHAR2(255)">
-        <constraints nullable="false"/>
-      </column>
-      <column name="PARENT_NAME" remarks="Название родительского бизнес-компонента" type="VARCHAR2(255)"/>
-      <column name="QUERY" remarks="Sql для получения списка бизнес-компонент" type="CLOB">
-        <constraints nullable="false"/>
-      </column>
-      <column name="DEFAULT_ORDER" remarks="Сортировка по умолчанию" type="VARCHAR2(500)"/>
-      <column name="REPORT_DATE_FIELD" remarks="Поле типа дата для PIVOT-фильтрации" type="VARCHAR2(500)"/>
-      <column defaultValueNumeric="5" name="PAGE_LIMIT" remarks="Кол-во строк при пагинации" type="NUMBER(19, 0)">
-        <constraints nullable="false"/>
-      </column>
-      <column defaultValue="[]" name="BINDS" type="CLOB"/>
-      <column defaultValueNumeric="0" name="EDITABLE" remarks="Редактируемые поля" type="NUMBER(1, 0)"/>
-      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" remarks="Дата создания"
-        type="TIMESTAMP(6)">
-        <constraints nullable="false"/>
-      </column>
-      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" remarks="Дата обновления"
-        type="TIMESTAMP(6)">
-        <constraints nullable="false"/>
-      </column>
-      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
-        <constraints nullable="false"/>
-      </column>
-      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
-        <constraints nullable="false"/>
-      </column>
-      <column name="REFRESH" remarks="Не кэшировать с фронта" type="NUMBER(1, 0)"/>
-      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
-        <constraints nullable="false"/>
-      </column>
-    </createTable>
-  </changeSet>
+
   <changeSet author="initial" id="BC_FILTER_GROUPS TABLE">
     <createTable remarks="Группы фильтров" tableName="BC_FILTER_GROUPS">
       <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
@@ -537,18 +499,7 @@
       <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"/>
     </createIndex>
   </changeSet>
-  <changeSet author="initial" id="BC INDEXES">
-    <addUniqueConstraint columnNames="NAME" constraintName="BC_UNIQUE" tableName="BC"/>
-    <createIndex indexName="BC_UNIQUE_INDEX" tableName="BC" unique="true">
-      <column name="NAME"/>
-    </createIndex>
-    <createIndex indexName="BC_IND1" tableName="BC">
-      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID"/>
-    </createIndex>
-    <createIndex indexName="BC_IND2" tableName="BC">
-      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"/>
-    </createIndex>
-  </changeSet>
+
   <changeSet author="initial" id="DICTIONARY_ITEM INDEXES">
     <addUniqueConstraint columnNames="TYPE, KEY" constraintName="DIC_SELECT_UNIQUE_TYPE_KEY"
       tableName="DICTIONARY_ITEM"/>
@@ -685,16 +636,6 @@
       referencedTableName="DICTIONARY_ITEM" validate="true"/>
   </changeSet>
 
-  <changeSet author="initial" id="BC CONSTRAINTS">
-    <addForeignKeyConstraint baseColumnNames="CREATED_BY_USER_ID" baseTableName="BC"
-      constraintName="FK_BC_CREATED_BY" deferrable="false" initiallyDeferred="false"
-      onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
-      referencedTableName="USERS" validate="true"/>
-    <addForeignKeyConstraint baseColumnNames="LAST_UPD_BY_USER_ID" baseTableName="BC"
-      constraintName="FK_BC_UPDATED_BY" deferrable="false" initiallyDeferred="false"
-      onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
-      referencedTableName="USERS" validate="true"/>
-  </changeSet>
   <changeSet author="initial" id="BC_FILTER_GROUPS CONSTRAINTS">
     <addForeignKeyConstraint baseColumnNames="CREATED_BY_USER_ID" baseTableName="BC_FILTER_GROUPS"
       constraintName="FK_BC_FILTER_GROUPS_CREATED_BY" deferrable="false"

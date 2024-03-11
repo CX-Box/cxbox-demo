@@ -1,0 +1,36 @@
+{
+  "name": "resplist",
+  "title": "Responsibilites",
+  "type": "List",
+  "bc": "responsibilities",
+  "showCondition": [],
+  "fields": [
+    {
+      "title": "Internal Role CD",
+      "key": "internalRoleCD",
+      "type": "input"
+    },
+    {
+      "title": "View",
+      "key": "view",
+      "type": "input"
+    },
+    {
+      "title": "Screens",
+      "key": "screens",
+      "type": "input"
+    },
+    {
+      "title": "Resp Type",
+      "key": "respType",
+      "type": "input"
+    },
+    {
+      "title": "DepartmentId",
+      "key": "departmentId",
+      "type": "number"
+    }
+  ],
+  "axisFields": [],
+  "chart": []
+}

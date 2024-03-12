@@ -48,6 +48,10 @@
     }
   ],
   "options": {
+    "export": {
+      "enabled": true,
+      "title": "meeting"
+    },
     "additional": {
       "enabled": true
     },

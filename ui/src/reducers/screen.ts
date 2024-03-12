@@ -11,12 +11,14 @@ interface ScreenState extends interfaces.ScreenState {
         activeBcName: string
         bc: Record<string, BcMetaState & { filterGroups?: FilterGroup[] }>
     }
+    pagination: { [bcName: string]: { limit?: number } }
 }
 
 const initialState: ScreenState = {
     ...reducers.initialScreenState,
     fullTextFilter: {},
-    menuCollapsed: false
+    menuCollapsed: false,
+    pagination: {}
 }
 
 const screenReducerBuilder = reducers
@@ -56,6 +58,21 @@ const screenReducerBuilder = reducers
         if (newFilterGroupIndex !== -1) {
             ;(state.bo.bc[newFilterGroup.bc].filterGroups as FilterGroup[])[newFilterGroupIndex].id = newFilterGroup.id
         }
+    })
+    .addCase(actions.changePageLimit, (state, action) => {
+        const { bcName, limit } = action.payload
+
+        state.pagination[bcName] = state.pagination[bcName] ?? {}
+        state.pagination[bcName].limit = limit
+
+        state.bo.bc[bcName] = state.bo.bc[bcName] ?? {}
+        state.bo.bc[bcName].limit = limit as number
+    })
+    .addMatcher(isAnyOf(actions.selectScreen), (state, action) => {
+        // временное решение чтобы сохранялся лимит при сменен экранов
+        Object.values(state.bo.bc).forEach(bc => {
+            bc.limit = state.pagination[bc.name]?.limit ?? bc.limit
+        })
     })
     .addMatcher(isAnyOf(sendOperationSuccess, actions.bcSaveDataSuccess), (state, action) => {
         if (action.payload.dataItem) {

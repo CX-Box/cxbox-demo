@@ -86,3 +86,5 @@ export const updateIdForFilterGroup = createAction<{ name: string; bc: string; i
 export const addFilterGroup = createAction<FilterGroup & { bc: string }>('addFilterGroup')
 
 export const removeFilterGroup = createAction<{ name: string; bc: string; id?: string }>('removeFilterGroup')
+
+export const changePageLimit = createAction<{ bcName: string; limit: number }>('changePageLimit')

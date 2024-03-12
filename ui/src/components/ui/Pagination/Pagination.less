@@ -3,7 +3,7 @@
 .container {
     margin: 16px 0;
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
 
     :global(.ant-pagination.mini).pagination {
         :global {
@@ -39,3 +39,17 @@
         }
     }
 }
+
+.limits {
+    min-width: 70px;
+    text-align: left;
+
+    :global .ant-select-selection {
+        border-radius: 0;
+    }
+
+    :global .ant-select-selection__rendered {
+        margin-right: 34px;
+    }
+}
+

@@ -144,6 +144,11 @@ export interface AppWidgetMeta extends interfaces.WidgetMeta {
             descriptionFieldKey?: string
         }
         buttons?: OperationInfo[]
+        pagination?: {
+            defaultLimit?: number
+            hideLimitOptions?: boolean
+            availableLimitsList?: number[]
+        }
     }
 }
 

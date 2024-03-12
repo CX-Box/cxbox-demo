@@ -1,10 +1,9 @@
 import React, { FunctionComponent } from 'react'
 import { connect } from 'react-redux'
 import DashboardLayout from '@cxboxComponents/ui/DashboardLayout/DashboardLayout'
-import { FileUploadPopup } from '@cxboxComponents/FileUploadPopup/FileUploadPopup'
 import ViewInfoLabel from '@cxboxComponents/DebugPanel/components/ViewInfoLabel'
 import DebugPanel from '@cxboxComponents/DebugPanel/DebugPanel'
-import { RootState, useAppSelector } from '@store'
+import { RootState } from '@store'
 import { interfaces } from '@cxbox-ui/core'
 
 const { PopupWidgetTypes } = interfaces
@@ -35,7 +34,6 @@ export const CustomizationContext: React.Context<{
 export const View: FunctionComponent<ViewProps> = props => {
     const { debugMode, widgets, skipWidgetTypes, card, customSpinner, customWidgets, customLayout, customFields, disableDebugMode } = props
     let layout: React.ReactNode = null
-    const fileUploadPopup = useAppSelector(state => state.view.popupData?.type === 'file-upload')
     if (customLayout) {
         const CustomLayout = customLayout
 
@@ -65,7 +63,6 @@ export const View: FunctionComponent<ViewProps> = props => {
     return (
         <CustomizationContext.Provider value={{ customFields: customFields as Record<string, interfaces.CustomWidget> }}>
             {!disableDebugMode && debugMode && <ViewInfoLabel />}
-            {fileUploadPopup && <FileUploadPopup />}
             {layout}
             {!disableDebugMode &&
                 debugMode &&

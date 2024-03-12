@@ -142,9 +142,9 @@ function Table({ meta, primaryColumn, disablePagination, ...rest }: TableProps) 
                                     </Menu.ItemGroup>
                                 )}
                                 {showExport && (
-                                    <Menu.ItemGroup key="export" title={t('Export')}>
+                                    <Menu.ItemGroup key="export" title={t('Export to')}>
                                         <Menu.Item key="3" onClick={exportTable}>
-                                            {t('Export to Excel')}
+                                            {t('Excel')}
                                             <Icon type="file-excel" style={{ fontSize: 14, marginLeft: 4 }} />
                                         </Menu.Item>
                                     </Menu.ItemGroup>

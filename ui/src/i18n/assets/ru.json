@@ -15,6 +15,7 @@
         "Cancel changes": "Отменить изменения",
         "Show all records": "Показать остальные записи",
         "Clear all filters": "Сбросить все фильтры",
+        "Clear filters": "Сбросить {{count}} фильтр(ы)",
         "Cancel": "Отменить",
         "Ok": "Ок",
         "Save": "Сохранить",

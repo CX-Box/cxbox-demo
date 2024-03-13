@@ -11,6 +11,7 @@
         "Access denied": "Access denied",
         "Show all records": "Show all records",
         "Clear all filters": "Clear all filters",
+        "Clear filters": "Clear {{count}} filter(s)",
         "Cancel": "Cancel",
         "Ok": "Ok",
         "Save": "Save",

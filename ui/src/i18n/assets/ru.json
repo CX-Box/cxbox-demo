@@ -42,6 +42,7 @@
         "Start date": "Начальная дата",
         "End date": "Конечная дата",
         "Screen is missing or unavailable for your role": "Экран \"{{screenName}}\" отсутствует или недоступен для вашей роли",
-        "View is missing or unavailable for your role": "Панель \"{{viewName}}\" отсутствует или недоступна для вашей роли"
+        "View is missing or unavailable for your role": "Панель \"{{viewName}}\" отсутствует или недоступна для вашей роли",
+        "Supports only format": "Поддерживает только {{permission}}."
     }
 }

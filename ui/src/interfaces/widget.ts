@@ -86,6 +86,12 @@ export type DocumentPreviewGeneratedFileUrlOption = {
     fieldKeyForContentType: string
 }
 
+export type OperationInfo = {
+    key: string
+    mode?: 'default' | 'file-upload-dnd' | string
+    fileAccept?: string // example: '.pdf,.zip,.p7m'
+}
+
 export interface AppWidgetMeta extends interfaces.WidgetMeta {
     options?: interfaces.WidgetOptions & {
         documentPreview?: {
@@ -137,6 +143,7 @@ export interface AppWidgetMeta extends interfaces.WidgetMeta {
             iconFieldKey?: string
             descriptionFieldKey?: string
         }
+        buttons?: OperationInfo[]
     }
 }
 

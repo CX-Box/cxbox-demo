@@ -33,6 +33,13 @@
     }
   ],
   "options": {
+    "buttons": [
+      {
+        "key": "associate",
+        "mode": "file-upload-dnd",
+        "fileAccept": ".png,.pdf,.jpeg"
+      }
+    ],
     "create": {
       "widget": "meetingDocumentsFormForList"
     },

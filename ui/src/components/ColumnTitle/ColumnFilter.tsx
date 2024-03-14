@@ -138,7 +138,9 @@ function ColumnFilter({ widgetName, widgetMeta, rowMeta, components }: ColumnFil
             onVisibleChange={handleVisibleChange}
         >
             <div
-                className={cn(styles.icon, { [styles.active]: (filter?.value?.toString()?.length as number) > 0 })}
+                className={cn(styles.icon, {
+                    [styles.active]: (filter?.value?.toString()?.length as number) > 0 || Array.isArray(filter?.value)
+                })}
                 data-test-widget-list-header-column-filter={true}
             >
                 <FilterIcon />

@@ -16,6 +16,7 @@ import { actions, interfaces, utils } from '@cxbox-ui/core'
 import { useTranslation } from 'react-i18next'
 import { useRowMenu } from '@hooks/useRowMenu'
 import { buildBcUrl } from '@utils/buildBcUrl'
+import { BcFilter } from '@interfaces/core'
 
 const { FieldType, PaginationMode } = interfaces
 
@@ -287,11 +288,23 @@ export const TableWidget: FunctionComponent<TableWidgetProps> = props => {
                         ))}
                     </Select>
                 )}
-                {filtersExist && <ActionLink onClick={handleRemoveFilters}> {t('Clear all filters')} </ActionLink>}
+                {filtersExist && (
+                    <ActionLink onClick={handleRemoveFilters}>{t('Clear filters', { count: getFiltersCount(props.filters) })}</ActionLink>
+                )}
                 {props.limitBySelf && <ActionLink onClick={handleShowAll}> {t('Show all records')} </ActionLink>}
             </div>
         )
-    }, [filterGroups, filterGroupName, filtersExist, props.limitBySelf, t, handleAddFilters, handleRemoveFilters, handleShowAll])
+    }, [
+        filterGroups,
+        filterGroupName,
+        t,
+        handleAddFilters,
+        filtersExist,
+        handleRemoveFilters,
+        props.filters,
+        props.limitBySelf,
+        handleShowAll
+    ])
 
     const [operationsRef, parentRef, onRow] = useRowMenu() // NOSONAR(S6440) hook is called conditionally, fix later
     const handleRow = (record: interfaces.DataItem, index: number) => {
@@ -394,3 +407,7 @@ TableWidget.displayName = 'TableWidget'
 const ConnectedTable = connect(mapStateToProps, mapDispatchToProps)(TableWidget)
 
 export default ConnectedTable
+
+const getFiltersCount = (filters?: BcFilter[]) => {
+    return filters?.length ?? 0
+}

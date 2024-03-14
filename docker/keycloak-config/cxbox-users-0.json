@@ -26,5 +26,32 @@
     },
     "notBefore" : 0,
     "groups" : [ ]
-  } ]
+  },
+    {
+      "id" : "896738bb-ec7e-4275-9231-17a0b043cc99",
+      "createdTimestamp" : 1631869680337,
+      "username" : "ivan",
+      "enabled" : true,
+      "totp" : false,
+      "emailVerified" : false,
+      "firstName" : "Ivan",
+      "lastName" : "Ivanov",
+      "email" : "demo@local.com",
+      "credentials" : [ {
+        "id" : "b9c8d63a-5e08-4052-97b1-f7698acf33bb",
+        "type" : "password",
+        "createdDate" : 1631869698399,
+        "secretData" : "{\"value\":\"E6uRVF+cAKK9fGBJEbbU1b5FoByU5Dk/2TJOtfSfk1DAWJNLFsIABPSrTGGZuJjE4B28V41i5rNcvEo+z5xxEw==\",\"salt\":\"Abv5gg1GveqwfjkN5pb09A==\",\"additionalParameters\":{}}",
+        "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+      } ],
+      "disableableCredentialTypes" : [ ],
+      "requiredActions" : [ ],
+      "realmRoles" : [ "uma_authorization", "offline_access" ],
+      "clientRoles" : {
+        "account" : [ "view-profile", "manage-account" ],
+        "cxbox-oidc-client" : [ "CXBOX_USER" ]
+      },
+      "notBefore" : 0,
+      "groups" : [ ]
+    }]
 }

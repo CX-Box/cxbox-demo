@@ -5,8 +5,9 @@ import static org.demo.conf.cxbox.extension.lov.AdministeredDictionaryType.INTER
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.cxbox.api.data.dictionary.LOV;
 import org.cxbox.api.data.dto.DataResponseDTO;
+import org.cxbox.core.util.filter.SearchParameter;
+import org.cxbox.core.util.filter.provider.impl.LovValueProvider;
 import org.cxbox.meta.entity.Responsibilities;
 import org.cxbox.meta.entity.Responsibilities.ResponsibilityType;
 import org.demo.conf.cxbox.extension.lov.AdministeredDictionary;
@@ -17,6 +18,7 @@ import org.demo.conf.cxbox.extension.lov.AdministeredDictionaryType;
 @NoArgsConstructor
 public class ResponsibilitesCreateDTO extends DataResponseDTO {
 
+	@SearchParameter(provider = LovValueProvider.class)
 	@AdministeredDictionary(AdministeredDictionaryType.INTERNAL_ROLE)
 	private String internalRoleCD;
 

@@ -86,9 +86,11 @@ export type DocumentPreviewGeneratedFileUrlOption = {
     fieldKeyForContentType: string
 }
 
+export type OperationCustomMode = 'default' | 'file-upload-dnd' | 'default-and-file-upload-dnd'
+
 export type OperationInfo = {
     key: string
-    mode?: 'default' | 'file-upload-dnd' | string
+    mode?: OperationCustomMode | string
     fileAccept?: string // example: '.pdf,.zip,.p7m'
 }
 

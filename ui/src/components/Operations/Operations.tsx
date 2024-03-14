@@ -5,7 +5,7 @@ import { useAppSelector } from '@store'
 import styles from './Operations.less'
 import { useDispatch } from 'react-redux'
 import OperationsGroup from './components/OperationsGroup'
-import { AppWidgetMeta, removeRecordOperationWidgets } from '@interfaces/widget'
+import { AppWidgetMeta, OperationCustomMode, removeRecordOperationWidgets } from '@interfaces/widget'
 import Button, { customTypes } from '../ui/Button/Button'
 import cn from 'classnames'
 import { useWidgetOperations } from '@hooks/useWidgetOperations'
@@ -24,14 +24,10 @@ export interface OperationsOwnProps {
 function Operations(props: OperationsOwnProps) {
     const { bcName, widgetMeta, operations, className } = props
     const metaInProgress = useAppSelector(state => state.view.metaInProgress[bcName])
+
+    const { defaultOperations, customOperations, isUploadDnDMode } = useWidgetOperationsMode(widgetMeta, operations)
+
     const dispatch = useDispatch()
-
-    const customOperations = widgetMeta.options?.buttons?.filter(button => button.key && button.mode?.length && button.mode !== 'default')
-    const customOperationsKeys = customOperations?.map(button => button.key)
-
-    const defaultOperations = useWidgetOperations(operations, widgetMeta).filter(
-        item => !customOperationsKeys?.includes(item.type as string)
-    )
 
     const handleOperationClick = React.useCallback(
         (operation: interfaces.Operation) => {
@@ -48,11 +44,15 @@ function Operations(props: OperationsOwnProps) {
         [dispatch, bcName, widgetMeta]
     )
 
-    const uploadDnDOperation = customOperations?.find(customOperation => customOperation.mode === 'file-upload-dnd')
-
     return (
         <div className={styles.container}>
-            {uploadDnDOperation && <FileUpload widget={widgetMeta} operationInfo={uploadDnDOperation} mode="drag" />}
+            {customOperations?.map(customOperation => {
+                if (isUploadDnDMode(customOperation.mode)) {
+                    return <FileUpload widget={widgetMeta} operationInfo={customOperation} mode="drag" />
+                }
+
+                return null
+            })}
             <div className={cn(styles.operations, className, { [styles.empty]: !defaultOperations?.length })}>
                 {metaInProgress ? (
                     <Button loading />
@@ -118,4 +118,34 @@ const getButtonType = ({ widgetType, index, defaultType }: { widgetType?: string
     }
 
     return defaultType
+}
+
+const CUSTOM_COMBINED_WITH_DEFAULT_MODE: OperationCustomMode[] = ['default-and-file-upload-dnd']
+const FILE_UPLOAD_DND_MODE: OperationCustomMode[] = ['default-and-file-upload-dnd', 'file-upload-dnd']
+
+const useWidgetOperationsMode = (widget: AppWidgetMeta, operations: (interfaces.Operation | interfaces.OperationGroup)[]) => {
+    const customOperations = widget.options?.buttons?.filter(button => button.key && button.mode?.length && button.mode !== 'default')
+
+    const customOperationsWithoutDefaultMode = customOperations
+        ?.filter(button => !CUSTOM_COMBINED_WITH_DEFAULT_MODE.includes(button.mode as OperationCustomMode))
+        .map(button => button.key)
+
+    const defaultOperations = useWidgetOperations(operations, widget).filter(
+        item => !customOperationsWithoutDefaultMode?.includes(item.type as string)
+    )
+
+    const getCustomOperationByMode = (mode: OperationCustomMode | string) => {
+        return customOperations?.find(customOperation => customOperation.mode === mode)
+    }
+
+    const isUploadDnDMode = (mode?: OperationCustomMode | string) => {
+        return FILE_UPLOAD_DND_MODE.includes(mode as OperationCustomMode)
+    }
+
+    return {
+        defaultOperations,
+        customOperations,
+        getOperationByMode: getCustomOperationByMode,
+        isUploadDnDMode
+    }
 }

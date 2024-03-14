@@ -48,7 +48,7 @@ function Operations(props: OperationsOwnProps) {
         <div className={styles.container}>
             {customOperations?.map(customOperation => {
                 if (isUploadDnDMode(customOperation.mode)) {
-                    return <FileUpload widget={widgetMeta} operationInfo={customOperation} mode="drag" />
+                    return <FileUpload key={customOperation.key} widget={widgetMeta} operationInfo={customOperation} mode="drag" />
                 }
 
                 return null
@@ -67,6 +67,7 @@ function Operations(props: OperationsOwnProps) {
                         if (item.subtype === 'multiFileUpload') {
                             return (
                                 <FileUpload
+                                    key={item.type}
                                     widget={widgetMeta}
                                     operationInfo={widgetMeta.options?.buttons?.find(button => button.key === item.type)}
                                     mode="default"

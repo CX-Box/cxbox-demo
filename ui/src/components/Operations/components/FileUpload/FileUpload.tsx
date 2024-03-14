@@ -60,7 +60,7 @@ export const FileUpload = ({ mode, widget, operationInfo, children }: FileUpload
                 setFileInfoDictionary(filesInfo => ({
                     ...filesInfo,
                     [info.file.uid]: {
-                        id: info.file.response.data.id,
+                        id: info.file.response?.data?.id ?? null,
                         status: info.file.status as UploadFileStatus
                     }
                 }))
@@ -87,8 +87,18 @@ export const FileUpload = ({ mode, widget, operationInfo, children }: FileUpload
     return <Upload {...commonUploadProps}>{children}</Upload>
 }
 
-const isFileDownloadComplete = (fileStatus: string | UploadFileStatus) => {
-    return (['error', 'done'] as UploadFileStatus[]).includes(fileStatus as UploadFileStatus)
+const UPLOAD_FILE_STATUS: Record<UploadFileStatus, UploadFileStatus | string> = {
+    done: 'done',
+    uploading: 'uploading',
+    error: 'error',
+    removed: 'removed',
+    success: 'success'
+}
+
+const isFileDownloadComplete = (fileStatus: string | UploadFileStatus | undefined) => {
+    const { done, error } = UPLOAD_FILE_STATUS
+
+    return [error, done].includes(fileStatus as string)
 }
 
 const needDownloadAllFiles = (filesInfo: FileInfo[]) => {

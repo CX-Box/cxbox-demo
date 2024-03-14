@@ -5,8 +5,9 @@ import static org.demo.conf.cxbox.extension.lov.AdministeredDictionaryType.INTER
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.cxbox.api.data.dictionary.LOV;
 import org.cxbox.api.data.dto.DataResponseDTO;
+import org.cxbox.core.util.filter.SearchParameter;
+import org.cxbox.core.util.filter.provider.impl.LovValueProvider;
 import org.cxbox.meta.entity.Responsibilities;
 import org.cxbox.meta.entity.Responsibilities.ResponsibilityType;
 import org.demo.conf.cxbox.extension.lov.AdministeredDictionary;
@@ -15,12 +16,11 @@ import org.demo.conf.cxbox.extension.lov.AdministeredDictionaryType;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ResponsibilitesCreateDTO extends DataResponseDTO {
+public class ResponsibilitesCrudDTO extends DataResponseDTO {
 
+	@SearchParameter(provider = LovValueProvider.class)
 	@AdministeredDictionary(AdministeredDictionaryType.INTERNAL_ROLE)
 	private String internalRoleCD;
-
-//	private String responsibilities;
 
 	private String screens;
 
@@ -32,13 +32,11 @@ public class ResponsibilitesCreateDTO extends DataResponseDTO {
 
 	private Long departmentId;
 
-	public ResponsibilitesCreateDTO(Responsibilities responsibilities) {
+	public ResponsibilitesCrudDTO(Responsibilities responsibilities) {
 
 		this.id = responsibilities.getId().toString();
 
 		this.internalRoleCD = INTERNAL_ROLE.lookupValue(responsibilities.getInternalRoleCD());
-
-		//this.responsibilities = responsibilities.();
 
 		this.screens = responsibilities.getScreens();
 

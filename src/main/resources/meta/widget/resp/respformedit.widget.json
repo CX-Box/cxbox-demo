@@ -1,0 +1,47 @@
+{
+  "name": "respformedit",
+  "title": "Responsibilites",
+  "type": "Form",
+  "bc": "responsibilities",
+  "showCondition": [],
+  "fields": [
+    {
+      "label": "Internal Role CD",
+      "key": "internalRoleCD",
+      "type": "dictionary"
+    },
+    {
+      "label": "View",
+      "key": "view",
+      "type": "dictionary"
+    }
+  ],
+  "options": {
+    "actionGroups": {
+      "include": [
+        "save",
+        "cancel-create"
+      ]
+    },
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "internalRoleCD",
+              "span": 7
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "view",
+              "span": 7
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

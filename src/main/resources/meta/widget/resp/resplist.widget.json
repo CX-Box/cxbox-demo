@@ -8,12 +8,12 @@
     {
       "title": "Internal Role CD",
       "key": "internalRoleCD",
-      "type": "input"
+      "type": "dictionary"
     },
     {
       "title": "View",
       "key": "view",
-      "type": "input"
+      "type": "dictionary"
     },
     {
       "title": "Screens",
@@ -24,13 +24,27 @@
       "title": "Resp Type",
       "key": "respType",
       "type": "input"
-    },
-    {
-      "title": "DepartmentId",
-      "key": "departmentId",
-      "type": "number"
     }
   ],
-  "axisFields": [],
-  "chart": []
+  "options": {
+    "additional": {
+      "enabled": true
+    },
+    "create": {
+      "widget": "respformedit"
+    },
+    "edit": {
+      "widget": "respformedit"
+    },
+    "actionGroups": {
+      "include": [
+        "create",
+        "edit",
+        "delete",
+        "refresh"
+      ]
+    }
+  }
+}
+
 }

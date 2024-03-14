@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { useDispatch } from 'react-redux'
 import { Pagination as AntPagination } from 'antd'
 import styles from './Pagination.less'
-import { actions, interfaces } from '@cxbox-ui/core'
+import { interfaces } from '@cxbox-ui/core'
 import { useAppSelector } from '@store'
+import Limit from '@components/ui/Pagination/components/Limit'
+import { AppWidgetMeta } from '@interfaces/widget'
+import { actions } from '@actions'
 
 export interface PaginationProps {
     meta: interfaces.WidgetMeta
@@ -30,6 +33,8 @@ function Pagination({ meta }: PaginationProps) {
         [dispatch, bcName]
     )
 
+    const { changePageLimit, hideLimitOptions, value: pageLimit, options } = useWidgetPaginationLimit(meta)
+
     if (!total) {
         return null
     }
@@ -45,7 +50,33 @@ function Pagination({ meta }: PaginationProps) {
                 total={total}
                 onChange={handlePageChange}
             />
+            {!hideLimitOptions && (
+                <Limit className={styles.limits} value={pageLimit} onChange={changePageLimit} total={total} options={options} />
+            )}
         </div>
     )
 }
 export default React.memo(Pagination)
+
+const useWidgetPaginationLimit = (widget: AppWidgetMeta) => {
+    const { hideLimitOptions = false, defaultLimit: widgetPageLimit, availableLimitsList } = widget.options?.pagination ?? {}
+    const bcPageLimit = useAppSelector(state => state.screen.bo.bc[widget.bcName].limit)
+    const localPageLimit = useAppSelector(state => state.screen.pagination[widget.bcName]?.limit)
+
+    const dispatch = useDispatch()
+
+    const changePageLimit = useCallback(
+        (value: number) => {
+            dispatch(actions.changePageLimit({ bcName: widget.bcName, limit: value }))
+            dispatch(actions.bcChangePage({ bcName: widget.bcName, page: 1 }))
+        },
+        [dispatch, widget.bcName]
+    )
+
+    return {
+        hideLimitOptions,
+        changePageLimit,
+        value: localPageLimit ?? widgetPageLimit ?? bcPageLimit,
+        options: availableLimitsList
+    }
+}

@@ -41,6 +41,8 @@
         "End date": "End date",
         "Screen is missing or unavailable for your role": "Screen {{screenName}} is missing or unavailable for your role",
         "View is missing or unavailable for your role": "View {{viewName}} is missing or unavailable for your role",
-        "Supports only format": "Supports only {{permission}} format"
+        "Supports only format": "Supports only {{permission}} format",
+        "limit of": "{{limit}} of {{total}}"
+
     }
 }

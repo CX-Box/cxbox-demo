@@ -13,6 +13,11 @@
       "widgetName": "resplist",
       "position": 10,
       "gridWidth": 24
+    },
+    {
+      "widgetName": "respformedit",
+      "position": 20,
+      "gridWidth": 24
     }
   ],
   "rolesAllowed": [

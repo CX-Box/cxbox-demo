@@ -5,15 +5,18 @@ import { useAppDispatch } from '@store'
 import { getFileUploadEndpoint } from '@utils/api'
 import { actions } from '@cxbox-ui/core'
 import { useTranslation } from 'react-i18next'
-import { UploadFileStatus, UploadProps } from 'antd/es/upload/interface'
+import { UploadFile, UploadFileStatus, UploadProps } from 'antd/es/upload/interface'
 import { OperationInfo } from '@interfaces/widget'
 import { WidgetMeta } from '@interfaces/core'
 import cn from 'classnames'
-
-interface FileInfo {
-    id: null | string
-    status: 'init' | UploadFileStatus
-}
+import { useFileUploadHint } from '@components/Operations/components/FileUpload/FileUpload.hooks'
+import {
+    getDoneIdsFromFilesInfo,
+    isFileDownloadComplete,
+    needSendAllFiles
+} from '@components/Operations/components/FileUpload/FileUpload.utils'
+import { FileInfo } from '@components/Operations/components/FileUpload/FileUpload.interfaces'
+import { UploadListContainer } from '@components/Operations/components/FileUpload/UploadListContainer'
 
 interface FileUploadProps {
     widget: WidgetMeta
@@ -25,39 +28,53 @@ interface FileUploadProps {
 export const FileUpload = ({ mode, widget, operationInfo, children }: FileUploadProps) => {
     const { t } = useTranslation()
     const uploadUrl = getFileUploadEndpoint()
-    const [fileInfoDictionary, setFileInfoDictionary] = useState<Record<string, FileInfo>>({})
-    const fileInfoList = useMemo(() => Object.values(fileInfoDictionary), [fileInfoDictionary])
+    const [addedFileDictionary, setAddedFileDictionary] = useState<Record<string, FileInfo>>({})
+    const addedFileList = useMemo(() => Object.values(addedFileDictionary), [addedFileDictionary])
+    const [fileList, setFileList] = useState<UploadFile[]>([])
 
     const dispatch = useAppDispatch()
 
     useEffect(() => {
-        if (needDownloadAllFiles(fileInfoList) && widget.bcName) {
+        if (needSendAllFiles(addedFileList) && widget.bcName) {
             dispatch(
                 actions.bulkUploadFiles({
                     isPopup: false,
                     bcName: widget.bcName,
-                    fileIds: getDoneIdsFromFilesInfo(fileInfoList)
+                    fileIds: getDoneIdsFromFilesInfo(addedFileList)
                 })
             )
 
-            setFileInfoDictionary({})
+            setAddedFileDictionary({})
         }
-    }, [dispatch, fileInfoList, widget.bcName])
+    }, [dispatch, addedFileList, widget.bcName])
 
     const commonUploadProps: UploadProps = {
+        fileList: fileList,
         action: uploadUrl,
         accept: operationInfo?.fileAccept,
         showUploadList: false,
         multiple: true,
         beforeUpload: file => {
-            setFileInfoDictionary(filesInfo => ({ ...filesInfo, [file.uid]: { id: null, status: 'init' } }))
+            setAddedFileDictionary(filesInfo => ({ ...filesInfo, [file.uid]: { id: null, status: 'init' } }))
 
             return true
         },
-        disabled: !!fileInfoList.length,
         onChange: info => {
+            setFileList(info.fileList)
+
+            if (addedFileDictionary[info.file.uid].status === 'init' || (info.file.percent && Math.floor(info.file.percent) % 10 === 0)) {
+                setAddedFileDictionary(filesInfo => ({
+                    ...filesInfo,
+                    [info.file.uid]: {
+                        ...filesInfo[info.file.uid],
+                        status: info.file.status as UploadFileStatus,
+                        percent: info.file.percent
+                    }
+                }))
+            }
+
             if (isFileDownloadComplete(info.file.status as string)) {
-                setFileInfoDictionary(filesInfo => ({
+                setAddedFileDictionary(filesInfo => ({
                     ...filesInfo,
                     [info.file.uid]: {
                         id: info.file.response?.data?.id ?? null,
@@ -70,52 +87,22 @@ export const FileUpload = ({ mode, widget, operationInfo, children }: FileUpload
 
     const hintText = useFileUploadHint(operationInfo)
 
-    if (mode === 'drag') {
-        return (
-            <Upload.Dragger {...commonUploadProps} className={styles.root}>
-                <p className={styles.icon}>
-                    <Icon type="inbox" />
-                </p>
-                <p className={styles.imitationButton}>{t('Click Here to Select Files')}</p>
-                <p className={cn(styles.text, styles.bold, styles.mr4)}>{t('Or drag files to this area')}</p>
-                <p className={styles.text}>{t('Add at least one file, support for a single or bulk upload')}</p>
-                <p className={styles.hint}>{hintText}</p>
-            </Upload.Dragger>
-        )
-    }
-
-    return <Upload {...commonUploadProps}>{children}</Upload>
-}
-
-const UPLOAD_FILE_STATUS: Record<UploadFileStatus, UploadFileStatus | string> = {
-    done: 'done',
-    uploading: 'uploading',
-    error: 'error',
-    removed: 'removed',
-    success: 'success'
-}
-
-const isFileDownloadComplete = (fileStatus: string | UploadFileStatus | undefined) => {
-    const { done, error } = UPLOAD_FILE_STATUS
-
-    return [error, done].includes(fileStatus as string)
-}
-
-const needDownloadAllFiles = (filesInfo: FileInfo[]) => {
-    return filesInfo.length !== 0 && filesInfo.every(filesInfo => isFileDownloadComplete(filesInfo.status as UploadFileStatus))
-}
-
-const getDoneIdsFromFilesInfo = (filesInfo: FileInfo[]) => {
-    return filesInfo.filter(fileInfo => fileInfo.status === 'done' && fileInfo.id).map(fileInfo => fileInfo.id as string)
-}
-
-const useFileUploadHint = (operationInfo?: OperationInfo) => {
-    const { t } = useTranslation()
-
-    const hintPermission = operationInfo?.fileAccept
-        ?.split(',')
-        ?.map(item => item.slice(1).toUpperCase())
-        ?.join(', ')
-
-    return hintPermission ? t('Supports only format', { permission: hintPermission }) : ''
+    return (
+        <>
+            {mode === 'drag' ? (
+                <Upload.Dragger {...commonUploadProps} className={styles.root}>
+                    <p className={styles.icon}>
+                        <Icon type="inbox" />
+                    </p>
+                    <p className={styles.imitationButton}>{t('Click Here to Select Files')}</p>
+                    <p className={cn(styles.text, styles.bold, styles.mr4)}>{t('Or drag files to this area')}</p>
+                    <p className={styles.text}>{t('Add at least one file, support for a single or bulk upload')}</p>
+                    <p className={styles.hint}>{hintText}</p>
+                </Upload.Dragger>
+            ) : (
+                <Upload {...commonUploadProps}>{children}</Upload>
+            )}
+            <UploadListContainer widget={widget} fileList={fileList} addedFileList={addedFileList} changeFileList={setFileList} />
+        </>
+    )
 }

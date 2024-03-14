@@ -37,7 +37,7 @@
       {
         "key": "associate",
         "mode": "default-and-file-upload-dnd",
-        "fileAccept": ".png,.pdf,.jpeg"
+        "fileAccept": ".png,.pdf,.jpg,.jpeg"
       }
     ],
     "create": {

@@ -1,7 +1,12 @@
+import { UPLOAD_FILE_STATUS } from '@components/Operations/components/FileUpload/FileUpload.constants'
 import { UploadFileStatus } from 'antd/es/upload/interface'
 
-export interface FileInfo {
+export interface AddedFileInfo {
+    uid: string
     id: null | string
-    status: 'init' | UploadFileStatus
+    status: keyof typeof UPLOAD_FILE_STATUS | UploadFileStatus
+    uploadType?: string
+    statusInformation?: string
     percent?: number
+    name: string
 }

@@ -1,4 +1,6 @@
 .root {
+    display: flex;
+    flex-direction: column;
     width: 100%;
 }
 
@@ -11,4 +13,23 @@
         margin-right: 7px;
         font-size: 16px;
     }
+}
+
+.fileRow {
+    display: flex;
+    flex-direction: column;
+    row-gap: 2px;
+    padding: 8px 24px;
+    margin: 0 -24px;
+}
+
+.fileRow:hover {
+    background-color: #f2f2f2;
+}
+
+.progressContainer {
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+    font-size: 16px
 }

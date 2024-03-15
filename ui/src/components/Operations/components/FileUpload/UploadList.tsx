@@ -1,34 +1,47 @@
 import React from 'react'
-import { UploadFile } from 'antd/es/upload/interface'
-import { Icon, Progress } from 'antd'
+import { Icon, Progress, Tooltip } from 'antd'
 import {
-    convertUploadStatusToProgress,
+    getProgressColorFromUploadStatus,
+    getProgressIcon,
     isFileDownloadComplete,
-    isFileDownloadError
+    isFileException
 } from '@components/Operations/components/FileUpload/FileUpload.utils'
 import styles from './UploadList.less'
+import { AddedFileInfo } from '@components/Operations/components/FileUpload/FileUpload.interfaces'
 
 interface UploadListProps {
-    fileList?: UploadFile[]
+    fileList?: AddedFileInfo[]
 }
 
 export function UploadList({ fileList }: UploadListProps) {
     return (
         <div className={styles.root}>
             {fileList?.map(file => {
+                const mainColor = getProgressColorFromUploadStatus(file.status)
+                const fileIcon =
+                    !isFileDownloadComplete(file.status) && !isFileException(file.status) ? <Icon type="loading" /> : <Icon type="file" />
+                const uploadTypeIcon = !!file.uploadType && (
+                    <Icon type={getProgressIcon(file.uploadType)} theme="filled" style={{ color: mainColor }} />
+                )
+
                 return 'percent' in file ? (
-                    <div key={file.uid}>
-                        <div className={styles.fileName}>
-                            {isFileDownloadComplete(file.status) ? <Icon type="file" /> : <Icon type="loading" />}
-                            <span>{file.name}</span>
-                        </div>
-                        <Progress
-                            type="line"
-                            strokeWidth={2}
-                            showInfo={false}
-                            percent={isFileDownloadError(file.status) ? 100 : file.percent}
-                            status={convertUploadStatusToProgress(file.status)}
-                        />
+                    <div key={file.uid} className={styles.fileRow}>
+                        <Tooltip overlay={file.statusInformation} placement="leftBottom">
+                            <div className={styles.fileName}>
+                                {fileIcon}
+                                <span>{file.name}</span>
+                            </div>
+                            <div className={styles.progressContainer}>
+                                <Progress
+                                    type="line"
+                                    strokeWidth={2}
+                                    showInfo={false}
+                                    percent={isFileException(file.status) ? 100 : file.percent}
+                                    strokeColor={mainColor}
+                                />
+                                {uploadTypeIcon}
+                            </div>
+                        </Tooltip>
                     </div>
                 ) : null
             })}

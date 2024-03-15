@@ -1,42 +1,37 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { notification } from 'antd'
 import styles from './FileUpload.less'
-import { useAppDispatch } from '@store'
 import { useTranslation } from 'react-i18next'
-import { UploadFile } from 'antd/es/upload/interface'
-import { WidgetMeta } from '@interfaces/core'
 import { UploadList } from '@components/Operations/components/FileUpload/UploadList'
-import { needSendAllFiles } from '@components/Operations/components/FileUpload/FileUpload.utils'
-import { FileInfo } from '@components/Operations/components/FileUpload/FileUpload.interfaces'
+import { AddedFileInfo } from '@components/Operations/components/FileUpload/FileUpload.interfaces'
 import { createPortal } from 'react-dom'
-import Button from '@components/ui/Button/Button'
 
 interface UploadListContainerProps {
-    widget: WidgetMeta
-    fileList: UploadFile[]
-    addedFileList: FileInfo[]
-    changeFileList: React.Dispatch<React.SetStateAction<UploadFile<any>[]>>
+    addedFileList: AddedFileInfo[]
+    onClose?: () => void
 }
 
-export const UploadListContainer = ({ widget, fileList, addedFileList, changeFileList }: UploadListContainerProps) => {
+export const UploadListContainer = ({ addedFileList, onClose }: UploadListContainerProps) => {
     const { t } = useTranslation()
     const [visibleProgress, setVisibleProgress] = useState(false)
     const progressKey = useRef(`upload-progress_${Date.now()}`)
 
-    const dispatch = useAppDispatch()
-
     useEffect(() => {
-        if (needSendAllFiles(addedFileList) && widget.bcName) {
-            setTimeout(() => changeFileList(fileList => fileList.filter(file => file.status === 'error')), 3000)
-        }
-    }, [dispatch, addedFileList, widget.bcName, changeFileList])
-
-    useEffect(() => {
-        if (fileList.length === 0 && visibleProgress) {
+        if (addedFileList.length === 0 && visibleProgress) {
             notification.close(progressKey.current)
             setVisibleProgress(false)
+            onClose?.()
         }
-    }, [fileList.length, visibleProgress])
+    }, [addedFileList.length, onClose, visibleProgress])
+
+    // hides the notification if the component is unmounted, since access to data will be lost
+    useEffect(() => {
+        const notificationKey = progressKey.current
+
+        return () => {
+            notification.close(notificationKey)
+        }
+    }, [onClose])
 
     useEffect(() => {
         if (addedFileList.length > 0 && addedFileList.some(file => file.status === 'init') && !visibleProgress) {
@@ -49,27 +44,18 @@ export const UploadListContainer = ({ widget, fileList, addedFileList, changeFil
                 onClose: () => {
                     notification.close(progressKey.current)
                     setVisibleProgress(false)
+                    onClose?.()
                 }
             })
         }
-    }, [addedFileList.length, fileList, t, visibleProgress])
+    }, [addedFileList, addedFileList.length, onClose, t, visibleProgress])
 
     const notificationElement = document.body.querySelector(`#${progressKey.current}`)
 
     return notificationElement
         ? createPortal(
               <div className={styles.uploadList}>
-                  <UploadList fileList={fileList} />
-                  <Button
-                      disabled={fileList.some(file => file.status === 'uploading')}
-                      onClick={() => {
-                          notification.close(progressKey.current)
-                          setVisibleProgress(false)
-                          changeFileList([])
-                      }}
-                  >
-                      {t('Clear and Close')}
-                  </Button>
+                  <UploadList fileList={addedFileList} />
               </div>,
               document.body.querySelector(`#${progressKey.current}`) as Element
           )

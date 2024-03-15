@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { useDispatch } from 'react-redux'
+import { shallowEqual, useDispatch } from 'react-redux'
 import { Pagination as AntPagination } from 'antd'
 import styles from './Pagination.less'
 import { interfaces } from '@cxbox-ui/core'
@@ -22,7 +22,7 @@ function Pagination({ meta }: PaginationProps) {
             bcLimit: bc?.limit,
             page: bc?.page
         }
-    })
+    }, shallowEqual)
     const total = useAppSelector(state => state.view.bcRecordsCount[bcName]?.count)
     const limit = metaLimit || bcLimit
 

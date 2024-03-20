@@ -43,8 +43,7 @@
       "label": "Brief",
       "key": "brief",
       "type": "fileUpload",
-      "fileIdKey": "briefId",
-      "fileAccept": ".png,.pdf,.jpg,.jpeg"
+      "fileIdKey": "briefId"
     }
   ],
   "options": {

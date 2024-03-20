@@ -51,7 +51,7 @@ function Operations(props: OperationsOwnProps) {
         <div className={styles.container}>
             {customOperations?.map(customOperation => {
                 if (isUploadDnDMode(customOperation.mode)) {
-                    return <FileUpload key={customOperation.key} widget={widgetMeta} operationInfo={customOperation} mode="drag" />
+                    return <FileUpload key={customOperation.actionKey} widget={widgetMeta} operationInfo={customOperation} mode="drag" />
                 }
 
                 return null
@@ -75,7 +75,7 @@ function Operations(props: OperationsOwnProps) {
                             <FileUpload
                                 key={item.type}
                                 widget={widgetMeta}
-                                operationInfo={widgetMeta.options?.buttons?.find(button => button.key === item.type)}
+                                operationInfo={widgetMeta.options?.buttons?.find(button => button.actionKey === item.type)}
                                 mode="default"
                             >
                                 <Button
@@ -132,11 +132,11 @@ const CUSTOM_COMBINED_WITH_DEFAULT_MODE: OperationCustomMode[] = ['default-and-f
 const FILE_UPLOAD_DND_MODE: OperationCustomMode[] = ['default-and-file-upload-dnd', 'file-upload-dnd']
 
 const useWidgetOperationsMode = (widget: AppWidgetMeta, operations: (interfaces.Operation | interfaces.OperationGroup)[]) => {
-    const customOperations = widget.options?.buttons?.filter(button => button.key && button.mode?.length && button.mode !== 'default')
+    const customOperations = widget.options?.buttons?.filter(button => button.actionKey && button.mode?.length && button.mode !== 'default')
 
     const customOperationsWithoutDefaultMode = customOperations
         ?.filter(button => !CUSTOM_COMBINED_WITH_DEFAULT_MODE.includes(button.mode as OperationCustomMode))
-        .map(button => button.key)
+        .map(button => button.actionKey)
 
     const defaultOperations = useWidgetOperations(operations, widget).filter(
         item => !customOperationsWithoutDefaultMode?.includes(item.type as string)

@@ -35,9 +35,9 @@
   "options": {
     "buttons": [
       {
-        "key": "associate",
-        "mode": "default-and-file-upload-dnd",
-        "fileAccept": ".png,.pdf,.jpg,.jpeg"
+        "actionKey": "associate",
+        "fieldKey": "file",
+        "mode": "default-and-file-upload-dnd"
       }
     ],
     "create": {

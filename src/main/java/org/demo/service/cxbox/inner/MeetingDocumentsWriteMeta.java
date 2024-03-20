@@ -1,5 +1,6 @@
 package org.demo.service.cxbox.inner;
 
+import java.util.List;
 import org.cxbox.core.crudma.bc.impl.InnerBcDescription;
 import org.cxbox.core.dto.rowmeta.FieldsMeta;
 import org.cxbox.core.dto.rowmeta.RowDependentFieldsMeta;
@@ -26,6 +27,7 @@ public class MeetingDocumentsWriteMeta extends FieldMetaBuilder<MeetingDocuments
 	public void buildIndependentMeta(FieldsMeta<MeetingDocumentsDTO> fields, InnerBcDescription bcDescription,
 			Long parentId) {
 		fields.enableFilter(MeetingDocumentsDTO_.file);
+		fields.setFileAccept(MeetingDocumentsDTO_.file, List.of(".png",".pdf",".jpg",".jpeg"));
 
 	}
 

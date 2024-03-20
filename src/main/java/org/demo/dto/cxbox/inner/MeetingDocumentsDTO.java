@@ -20,8 +20,6 @@ public class MeetingDocumentsDTO extends DataResponseDTO {
 
 	private String fileId;
 
-	private String fileAcceptTypes = ".png,.pdf,.jpg,.jpeg";
-
 	private String type;
 
 	private String fieldKeyForBase64;

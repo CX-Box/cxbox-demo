@@ -15,6 +15,9 @@ import {
     isFileDownloadComplete
 } from '@components/Operations/components/FileUpload/FileUpload.utils'
 import { UPLOAD_TYPE_ICON } from '@components/Operations/components/FileUpload/FileUpload.constants'
+import { useAppSelector } from '@store'
+import { buildBcUrl } from '@utils/buildBcUrl'
+import { RowMetaField } from '@interfaces/rowMeta'
 
 interface FileUploadProps {
     widget: WidgetMeta
@@ -27,16 +30,23 @@ interface FileUploadProps {
 export const FileUpload = ({ mode, widget, operationInfo, children, uploadType = 'create' }: FileUploadProps) => {
     const { t } = useTranslation()
     const uploadUrl = getFileUploadEndpoint()
+    const bcName = widget.bcName
+    const bcUrl = buildBcUrl(bcName, true)
+    const rowMeta = useAppSelector(state => state.view.rowMeta[bcName]?.[bcUrl])
+    const rowMetaField = rowMeta?.fields.find(field => field.key === operationInfo?.fieldKey)
+    const fileAccept = (rowMetaField as RowMetaField)?.fileAccept
+
     const { initializeNewAddedFile, updateAddedFile, getAddedFile, getAddedFileListWithout, clearAddedFiles, initializeNotSupportedFile } =
-        useBulkUploadFiles(widget.bcName, operationInfo?.fileAccept)
+        useBulkUploadFiles(bcName, fileAccept)
 
     const commonUploadProps: UploadProps = {
+        disabled: rowMetaField ? rowMetaField.disabled : true,
         action: uploadUrl,
-        accept: operationInfo?.fileAccept,
+        accept: fileAccept,
         showUploadList: false,
         multiple: true,
         beforeUpload: file => {
-            if (checkFileFormat(file.name, operationInfo?.fileAccept)) {
+            if (checkFileFormat(file.name, fileAccept)) {
                 initializeNewAddedFile(file.uid, file.name, uploadType)
 
                 return true
@@ -61,7 +71,7 @@ export const FileUpload = ({ mode, widget, operationInfo, children, uploadType =
         }
     }
 
-    const hintText = useFileUploadHint(operationInfo)
+    const hintText = useFileUploadHint(fileAccept)
 
     // Needed to process files with an inappropriate extension. Such files are not included in the beforeUpload and onChange handlers of the Upload component.
     const handleDrop: DragEventHandler<HTMLDivElement> = event => {
@@ -69,7 +79,7 @@ export const FileUpload = ({ mode, widget, operationInfo, children, uploadType =
         const files = getFilesFromDataTransfer(event.dataTransfer)
 
         files
-            .filter(file => !checkFileFormat(file.name, operationInfo?.fileAccept))
+            .filter(file => !checkFileFormat(file.name, fileAccept))
             .forEach(file => {
                 initializeNotSupportedFile(file.name)
             })

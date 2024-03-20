@@ -89,9 +89,9 @@ export type DocumentPreviewGeneratedFileUrlOption = {
 export type OperationCustomMode = 'default' | 'file-upload-dnd' | 'default-and-file-upload-dnd'
 
 export type OperationInfo = {
-    key: string
+    actionKey: string
+    fieldKey?: string
     mode?: OperationCustomMode | string
-    fileAccept?: string // example: '.pdf,.zip,.p7m'
 }
 
 export interface AppWidgetMeta extends interfaces.WidgetMeta {

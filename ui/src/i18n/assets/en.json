@@ -43,7 +43,11 @@
         "Screen is missing or unavailable for your role": "Screen {{screenName}} is missing or unavailable for your role",
         "View is missing or unavailable for your role": "View {{viewName}} is missing or unavailable for your role",
         "Supports only format": "Supports only {{permission}} format",
-        "limit of": "{{limit}} of {{total}}"
-
+        "limit of": "{{limit}} of {{total}}",
+        "Success. File loaded and new row created": "Success. File loaded and new row created",
+        "Success. File loaded to current row": "Success. File loaded to current row",
+        "Skipped. File has unsupported format": "Skipped. File has unsupported format {{format}}. Supported formats are {{listOfFormats}}",
+        "Error. File not loaded and no new row created": "Error. File not loaded and no new row created",
+        "Error. File not loaded to current row": "Error. File not loaded to current row"
     }
 }

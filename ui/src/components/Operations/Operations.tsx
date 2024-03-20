@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { actions, interfaces } from '@cxbox-ui/core'
 import { Icon } from 'antd'
 import { useAppSelector } from '@store'
@@ -11,6 +11,8 @@ import cn from 'classnames'
 import { useWidgetOperations } from '@hooks/useWidgetOperations'
 import TextSearchInput from '@components/Operations/components/TextSearchInput/TextSearchInput'
 import { FileUpload } from '@components/Operations/components/FileUpload/FileUpload'
+import { Operation, OperationGroup } from '@interfaces/core'
+import { buildBcUrl } from '@utils/buildBcUrl'
 
 const { isOperationGroup, WidgetTypes } = interfaces
 
@@ -26,6 +28,7 @@ function Operations(props: OperationsOwnProps) {
     const metaInProgress = useAppSelector(state => state.view.metaInProgress[bcName])
 
     const { defaultOperations, customOperations, isUploadDnDMode } = useWidgetOperationsMode(widgetMeta, operations)
+    const cachedOperations = useCacheForDefaultUploadOperation(defaultOperations, bcName)
 
     const dispatch = useDispatch()
 
@@ -54,49 +57,53 @@ function Operations(props: OperationsOwnProps) {
                 return null
             })}
             <div className={cn(styles.operations, className, { [styles.empty]: !defaultOperations?.length })}>
-                {metaInProgress ? (
-                    <Button loading />
-                ) : (
-                    defaultOperations.map((item: interfaces.Operation | interfaces.OperationGroup, index) => {
-                        if (isOperationGroup(item)) {
-                            return (
-                                <OperationsGroup key={item.type} group={item} widgetType={widgetMeta.type} onClick={handleOperationClick} />
-                            )
-                        }
-
-                        if (item.subtype === 'multiFileUpload') {
-                            return (
-                                <FileUpload
-                                    key={item.type}
-                                    widget={widgetMeta}
-                                    operationInfo={widgetMeta.options?.buttons?.find(button => button.key === item.type)}
-                                    mode="default"
-                                >
-                                    <Button
-                                        key={item.type}
-                                        data-test-widget-action-item={true}
-                                        type={getButtonType({ widgetType: widgetMeta.type, index })}
-                                    >
-                                        {item.icon && <Icon type={item.icon} />}
-                                        {item.text}
-                                    </Button>
-                                </FileUpload>
-                            )
-                        }
-
-                        return removeRecordOperationWidgets.includes(widgetMeta.type) && item.scope === 'record' ? null : (
-                            <Button
+                {cachedOperations.map((item: interfaces.Operation | interfaces.OperationGroup, index) => {
+                    if (isOperationGroup(item)) {
+                        return (
+                            <OperationsGroup
                                 key={item.type}
-                                data-test-widget-action-item={true}
-                                type={getButtonType({ widgetType: widgetMeta.type, index })}
-                                onClick={() => handleOperationClick(item)}
-                            >
-                                {item.icon && <Icon type={item.icon} />}
-                                {item.text}
-                            </Button>
+                                group={item}
+                                widgetType={widgetMeta.type}
+                                onClick={handleOperationClick}
+                                loading={metaInProgress}
+                            />
                         )
-                    })
-                )}
+                    }
+
+                    if (item.subtype === 'multiFileUpload') {
+                        return (
+                            <FileUpload
+                                key={item.type}
+                                widget={widgetMeta}
+                                operationInfo={widgetMeta.options?.buttons?.find(button => button.key === item.type)}
+                                mode="default"
+                            >
+                                <Button
+                                    key={item.type}
+                                    data-test-widget-action-item={true}
+                                    type={getButtonType({ widgetType: widgetMeta.type, index })}
+                                    loading={metaInProgress}
+                                >
+                                    {item.icon && <Icon type={item.icon} />}
+                                    {item.text}
+                                </Button>
+                            </FileUpload>
+                        )
+                    }
+
+                    return removeRecordOperationWidgets.includes(widgetMeta.type) && item.scope === 'record' ? null : (
+                        <Button
+                            key={item.type}
+                            data-test-widget-action-item={true}
+                            type={getButtonType({ widgetType: widgetMeta.type, index })}
+                            onClick={() => handleOperationClick(item)}
+                            loading={metaInProgress}
+                        >
+                            {item.icon && <Icon type={item.icon} />}
+                            {item.text}
+                        </Button>
+                    )
+                })}
                 {widgetMeta.options?.fullTextSearch?.enabled && (
                     <TextSearchInput bcName={bcName} placeholder={widgetMeta.options?.fullTextSearch?.placeholder} />
                 )}
@@ -149,4 +156,34 @@ const useWidgetOperationsMode = (widget: AppWidgetMeta, operations: (interfaces.
         getOperationByMode: getCustomOperationByMode,
         isUploadDnDMode
     }
+}
+/**
+ *  Решает проблему с потерей состояния FileUpload из-за metaInProgress, исчезновения rowMeta при перезагрузке страницы и хука useWidgetOperations, который всегда возвращает массив вместо undefined.
+ */
+const useCacheForDefaultUploadOperation = (defaultOperations: (OperationGroup | Operation)[], bcName: string) => {
+    const cachedMultiFileUpload = useRef<Operation | null>(null)
+
+    const metaInProgress = useAppSelector(state => state.view.metaInProgress[bcName])
+    const existRowMeta = useAppSelector(state => {
+        const bcUrl = buildBcUrl(bcName, true)
+        return Array.isArray(state.view.rowMeta[bcName]?.[bcUrl]?.actions)
+    })
+
+    useEffect(() => {
+        const multiFileUpload = defaultOperations.find(item => (item as Operation).subtype === 'multiFileUpload')
+
+        if (!metaInProgress && multiFileUpload && cachedMultiFileUpload.current === null) {
+            cachedMultiFileUpload.current = multiFileUpload as Operation
+        } else if (!metaInProgress && multiFileUpload && multiFileUpload !== cachedMultiFileUpload.current) {
+            cachedMultiFileUpload.current = multiFileUpload as Operation
+        } else if (!metaInProgress && existRowMeta && cachedMultiFileUpload && !multiFileUpload) {
+            cachedMultiFileUpload.current = null
+        }
+    }, [cachedMultiFileUpload, defaultOperations, existRowMeta, metaInProgress])
+
+    if (defaultOperations.length === 0 && cachedMultiFileUpload.current) {
+        return [...defaultOperations, cachedMultiFileUpload.current]
+    }
+
+    return defaultOperations
 }

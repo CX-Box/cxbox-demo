@@ -9,9 +9,10 @@ interface OperationsGroupProps {
     group: interfaces.OperationGroup
     onClick: (operation: interfaces.Operation) => void
     widgetType: interfaces.WidgetTypes | string
+    loading?: boolean
 }
 
-function OperationsGroup({ group, widgetType, onClick }: OperationsGroupProps) {
+function OperationsGroup({ group, widgetType, onClick, loading }: OperationsGroupProps) {
     const operations = group.actions.filter(i => !(removeRecordOperationWidgets.includes(widgetType) && i.scope === 'record'))
     if (!operations.length) {
         return null
@@ -38,7 +39,7 @@ function OperationsGroup({ group, widgetType, onClick }: OperationsGroupProps) {
 
     return (
         <Dropdown trigger={['click']} overlay={operationsMenu} getPopupContainer={element => element.parentElement as HTMLElement}>
-            <Button key={group.text} data-test-widget-action-group={true}>
+            <Button key={group.text} data-test-widget-action-group={true} loading={loading}>
                 <Icon type={group.icon} />
                 {group.text}
             </Button>

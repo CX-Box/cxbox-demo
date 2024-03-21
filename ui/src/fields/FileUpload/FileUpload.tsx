@@ -113,7 +113,7 @@ const FileUpload: React.FunctionComponent<Props> = ({
 
             setTimeout(() => {
                 changeFileStatuses('done', 'updated')
-            }, 2000)
+            }, 5000)
         },
         [onUploadFileDone, bcName, cursor, fileIdKey, fieldName, updateAddedFile, changeFileStatuses]
     )
@@ -220,7 +220,7 @@ const FileUpload: React.FunctionComponent<Props> = ({
         return (
             <span className={styles.viewLink}>
                 {downloadParams.id && (
-                    <a href={downloadUrl}>
+                    <a href={downloadUrl} download={true}>
                         <Icon type="file" /> <span>{fileName}</span>
                     </a>
                 )}
@@ -276,7 +276,11 @@ const FileUpload: React.FunctionComponent<Props> = ({
                     [controls.uploadLink, controls.uploadButton]
                 )}
             </div>
-            <UploadListContainer addedFileList={getAddedFileListWithout(['updated'])} onClose={clearAddedFiles} />
+            <UploadListContainer
+                addedFileList={getAddedFileListWithout(['updated'])}
+                onClose={clearAddedFiles}
+                successHint={t('The file has been uploaded. Please save the changes')}
+            />
         </>
     )
 }

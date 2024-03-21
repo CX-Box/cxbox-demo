@@ -181,7 +181,7 @@ export const useBulkUploadFiles = (bcName: string, accept?: string) => {
             timeoutId.current = setTimeout(() => {
                 changeFileStatuses('done', 'updated')
                 timeoutId.current = null
-            }, 2000)
+            }, 5000)
         }
     }, [dispatch, addedFileList, bcName, changeFileStatuses])
 

@@ -18,11 +18,19 @@ export function UploadList({ fileList }: UploadListProps) {
         <div className={styles.root}>
             {fileList?.map(file => {
                 const mainColor = getProgressColorFromUploadStatus(file.status)
-                const fileIcon =
-                    !isFileDownloadComplete(file.status) && !isFileException(file.status) ? <Icon type="loading" /> : <Icon type="file" />
-                const uploadTypeIcon = !!file.uploadType && (
-                    <Icon type={getProgressIcon(file.uploadType)} theme="filled" style={{ color: mainColor }} />
-                )
+                let fileIcon = <Icon type="file" />
+
+                if (!isFileDownloadComplete(file.status) && !isFileException(file.status)) {
+                    fileIcon = <Icon type="loading" />
+                }
+
+                let uploadTypeIcon = <Icon type="upload" style={{ color: mainColor }} />
+
+                if (isFileDownloadComplete(file.status) && !isFileException(file.status)) {
+                    uploadTypeIcon = <Icon type="check-circle" theme="filled" style={{ color: mainColor }} />
+                } else if (isFileException(file.status)) {
+                    uploadTypeIcon = <Icon type="close-circle" style={{ color: mainColor }} />
+                }
 
                 return 'percent' in file ? (
                     <div key={file.uid} className={styles.fileRow}>

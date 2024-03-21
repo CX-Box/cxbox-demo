@@ -38,9 +38,10 @@ export const FileUpload = ({ mode, widget, operationInfo, children, uploadType =
 
     const { initializeNewAddedFile, updateAddedFile, getAddedFile, getAddedFileListWithout, clearAddedFiles, initializeNotSupportedFile } =
         useBulkUploadFiles(bcName, fileAccept)
+    const disabled = !rowMetaField
 
     const commonUploadProps: UploadProps = {
-        disabled: rowMetaField ? rowMetaField.disabled : true,
+        disabled,
         action: uploadUrl,
         accept: fileAccept,
         showUploadList: false,
@@ -87,7 +88,7 @@ export const FileUpload = ({ mode, widget, operationInfo, children, uploadType =
 
     return (
         <>
-            <div onDrop={handleDrop}>
+            <div onDrop={disabled ? undefined : handleDrop}>
                 {mode === 'drag' ? (
                     <Upload.Dragger {...commonUploadProps} className={styles.root}>
                         <p className={styles.icon}>

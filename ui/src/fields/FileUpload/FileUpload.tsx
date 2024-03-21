@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useRef } from 'react'
 import cn from 'classnames'
 import { useTranslation } from 'react-i18next'
 import { Icon, Upload } from 'antd'
@@ -14,6 +14,7 @@ import { checkFileFormat } from '@components/Operations/components/FileUpload/Fi
 import { UploadListContainer } from '@components/Operations/components/FileUpload/UploadListContainer'
 import { FileUploadFieldMeta } from '@cxbox-ui/schema'
 import { RowMetaField } from '@interfaces/rowMeta'
+import axios from 'axios'
 
 interface Props extends Omit<BaseFieldProps, 'meta'> {
     value: string
@@ -48,7 +49,6 @@ const FileUpload: React.FunctionComponent<Props> = ({
     const rowMeta = useAppSelector(state => state.view.rowMeta[bcName]?.[bcUrl])
     const rowMetaField = rowMeta?.fields.find(field => field.key === meta.key) as RowMetaField | undefined
     const fileAccept = rowMetaField?.fileAccept
-
     const {
         changeFileStatuses,
         getAddedFileListWithout,
@@ -151,6 +151,7 @@ const FileUpload: React.FunctionComponent<Props> = ({
     }
     const downloadUrl = applyParams(getFileUploadEndpoint(), downloadParams)
     const uploadUrl = applyParams(getFileUploadEndpoint(), uploadParams)
+    const { request: customRequest, abortController } = useSingleUploadAbortController()
 
     const defaultUploadProps: UploadProps = {
         name: 'file',
@@ -160,6 +161,8 @@ const FileUpload: React.FunctionComponent<Props> = ({
         showUploadList: false,
         beforeUpload: file => {
             if (checkFileFormat(file.name, fileAccept)) {
+                abortController.current?.abort()
+
                 initializeNewAddedFile(file.uid, file.name, uploadType)
 
                 return true
@@ -168,7 +171,8 @@ const FileUpload: React.FunctionComponent<Props> = ({
             initializeNotSupportedFile(file.name, uploadType)
 
             return false
-        }
+        },
+        customRequest
     }
 
     const uploadProps = {
@@ -280,3 +284,59 @@ const FileUpload: React.FunctionComponent<Props> = ({
 }
 
 export default React.memo(FileUpload)
+
+export const useSingleUploadAbortController = () => {
+    const externalAbortController = useRef<AbortController | undefined>()
+
+    const request: UploadProps['customRequest'] = ({
+        action,
+        data,
+        file,
+        filename,
+        headers,
+        onError,
+        onProgress,
+        onSuccess,
+        withCredentials
+    }) => {
+        const formData = new FormData()
+
+        if (data) {
+            Object.keys(data).forEach(key => {
+                formData.append(key, (data as Record<string, string>)[key])
+            })
+        }
+
+        formData.append(filename, file)
+
+        const innerAbortController = new AbortController()
+        externalAbortController.current = innerAbortController
+
+        axios
+            .post(action, formData, {
+                withCredentials,
+                headers,
+                onUploadProgress: ({ total, loaded }) => {
+                    const percent = +Math.round((loaded / (total as number)) * 100).toFixed(2)
+
+                    onProgress({ percent }, file)
+                },
+                signal: externalAbortController.current?.signal
+            })
+            .then(({ data: response }) => {
+                onSuccess(response, file)
+            })
+            .catch(onError)
+
+        return {
+            abort() {
+                innerAbortController.abort()
+            }
+        }
+    }
+
+    return {
+        request,
+        abortController: externalAbortController
+    }
+}

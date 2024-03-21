@@ -14,6 +14,7 @@ import { checkFileFormat } from '@components/Operations/components/FileUpload/Fi
 import { UploadListContainer } from '@components/Operations/components/FileUpload/UploadListContainer'
 import { FileUploadFieldMeta } from '@cxbox-ui/schema'
 import { RowMetaField } from '@interfaces/rowMeta'
+import { useSingleUploadRequest } from '@hooks/useSingleUploadRequest'
 
 interface Props extends Omit<BaseFieldProps, 'meta'> {
     value: string
@@ -48,7 +49,6 @@ const FileUpload: React.FunctionComponent<Props> = ({
     const rowMeta = useAppSelector(state => state.view.rowMeta[bcName]?.[bcUrl])
     const rowMetaField = rowMeta?.fields.find(field => field.key === meta.key) as RowMetaField | undefined
     const fileAccept = rowMetaField?.fileAccept
-
     const {
         changeFileStatuses,
         getAddedFileListWithout,
@@ -151,6 +151,7 @@ const FileUpload: React.FunctionComponent<Props> = ({
     }
     const downloadUrl = applyParams(getFileUploadEndpoint(), downloadParams)
     const uploadUrl = applyParams(getFileUploadEndpoint(), uploadParams)
+    const customRequest = useSingleUploadRequest()
 
     const defaultUploadProps: UploadProps = {
         name: 'file',
@@ -168,7 +169,8 @@ const FileUpload: React.FunctionComponent<Props> = ({
             initializeNotSupportedFile(file.name, uploadType)
 
             return false
-        }
+        },
+        customRequest
     }
 
     const uploadProps = {

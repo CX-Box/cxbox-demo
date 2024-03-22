@@ -12,19 +12,19 @@ import { UploadListContainer } from '@components/Operations/components/FileUploa
 import {
     checkFileFormat,
     getFilesFromDataTransfer,
-    isFileDownloadComplete
+    isFileUploadComplete
 } from '@components/Operations/components/FileUpload/FileUpload.utils'
-import { UPLOAD_TYPE_ICON } from '@components/Operations/components/FileUpload/FileUpload.constants'
 import { useAppSelector } from '@store'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import { RowMetaField } from '@interfaces/rowMeta'
+import { UPLOAD_TYPE } from '@components/Operations/components/FileUpload/FileUpload.constants'
 
 interface FileUploadProps {
     widget: WidgetMeta
     operationInfo?: OperationInfo
     mode?: 'default' | 'drag'
     children?: ReactNode
-    uploadType?: keyof typeof UPLOAD_TYPE_ICON
+    uploadType?: keyof typeof UPLOAD_TYPE
 }
 
 export const FileUpload = ({ mode, widget, operationInfo, children, uploadType = 'create' }: FileUploadProps) => {
@@ -36,11 +36,19 @@ export const FileUpload = ({ mode, widget, operationInfo, children, uploadType =
     const rowMetaField = rowMeta?.fields.find(field => field.key === operationInfo?.fieldKey)
     const fileAccept = (rowMetaField as RowMetaField)?.fileAccept
 
-    const { initializeNewAddedFile, updateAddedFile, getAddedFile, getAddedFileListWithout, clearAddedFiles, initializeNotSupportedFile } =
-        useBulkUploadFiles(bcName, fileAccept)
+    const {
+        initializeNewAddedFile,
+        updateAddedFile,
+        getAddedFile,
+        getAddedFileListWithout,
+        clearAddedFiles,
+        initializeNotSupportedFile,
+        removeAddedFiles
+    } = useBulkUploadFiles(bcName, fileAccept)
+    const disabled = !rowMetaField
 
     const commonUploadProps: UploadProps = {
-        disabled: rowMetaField ? rowMetaField.disabled : true,
+        disabled,
         action: uploadUrl,
         accept: fileAccept,
         showUploadList: false,
@@ -65,7 +73,7 @@ export const FileUpload = ({ mode, widget, operationInfo, children, uploadType =
                 updateAddedFile(uid, { status, percent })
             }
 
-            if (isFileDownloadComplete(status)) {
+            if (isFileUploadComplete(status)) {
                 updateAddedFile(uid, { status, percent, id: response?.data?.id ?? null })
             }
         }
@@ -87,7 +95,7 @@ export const FileUpload = ({ mode, widget, operationInfo, children, uploadType =
 
     return (
         <>
-            <div onDrop={handleDrop}>
+            <div onDrop={disabled ? undefined : handleDrop}>
                 {mode === 'drag' ? (
                     <Upload.Dragger {...commonUploadProps} className={styles.root}>
                         <p className={styles.icon}>
@@ -102,7 +110,16 @@ export const FileUpload = ({ mode, widget, operationInfo, children, uploadType =
                     <Upload {...commonUploadProps}>{children}</Upload>
                 )}
             </div>
-            <UploadListContainer addedFileList={getAddedFileListWithout(['updated'])} onClose={clearAddedFiles} />
+            <UploadListContainer
+                addedFileList={getAddedFileListWithout()}
+                onClose={clearAddedFiles}
+                onRemove={removeAddedFiles}
+                data-test-notification-inner-container={true}
+                data-test-notification-for-action={true}
+                data-test-action-key={operationInfo?.actionKey}
+                data-test-action-mode={operationInfo?.mode}
+                data-test-widget-name={widget?.name}
+            />
         </>
     )
 }

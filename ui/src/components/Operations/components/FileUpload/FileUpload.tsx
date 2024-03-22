@@ -110,7 +110,16 @@ export const FileUpload = ({ mode, widget, operationInfo, children, uploadType =
                     <Upload {...commonUploadProps}>{children}</Upload>
                 )}
             </div>
-            <UploadListContainer addedFileList={getAddedFileListWithout()} onClose={clearAddedFiles} onRemove={removeAddedFiles} />
+            <UploadListContainer
+                addedFileList={getAddedFileListWithout()}
+                onClose={clearAddedFiles}
+                onRemove={removeAddedFiles}
+                data-test-notification-inner-container={true}
+                data-test-notification-for-action={true}
+                data-test-action-key={operationInfo?.actionKey}
+                data-test-action-mode={operationInfo?.mode}
+                data-test-widget-name={widget?.name}
+            />
         </>
     )
 }

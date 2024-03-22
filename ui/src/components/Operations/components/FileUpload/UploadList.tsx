@@ -15,7 +15,7 @@ interface UploadListProps {
 
 export function UploadList({ fileList }: UploadListProps) {
     return (
-        <div className={styles.root}>
+        <div className={styles.root} data-test-file-upload-prgress-list={true}>
             {fileList?.map(file => {
                 const mainColor = getProgressColorFromUploadStatus(file.status)
 
@@ -36,7 +36,14 @@ export function UploadList({ fileList }: UploadListProps) {
                 const percent = isFileException(file.status) ? 100 : file.percent
 
                 return 'percent' in file ? (
-                    <div key={file.uid} className={styles.fileRow}>
+                    <div
+                        key={file.uid}
+                        className={styles.fileRow}
+                        data-test-file-upload-prgress-item={true}
+                        data-test-file-name={file.name}
+                        data-test-file-status={file.status}
+                        data-test-file-status-information={file.statusInformation}
+                    >
                         <Tooltip overlay={file.statusInformation} placement="leftBottom">
                             <div className={styles.fileName}>
                                 {fileIcon}

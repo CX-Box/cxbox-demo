@@ -284,6 +284,10 @@ const FileUpload: React.FunctionComponent<Props> = ({
                 onClose={clearAddedFiles}
                 onRemove={removeAddedFiles}
                 successHint={t('The file has been uploaded. Please save the changes')}
+                data-test-notification-inner-container={true}
+                data-test-notification-for-field={true}
+                data-test-field-key={meta.key}
+                data-test-widget-name={widgetName}
             />
         </>
     )

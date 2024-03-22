@@ -16,7 +16,14 @@ interface UploadListContainerProps {
     successHint?: string
 }
 
-export const UploadListContainer = ({ title, addedFileList, onRemove, onClose, successHint }: UploadListContainerProps) => {
+export const UploadListContainer = ({
+    title,
+    addedFileList,
+    onRemove,
+    onClose,
+    successHint,
+    ...dataAttributes
+}: UploadListContainerProps) => {
     const { t } = useTranslation()
     const [visibleProgress, setVisibleProgress] = useState(false)
     const progressKey = useRef(`upload-progress_${Date.now()}`)
@@ -89,7 +96,7 @@ export const UploadListContainer = ({ title, addedFileList, onRemove, onClose, s
 
     return notificationElement
         ? createPortal(
-              <div ref={callbackRef} className={styles.uploadList}>
+              <div ref={callbackRef} className={styles.uploadList} {...dataAttributes}>
                   <UploadList fileList={addedFileList} />
                   {hint}
               </div>,

@@ -70,6 +70,7 @@ export interface TableWidgetProps extends TableWidgetOwnProps {
     metaInProgress?: boolean
     filters: interfaces.BcFilter[]
     filterGroups?: interfaces.FilterGroup[]
+    fullTextFilter?: string
     /**
      * @deprecated TODO: Remove 2.0 as it is never used
      */
@@ -125,6 +126,7 @@ export const TableWidget: FunctionComponent<TableWidgetProps> = props => {
         onApplyFilter,
         onForceUpdate,
         onRow: customHandleRow,
+        fullTextFilter,
         ...rest
     } = props
     /**
@@ -239,7 +241,8 @@ export const TableWidget: FunctionComponent<TableWidgetProps> = props => {
     }, [columns, props.controlColumns])
 
     const [filterGroupName, setFilterGroupName] = React.useState<string | null>(null) // NOSONAR(S6440) hook is called conditionally, fix later
-    const filtersExist = !!props.filters?.length
+    const filtersCount = getFiltersCount(props.filters, fullTextFilter)
+    const filtersExist = !!filtersCount
 
     // eslint-disable-next-line prettier/prettier
     const handleShowAll = React.useCallback(() => { // NOSONAR(S6440) hook is called conditionally, fix later
@@ -288,9 +291,7 @@ export const TableWidget: FunctionComponent<TableWidgetProps> = props => {
                         ))}
                     </Select>
                 )}
-                {filtersExist && (
-                    <ActionLink onClick={handleRemoveFilters}>{t('Clear filters', { count: getFiltersCount(props.filters) })}</ActionLink>
-                )}
+                {filtersExist && <ActionLink onClick={handleRemoveFilters}>{t('Clear filters', { count: filtersCount })}</ActionLink>}
                 {props.limitBySelf && <ActionLink onClick={handleShowAll}> {t('Show all records')} </ActionLink>}
             </div>
         )
@@ -301,7 +302,7 @@ export const TableWidget: FunctionComponent<TableWidgetProps> = props => {
         handleAddFilters,
         filtersExist,
         handleRemoveFilters,
-        props.filters,
+        filtersCount,
         props.limitBySelf,
         handleShowAll
     ])
@@ -372,7 +373,8 @@ function mapStateToProps(state: RootState, ownProps: TableWidgetOwnProps) {
          */
         pendingDataItem: null as unknown as interfaces.PendingDataItem,
         filters,
-        filterGroups: bc?.filterGroups
+        filterGroups: bc?.filterGroups,
+        fullTextFilter: state.screen.fullTextFilter[bc?.name]
     }
 }
 
@@ -408,6 +410,6 @@ const ConnectedTable = connect(mapStateToProps, mapDispatchToProps)(TableWidget)
 
 export default ConnectedTable
 
-const getFiltersCount = (filters?: BcFilter[]) => {
-    return filters?.length ?? 0
+const getFiltersCount = (filters?: BcFilter[], fullTextFilter?: string | null) => {
+    return (filters?.length ?? 0) + (fullTextFilter?.length ? 1 : 0)
 }

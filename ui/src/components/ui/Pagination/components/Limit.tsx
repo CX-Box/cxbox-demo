@@ -1,6 +1,7 @@
 import React from 'react'
 import { Select } from 'antd'
 import { useTranslation } from 'react-i18next'
+import styles from './Limit.less'
 
 const DEFAULT_PAGE_LIMIT = 5
 const AVAILABLE_LIMITS_LIST = [5, 10, 15, 20]
@@ -17,13 +18,16 @@ function Limit({ className, onChange, value = DEFAULT_PAGE_LIMIT, options = AVAI
     const { t } = useTranslation()
 
     return (
-        <Select value={value} className={className} onSelect={onChange}>
-            {options.map(limit => (
-                <Select.Option key={limit} value={limit}>
-                    {t('limit of', { limit, total })}
-                </Select.Option>
-            ))}
-        </Select>
+        <div className={styles.root}>
+            <Select value={value} className={className} onSelect={onChange}>
+                {options.map(limit => (
+                    <Select.Option key={limit} value={limit}>
+                        {t('limit / page', { limit })}
+                    </Select.Option>
+                ))}
+            </Select>
+            {t('of total', { total })}
+        </div>
     )
 }
 

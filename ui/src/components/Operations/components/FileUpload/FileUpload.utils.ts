@@ -1,40 +1,39 @@
 import {
     PROGRESS_STATUS_COLOR,
     UPLOAD_FILE_STATUS,
-    UPLOAD_TO_PROGRESS_STATUS_MAP,
-    UPLOAD_TYPE_ICON
+    UPLOAD_TO_PROGRESS_STATUS_MAP
 } from '@components/Operations/components/FileUpload/FileUpload.constants'
 import { AddedFileInfo } from '@components/Operations/components/FileUpload/FileUpload.interfaces'
 
-const { done, error, notSupportedExtension } = UPLOAD_FILE_STATUS
+const { done, error, notSupportedExtension, uploading, init, canceled, removed } = UPLOAD_FILE_STATUS
 type UploadFileStatus = keyof typeof UPLOAD_FILE_STATUS
 
-export const isFileDownloadComplete = (fileStatus: UploadFileStatus | string | undefined) => {
-    return isFileDownloadSuccess(fileStatus) || isFileDownloadError(fileStatus)
+export const isFileUploading = (fileStatus: UploadFileStatus | string | undefined) => {
+    return ([init, uploading] as string[]).includes(fileStatus as string)
 }
 
-export const isFileDownloadSuccess = (fileStatus: UploadFileStatus | string | undefined) => {
+export const isFileUploadSuccess = (fileStatus: UploadFileStatus | string | undefined) => {
     return fileStatus === done
 }
 
-export const isFileDownloadError = (fileStatus: UploadFileStatus | string | undefined) => {
-    return fileStatus === error
+export const isFileException = (fileStatus: UploadFileStatus | string | undefined) => {
+    return ([notSupportedExtension, error, canceled] as string[]).includes(fileStatus as string)
 }
 
-export const isFileException = (fileStatus: UploadFileStatus | string | undefined) => {
-    return isFileDownloadError(fileStatus) || fileStatus === notSupportedExtension
+export const isFileUploadComplete = (fileStatus: UploadFileStatus | string | undefined) => {
+    return isFileUploadSuccess(fileStatus) || isFileException(fileStatus)
 }
 
 export const needSendAllFiles = (filesInfo: AddedFileInfo[]) => {
-    return (
-        filesInfo.length !== 0 &&
-        !filesInfo.some(filesInfo => {
-            return filesInfo.status === 'init' || filesInfo.status === 'uploading'
-        }) &&
-        filesInfo.some(filesInfo => {
-            return filesInfo.status === 'done'
-        })
-    )
+    const filesExist = filesInfo.length !== 0
+    const uploadingFilesContinues = filesInfo.some(filesInfo => {
+        return filesInfo.status === 'init' || filesInfo.status === 'uploading'
+    })
+    const someDoneFilesExist = filesInfo.some(filesInfo => {
+        return filesInfo.status === 'done'
+    })
+
+    return filesExist && someDoneFilesExist && !uploadingFilesContinues
 }
 
 export function getFileExtension(fileName: string | null = null) {
@@ -55,7 +54,7 @@ export function checkFileFormat(fileName: string, accept?: string) {
 }
 
 export const getDoneIdsFromFilesInfo = (filesInfo: AddedFileInfo[]) => {
-    return filesInfo.filter(fileInfo => fileInfo.status === 'done' && fileInfo.id).map(fileInfo => fileInfo.id as string)
+    return filesInfo.filter(fileInfo => fileInfo.status === done && fileInfo.id).map(fileInfo => fileInfo.id as string)
 }
 
 export const convertUploadStatusToProgress = (fileStatus: UploadFileStatus | string | undefined) => {
@@ -64,10 +63,6 @@ export const convertUploadStatusToProgress = (fileStatus: UploadFileStatus | str
 
 export const getProgressColorFromUploadStatus = (fileStatus: UploadFileStatus | string | undefined) => {
     return PROGRESS_STATUS_COLOR[convertUploadStatusToProgress(fileStatus) as keyof typeof PROGRESS_STATUS_COLOR]
-}
-
-export const getProgressIcon = (uploadType: keyof typeof UPLOAD_TYPE_ICON | string | undefined) => {
-    return UPLOAD_TYPE_ICON[uploadType as keyof typeof UPLOAD_TYPE_ICON]
 }
 
 export const getFilePermissionFromAccept = (accept?: string) => {

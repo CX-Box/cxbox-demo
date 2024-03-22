@@ -15,6 +15,7 @@ import { UploadListContainer } from '@components/Operations/components/FileUploa
 import { FileUploadFieldMeta } from '@cxbox-ui/schema'
 import { RowMetaField } from '@interfaces/rowMeta'
 import { useSingleUploadRequest } from '@hooks/useSingleUploadRequest'
+import { AxiosError, CanceledError } from 'axios'
 
 interface Props extends Omit<BaseFieldProps, 'meta'> {
     value: string
@@ -50,12 +51,12 @@ const FileUpload: React.FunctionComponent<Props> = ({
     const rowMetaField = rowMeta?.fields.find(field => field.key === meta.key) as RowMetaField | undefined
     const fileAccept = rowMetaField?.fileAccept
     const {
-        changeFileStatuses,
         getAddedFileListWithout,
         clearAddedFiles,
         initializeNewAddedFile,
         initializeNotSupportedFile,
-        updateAddedFile
+        updateAddedFile,
+        removeAddedFiles
     } = useUploadFilesInfo(fileAccept)
 
     const onStartUpload = useCallback(
@@ -110,12 +111,8 @@ const FileUpload: React.FunctionComponent<Props> = ({
             })
 
             updateAddedFile(file.uid, { id: response.data.id, status: 'done', percent: 100 })
-
-            setTimeout(() => {
-                changeFileStatuses('done', 'updated')
-            }, 5000)
         },
-        [onUploadFileDone, bcName, cursor, fileIdKey, fieldName, updateAddedFile, changeFileStatuses]
+        [onUploadFileDone, bcName, cursor, fileIdKey, fieldName, updateAddedFile]
     )
 
     const onFileDelete = React.useCallback(() => {
@@ -132,10 +129,14 @@ const FileUpload: React.FunctionComponent<Props> = ({
     }, [onDeleteFile, bcName, cursor, fileIdKey, fieldName, clearAddedFiles])
 
     const onUploadFailed = React.useCallback(
-        (error: any, response: any, file: UploadFile) => {
+        (error: AxiosError<unknown>, response: any, file: UploadFile) => {
             onUploadFileFailed()
 
-            updateAddedFile(file.uid, { status: 'error', percent: 100, id: null })
+            if ((error as CanceledError<unknown>).code === AxiosError.ERR_CANCELED) {
+                updateAddedFile(file.uid, { status: 'canceled', percent: 100, id: null })
+            } else {
+                updateAddedFile(file.uid, { status: 'error', percent: 100, id: null })
+            }
         },
         [onUploadFileFailed, updateAddedFile]
     )
@@ -161,6 +162,8 @@ const FileUpload: React.FunctionComponent<Props> = ({
         showUploadList: false,
         beforeUpload: file => {
             if (checkFileFormat(file.name, fileAccept)) {
+                clearAddedFiles(['done'])
+
                 initializeNewAddedFile(file.uid, file.name, uploadType)
 
                 return true
@@ -277,8 +280,9 @@ const FileUpload: React.FunctionComponent<Props> = ({
                 )}
             </div>
             <UploadListContainer
-                addedFileList={getAddedFileListWithout(['updated'])}
+                addedFileList={getAddedFileListWithout()}
                 onClose={clearAddedFiles}
+                onRemove={removeAddedFiles}
                 successHint={t('The file has been uploaded. Please save the changes')}
             />
         </>

@@ -86,6 +86,11 @@ const screenReducerBuilder = reducers
             state.bo.bc[action.payload.bcName].cursor = newCursor
             state.cachedBc[action.payload.bcName] = `${action.payload.bcName}/${newCursor}`
         }
+    })
+    .addMatcher(isAnyOf(actions.bcRemoveAllFilters), (state, action) => {
+        const { bcName } = action.payload
+
+        state.fullTextFilter[bcName] = undefined as unknown as string
     }).builder
 
 export const screenReducer = createReducer(initialState, screenReducerBuilder)

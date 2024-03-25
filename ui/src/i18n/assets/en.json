@@ -50,6 +50,6 @@
         "Skipped. File has unsupported format": "Skipped. File has unsupported format {{format}}. Supported formats are {{listOfFormats}}",
         "Error. File not loaded and no new row created": "Error. File not loaded and no new row created",
         "Error. File not loaded to current row": "Error. File not loaded to current row",
-        "Skipped. File download interrupted intentionally": "Skipped. File download interrupted intentionally"
+        "Skipped. The file upload was cancelled because a new file was added": "Skipped. The file upload was cancelled because a new file was added"
     }
 }

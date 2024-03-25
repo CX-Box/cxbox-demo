@@ -129,12 +129,13 @@ function DocumentList({ meta }: DocumentListProps) {
 export default React.memo(DocumentList)
 
 function useDocumentPreviewOption(meta: AppWidgetMeta) {
-    const { options } = meta
+    const { options, bcName } = meta
     const documentPreview = options?.documentPreview
     const [isValidMetaOption, setIsValidOption] = useState<boolean>(false)
     const popupWidget = useAppSelector(state => {
         return state.view.widgets.find(widget => widget.name === documentPreview?.edit?.widget)
     })
+    const loading = useAppSelector(state => state.screen.bo.bc[bcName]?.loading)
 
     useEffect(() => {
         if (!documentPreview) {
@@ -210,7 +211,7 @@ function useDocumentPreviewOption(meta: AppWidgetMeta) {
     }
 
     const showPdfViewer = (dataItem: Record<string, string | null>) => {
-        return documentPreview?.enabledPdfViewer && isPdfFile(dataItem)
+        return documentPreview?.enabledPdfViewer && isPdfFile(dataItem) && !loading
     }
 
     return {

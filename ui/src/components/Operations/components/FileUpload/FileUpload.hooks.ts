@@ -43,7 +43,7 @@ export const useStatusesInformation = (accept?: string) => {
                     listOfFormats: getFilePermissionFromAccept(accept)?.toLowerCase()
                 })
             } else if (fileStatus === UPLOAD_FILE_STATUS.canceled) {
-                return t('Skipped. File download interrupted intentionally')
+                return t('Skipped. The file upload was cancelled because a new file was added')
             }
         },
         [accept, t]

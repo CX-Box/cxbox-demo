@@ -105,7 +105,11 @@ function Operations(props: OperationsOwnProps) {
                     )
                 })}
                 {widgetMeta.options?.fullTextSearch?.enabled && (
-                    <TextSearchInput bcName={bcName} placeholder={widgetMeta.options?.fullTextSearch?.placeholder} />
+                    <TextSearchInput
+                        bcName={bcName}
+                        widgetName={widgetMeta.name}
+                        placeholder={widgetMeta.options?.fullTextSearch?.placeholder}
+                    />
                 )}
             </div>
         </div>

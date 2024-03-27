@@ -70,7 +70,6 @@ export interface TableWidgetProps extends TableWidgetOwnProps {
     metaInProgress?: boolean
     filters: interfaces.BcFilter[]
     filterGroups?: interfaces.FilterGroup[]
-    fullTextFilter?: string
     /**
      * @deprecated TODO: Remove 2.0 as it is never used
      */
@@ -126,7 +125,6 @@ export const TableWidget: FunctionComponent<TableWidgetProps> = props => {
         onApplyFilter,
         onForceUpdate,
         onRow: customHandleRow,
-        fullTextFilter,
         ...rest
     } = props
     /**
@@ -241,7 +239,7 @@ export const TableWidget: FunctionComponent<TableWidgetProps> = props => {
     }, [columns, props.controlColumns])
 
     const [filterGroupName, setFilterGroupName] = React.useState<string | null>(null) // NOSONAR(S6440) hook is called conditionally, fix later
-    const filtersCount = getFiltersCount(props.filters, fullTextFilter)
+    const filtersCount = getFiltersCount(props.filters)
     const filtersExist = !!filtersCount
 
     // eslint-disable-next-line prettier/prettier
@@ -373,8 +371,7 @@ function mapStateToProps(state: RootState, ownProps: TableWidgetOwnProps) {
          */
         pendingDataItem: null as unknown as interfaces.PendingDataItem,
         filters,
-        filterGroups: bc?.filterGroups,
-        fullTextFilter: state.screen.fullTextFilter[bc?.name]
+        filterGroups: bc?.filterGroups
     }
 }
 
@@ -410,6 +407,6 @@ const ConnectedTable = connect(mapStateToProps, mapDispatchToProps)(TableWidget)
 
 export default ConnectedTable
 
-const getFiltersCount = (filters?: BcFilter[], fullTextFilter?: string | null) => {
-    return (filters?.length ?? 0) + (fullTextFilter?.length ? 1 : 0)
+const getFiltersCount = (filters?: BcFilter[]) => {
+    return filters?.length ?? 0
 }

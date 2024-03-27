@@ -68,11 +68,6 @@ export const loginDone = createAction<LoginResponse>('loginDone')
 
 export const changeNotification = createAction<Partial<NotificationState>>('changeNotification')
 
-export const changeBcFullTextFilter = createAction<{
-    bcName: string
-    fullTextFilterValue: string
-}>('changeBcFullTextFilter')
-
 export const initTableSettings = createAction<{ rawSettings: TableSettingsList | TableSettingsMap }>('initTableSettings')
 
 export const changeTableSettings = createAction<

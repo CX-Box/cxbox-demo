@@ -6,7 +6,6 @@ import { FilterGroup } from '@interfaces/filters'
 
 interface ScreenState extends interfaces.ScreenState {
     menuCollapsed: boolean
-    fullTextFilter: Record<string, string>
     bo: {
         activeBcName: string
         bc: Record<string, BcMetaState & { filterGroups?: FilterGroup[] }>
@@ -16,7 +15,6 @@ interface ScreenState extends interfaces.ScreenState {
 
 const initialState: ScreenState = {
     ...reducers.initialScreenState,
-    fullTextFilter: {},
     menuCollapsed: false,
     pagination: {}
 }
@@ -31,11 +29,6 @@ const screenReducerBuilder = reducers
          * An example reducer for custom action
          */
         console.log(action.payload)
-    })
-    .addCase(actions.changeBcFullTextFilter, (state, action) => {
-        const { bcName, fullTextFilterValue } = action.payload
-
-        state.fullTextFilter[bcName] = fullTextFilterValue
     })
     .addCase(actions.removeFilterGroup, (state, action) => {
         const removedFilterGroup = action.payload
@@ -86,11 +79,6 @@ const screenReducerBuilder = reducers
             state.bo.bc[action.payload.bcName].cursor = newCursor
             state.cachedBc[action.payload.bcName] = `${action.payload.bcName}/${newCursor}`
         }
-    })
-    .addMatcher(isAnyOf(actions.bcRemoveAllFilters), (state, action) => {
-        const { bcName } = action.payload
-
-        state.fullTextFilter[bcName] = undefined as unknown as string
     }).builder
 
 export const screenReducer = createReducer(initialState, screenReducerBuilder)

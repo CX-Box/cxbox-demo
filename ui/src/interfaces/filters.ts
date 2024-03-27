@@ -22,5 +22,6 @@ export enum FilterType {
     specified = 'specified',
     specifiedBooleanSql = 'specifiedBooleanSql',
     equalsOneOf = 'equalsOneOf',
-    containsOneOf = 'containsOneOf'
+    containsOneOf = 'containsOneOf',
+    fullTextSearch = '_fullTextSearch'
 }

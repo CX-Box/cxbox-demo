@@ -17,7 +17,7 @@ export function useDebouncedTextSearch(value: string, doSearch: () => void) {
     }, [debounced, doSearch])
 }
 
-export function useSearchWarning(value: string) {
+export function useSearchWarning(value?: string) {
     const debounced = useDebounce(value, 500)
     const [isWarning, setIsWarning] = useState(false)
 

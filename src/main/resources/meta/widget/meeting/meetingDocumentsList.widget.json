@@ -14,7 +14,11 @@
       "title": "File",
       "key": "file",
       "type": "fileUpload",
-      "fileIdKey": "fileId"
+      "fileIdKey": "fileId",
+      "preview": {
+        "enabled": true,
+        "previewMode": "popup"
+      }
     },
     {
       "title": "Notes",

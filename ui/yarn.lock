@@ -4523,6 +4523,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-window@npm:^1":
+  version: 1.8.8
+  resolution: "@types/react-window@npm:1.8.8"
+  dependencies:
+    "@types/react": "npm:*"
+  checksum: 2170a3957752603e8b994840c5d31b72ddf94c427c0f42b0175b343cc54f50fe66161d8871e11786ec7a59906bd33861945579a3a8f745455a3744268ec1069f
+  languageName: node
+  linkType: hard
+
 "@types/react@npm:17.0.2":
   version: 17.0.2
   resolution: "@types/react@npm:17.0.2"
@@ -12692,6 +12701,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"memoize-one@npm:>=3.1.1 <6":
+  version: 5.2.1
+  resolution: "memoize-one@npm:5.2.1"
+  checksum: fd22dbe9a978a2b4f30d6a491fc02fb90792432ad0dab840dc96c1734d2bd7c9cdeb6a26130ec60507eb43230559523615873168bcbe8fafab221c30b11d54c1
+  languageName: node
+  linkType: hard
+
 "merge-descriptors@npm:1.0.1":
   version: 1.0.1
   resolution: "merge-descriptors@npm:1.0.1"
@@ -16220,6 +16236,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-window@npm:1.8.8":
+  version: 1.8.8
+  resolution: "react-window@npm:1.8.8"
+  dependencies:
+    "@babel/runtime": "npm:^7.0.0"
+    memoize-one: "npm:>=3.1.1 <6"
+  peerDependencies:
+    react: ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
+  checksum: 7e2b2dfd1d04b94f393cea54773fba410450f087bd1c71a0819b856dda4520027acd2c06df7f024d183ab8e8a79fb3c35da0ec65e9ac6b4c346cef7b28a94866
+  languageName: node
+  linkType: hard
+
 "react@npm:17.0.2":
   version: 17.0.2
   resolution: "react@npm:17.0.2"
@@ -18710,6 +18739,7 @@ __metadata:
     "@types/react": "npm:17.0.2"
     "@types/react-dom": "npm:17.0.2"
     "@types/react-redux": "npm:7.1.26"
+    "@types/react-window": "npm:^1"
     "@typescript-eslint/eslint-plugin": "npm:6.5.0"
     "@typescript-eslint/parser": "npm:6.5.0"
     antd: "npm:3.26.20"
@@ -18745,6 +18775,7 @@ __metadata:
     react-pdf: "npm:7.7.0"
     react-redux: "npm:7.2.9"
     react-scripts: "npm:5.0.0"
+    react-window: "npm:1.8.8"
     redux-observable: "npm:2.0.0"
     rxjs: "npm:7.8.1"
     source-map-loader: "npm:4.0.1"

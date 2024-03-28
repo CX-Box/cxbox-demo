@@ -1,4 +1,4 @@
-import React, { DragEventHandler, ReactNode } from 'react'
+import React, { DragEventHandler, ReactNode, useCallback } from 'react'
 import { Icon, Upload } from 'antd'
 import styles from './FileUpload.less'
 import { getFileUploadEndpoint } from '@utils/api'
@@ -35,6 +35,7 @@ export const FileUpload = ({ mode, widget, operationInfo, children, uploadType =
     const rowMeta = useAppSelector(state => state.view.rowMeta[bcName]?.[bcUrl])
     const rowMetaField = rowMeta?.fields.find(field => field.key === operationInfo?.fieldKey)
     const fileAccept = (rowMetaField as RowMetaField)?.fileAccept
+    const disabled = !rowMetaField
 
     const {
         initializeNewAddedFile,
@@ -45,15 +46,9 @@ export const FileUpload = ({ mode, widget, operationInfo, children, uploadType =
         initializeNotSupportedFile,
         removeAddedFiles
     } = useBulkUploadFiles(bcName, fileAccept)
-    const disabled = !rowMetaField
 
-    const commonUploadProps: UploadProps = {
-        disabled,
-        action: uploadUrl,
-        accept: fileAccept,
-        showUploadList: false,
-        multiple: true,
-        beforeUpload: file => {
+    const beforeUpload = useCallback(
+        file => {
             if (checkFileFormat(file.name, fileAccept)) {
                 initializeNewAddedFile(file.uid, file.name, uploadType)
 
@@ -64,7 +59,11 @@ export const FileUpload = ({ mode, widget, operationInfo, children, uploadType =
 
             return false
         },
-        onChange: info => {
+        [fileAccept, initializeNewAddedFile, initializeNotSupportedFile, uploadType]
+    )
+
+    const onChange = useCallback(
+        info => {
             const { uid, status, percent, response } = info.file
             const needUpdatePercents =
                 getAddedFile(uid)?.status === 'init' || (!!percent && Math.floor(percent) % 10 === 0 && status === 'uploading')
@@ -76,7 +75,18 @@ export const FileUpload = ({ mode, widget, operationInfo, children, uploadType =
             if (isFileUploadComplete(status)) {
                 updateAddedFile(uid, { status, percent, id: response?.data?.id ?? null })
             }
-        }
+        },
+        [getAddedFile, updateAddedFile]
+    )
+
+    const commonUploadProps: UploadProps = {
+        disabled,
+        action: uploadUrl,
+        accept: fileAccept,
+        showUploadList: false,
+        multiple: true,
+        beforeUpload,
+        onChange
     }
 
     const hintText = useFileUploadHint(fileAccept)

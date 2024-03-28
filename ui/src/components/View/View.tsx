@@ -27,21 +27,19 @@ import PickListField from '../../fields/PickListField/PickListField'
 import { useAppSelector } from '@store'
 import ViewInfoLabel from '../DebugPanel/components/ViewInfoLabel'
 import PopupWidgetInfoLabel from '../DebugPanel/components/PopupWidgetInfoLabel'
-import FileUpload from '../../fields/FileUpload/FileUpload'
+import FileUpload from '../../fields/FileUpload/FileUploadContainer'
 import { interfaces } from '@cxbox-ui/core'
 import { AdditionalInfoWidget } from '@components/widgets/AdditionalInfo/AdditionalInfoWidget'
 import { WidgetTypes } from '@cxbox-ui/schema'
-import DocumentList from '../widgets/DocumentList/DocumentList'
-import DocumentPreviewField from '../../fields/DocumentPreview/DocumentPreview'
-import { DocumentFormPopup } from '../widgets/DocumentFormPopup/DocumentFormPopup'
 import TimeField from '../../fields/TimePicker/TimePickerField'
 import SuggestionPickListField from '../../fields/SuggestionPickList/SuggestionPickList'
 import { StatsBlock } from '@components/widgets/StatsBlock/StatsBlock'
+import FileViewerPopup from '@components/FileViewerPopup/FileViewerPopup'
 
 // TODO We need to remove PopupWidgetTypes from the core and replace imports throughout the entire project
 const { PopupWidgetTypes, FieldType } = interfaces
 
-const customPopupWidgetTypes: CustomWidgetTypes[] = [CustomWidgetTypes.FormPopup, CustomWidgetTypes.DocumentFormPopup]
+const customPopupWidgetTypes: CustomWidgetTypes[] = [CustomWidgetTypes.FormPopup]
 
 const allPopupWidgetTypes: string[] = [...customPopupWidgetTypes, ...PopupWidgetTypes]
 
@@ -56,7 +54,6 @@ const customFields = {
     [FieldType.pickList]: PickListField,
     [FieldType.inlinePickList]: InlinePickList,
     [CustomFieldTypes.MultipleSelect]: MultipleSelectField,
-    [CustomFieldTypes.DocumentPreview]: DocumentPreviewField,
     [FieldType.fileUpload]: FileUpload,
     [CustomFieldTypes.Time]: TimeField,
     [CustomFieldTypes.SuggestionPickList]: SuggestionPickListField
@@ -66,14 +63,12 @@ const customWidgets: Partial<Record<CustomWidgetTypes | interfaces.WidgetTypes, 
     [WidgetTypes.Form]: { component: Form },
     [WidgetTypes.Info]: { component: Info },
     [WidgetTypes.List]: { component: Table },
-    [CustomWidgetTypes.DocumentList]: { component: DocumentList },
     [WidgetTypes.HeaderWidget]: { component: Header, card: EmptyCard },
     [CustomWidgetTypes.Steps]: { component: Steps, card: EmptyCard },
     [CustomWidgetTypes.Funnel]: { component: Funnel, card: DashboardCard },
     [CustomWidgetTypes.RingProgress]: { component: RingProgress, card: DashboardCard },
     [CustomWidgetTypes.DashboardList]: { component: DashboardList, card: DashboardCard },
     [CustomWidgetTypes.FormPopup]: { component: FormPopup, card: null },
-    [CustomWidgetTypes.DocumentFormPopup]: { component: DocumentFormPopup, card: null },
     [CustomWidgetTypes.AdditionalInfo]: { component: AdditionalInfoWidget, card: EmptyCard },
     [WidgetTypes.AssocListPopup]: AssocListPopup,
     [WidgetTypes.PickListPopup]: PickListPopup,
@@ -90,6 +85,7 @@ function View() {
     return (
         <div className={styles.container}>
             {debugMode && <ViewInfoLabel />}
+            <FileViewerPopup />
             <CxboxView
                 customWidgets={customWidgets as Record<string, interfaces.CustomWidgetDescriptor>}
                 customFields={customFields}

@@ -1,0 +1,22 @@
+.root {
+    display: inline-block;
+    position: relative;
+    line-height: 0;
+}
+
+.hoverEnabled.root {
+    cursor: pointer;
+
+    &:hover {
+        .main {
+            opacity: 0.7;
+        }
+    }
+}
+
+.eye {
+    position: absolute;
+    bottom: 0;
+    right: -4px;
+    transform: translateY(40%);
+}

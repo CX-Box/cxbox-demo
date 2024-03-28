@@ -1,8 +1,10 @@
-import { interfaces, reducers } from '@cxbox-ui/core'
+import { reducers } from '@cxbox-ui/core'
+import { ViewState as CoreViewState } from '@interfaces/core'
 import { createReducer, isAnyOf } from '@reduxjs/toolkit'
 import { actions, partialUpdateRecordForm, resetRecordForm, setBcCount, setRecordForm, showViewPopup } from '@actions'
+import { PopupData } from '@interfaces/view'
 
-interface ViewState extends interfaces.ViewState {
+interface ViewState extends Omit<CoreViewState, 'popupData'> {
     bcRecordsCount: {
         [bcName: string]: {
             count: number
@@ -15,12 +17,7 @@ interface ViewState extends interfaces.ViewState {
         cursor: string
         create: boolean
     }
-    popupData?: interfaces.PopupData & {
-        options?: {
-            operation?: ReturnType<typeof actions.processPreInvoke>['payload']
-            calleeFieldKey?: string
-        }
-    }
+    popupData?: PopupData
 }
 
 const initialState: ViewState = {
@@ -59,9 +56,9 @@ const viewReducerBuilder = reducers
     .addCase(partialUpdateRecordForm, (state, action) => {
         state.recordForm = { ...state.recordForm, ...action.payload }
     })
-    .addMatcher(isAnyOf(showViewPopup), (state, action) => {
-        const { options } = action.payload
-        state.popupData = { ...state.popupData, options }
+    .addMatcher(isAnyOf(showViewPopup, actions.showFileViewerPopup), (state, action) => {
+        const { options, ...fileViewerPopupData } = action.payload
+        state.popupData = { ...fileViewerPopupData, ...state.popupData, options }
     })
     .addMatcher(isAnyOf(actions.selectView, resetRecordForm), state => {
         state.recordForm = { ...initialState.recordForm }

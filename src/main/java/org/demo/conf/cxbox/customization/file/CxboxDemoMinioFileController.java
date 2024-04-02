@@ -30,6 +30,7 @@ import io.minio.PutObjectArgs;
 import io.minio.RemoveObjectArgs;
 import io.minio.StatObjectArgs;
 import io.minio.StatObjectResponse;
+import java.nio.charset.StandardCharsets;
 import org.cxbox.core.file.dto.FileUploadDto;
 import org.cxbox.core.file.dto.CxboxResponseDTO;
 import java.util.Collections;
@@ -38,6 +39,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -100,9 +102,16 @@ public class CxboxDemoMinioFileController {
 				.object(id)
 				.build()
 		);
+
+		ContentDisposition contentDisposition = ContentDisposition.builder("inline")
+				.filename(statObjectResponse.userMetadata().get(FILENAME_FIELD), StandardCharsets.UTF_8)
+				.build();
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentDisposition(contentDisposition);
+		headers.setContentType(MediaType.parseMediaType(statObjectResponse.contentType()));
+		headers.setContentLength(statObjectResponse.size());
 		return ResponseEntity.ok()
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=\"" + statObjectResponse.userMetadata().get(FILENAME_FIELD) + "\"")
-				.contentLength(statObjectResponse.size()) //
+				.headers(headers)
 				.body(outputStream -> IOUtils.copy(getObjectResponse, outputStream, FIVE_MIB));
 	}
 

@@ -5,16 +5,6 @@
   "bc": "meetingDocumentEdit",
   "fields": [
     {
-      "title": "Field Key For Content Type",
-      "key": "fieldKeyForContentType",
-      "type": "hidden"
-    },
-    {
-      "title": "Field Key For Base 64",
-      "key": "fieldKeyForBase64",
-      "type": "hidden"
-    },
-    {
       "title": "Document ID",
       "key": "id",
       "type": "input",

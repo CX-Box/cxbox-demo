@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import lombok.NonNull;
 import org.cxbox.core.controller.param.QueryParameters;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.dao.AnySourceBaseDAO;
@@ -12,7 +13,6 @@ import org.demo.dto.cxbox.anysource.DashboardSalesFunnelDTO;
 import org.demo.repository.ClientRepository;
 import org.demo.repository.MeetingRepository;
 import org.demo.repository.SaleRepository;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
@@ -63,7 +63,7 @@ public class SaleStatsDao extends AbstractAnySourceBaseDAO<DashboardSalesFunnelD
 		throw new IllegalStateException();
 	}
 
-	@NotNull
+	@NonNull
 	private List<DashboardSalesFunnelDTO> getStats() {
 		List<DashboardSalesFunnelDTO> result = new ArrayList<>();
 		long activitiesAmount = clientRepository.count() + meetingRepository.count();

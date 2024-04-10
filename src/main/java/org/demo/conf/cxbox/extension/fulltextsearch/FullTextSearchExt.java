@@ -4,10 +4,10 @@ import java.util.Optional;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Predicate;
+import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.StringUtils;
 import org.cxbox.core.crudma.bc.BusinessComponent;
-import org.jetbrains.annotations.NotNull;
 
 @UtilityClass
 public class FullTextSearchExt {
@@ -32,7 +32,7 @@ public class FullTextSearchExt {
 	 * }
 	 * </pre>
 	 */
-	@NotNull
+	@NonNull
 	public static Optional<String> getFullTextSearchFilterParam(BusinessComponent bc) {
 		return Optional.ofNullable(bc.getParameters().getParameter("_fullTextSearch"));
 	}

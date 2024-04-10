@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 
 @Getter
 @AllArgsConstructor
@@ -20,14 +20,14 @@ public enum ClientEditStep {
 
 	private final String editView;
 
-	@NotNull
+	@NonNull
 	public static Optional<ClientEditStep> getNextEditStep(Client client) {
 		return Arrays.stream(ClientEditStep.values())
 				.filter(v -> v.ordinal() > client.getEditStep().ordinal())
 				.findFirst();
 	}
 
-	@NotNull
+	@NonNull
 	public static Optional<ClientEditStep> getPreviousEditStep(Client client) {
 		return Arrays.stream(ClientEditStep.values())
 				.filter(v -> v.ordinal() < client.getEditStep().ordinal())

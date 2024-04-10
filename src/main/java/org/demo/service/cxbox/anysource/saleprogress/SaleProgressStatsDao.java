@@ -11,10 +11,10 @@ import org.demo.dto.cxbox.anysource.SalesProgressStatsDTO;
 import org.demo.entity.Sale;
 import org.demo.entity.enums.SaleStatus;
 import org.demo.repository.SaleRepository;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
+import lombok.NonNull;
 
 @Service
 @RequiredArgsConstructor
@@ -58,7 +58,7 @@ public class SaleProgressStatsDao extends AbstractAnySourceBaseDAO<SalesProgress
 		throw new IllegalStateException();
 	}
 
-	@NotNull
+	@NonNull
 	private List<SalesProgressStatsDTO> getStats() {
 		SalesProgressStatsDTO dto = new SalesProgressStatsDTO();
 		List<Sale> sales = saleRepository.findAll();

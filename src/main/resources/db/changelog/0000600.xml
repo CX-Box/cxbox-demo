@@ -7,7 +7,7 @@
   <property name="now" value="current_timestamp" dbms="postgresql"/>
   <property name="now" value="sysdate" dbms="oracle"/>
 
-  <changeSet id="main demo tables" author="ryalalov">
+  <changeSet id="main demo tables" author="cxbox">
     <createTable tableName="CLIENT">
       <column name="ID" remarks="Identifier" type="NUMBER(19, 0)">
         <constraints primaryKey="true"/>
@@ -75,7 +75,7 @@
     </createTable>
   </changeSet>
 
-  <changeSet id="meeting table" author="kuzin">
+  <changeSet id="meeting table" author="cxbox">
     <createTable tableName="MEETING">
       <column name="ID" remarks="Identifier" type="NUMBER(19, 0)">
         <constraints primaryKey="true"/>
@@ -123,7 +123,7 @@
   </changeSet>
 
 
-  <changeSet id="meetingDocuments table" author="kuzin">
+  <changeSet id="meetingDocuments table" author="cxbox">
     <createTable tableName="MEETING_DOCUMENTS">
       <column name="ID" remarks="Identifier" type="NUMBER(19, 0)">
         <constraints primaryKey="true"/>
@@ -153,42 +153,42 @@
     </createTable>
   </changeSet>
 
-  <changeSet id="meetingdoc table field_key_for_base64" author="agelfman">
+  <changeSet id="meetingdoc table field_key_for_base64" author="cxbox">
     <addColumn tableName="MEETING_DOCUMENTS">
       <column name="field_key_for_base64" type="bytea">
       </column>
     </addColumn>
   </changeSet>
 
-  <changeSet id="meetingdoc table field_key_for_content_type" author="agelfman">
+  <changeSet id="meetingdoc table field_key_for_content_type" author="cxbox">
     <addColumn tableName="MEETING_DOCUMENTS">
       <column name="field_key_for_content_type" type="VARCHAR(50)">
       </column>
     </addColumn>
   </changeSet>
 
-  <changeSet id="meetingdoc table field_id" author="agelfman">
+  <changeSet id="meetingdoc table field_id" author="cxbox">
     <addColumn tableName="MEETING_DOCUMENTS">
       <column name="field_id" type="VARCHAR(50)">
       </column>
     </addColumn>
   </changeSet>
 
-  <changeSet id="meetingdoc table file_id" author="agelfman">
+  <changeSet id="meetingdoc table file_id" author="cxbox">
     <addColumn tableName="MEETING_DOCUMENTS">
       <column name="file_id" type="VARCHAR(50)">
       </column>
     </addColumn>
   </changeSet>
 
-  <changeSet id="meetingdoc table meeting_id" author="agelfman">
+  <changeSet id="meetingdoc table meeting_id" author="cxbox">
     <addColumn tableName="MEETING_DOCUMENTS">
       <column name="meeting_id" type="VARCHAR(50)">
       </column>
     </addColumn>
   </changeSet>
 
-  <changeSet id="meeting table primary" author="iborisenko">
+  <changeSet id="meeting table primary" author="cxbox">
     <addColumn tableName="MEETING">
       <column name="additional_contact_primary_id" type="NUMBER(19, 0)">
         <constraints nullable="true" foreignKeyName="additional_contact_primary_id" referencedColumnNames="ID"
@@ -197,7 +197,7 @@
     </addColumn>
   </changeSet>
 
-  <changeSet id="meeting_contact table" author="iborisenko">
+  <changeSet id="meeting_contact table" author="cxbox">
     <createTable tableName="meeting_contact">
       <column name="meeting_id" type="NUMBER(19, 0)">
         <constraints nullable="false" foreignKeyName="meeting_contact_meeting" references="meeting"/>
@@ -208,7 +208,7 @@
     </createTable>
   </changeSet>
 
-  <changeSet id="dashboard_filter table" author="mitrofanova">
+  <changeSet id="dashboard_filter table" author="cxbox">
     <createTable tableName="DASHBOARD_FILTER">
       <column name="ID" remarks="Identifier" type="NUMBER(19, 0)">
         <constraints primaryKey="true"/>
@@ -236,7 +236,7 @@
     </createTable>
   </changeSet>
 
-  <changeSet id="dashboard_filter_field_of_activity table" author="mitrofanova">
+  <changeSet id="dashboard_filter_field_of_activity table" author="cxbox">
     <createTable tableName="DASHBOARD_FILTER_FIELD_OF_ACTIVITY">
       <column name="VALUE" type="VARCHAR(50)"/>
       <column name="DASHBOARD_FILTER_ID" type="NUMBER(19, 0)">
@@ -262,7 +262,7 @@
     </createTable>
   </changeSet>
 
-  <changeSet id="sale table" author="mitrofanova">
+  <changeSet id="sale table" author="cxbox">
     <createTable tableName="SALE">
       <column name="ID" remarks="Identifier" type="NUMBER(19, 0)">
         <constraints primaryKey="true"/>
@@ -298,7 +298,7 @@
     </createTable>
   </changeSet>
 
-  <changeSet id="t_list_of_values table" author="iborisenko">
+  <changeSet id="t_list_of_values table" author="cxbox">
     <createTable tableName="t_list_of_values">
       <column name="ID" remarks="Identifier" type="NUMBER(19, 0)">
         <constraints primaryKey="true"/>
@@ -338,7 +338,7 @@
     </createTable>
   </changeSet>
 
-  <changeSet id="t_lov_hierarchy table" author="iborisenko">
+  <changeSet id="t_lov_hierarchy table" author="cxbox">
     <createTable tableName="t_lov_hierarchy">
       <column name="ID" remarks="Identifier" type="NUMBER(19, 0)">
         <constraints primaryKey="true"/>
@@ -371,7 +371,7 @@
     </createTable>
   </changeSet>
 
-  <changeSet author="initial" id="NOTIFICATION TABLE">
+  <changeSet author="cxbox" id="NOTIFICATION TABLE">
     <createTable remarks="Уведомления" tableName="NOTIFICATION">
       <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
         <constraints primaryKey="true"/>
@@ -409,7 +409,7 @@
     </createTable>
   </changeSet>
 
-  <changeSet id="local example data" author="initial" runOnChange="true" context="local">
+  <changeSet id="local example data" author="cxbox" runOnChange="true" context="local">
     <loadUpdateData tableName="CLIENT" primaryKey="ID" encoding="UTF-8" separator="," quotchar="&quot;"
       file="db/data/CLIENT.csv">
       <column header="ID" name="ID" type="STRING"/>

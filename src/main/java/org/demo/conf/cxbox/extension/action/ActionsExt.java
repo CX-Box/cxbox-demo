@@ -4,12 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 import lombok.experimental.UtilityClass;
 import org.cxbox.core.dto.rowmeta.PreAction;
-import org.jetbrains.annotations.Nullable;
 
 @UtilityClass
 public class ActionsExt {
 
-	public static PreAction confirmWithCustomWidget(@Nullable String message, @Nullable String widget, @Nullable String yesButton, @Nullable String noButton) {
+	public static PreAction confirmWithCustomWidget(String message, String widget, String yesButton, String noButton) {
 		Map<String, String> customParameters = new HashMap<>();
 		customParameters.put("subtype", "confirmWithCustomWidget");
 		if (widget != null) {

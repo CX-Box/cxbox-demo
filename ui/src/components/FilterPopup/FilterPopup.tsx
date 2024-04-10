@@ -70,7 +70,7 @@ const FilterPopup: React.FC<FilterPopupProps> = props => {
             viewName,
             widgetName: widget?.name as string
         }
-        if (FieldType.pickList) {
+        if (FieldType.pickList === props.fieldType) {
             const foundPickListFilter = allFilters?.find(filter => {
                 return filter.fieldName === associateFieldKeyForPickList
             })

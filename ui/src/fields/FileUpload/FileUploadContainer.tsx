@@ -5,7 +5,7 @@ import { applyParams, getFileUploadEndpoint } from '@utils/api'
 import { BaseFieldProps } from '@cxboxComponents/Field/Field'
 import { useAppDispatch, useAppSelector } from '@store'
 import { buildBcUrl } from '@utils/buildBcUrl'
-import { useUploadFilesInfo } from '@components/Operations/components/FileUpload/FileUpload.hooks'
+import { useUploadFilesInfoWithAutoRemove } from '@components/Operations/components/FileUpload/FileUpload.hooks'
 import { checkFileFormat } from '@components/Operations/components/FileUpload/FileUpload.utils'
 import { UploadListContainer } from '@components/Operations/components/FileUpload/UploadListContainer'
 import { RowMetaField } from '@interfaces/rowMeta'
@@ -46,14 +46,8 @@ const FileUploadContainer: React.FunctionComponent<Props> = ({
     const rowMeta = useAppSelector(state => state.view.rowMeta[bcName]?.[bcUrl])
     const rowMetaField = rowMeta?.fields.find(field => field.key === meta.key) as RowMetaField | undefined
     const fileAccept = rowMetaField?.fileAccept
-    const {
-        getAddedFileListWithout,
-        clearAddedFiles,
-        initializeNewAddedFile,
-        initializeNotSupportedFile,
-        updateAddedFile,
-        removeAddedFiles
-    } = useUploadFilesInfo(fileAccept)
+    const { getAddedFileListWithout, clearAddedFiles, initializeNewAddedFile, initializeNotSupportedFile, updateAddedFile, callbackRef } =
+        useUploadFilesInfoWithAutoRemove(fileAccept)
 
     const dispatch = useAppDispatch()
 
@@ -220,9 +214,9 @@ const FileUploadContainer: React.FunctionComponent<Props> = ({
                 onFileIconClick={displayFileViewer ? handleFileIconClick : undefined}
             />
             <UploadListContainer
+                ref={callbackRef}
                 addedFileList={getAddedFileListWithout()}
                 onClose={clearAddedFiles}
-                onRemove={removeAddedFiles}
                 successHint={t('The file has been uploaded. Please save the changes')}
                 data-test-notification-inner-container={true}
                 data-test-notification-for-field={true}

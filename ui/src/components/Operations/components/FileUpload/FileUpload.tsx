@@ -44,7 +44,7 @@ export const FileUpload = ({ mode, widget, operationInfo, children, uploadType =
         getAddedFileListWithout,
         clearAddedFiles,
         initializeNotSupportedFile,
-        removeAddedFiles
+        callbackRef
     } = useBulkUploadFiles(bcName, fileAccept)
 
     const beforeUpload = useCallback(
@@ -121,9 +121,9 @@ export const FileUpload = ({ mode, widget, operationInfo, children, uploadType =
                 )}
             </div>
             <UploadListContainer
+                ref={callbackRef}
                 addedFileList={getAddedFileListWithout()}
                 onClose={clearAddedFiles}
-                onRemove={removeAddedFiles}
                 data-test-notification-inner-container={true}
                 data-test-notification-for-action={true}
                 data-test-action-key={operationInfo?.actionKey}

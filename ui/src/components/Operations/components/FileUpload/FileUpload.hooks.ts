@@ -1,16 +1,45 @@
 import { useTranslation } from 'react-i18next'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import { AddedFileInfo } from '@components/Operations/components/FileUpload/FileUpload.interfaces'
 import { useAppDispatch } from '@store'
 import {
     getDoneIdsFromFilesInfo,
     getFileExtension,
     getFilePermissionFromAccept,
+    isFileUploadSuccess,
     needSendAllFiles
 } from '@components/Operations/components/FileUpload/FileUpload.utils'
 import { actions } from '@cxbox-ui/core'
 import { UPLOAD_FILE_STATUS, UPLOAD_TYPE } from '@components/Operations/components/FileUpload/FileUpload.constants'
 import { UploadFileStatus } from 'antd/es/upload/interface'
+import { useHover } from '@hooks/useHover'
+
+export const useTimeoutIdList = () => {
+    const list = useRef<NodeJS.Timeout[]>([])
+
+    const clearList = useCallback(() => {
+        list.current.forEach(timeoutId => clearTimeout(timeoutId))
+        list.current = []
+    }, [])
+
+    const removeItem = useCallback((timeoutId?: NodeJS.Timeout) => {
+        list.current.filter(id => id !== timeoutId)
+    }, [])
+
+    const addItem = useCallback((timeoutId?: NodeJS.Timeout) => {
+        timeoutId && list.current.push(timeoutId)
+    }, [])
+
+    return useMemo(
+        () => ({
+            items: list,
+            clear: clearList,
+            remove: removeItem,
+            add: addItem
+        }),
+        [addItem, clearList, removeItem]
+    )
+}
 
 export const useFileUploadHint = (accept?: string) => {
     const { t } = useTranslation()
@@ -185,28 +214,75 @@ export const useUploadFilesInfo = (accept?: string) => {
     }
 }
 
-export const useBulkUploadFiles = (bcName: string, accept?: string) => {
-    const { getAddedFileList, changeFileStatuses, ...rest } = useUploadFilesInfo(accept)
+export const useUploadFilesInfoWithAutoRemove = (accept?: string) => {
+    const uploadFilesInfo = useUploadFilesInfo(accept)
+    const { removeAddedFiles, getAddedFileList } = uploadFilesInfo
     const addedFileList = getAddedFileList()
+
+    const [callbackRef, isHovering] = useHover<HTMLDivElement>()
+    const timeoutIdList = useTimeoutIdList()
+
+    useEffect(() => {
+        timeoutIdList.clear()
+        const uidListForDeletion = addedFileList.filter(file => isFileUploadSuccess(file.status)).map(file => file.uid)
+
+        if (uidListForDeletion.length && !isHovering) {
+            const timeoutId = setTimeout(() => {
+                removeAddedFiles(uidListForDeletion)
+                timeoutIdList.remove(timeoutId)
+            }, 5000)
+
+            timeoutIdList.add(timeoutId)
+        }
+    }, [addedFileList, isHovering, removeAddedFiles, timeoutIdList])
+
+    // cancels deletion of uploaded files when hovering over a notification
+    useEffect(() => {
+        if (isHovering) {
+            timeoutIdList.clear()
+        }
+    }, [isHovering, timeoutIdList])
+
+    return {
+        callbackRef,
+        ...uploadFilesInfo
+    }
+}
+
+export const useBulkUploadFiles = (bcName: string, accept?: string) => {
+    const uploadFilesInfo = useUploadFilesInfoWithAutoRemove(accept)
+    const { getAddedFileList } = uploadFilesInfo
+    const addedFileList = getAddedFileList()
+
+    const uploadedFileIds = useRef<Record<string, true>>({})
+
+    const changeUploadedFileIds = useCallback((fileIds: string[]) => {
+        fileIds.forEach(id => (uploadedFileIds.current[id] = true))
+    }, [])
 
     const dispatch = useAppDispatch()
 
     useEffect(() => {
         if (needSendAllFiles(addedFileList) && bcName) {
-            const fileIdList = getDoneIdsFromFilesInfo(addedFileList)
+            const fileIdList = getDoneIdsFromFilesInfo(addedFileList).filter(id => !uploadedFileIds.current[id])
+            changeUploadedFileIds(fileIdList)
 
-            dispatch(
-                actions.bulkUploadFiles({
-                    isPopup: false,
-                    bcName: bcName,
-                    fileIds: fileIdList
-                })
-            )
+            fileIdList.length &&
+                dispatch(
+                    actions.bulkUploadFiles({
+                        isPopup: false,
+                        bcName: bcName,
+                        fileIds: fileIdList
+                    })
+                )
         }
-    }, [dispatch, addedFileList, bcName, changeFileStatuses])
+    }, [dispatch, addedFileList, bcName, changeUploadedFileIds])
 
-    return {
-        ...rest,
-        getAddedFileList
-    }
+    useEffect(() => {
+        if (addedFileList.length === 0) {
+            uploadedFileIds.current = {}
+        }
+    }, [addedFileList.length])
+
+    return uploadFilesInfo
 }

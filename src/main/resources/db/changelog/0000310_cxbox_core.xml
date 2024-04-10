@@ -4,7 +4,7 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd"
   logicalFilePath="db/changelog/0000310_cxbox_core.xml">
 
-  <changeSet author="initial" id="ADDITIONAL_FIELDS TABLE">
+  <changeSet author="cxbox" id="ADDITIONAL_FIELDS TABLE">
     <createTable remarks="Добавленные поля" tableName="ADDITIONAL_FIELDS">
       <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
         <constraints primaryKey="true"/>
@@ -43,7 +43,7 @@
     </createTable>
   </changeSet>
 
-  <changeSet id="BC_FILTER_GROUPS TABLE_USER" author="initial">
+  <changeSet id="BC_FILTER_GROUPS TABLE_USER" author="cxbox">
     <addColumn tableName="BC_FILTER_GROUPS">
       <column name="USER_ID" type="VARCHAR2(255)" remarks="Идентификатор пользователя">
         <constraints nullable="true"/>
@@ -51,7 +51,7 @@
     </addColumn>
   </changeSet>
 
-  <changeSet id="ADDITIONAL_FIELDS ADD DATE" author="initial">
+  <changeSet id="ADDITIONAL_FIELDS ADD DATE" author="cxbox">
   <addColumn tableName="ADDITIONAL_FIELDS">
   <column defaultValueComputed="current_timestamp" name="CREATED_DATE" remarks="Дата создания"
     type="TIMESTAMP(6)">

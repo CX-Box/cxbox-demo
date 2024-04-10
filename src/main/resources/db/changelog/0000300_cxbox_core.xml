@@ -5,7 +5,7 @@
   logicalFilePath="db/changelog/0000300_cxbox_core.xml">
 
 
-  <changeSet author="initial" id="BC_FILTER_GROUPS TABLE">
+  <changeSet author="cxbox" id="BC_FILTER_GROUPS TABLE">
     <createTable remarks="Группы фильтров" tableName="BC_FILTER_GROUPS">
       <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
         <constraints primaryKey="true"/>
@@ -36,7 +36,7 @@
       </column>
     </createTable>
   </changeSet>
-  <changeSet author="initial" id="BC_PROPERTIES TABLE">
+  <changeSet author="cxbox" id="BC_PROPERTIES TABLE">
     <createTable remarks="Поиск по умолчанию" tableName="BC_PROPERTIES">
       <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
         <constraints primaryKey="true"/>
@@ -72,7 +72,7 @@
         type="VARCHAR2(255)"/>
     </createTable>
   </changeSet>
-  <changeSet author="initial" id="CUSTOMIZABLE_RESPONSE_SERVICE TABLE">
+  <changeSet author="cxbox" id="CUSTOMIZABLE_RESPONSE_SERVICE TABLE">
     <createTable remarks="Кастомизируеммые inner - сервисы" tableName="CUSTOMIZABLE_RESPONSE_SERVICE">
       <column name="ID" remarks="Индентификатор" type="NUMBER(19, 0)">
         <constraints primaryKey="true" primaryKeyName="PK_CUSTOMIZABLE_RESPONSE_SERVI"/>
@@ -98,7 +98,7 @@
       </column>
     </createTable>
   </changeSet>
-  <changeSet author="initial" id="DEPT TABLE">
+  <changeSet author="cxbox" id="DEPT TABLE">
     <createTable remarks="Департамент" tableName="DEPT">
       <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
         <constraints primaryKey="true"/>
@@ -128,7 +128,7 @@
     </createTable>
   </changeSet>
 
-  <changeSet author="initial" id="DICTIONARY_ITEM TABLE">
+  <changeSet author="cxbox" id="DICTIONARY_ITEM TABLE">
     <createTable remarks="Значения простых справочников" tableName="DICTIONARY_ITEM">
       <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
         <constraints primaryKey="true"/>
@@ -160,14 +160,14 @@
       </column>
     </createTable>
   </changeSet>
-  <changeSet author="initial" id="DICTIONARY_ITEM_TR TABLE">
+  <changeSet author="cxbox" id="DICTIONARY_ITEM_TR TABLE">
     <createTable remarks="Переводы простых справочников" tableName="DICTIONARY_ITEM_TR">
       <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)"/>
       <column name="LANGUAGE" remarks="Язык" type="VARCHAR2(255)"/>
       <column name="VALUE" remarks="Значение" type="VARCHAR2(1500)"/>
     </createTable>
   </changeSet>
-  <changeSet author="initial" id="AUD_DICTIONARY TABLE">
+  <changeSet author="cxbox" id="AUD_DICTIONARY TABLE">
     <createTable tableName="AUD_DICTIONARY" remarks="Аудит справочников">
       <column name="ID" type="NUMBER(19)" remarks="Идентификатор">
         <constraints nullable="false" primaryKey="true"/>
@@ -192,7 +192,7 @@
       </column>
     </createTable>
   </changeSet>
-  <changeSet author="initial" id="DICTIONARY_LNK_RULE TABLE">
+  <changeSet author="cxbox" id="DICTIONARY_LNK_RULE TABLE">
     <createTable remarks="Правила связи справочников" tableName="DICTIONARY_LNK_RULE">
       <column name="ID" remarks="Индентификатор" type="NUMBER(19, 0)">
         <constraints primaryKey="true" primaryKeyName="PK_DICTIONARY_LNK_RULE"/>
@@ -231,7 +231,7 @@
       </column>
     </createTable>
   </changeSet>
-  <changeSet author="initial" id="DICTIONARY_LNK_RULE_COND TABLE">
+  <changeSet author="cxbox" id="DICTIONARY_LNK_RULE_COND TABLE">
     <createTable remarks="Условия применения правила на поле LOV" tableName="DICTIONARY_LNK_RULE_COND">
       <column name="ID" remarks="Индентификатор" type="NUMBER(19, 0)">
         <constraints primaryKey="true" primaryKeyName="PK_DICTIONARY_LNK_RULE_COND"/>
@@ -270,7 +270,7 @@
       </column>
     </createTable>
   </changeSet>
-  <changeSet author="initial" id="DICTIONARY_LNK_RULE_VALUE TABLE">
+  <changeSet author="cxbox" id="DICTIONARY_LNK_RULE_VALUE TABLE">
     <createTable remarks="Значения при применении правила" tableName="DICTIONARY_LNK_RULE_VALUE">
       <column name="ID" remarks="Индентификатор" type="NUMBER(19, 0)">
         <constraints primaryKey="true" primaryKeyName="PK_DICTIONARY_LNK_RULE_VALUE"/>
@@ -298,7 +298,7 @@
       </column>
     </createTable>
   </changeSet>
-  <changeSet author="initial" id="DICTIONARY_TYPE TABLE">
+  <changeSet author="cxbox" id="DICTIONARY_TYPE TABLE">
     <createTable remarks="Типы простых справочников" tableName="DICTIONARY_TYPE">
       <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
         <constraints primaryKey="true"/>
@@ -324,7 +324,7 @@
   </changeSet>
 
 
-  <changeSet author="initial" id="RESPONSIBILITIES TABLE">
+  <changeSet author="cxbox" id="RESPONSIBILITIES TABLE">
     <createTable remarks="Респонсибилити" tableName="RESPONSIBILITIES">
       <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
         <constraints primaryKey="true"/>
@@ -357,7 +357,7 @@
     </createTable>
   </changeSet>
 
-  <changeSet author="initial" id="SEARCH_SPEC TABLE">
+  <changeSet author="cxbox" id="SEARCH_SPEC TABLE">
     <createTable remarks="Критерии поиска" tableName="SEARCH_SPEC">
       <column name="ID" type="NUMBER(19, 0)">
         <constraints primaryKey="true"/>
@@ -390,7 +390,7 @@
     </createTable>
   </changeSet>
 
-  <changeSet author="initial" id="USERS TABLE">
+  <changeSet author="cxbox" id="USERS TABLE">
     <createTable remarks="Пользователи" tableName="USERS">
       <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
         <constraints primaryKey="true"/>
@@ -437,7 +437,7 @@
     </createTable>
   </changeSet>
 
-  <changeSet author="initial" id="USER_ROLE TABLE">
+  <changeSet author="cxbox" id="USER_ROLE TABLE">
     <createTable remarks="Роли пользователя" tableName="USER_ROLE">
       <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
         <constraints primaryKey="true"/>
@@ -473,7 +473,7 @@
     </createTable>
   </changeSet>
 
-  <changeSet author="initial" id="BC_FILTER_GROUPS INDEXES">
+  <changeSet author="cxbox" id="BC_FILTER_GROUPS INDEXES">
     <addUniqueConstraint columnNames="NAME, BC" constraintName="BC_FILTER_GROUPS_UNIQUE"
       tableName="BC_FILTER_GROUPS"/>
     <createIndex indexName="BC_FILTER_GROUPS_UNIQUE_INDEX" tableName="BC_FILTER_GROUPS" unique="true">
@@ -487,7 +487,7 @@
       <column defaultValueNumeric="1" name="CREATED_BY_USER_ID"/>
     </createIndex>
   </changeSet>
-  <changeSet author="initial" id="BC_PROPERTIES INDEXES">
+  <changeSet author="cxbox" id="BC_PROPERTIES INDEXES">
     <addUniqueConstraint columnNames="BC" constraintName="BC_PROPERTIES_BC" tableName="BC_PROPERTIES"/>
     <createIndex indexName="BC_PROPERTIES_BC_INDEX" tableName="BC_PROPERTIES" unique="true">
       <column name="BC"/>
@@ -500,7 +500,7 @@
     </createIndex>
   </changeSet>
 
-  <changeSet author="initial" id="DICTIONARY_ITEM INDEXES">
+  <changeSet author="cxbox" id="DICTIONARY_ITEM INDEXES">
     <addUniqueConstraint columnNames="TYPE, KEY" constraintName="DIC_SELECT_UNIQUE_TYPE_KEY"
       tableName="DICTIONARY_ITEM"/>
     <createIndex indexName="DIC_SELECT_UNIQUE_TYPE_KEY_INDEX" tableName="DICTIONARY_ITEM" unique="true">
@@ -520,7 +520,7 @@
       <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"/>
     </createIndex>
   </changeSet>
-  <changeSet author="initial" id="DICTIONARY_ITEM_TR INDEXES" dbms="oracle">
+  <changeSet author="cxbox" id="DICTIONARY_ITEM_TR INDEXES" dbms="oracle">
     <createIndex indexName="DICTIONARY_ITEM_TR_PK" tableName="DICTIONARY_ITEM_TR" unique="true">
       <column name="ID"/>
       <column name="LANGUAGE"/>
@@ -528,7 +528,7 @@
     <addPrimaryKey columnNames="ID, LANGUAGE" constraintName="DICTIONARY_ITEM_TR_PK"
       forIndexName="DICTIONARY_ITEM_TR_PK" tableName="DICTIONARY_ITEM_TR"/>
   </changeSet>
-  <changeSet author="initial" id="DICTIONARY_ITEM_TR INDEXES" dbms="postgresql">
+  <changeSet author="cxbox" id="DICTIONARY_ITEM_TR INDEXES" dbms="postgresql">
     <createIndex indexName="DICTIONARY_ITEM_IND3" tableName="DICTIONARY_ITEM_TR" unique="true">
       <column name="ID"/>
       <column name="LANGUAGE"/>
@@ -538,7 +538,7 @@
   </changeSet>
 
 
-  <changeSet author="initial" id="USERS INDEXES">
+  <changeSet author="cxbox" id="USERS INDEXES">
     <addUniqueConstraint columnNames="LOGIN" constraintName="UK_LOGIN_NAME" tableName="USERS"/>
     <createIndex indexName="UK_LOGIN_NAME_INDEX" tableName="USERS" unique="true">
       <column name="LOGIN"/>
@@ -558,7 +558,7 @@
     </createIndex>
   </changeSet>
 
-  <changeSet author="initial" id="USER_ROLE INDEXES">
+  <changeSet author="cxbox" id="USER_ROLE INDEXES">
     <addUniqueConstraint columnNames="USER_ID, INTERNAL_ROLE_CD" constraintName="USER_ROLE_UNIQUE"
       tableName="USER_ROLE"/>
     <createIndex indexName="USER_ROLE_UNIQUE_INDEX" tableName="USER_ROLE" unique="true">
@@ -577,7 +577,7 @@
     </createIndex>
   </changeSet>
 
-  <changeSet author="initial" id="DEPT INDEXES">
+  <changeSet author="cxbox" id="DEPT INDEXES">
     <createIndex indexName="DEPT_IND1" tableName="DEPT">
       <column defaultValueNumeric="1" name="CREATED_BY_USER_ID"/>
     </createIndex>
@@ -585,7 +585,7 @@
       <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"/>
     </createIndex>
   </changeSet>
-  <changeSet author="initial" id="DICTIONARY_TYPE INDEXES">
+  <changeSet author="cxbox" id="DICTIONARY_TYPE INDEXES">
     <createIndex indexName="DICTIONARY_TYPE_IND1" tableName="DICTIONARY_TYPE">
       <column defaultValueNumeric="1" name="CREATED_BY_USER_ID"/>
     </createIndex>
@@ -594,7 +594,7 @@
     </createIndex>
   </changeSet>
 
-  <changeSet author="initial" id="RESPONSIBILITIES INDEXES">
+  <changeSet author="cxbox" id="RESPONSIBILITIES INDEXES">
     <createIndex indexName="RESPONSIBILITIES_IND1" tableName="RESPONSIBILITIES">
       <column defaultValueNumeric="1" name="CREATED_BY_USER_ID"/>
     </createIndex>
@@ -602,20 +602,20 @@
       <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"/>
     </createIndex>
   </changeSet>
-  <changeSet author="initial" dbms="oracle" id="SEARCH_SPEC INDEXES">
+  <changeSet author="cxbox" dbms="oracle" id="SEARCH_SPEC INDEXES">
     <createIndex indexName="SEARCH_SPEC_SVC_NAME_FK" tableName="SEARCH_SPEC" unique="true">
       <column computed="true"
         name="CASE &quot;TYPE&quot; WHEN 'BC' THEN &quot;BC_NAME&quot;||&quot;NAME&quot;||&quot;SERVICE_NAME&quot; WHEN 'LINK' THEN &quot;BC_NAME&quot;||&quot;NAME&quot;||&quot;SERVICE_NAME&quot; WHEN 'SECURITY' THEN &quot;ROLE_CD&quot;||&quot;NAME&quot;||&quot;SERVICE_NAME&quot; ELSE NULL END"/>
     </createIndex>
   </changeSet>
-  <changeSet author="initial" dbms="postgresql" id="SEARCH_SPEC INDEXES">
+  <changeSet author="cxbox" dbms="postgresql" id="SEARCH_SPEC INDEXES">
     <createIndex indexName="SEARCH_SPEC_SVC_NAME_FK" tableName="SEARCH_SPEC" unique="true">
       <column computed="true"
         name="(CASE 'TYPE' WHEN 'BC' THEN 'BC_NAME' || 'NAME' || 'SERVICE_NAME' WHEN 'LINK' THEN 'BC_NAME' || 'NAME' || 'SERVICE_NAME' WHEN 'SECURITY' THEN 'ROLE_CD' || 'NAME' || 'SERVICE_NAME' ELSE NULL END)"/>
     </createIndex>
   </changeSet>
 
-  <changeSet author="initial" id="DICTIONARY_ITEM CONSTRAINTS">
+  <changeSet author="cxbox" id="DICTIONARY_ITEM CONSTRAINTS">
     <addForeignKeyConstraint baseColumnNames="DICTIONARY_TYPE_ID" baseTableName="DICTIONARY_ITEM"
       constraintName="CONS_DICTIONARY_TYPE_ID" deferrable="true" initiallyDeferred="true"
       onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
@@ -629,14 +629,14 @@
       initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
       referencedColumnNames="ID" referencedTableName="USERS" validate="true"/>
   </changeSet>
-  <changeSet author="initial" id="DICTIONARY_ITEM_TR CONSTRAINTS">
+  <changeSet author="cxbox" id="DICTIONARY_ITEM_TR CONSTRAINTS">
     <addForeignKeyConstraint baseColumnNames="ID" baseTableName="DICTIONARY_ITEM_TR"
       constraintName="DICTIONARY_ITEM_TR_FK" deferrable="false" initiallyDeferred="false"
       onDelete="CASCADE" onUpdate="CASCADE" referencedColumnNames="ID"
       referencedTableName="DICTIONARY_ITEM" validate="true"/>
   </changeSet>
 
-  <changeSet author="initial" id="BC_FILTER_GROUPS CONSTRAINTS">
+  <changeSet author="cxbox" id="BC_FILTER_GROUPS CONSTRAINTS">
     <addForeignKeyConstraint baseColumnNames="CREATED_BY_USER_ID" baseTableName="BC_FILTER_GROUPS"
       constraintName="FK_BC_FILTER_GROUPS_CREATED_BY" deferrable="false"
       initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
@@ -646,7 +646,7 @@
       initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
       referencedColumnNames="ID" referencedTableName="USERS" validate="true"/>
   </changeSet>
-  <changeSet author="initial" id="CUSTOMIZABLE_RESPONSE_SERVICE CONSTRAINTS">
+  <changeSet author="cxbox" id="CUSTOMIZABLE_RESPONSE_SERVICE CONSTRAINTS">
     <addForeignKeyConstraint baseColumnNames="CREATED_BY_USER_ID" baseTableName="CUSTOMIZABLE_RESPONSE_SERVICE"
       constraintName="FK_CRSRVS_CB" deferrable="false" initiallyDeferred="false"
       onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
@@ -656,7 +656,7 @@
       onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
       referencedTableName="USERS" validate="true"/>
   </changeSet>
-  <changeSet author="initial" id="BC_PROPERTIES CONSTRAINTS">
+  <changeSet author="cxbox" id="BC_PROPERTIES CONSTRAINTS">
     <addForeignKeyConstraint baseColumnNames="CREATED_BY_USER_ID" baseTableName="BC_PROPERTIES"
       constraintName="FK_DEFBCPROPS_CREATED_BY" deferrable="false" initiallyDeferred="false"
       onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
@@ -666,7 +666,7 @@
       onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
       referencedTableName="USERS" validate="true"/>
   </changeSet>
-  <changeSet author="initial" id="DEPT CONSTRAINTS">
+  <changeSet author="cxbox" id="DEPT CONSTRAINTS">
     <addForeignKeyConstraint baseColumnNames="CREATED_BY_USER_ID" baseTableName="DEPT"
       constraintName="FK_DEPT_CREATED_BY" deferrable="false" initiallyDeferred="false"
       onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
@@ -676,7 +676,7 @@
       onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
       referencedTableName="USERS" validate="true"/>
   </changeSet>
-  <changeSet author="initial" id="DICTIONARY_TYPE CONSTRAINTS">
+  <changeSet author="cxbox" id="DICTIONARY_TYPE CONSTRAINTS">
     <addForeignKeyConstraint baseColumnNames="CREATED_BY_USER_ID" baseTableName="DICTIONARY_TYPE"
       constraintName="FK_DICTIONARY_TYPE_CREATED_BY" deferrable="false"
       initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
@@ -687,7 +687,7 @@
       referencedColumnNames="ID" referencedTableName="USERS" validate="true"/>
   </changeSet>
 
-  <changeSet author="initial" id="DICTIONARY_LNK_RULE_COND CONSTRAINTS">
+  <changeSet author="cxbox" id="DICTIONARY_LNK_RULE_COND CONSTRAINTS">
     <addForeignKeyConstraint baseColumnNames="CREATED_BY_USER_ID" baseTableName="DICTIONARY_LNK_RULE_COND"
       constraintName="FK_DLNKRULECOND_CB" deferrable="false" initiallyDeferred="false"
       onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
@@ -701,7 +701,7 @@
       onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
       referencedTableName="USERS" validate="true"/>
   </changeSet>
-  <changeSet author="initial" id="DICTIONARY_LNK_RULE_VALUE CONSTRAINTS">
+  <changeSet author="cxbox" id="DICTIONARY_LNK_RULE_VALUE CONSTRAINTS">
     <addForeignKeyConstraint baseColumnNames="CREATED_BY_USER_ID" baseTableName="DICTIONARY_LNK_RULE_VALUE"
       constraintName="FK_DLNKRULEVAL_CB" deferrable="false" initiallyDeferred="false"
       onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
@@ -715,7 +715,7 @@
       onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
       referencedTableName="USERS" validate="true"/>
   </changeSet>
-  <changeSet author="initial" id="DICTIONARY_LNK_RULE CONSTRAINTS">
+  <changeSet author="cxbox" id="DICTIONARY_LNK_RULE CONSTRAINTS">
     <addForeignKeyConstraint baseColumnNames="CREATED_BY_USER_ID" baseTableName="DICTIONARY_LNK_RULE"
       constraintName="FK_DLNKRULE_CB" deferrable="false" initiallyDeferred="false"
       onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
@@ -730,7 +730,7 @@
       referencedTableName="USERS" validate="true"/>
   </changeSet>
 
-  <changeSet author="initial" id="RESPONSIBILITIES CONSTRAINTS">
+  <changeSet author="cxbox" id="RESPONSIBILITIES CONSTRAINTS">
     <addForeignKeyConstraint baseColumnNames="CREATED_BY_USER_ID" baseTableName="RESPONSIBILITIES"
       constraintName="FK_RESPONSIBILITIES_CREATED_BY" deferrable="false"
       initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
@@ -741,7 +741,7 @@
       referencedColumnNames="ID" referencedTableName="USERS" validate="true"/>
   </changeSet>
 
-  <changeSet author="initial" id="USERS CONSTRAINTS">
+  <changeSet author="cxbox" id="USERS CONSTRAINTS">
     <addForeignKeyConstraint baseColumnNames="CREATED_BY_USER_ID" baseTableName="USERS"
       constraintName="FK_USER_CREATED_BY" deferrable="false" initiallyDeferred="false"
       onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
@@ -751,7 +751,7 @@
       onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
       referencedTableName="USERS" validate="true"/>
   </changeSet>
-  <changeSet author="initial" id="USER_ROLE CONSTRAINTS">
+  <changeSet author="cxbox" id="USER_ROLE CONSTRAINTS">
     <addForeignKeyConstraint baseColumnNames="CREATED_BY_USER_ID" baseTableName="USER_ROLE"
       constraintName="FK_USER_ROLE_CREATED_BY" deferrable="false" initiallyDeferred="false"
       onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID"
@@ -766,7 +766,7 @@
       referencedColumnNames="ID" referencedTableName="USERS" validate="true"/>
   </changeSet>
 
-  <changeSet author="initial" id="SEARCH_SPEC CONSTRAINTS">
+  <changeSet author="cxbox" id="SEARCH_SPEC CONSTRAINTS">
     <addForeignKeyConstraint baseColumnNames="CREATED_BY_USER_ID" baseTableName="SEARCH_SPEC"
       constraintName="SEARCH_SPEC_CREATED_USER_FK" deferrable="false"
       initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
@@ -777,7 +777,7 @@
       referencedColumnNames="ID" referencedTableName="USERS" validate="true"/>
   </changeSet>
 
-  <changeSet author="initial" id="INITIAL DATA">
+  <changeSet author="cxbox" id="INITIAL DATA">
     <loadData tableName="USERS" encoding="UTF-8" separator=";" quotchar="&quot;"
       file="db/data/CXBOX-USERS.csv">
       <column header="ID" name="ID" type="NUMERIC"/>
@@ -805,13 +805,13 @@
     </loadData>
   </changeSet>
 
-  <changeSet author="initial" id="USERS CONSTRAINTS(2)">
+  <changeSet author="cxbox" id="USERS CONSTRAINTS(2)">
     <addForeignKeyConstraint baseColumnNames="DEPT_ID" baseTableName="USERS" constraintName="USERS_FK_1"
       deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
       referencedColumnNames="ID" referencedTableName="DEPT" validate="true"/>
   </changeSet>
 
-  <changeSet author="initial" id="INITIAL DATA(2)">
+  <changeSet author="cxbox" id="INITIAL DATA(2)">
     <loadData tableName="USER_ROLE" encoding="UTF-8" separator=";" quotchar="&quot;"
       file="db/data/CXBOX-USER_ROLE.csv">
       <column header="ID" name="ID" type="NUMERIC"/>
@@ -822,7 +822,7 @@
     </loadData>
   </changeSet>
 
-  <changeSet author="initial" id="DICTIONARIES" runOnChange="true">
+  <changeSet author="cxbox" id="DICTIONARIES" runOnChange="true">
     <delete tableName="DICTIONARY_ITEM_TR"/>
 
     <loadUpdateData tableName="DICTIONARY_TYPE" primaryKey="ID" encoding="UTF-8" separator=";" quotchar="&quot;"

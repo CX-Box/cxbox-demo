@@ -11,7 +11,7 @@ import org.cxbox.core.dao.impl.AbstractAnySourceBaseDAO;
 import org.demo.dto.cxbox.anysource.ClientStatsDTO;
 import org.demo.entity.enums.ClientStatus;
 import org.demo.repository.ClientRepository;
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
@@ -66,7 +66,7 @@ public class ClientStatsDao extends AbstractAnySourceBaseDAO<ClientStatsDTO> imp
 		throw new IllegalStateException();
 	}
 
-	@NotNull
+	@NonNull
 	private List<ClientStatsDTO> getClientStats() {
 		List<ClientStatsDTO> result = new ArrayList<>(ROWS_TOTAL);
 		ClientStatsDTO newClients = new ClientStatsDTO()

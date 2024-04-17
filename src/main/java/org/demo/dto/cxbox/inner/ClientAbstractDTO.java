@@ -37,6 +37,10 @@ public abstract class ClientAbstractDTO extends DataResponseDTO {
 
 	private String briefId;
 
+	private String filePreviewTitle = "My Lovely File";
+
+	private String filePreviewHint = "ver nice!";
+
 	ClientAbstractDTO(Client client) {
 		this.id = client.getId().toString();
 		this.address = client.getAddress();

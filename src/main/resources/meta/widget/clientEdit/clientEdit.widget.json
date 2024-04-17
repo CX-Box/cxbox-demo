@@ -35,15 +35,17 @@
       "type": "multipleSelect"
     },
     {
-      "label": "briefId",
-      "key": "briefId",
-      "type": "hidden"
-    },
-    {
       "label": "Brief",
       "key": "brief",
       "type": "fileUpload",
-      "fileIdKey": "briefId"
+      "fileIdKey": "briefId",
+      "preview": {
+        "enabled": true,
+        "titleKey": "filePreviewTitle",
+        "hintKey": "filePreviewHint",
+        "mode": "popup",
+        "miniPreview": true
+      }
     }
   ],
   "options": {

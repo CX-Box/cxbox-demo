@@ -17,7 +17,7 @@
       "fileIdKey": "fileId",
       "preview": {
         "enabled": true,
-        "previewMode": "popup"
+        "mode": "popup"
       }
     },
     {

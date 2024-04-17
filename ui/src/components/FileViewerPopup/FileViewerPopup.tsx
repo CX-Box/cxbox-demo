@@ -106,8 +106,8 @@ function FileViewerPopup() {
                     <Header
                         className={styles.popupHeader}
                         theme="light"
-                        title={trimString(fileName)}
-                        hint="Additional attribute"
+                        title={preview?.titleKey ? record?.[preview?.titleKey] : trimString(fileName)}
+                        hint={preview?.hintKey ? record?.[preview?.hintKey] : undefined}
                         onClose={handleCancel}
                         onDownload={handleDownload}
                         onFullscreen={() => setFullscreen(true)}

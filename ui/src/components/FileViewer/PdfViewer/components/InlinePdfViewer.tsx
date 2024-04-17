@@ -23,18 +23,21 @@ function InlinePdfViewer({ mode, hideToolbar, isFirefox, ...restProps }: InlineP
         const objectElement = objectRef.current
         const handleLoad = () => {
             setLoading(false)
+
             objectElement?.removeEventListener('load', handleLoad)
             objectElement?.removeEventListener('error', handleLoad)
         }
 
         if (src) {
             setLoading(true)
+
             objectElement?.addEventListener('load', handleLoad)
             objectElement?.addEventListener('error', handleLoad)
         }
 
         return () => {
             objectElement?.removeEventListener('load', handleLoad)
+            objectElement?.removeEventListener('error', handleLoad)
         }
     }, [src])
 
@@ -49,6 +52,7 @@ function InlinePdfViewer({ mode, hideToolbar, isFirefox, ...restProps }: InlineP
                 }}
             >
                 <object
+                    key={src}
                     ref={objectRef}
                     title="pdf viewer"
                     {...restProps}

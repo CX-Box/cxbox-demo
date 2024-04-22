@@ -1,43 +1,44 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import { actions } from '@cxbox-ui/core'
-import { Form, Input, Button, Icon } from 'antd'
+import { Form, Input, Button, FormProps } from 'antd-5'
 import styles from './Login.less'
 import { useAppSelector } from '@store'
 import { useTranslation } from 'react-i18next'
+import { LockOutlined, UserOutlined } from '@ant-design/icons'
+
+type FieldType = {
+    login?: string
+    password?: string
+}
 
 export const Login: React.FC = () => {
     const dispatch = useDispatch()
     const spin = useAppSelector(state => state.session.loginSpin)
     const errorMsg = useAppSelector(state => state.session.errorMsg) ?? ''
-    const [login, setLogin] = React.useState('vanilla')
-    const [password, setPassword] = React.useState('vanilla')
     const { t } = useTranslation()
 
-    const onLogin = (login: string, password: string) => {
-        dispatch(actions.login({ login, password }))
-    }
-
-    const handleLogin = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setLogin(event.target.value)
-    }
-
-    const handlePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setPassword(event.target.value)
-    }
-
-    const handleClick = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault()
-        onLogin(login, password)
+    const handleLogin: FormProps<FieldType>['onFinish'] = ({ login, password }) => {
+        if (login && password) {
+            dispatch(actions.login({ login, password }))
+        }
     }
 
     return (
-        <Form onSubmit={handleClick}>
-            <Form.Item>
-                <Input prefix={<Icon type="user" />} placeholder="Username" value={login} onChange={handleLogin} />
+        <Form
+            name={'Login Form'}
+            labelCol={{ span: 8 }}
+            wrapperCol={{ span: 24 }}
+            style={{ maxWidth: 600 }}
+            onFinish={handleLogin}
+            autoComplete="off"
+            initialValues={{ login: 'vanilla', password: 'vanilla' }}
+        >
+            <Form.Item<FieldType> name={'login'} rules={[{ required: true, message: 'Please, enter your login!' }]}>
+                <Input placeholder="Username" prefix={<UserOutlined />} />
             </Form.Item>
-            <Form.Item>
-                <Input.Password prefix={<Icon type="lock" />} placeholder="Password" value={password} onChange={handlePassword} />
+            <Form.Item<FieldType> name={'password'} rules={[{ required: true, message: 'Please, enter your password!' }]}>
+                <Input prefix={<LockOutlined />} placeholder="Password" type="password" />
             </Form.Item>
             <Form.Item>
                 <Button block autoFocus loading={spin} type="primary" htmlType="submit">

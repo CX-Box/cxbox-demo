@@ -1,0 +1,42 @@
+{
+  "name": "jobStats",
+  "title": "",
+  "type": "StatsBlock",
+  "bc": "JobsStats",
+  "fields": [
+    {
+      "title": "title",
+      "key": "title",
+      "type": "input"
+    },
+    {
+      "title": "value",
+      "key": "value",
+      "type": "number",
+      "bgColorKey": "color"
+    },
+
+    {
+      "title": "icon",
+      "key": "icon",
+      "type": "input"
+    },
+    {
+      "title": "description",
+      "key": "description",
+      "type": "hint"
+    }
+  ],
+  "options": {
+    "stats": {
+      "valueFieldKey": "value",
+      "titleFieldKey": "title",
+      "iconFieldKey": "icon",
+      "descriptionFieldKey": "description"
+    },
+    "actionGroups": {
+      "include": [
+      ]
+    }
+  }
+}

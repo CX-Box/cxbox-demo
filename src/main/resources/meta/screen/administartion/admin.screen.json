@@ -3,9 +3,9 @@
   "icon": "calendar",
   "title": "Administration",
   "order": 4,
-  "primaryViewName": "joblist",
+  "primaryViewName": "scheduledJobs",
   "primaryViews": [
-    "joblist"
+    "scheduledJobs"
   ],
   "navigation": {
     "menu": [
@@ -13,7 +13,22 @@
         "title": "Job Administration",
         "child": [
           {
-            "viewName": "joblist"
+            "viewName": "scheduledJobs"
+          },
+          {
+            "viewName": "enqueuedJobs"
+          },
+          {
+            "viewName": "processingJobs"
+          },
+          {
+            "viewName": "succeededJobs"
+          },
+          {
+            "viewName": "failedJobs"
+          },
+          {
+            "viewName": "deletedJobs"
           }
         ]
       },

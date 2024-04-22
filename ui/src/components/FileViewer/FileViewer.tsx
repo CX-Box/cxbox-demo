@@ -52,7 +52,7 @@ const FileViewer = forwardRef<FileViewerHandlers | undefined, FileViewerProps>(
         const viewerMode = isCompact ? 'light' : 'dark'
 
         const viewerMap: Record<FileViewerType, JSX.Element | null> = {
-            image: <Image key={url} alt={alt} src={url} mode={viewerMode} />,
+            image: <Image alt={alt} src={url} mode={viewerMode} />,
             pdf: (
                 <PdfViewer
                     displayMode="inline"

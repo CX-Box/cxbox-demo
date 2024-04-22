@@ -11,19 +11,24 @@ function Image({ alt, src, mode, ...restProps }: ImageProps) {
     const imageRef = useRef<HTMLImageElement>(null)
 
     useEffect(() => {
-        setError(false)
         const handleError = () => {
             setError(true)
         }
 
         const imageElement = imageRef.current
 
-        if (imageElement) {
+        if (imageElement && !error) {
             imageElement.addEventListener('error', handleError)
         }
 
         return () => {
             imageElement?.removeEventListener('error', handleError)
+        }
+    }, [error, src])
+
+    useEffect(() => {
+        return () => {
+            setError(false)
         }
     }, [src])
 

@@ -51,6 +51,7 @@
   "options": {
     "actionGroups": {
       "include": [
+        "generate"
       ]
     },
     "layout": {

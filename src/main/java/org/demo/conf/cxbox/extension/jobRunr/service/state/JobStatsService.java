@@ -1,13 +1,11 @@
 package org.demo.conf.cxbox.extension.jobRunr.service.state;
 
-import java.util.UUID;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.AnySourceVersionAwareResponseService;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.cxbox.core.dto.rowmeta.PostAction;
 import org.cxbox.core.service.action.Actions;
-import org.demo.conf.cxbox.extension.jobRunr.dto.JobAdminDTO;
 import org.demo.conf.cxbox.extension.jobRunr.dto.JobStatsDTO;
 import org.demo.controller.CxboxRestController;
 import org.springframework.stereotype.Service;

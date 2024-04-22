@@ -1,6 +1,6 @@
 {
   "name": "jobListHeader",
-  "title": "Scheduled Jobs Administration",
+  "title": "",
   "type": "HeaderWidget",
   "bc": "scheduledJobs",
   "fields": []

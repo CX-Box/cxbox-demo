@@ -3,6 +3,7 @@ package org.demo.service.cxbox.inner;
 
 import static org.cxbox.api.data.dao.SpecificationUtils.and;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import org.cxbox.core.crudma.bc.BusinessComponent;
@@ -30,6 +31,9 @@ import org.demo.entity.enums.FieldOfActivity;
 import org.demo.repository.ClientRepository;
 import org.demo.repository.MeetingRepository;
 import org.demo.repository.core.UserRepository;
+import org.demo.service.mail.MailSendingService;
+import org.jobrunr.scheduling.BackgroundJob;
+import org.jobrunr.scheduling.JobRequestScheduler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -49,6 +53,12 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 
 	@Autowired
 	private SessionService sessionService;
+
+	@Autowired
+	private MailSendingService mailSendingService;
+
+	@Autowired
+	private JobRequestScheduler jobRequestScheduler;
 
 	public ClientReadWriteService() {
 		super(ClientWriteDTO.class, Client.class, null, ClientReadWriteMeta.class);
@@ -110,6 +120,12 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 					ClientEditStep nextStep = ClientEditStep.getNextEditStep(client).get();
 					client.setEditStep(nextStep);
 					clientRepository.save(client);
+
+					BackgroundJob.<MailSendingService>schedule(LocalDateTime.now().plusHours(5), x -> x.stats("save pressed job"));
+
+				/*	jobRequestScheduler.schedule(
+							Instant.now().plus(24, ChronoUnit.HOURS),
+							new SendNewlyRegisteredEmailJobRequest());*/
 					return new ActionResultDTO<ClientWriteDTO>().setAction(
 							PostAction.drillDown(
 									DrillDownType.INNER,

@@ -6,6 +6,7 @@ import org.cxbox.core.crudma.bc.EnumBcIdentifier;
 import org.cxbox.core.crudma.bc.impl.AbstractEnumBcSupplier;
 import org.cxbox.core.crudma.bc.impl.BcDescription;
 import org.demo.service.cxbox.anysource.clientstats.ClientStatsService;
+import org.demo.conf.cxbox.extension.jobRunr.service.JobRunrAdminService;
 import org.demo.service.cxbox.anysource.dadatacompany.CompanyService;
 import org.demo.service.cxbox.anysource.lov.LovReadService;
 import org.demo.service.cxbox.anysource.saleprogress.SaleProgressStatsService;
@@ -39,6 +40,7 @@ public enum CxboxRestController implements EnumBcIdentifier {
 	// @formatter:on
 	clientStats(ClientStatsService.class),
 	lovExternal(LovReadService.class),
+	jobRunrAdmin(JobRunrAdminService.class),
 
 	client(ClientReadWriteService.class),
 		contact(client, ClientContactService.class),

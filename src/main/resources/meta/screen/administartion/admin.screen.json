@@ -3,12 +3,20 @@
   "icon": "calendar",
   "title": "Administration",
   "order": 4,
-  "primaryViewName": "lovlistexternal",
+  "primaryViewName": "joblist",
   "primaryViews": [
-    "lovlistexternal"
+    "joblist"
   ],
   "navigation": {
     "menu": [
+      {
+        "title": "Job Administration",
+        "child": [
+          {
+            "viewName": "joblist"
+          }
+        ]
+      },
       {
         "title": "External Administration",
         "child": [

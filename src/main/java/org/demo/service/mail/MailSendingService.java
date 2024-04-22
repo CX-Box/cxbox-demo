@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.cxbox.api.service.session.InternalAuthorizationService;
 import org.cxbox.core.dto.DrillDownType;
 import org.demo.conf.cxbox.extension.notification.NotificationService;
@@ -13,6 +14,7 @@ import org.demo.conf.cxbox.extension.notification.SocketNotificationDTO;
 import org.demo.conf.cxbox.extension.notification.SocketNotificationErrorDTO;
 import org.demo.conf.cxbox.extension.notification.enums.SocketNotificationErrorType;
 import org.demo.entity.core.User;
+import org.jobrunr.jobs.annotations.Job;
 import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailParseException;
@@ -22,6 +24,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MailSendingService {
@@ -35,6 +38,11 @@ public class MailSendingService {
 	private final InternalAuthorizationService authzService;
 
 	private static final String HTTP = "http://";
+
+	@Job(name = "The sample job with variable %0", retries = 2)
+	public void stats(String variable) {
+		log.info(variable);
+	}
 
 	@Async
 	public void send(Optional<String> mailTo, String subject, String message, User currentUser) {

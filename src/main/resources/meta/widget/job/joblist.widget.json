@@ -1,0 +1,61 @@
+{
+  "name": "joblist",
+  "title": "",
+  "type": "List",
+  "bc": "jobRunrAdmin",
+  "fields": [
+    {
+      "title": "id",
+      "key": "id",
+      "type": "input"
+    },
+    {
+      "title": "state",
+      "key": "state",
+      "type": "input"
+    },
+    {
+      "title": "jobasjson",
+      "key": "jobasjson",
+      "type": "text"
+    },
+    {
+      "title": "createdat",
+      "key": "createdat",
+      "type": "dateTime"
+    },
+    {
+      "title": "updatedat",
+      "key": "updatedat",
+      "type": "dateTime"
+    },
+    {
+      "title": "scheduledat",
+      "key": "scheduledat",
+      "type": "dateTime"
+    },
+    {
+      "title": "recurringjobid",
+      "key": "recurringjobid",
+      "type": "input"
+    },
+    {
+      "title": "version",
+      "key": "version",
+      "type": "number"
+    },
+    {
+      "title": "jobsignature",
+      "key": "jobsignature",
+      "type": "input"
+    }
+  ],
+  "options": {
+    "actionGroups": {
+      "include": [
+        "change",
+        "deleteLov"
+      ]
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "name": "jobListHeader",
+  "title": "Scheduled Jobs Administration",
+  "type": "HeaderWidget",
+  "bc": "jobRunrAdmin",
+  "fields": []
+}

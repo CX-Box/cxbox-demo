@@ -1,0 +1,27 @@
+{
+  "name": "generationList",
+  "title": "",
+  "type": "List",
+  "bc": "generation",
+  "fields": [
+    {
+      "title": "id",
+      "key": "id",
+      "type": "input",
+      "drillDown": "true"
+    },
+    {
+      "title": "Name",
+      "key": "name",
+      "type": "input"
+    }
+  ],
+  "options": {
+    "actionGroups": {
+      "include": [
+        "create",
+        "save"
+      ]
+    }
+  }
+}

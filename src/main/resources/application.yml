@@ -78,7 +78,7 @@ spring:
     password: ${DATABASE_PASSWORD:postgres}
   liquibase:
     change-log: classpath:/db/db.changelog-master.xml
-    drop-first: true
+    drop-first: false
     contexts: local
   cache:
     type: SIMPLE
@@ -99,7 +99,7 @@ spring:
         jdbc:
           batch_size: 100
         hbm2ddl:
-          auto: ${HIBERNATE_DDL_AUTO:none}
+          auto: ${HIBERNATE_DDL_AUTO:update}
     hibernate:
       naming:
         physical-strategy: org.cxbox.model.core.hbn.ImprovedPhysicalNamingStrategy

@@ -1,3 +1,4 @@
 ID;BC;PAGE_LIMIT;SORT;FILTER
 1;'meetingEdit';5;_sort.0.desc=agenda;'""'
 2;'companySuggestionPickList';10;NULL;'""'
+3;'getGenerationDocument';20;NULL;'""'

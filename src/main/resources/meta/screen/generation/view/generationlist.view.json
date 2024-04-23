@@ -1,0 +1,21 @@
+{
+  "name": "generationlist",
+  "title": "Meeting List",
+  "template": "DashboardView",
+  "url": "/screen/generation/view/generationlist",
+  "widgets": [
+    {
+      "widgetName": "generationListHeader",
+      "position": 0,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "generationList",
+      "position": 10,
+      "gridWidth": 24
+    }
+  ],
+  "rolesAllowed": [
+   "CXBOX_USER", "ADMIN"
+  ]
+}

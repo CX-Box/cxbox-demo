@@ -1,0 +1,22 @@
+{
+  "name": "generation",
+  "icon": "calendar",
+  "order": 1,
+  "title": "Generations",
+  "navigation": {
+    "menu": [
+      {
+        "title": "Generations",
+        "child": [
+          {
+            "viewName": "generationlist"
+          },
+          {
+            "viewName": "generation",
+            "hidden" : true
+          }
+        ]
+      }
+    ]
+  }
+}

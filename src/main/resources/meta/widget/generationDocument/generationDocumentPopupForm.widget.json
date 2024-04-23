@@ -1,0 +1,34 @@
+{
+  "name": "generationDocumentPopupForm",
+  "title": "",
+  "type": "DocumentFormPopup",
+  "bc": "getGenerationDocument",
+  "fields": [
+    {
+      "label": "Field Key For Content Type",
+      "key": "fieldKeyForContentType",
+      "type": "hidden"
+    },
+    {
+      "label": "",
+      "key": "fieldKeyForBase64",
+      "previewType": "base64",
+      "type": "documentPreview",
+      "fieldKeyForContentType": "fieldKeyForContentType"
+    }
+  ],
+  "options": {
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "fieldKeyForBase64",
+              "span": 24
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

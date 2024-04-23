@@ -35,7 +35,8 @@ public class ExtendedFormFieldExtractor extends DemoBaseFieldExtractor {
 	@Override
 	public List<String> getSupportedTypes() {
 		return ImmutableList.of(
-				"Form"
+				"Form",
+				"DocumentFormPopup"
 		);
 	}
 

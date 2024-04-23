@@ -1,5 +1,6 @@
 package org.demo.microservice.conf;
 
+import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +16,7 @@ public class ClientConfiguration {
 	@Primary
 	public RestTemplate restTemplate(final RestTemplateBuilder builder) {
 		return builder
+				.setReadTimeout(Duration.ofMinutes(1L))
 				.build();
 	}
 

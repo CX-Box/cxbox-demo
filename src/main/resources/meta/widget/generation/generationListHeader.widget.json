@@ -1,0 +1,7 @@
+{
+  "name": "generationListHeader",
+  "title": "Generations List",
+  "type": "HeaderWidget",
+  "bc": "generation",
+  "fields": []
+}

@@ -1,0 +1,86 @@
+{
+  "name": "generationForm",
+  "title": "",
+  "type": "Form",
+  "bc": "generation",
+  "fields": [
+    {
+      "label": "Override Prompt",
+      "key": "overridePrompt",
+      "type": "text"
+    },
+    {
+      "label": "Detalization",
+      "key": "detalization",
+      "type": "dictionary"
+    },
+    {
+      "label": "Style",
+      "key": "style",
+      "type": "dictionary"
+    },
+    {
+      "label": "id",
+      "key": "id",
+      "type": "input",
+      "drillDown": "true"
+    },
+    {
+      "label": "Name",
+      "key": "name",
+      "type": "input"
+    }
+  ],
+  "options": {
+    "layout": {
+      "rows": [
+
+        {
+          "cols": [
+            {
+              "fieldKey": "id",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "name",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "detalization",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "style",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "overridePrompt",
+              "span": 12
+            }
+          ]
+        }
+      ]
+    },
+    "actionGroups": {
+      "include": [
+        "generate"
+      ]
+    }
+  }
+}

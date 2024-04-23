@@ -36,7 +36,8 @@ public class DashboardWidgetsFieldExtractor extends BaseFieldExtractor {
 				"Funnel",
 				"RingProgress",
 				"DashboardList",
-				"FormPopup"
+				"FormPopup",
+				"DocumentList"
 		);
 	}
 

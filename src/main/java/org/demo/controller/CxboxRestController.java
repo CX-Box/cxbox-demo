@@ -17,6 +17,8 @@ import org.demo.service.cxbox.inner.ContactMultivalueService;
 import org.demo.service.cxbox.inner.ContactPickListService;
 import org.demo.service.cxbox.inner.DashboardClientActivitiesService;
 import org.demo.service.cxbox.inner.DashboardFilterService;
+import org.demo.service.cxbox.inner.GenerationDocumentsWriteService;
+import org.demo.service.cxbox.inner.GenerationService;
 import org.demo.service.cxbox.inner.MeetingDocumentsWriteService;
 import org.demo.service.cxbox.inner.MeetingReadService;
 import org.demo.service.cxbox.inner.MeetingWriteService;
@@ -37,6 +39,11 @@ import org.springframework.stereotype.Component;
 public enum CxboxRestController implements EnumBcIdentifier {
 
 	// @formatter:on
+
+	generation(GenerationService.class),
+		getGenerationDocument(generation, GenerationDocumentsWriteService.class),
+
+
 	clientStats(ClientStatsService.class),
 	lovExternal(LovReadService.class),
 

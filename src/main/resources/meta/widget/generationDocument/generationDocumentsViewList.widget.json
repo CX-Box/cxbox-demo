@@ -1,0 +1,29 @@
+{
+  "name": "generationDocumentsViewList",
+  "title": "",
+  "type": "DocumentList",
+  "bc": "getGenerationDocument",
+  "fields": [
+    {
+      "title": "Field Key For Content Type",
+      "key": "fieldKeyForContentType",
+      "type": "hidden"
+    },
+    {
+      "title": "Field Key For Base 64",
+      "key": "fieldKeyForBase64",
+      "type": "hidden"
+    }
+  ],
+  "options": {
+    "documentPreview": {
+      "fieldKeyForBase64": "fieldKeyForBase64",
+      "fieldKeyForContentType": "fieldKeyForContentType",
+      "enabledPdfViewer": true,
+      "type": "base64",
+      "edit": {
+        "widget": "generationDocumentPopupForm"
+      }
+    }
+  }
+}

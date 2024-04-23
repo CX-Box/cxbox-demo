@@ -1,0 +1,7 @@
+{
+  "name": "generationFormHeader",
+  "title": "Generation",
+  "type": "HeaderWidget",
+  "bc": "generation",
+  "fields": []
+}

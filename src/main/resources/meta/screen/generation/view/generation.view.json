@@ -1,0 +1,32 @@
+{
+  "name": "generation",
+  "title": "Meeting List",
+  "template": "DashboardView",
+  "url": "/screen/generation/view/generation",
+  "widgets": [
+    {
+      "widgetName": "generationFormHeader",
+      "position": 0,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "generationForm",
+      "position": 10,
+      "gridWidth": 24
+    },
+
+    {
+      "widgetName": "generationDocumentsViewList",
+      "position": 30,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "generationDocumentPopupForm",
+      "position": 40,
+      "gridWidth": 24
+    }
+  ],
+  "rolesAllowed": [
+   "CXBOX_USER", "ADMIN"
+  ]
+}

@@ -1,7 +1,6 @@
 import React from 'react'
 import cn from 'classnames'
 import styles from './FileUpload.less'
-import { Icon } from 'antd'
 import FileIcon from './FileIconContainer'
 import { trimString } from '@utils/fileViewer'
 
@@ -24,7 +23,6 @@ function ReadOnlySingleFileUpload({
     diffDownloadUrl,
     onFileIconClick
 }: ReadOnlySingleFileUploadProps) {
-    const simpleIcon = !onFileIconClick ? <Icon type="file" /> : null
     const smartIcon = <FileIcon fileName={fileName} onFileIconClick={onFileIconClick} />
 
     if (mode === 'snapshot') {
@@ -37,7 +35,6 @@ function ReadOnlySingleFileUpload({
                             <div>
                                 <span className={cn(styles.viewLink, styles.prevValue)}>
                                     <a href={diffDownloadUrl}>
-                                        {simpleIcon}
                                         <span>{trimString(diffFileName)}</span>
                                     </a>
                                 </span>
@@ -47,7 +44,6 @@ function ReadOnlySingleFileUpload({
                             <div>
                                 <span className={cn(styles.viewLink, styles.newValue)}>
                                     <a href={downloadUrl}>
-                                        {simpleIcon}
                                         <span>{trimString(fileName)}</span>
                                     </a>
                                 </span>
@@ -65,7 +61,6 @@ function ReadOnlySingleFileUpload({
             <span className={styles.viewLink}>
                 {downloadUrl && (
                     <a href={downloadUrl} download={true}>
-                        {simpleIcon}
                         <span>{trimString(fileName)}</span>
                     </a>
                 )}

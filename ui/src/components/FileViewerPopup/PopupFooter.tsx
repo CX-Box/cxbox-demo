@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from 'react'
-import styles from './FileViewerPopup.less'
+import styles from './PopupFooter.less'
 
 interface PopupFooterProps {}
 

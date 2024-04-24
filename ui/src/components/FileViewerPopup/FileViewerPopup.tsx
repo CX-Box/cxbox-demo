@@ -19,12 +19,14 @@ import { useWindowSize } from '@hooks/useWindowSize'
 import { useVisibility } from '@components/widgets/Table/hooks/useVisibility'
 import { trimString } from '@utils/fileViewer'
 import { FileUploadFieldMeta } from '@interfaces/widget'
+import { useTranslation } from 'react-i18next'
 
 const POPUP_WIDTH = 808
 const VIEWER_WIDTH = 760
 const VIEWER_HEIGHT = 760
 
 function FileViewerPopup() {
+    const { t } = useTranslation()
     const popupData = useAppSelector(state => state.view.popupData) as PopupData
     const { active: visible, calleeWidgetName, options } = popupData
     const { type, calleeFieldKey } = (options as FileViewerPopupOptions) ?? {}
@@ -82,6 +84,14 @@ function FileViewerPopup() {
                         className={styles.fullscreenHeader}
                         theme="dark"
                         title={preview?.titleKey ? record?.[preview?.titleKey] : trimString(fileName)}
+                        center={
+                            <div className={styles.headerCenter}>
+                                {t('number of total files', {
+                                    number: paginationProps.currentIndex + 1,
+                                    total: paginationProps.total
+                                })}
+                            </div>
+                        }
                         hint={preview?.hintKey ? record?.[preview?.hintKey] : undefined}
                         onClose={() => setFullscreen(false)}
                         onDownload={handleDownload}

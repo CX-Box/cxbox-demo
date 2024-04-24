@@ -1,5 +1,5 @@
-import React from 'react'
-import styles from './FileViewerPopup.less'
+import React, { ReactNode } from 'react'
+import styles from './Header.less'
 import Button from '@components/ui/Button/Button'
 import { useTranslation } from 'react-i18next'
 import { Icon } from 'antd'
@@ -13,17 +13,19 @@ interface HeaderProps {
     onDownload?: () => void
     onClose: () => void
     onFullscreen?: () => void
+    center?: ReactNode
 }
 
-function Header({ className, theme = 'light', title, hint, onFullscreen, onClose, onDownload }: HeaderProps) {
+function Header({ className, theme = 'light', title, hint, onFullscreen, onClose, onDownload, center }: HeaderProps) {
     const { t } = useTranslation()
 
     return (
-        <div className={cn(styles.header, styles[theme], className)}>
+        <div className={cn(styles.header, styles[theme], className, { [styles.hasCenter]: !!center })}>
             <div className={styles.textBlock}>
                 <span className={styles.title}>{title}</span>
                 <span className={styles.hint}>{hint}</span>
             </div>
+            {center && <div className={styles.centerBlock}>{center}</div>}
             <div className={styles.operationsBlock}>
                 {onFullscreen && (
                     <Button className={styles.button} type="link" icon="fullscreen" onClick={onFullscreen}>
@@ -33,8 +35,8 @@ function Header({ className, theme = 'light', title, hint, onFullscreen, onClose
                 <Button className={styles.button} type="link" icon="download" onClick={onDownload}>
                     {t('Download')}
                 </Button>
+                <Icon className={styles.close} type="close" onClick={onClose} />
             </div>
-            <Icon className={styles.close} type="close" onClick={onClose} />
         </div>
     )
 }

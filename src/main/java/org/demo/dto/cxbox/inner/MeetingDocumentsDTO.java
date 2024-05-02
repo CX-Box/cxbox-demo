@@ -22,17 +22,11 @@ public class MeetingDocumentsDTO extends DataResponseDTO {
 
 	private String type;
 
-	private String fieldKeyForBase64;
-
-	private String fieldKeyForContentType;
-
 	public MeetingDocumentsDTO(MeetingDocuments meeting) {
 		this.id = meeting.getId().toString();
 		this.notes = meeting.getNotes();
 		this.file = meeting.getFile();
 		this.fileId = meeting.getFileId();
-		this.fieldKeyForBase64 = meeting.getFieldKeyForBase64() != null ? new String(meeting.getFieldKeyForBase64()) : null;
-		this.fieldKeyForContentType = meeting.getFieldKeyForContentType();
 	}
 
 

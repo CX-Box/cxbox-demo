@@ -1,0 +1,58 @@
+.compact {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 10px;
+
+  button + button {
+    margin: 0;
+  }
+}
+
+.button {
+  width: 56px;
+  height: 42px;
+}
+
+.fullscreen {
+  position: relative;
+
+  .arrow {
+    --white: #ffffff;
+    --bg-default-color: #1C1D1D;
+    --bg-hover-color: #1C1D1D;
+    --border-hover-color: #464646;
+    --bg-disabled-color: #3d4042;
+    --text-disabled-color: #5a5c5e;
+    --antd-wave-shadow-color: var(--border-hover-color);
+
+    color: var(--white);
+    background: var(--bg-default-color);
+    border: 1px solid var(--bg-default-color);
+
+    &:hover, &:active {
+      background: var(--bg-hover-color);
+      border-color: var(--border-hover-color);
+    }
+
+    &[disabled] {
+      color: var(--text-disabled-color);
+      border-color: var(--text-disabled-color);
+      background: var(--bg-disabled-color);
+    }
+  }
+
+  .arrow {
+    position: absolute;
+    z-index: 110;
+
+    transform: translateY(-50%);
+    top: 50%;
+    left: 24px;
+  }
+
+  .arrow + .arrow {
+    left: initial;
+    right: 24px;
+  }
+}

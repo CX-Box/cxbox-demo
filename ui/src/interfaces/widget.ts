@@ -1,16 +1,14 @@
 import { interfaces } from '@cxbox-ui/core'
+import { WidgetField as CoreWidgetField, FileUploadFieldMeta as CoreFileUploadFieldMeta } from '@cxbox-ui/schema'
 
 export enum CustomFieldTypes {
     MultipleSelect = 'multipleSelect',
-    DocumentPreview = 'documentPreview',
     Time = 'time',
     SuggestionPickList = 'suggestionPickList'
 }
 
 export enum CustomWidgetTypes {
     FormPopup = 'FormPopup',
-    DocumentList = 'DocumentList',
-    DocumentFormPopup = 'DocumentFormPopup',
     Steps = 'Steps',
     Funnel = 'Funnel',
     RingProgress = 'RingProgress',
@@ -50,40 +48,9 @@ export type TableWidgetField = interfaces.WidgetListFieldBase & {
     excelWidth?: number
 }
 
-export type DocumentPreviewType = 'base64' | 'dataUrl' | 'fileUrl' | 'generatedFileUrl'
-
-export type DocumentPreviewFieldMeta = Omit<interfaces.WidgetFieldBase, 'type'> & {
-    type: CustomFieldTypes.DocumentPreview
-    previewType: DocumentPreviewType
-    fieldKeyForContentType?: string
-    fieldKeyForFileName?: string
-}
-
 type InternalWidgetOption = {
     widget: string
     style: 'inlineForm' | 'popup' | 'inline' | 'none'
-}
-
-export type DocumentPreviewBase64Option = {
-    type: 'base64'
-    fieldKeyForBase64: string
-    fieldKeyForContentType: string
-}
-
-export type DocumentPreviewDataUrlOption = {
-    type: 'dataUrl'
-    fieldKeyForUrl: string
-}
-
-export type DocumentPreviewFileUrlOption = {
-    type: 'fileUrl'
-    fieldKeyForUrl: string
-}
-
-export type DocumentPreviewGeneratedFileUrlOption = {
-    type: 'generatedFileUrl'
-    fieldKeyForUrl: string
-    fieldKeyForContentType: string
 }
 
 export type OperationCustomMode = 'default' | 'file-upload-dnd' | 'default-and-file-upload-dnd'
@@ -96,21 +63,6 @@ export type OperationInfo = {
 
 export interface AppWidgetMeta extends interfaces.WidgetMeta {
     options?: interfaces.WidgetOptions & {
-        documentPreview?: {
-            type: string
-            edit: {
-                widget: string
-            }
-            enabledPdfViewer?: boolean
-            fieldKeyForImageTitle?: string
-            imageSizeOnList?: number
-        } & (
-            | DocumentPreviewBase64Option
-            | DocumentPreviewDataUrlOption
-            | DocumentPreviewFileUrlOption
-            | DocumentPreviewGeneratedFileUrlOption
-        )
-
         primary?: {
             enabled: boolean
             title?: string
@@ -173,3 +125,32 @@ export interface SuggestionPickListWidgetMeta extends interfaces.WidgetMeta {
 export interface SuggestionPickListField extends Omit<interfaces.PickListFieldMeta, 'type'> {
     type: CustomFieldTypes.SuggestionPickList
 }
+
+export type FileUploadFieldMeta = CoreFileUploadFieldMeta & {
+    preview?: {
+        /**
+         * Enables file previews. Default false.
+         */
+        enabled: boolean
+        /**
+         * Key whose value is used for the popup title. If not specified, the file name is taken
+         */
+        titleKey?: string
+        /**
+         * The key whose value is used for the tooltip under the popup title. If not specified, the additional attribute is not shown.
+         */
+        hintKey?: string
+        /**
+         * Preview display mode: popup (default), side-panel.
+         */
+        mode?: 'popup' | 'side-panel'
+        /**
+         * Includes display of mini-previews for file types for which we can, for the rest there are icons with an eye.
+         * The default is false (icons with an eye are shown for all files).
+         * Where the value will come from is decided at the project level.
+         */
+        miniPreview?: boolean
+    }
+}
+
+export type WidgetField = CoreWidgetField | FileUploadFieldMeta

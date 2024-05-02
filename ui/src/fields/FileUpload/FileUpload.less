@@ -83,10 +83,14 @@
     flex-grow: 1;
     align-self: flex-start;
     overflow: hidden;
-    padding: 5px 11px;
+    padding: 5px 8px 5px 11px;
     white-space: nowrap;
     word-break: normal;
     text-overflow: ellipsis;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .disabled {
@@ -125,4 +129,10 @@
 .newValue {
     padding-right: 5px;
     background-color: #c1f3b8;
+}
+
+.snapshot {
+    display: flex;
+    align-items: center;
+    width: 100%;
 }

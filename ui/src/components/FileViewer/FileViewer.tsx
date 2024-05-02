@@ -1,116 +1,83 @@
 import React, { CSSProperties, forwardRef, useImperativeHandle } from 'react'
-import { getFileDisplayType, getUrlExtension } from '@utils/documentPreview'
-import Image from 'rc-image'
-import styles from './FileViewer.less'
-import ReactFileViewer from './ReactFileViewer'
+import { fileViewerType, FileViewerType, getExtension } from '@utils/fileViewer'
 import cn from 'classnames'
-import PdfViewer from './PdfViewer'
-import { extension, lookup } from 'mime-types'
 import { saveAs } from 'file-saver'
-import { DocumentPreviewType } from '@interfaces/widget'
+import 'rc-image/assets/index.css'
+import styles from './FileViewer.less'
+import { PdfViewer } from '@components/FileViewer/PdfViewer'
+import { DOCUMENT_PAGE_WIDTH } from '@components/FileViewer/PdfViewer/constants'
+import Empty from '@components/FileViewer/Empty/Empty'
+import Image from './Image/Image'
+import { useTranslation } from 'react-i18next'
 
-interface FileViewerProps {
-    width?: string
-    height?: string
-    /**
-     * data url or file url
-     */
+export interface FileViewerProps {
+    fileName: string
     url?: string
-    contentType?: string
-    previewType: DocumentPreviewType
+    view: 'compact' | 'full'
     alt?: string
+    width: number
+    height: number
+    pageWidth?: number
     onDoubleClick?: () => void
     onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
-    style?: CSSProperties
     className?: string
-    /**
-     * only works with pdf
-     */
-    hideToolbar?: boolean
+    style?: CSSProperties
 }
 
 export type FileViewerHandlers = {
-    download: (fileNameWithoutExt: string) => void
+    download: () => void
 }
 
 const FileViewer = forwardRef<FileViewerHandlers | undefined, FileViewerProps>(
     (
-        {
-            previewType,
-            contentType,
-            alt,
-            url = '',
-            height = '510px',
-            width = '100%',
-            onDoubleClick,
-            onClick,
-            style = {},
-            className,
-            hideToolbar
-        },
+        { alt, url = '', height, width, onDoubleClick, onClick, style = {}, className, view, fileName, pageWidth = DOCUMENT_PAGE_WIDTH },
         ref
     ) => {
-        let viewer: JSX.Element
-
-        const { calculatedContentType, extension } = useContentTypeAdapter(previewType, url, contentType)
-
         useImperativeHandle(
             ref,
             () => {
                 return {
-                    download: (fileNameWithoutExt: string) => {
-                        saveAs(url, `${fileNameWithoutExt}.${extension}`)
+                    download: () => {
+                        saveAs(url, fileName)
                     }
                 }
             },
-            [extension, url]
+            [fileName, url]
         )
 
-        const displayType = getFileDisplayType(calculatedContentType)
+        const displayType = url ? fileViewerType(fileName) : fileViewerType()
 
-        switch (displayType) {
-            case 'image': {
-                viewer = <Image preview={false} alt={alt} src={url} style={{ maxHeight: height }} wrapperClassName={styles.imageWrapper} />
-                break
-            }
-            case 'pdf': {
-                viewer = <PdfViewer src={url} width={width} height={height} hideToolbar={hideToolbar} />
-                break
-            }
-            default: {
-                viewer = <ReactFileViewer url={url} extension={extension} height={height} />
+        const { t } = useTranslation()
+        const isCompact = view === 'compact'
+        const viewerMode = isCompact ? 'light' : 'dark'
 
-                break
-            }
+        const viewerMap: Record<FileViewerType, JSX.Element | null> = {
+            image: <Image alt={alt} src={url} mode={viewerMode} />,
+            pdf: (
+                <PdfViewer
+                    displayMode="inline"
+                    src={url}
+                    width={width}
+                    height={height}
+                    hideToolbar={isCompact}
+                    mode={viewerMode}
+                    pageWidth={pageWidth}
+                />
+            ),
+            other: <Empty type={getExtension(fileName)} size="big" mode={viewerMode} text={t('This file type cannot be viewed')} />
         }
 
         return (
             <div
-                className={cn(styles.root, className, {
-                    [styles.pdf]: displayType === 'pdf',
-                    [styles.image]: displayType === 'image'
-                })}
+                className={cn(styles.root, className, styles[view])}
                 onDoubleClick={onDoubleClick}
                 onClick={onClick}
-                style={style}
+                style={{ ...style, width, height }}
             >
-                {viewer}
+                {viewerMap[displayType]}
             </div>
         )
     }
 )
 
 export default FileViewer
-
-function useContentTypeAdapter(previewType: DocumentPreviewType, fileOrDataUrl: string, contentType?: string) {
-    let calculatedContentType = contentType
-
-    if (previewType === 'fileUrl') {
-        calculatedContentType = lookup(getUrlExtension(fileOrDataUrl)) || ''
-    }
-
-    return {
-        calculatedContentType: calculatedContentType,
-        extension: (calculatedContentType && extension(calculatedContentType)) || ''
-    }
-}

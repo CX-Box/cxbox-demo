@@ -1,0 +1,16 @@
+{
+  "name": "jobStatsActions",
+  "title": "",
+  "type": "Form",
+  "bc": "JobsStats",
+  "fields": [
+
+  ],
+  "options": {
+    "actionGroups": {
+      "include": [
+        "refresh"
+      ]
+    }
+  }
+}

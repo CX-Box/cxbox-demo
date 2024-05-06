@@ -33,6 +33,11 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.jobrunr</groupId>
+      <artifactId>jobrunr-spring-boot-3-starter</artifactId>
+      <version>7.0.0</version>
+    </dependency>
+    <dependency>
       <groupId>com.github.gavlyukovskiy</groupId>
       <artifactId>datasource-proxy-spring-boot-starter</artifactId>
       <version>1.9.1</version>

@@ -151,3 +151,10 @@ decorator:
     datasource-proxy:
       query:
         enable-logging: true
+org:
+  jobrunr:
+    background-job-server:
+      enabled: true
+    dashboard:
+      enabled: true
+

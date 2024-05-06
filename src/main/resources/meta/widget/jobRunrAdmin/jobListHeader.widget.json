@@ -1,0 +1,7 @@
+{
+  "name": "jobListHeader",
+  "title": "",
+  "type": "HeaderWidget",
+  "bc": "scheduledJobs",
+  "fields": []
+}

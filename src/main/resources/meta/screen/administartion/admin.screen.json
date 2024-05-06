@@ -3,12 +3,35 @@
   "icon": "calendar",
   "title": "Administration",
   "order": 4,
-  "primaryViewName": "lovlistexternal",
+  "primaryViewName": "scheduledJobs",
   "primaryViews": [
-    "lovlistexternal"
+    "scheduledJobs"
   ],
   "navigation": {
     "menu": [
+      {
+        "title": "Job Administration",
+        "child": [
+          {
+            "viewName": "scheduledJobs"
+          },
+          {
+            "viewName": "enqueuedJobs"
+          },
+          {
+            "viewName": "processingJobs"
+          },
+          {
+            "viewName": "succeededJobs"
+          },
+          {
+            "viewName": "failedJobs"
+          },
+          {
+            "viewName": "deletedJobs"
+          }
+        ]
+      },
       {
         "title": "External Administration",
         "child": [

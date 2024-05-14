@@ -7,7 +7,11 @@ import { useDispatch } from 'react-redux'
 
 const historyObj = createHashHistory()
 
-export const Router: React.FC = ({ children }) => {
+interface Props {
+    children?: React.ReactNode
+}
+
+export const Router: React.FC<Props> = ({ children }) => {
     const path = useAppSelector(state => state.router.path)
     const search = useAppSelector(state => state.router.search)
     const pathRef = useRef(path)

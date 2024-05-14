@@ -6,25 +6,21 @@ import { actions, interfaces } from '@cxbox-ui/core'
 import styles from './UserMenuContent.less'
 import cn from 'classnames'
 import Button from '../../../ui/Button/Button'
+import { useQuery } from '@tanstack/react-query'
+import { CxBoxApiInstance } from '../../../../api'
+import { useMeta } from '../../../../queries'
 
 export const UserMenuContent: React.FC = () => {
-    const { firstName, lastName, login, activeRole, roles } = useAppSelector(state => {
-        return {
-            firstName: state.session.firstName,
-            lastName: state.session.lastName,
-            login: state.session.login,
-            activeRole: state.session.activeRole,
-            roles: state.session.roles
-        }
-    }, shallowEqual)
-    const dispatch = useDispatch()
-    const createSwitchRoleHandler = React.useCallback(
-        (roleKey: string) => () => dispatch(actions.switchRole({ role: roleKey })),
-        [dispatch]
-    )
-    const handleLogout = React.useCallback(() => dispatch(actions.logout(null)), [dispatch])
-    const fullName = `${lastName} ${firstName}`
-    const sortedRoles = React.useMemo(() => roles?.sort(roleComparator), [roles])
+    const { data } = useMeta()
+
+    // const createSwitchRoleHandler = React.useCallback(
+    //     (roleKey: string) => () => dispatch(actions.switchRole({ role: roleKey })),
+    //     [dispatch]
+    // )
+    // const handleLogout = React.useCallback(() => dispatch(actions.logout(null)), [dispatch])
+    const sortedRoles = React.useMemo(() => data?.roles?.sort(roleComparator), [data?.roles])
+
+    const fullName = `${data?.firstName} ${data?.lastName}`
 
     return (
         <div className={styles.root} data-test-menu-user={true}>
@@ -32,7 +28,7 @@ export const UserMenuContent: React.FC = () => {
                 <span className={styles.fullName} data-test-menu-user-info-fullName={true}>
                     {fullName}
                 </span>
-                <span data-test-menu-user-info-login={true}>{login}</span>
+                <span data-test-menu-user-info-login={true}>{data?.login}</span>
             </div>
             <Divider className={styles.divider} />
             <div className={cn(styles.rolesList)}>
@@ -40,7 +36,7 @@ export const UserMenuContent: React.FC = () => {
                     return (
                         <div
                             className={cn(styles.roleButtonWrapper, {
-                                [styles.checked]: i.key === activeRole
+                                [styles.checked]: i.key === data?.activeRole
                             })}
                             key={i.key}
                         >
@@ -48,7 +44,7 @@ export const UserMenuContent: React.FC = () => {
                                 className={styles.roleButton}
                                 data-test-menu-user-role={true}
                                 type="link"
-                                onClick={createSwitchRoleHandler(i.key)}
+                                // onClick={createSwitchRoleHandler(i.key)}
                             >
                                 {i.value}
                             </Button>
@@ -57,7 +53,7 @@ export const UserMenuContent: React.FC = () => {
                 })}
             </div>
             <Divider className={styles.divider} />
-            <Button className={cn(styles.signOut)} data-test-menu-user-logout={true} type="default" onClick={handleLogout} icon="logout">
+            <Button className={cn(styles.signOut)} data-test-menu-user-logout={true} type="default" icon="logout">
                 Log out
             </Button>
         </div>

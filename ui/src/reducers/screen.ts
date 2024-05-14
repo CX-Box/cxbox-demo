@@ -1,7 +1,7 @@
 import { interfaces, reducers } from '@cxbox-ui/core'
 import { actions, changeMenuCollapsed, customAction, sendOperationSuccess } from '@actions'
 import { createReducer, isAnyOf } from '@reduxjs/toolkit'
-import { BcMetaState } from '@cxbox-ui/core/dist/interfaces'
+import { BcMetaState } from '@cxbox-ui/core'
 import { FilterGroup } from '@interfaces/filters'
 
 interface ScreenState extends interfaces.ScreenState {

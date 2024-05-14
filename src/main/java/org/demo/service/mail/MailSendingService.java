@@ -46,7 +46,8 @@ public class MailSendingService {
 
 	@Async
 	public void send(Optional<String> mailTo, String subject, String message, User currentUser) {
-		if (mailTo.isPresent() && mailSenderEnabled()) {
+		boolean mailSend = mailTo.isPresent() && mailSenderEnabled();
+		if (mailSend) {
 			try {
 				SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
 				simpleMailMessage.setFrom(mailProperties.get().getUsername());
@@ -55,19 +56,6 @@ public class MailSendingService {
 				simpleMailMessage.setSubject(subject);
 
 				javaMailSender.get().send(simpleMailMessage);
-
-				authzService.loginAs(authzService.createAuthentication(VANILLA));
-
-				String link = mailTo.map(mail -> mail.substring(mail.indexOf("@") + 1)).orElse("");
-
-				notificationService.sendAndSave(SocketNotificationDTO.builder()
-						.title("Successful")
-						.text("Email sent to " + mailTo.orElse(""))
-						.drillDownType(DrillDownType.EXTERNAL_NEW.getValue())
-						.drillDownLabel(link)
-						.drillDownLink(HTTP + link)
-						.time(LocalDateTime.now(ZoneOffset.UTC))
-						.build(), currentUser);
 
 			} catch (MailParseException | MailPreparationException e) {
 				notificationService.sendAndSave(
@@ -86,6 +74,19 @@ public class MailSendingService {
 				);
 			}
 		}
+		authzService.loginAs(authzService.createAuthentication(VANILLA));
+
+		String link = mailTo.map(mail -> mail.substring(mail.indexOf("@") + 1)).orElse("");
+
+		notificationService.sendAndSave(SocketNotificationDTO.builder()
+				.title(mailSend ? "Successful" : "Error")
+				.text(mailSend ? "Email sent to " + mailTo.orElse("") : "Email don't sent " + mailTo.orElse(""))
+				.drillDownType(DrillDownType.EXTERNAL_NEW.getValue())
+				.drillDownLabel(link)
+				.drillDownLink(HTTP + link)
+				.time(LocalDateTime.now(ZoneOffset.UTC))
+				.build(), currentUser);
+
 	}
 
 	private boolean mailSenderEnabled() {

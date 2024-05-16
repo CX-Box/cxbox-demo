@@ -12,12 +12,13 @@ import static org.demo.dto.cxbox.inner.MeetingDTO_.startDateTime;
 
 import jakarta.persistence.EntityManager;
 import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.Optional;
 import lombok.NonNull;
 import lombok.val;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.DrillDownType;
+import org.cxbox.core.dto.MessageType;
 import org.cxbox.core.dto.multivalue.MultivalueFieldSingleValue;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
@@ -26,6 +27,7 @@ import org.cxbox.core.dto.rowmeta.PreAction;
 import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
 import org.cxbox.core.service.action.ActionsBuilder;
+import org.cxbox.core.util.session.SessionService;
 import org.demo.conf.cxbox.customization.icon.ActionIcon;
 import org.demo.conf.cxbox.extension.action.ActionsExt;
 import org.demo.conf.cxbox.extension.multivaluePrimary.MultivalueExt;
@@ -38,34 +40,44 @@ import org.demo.repository.ClientRepository;
 import org.demo.repository.ContactRepository;
 import org.demo.repository.MeetingRepository;
 import org.demo.repository.core.UserRepository;
+import org.demo.service.mail.MailSendingService;
 import org.demo.service.statemodel.MeetingStatusModelActionProvider;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S3252", "java:S1186"})
 @Service
 public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO, Meeting> {
 
-	@Autowired
-	private MeetingRepository meetingRepository;
+	private final MeetingRepository meetingRepository;
 
-	@Autowired
-	private ClientRepository clientRepository;
+	private final ClientRepository clientRepository;
 
-	@Autowired
-	private ContactRepository contactRepository;
+	private final ContactRepository contactRepository;
 
-	@Autowired
-	private UserRepository userRepository;
+	private final UserRepository userRepository;
 
-	@Autowired
-	private MeetingStatusModelActionProvider statusModelActionProvider;
+	private final MeetingStatusModelActionProvider statusModelActionProvider;
 
-	@Autowired
-	private EntityManager entityManager;
+	private final EntityManager entityManager;
 
-	public MeetingWriteService() {
+	private final  MailSendingService mailSendingService;
+
+	private final SessionService sessionService;
+	private static final String MESSAGE_TEMPLATE = "Status: %s; \nMeeting Result: %s";
+
+	public MeetingWriteService(MeetingRepository meetingRepository, ClientRepository clientRepository,
+			ContactRepository contactRepository, UserRepository userRepository,
+			MeetingStatusModelActionProvider statusModelActionProvider, EntityManager entityManager,
+			MailSendingService mailSendingService, SessionService sessionService) {
 		super(MeetingDTO.class, Meeting.class, null, MeetingWriteMeta.class);
+		this.meetingRepository = meetingRepository;
+		this.clientRepository = clientRepository;
+		this.contactRepository = contactRepository;
+		this.userRepository = userRepository;
+		this.statusModelActionProvider = statusModelActionProvider;
+		this.entityManager = entityManager;
+		this.mailSendingService = mailSendingService;
+		this.sessionService = sessionService;
 	}
 
 	@Override
@@ -83,7 +95,7 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 					.filter(Objects::nonNull)
 					.map(Long::parseLong)
 					.map(e -> entityManager.getReference(Contact.class, e))
-					.collect(Collectors.toList()));
+					.	toList());
 			val primary = data.getAdditionalContacts().getValues().stream()
 					.filter(e -> e.getOptions().get(MultivalueExt.PRIMARY) != null && e.getOptions().get(MultivalueExt.PRIMARY)
 							.equalsIgnoreCase(Boolean.TRUE.toString())).findAny();
@@ -96,18 +108,18 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 		setIfChanged(data, notes, entity::setNotes);
 		setIfChanged(data, result, entity::setResult);
 		setMappedIfChanged(data, responsibleId, entity::setResponsible,
-				id -> id != null ? userRepository.getById(id) : null
+				id -> id != null ? userRepository.getReferenceById(id) : null
 		);
 		if (data.isFieldChanged(clientId)) {
 			if (data.getClientId() != null) {
-				entity.setClient(clientRepository.getById(data.getClientId()));
+				entity.setClient(clientRepository.getReferenceById(data.getClientId()));
 			} else {
 				entity.setClient(null);
 			}
 			entity.setContact(null);
 		}
 		setMappedIfChanged(data, contactId, entity::setContact,
-				id -> id != null ? contactRepository.getById(id) : null
+				id -> id != null ? contactRepository.getReferenceById(id) : null
 		);
 		meetingRepository.save(entity);
 		return new ActionResultDTO<>(entityToDto(bc, entity));
@@ -145,7 +157,26 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 						)))
 				.add()
 				.cancelCreate().text("Cancel").available(bc -> true).add()
+				.newAction()
+				.action("sendEmail", "Send Email")
+				.scope(ActionScope.RECORD)
+				.invoker((bc, data) -> {
+					Meeting meeting = meetingRepository.getReferenceById(Long.parseLong(bc.getId()));
+					getSend(meeting);
+					return new ActionResultDTO<MeetingDTO>()
+							.setAction(PostAction.showMessage(MessageType.INFO, "The email is currently being sent."));
+				})
+				.add()
 				.build();
+	}
+
+	private void getSend(Meeting meeting) {
+		mailSendingService.send(
+				Optional.ofNullable(meeting).map(Meeting::getContact).map(Contact::getEmail),
+				meeting.getAgenda(),
+				String.format(MESSAGE_TEMPLATE, meeting.getStatus().getValue(), meeting.getResult()),
+				userRepository.getReferenceById(sessionService.getSessionUser().getId())
+		);
 	}
 
 	private static PreAction confirmWithComment(@NonNull String actionText) {

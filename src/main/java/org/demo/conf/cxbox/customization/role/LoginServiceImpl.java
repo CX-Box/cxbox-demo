@@ -76,6 +76,7 @@ public class LoginServiceImpl implements LoginService {
 
 		return LoggedUser.builder()
 				.sessionId(sessionService.getSessionId())
+				.userId(userEntity.getId())
 				.activeRole(activeUserRole.getKey())
 				.roles(userRoleService.getUserRoles(userEntity))
 				.screens(screenResponsibilityService.getScreens(user, activeUserRole))

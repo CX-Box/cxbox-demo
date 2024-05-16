@@ -7,7 +7,8 @@
   "options": {
     "actionGroups": {
       "include": [
-        "actions"
+        "actions",
+        "sendEmail"
       ]
     }
   }

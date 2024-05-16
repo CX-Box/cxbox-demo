@@ -65,7 +65,8 @@
       "include": [
         "create",
         "edit",
-        "actions"
+        "actions",
+        "sendEmail"
       ]
     }
   }

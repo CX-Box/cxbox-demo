@@ -11,6 +11,7 @@ import static org.demo.dto.cxbox.inner.MeetingDTO_.result;
 import static org.demo.dto.cxbox.inner.MeetingDTO_.startDateTime;
 
 import jakarta.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 import lombok.NonNull;
@@ -42,6 +43,7 @@ import org.demo.repository.MeetingRepository;
 import org.demo.repository.core.UserRepository;
 import org.demo.service.mail.MailSendingService;
 import org.demo.service.statemodel.MeetingStatusModelActionProvider;
+import org.jobrunr.scheduling.BackgroundJob;
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S3252", "java:S1186"})
@@ -157,9 +159,7 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 						)))
 				.add()
 				.cancelCreate().text("Cancel").available(bc -> true).add()
-				.newAction()
 				.action("sendEmail", "Send Email")
-				.scope(ActionScope.RECORD)
 				.invoker((bc, data) -> {
 					Meeting meeting = meetingRepository.getReferenceById(Long.parseLong(bc.getId()));
 					getSend(meeting);
@@ -167,6 +167,14 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 							.setAction(PostAction.showMessage(MessageType.INFO, "The email is currently being sent."));
 				})
 				.add()
+				.action("sendEmailNextDay", "Send Email Next Day")
+				.invoker((bc, data) -> {
+					BackgroundJob.<MailSendingService>schedule(LocalDateTime.now().plusDays(1), x -> x.stats("save pressed job"));
+					return new ActionResultDTO<MeetingDTO>()
+							.setAction(PostAction.showMessage(MessageType.INFO, "The email will be dispatched tomorrow."));
+				})
+				.add()
+
 				.build();
 	}
 

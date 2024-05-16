@@ -1,5 +1,6 @@
 package org.demo.service.cxbox.inner;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
@@ -22,6 +23,7 @@ import org.demo.repository.MeetingRepository;
 import org.demo.repository.core.UserRepository;
 import org.demo.service.mail.MailSendingService;
 import org.demo.service.statemodel.MeetingStatusModelActionProvider;
+import org.jobrunr.scheduling.BackgroundJob;
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S3252", "java:S1186"})
@@ -76,16 +78,6 @@ public class MeetingReadService extends VersionAwareResponseService<MeetingDTO, 
 		return Actions.<MeetingDTO>builder()
 				.create().text("Add").add()
 				.cancelCreate().text("Cancel").withIcon(CxboxActionIconSpecifier.CLOSE, false).add()
-				.newAction()
-				.action("sendEmail", "Send Email")
-				.scope(ActionScope.RECORD)
-				.invoker((bc, data) -> {
-					Meeting meeting = meetingRepository.getReferenceById(Long.parseLong(bc.getId()));
-					getSend(meeting);
-					return new ActionResultDTO<MeetingDTO>()
-							.setAction(PostAction.showMessage(MessageType.INFO, "The email is currently being sent."));
-				})
-				.add()
 				.addGroup(
 						"actions",
 						"Actions",
@@ -93,7 +85,22 @@ public class MeetingReadService extends VersionAwareResponseService<MeetingDTO, 
 						addEditAction(statusModelActionProvider.getMeetingActions()).build()
 				)
 				.withIcon(ActionIcon.MENU, false)
-
+				.action("sendEmail", "Send Email")
+				.invoker((bc, data) -> {
+					Meeting meeting = meetingRepository.getReferenceById(Long.parseLong(bc.getId()));
+					getSend(meeting);
+					return new ActionResultDTO<MeetingDTO>()
+							.setAction(PostAction.showMessage(MessageType.INFO, "Create action on the email sent."));
+				})
+				.add()
+				.newAction()
+				.action("sendEmailNextDay", "Send Email Next Day")
+				.invoker((bc, data) -> {
+					BackgroundJob.<MailSendingService>schedule(LocalDateTime.now().plusDays(1), x -> x.stats("save pressed job"));
+					return new ActionResultDTO<MeetingDTO>()
+							.setAction(PostAction.showMessage(MessageType.INFO, "The email will be dispatched tomorrow."));
+				})
+				.add()
 				.build();
 	}
 

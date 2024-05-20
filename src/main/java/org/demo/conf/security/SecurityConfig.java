@@ -84,7 +84,8 @@ public class SecurityConfig {
 						.requestMatchers("/").permitAll()
 						.requestMatchers("").permitAll()
 						.requestMatchers("/api/v1/file/**").permitAll()
-						.requestMatchers("/api/v1/auth/**").permitAll()
+						.requestMatchers("/actuator/metrics/**").permitAll()
+						.requestMatchers("/api/actuator/**").permitAll()
 						.requestMatchers("/api/v1/websocketnotification/**").permitAll()
 						.requestMatchers("/api/v1/notification/**").permitAll()
 						.requestMatchers("/**").fullyAuthenticated());

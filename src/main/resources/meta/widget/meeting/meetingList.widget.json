@@ -66,7 +66,8 @@
         "create",
         "edit",
         "actions",
-        "sendEmail"
+        "sendEmail",
+        "sendEmailNextDay"
       ]
     }
   }

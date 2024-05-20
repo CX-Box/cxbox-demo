@@ -86,6 +86,7 @@ public class SecurityConfig {
 						.requestMatchers("/api/v1/file/**").permitAll()
 						.requestMatchers("/api/v1/auth/**").permitAll()
 						.requestMatchers("/api/v1/websocketnotification/**").permitAll()
+						.requestMatchers("/api/v1/notification/**").permitAll()
 						.requestMatchers("/**").fullyAuthenticated());
 		if (Boolean.TRUE.equals(authBasicConfigProperties.getEnabled())) {
 			http.httpBasic(c -> c.authenticationEntryPoint(customBasicAuthenticationEntryPoint()));

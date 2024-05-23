@@ -29,9 +29,9 @@ function ScreenNavigation() {
     }, [screenUrl])
 
     const menuSearch = !menuCollapsed && (
-      <div className={styles.search}>
-          <Search onSearch={handleSearch} />
-      </div>
+        <div className={styles.search}>
+            <Search onSearch={handleSearch} />
+        </div>
     )
 
     return (

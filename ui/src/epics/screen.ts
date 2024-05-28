@@ -5,6 +5,7 @@ import { CustomWidgetTypes } from '@interfaces/widget'
 import { actions, processPreInvoke, sendOperationSuccess, showViewPopup } from '@actions'
 import { RootEpic } from '@store'
 import { isAnyOf } from '@reduxjs/toolkit'
+import { getRouteFromString } from '@router'
 
 const findFormPopupWidget = (operationType: string, widgets: interfaces.WidgetMeta[], calleeBcName: string, widgetName?: string) => {
     const formPopupWidget = widgetName
@@ -60,18 +61,22 @@ export const processPreInvokeConfirmEpic: RootEpic = (action$, state$) =>
         })
     )
 
-export const replaceTemporaryIdOnSavingEpic: RootEpic = (action$, state$) =>
+export const replaceTemporaryIdOnSavingEpic: RootEpic = (action$, state$, { api }) =>
     action$.pipe(
         filter(isAnyOf(sendOperationSuccess, actions.bcSaveDataSuccess)),
         mergeMap(action => {
-            const state = state$.value
             const newCursor = action.payload.dataItem?.id
+            const partPathWithId = `/${action.payload.bcName}/-1`
+            const partPathWithIdRegExp = new RegExp(`${partPathWithId}$`)
+            const needChangeBcPath = partPathWithIdRegExp.test(window.location.href)
 
-            if (newCursor != null) {
-                window.location.href = `${window.location.href}`.replace(
+            if (newCursor != null && needChangeBcPath) {
+                const newPathname = window.location.pathname.replace(
                     `/${action.payload.bcName}/-1`,
                     `/${action.payload.bcName}/${newCursor}`
                 )
+
+                return of(actions.changeLocation({ location: getRouteFromString(newPathname) }))
             }
 
             return EMPTY

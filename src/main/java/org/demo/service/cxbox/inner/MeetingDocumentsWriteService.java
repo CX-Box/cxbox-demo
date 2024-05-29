@@ -83,7 +83,9 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 		if (data.isFieldChanged(MeetingDocumentsDTO_.fileId)) {
 			entity.setFileId(data.getFileId());
 		}
-
+		if (data.isFieldChanged(MeetingDocumentsDTO_.file)) {
+			entity.setFile(data.getFile());
+		}
 		setIfChanged(data, notes, entity::setNotes);
 
 		meetingDocumentsRepository.save(entity);

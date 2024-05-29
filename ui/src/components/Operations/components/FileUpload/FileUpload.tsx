@@ -18,6 +18,7 @@ import { useAppSelector } from '@store'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import { RowMetaField } from '@interfaces/rowMeta'
 import { UPLOAD_TYPE } from '@components/Operations/components/FileUpload/FileUpload.constants'
+import { useDebounce } from '@hooks/useDebounce'
 
 interface FileUploadProps {
     widget: WidgetMeta
@@ -41,7 +42,7 @@ export const FileUpload = ({ mode, widget, operationInfo, children, uploadType =
         initializeNewAddedFile,
         updateAddedFile,
         getAddedFile,
-        getAddedFileListWithout,
+        getAddedFileList,
         clearAddedFiles,
         initializeNotSupportedFile,
         callbackRef
@@ -103,6 +104,8 @@ export const FileUpload = ({ mode, widget, operationInfo, children, uploadType =
             })
     }
 
+    const debouncedAddedFileList = useDebounce(getAddedFileList(), 600)
+
     return (
         <>
             <div onDrop={disabled ? undefined : handleDrop}>
@@ -122,7 +125,7 @@ export const FileUpload = ({ mode, widget, operationInfo, children, uploadType =
             </div>
             <UploadListContainer
                 ref={callbackRef}
-                addedFileList={getAddedFileListWithout()}
+                addedFileList={debouncedAddedFileList}
                 onClose={clearAddedFiles}
                 data-test-notification-inner-container={true}
                 data-test-notification-for-action={true}

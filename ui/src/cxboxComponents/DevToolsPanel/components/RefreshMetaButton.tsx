@@ -1,7 +1,6 @@
 import React from 'react'
 import { Button, Tooltip } from 'antd'
-import { useAppDispatch } from '@store'
-import { actions } from '@cxbox-ui/core'
+import { useMeta } from '../../../queries'
 
 interface RefreshMetaButtonProps {
     className?: string
@@ -9,10 +8,12 @@ interface RefreshMetaButtonProps {
 
 const RefreshMetaButton: React.FunctionComponent<RefreshMetaButtonProps> = props => {
     const { className } = props
-    const dispatch = useAppDispatch()
+    const { refetch } = useMeta()
+
     const handleRefreshMeta = React.useCallback(() => {
-        dispatch(actions.refreshMeta())
-    }, [dispatch])
+        refetch()
+    }, [refetch])
+
     return (
         <div className={className}>
             <Tooltip title={'Refresh meta'}>

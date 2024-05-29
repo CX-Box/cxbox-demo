@@ -13,6 +13,9 @@ import { interfaces, utils } from '@cxbox-ui/core'
 import { RootState } from '@store'
 import { WidgetShowCondition } from '@cxbox-ui/schema'
 import { buildBcUrl } from '@utils/buildBcUrl'
+import { useQuery } from '@tanstack/react-query'
+import { CxBoxApiInstance } from '../../api'
+import { useCxBoxLocation } from '@hooks/useLocation'
 
 interface WidgetOwnProps {
     meta: interfaces.WidgetMeta | interfaces.WidgetMetaAny
@@ -40,6 +43,13 @@ const skeletonParams = { rows: 5 }
  * @category Components
  */
 export const Widget: FunctionComponent<WidgetProps> = props => {
+    const [location] = useCxBoxLocation()
+
+    const { data: rowMeta } = useQuery({
+        queryKey: ['rowMeta', props.meta.bcName],
+        queryFn: () => CxBoxApiInstance.fetchRowMeta(location.bcMap.get('screen') || '', props.meta.bcName)
+    })
+
     if (!props.showWidget) {
         return null
     }
@@ -76,9 +86,9 @@ export const Widget: FunctionComponent<WidgetProps> = props => {
     // TODO 2.0.0 delete spinner and skeleton. Spinner and skeleton should be overridden by props.card component
     const WidgetParts = (
         <>
-            {showSkeleton && <Skeleton loading paragraph={skeletonParams} />}
-            {!showSkeleton && spinnerElement}
-            {!props.disableDebugMode && props.debugMode && <DebugPanel widgetMeta={props.meta} />}
+            {/*{showSkeleton && <Skeleton loading paragraph={skeletonParams} />}*/}
+            {/*{!showSkeleton && spinnerElement}*/}
+            {/*{!props.disableDebugMode && props.debugMode && <DebugPanel widgetMeta={props.meta} />}*/}
         </>
     )
 

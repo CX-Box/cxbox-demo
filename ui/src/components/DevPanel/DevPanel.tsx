@@ -1,10 +1,10 @@
 import React from 'react'
-import { useAppSelector } from '@store'
 import { DevToolsPanel } from '@cxboxComponents'
+import { useMeta } from '../../queries'
 
 const DevPanel: React.FunctionComponent = () => {
-    const showCondition = useAppSelector(state => state.session.devPanelEnabled)
-    if (!showCondition) {
+    const { data } = useMeta()
+    if (!data?.devPanelEnabled) {
         return null
     }
     return <DevToolsPanel />

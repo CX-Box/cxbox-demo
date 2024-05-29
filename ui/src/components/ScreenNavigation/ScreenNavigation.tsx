@@ -2,46 +2,39 @@ import React, { useEffect, useState } from 'react'
 import cn from 'classnames'
 import { Menu, Icon } from 'antd'
 import { ClickParam } from 'antd/lib/menu'
-import { useAppSelector } from '@store'
 import Search from 'antd/lib/input/Search'
 import styles from './ScreenNavigation.less'
-import { useChangeLocation } from '@router'
-import { useMeta } from '../../queries'
-import { useLocation, useRoute } from 'wouter'
+import { useCxBoxLocation } from '@hooks/useLocation'
+import { useMeta, useScreenMeta } from '../../queries'
 
 const selectedItemClass = 'selectedItem'
 
 function ScreenNavigation() {
+    const [location, navigate] = useCxBoxLocation()
     const { data } = useMeta()
+    const { data: screen } = useScreenMeta(location.bcMap.get('screen'))
 
-    const [, params] = useRoute('/screen/:screenName/*?')
-
-    const [path, navigate] = useLocation()
-
-    const screens = data?.screens
-    const selectedScreen =
-        screens?.find(item => item.name === params?.screenName) || screens?.find(screen => screen.defaultScreen) || screens?.[0]
-    const screenUrl = selectedScreen?.url ?? `/screen/${params?.screenName}`
+    const screenUrl = screen?.url ?? `/screen/${location.bcMap.get('screen')}`
 
     const handleClick = (e: ClickParam) => {
         navigate(e.key)
     }
-    //
-    // const { filteredValues: filteredScreens, handleSearch } = useLocalSearch({ values: screens, comparisonField: 'text' })
-    //
-    // useEffect(() => {
-    //     // can't use .ant-menu-item-selected because dom nodes changes it too slowly
-    //     const selectedItem = document.querySelector(`.${styles.item}.${selectedItemClass}`)
-    //     selectedItem?.scrollIntoView()
-    // }, [screenUrl])
+
+    const { filteredValues: filteredScreens, handleSearch } = useLocalSearch({ values: data?.screens ?? [], comparisonField: 'text' })
+
+    useEffect(() => {
+        // can't use .ant-menu-item-selected because dom nodes changes it too slowly
+        const selectedItem = document.querySelector(`.${styles.item}.${selectedItemClass}`)
+        selectedItem?.scrollIntoView()
+    }, [screenUrl])
 
     return (
         <div className={styles.menuContainer}>
-            {/*<div className={styles.search}>*/}
-            {/*    <Search onSearch={handleSearch} />*/}
-            {/*</div>*/}
+            <div className={styles.search}>
+                <Search onSearch={handleSearch} />
+            </div>
             <Menu className={styles.container} data-test="MAIN_MENU" selectedKeys={[screenUrl]} onClick={handleClick} theme="dark">
-                {data?.screens.map(item => {
+                {filteredScreens.map(item => {
                     return (
                         <Menu.Item
                             key={item.url}

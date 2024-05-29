@@ -1,31 +1,23 @@
-import React, { useEffect } from 'react'
-import { Button, Layout, Popover, Spin } from 'antd'
+import React from 'react'
+import { Layout, Spin } from 'antd'
 import AppSide from '../AppSide/AppSide'
 import AppBar from '../AppBar/AppBar'
 import DevPanel from '../DevPanel/DevPanel'
-import { SSO_AUTH } from '@actions'
 import styles from './AppLayout.less'
 import View from '../View/View'
-import ModalInvoke from '../ModalInvoke/ModalInvoke'
 import SystemNotifications from '../SystemNotifications/SystemNotifications'
 import ErrorPopup from '../containers/ErrorPopup/ErrorPopup'
-import { useAppDispatch, useAppSelector } from '@store'
 import Notifications from '@components/Notifications/Notifications'
 import { Login } from '../Login/Login'
-import { keycloak, keycloakOptions } from '../../keycloak'
-import { useQuery } from '@tanstack/react-query'
-import { CxBoxApiInstance } from '../../api'
 import { useMeta } from '../../queries'
-import { useBrowserLocation } from 'wouter/use-browser-location'
-import { useRoute, useRouter } from 'wouter'
 
 export const AppLayout: React.FC = () => {
-    const { isFetching } = useMeta()
+    const { isLoading } = useMeta()
 
-    return !isFetching ? (
+    return !isLoading ? (
         <Layout className={styles.root}>
             <Notifications />
-            <Spin wrapperClassName={styles.appSpin} spinning={isFetching}>
+            <Spin wrapperClassName={styles.appSpin} spinning={isLoading}>
                 <DevPanel />
                 <ErrorPopup />
                 {/*{modalInvoke?.operation && <ModalInvoke />}*/}
@@ -40,7 +32,7 @@ export const AppLayout: React.FC = () => {
             </Spin>
         </Layout>
     ) : (
-        <div className={styles.spinContainer}>{!isFetching ? <Login /> : <Spin size="large" />}</div>
+        <div className={styles.spinContainer}>{!isLoading ? <Login /> : <Spin size="large" />}</div>
     )
 }
 

@@ -5,6 +5,8 @@ import ViewInfoLabel from '@cxboxComponents/DebugPanel/components/ViewInfoLabel'
 import DebugPanel from '@cxboxComponents/DebugPanel/DebugPanel'
 import { RootState } from '@store'
 import { interfaces } from '@cxbox-ui/core'
+import { useCxBoxLocation } from '@hooks/useLocation'
+import { useViewMeta } from '../../queries'
 
 const { PopupWidgetTypes } = interfaces
 
@@ -32,7 +34,10 @@ export const CustomizationContext: React.Context<{
  * @category Components
  */
 export const View: FunctionComponent<ViewProps> = props => {
-    const { debugMode, widgets, skipWidgetTypes, card, customSpinner, customWidgets, customLayout, customFields, disableDebugMode } = props
+    const [location] = useCxBoxLocation()
+    const { data } = useViewMeta(location.bcMap.get('screen'), location.bcMap.get('view'))
+
+    const { debugMode, skipWidgetTypes, card, customSpinner, customWidgets, customLayout, customFields, disableDebugMode } = props
     let layout: React.ReactNode = null
     if (customLayout) {
         const CustomLayout = customLayout
@@ -40,7 +45,7 @@ export const View: FunctionComponent<ViewProps> = props => {
         layout = (
             <CustomLayout
                 customSpinner={customSpinner}
-                widgets={widgets}
+                widgets={data?.widgets}
                 customWidgets={customWidgets}
                 card={card}
                 skipWidgetTypes={skipWidgetTypes}
@@ -51,7 +56,7 @@ export const View: FunctionComponent<ViewProps> = props => {
         layout = (
             <DashboardLayout
                 customSpinner={customSpinner}
-                widgets={widgets}
+                widgets={data?.widgets}
                 customWidgets={customWidgets}
                 card={card}
                 skipWidgetTypes={skipWidgetTypes}
@@ -66,7 +71,7 @@ export const View: FunctionComponent<ViewProps> = props => {
             {layout}
             {!disableDebugMode &&
                 debugMode &&
-                widgets.filter(i => PopupWidgetTypes.includes(i.type)).map(i => <DebugPanel key={i.name} widgetMeta={i} />)}
+                data?.widgets.filter(i => PopupWidgetTypes.includes(i.type)).map(i => <DebugPanel key={i.name} widgetMeta={i} />)}
         </CustomizationContext.Provider>
     )
 }

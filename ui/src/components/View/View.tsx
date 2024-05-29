@@ -35,6 +35,8 @@ import TimeField from '../../fields/TimePicker/TimePickerField'
 import SuggestionPickListField from '../../fields/SuggestionPickList/SuggestionPickList'
 import { StatsBlock } from '@components/widgets/StatsBlock/StatsBlock'
 import FileViewerPopup from '@components/FileViewerPopup/FileViewerPopup'
+import { useCxBoxLocation } from '@hooks/useLocation'
+import { useViewMeta } from '../../queries'
 
 // TODO We need to remove PopupWidgetTypes from the core and replace imports throughout the entire project
 const { PopupWidgetTypes, FieldType } = interfaces
@@ -79,8 +81,9 @@ const customWidgets: Partial<Record<CustomWidgetTypes | interfaces.WidgetTypes, 
 }
 
 function View() {
+    const [location] = useCxBoxLocation()
+    const { data } = useViewMeta(location.bcMap.get('screen'), location.bcMap.get('view'))
     const debugMode = useAppSelector(state => state.session.debugMode || false)
-    const widgets = useAppSelector(state => state.view.widgets)
 
     return (
         <div className={styles.container}>
@@ -95,7 +98,7 @@ function View() {
                 disableDebugMode={true}
             />
             {debugMode &&
-                widgets.filter(i => allPopupWidgetTypes.includes(i.type)).map(i => <PopupWidgetInfoLabel key={i.name} meta={i} />)}
+                data?.widgets.filter(i => allPopupWidgetTypes.includes(i.type)).map(i => <PopupWidgetInfoLabel key={i.name} meta={i} />)}
         </div>
     )
 }

@@ -1,5 +1,5 @@
 import { AppWidgetMeta } from '@interfaces/widget'
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { useCallback } from 'react'
 import { shallowEqual, useDispatch } from 'react-redux'
 import { useAppSelector } from '@store'
 import { interfaces } from '@cxbox-ui/core'
@@ -7,7 +7,7 @@ import { ExpandIconProps } from 'antd/lib/table'
 import ExpandIcon from '../components/ExpandIcon'
 import ExpandedRow from '../components/ExpandedRow'
 import { ColumnProps } from 'antd/es/table'
-import { actions, resetRecordForm, setRecordForm } from '@actions'
+import { resetRecordForm, setRecordForm } from '@actions'
 import { Spin } from 'antd'
 import DebugWidgetWrapper from '../../../DebugWidgetWrapper/DebugWidgetWrapper'
 import { buildBcUrl } from '@utils/buildBcUrl'
@@ -59,48 +59,11 @@ function isExpandColumn(item: ControlColumn) {
     return item.column.key === EXPAND_ICON_COLUMN.key
 }
 
-export const useRecordCursorReturn = (bcName: string) => {
-    const popupData = useAppSelector(state => state.view.popupData)
-    const recordFormCursor = useAppSelector(state => state.view.recordForm?.cursor)
-    const recordFormActive = useAppSelector(state => state.view.recordForm?.active)
-    const bcData = useAppSelector(state => state.data[bcName])
-    const currentCursor = useAppSelector(state => state.screen.bo.bc[bcName]?.cursor)
-
-    const cursorReturnInitialized = useRef<boolean>(false)
-
-    const dispatch = useDispatch()
-
-    useEffect(() => {
-        if (!cursorReturnInitialized.current && popupData?.active && popupData?.options?.type === 'file-viewer' && recordFormActive) {
-            cursorReturnInitialized.current = true
-        }
-    }, [bcData, bcName, dispatch, popupData?.active, popupData?.options?.type, cursorReturnInitialized, recordFormActive])
-
-    useEffect(() => {
-        if (
-            !popupData?.active &&
-            cursorReturnInitialized.current &&
-            recordFormActive &&
-            recordFormCursor !== currentCursor &&
-            bcData.find(dataItem => dataItem.id === recordFormCursor)
-        ) {
-            cursorReturnInitialized.current = false
-            dispatch(actions.bcSelectRecord({ bcName, cursor: recordFormCursor, skipUnsavedNotification: true }))
-        }
-
-        if (!recordFormActive) {
-            cursorReturnInitialized.current = false
-        }
-    }, [bcData, bcName, currentCursor, dispatch, popupData?.active, cursorReturnInitialized, recordFormActive, recordFormCursor])
-}
-
 export function useExpandableForm(currentWidgetMeta: AppWidgetMeta) {
     const { internalWidget, internalWidgetOperations, internalWidgetActiveCursor, isCreateStyle, isEditStyle } =
         useInternalWidgetSelector(currentWidgetMeta)
     const { cursor: currentActiveRowId } = useAppSelector(state => state.view.recordForm)
     const debugMode = useAppSelector(state => state.session.debugMode || false)
-
-    useRecordCursorReturn(internalWidget?.bcName)
 
     const dispatch = useDispatch()
 

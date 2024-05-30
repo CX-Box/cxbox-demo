@@ -23,10 +23,6 @@ export const internalFormWidgetMiddleware: Middleware =
         const state = getState()
         const recordForm = state.view.recordForm
 
-        if (action.payload?.skipUnsavedNotification) {
-            return next(action)
-        }
-
         const selectBcRecordAfter = (action: AnyAction) => {
             next(action)
 

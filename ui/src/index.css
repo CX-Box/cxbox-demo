@@ -19,3 +19,7 @@ body {
 * {
     box-sizing: border-box;
 }
+
+.ant-notification {
+    z-index: 1060 !important;
+}

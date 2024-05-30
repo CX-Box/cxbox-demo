@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { UploadFile } from 'antd/es/upload/interface'
 import { applyParams, getFileUploadEndpoint } from '@utils/api'
@@ -16,6 +16,8 @@ import ReadOnlySingleFileUpload, { ReadOnlySingleFileUploadProps } from './ReadO
 import { DataValue } from '@interfaces/core'
 import { actions } from '@actions'
 import { FileUploadFieldMeta } from '@interfaces/widget'
+import { useDispatch } from 'react-redux'
+import { usePrevious } from '@hooks/usePrevious'
 
 interface Props extends Omit<BaseFieldProps, 'meta'> {
     value: string
@@ -165,20 +167,12 @@ const FileUploadContainer: React.FunctionComponent<Props> = ({
     const fileName = fileNameDelta || fieldValue
 
     const displayFileViewer = preview?.enabled
-
-    const handleFileIconClick = useCallback(() => {
-        dispatch(actions.bcSelectRecord({ bcName, cursor: fieldDataItem?.id as string, skipUnsavedNotification: true }))
-        dispatch(
-            actions.showFileViewerPopup({
-                active: true,
-                options: {
-                    type: 'file-viewer',
-                    calleeFieldKey: fieldName
-                },
-                calleeWidgetName: widgetName as string
-            })
-        )
-    }, [bcName, dispatch, fieldName, fieldDataItem?.id, widgetName])
+    const handleFileIconClick = useFileIconClick(
+        widgetMeta?.name as string,
+        widgetMeta?.bcName as string,
+        fieldDataItem?.id as string,
+        fieldName
+    )
 
     if (readOnly) {
         const diffProps = getReadOnlyDiffProps()
@@ -227,3 +221,38 @@ const FileUploadContainer: React.FunctionComponent<Props> = ({
 }
 
 export default React.memo(FileUploadContainer)
+
+// The hook is needed so that before opening a popup, if there is unsaved data in the table row being edited, the popup will not open until the data is saved or deleted (internalFormWidgetMiddleware)
+export const useFileIconClick = (widgetName: string, bcName: string, recordId: string, fieldName: string) => {
+    const dispatch = useDispatch()
+    const currentCursor = useAppSelector(state => state.screen.bo.bc[bcName].cursor)
+    const [wasClick, setWasClick] = useState(false)
+
+    const handleFileIconClick = useCallback(() => {
+        setWasClick(true)
+        dispatch(actions.bcSelectRecord({ bcName, cursor: recordId }))
+    }, [bcName, dispatch, recordId])
+
+    const currentCursorPrevious = usePrevious(currentCursor)
+
+    useEffect(() => {
+        if (currentCursor === recordId && wasClick) {
+            setWasClick(false)
+
+            dispatch(
+                actions.showFileViewerPopup({
+                    active: true,
+                    options: {
+                        type: 'file-viewer',
+                        calleeFieldKey: fieldName
+                    },
+                    calleeWidgetName: widgetName as string
+                })
+            )
+        } else if (currentCursor !== currentCursorPrevious && wasClick) {
+            setWasClick(false)
+        }
+    }, [currentCursor, currentCursorPrevious, dispatch, fieldName, recordId, wasClick, widgetName])
+
+    return handleFileIconClick
+}

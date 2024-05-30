@@ -41,8 +41,7 @@ export function useArrowPagination(widget?: WidgetMeta) {
             dispatch(
                 actions.bcSelectRecord({
                     bcName: bc?.name as string,
-                    cursor: data?.[data?.length - 1]?.id as string,
-                    skipUnsavedNotification: true
+                    cursor: data?.[data?.length - 1]?.id as string
                 })
             )
             setChangePageType(null)
@@ -63,8 +62,7 @@ export function useArrowPagination(widget?: WidgetMeta) {
                 dispatch(
                     actions.bcSelectRecord({
                         bcName: bc.name as string,
-                        cursor: data[indexOnPage].id as string,
-                        skipUnsavedNotification: true
+                        cursor: data[indexOnPage].id as string
                     })
                 )
             }

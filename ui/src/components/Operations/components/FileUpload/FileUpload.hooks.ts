@@ -139,27 +139,9 @@ export const useUploadFilesInfo = (accept?: string) => {
         return addedFileDictionary[uid]
     }
 
-    const getAddedFileList = useCallback(
-        (statuses?: AddedFileInfo['status'][]) => {
-            if (!statuses?.length) {
-                return addedFileList
-            }
-
-            return addedFileList.filter(addedFile => statuses.includes(addedFile.status))
-        },
-        [addedFileList]
-    )
-
-    const getAddedFileListWithout = useCallback(
-        (statuses?: AddedFileInfo['status'][]) => {
-            if (!statuses?.length) {
-                return addedFileList
-            }
-
-            return addedFileList.filter(addedFile => !statuses.includes(addedFile.status))
-        },
-        [addedFileList]
-    )
+    const getAddedFileList = useCallback(() => {
+        return addedFileList
+    }, [addedFileList])
 
     const changeFileStatuses = useCallback((from: keyof typeof UPLOAD_FILE_STATUS, to: keyof typeof UPLOAD_FILE_STATUS) => {
         setAddedFileDictionary(fileDictionary =>
@@ -207,7 +189,6 @@ export const useUploadFilesInfo = (accept?: string) => {
         initializeNotSupportedFile,
         getAddedFile,
         getAddedFileList,
-        getAddedFileListWithout,
         clearAddedFiles,
         changeFileStatuses,
         removeAddedFiles

@@ -46,7 +46,7 @@ const FileUploadContainer: React.FunctionComponent<Props> = ({
     const rowMeta = useAppSelector(state => state.view.rowMeta[bcName]?.[bcUrl])
     const rowMetaField = rowMeta?.fields.find(field => field.key === meta.key) as RowMetaField | undefined
     const fileAccept = rowMetaField?.fileAccept
-    const { getAddedFileListWithout, clearAddedFiles, initializeNewAddedFile, initializeNotSupportedFile, updateAddedFile, callbackRef } =
+    const { getAddedFileList, clearAddedFiles, initializeNewAddedFile, initializeNotSupportedFile, updateAddedFile, callbackRef } =
         useUploadFilesInfoWithAutoRemove(fileAccept)
 
     const dispatch = useAppDispatch()
@@ -165,10 +165,9 @@ const FileUploadContainer: React.FunctionComponent<Props> = ({
     const fileName = fileNameDelta || fieldValue
 
     const displayFileViewer = preview?.enabled
-    const recordId = fieldDataItem?.id as string
-    const handleFileIconClick = useCallback(() => {
-        dispatch(actions.bcSelectRecord({ bcName, cursor: recordId }))
 
+    const handleFileIconClick = useCallback(() => {
+        dispatch(actions.bcSelectRecord({ bcName, cursor: fieldDataItem?.id as string, skipUnsavedNotification: true }))
         dispatch(
             actions.showFileViewerPopup({
                 active: true,
@@ -176,10 +175,10 @@ const FileUploadContainer: React.FunctionComponent<Props> = ({
                     type: 'file-viewer',
                     calleeFieldKey: fieldName
                 },
-                calleeWidgetName: widgetMeta?.name as string
+                calleeWidgetName: widgetName as string
             })
         )
-    }, [bcName, dispatch, fieldName, recordId, widgetMeta?.name])
+    }, [bcName, dispatch, fieldName, fieldDataItem?.id, widgetName])
 
     if (readOnly) {
         const diffProps = getReadOnlyDiffProps()
@@ -215,7 +214,7 @@ const FileUploadContainer: React.FunctionComponent<Props> = ({
             />
             <UploadListContainer
                 ref={callbackRef}
-                addedFileList={getAddedFileListWithout()}
+                addedFileList={getAddedFileList()}
                 onClose={clearAddedFiles}
                 successHint={t('The file has been uploaded. Please save the changes')}
                 data-test-notification-inner-container={true}

@@ -41,7 +41,7 @@ export const FileUpload = ({ mode, widget, operationInfo, children, uploadType =
         initializeNewAddedFile,
         updateAddedFile,
         getAddedFile,
-        getAddedFileListWithout,
+        getAddedFileList,
         clearAddedFiles,
         initializeNotSupportedFile,
         callbackRef
@@ -122,7 +122,7 @@ export const FileUpload = ({ mode, widget, operationInfo, children, uploadType =
             </div>
             <UploadListContainer
                 ref={callbackRef}
-                addedFileList={getAddedFileListWithout()}
+                addedFileList={getAddedFileList()}
                 onClose={clearAddedFiles}
                 data-test-notification-inner-container={true}
                 data-test-notification-for-action={true}

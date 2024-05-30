@@ -29,12 +29,6 @@ export const showViewPopup = createAction<
     }
 >('showViewPopup')
 
-export const bcSelectRecord = createAction<
-    ReturnType<typeof actions.bcSelectRecord>['payload'] & {
-        skipUnsavedNotification?: true
-    }
->('bcSelectRecord')
-
 export const showFileViewerPopup = createAction<{
     active: boolean
     calleeWidgetName: string

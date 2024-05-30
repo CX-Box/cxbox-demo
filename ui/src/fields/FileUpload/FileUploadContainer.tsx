@@ -16,7 +16,6 @@ import ReadOnlySingleFileUpload, { ReadOnlySingleFileUploadProps } from './ReadO
 import { DataValue } from '@interfaces/core'
 import { actions } from '@actions'
 import { FileUploadFieldMeta } from '@interfaces/widget'
-import { useDebounce } from '@hooks/useDebounce'
 
 interface Props extends Omit<BaseFieldProps, 'meta'> {
     value: string
@@ -156,7 +155,6 @@ const FileUploadContainer: React.FunctionComponent<Props> = ({
 
         return
     }
-    const debouncedAddedFileList = useDebounce(getAddedFileList(), 600)
 
     const downloadUrl = getDownloadUrl({
         source: fileSource,
@@ -216,7 +214,7 @@ const FileUploadContainer: React.FunctionComponent<Props> = ({
             />
             <UploadListContainer
                 ref={callbackRef}
-                addedFileList={debouncedAddedFileList}
+                addedFileList={getAddedFileList()}
                 onClose={clearAddedFiles}
                 successHint={t('The file has been uploaded. Please save the changes')}
                 data-test-notification-inner-container={true}

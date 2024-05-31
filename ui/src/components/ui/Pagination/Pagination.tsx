@@ -10,14 +10,15 @@ import { actions } from '@actions'
 
 export interface PaginationProps {
     meta: interfaces.WidgetMeta
+    disabledLimit?: boolean
 }
 
-function Pagination({ meta }: PaginationProps) {
+function Pagination({ meta, disabledLimit }: PaginationProps) {
     const dispatch = useDispatch()
 
     const { bcName, limit: metaLimit } = meta
     const { bcLimit, page } = useAppSelector(state => {
-        const bc = state.screen.bo.bc[bcName]
+        const bc = bcName ? state.screen.bo.bc[bcName] : undefined
         return {
             bcLimit: bc?.limit,
             page: bc?.page
@@ -51,7 +52,15 @@ function Pagination({ meta }: PaginationProps) {
                 onChange={handlePageChange}
             />
             {!hideLimitOptions && (
-                <Limit className={styles.limits} value={pageLimit} onChange={changePageLimit} total={total} options={options} />
+                <Limit
+                    className={styles.limits}
+                    classNameContainer={styles.limitContainer}
+                    disabled={disabledLimit}
+                    value={pageLimit}
+                    onChange={changePageLimit}
+                    total={total}
+                    options={options}
+                />
             )}
         </div>
     )

@@ -1,12 +1,8 @@
 import { interfaces } from '@cxbox-ui/core'
-import { TableSettingsItem } from '@interfaces/tableSettings'
+import { AppWidgetMeta } from '@interfaces/widget'
 
 export interface LoginResponse extends interfaces.LoginResponse {
     userId: string
-}
-
-export interface WidgetMeta extends interfaces.WidgetMeta {
-    personalFields: TableSettingsItem | null
 }
 
 export interface SessionScreen extends interfaces.SessionScreen {
@@ -18,5 +14,5 @@ export interface ScreenMetaResponse extends interfaces.ScreenMetaResponse {
 }
 
 export interface ViewMetaResponse extends interfaces.ViewMetaResponse {
-    widgets: WidgetMeta[]
+    widgets: AppWidgetMeta[]
 }

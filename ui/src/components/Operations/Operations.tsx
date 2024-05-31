@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { ReactNode, useEffect, useRef } from 'react'
 import { actions, interfaces } from '@cxbox-ui/core'
 import { Icon } from 'antd'
 import { useAppSelector } from '@store'
@@ -21,10 +21,11 @@ export interface OperationsOwnProps {
     bcName: string
     widgetMeta: AppWidgetMeta
     operations: Array<interfaces.Operation | interfaces.OperationGroup>
+    additionalOperations?: ReactNode
 }
 
 function Operations(props: OperationsOwnProps) {
-    const { bcName, widgetMeta, operations, className } = props
+    const { bcName, widgetMeta, operations, className, additionalOperations } = props
     const metaInProgress = useAppSelector(state => state.view.metaInProgress[bcName])
 
     const { defaultOperations, customOperations, isUploadDnDMode } = useWidgetOperationsMode(widgetMeta, operations)
@@ -104,13 +105,16 @@ function Operations(props: OperationsOwnProps) {
                         </Button>
                     )
                 })}
-                {widgetMeta.options?.fullTextSearch?.enabled && (
-                    <TextSearchInput
-                        bcName={bcName}
-                        widgetName={widgetMeta.name}
-                        placeholder={widgetMeta.options?.fullTextSearch?.placeholder}
-                    />
-                )}
+                <div className={styles.operationsLeftBlock}>
+                    {widgetMeta.options?.fullTextSearch?.enabled && (
+                        <TextSearchInput
+                            bcName={bcName}
+                            widgetName={widgetMeta.name}
+                            placeholder={widgetMeta.options?.fullTextSearch?.placeholder}
+                        />
+                    )}
+                    {additionalOperations}
+                </div>
             </div>
         </div>
     )

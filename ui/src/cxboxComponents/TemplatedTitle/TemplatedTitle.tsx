@@ -29,7 +29,7 @@ export const TemplatedTitle: FunctionComponent<TemplatedTitleProps> = props => {
 function mapStateToProps(state: RootState, ownProps: TemplatedTitleOwnProps) {
     const widget = state.view.widgets.find(item => item.name === ownProps.widgetName)
     const bcName = widget?.bcName || ''
-    const bc = state.screen.bo.bc[bcName]
+    const bc = bcName ? state.screen.bo.bc[bcName] : undefined
     const cursor = bc?.cursor
     const bcData = state.data[bcName]
     const dataItem = bcData?.find(item => item.id === cursor)

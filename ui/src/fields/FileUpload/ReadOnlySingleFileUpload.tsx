@@ -56,7 +56,7 @@ function ReadOnlySingleFileUpload({
     }
 
     return (
-        <span>
+        <div className={styles.root}>
             {smartIcon}
             <span className={styles.viewLink}>
                 {downloadUrl && (
@@ -65,7 +65,7 @@ function ReadOnlySingleFileUpload({
                     </a>
                 )}
             </span>
-        </span>
+        </div>
     )
 }
 

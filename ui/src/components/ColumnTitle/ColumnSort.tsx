@@ -1,97 +1,116 @@
-import React, { FunctionComponent } from 'react'
-import { connect } from 'react-redux'
-import { Dispatch } from 'redux'
+import React, { FunctionComponent, useCallback } from 'react'
+import { shallowEqual, useDispatch } from 'react-redux'
 import { Icon } from 'antd'
 import cn from 'classnames'
 import styles from './ColumnSort.less'
-import { actions, interfaces } from '@cxbox-ui/core'
-import { RootState } from '@store'
+import { actions, BcSorter } from '@cxbox-ui/core'
+import { useAppSelector } from '@store'
+import { AppWidgetTableMeta } from '@interfaces/widget'
 
-export interface ColumnSortOwnProps {
+export interface ColumnSortProps {
     className?: string
     widgetName: string
     fieldKey: string
 }
 
-export interface ColumnSortProps extends ColumnSortOwnProps {
-    sorter?: interfaces.BcSorter
-    /**
-     * @deprecated TODO: Remove in 2.0.0 in favor of widget name
-     */
-    bcName: string
-    /**
-     * @deprecated TODO: Remove in 2.0.0, get page directly from the store
-     */
-    page?: number
-    infinitePagination: boolean
-    onSort: (bcName: string, sorter: interfaces.BcSorter, page: number, widgetName: string, infinitePagination: boolean) => void
-}
+export const ColumnSort: FunctionComponent<ColumnSortProps> = ({ widgetName, fieldKey, className }) => {
+    const { hideSort, sorter, toggleSort } = useSorter(widgetName, fieldKey)
 
-export const ColumnSort: FunctionComponent<ColumnSortProps> = props => {
-    if (!props.bcName) {
+    if (hideSort) {
         return null
     }
-    let icon = 'caret-down'
-    if (props.sorter) {
-        icon = props.sorter.direction === 'asc' ? 'caret-up' : 'caret-down'
-    }
 
-    const handleSort = () => {
-        const sorter: interfaces.BcSorter = {
-            fieldName: props.fieldKey,
-            direction: !props.sorter ? 'desc' : props.sorter.direction === 'asc' ? 'desc' : 'asc'
-        }
-        props.onSort(props.bcName, sorter, props.page as number, props.widgetName, props.infinitePagination)
-    }
+    const icon = sorter?.direction === 'asc' ? 'caret-up' : 'caret-down'
 
     return (
         <Icon
-            className={cn(styles.icon, props.className, { [styles.forceShow]: props.sorter })}
+            className={cn(styles.icon, className, { [styles.forceShow]: sorter })}
             type={icon}
             data-test-widget-list-header-column-sort={true}
-            onClick={handleSort}
+            onClick={toggleSort}
         />
     )
 }
 
-function mapStateToProps(state: RootState, ownProps: ColumnSortOwnProps) {
-    const widget = state.view.widgets.find(item => item.name === ownProps.widgetName)
-    const bcName = widget?.bcName as string
-    const sorter = state.screen.sorters[bcName]?.find(item => item.fieldName === ownProps.fieldKey)
-    const page = state.screen.bo.bc[bcName]?.page
-    const infinitePagination = !!state.view.infiniteWidgets?.includes(ownProps.widgetName)
-    return {
-        bcName,
-        infinitePagination,
-        sorter,
-        page
-    }
-}
+export default ColumnSort
 
-function mapDispatchToProps(dispatch: Dispatch) {
-    return {
-        onSort: (bcName: string, sorter: interfaces.BcSorter, page: number, widgetName: string, infinitePagination: boolean) => {
-            dispatch(actions.bcAddSorter({ bcName, sorter }))
+export function useSorter(widgetName: string, fieldKey: string) {
+    const { bcName, sorters, page, infinitePagination, permanentSorterFields } = useAppSelector(state => {
+        const widget = state.view.widgets.find(item => item.name === widgetName) as AppWidgetTableMeta | undefined
+        const bcName = widget?.bcName as string
+        const sorters = state.screen.sorters[bcName] as BcSorter[] | undefined
+        const page = state.screen.bo.bc[bcName]?.page
+        const infinitePagination = !!state.view.infiniteWidgets?.includes(widgetName)
+        const permanentSorterFields = widget?.options?.groupingHierarchy?.fields
+
+        return { bcName, infinitePagination, sorters, page, permanentSorterFields }
+    }, shallowEqual)
+
+    const fieldSorter = sorters?.find(item => item.fieldName === fieldKey)
+
+    const dispatch = useDispatch()
+
+    const setSort = useCallback(
+        (newSorter: BcSorter | BcSorter[]) => {
+            dispatch(actions.bcAddSorter({ bcName, sorter: newSorter }))
+
             infinitePagination
                 ? dispatch(
                       actions.bcFetchDataPages({
-                          bcName: bcName,
-                          widgetName: widgetName,
+                          bcName,
+                          widgetName,
                           from: 1,
                           to: page
                       })
                   )
                 : dispatch(
                       actions.bcForceUpdate({
-                          bcName: bcName,
-                          widgetName: widgetName
+                          bcName,
+                          widgetName
                       })
                   )
+        },
+        [bcName, dispatch, infinitePagination, page, widgetName]
+    )
+
+    const toggleSort = useCallback(() => {
+        const newSorters = sorters?.filter(sorter => sorter.fieldName === fieldKey || permanentSorterFields?.includes(sorter.fieldName))
+
+        if (!permanentSorterFields || !newSorters) {
+            setSort({
+                fieldName: fieldKey,
+                direction: !fieldSorter ? 'desc' : fieldSorter.direction === 'asc' ? 'desc' : 'asc'
+            })
+
+            return
         }
+
+        if (permanentSorterFields && newSorters) {
+            const currentFieldSorterIndex = newSorters?.findIndex(item => item.fieldName === fieldKey) ?? -1
+
+            if (currentFieldSorterIndex !== -1) {
+                const oldFieldSorter = newSorters?.[currentFieldSorterIndex]
+
+                newSorters[currentFieldSorterIndex] = {
+                    ...oldFieldSorter,
+                    direction: oldFieldSorter?.direction === 'asc' ? 'desc' : 'asc'
+                }
+            } else {
+                newSorters?.push({
+                    fieldName: fieldKey,
+                    direction: !fieldSorter ? 'desc' : fieldSorter.direction === 'asc' ? 'desc' : 'asc'
+                })
+            }
+
+            setSort(newSorters)
+
+            return
+        }
+    }, [sorters, permanentSorterFields, fieldKey, setSort, fieldSorter])
+
+    return {
+        sorter: fieldSorter,
+        hideSort: !bcName,
+        toggleSort
     }
 }
-
-/**
- * @category Components
- */
-export default connect(mapStateToProps, mapDispatchToProps)(ColumnSort)

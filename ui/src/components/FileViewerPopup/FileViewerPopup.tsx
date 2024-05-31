@@ -45,7 +45,7 @@ function FileViewerPopup() {
 
     const windowSize = useWindowSize()
 
-    const { visible: fullscreen, changeVisibility: setFullscreen } = useVisibility(false)
+    const { visibility: fullscreen, changeVisibility: setFullscreen } = useVisibility(false)
 
     useEffect(() => {
         if (visible) {

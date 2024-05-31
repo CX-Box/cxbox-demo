@@ -41,6 +41,8 @@ export interface RowOperationsButtonInstance {
  * {@link RowOperationsButtonInstance.setRow | setRow} can be used to dynamically place the button
  * next to hovered row.
  *
+ * @param meta
+ * @param parent
  * @param props - Component properties
  * @param ref - Assigned reference will receive component instance
  */
@@ -122,7 +124,6 @@ export const RowOperationsButton = (
                 onVisibleChange={handleVisibleChange}
                 getPopupContainer={handlePopupContainer}
             >
-                {/*<Icon type="ellipsis" className={styles.dots} onClick={handleFetchMeta} />*/}
                 <Button className={styles.dots} data-test-widget-list-row-action={true} icon="ellipsis" onClick={handleFetchMeta} />
             </Dropdown>
         </div>

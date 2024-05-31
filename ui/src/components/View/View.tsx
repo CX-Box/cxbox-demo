@@ -35,6 +35,7 @@ import TimeField from '../../fields/TimePicker/TimePickerField'
 import SuggestionPickListField from '../../fields/SuggestionPickList/SuggestionPickList'
 import { StatsBlock } from '@components/widgets/StatsBlock/StatsBlock'
 import FileViewerPopup from '@components/FileViewerPopup/FileViewerPopup'
+import GroupingHierarchy from '@components/widgets/GroupingHierarchy/GroupingHierarchy'
 
 // TODO We need to remove PopupWidgetTypes from the core and replace imports throughout the entire project
 const { PopupWidgetTypes, FieldType } = interfaces
@@ -63,6 +64,7 @@ const customWidgets: Partial<Record<CustomWidgetTypes | interfaces.WidgetTypes, 
     [WidgetTypes.Form]: { component: Form },
     [WidgetTypes.Info]: { component: Info },
     [WidgetTypes.List]: { component: Table },
+    [CustomWidgetTypes.GroupingHierarchy]: { component: GroupingHierarchy },
     [WidgetTypes.HeaderWidget]: { component: Header, card: EmptyCard },
     [CustomWidgetTypes.Steps]: { component: Steps, card: EmptyCard },
     [CustomWidgetTypes.Funnel]: { component: Funnel, card: DashboardCard },

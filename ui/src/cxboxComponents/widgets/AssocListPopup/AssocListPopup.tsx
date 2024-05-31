@@ -227,7 +227,7 @@ export const AssocListPopup = ({
 
 function mapStateToProps(state: RootState, ownProps: IAssocListOwnProps) {
     const bcName = ownProps.widget?.bcName
-    const bc = state.screen.bo.bc[bcName]
+    const bc = bcName ? state.screen.bo.bc[bcName] : undefined
     const isFilter = state.view.popupData?.isFilter
     const calleeBCName = state.view.popupData?.calleeBCName || ''
     const calleeWidgetName = state.view.popupData?.calleeWidgetName

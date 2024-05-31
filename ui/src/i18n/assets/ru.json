@@ -54,6 +54,8 @@
         "Error. File not loaded to current row": "Error. File not loaded to current row",
         "Skipped. The file upload was cancelled because a new file was added": "Skipped. The file upload was cancelled because a new file was added",
         "number of total files": "{{number}} of {{total}} files",
+        "Field cannot be moved": "Поле \"{{label}}\" нельзя переместить",
+        "Transfer space not available": "Место в которое вы пытаетесь перенести поле \"{{label}}\" не доступно",
         "Additional columns": "Дополнительные колонки",
         "Change": "Изменить",
         "Reset": "Сбросить",

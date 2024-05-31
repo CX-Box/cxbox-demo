@@ -17,7 +17,7 @@ export function FormPopup(props: FormPopupProps) {
     const bcName = props.meta.bcName
     const popupData = useAppSelector(state => state.view.popupData)
     const showed = popupData?.bcName === bcName
-    const bc = useAppSelector(state => state.screen.bo.bc[bcName])
+    const bc = useAppSelector(state => (bcName ? state.screen.bo.bc[bcName] : undefined))
     const bcLoading = bc && bc.loading
 
     const onClose = useCallback(() => {

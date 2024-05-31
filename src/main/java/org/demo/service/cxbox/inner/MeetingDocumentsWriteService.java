@@ -112,8 +112,7 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 		List<MeetingDocuments> meetingDocuments = fileUpload(bc, data);
 		List<MeetingDocumentsDTO> collect = meetingDocuments.stream().map(e -> entityToDto(bc, e))
 				.collect(Collectors.toList());
-		return new AssociateResultDTO((List) collect)
-				.setAction(PostAction.refreshBc(bc));
+		return new AssociateResultDTO((List) collect);
 	}
 
 	@SneakyThrows

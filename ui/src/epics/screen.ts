@@ -61,7 +61,7 @@ export const processPreInvokeConfirmEpic: RootEpic = (action$, state$) =>
         })
     )
 
-export const replaceTemporaryIdOnSavingEpic: RootEpic = (action$, state$, { api }) =>
+export const replaceTemporaryIdOnSavingEpic: RootEpic = action$ =>
     action$.pipe(
         filter(isAnyOf(sendOperationSuccess, actions.bcSaveDataSuccess)),
         mergeMap(action => {
@@ -71,10 +71,9 @@ export const replaceTemporaryIdOnSavingEpic: RootEpic = (action$, state$, { api 
             const needChangeBcPath = partPathWithIdRegExp.test(window.location.href)
 
             if (newCursor != null && needChangeBcPath) {
-                const newPathname = window.location.pathname.replace(
-                    `/${action.payload.bcName}/-1`,
-                    `/${action.payload.bcName}/${newCursor}`
-                )
+                const newPathname = window.location.hash
+                    .slice(1)
+                    .replace(`/${action.payload.bcName}/-1`, `/${action.payload.bcName}/${newCursor}`)
 
                 return of(actions.changeLocation({ location: getRouteFromString(newPathname) }))
             }

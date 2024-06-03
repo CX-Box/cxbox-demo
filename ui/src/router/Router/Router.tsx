@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from 'react'
 import { useAppSelector } from '@store'
-import { createBrowserHistory } from 'history'
+import { createHashHistory } from 'history'
 import { actions } from '@actions'
 import { getRouteFromString } from '../index'
 import { useDispatch } from 'react-redux'
 
-const historyObj = createBrowserHistory()
+const historyObj = createHashHistory()
 
 export const Router: React.FC = ({ children }) => {
     const path = useAppSelector(state => state.router.path)

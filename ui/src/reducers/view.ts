@@ -1,4 +1,4 @@
-import { reducers } from '@cxbox-ui/core'
+import { PendingValidationFailsFormat, reducers } from '@cxbox-ui/core'
 import { ViewState as CoreViewState } from '@interfaces/core'
 import { createReducer, isAnyOf } from '@reduxjs/toolkit'
 import { actions, partialUpdateRecordForm, resetRecordForm, setBcCount, setRecordForm, showViewPopup } from '@actions'
@@ -22,6 +22,7 @@ interface ViewState extends Omit<CoreViewState, 'popupData'> {
 
 const initialState: ViewState = {
     ...reducers.initialViewState,
+    pendingValidationFailsFormat: PendingValidationFailsFormat.target,
     rowMeta: {},
     pendingDataChanges: {},
     id: -1,

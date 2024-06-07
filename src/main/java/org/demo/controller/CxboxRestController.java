@@ -22,7 +22,9 @@ import org.demo.service.cxbox.inner.DashboardFilterService;
 import org.demo.service.cxbox.inner.MeetingDocumentsWriteService;
 import org.demo.service.cxbox.inner.MeetingReadService;
 import org.demo.service.cxbox.inner.MeetingWriteService;
+import org.demo.service.cxbox.inner.ResponsibilitesService;
 import org.demo.service.cxbox.inner.ResponsiblePickListService;
+
 import org.demo.service.cxbox.inner.SaleReadService;
 import org.demo.service.cxbox.inner.SaleWriteService;
 import org.springframework.stereotype.Component;
@@ -68,8 +70,8 @@ public enum CxboxRestController implements EnumBcIdentifier {
 		dashboardClientActivities(dashboardFilter, DashboardClientActivitiesService.class),
 	dashboardSalesFunnel(dashboardFilter, SaleStatsService.class),
 	dashboardSalesRingProgress(dashboardFilter, SaleProgressStatsService.class),
-	companySuggestionPickList(CompanyService.class);
-
+	companySuggestionPickList(CompanyService.class),
+	responsibilities(ResponsibilitesService.class);
 	// @formatter:on
 
 	public static final EnumBcIdentifier.Holder<CxboxRestController> Holder = new Holder<>(CxboxRestController.class);

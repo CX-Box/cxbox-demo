@@ -1,0 +1,26 @@
+{
+  "name": "resplist",
+  "title": "Responsibilities",
+  "template": "DashboardView",
+  "url": "/screen/admin/view/resplist",
+  "widgets": [
+    {
+      "widgetName": "SecondLevelMenu",
+      "position": 0,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "resplist",
+      "position": 10,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "respformedit",
+      "position": 20,
+      "gridWidth": 24
+    }
+  ],
+  "rolesAllowed": [
+    "CXBOX_USER"
+  ]
+}

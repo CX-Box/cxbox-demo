@@ -60,4 +60,13 @@
 
   </addColumn>
   </changeSet>
+
+  <changeSet id="ADD LANGUAGE DICTIONARY_ITEM_TR" author="cxbox">
+    <sql>
+      insert into DICTIONARY_ITEM_TR (ID, LANGUAGE, VALUE)
+      select ID, 'en' as LANGUAGE, VALUE as VALUE
+      from DICTIONARY_ITEM;
+    </sql>
+  </changeSet>
+
 </databaseChangeLog>

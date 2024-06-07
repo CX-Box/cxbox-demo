@@ -47,6 +47,14 @@
             "hidden": true
           }
         ]
+      },
+      {
+        "title": "Responsibilites Administration",
+        "child": [
+          {
+            "viewName": "resplist"
+          }
+        ]
       }
     ]
   }

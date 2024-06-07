@@ -8,7 +8,7 @@ import FilterPopup from '../FilterPopup/FilterPopup'
 import FilterField from './FilterField'
 import { useAppDispatch, useAppSelector } from '@store'
 import { FieldType, WidgetListField } from '@cxbox-ui/schema'
-import { RowMetaField } from '@cxbox-ui/core/dist/interfaces'
+import { RowMetaField } from '@cxbox-ui/core'
 import { actions } from '@actions'
 import { PickListFieldMeta } from '@cxbox-ui/schema/src/interfaces/widget'
 

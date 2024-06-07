@@ -6,7 +6,7 @@ import InfoRow from './components/InfoRow'
 import { RootState } from '@store'
 import { useFlatFormFields } from '@hooks/useFlatFormFields'
 import { actions, interfaces } from '@cxbox-ui/core'
-import { RowMetaField } from '@cxbox-ui/core/dist/interfaces'
+import { RowMetaField } from '@cxbox-ui/core'
 import { buildBcUrl } from '@utils/buildBcUrl'
 
 interface InfoWidgetOwnProps {

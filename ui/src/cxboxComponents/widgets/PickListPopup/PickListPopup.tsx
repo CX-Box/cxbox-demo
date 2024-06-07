@@ -11,7 +11,7 @@ import cn from 'classnames'
 import { RootState, useAppSelector } from '@store'
 import { createMapDispatchToProps } from '@utils/redux'
 import { actions, interfaces } from '@cxbox-ui/core'
-import { RowMetaField } from '@cxbox-ui/core/dist/interfaces'
+import { RowMetaField } from '@cxbox-ui/core'
 import { TableEventListeners } from 'antd/lib/table/interface'
 import { buildBcUrl } from '@utils/buildBcUrl'
 

@@ -7,6 +7,8 @@ import org.cxbox.core.dto.rowmeta.RowDependentFieldsMeta;
 import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
 import org.demo.dto.cxbox.inner.MeetingDocumentsDTO;
 import org.demo.dto.cxbox.inner.MeetingDocumentsDTO_;
+import org.demo.entity.enums.Briefings;
+import org.demo.entity.enums.Documents;
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S3252", "java:S1186"})
@@ -21,13 +23,18 @@ public class MeetingDocumentsWriteMeta extends FieldMetaBuilder<MeetingDocuments
 		fields.setEnabled(MeetingDocumentsDTO_.file);
 		fields.setEnabled(
 				MeetingDocumentsDTO_.notes);
+		fields.setEnabled(MeetingDocumentsDTO_.briefing);
+		fields.setEnabled(MeetingDocumentsDTO_.document);
+
+		fields.setEnumValues(MeetingDocumentsDTO_.briefing, Briefings.values());
+		fields.setEnumValues(MeetingDocumentsDTO_.document, Documents.values());
 	}
 
 	@Override
 	public void buildIndependentMeta(FieldsMeta<MeetingDocumentsDTO> fields, InnerBcDescription bcDescription,
 			Long parentId) {
 		fields.enableFilter(MeetingDocumentsDTO_.file);
-		fields.setFileAccept(MeetingDocumentsDTO_.file, List.of(".png",".pdf",".jpg",".jpeg"));
+		fields.setFileAccept(MeetingDocumentsDTO_.file, List.of(".png", ".pdf", ".jpg", ".jpeg"));
 
 	}
 

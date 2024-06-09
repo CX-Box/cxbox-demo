@@ -11,6 +11,16 @@
       "drillDown": "true"
     },
     {
+      "title": "Document",
+      "key": "document",
+      "type": "dictionary"
+    },
+    {
+      "title": "Briefing",
+      "key": "briefing",
+      "type": "dictionary"
+    },
+    {
       "title": "File",
       "key": "file",
       "type": "fileUpload",

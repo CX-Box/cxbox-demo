@@ -49,22 +49,14 @@ function Table({ meta, primaryColumn, disablePagination, ...rest }: TableProps) 
 
     const bc = useAppSelector(state => state.screen.bo.bc[meta.bcName])
 
-    const {
-        showColumnSettings,
-        allFields,
-        resultedFields,
-        currentAdditionalFields,
-        changeOrder,
-        changeColumnVisibility,
-        changeColumnsVisibility,
-        resetSetting
-    } = useTableSetting(meta)
+    const { showColumnSettings, allFields, resultedFields, currentAdditionalFields, changeOrder, changeColumnsVisibility, resetSetting } =
+        useTableSetting(meta.name, meta.fields, meta.options)
 
     const normalizedMeta = useMemo(() => ({ ...meta, fields: resultedFields }), [resultedFields, meta])
 
     const { visible: showCloseButton, toggleVisibility: toggleCloseButtonVisibility } = useVisibility(false)
 
-    const handleColumnClose = useCallback((fieldKey: string) => changeColumnVisibility(fieldKey, false), [changeColumnVisibility])
+    const handleColumnClose = useCallback((fieldKey: string) => changeColumnsVisibility([fieldKey], false), [changeColumnsVisibility])
 
     const { visible: transferVisible, toggleVisibility: toggleTransferVisible } = useVisibility(false)
 

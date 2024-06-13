@@ -8,16 +8,23 @@ import { useAppSelector } from '@store'
 import { FieldType, WidgetListField } from '@cxbox-ui/schema'
 import { CxBoxApiInstance } from '../../../../api'
 import { firstValueFrom } from 'rxjs'
+import { message } from 'antd'
+import { useTranslation } from 'react-i18next'
 
-export function useTableSetting(widget: AppWidgetMeta, serviceFields?: string[]) {
+export function useTableSetting(
+    widgetName: string,
+    widgetFields: AppWidgetMeta['fields'],
+    widgetOptions?: AppWidgetMeta['options'],
+    serviceFields?: string[]
+) {
     const view = useAppSelector(state => state.view)
     const viewName = view.name
-    const widgetName = widget.name
-    const additionalFields = widget.options?.additional?.fields
+    const additionalFields = widgetOptions?.additional?.fields
     const settingPath = createSettingPath({ view: viewName, widget: widgetName })
     const settingsMap = useAppSelector(state => state.session.tableSettings)
     const setting = settingsMap?.[settingPath as string] ?? null
     const sessionScreens = useAppSelector(state => state.session.screens)
+    const { t } = useTranslation()
 
     const dispatch = useDispatch()
 
@@ -36,8 +43,8 @@ export function useTableSetting(widget: AppWidgetMeta, serviceFields?: string[])
     }, [dispatch, sessionScreens, settingPath, settingsMap, view.widgets])
 
     const visibleFields = useMemo(() => {
-        return (widget.fields as WidgetListField[]).filter(field => !field?.hidden && field.type !== FieldType.hidden)
-    }, [widget.fields])
+        return (widgetFields as WidgetListField[]).filter(field => !field?.hidden && field.type !== FieldType.hidden)
+    }, [widgetFields])
 
     const updateSetting = useCallback(
         (partialSetting: Partial<Omit<TableSettingsItem, 'view' | 'widget'>>, withoutRequest: boolean = false) => {
@@ -103,23 +110,19 @@ export function useTableSetting(widget: AppWidgetMeta, serviceFields?: string[])
         }
     }, [dispatch, settingPath, settingsMap, updateSetting, viewName, widgetName])
 
-    const calculateCurrentAdditionalFields = useCallback(() => {
-        let currentAdditionalFields = additionalFields ? [...additionalFields] : []
+    const calculateHiddenFields = useCallback(() => {
+        let hiddenFields = additionalFields ? [...additionalFields] : []
 
-        currentAdditionalFields = currentAdditionalFields.filter(
-            additionalField => !setting?.removedFromAdditionalFields?.includes(additionalField)
-        )
+        hiddenFields = hiddenFields.filter(additionalField => !setting?.removedFromAdditionalFields?.includes(additionalField))
 
-        currentAdditionalFields = setting?.addedToAdditionalFields?.length
-            ? [...currentAdditionalFields, ...setting.addedToAdditionalFields]
-            : currentAdditionalFields
+        hiddenFields = setting?.addedToAdditionalFields?.length ? [...hiddenFields, ...setting.addedToAdditionalFields] : hiddenFields
 
-        return currentAdditionalFields
+        return hiddenFields
     }, [additionalFields, setting?.addedToAdditionalFields, setting?.removedFromAdditionalFields])
 
-    const calculateCurrentOrderFields = useCallback(
-        (currentAdditionalFields: string[]) => {
-            const newVisibleFields = visibleFields.filter(visibleField => !currentAdditionalFields.includes(visibleField.key))
+    const calculateFieldsOrder = useCallback(
+        (hiddenFields: string[]) => {
+            const newVisibleFields = visibleFields.filter(visibleField => !hiddenFields.includes(visibleField.key))
 
             const fieldsDictionary = createMap(newVisibleFields, 'key')
 
@@ -131,86 +134,115 @@ export function useTableSetting(widget: AppWidgetMeta, serviceFields?: string[])
     )
 
     const resultedFields: WidgetListField[] = useMemo(() => {
-        const currentAdditionalFields = calculateCurrentAdditionalFields()
+        const currentAdditionalFields = calculateHiddenFields()
 
-        return calculateCurrentOrderFields(currentAdditionalFields)
-    }, [calculateCurrentAdditionalFields, calculateCurrentOrderFields])
+        return calculateFieldsOrder(currentAdditionalFields)
+    }, [calculateHiddenFields, calculateFieldsOrder])
 
-    const changeOrder = useCallback(
-        (fromIndex: number, toIndex: number) => {
+    const changeOrderWithMutate = useCallback(<T>(array: T[], oldIndex: number, newIndex: number) => {
+        array.splice(newIndex, 0, array.splice(oldIndex, 1)[0])
+    }, [])
+
+    // Changes the order of fields contained in the meta
+    const changeFieldOrder = useCallback(
+        (oldIndex: number, newIndex: number) => {
             const newOrderFields = setting?.orderFields?.length ? [...setting.orderFields] : visibleFields.map(item => item.key)
 
-            const fromItem = resultedFields[fromIndex]
-            const toItem = resultedFields[toIndex]
+            const currentItem: WidgetListField | undefined = resultedFields[oldIndex]
+            const itemFromNewPosition: WidgetListField | undefined = resultedFields[newIndex]
 
             const firstIndex = newOrderFields.findIndex(fieldKey => {
-                return fieldKey === fromItem?.key
+                return fieldKey === currentItem?.key
             })
+
             const secondIndex = newOrderFields.findIndex(fieldKey => {
-                return fieldKey === toItem?.key
+                return fieldKey === itemFromNewPosition?.key
             })
 
-            const item = newOrderFields.splice(firstIndex, 1)[0]
-
-            if (serviceFields?.includes(item)) {
+            if (!currentItem?.key || serviceFields?.includes(currentItem.key)) {
+                message.error(t('Field cannot be moved', { label: currentItem?.label || currentItem?.title }))
                 return null
             }
 
-            newOrderFields.splice(secondIndex, 0, item)
+            if (!itemFromNewPosition?.key || serviceFields?.includes(itemFromNewPosition.key)) {
+                message.error(
+                    t('Transfer space not available', {
+                        label: currentItem?.label || currentItem?.title
+                    })
+                )
+                return null
+            }
+
+            changeOrderWithMutate(newOrderFields, firstIndex, secondIndex)
 
             updateSetting({ orderFields: newOrderFields })
         },
-        [resultedFields, serviceFields, setting?.orderFields, updateSetting, visibleFields]
+        [changeOrderWithMutate, resultedFields, serviceFields, setting?.orderFields, t, updateSetting, visibleFields]
+    )
+
+    const createVisibilitySetting = useCallback(
+        (fieldKeys: string[], visibility: boolean) => {
+            const partialSetting: Partial<Pick<TableSettingsItem, 'addedToAdditionalFields' | 'removedFromAdditionalFields'>> = {}
+            const mainFields = fieldKeys.filter(fieldKey => !additionalFields?.includes(fieldKey))
+            const newAdditionalFields = fieldKeys.filter(fieldKey => additionalFields?.includes(fieldKey))
+
+            // Returns the visibility of table fields not specified in jsonMeta.options.additional.fields
+            if (visibility && mainFields.length) {
+                partialSetting.addedToAdditionalFields = setting?.addedToAdditionalFields?.length
+                    ? setting.addedToAdditionalFields.filter(fieldKey => !mainFields.includes(fieldKey))
+                    : []
+            }
+
+            // Returns hiding the fields specified in jsonMeta.options.additional.fields
+            if (!visibility && newAdditionalFields.length) {
+                partialSetting.removedFromAdditionalFields = setting?.removedFromAdditionalFields?.length
+                    ? setting?.removedFromAdditionalFields.filter(fieldKey => !newAdditionalFields.includes(fieldKey))
+                    : []
+            }
+
+            // Hides fields not specified in jsonMeta.options.additional.fields
+            if (!visibility && mainFields.length) {
+                partialSetting.addedToAdditionalFields = setting?.addedToAdditionalFields?.length
+                    ? [
+                          ...setting?.addedToAdditionalFields,
+                          ...mainFields.filter(mainField => !setting?.addedToAdditionalFields?.includes(mainField))
+                      ]
+                    : mainFields
+            }
+
+            // Makes the fields specified in jsonMeta.options.additional.fields visible
+            if (visibility && newAdditionalFields.length) {
+                partialSetting.removedFromAdditionalFields = setting?.removedFromAdditionalFields?.length
+                    ? [
+                          ...setting?.removedFromAdditionalFields,
+                          ...newAdditionalFields.filter(mainField => !setting?.removedFromAdditionalFields?.includes(mainField))
+                      ]
+                    : newAdditionalFields
+            }
+
+            return partialSetting
+        },
+        [additionalFields, setting?.addedToAdditionalFields, setting?.removedFromAdditionalFields]
     )
 
     const changeColumnsVisibility = useCallback(
         (fieldKeys: string[], visibility: boolean) => {
-            let addedToAdditionalFields
-            let removedFromAdditionalFields
-            const mainFields = fieldKeys.filter(fieldKey => !additionalFields?.includes(fieldKey))
-            const newAdditionalFields = fieldKeys.filter(fieldKey => additionalFields?.includes(fieldKey))
-
-            if (visibility && newAdditionalFields.length) {
-                removedFromAdditionalFields = setting?.removedFromAdditionalFields?.length
-                    ? [...setting?.removedFromAdditionalFields, ...newAdditionalFields]
-                    : newAdditionalFields
-            } else if (visibility && mainFields.length) {
-                addedToAdditionalFields = setting?.addedToAdditionalFields?.length
-                    ? setting.addedToAdditionalFields.filter(fieldKey => !mainFields.includes(fieldKey))
-                    : []
-            } else if (!visibility && newAdditionalFields.length) {
-                removedFromAdditionalFields = setting?.removedFromAdditionalFields?.length
-                    ? setting?.removedFromAdditionalFields.filter(fieldKey => !newAdditionalFields.includes(fieldKey))
-                    : []
-            } else if (!visibility && mainFields.length) {
-                addedToAdditionalFields = setting?.addedToAdditionalFields?.length
-                    ? [...setting?.addedToAdditionalFields, ...mainFields]
-                    : mainFields
-            }
-
-            updateSetting({ addedToAdditionalFields, removedFromAdditionalFields })
+            updateSetting(
+                createVisibilitySetting(
+                    fieldKeys.filter(fieldKey => !serviceFields?.includes(fieldKey)),
+                    visibility
+                )
+            )
         },
-        [additionalFields, setting?.addedToAdditionalFields, setting?.removedFromAdditionalFields, updateSetting]
-    )
-
-    const changeColumnVisibility = useCallback(
-        (fieldKey: string, visibility: boolean) => {
-            if (serviceFields?.includes(fieldKey)) {
-                return null
-            }
-
-            changeColumnsVisibility([fieldKey], visibility)
-        },
-        [changeColumnsVisibility, serviceFields]
+        [createVisibilitySetting, serviceFields, updateSetting]
     )
 
     return {
-        showColumnSettings: !!widget.options?.additional?.enabled,
+        showColumnSettings: !!widgetOptions?.additional?.enabled,
         allFields: visibleFields,
         resultedFields,
-        currentAdditionalFields: calculateCurrentAdditionalFields(),
-        changeOrder,
-        changeColumnVisibility,
+        currentAdditionalFields: calculateHiddenFields(),
+        changeOrder: changeFieldOrder,
         changeColumnsVisibility,
         resetSetting
     }

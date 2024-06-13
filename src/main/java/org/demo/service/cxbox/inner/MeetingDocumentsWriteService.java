@@ -158,6 +158,8 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 				.withCustomParameter(Map.of("subtype", "multiFileUpload"))
 				.text("Add Files")
 				.add()
+				.delete()
+				.add()
 				.build();
 	}
 

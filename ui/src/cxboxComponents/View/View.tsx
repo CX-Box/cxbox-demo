@@ -5,7 +5,7 @@ import ViewInfoLabel from '@cxboxComponents/DebugPanel/components/ViewInfoLabel'
 import DebugPanel from '@cxboxComponents/DebugPanel/DebugPanel'
 import { RootState } from '@store'
 import { interfaces } from '@cxbox-ui/core'
-import { useCxBoxLocation } from '@hooks/useLocation'
+import { useBcLocation } from '@hooks/useBcLocation'
 import { useViewMeta } from '../../queries'
 
 const { PopupWidgetTypes } = interfaces
@@ -34,7 +34,7 @@ export const CustomizationContext: React.Context<{
  * @category Components
  */
 export const View: FunctionComponent<ViewProps> = props => {
-    const [location] = useCxBoxLocation()
+    const [location] = useBcLocation()
     const { data } = useViewMeta(location.bcMap.get('screen'), location.bcMap.get('view'))
 
     const { debugMode, skipWidgetTypes, card, customSpinner, customWidgets, customLayout, customFields, disableDebugMode } = props

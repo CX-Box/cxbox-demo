@@ -1,39 +1,28 @@
 import React, { useMemo } from 'react'
 import { Row, Col } from 'antd'
-import { AppWidgetMeta, CustomWidgetTypes } from '@interfaces/widget'
+import { AppWidgetMeta } from '@interfaces/widget'
 import { createSkipWidgetList } from '@utils/createSkipWidgetList'
-import { interfaces } from '@cxbox-ui/core'
 import Widget from '@cxboxComponents/Widget/Widget'
+import { isOffRegularLayoutWidget, isPopupWidget } from '@constants/widgets'
 
 export interface DashboardLayoutProps {
     widgets: AppWidgetMeta[]
-    customWidgets?: Record<string, interfaces.CustomWidgetDescriptor>
-    skipWidgetTypes?: string[]
-    customSpinner?: (props: any) => React.ReactElement<any>
-    card?: (props: any) => React.ReactElement<any>
-    disableDebugMode?: boolean
 }
 
 export function DashboardLayout(props: DashboardLayoutProps) {
     const widgetsByRow = React.useMemo(() => {
-        return groupByRow(props.widgets, props.skipWidgetTypes || [])
-    }, [props.widgets, props.skipWidgetTypes])
+        return groupByRow(props.widgets)
+    }, [props.widgets])
 
     const additionalInfoWidgets = useMemo(() => {
-        return props.widgets.filter(widget => widget.type === CustomWidgetTypes.AdditionalInfo)
+        return props.widgets.filter(widget => isOffRegularLayoutWidget(widget.type))
     }, [props.widgets])
 
     const CommonWidgets = Object.values(widgetsByRow).map((row, rowIndex) => (
-        <Row key={rowIndex}>
+        <Row key={row[0].name}>
             {row.map((widget, colIndex) => (
                 <Col key={colIndex} span={getColWidth(widget)}>
-                    <Widget
-                        meta={widget}
-                        card={props.card}
-                        customWidgets={props.customWidgets}
-                        customSpinner={props.customSpinner}
-                        disableDebugMode={props.disableDebugMode}
-                    />
+                    <Widget meta={widget} />
                 </Col>
             ))}
         </Row>
@@ -47,12 +36,7 @@ export function DashboardLayout(props: DashboardLayoutProps) {
                     {additionalInfoWidgets.map(widget => (
                         <Row key={widget.name} gutter={[8, 8]}>
                             <Col span={24}>
-                                <Widget
-                                    meta={widget}
-                                    customWidgets={props.customWidgets}
-                                    customSpinner={props.customSpinner}
-                                    disableDebugMode={props.disableDebugMode}
-                                />
+                                <Widget meta={widget} />
                             </Col>
                         </Row>
                     ))}
@@ -64,13 +48,13 @@ export function DashboardLayout(props: DashboardLayoutProps) {
     return <React.Fragment>{CommonWidgets}</React.Fragment>
 }
 
-function groupByRow<WidgetMeta extends AppWidgetMeta>(widgets: WidgetMeta[], skipWidgetTypes: string[]) {
+function groupByRow<WidgetMeta extends AppWidgetMeta>(widgets: WidgetMeta[]) {
     const byRow: Record<string, WidgetMeta[]> = {}
     const skipWidgetList = createSkipWidgetList(widgets)
 
     widgets
         .filter(item => {
-            return !skipWidgetTypes.includes(item.type) && !skipWidgetList.includes(item.name)
+            return !skipWidgetList.includes(item.name) && !isOffRegularLayoutWidget(item.type)
         })
         .forEach(item => {
             if (!byRow[item.position]) {
@@ -81,12 +65,9 @@ function groupByRow<WidgetMeta extends AppWidgetMeta>(widgets: WidgetMeta[], ski
     return byRow
 }
 
-const { WidgetTypes } = interfaces
-
-const popupWidgets = [WidgetTypes.AssocListPopup, WidgetTypes.PickListPopup, WidgetTypes.FlatTreePopup, CustomWidgetTypes.FormPopup]
 function getColWidth(widget: AppWidgetMeta) {
     // this is necessary so that the popup widget does not affect the formation of the grid
-    const needFullWidth = popupWidgets.includes(widget.type as interfaces.WidgetTypes)
+    const needFullWidth = isPopupWidget(widget.type)
 
     return needFullWidth ? 24 : widget.gridWidth
 }

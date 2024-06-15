@@ -36,4 +36,4 @@ export const AppLayout: React.FC = () => {
     )
 }
 
-export default React.memo(AppLayout)
+export default AppLayout

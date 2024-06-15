@@ -15,24 +15,19 @@ import { WidgetShowCondition } from '@cxbox-ui/schema'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import { useQuery } from '@tanstack/react-query'
 import { CxBoxApiInstance } from '../../api'
-import { useCxBoxLocation } from '@hooks/useLocation'
+import { useBcLocation } from '@hooks/useBcLocation'
+import get from 'lodash.get'
+import * as widgets from '../../widgets'
+import { ErrorBoundary } from 'react-error-boundary'
+import { WidgetError } from '@components/WidgetError'
+import { isPopupWidget } from '@constants/widgets'
 
-interface WidgetOwnProps {
+interface WidgetProps {
     meta: interfaces.WidgetMeta | interfaces.WidgetMetaAny
-    card?: (props: any) => React.ReactElement<any>
-    customSpinner?: (props: any) => React.ReactElement<any>
-    children?: React.ReactNode
-    disableDebugMode?: boolean
 }
 
-interface WidgetProps extends WidgetOwnProps {
-    debugMode?: boolean
-    loading?: boolean
-    parentCursor?: string
-    customWidgets?: Record<string, interfaces.CustomWidgetDescriptor>
-    showWidget: boolean
-    rowMetaExists: boolean
-    dataExists: boolean
+export interface WidgetAnyProps {
+    widgetName: string
 }
 
 const skeletonParams = { rows: 5 }
@@ -43,140 +38,19 @@ const skeletonParams = { rows: 5 }
  * @category Components
  */
 export const Widget: FunctionComponent<WidgetProps> = props => {
-    const [location] = useCxBoxLocation()
+    const WidgetComponent: React.FC<WidgetAnyProps> = get(widgets, props.meta.type, WidgetError)
 
-    const { data: rowMeta } = useQuery({
-        queryKey: ['rowMeta', props.meta.bcName],
-        queryFn: () => CxBoxApiInstance.fetchRowMeta(location.bcMap.get('screen') || '', props.meta.bcName)
-    })
-
-    if (!props.showWidget) {
-        return null
-    }
-
-    const customWidget = props.customWidgets?.[props.meta.type]
-
-    const skipCardWrapping = interfaces.PopupWidgetTypes.includes(props.meta.type)
-
-    if (skipCardWrapping) {
-        return (
-            <div
-                data-test="WIDGET"
-                data-test-widget-type={props.meta.type}
-                data-test-widget-position={props.meta.position}
-                data-test-widget-title={props.meta.title}
-                data-test-widget-name={props.meta.name}
-            >
-                {chooseWidgetType(props.meta, props.customWidgets, props.children)}
-            </div>
-        )
-    }
-
-    const showSpinner = !!(props.loading && (props.rowMetaExists || props.dataExists))
-    const showSkeleton = props.loading && !showSpinner
-
-    const spinnerElement = props.customSpinner ? (
-        <props.customSpinner spinning={showSpinner}>
-            {chooseWidgetType(props.meta, props.customWidgets, props.children)}
-        </props.customSpinner>
-    ) : (
-        <Spin spinning={showSpinner}>{chooseWidgetType(props.meta, props.customWidgets, props.children)}</Spin>
-    )
-
-    // TODO 2.0.0 delete spinner and skeleton. Spinner and skeleton should be overridden by props.card component
-    const WidgetParts = (
-        <>
-            {/*{showSkeleton && <Skeleton loading paragraph={skeletonParams} />}*/}
-            {/*{!showSkeleton && spinnerElement}*/}
-            {/*{!props.disableDebugMode && props.debugMode && <DebugPanel widgetMeta={props.meta} />}*/}
-        </>
-    )
-
-    if (customWidget && !interfaces.isCustomWidget(customWidget)) {
-        if (customWidget.card === null) {
-            return (
-                <div
-                    data-test="WIDGET"
-                    data-test-widget-type={props.meta.type}
-                    data-test-widget-position={props.meta.position}
-                    data-test-widget-title={props.meta.title}
-                    data-test-widget-name={props.meta.name}
-                >
-                    {WidgetParts}
-                </div>
-            )
-        }
-
-        if (customWidget.card) {
-            const CustomCard = customWidget.card
-            return <CustomCard meta={props.meta}>{WidgetParts}</CustomCard>
-        }
-    }
-
-    if (props.card) {
-        const Card = props.card
-        return <Card meta={props.meta}>{WidgetParts}</Card>
-    }
     return (
         <div
-            className={styles.container}
             data-test="WIDGET"
             data-test-widget-type={props.meta.type}
             data-test-widget-position={props.meta.position}
             data-test-widget-title={props.meta.title}
             data-test-widget-name={props.meta.name}
         >
-            <h2 className={styles.title}>{props.meta.title}</h2>
-            {WidgetParts}
+            <WidgetComponent widgetName={props.meta.name} />
         </div>
     )
-}
-
-/**
- * Return component instance based on type specified in widget meta
- *
- * `customWidgets` dictionary can be used to extend this function with new widget types,
- * with custom declaration having a priority when it is specified for core widget type
- * `children` is returned in case of unknown widget type
- *
- * @param widgetMeta Meta configuration for widget
- * @param customWidgets Dictionary where key is a widget type and value is a component that should be rendered
- * @param children Widgets children component, returned in case type is unknown
- */
-function chooseWidgetType(
-    widgetMeta: interfaces.WidgetMeta | interfaces.WidgetMetaAny,
-    customWidgets?: Record<string, interfaces.CustomWidgetDescriptor>,
-    children?: React.ReactNode
-) {
-    const customWidget = customWidgets?.[widgetMeta.type]
-
-    if (customWidget) {
-        if (interfaces.isCustomWidget(customWidget)) {
-            const CustomWidgetComponent = customWidget
-            return <CustomWidgetComponent meta={widgetMeta} />
-        }
-        const DescriptorComponent = customWidget.component
-        return <DescriptorComponent meta={widgetMeta} />
-    }
-    const knownWidgetMeta = widgetMeta as interfaces.WidgetMetaAny
-    const { WidgetTypes } = interfaces
-    switch (knownWidgetMeta.type) {
-        case WidgetTypes.List:
-        case WidgetTypes.DataGrid:
-            return <TableWidget meta={knownWidgetMeta} showRowActions />
-        case WidgetTypes.Form:
-            return <FormWidget meta={knownWidgetMeta} />
-        case WidgetTypes.AssocListPopup:
-            return <AssocListPopup widget={knownWidgetMeta} />
-        case WidgetTypes.PickListPopup:
-            return <PickListPopup widget={knownWidgetMeta} />
-        case WidgetTypes.Info:
-            return <InfoWidget meta={knownWidgetMeta} />
-        case WidgetTypes.NavigationTabs:
-            return <NavigationTabsWidget meta={knownWidgetMeta} />
-        default:
-            return children
-    }
 }
 
 function mapStateToProps(state: RootState, ownProps: WidgetOwnProps) {
@@ -215,4 +89,4 @@ function mapStateToProps(state: RootState, ownProps: WidgetOwnProps) {
  */
 const ConnectedWidget = connect(mapStateToProps)(Widget)
 
-export default ConnectedWidget
+export default Widget

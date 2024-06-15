@@ -4,13 +4,13 @@ import { Menu, Icon } from 'antd'
 import { ClickParam } from 'antd/lib/menu'
 import Search from 'antd/lib/input/Search'
 import styles from './ScreenNavigation.less'
-import { useCxBoxLocation } from '@hooks/useLocation'
+import { useBcLocation } from '@hooks/useBcLocation'
 import { useMeta, useScreenMeta } from '../../queries'
 
 const selectedItemClass = 'selectedItem'
 
 function ScreenNavigation() {
-    const [location, navigate] = useCxBoxLocation()
+    const [location, navigate] = useBcLocation()
     const { data } = useMeta()
     const { data: screen } = useScreenMeta(location.bcMap.get('screen'))
 

@@ -13,7 +13,7 @@ import Info from '../widgets/Info/Info'
 import Table from '../widgets/Table/Table'
 import Dictionary from '../../fields/Dictionary/Dictionary'
 import Steps from '../widgets/Steps/Steps'
-import { DashboardLayout } from '../ui/DashboardLayout/DashboardLayout'
+import { DashboardLayout } from '../../layouts/DashboardLayout'
 import Funnel from '../widgets/Funnel/Funnel'
 import RingProgress from '../widgets/RingProgress/RingProgress'
 import DashboardCard from '../DashboardCard/DashboardCard'
@@ -35,7 +35,7 @@ import TimeField from '../../fields/TimePicker/TimePickerField'
 import SuggestionPickListField from '../../fields/SuggestionPickList/SuggestionPickList'
 import { StatsBlock } from '@components/widgets/StatsBlock/StatsBlock'
 import FileViewerPopup from '@components/FileViewerPopup/FileViewerPopup'
-import { useCxBoxLocation } from '@hooks/useLocation'
+import { useBcLocation } from '@hooks/useBcLocation'
 import { useViewMeta } from '../../queries'
 
 // TODO We need to remove PopupWidgetTypes from the core and replace imports throughout the entire project
@@ -66,39 +66,29 @@ const customWidgets: Partial<Record<CustomWidgetTypes | interfaces.WidgetTypes, 
     [WidgetTypes.Info]: { component: Info },
     [WidgetTypes.List]: { component: Table },
     [WidgetTypes.HeaderWidget]: { component: Header, card: EmptyCard },
-    [CustomWidgetTypes.Steps]: { component: Steps, card: EmptyCard },
-    [CustomWidgetTypes.Funnel]: { component: Funnel, card: DashboardCard },
-    [CustomWidgetTypes.RingProgress]: { component: RingProgress, card: DashboardCard },
-    [CustomWidgetTypes.DashboardList]: { component: DashboardList, card: DashboardCard },
-    [CustomWidgetTypes.FormPopup]: { component: FormPopup, card: null },
-    [CustomWidgetTypes.AdditionalInfo]: { component: AdditionalInfoWidget, card: EmptyCard },
     [WidgetTypes.AssocListPopup]: AssocListPopup,
     [WidgetTypes.PickListPopup]: PickListPopup,
     [WidgetTypes.SecondLevelMenu]: { component: LevelMenu, card: EmptyCard },
     [WidgetTypes.ThirdLevelMenu]: { component: LevelMenu, card: EmptyCard },
     [WidgetTypes.FourthLevelMenu]: { component: LevelMenu, card: EmptyCard },
-    [CustomWidgetTypes.StatsBlock]: { component: StatsBlock, card: EmptyCard }
+    [CustomWidgetTypes.StatsBlock]: { component: StatsBlock, card: EmptyCard },
+    [CustomWidgetTypes.Steps]: { component: Steps, card: EmptyCard },
+    [CustomWidgetTypes.Funnel]: { component: Funnel, card: DashboardCard },
+    [CustomWidgetTypes.RingProgress]: { component: RingProgress, card: DashboardCard },
+    [CustomWidgetTypes.DashboardList]: { component: DashboardList, card: DashboardCard },
+    [CustomWidgetTypes.FormPopup]: { component: FormPopup, card: null },
+    [CustomWidgetTypes.AdditionalInfo]: { component: AdditionalInfoWidget, card: EmptyCard }
 }
 
 function View() {
-    const [location] = useCxBoxLocation()
-    const { data } = useViewMeta(location.bcMap.get('screen'), location.bcMap.get('view'))
+    const [location] = useBcLocation()
+    const { data, isLoading } = useViewMeta(location.bcMap.get('screen'), location.bcMap.get('view'))
     const debugMode = useAppSelector(state => state.session.debugMode || false)
 
     return (
         <div className={styles.container}>
             {debugMode && <ViewInfoLabel />}
-            <FileViewerPopup />
-            <CxboxView
-                customWidgets={customWidgets as Record<string, interfaces.CustomWidgetDescriptor>}
-                customFields={customFields}
-                card={Card as any}
-                skipWidgetTypes={skipWidgetTypes}
-                customLayout={DashboardLayout}
-                disableDebugMode={true}
-            />
-            {debugMode &&
-                data?.widgets.filter(i => allPopupWidgetTypes.includes(i.type)).map(i => <PopupWidgetInfoLabel key={i.name} meta={i} />)}
+            {!isLoading && <DashboardLayout widgets={data?.widgets} />}
         </div>
     )
 }

@@ -1,5 +1,5 @@
-import { useSyncExternalStore } from 'use-sync-external-store'
-import { useEffect, useMemo } from 'react'
+import { useSyncExternalStore } from 'use-sync-external-store/shim'
+import { useMemo } from 'react'
 
 const events = {
     popstate: 'popstate',
@@ -25,9 +25,19 @@ const useLocationSearch = () => useSyncExternalStore(subToChangeLocationEvents, 
 const navigate = (to: string, { replace = false, state = null } = {}) =>
     window.history[replace ? events.replaceState : events.pushState](state, '', to)
 
-type ReturnType = [{ pathname: string; search: string; params: Record<string, string>; bcMap: Map<string, string> }, typeof navigate]
+type ReturnType = [
+    {
+        pathname: string
+        search: string
+        params: Record<string, string>
+        bcMap: Map<string, string>
+        screenName?: string
+        viewName?: string
+    },
+    typeof navigate
+]
 
-export const useCxBoxLocation: () => ReturnType = () => {
+export const useBcLocation: () => ReturnType = () => {
     const pathname = useLocationPathname()
     const search = useLocationSearch()
 
@@ -63,7 +73,9 @@ export const useCxBoxLocation: () => ReturnType = () => {
             pathname,
             search,
             params,
-            bcMap
+            bcMap,
+            screenName: bcMap.get('screen'),
+            viewName: bcMap.get('view')
         }
     }, [pathname, search, params, bcMap])
 
@@ -72,8 +84,8 @@ export const useCxBoxLocation: () => ReturnType = () => {
 
 const patchKey = Symbol.for('cxbox_router_monkey_patch')
 // <3 JS
-// While History API does have `popstate` event, the only
-// proper way to listen to changes via `push/replaceState`
+// History API have only `popstate` event,
+// proper way to listen via `push/replaceState`
 // is to monkey-patch these methods.
 //
 // See https://stackoverflow.com/a/4585031
@@ -81,7 +93,7 @@ const patchKey = Symbol.for('cxbox_router_monkey_patch')
 if (typeof window.history !== 'undefined' && typeof window[patchKey] === 'undefined') {
     for (const type of [events.pushState, events.replaceState]) {
         const original = window.history[type]
-        // TODO: we should be using unstable_batchedUpdates to avoid multiple re-renders,
+        // TODO: we should use unstable_batchedUpdates to avoid multiple re-renders,
         // however that will require an additional peer dependency on react-dom.
         // See: https://github.com/reactwg/react-18/discussions/86#discussioncomment-1567149
         window.history[type] = function () {

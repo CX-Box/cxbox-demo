@@ -2,12 +2,15 @@ import React from 'react'
 import InfoLabel from './InfoLabel'
 import { useAppSelector } from '@store'
 import styles from './ViewInfoLabel.less'
+import { useBcLocation } from '@hooks/useBcLocation'
+import { useScreenMeta, useViewMeta } from '../../../queries'
 
 const ViewInfoLabel: React.FunctionComponent = () => {
-    const screenName = useAppSelector(state => state.screen.screenName) ?? ''
-    const viewName = useAppSelector(state => state.view.name) ?? ''
-    const screenInfo = [`"name": "${screenName}"`]
-    const viewInfo = [`"name": "${viewName}"`]
+    const [location] = useBcLocation()
+    const { data: screenMeta } = useScreenMeta(location.bcMap.get('screen'))
+    const { data: viewMeta } = useViewMeta(location.bcMap.get('screen'), location.bcMap.get('view'))
+    const screenInfo = [`"name": "${screenMeta?.name}"`]
+    const viewInfo = [`"name": "${viewMeta?.name}"`]
 
     return (
         <div className={styles.wrapper}>

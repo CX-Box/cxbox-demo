@@ -108,7 +108,7 @@ function Table({ meta, primaryColumn, disablePagination, ...rest }: TableProps) 
     const bcUrl = useAppSelector(state => state.screen.bo.bc[meta.bcName] && buildBcUrl(meta.bcName, true))
     const operations = useAppSelector(state => state.view.rowMeta?.[meta.bcName]?.[bcUrl]?.actions)
 
-    const { showExport, exportTable } = useExportTable({ widget: meta })
+    const { showExport, exportTable } = useExportTable({ widget: normalizedMeta })
 
     const showSaveFiltersButton = normalizedMeta.options?.filterSetting?.enabled
 

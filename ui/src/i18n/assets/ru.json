@@ -53,6 +53,23 @@
         "Error. File not loaded and no new row created": "Error. File not loaded and no new row created",
         "Error. File not loaded to current row": "Error. File not loaded to current row",
         "Skipped. The file upload was cancelled because a new file was added": "Skipped. The file upload was cancelled because a new file was added",
-        "number of total files": "{{number}} of {{total}} files"
+        "number of total files": "{{number}} of {{total}} files",
+        "Additional columns": "Дополнительные колонки",
+        "Change": "Изменить",
+        "Reset": "Сбросить",
+        "Export to": "Экспортировать в",
+        "Excel": "Excel",
+        "Filters settings": "Настройки фильтров",
+        "Save filters": "Сохранить фильтры",
+        "column": "колонка",
+        "columns": "колонки",
+        "Main": "Основные",
+        "Additional": "Дополнительные",
+        "Filter group setting": "Настройка группы фильтров",
+        "remove filter group": "удалить группу фильтров",
+        "Please input filter group name": "Пожалуйста, введите название группы фильтров",
+        "name": "имя",
+        "create": "создать",
+        "No applied filters for saving": "Нет примененных фильтров для сохранения"
     }
 }

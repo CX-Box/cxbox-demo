@@ -14,7 +14,9 @@ export const convertFiltersIntoObject = (filters?: interfaces.BcFilter[]) => {
                 filtersObj[`${filter.fieldName}.${FilterType.greaterOrEqualThan}`] = normalizeFilterValue(filter.value[0])
                 filtersObj[`${filter.fieldName}.${FilterType.lessOrEqualThan}`] = normalizeFilterValue(filter.value[1])
             } else {
-                filtersObj[`${filter.fieldName}.${filter.type}`] = normalizeFilterValue(filter.value)
+                const separator = filter.fieldName ? '.' : ''
+
+                filtersObj[`${filter.fieldName}${separator}${filter.type}`] = normalizeFilterValue(filter.value)
             }
 
             return filtersObj

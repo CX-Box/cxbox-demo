@@ -1,5 +1,8 @@
 package org.demo.service.cxbox.inner;
 
+import static org.demo.dto.cxbox.TestDictionaryType.REGIONS;
+
+import java.util.Comparator;
 import java.util.Optional;
 import org.cxbox.api.data.dto.rowmeta.FieldDTO;
 import org.cxbox.core.crudma.bc.impl.InnerBcDescription;
@@ -20,6 +23,9 @@ public class MeetingWriteMeta extends FieldMetaBuilder<MeetingDTO> {
 	@Override
 	public void buildRowDependentMeta(RowDependentFieldsMeta<MeetingDTO> fields, InnerBcDescription bcDescription,
 			Long id, Long parentId) {
+		FieldsMeta.setAllFilterValuesByLovTypeOrdered(fields, MeetingDTO_.test, REGIONS);
+		fields.setEnabled(MeetingDTO_.test);
+		fields.setDictionaryTypeWithAllValues(MeetingDTO_.test, REGIONS);
 		fields.setEnabled(MeetingDTO_.additionalContacts);
 		if (MeetingStatus.IN_COMPLETION.equals(fields.get(MeetingDTO_.status).getCurrentValue())) {
 			fields.setEnabled(
@@ -73,6 +79,7 @@ public class MeetingWriteMeta extends FieldMetaBuilder<MeetingDTO> {
 	public void buildIndependentMeta(FieldsMeta<MeetingDTO> fields, InnerBcDescription bcDescription, Long parentId) {
 		fields.enableFilter(MeetingDTO_.additionalContacts);
 		fields.enableFilter(MeetingDTO_.clientName);
+		fields.enableFilter(MeetingDTO_.test);
 		fields.setForceActive(MeetingDTO_.clientId);
 		fields.setForceActive(MeetingDTO_.startDateTime);
 		fields.setForceActive(MeetingDTO_.endDateTime);

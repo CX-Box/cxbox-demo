@@ -5,6 +5,11 @@
   "bc": "meetingEdit",
   "fields": [
     {
+      "label": "Test",
+      "key": "test",
+      "type": "dictionary"
+    },
+    {
       "label": "Agenda",
       "key": "agenda",
       "type": "input"
@@ -44,6 +49,14 @@
     },
     "layout": {
       "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "test",
+              "span": 12
+            }
+          ]
+        },
         {
           "cols": [
             {

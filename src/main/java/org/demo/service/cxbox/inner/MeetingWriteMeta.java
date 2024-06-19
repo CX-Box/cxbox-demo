@@ -2,7 +2,6 @@ package org.demo.service.cxbox.inner;
 
 import static org.demo.dto.cxbox.TestDictionaryType.REGIONS;
 
-import java.util.Comparator;
 import java.util.Optional;
 import org.cxbox.api.data.dto.rowmeta.FieldDTO;
 import org.cxbox.core.crudma.bc.impl.InnerBcDescription;

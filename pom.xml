@@ -19,7 +19,7 @@
     <mapstruct.version>1.5.5.Final</mapstruct.version>
     <!-- dependencies versions -->
     <minio.version>8.3.0</minio.version>
-
+    <spring-security.version>6.1.5</spring-security.version>
   </properties>
 
   <repositories>

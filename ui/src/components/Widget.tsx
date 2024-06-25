@@ -1,10 +1,10 @@
-import React, { FunctionComponent } from 'react'
+import React, { FunctionComponent, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Skeleton, Spin } from 'antd'
 import TableWidget from '@cxboxComponents/widgets/TableWidget/TableWidget'
 import FormWidget from '@cxboxComponents/widgets/FormWidget/FormWidget'
 import InfoWidget from '@cxboxComponents/widgets/InfoWidget/InfoWidget'
-import styles from './Widget.less'
+import styles from '@cxboxComponents/Widget/Widget.less'
 import AssocListPopup from '@cxboxComponents/widgets/AssocListPopup/AssocListPopup'
 import PickListPopup from '@cxboxComponents/widgets/PickListPopup/PickListPopup'
 import DebugPanel from '@cxboxComponents/DebugPanel/DebugPanel'
@@ -14,20 +14,23 @@ import { RootState } from '@store'
 import { WidgetShowCondition } from '@cxbox-ui/schema'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import { useQuery } from '@tanstack/react-query'
-import { CxBoxApiInstance } from '../../api'
+import { CxBoxApiInstance } from '../api'
 import { useBcLocation } from '@hooks/useBcLocation'
 import get from 'lodash.get'
-import * as widgets from '../../widgets'
+import * as widgets from '../widgets'
 import { ErrorBoundary } from 'react-error-boundary'
 import { WidgetError } from '@components/WidgetError'
 import { isPopupWidget } from '@constants/widgets'
+import DebugWidgetWrapper from '@components/DebugWidgetWrapper/DebugWidgetWrapper'
+import { useWidgetMeta } from '../queries'
 
 interface WidgetProps {
-    meta: interfaces.WidgetMeta | interfaces.WidgetMetaAny
+    name: string
 }
 
 export interface WidgetAnyProps {
     widgetName: string
+    testingProps: Record<string, any>
 }
 
 const skeletonParams = { rows: 5 }
@@ -37,20 +40,26 @@ const skeletonParams = { rows: 5 }
  * @param props
  * @category Components
  */
-export const Widget: FunctionComponent<WidgetProps> = props => {
-    const WidgetComponent: React.FC<WidgetAnyProps> = get(widgets, props.meta.type, WidgetError)
+export const Widget: FunctionComponent<WidgetProps> = ({ name }) => {
+    const { data: widgetMeta } = useWidgetMeta(name)
 
-    return (
-        <div
-            data-test="WIDGET"
-            data-test-widget-type={props.meta.type}
-            data-test-widget-position={props.meta.position}
-            data-test-widget-title={props.meta.title}
-            data-test-widget-name={props.meta.name}
-        >
-            <WidgetComponent widgetName={props.meta.name} />
-        </div>
-    )
+    const testingProps = useMemo(() => {
+        return {
+            'data-test': 'WIDGET',
+            'data-test-widget-type': widgetMeta?.type,
+            'data-test-widget-position': widgetMeta?.position,
+            'data-test-widget-title': widgetMeta?.title,
+            'data-test-widget-name': widgetMeta?.name
+        }
+    }, [widgetMeta])
+
+    if (widgetMeta?.name === undefined && widgetMeta?.type === undefined) {
+        return null
+    }
+
+    const WidgetComponent: React.FC<WidgetAnyProps> = get(widgets, widgetMeta.type, WidgetError)
+
+    return <WidgetComponent widgetName={widgetMeta.name} testingProps={testingProps} />
 }
 
 function mapStateToProps(state: RootState, ownProps: WidgetOwnProps) {
@@ -83,10 +92,3 @@ function mapStateToProps(state: RootState, ownProps: WidgetOwnProps) {
         dataExists: !!state.data[bcName]
     }
 }
-
-/**
- * @category Components
- */
-const ConnectedWidget = connect(mapStateToProps)(Widget)
-
-export default Widget

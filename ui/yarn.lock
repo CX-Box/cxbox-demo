@@ -4383,6 +4383,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/lodash.get@npm:^4":
+  version: 4.4.9
+  resolution: "@types/lodash.get@npm:4.4.9"
+  dependencies:
+    "@types/lodash": "npm:*"
+  checksum: 934ae4f02831afdb9216cb5fcb702f8f4e0b45e13f2d10ed9c7ce7e891800e5dea726b513c98b8370d6292d42ad7745c622ae75733676746b711bea95b6259d5
+  languageName: node
+  linkType: hard
+
 "@types/lodash@npm:*":
   version: 4.14.202
   resolution: "@types/lodash@npm:4.14.202"
@@ -12315,6 +12324,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lodash.get@npm:^4.4.2":
+  version: 4.4.2
+  resolution: "lodash.get@npm:4.4.2"
+  checksum: 48f40d471a1654397ed41685495acb31498d5ed696185ac8973daef424a749ca0c7871bf7b665d5c14f5cc479394479e0307e781f61d5573831769593411be6e
+  languageName: node
+  linkType: hard
+
 "lodash.groupby@npm:^4.6.0":
   version: 4.6.0
   resolution: "lodash.groupby@npm:4.6.0"
@@ -15855,6 +15871,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-error-boundary@npm:^4.0.13":
+  version: 4.0.13
+  resolution: "react-error-boundary@npm:4.0.13"
+  dependencies:
+    "@babel/runtime": "npm:^7.12.5"
+  peerDependencies:
+    react: ">=16.13.1"
+  checksum: 6f3e0e4d7669f680ccf49c08c9571519c6e31f04dcfc30a765a7136c7e6fbbbe93423dd5a9fce12107f8166e54133e9dd5c2079a00c7a38201ac811f7a28b8e7
+  languageName: node
+  linkType: hard
+
 "react-error-overlay@npm:6.0.9":
   version: 6.0.9
   resolution: "react-error-overlay@npm:6.0.9"
@@ -18578,6 +18605,7 @@ __metadata:
     "@types/diff": "npm:5.0.3"
     "@types/file-saver": "npm:2.0.5"
     "@types/lodash.debounce": "npm:^4.0.7"
+    "@types/lodash.get": "npm:^4"
     "@types/mime-types": "npm:^2.1.4"
     "@types/parse-data-url": "npm:^3.0.1"
     "@types/query-string": "npm:5.1.0"
@@ -18605,6 +18633,7 @@ __metadata:
     i18next: "npm:23.4.6"
     keycloak-js: "npm:14.0.0"
     lodash.debounce: "npm:^4.0.8"
+    lodash.get: "npm:^4.4.2"
     mime-types: "npm:2.0.0"
     parse-data-url: "npm:^6.0.0"
     prettier: "npm:2.8.8"
@@ -18615,6 +18644,7 @@ __metadata:
     react-app-alias: "npm:2.2.2"
     react-dom: "npm:^18.3.1"
     react-drag-listview: "npm:2.0.0"
+    react-error-boundary: "npm:^4.0.13"
     react-file-viewer: "npm:1.2.1"
     react-i18next: "npm:13.2.1"
     react-redux: "npm:7.2.9"

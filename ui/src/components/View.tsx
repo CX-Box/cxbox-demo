@@ -1,42 +1,42 @@
 import React from 'react'
-import Card from '../Card/Card'
+import Card from './Card/Card'
 import { View as CxboxView } from '@cxboxComponents'
 import { CustomFieldTypes, CustomWidgetTypes } from '@interfaces/widget'
-import MultipleSelectField from '../../fields/MultipleSelectField/MultipleSelectField'
-import Form from '../widgets/Form/Form'
-import Header from '../widgets/Header/Header'
-import AssocListPopup from '../widgets/AssocListPopup/AssocListPopup'
-import PickListPopup from '../widgets/PickListPopup/PickListPopup'
-import EmptyCard from '../EmptyCard/EmptyCard'
-import styles from './View.module.css'
-import Info from '../widgets/Info/Info'
-import Table from '../widgets/Table/Table'
-import Dictionary from '../../fields/Dictionary/Dictionary'
-import Steps from '../widgets/Steps/Steps'
-import { DashboardLayout } from '../../layouts/DashboardLayout'
-import Funnel from '../widgets/Funnel/Funnel'
-import RingProgress from '../widgets/RingProgress/RingProgress'
-import DashboardCard from '../DashboardCard/DashboardCard'
-import DashboardList from '../widgets/DashboardList/DashboardList'
-import LevelMenu from '../widgets/LevelMenu/LevelMenu'
-import { Number } from '../../fields/NumberInput/NumberInput'
-import { FormPopup } from '../widgets/FormPopup/FormPopup'
-import MultivalueField from '../../fields/Multivalue/MultivalueField'
-import InlinePickList from '../../fields/InlinePickList/InlinePickList'
-import PickListField from '../../fields/PickListField/PickListField'
+import MultipleSelectField from '../fields/MultipleSelectField/MultipleSelectField'
+import Form from './widgets/Form/Form'
+import Header from './widgets/Header/Header'
+import AssocListPopup from './widgets/AssocListPopup/AssocListPopup'
+import PickListPopup from './widgets/PickListPopup/PickListPopup'
+import EmptyCard from './EmptyCard/EmptyCard'
+import styles from './View/View.module.css'
+import Info from './widgets/Info/Info'
+import Table from './widgets/Table/Table'
+import Dictionary from '../fields/Dictionary/Dictionary'
+import Steps from './widgets/Steps/Steps'
+import { DashboardLayout } from '../layouts/DashboardLayout'
+import Funnel from './widgets/Funnel/Funnel'
+import RingProgress from './widgets/RingProgress/RingProgress'
+import DashboardCard from './DashboardCard/DashboardCard'
+import DashboardList from './widgets/DashboardList/DashboardList'
+import LevelMenu from './widgets/LevelMenu/LevelMenu'
+import { Number } from '../fields/NumberInput/NumberInput'
+import { FormPopup } from './widgets/FormPopup/FormPopup'
+import MultivalueField from '../fields/Multivalue/MultivalueField'
+import InlinePickList from '../fields/InlinePickList/InlinePickList'
+import PickListField from '../fields/PickListField/PickListField'
 import { useAppSelector } from '@store'
-import ViewInfoLabel from '../DebugPanel/components/ViewInfoLabel'
-import PopupWidgetInfoLabel from '../DebugPanel/components/PopupWidgetInfoLabel'
-import FileUpload from '../../fields/FileUpload/FileUploadContainer'
+import ViewInfoLabel from './DebugPanel/components/ViewInfoLabel'
+import PopupWidgetInfoLabel from './DebugPanel/components/PopupWidgetInfoLabel'
+import FileUpload from '../fields/FileUpload/FileUploadContainer'
 import { interfaces } from '@cxbox-ui/core'
 import { AdditionalInfoWidget } from '@components/widgets/AdditionalInfo/AdditionalInfoWidget'
 import { WidgetTypes } from '@cxbox-ui/schema'
-import TimeField from '../../fields/TimePicker/TimePickerField'
-import SuggestionPickListField from '../../fields/SuggestionPickList/SuggestionPickList'
+import TimeField from '../fields/TimePicker/TimePickerField'
+import SuggestionPickListField from '../fields/SuggestionPickList/SuggestionPickList'
 import { StatsBlock } from '@components/widgets/StatsBlock/StatsBlock'
 import FileViewerPopup from '@components/FileViewerPopup/FileViewerPopup'
 import { useBcLocation } from '@hooks/useBcLocation'
-import { useViewMeta } from '../../queries'
+import { useViewMeta } from '../queries'
 
 // TODO We need to remove PopupWidgetTypes from the core and replace imports throughout the entire project
 const { PopupWidgetTypes, FieldType } = interfaces
@@ -81,14 +81,13 @@ const customWidgets: Partial<Record<CustomWidgetTypes | interfaces.WidgetTypes, 
 }
 
 function View() {
-    const [location] = useBcLocation()
-    const { data, isLoading } = useViewMeta(location.bcMap.get('screen'), location.bcMap.get('view'))
+    const { data, isLoading } = useViewMeta()
     const debugMode = useAppSelector(state => state.session.debugMode || false)
 
     return (
         <div className={styles.container}>
             {debugMode && <ViewInfoLabel />}
-            {!isLoading && <DashboardLayout widgets={data?.widgets} />}
+            {!isLoading && data?.widgets && <DashboardLayout widgets={data?.widgets} />}
         </div>
     )
 }

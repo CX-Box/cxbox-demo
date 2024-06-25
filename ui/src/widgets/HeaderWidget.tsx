@@ -1,4 +1,4 @@
-import { WidgetAnyProps } from '@cxboxComponents/Widget/Widget'
+import { WidgetAnyProps } from '@components/Widget'
 import React from 'react'
 import { useBcMeta, useWidgetMeta } from '../queries'
 

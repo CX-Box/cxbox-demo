@@ -30,7 +30,7 @@ export { default as NavigationTabs } from '@cxboxComponents/ui/NavigationTabs/Na
 // Containers
 export { default as TemplatedTitle } from './TemplatedTitle/TemplatedTitle'
 export { default as View } from './View/View'
-export { default as Widget } from './Widget/Widget'
+export { default as Widget } from '@components/Widget'
 export { default as Field } from './Field/Field'
 export { default as ModalInvoke } from './ModalInvoke/ModalInvoke'
 export { default as PickListField } from './PickListField/PickListField'

@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import { Row, Col } from 'antd'
 import { AppWidgetMeta } from '@interfaces/widget'
 import { createSkipWidgetList } from '@utils/createSkipWidgetList'
-import Widget from '@cxboxComponents/Widget/Widget'
+import { Widget } from '@components/Widget'
 import { isOffRegularLayoutWidget, isPopupWidget } from '@constants/widgets'
 
 export interface DashboardLayoutProps {
@@ -10,19 +10,15 @@ export interface DashboardLayoutProps {
 }
 
 export function DashboardLayout(props: DashboardLayoutProps) {
-    const widgetsByRow = React.useMemo(() => {
-        return groupByRow(props.widgets)
-    }, [props.widgets])
+    const widgetsByRow = React.useMemo(() => groupByRow(props.widgets), [props.widgets])
 
-    const additionalInfoWidgets = useMemo(() => {
-        return props.widgets.filter(widget => isOffRegularLayoutWidget(widget.type))
-    }, [props.widgets])
+    const additionalInfoWidgets = useMemo(() => props.widgets.filter(widget => isOffRegularLayoutWidget(widget.type)), [props.widgets])
 
     const CommonWidgets = Object.values(widgetsByRow).map((row, rowIndex) => (
         <Row key={row[0].name}>
             {row.map((widget, colIndex) => (
                 <Col key={colIndex} span={getColWidth(widget)}>
-                    <Widget meta={widget} />
+                    <Widget name={widget.name} />
                 </Col>
             ))}
         </Row>
@@ -36,7 +32,7 @@ export function DashboardLayout(props: DashboardLayoutProps) {
                     {additionalInfoWidgets.map(widget => (
                         <Row key={widget.name} gutter={[8, 8]}>
                             <Col span={24}>
-                                <Widget meta={widget} />
+                                <Widget name={widget.name} />
                             </Col>
                         </Row>
                     ))}

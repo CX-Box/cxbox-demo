@@ -1,34 +1,36 @@
 import { useQuery } from '@tanstack/react-query'
 import { CxBoxApiInstance } from '../api'
 import { useBcLocation } from '@hooks/useBcLocation'
+import { LoginResponse } from '@cxbox-ui/core'
+import { firstValueFrom } from 'rxjs'
+import { useCallback, useMemo } from 'react'
 
-export const useMeta = () =>
+export const useMeta = <TData = LoginResponse>(select?: (data: LoginResponse) => TData) =>
     useQuery({
         queryKey: ['meta'],
-        queryFn: () => CxBoxApiInstance.loginByRoleRequest('').toPromise(),
-        staleTime: Infinity
+        queryFn: () => firstValueFrom(CxBoxApiInstance.loginByRoleRequest('')),
+        staleTime: Infinity,
+        select: select
     })
 
 export const useScreenMeta = () => {
     const [location] = useBcLocation()
-    return useQuery({
-        queryKey: ['meta'],
-        queryFn: () => CxBoxApiInstance.loginByRoleRequest('').toPromise(),
-        staleTime: Infinity,
-        select: data =>
+
+    const screenSelector = useCallback(
+        (data: LoginResponse) =>
             data?.screens.find(screen => screen.name === location.screenName) ||
             data?.screens.find(screen => screen.defaultScreen) ||
-            data?.screens[0]
-    })
+            data?.screens[0],
+        [location]
+    )
+    const screenMeta = useMeta(screenSelector)
 }
 
 export const useViewMeta = () => {
     const [location] = useBcLocation()
-    return useQuery({
-        queryKey: ['meta'],
-        queryFn: () => CxBoxApiInstance.loginByRoleRequest('').toPromise(),
-        staleTime: Infinity,
-        select: data => {
+
+    const viewSelector = useCallback(
+        (data: LoginResponse) => {
             const screen =
                 data?.screens.find(screen => screen.name === location.screenName) ||
                 data?.screens.find(screen => screen.defaultScreen) ||
@@ -39,17 +41,18 @@ export const useViewMeta = () => {
                 screen?.meta?.views.find(view => view.name === screen?.meta?.primary) ||
                 screen?.meta?.views[0]
             )
-        }
-    })
+        },
+        [location]
+    )
+
+    return useMeta(viewSelector)
 }
 
 export const useWidgetMeta = (widgetName: string) => {
     const [location] = useBcLocation()
-    return useQuery({
-        queryKey: ['meta'],
-        queryFn: () => CxBoxApiInstance.loginByRoleRequest('').toPromise(),
-        staleTime: Infinity,
-        select: data => {
+
+    const widgetSelector = useCallback(
+        (data: LoginResponse) => {
             const screen =
                 data?.screens.find(screen => screen.name === location.screenName) ||
                 data?.screens.find(screen => screen.defaultScreen) ||
@@ -61,26 +64,16 @@ export const useWidgetMeta = (widgetName: string) => {
                 screen?.meta?.views[0]
 
             return view?.widgets.find(widget => widget.name === widgetName)
-        }
-    })
+        },
+        [location, widgetName]
+    )
+
+    return useMeta(widgetSelector)
 }
 
-export const useBcMeta = (bcName?: string) => {
-    const [location] = useBcLocation()
-    return useQuery({
-        queryKey: ['meta'],
-        queryFn: () => CxBoxApiInstance.loginByRoleRequest('').toPromise(),
-        staleTime: Infinity,
-        select: data => {
-            if (bcName === undefined) {
-                return undefined
-            }
-            const screen =
-                data?.screens.find(screen => screen.name === location.screenName) ||
-                data?.screens.find(screen => screen.defaultScreen) ||
-                data?.screens[0]
+export const useRowMeta = (bcName?: string) => {
+    const { data: screenMeta } = useScreenMeta()
+    const bc = screenMeta?.meta?.bo.bc
 
-            return screen?.meta?.bo.bc.find(bc => bc.name === bcName)
-        }
-    })
+    bc?.find(bc => bc.name === bcName)
 }

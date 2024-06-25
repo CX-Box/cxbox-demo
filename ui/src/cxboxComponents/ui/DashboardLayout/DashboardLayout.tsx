@@ -1,6 +1,6 @@
 import React from 'react'
 import { Row, Col } from 'antd'
-import Widget from '@cxboxComponents/Widget/Widget'
+import Widget from '@components/Widget'
 import WidgetErrorBoundary from '@cxboxComponents/WidgetErrorBoundary/WidgetErrorBoundary'
 import { interfaces } from '@cxbox-ui/core'
 

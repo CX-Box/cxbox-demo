@@ -225,7 +225,7 @@ export default React.memo(FileUploadContainer)
 // The hook is needed so that before opening a popup, if there is unsaved data in the table row being edited, the popup will not open until the data is saved or deleted (internalFormWidgetMiddleware)
 export const useFileIconClick = (widgetName: string, bcName: string, recordId: string, fieldName: string) => {
     const dispatch = useDispatch()
-    const currentCursor = useAppSelector(state => state.screen.bo.bc[bcName].cursor)
+    const currentCursor = useAppSelector(state => state.screen.bo.bc[bcName]?.cursor)
     const [wasClick, setWasClick] = useState(false)
 
     const handleFileIconClick = useCallback(() => {

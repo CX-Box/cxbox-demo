@@ -3,12 +3,11 @@ import { Button, Popover } from 'antd'
 import styles from './ColumnFilter.less'
 import cn from 'classnames'
 import { ReactComponent as FilterIcon } from './filter-solid.svg'
-import { interfaces } from '@cxbox-ui/core'
+import { RowMetaField, interfaces } from '@cxbox-ui/core'
 import FilterPopup from '../FilterPopup/FilterPopup'
 import FilterField from './FilterField'
 import { useAppDispatch, useAppSelector } from '@store'
 import { FieldType, WidgetListField } from '@cxbox-ui/schema'
-import { RowMetaField } from '@cxbox-ui/core'
 import { actions } from '@actions'
 import { PickListFieldMeta } from '@cxbox-ui/schema/src/interfaces/widget'
 
@@ -16,7 +15,6 @@ interface ColumnFilterProps {
     widgetName: string
     widgetMeta: WidgetListField
     rowMeta: RowMetaField
-
     components?: {
         popup: React.ReactNode
     }

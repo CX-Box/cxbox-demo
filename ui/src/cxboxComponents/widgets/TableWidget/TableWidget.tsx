@@ -349,7 +349,7 @@ function mapStateToProps(state: RootState, ownProps: TableWidgetOwnProps) {
     const bcName = ownProps.meta.bcName
     const bcUrl = buildBcUrl(bcName, true)
     const fields = bcUrl ? state.view.rowMeta[bcName]?.[bcUrl]?.fields : undefined
-    const bc = state.screen.bo.bc[bcName]
+    const bc = bcName ? state.screen.bo.bc[bcName] : undefined
     const cursor = bc?.cursor as string
     const hasNext = bc?.hasNext as boolean
     const limitBySelf = cursor ? !!state.router.bcPath?.includes(`${bcName}/${cursor}`) : false

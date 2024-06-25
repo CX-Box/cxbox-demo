@@ -1,7 +1,7 @@
 import React from 'react'
 import Operations from '../../../Operations/Operations'
 import Form from '../../Form/Form'
-import styles from './ExpandedRow.module.css'
+import styles from '../Table.less'
 import { interfaces } from '@cxbox-ui/core'
 
 interface ExpandedRowProps {
@@ -16,7 +16,7 @@ function ExpandedRow({ widgetMeta, operations, record }: ExpandedRowProps) {
     }
 
     return (
-        <div className={styles.root} data-test-widget-list-row-id={record.id} data-test-widget-list-row-type="InlineForm">
+        <div className={styles.expandRow} data-test-widget-list-row-id={record.id} data-test-widget-list-row-type="InlineForm">
             <Form meta={widgetMeta} />
             {operations?.length ? <Operations operations={operations} bcName={widgetMeta?.bcName} widgetMeta={widgetMeta} /> : null}
         </div>

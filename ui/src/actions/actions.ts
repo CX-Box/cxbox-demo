@@ -6,6 +6,7 @@ import { LoginResponse } from '@interfaces/session'
 import { TableSettingsItem, TableSettingsList, TableSettingsMap } from '@interfaces/tableSettings'
 import { FilterGroup } from '@interfaces/filters'
 import { FileViewerPopupOptions } from '@interfaces/view'
+import { DataItem } from '@interfaces/core'
 
 export const SSO_AUTH = createAction('SSO_AUTH')
 
@@ -61,10 +62,6 @@ export const partialUpdateRecordForm = createAction<{
 
 export const resetRecordForm = createAction('resetRecordForm')
 
-export const sendOperationSuccess = createAction<
-    ReturnType<typeof actions.sendOperationSuccess>['payload'] & { dataItem?: interfaces.DataItem }
->('sendOperationSuccess')
-
 export const processPreInvoke = createAction<
     Omit<ReturnType<typeof actions.processPreInvoke>['payload'], 'preInvoke'> & {
         preInvoke: OperationPreInvokeCustom | interfaces.OperationPreInvoke
@@ -90,3 +87,22 @@ export const addFilterGroup = createAction<FilterGroup & { bc: string }>('addFil
 export const removeFilterGroup = createAction<{ name: string; bc: string; id?: string }>('removeFilterGroup')
 
 export const changePageLimit = createAction<{ bcName: string; limit: number }>('changePageLimit')
+/**
+ * sortedGroupKeys - responsible for sorting fields after updating a record for GroupingHierarchy widget
+ */
+export const bcSaveDataSuccess = createAction<ReturnType<typeof actions.bcSaveDataSuccess>['payload'] & { sortedGroupKeys?: string[] }>(
+    'bcSaveDataSuccess'
+)
+/**
+ * sortedGroupKeys - responsible for sorting fields after updating a record for GroupingHierarchy widget
+ */
+export const sendOperationSuccess = createAction<
+    ReturnType<typeof actions.sendOperationSuccess>['payload'] & {
+        dataItem?: interfaces.DataItem
+        sortedGroupKeys?: string[]
+        // needed to save data without reloading the page when bulk loading a file for group hierarchies
+        newDataItems?: interfaces.DataItem[]
+    }
+>('sendOperationSuccess')
+
+export const updateBcData = createAction<{ bcName: string; data: DataItem[] }>('updateBcData')

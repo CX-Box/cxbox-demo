@@ -130,6 +130,8 @@
       </column>
       <column name="NOTES" type="VARCHAR(200)"/>
       <column name="FILE" type="VARCHAR(255)"/>
+      <column name="BRIEFING" type="VARCHAR(50)"/>
+      <column name="DOCUMENT" type="VARCHAR(50)"/>
 
       <column defaultValueComputed="${now}" name="CREATED_DATE" remarks="Creation date"
         type="TIMESTAMP(6)">

@@ -1,7 +1,6 @@
-import { interfaces, reducers } from '@cxbox-ui/core'
+import { BcMetaState, interfaces, reducers } from '@cxbox-ui/core'
 import { actions, changeMenuCollapsed, customAction, sendOperationSuccess } from '@actions'
 import { createReducer, isAnyOf } from '@reduxjs/toolkit'
-import { BcMetaState } from '@cxbox-ui/core'
 import { FilterGroup } from '@interfaces/filters'
 
 interface ScreenState extends interfaces.ScreenState {
@@ -60,6 +59,12 @@ const screenReducerBuilder = reducers
 
         state.bo.bc[bcName] = state.bo.bc[bcName] ?? {}
         state.bo.bc[bcName].limit = limit as number
+    })
+    .addCase(actions.updateBcData, (state, action) => {
+        const { bcName } = action.payload
+
+        state.bo.bc[bcName] = state.bo.bc[bcName] ?? {}
+        state.bo.bc[bcName].loading = false
     })
     .addMatcher(isAnyOf(actions.selectScreen), (state, action) => {
         // временное решение чтобы сохранялся лимит при сменен экранов

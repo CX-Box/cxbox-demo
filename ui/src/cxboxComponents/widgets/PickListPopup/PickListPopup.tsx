@@ -10,8 +10,7 @@ import Pagination from '@cxboxComponents/ui/Pagination/Pagination'
 import cn from 'classnames'
 import { RootState, useAppSelector } from '@store'
 import { createMapDispatchToProps } from '@utils/redux'
-import { actions, interfaces } from '@cxbox-ui/core'
-import { RowMetaField } from '@cxbox-ui/core'
+import { actions, interfaces, RowMetaField } from '@cxbox-ui/core'
 import { TableEventListeners } from 'antd/lib/table/interface'
 import { buildBcUrl } from '@utils/buildBcUrl'
 
@@ -108,7 +107,7 @@ export const PickListPopup: FunctionComponent<PickListPopupProps & PickListPopup
                 }
             }
         },
-        [pickMap, onChange, parentBCName, cursor, onClose]
+        [pickMap, onChange, parentBCName, cursor]
     )
 
     const defaultTitle = React.useMemo(
@@ -172,7 +171,7 @@ function mapStateToProps(state: RootState, props: PickListPopupOwnProps) {
     const bcName = props.widget.bcName
     const bcUrl = buildBcUrl(bcName, true)
     const fields = bcUrl ? state.view.rowMeta[bcName]?.[bcUrl]?.fields : undefined
-    const bc = state.screen.bo.bc[bcName]
+    const bc = bcName ? state.screen.bo.bc[bcName] : undefined
     const parentBCName = bc?.parentName
     return {
         pickMap: state.view.pickMap ?? {},

@@ -1,7 +1,7 @@
 {
   "name": "meetingDocumentsList",
   "title": "",
-  "type": "List",
+  "type": "GroupingHierarchy",
   "bc": "meetingDocumentEdit",
   "fields": [
     {
@@ -9,6 +9,16 @@
       "key": "id",
       "type": "input",
       "drillDown": "true"
+    },
+    {
+      "title": "Document",
+      "key": "document",
+      "type": "dictionary"
+    },
+    {
+      "title": "Briefing",
+      "key": "briefing",
+      "type": "dictionary"
     },
     {
       "title": "File",
@@ -27,6 +37,12 @@
     }
   ],
   "options": {
+    "groupingHierarchy": {
+      "fields": [
+        "document",
+        "briefing"
+      ]
+    },
     "buttons": [
       {
         "actionKey": "associate",

@@ -62,7 +62,7 @@ const TimePickerField: React.FunctionComponent<ITimePickerProps> = ({
 }) => {
     const { t } = useTranslation()
 
-    const { visible, changeVisibility } = useVisibility()
+    const { visibility, changeVisibility } = useVisibility()
 
     const handleClose = () => changeVisibility(false)
 
@@ -130,7 +130,7 @@ const TimePickerField: React.FunctionComponent<ITimePickerProps> = ({
           )
         : undefined
 
-    return <TimePicker {...extendedProps} open={visible} onOpenChange={changeVisibility} addon={addon} />
+    return <TimePicker {...extendedProps} open={visibility} onOpenChange={changeVisibility} addon={addon} />
 }
 
 export default React.memo(TimePickerField)

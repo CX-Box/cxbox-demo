@@ -1,0 +1,20 @@
+.filtersContainer {
+  :global {
+    .ant-select {
+      padding-top: 10px;
+      padding-right: 10px;
+    }
+
+    .ant-select-selection {
+      border: none;
+
+      &:focus, &:active{
+        box-shadow: none;
+      }
+
+      &__rendered {
+        margin-left: 0;
+      }
+    }
+  }
+}

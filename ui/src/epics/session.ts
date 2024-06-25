@@ -4,6 +4,7 @@ import { keycloak, keycloakOptions } from '../keycloak'
 import { catchError, concat, EMPTY, filter, from, mergeMap, of, switchMap } from 'rxjs'
 import { actions, interfaces, utils } from '@cxbox-ui/core'
 import { RootEpic } from '@store'
+import { addSortForGroupHierarchiesMutate } from '@utils/groupingHierarchy'
 
 const { login, loginFail, logout, logoutDone } = actions
 
@@ -43,7 +44,7 @@ const loginEpic: RootEpic = (action$, state$, { api }) =>
                             firstName: data.firstName,
                             lastName: data.lastName,
                             login: data.login,
-                            screens: data.screens,
+                            screens: addSortForGroupHierarchiesMutate([...data.screens]),
                             userId: data.userId
                         })
                     )

@@ -1,7 +1,87 @@
 @import '../../../assets/styles/theme';
 
+.tableContainer {
+    position: relative;
+
+    :global{
+        .ant-select-selection-selected-value {
+            margin-right: 10px;
+        }
+
+        .ant-select-selection {
+            .ant-select-arrow {
+                width: 16px;
+            }
+
+            &__clear {
+                width: 16px;
+            }
+        }
+
+        .ant-table-header-column {
+            width: 100%;
+        }
+    }
+}
+
+.tableField {
+    width: 100%;
+}
+
+.table {
+    overflow-x: auto;
+    :global {
+        .ant-table .ant-table-thead > tr > th {
+            padding: 11px 16px;
+            font-weight: 500;
+            color: rgba(0, 0, 0, 0.85);
+            background: #fff;
+            border-bottom: 1px solid #595959;
+
+            span {
+                font-size: 14px;
+            }
+        }
+
+        .ant-table-row {
+            vertical-align: top;
+
+            > td {
+                border: none;
+            }
+        }
+    }
+}
+
+.tableWithRowMenu {
+    tbody td:last-child {
+        padding-right: 45px;
+    }
+}
+
+.filtersContainer {
+    :global {
+        .ant-select {
+            padding-top: 10px;
+            padding-right: 10px;
+        }
+
+        .ant-select-selection {
+            border: none;
+
+            &:focus, &:active {
+                box-shadow: none;
+            }
+
+            &__rendered {
+                margin-left: 0;
+            }
+        }
+    }
+}
+
 // table header
-.tableContainer div[class*="TableWidget__tableContainer"] {
+.tableContainer {
     position: relative;
     :global {
         .ant-table .ant-table-thead > tr > th {
@@ -24,7 +104,7 @@
 }
 
 // table body
-.tableContainer div[class*="TableWidget__tableContainer"] {
+.tableContainer {
     :global {
         .ant-table-row > td {
             line-height: 1.43;
@@ -46,7 +126,7 @@
             }
         }
 
-        div[class^='TableWidget__filtersContainer'] {
+        .filtersContainer {
             display: flex;
             justify-content: flex-start;
             align-items: baseline;
@@ -82,7 +162,7 @@
         }
     }
 
-    div[class*="TableWidget__tableWithRowMenu"] tbody td:last-child {
+    .tableWithRowMenu tbody td:last-child {
         padding-right: 34px;
     }
 }
@@ -101,3 +181,88 @@
 
 .settingButton {}
 
+// TODO temporary solution to use sticky and horizontal scroll until upgrading to and 4.7.0 or higher. Use Table.props.scroll={{ y: true, x: 'calc(700px + 50%)' }}
+// before: sticky and horizontal scroll
+.stickyWithHorizontalScroll {
+    .table {
+        overflow-x: visible;
+    }
+
+    :global {
+        .ant-table-header {
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+
+        .ant-table-scroll {
+            overflow: visible !important;
+            margin-bottom: 0 !important;
+        }
+
+        .ant-table-header {
+            overflow: hidden !important;
+            margin-bottom: 0 !important;
+            padding-bottom: 0 !important;
+        }
+
+        .ant-table-body {
+            overflow-y: visible !important;
+            overflow-x: auto !important;
+
+            @-moz-document url-prefix() {
+                td {
+                    overflow: hidden !important;
+                }
+            }
+        }
+    }
+}
+// after: sticky and horizontal scroll
+
+.tableContainer {
+    .moveToTop {
+        border-radius: 50%;
+        border: 1px solid rgb(187, 187, 187);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        color: #bbbbbb;
+        background: #e8e8e8;
+    }
+
+
+    .parentExpandIcon {
+        margin-right: 15px;
+        font-size: 14px;
+        :global .anticon svg {
+            width: 14px;
+            height: 14px;
+        }
+    }
+}
+
+.treeButton:not(.active)[disabled] {
+    color: #f5222d;
+    opacity: 0.75;
+}
+
+.treeButton.active {
+    color: #808080;
+}
+
+.expandRow form {
+    margin-right: 12px;
+    margin-left: 12px;
+}
+
+.expandRow {
+    margin: 16px;
+}
+
+.tableWithRowMenu :global .ant-table-tbody > tr.ant-table-expanded-row > td:last-child,
+:global .ant-table-tbody > tr.ant-table-expanded-row > td {
+    padding: 0
+}

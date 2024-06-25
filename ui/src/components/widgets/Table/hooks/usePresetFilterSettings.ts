@@ -8,9 +8,9 @@ import { actions } from '@actions'
 
 export function usePresetFilterSettings(bcName: string) {
     const { filterGroups, filters } = useAppSelector(state => {
-        const bc = state.screen.bo.bc[bcName]
+        const bc = bcName ? state.screen.bo.bc[bcName] : undefined
 
-        return { filterGroups: bc.filterGroups, filters: state.screen.filters[bcName] }
+        return { filterGroups: bc?.filterGroups, filters: state.screen.filters[bcName] }
     }, shallowEqual)
 
     const dispatch = useDispatch()

@@ -17,7 +17,7 @@ interface Props {
 export const AdditionalInfoWidget: React.FC<Props> = ({ meta }) => {
     const { bcName, options, fields: widgetFields } = meta
     const bcUrl = buildBcUrl(bcName, true)
-    const bc = useAppSelector(state => state.screen.bo.bc[bcName])
+    const bc = useAppSelector(state => (bcName ? state.screen.bo.bc[bcName] : undefined))
     const cursor = bc?.cursor
     const bcData = useAppSelector(state => state.data[bcName])
     const fields = useAppSelector(state => state.view.rowMeta[bcName]?.[bcUrl]?.fields)

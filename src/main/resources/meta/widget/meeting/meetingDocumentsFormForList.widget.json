@@ -5,6 +5,16 @@
   "bc": "meetingDocumentEdit",
   "fields": [
     {
+      "label": "Document",
+      "key": "document",
+      "type": "dictionary"
+    },
+    {
+      "label": "Briefing",
+      "key": "briefing",
+      "type": "dictionary"
+    },
+    {
       "label": "Notes",
       "key": "notes",
       "type": "input"
@@ -25,6 +35,22 @@
     },
     "layout": {
       "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "document",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "briefing",
+              "span": 12
+            }
+          ]
+        },
         {
           "cols": [
             {

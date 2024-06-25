@@ -1,5 +1,6 @@
 import { interfaces } from '@cxbox-ui/core'
 import { WidgetField as CoreWidgetField, FileUploadFieldMeta as CoreFileUploadFieldMeta } from '@cxbox-ui/schema'
+import { TableSettingsItem } from '@interfaces/tableSettings'
 
 export enum CustomFieldTypes {
     MultipleSelect = 'multipleSelect',
@@ -15,10 +16,14 @@ export enum CustomWidgetTypes {
     DashboardList = 'DashboardList',
     AdditionalInfo = 'AdditionalInfo',
     SuggestionPickList = 'SuggestionPickList',
-    StatsBlock = 'StatsBlock'
+    StatsBlock = 'StatsBlock',
+    GroupingHierarchy = 'GroupingHierarchy'
 }
 
-export const removeRecordOperationWidgets: Array<interfaces.WidgetTypes | string> = [interfaces.WidgetTypes.List]
+export const removeRecordOperationWidgets: Array<interfaces.WidgetTypes | string> = [
+    interfaces.WidgetTypes.List,
+    CustomWidgetTypes.GroupingHierarchy
+]
 
 export interface StepsWidgetMeta extends interfaces.WidgetMeta {
     type: CustomWidgetTypes.Steps
@@ -62,6 +67,7 @@ export type OperationInfo = {
 }
 
 export interface AppWidgetMeta extends interfaces.WidgetMeta {
+    personalFields?: TableSettingsItem | null // TODO make mandatory
     options?: interfaces.WidgetOptions & {
         primary?: {
             enabled: boolean
@@ -103,11 +109,19 @@ export interface AppWidgetMeta extends interfaces.WidgetMeta {
             hideLimitOptions?: boolean
             availableLimitsList?: number[]
         }
+        groupingHierarchy?: {
+            fields: string[]
+        }
     }
 }
 
 export interface AppWidgetTableMeta extends interfaces.WidgetTableMeta {
     options?: AppWidgetMeta['options']
+}
+
+export interface AppWidgetGroupingHierarchyMeta extends Omit<AppWidgetTableMeta, 'type'> {
+    type: CustomWidgetTypes.GroupingHierarchy
+    options?: AppWidgetTableMeta['options']
 }
 
 export interface WidgetFormPopupMeta extends Omit<interfaces.WidgetFormMeta, 'type'> {

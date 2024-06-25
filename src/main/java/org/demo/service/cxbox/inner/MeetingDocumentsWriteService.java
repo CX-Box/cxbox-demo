@@ -86,6 +86,12 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 		if (data.isFieldChanged(MeetingDocumentsDTO_.file)) {
 			entity.setFile(data.getFile());
 		}
+		if (data.isFieldChanged(MeetingDocumentsDTO_.document)) {
+			entity.setDocument(data.getDocument());
+		}
+		if (data.isFieldChanged(MeetingDocumentsDTO_.briefing)) {
+			entity.setBriefing(data.getBriefing());
+		}
 		setIfChanged(data, notes, entity::setNotes);
 
 		meetingDocumentsRepository.save(entity);
@@ -106,8 +112,7 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 		List<MeetingDocuments> meetingDocuments = fileUpload(bc, data);
 		List<MeetingDocumentsDTO> collect = meetingDocuments.stream().map(e -> entityToDto(bc, e))
 				.collect(Collectors.toList());
-		return new AssociateResultDTO((List) collect)
-				.setAction(PostAction.refreshBc(bc));
+		return new AssociateResultDTO((List) collect);
 	}
 
 	@SneakyThrows

@@ -167,10 +167,11 @@ function Table({ meta, isGroupingHierarchy, primaryColumn, disablePagination, hi
 
         const isParentRow = record.children
         const removeRowMenu = isGroupingHierarchy && isParentRow
+        const rowType = removeRowMenu ? 'GroupingRow' : 'Row'
 
         return {
             ...(!removeRowMenu ? tableEventListeners : undefined),
-            ...({ 'data-test-widget-list-row-id': record.id, 'data-test-widget-list-row-type': 'Row' } as Record<string, unknown>)
+            ...({ 'data-test-widget-list-row-id': record.id, 'data-test-widget-list-row-type': rowType } as Record<string, unknown>)
         } as TableEventListeners
     }
 

@@ -6,6 +6,7 @@ import { useAppSelector } from '@store'
 import { interfaces } from '@cxbox-ui/core'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import ActionLink from '@cxboxComponents/ui/ActionLink/ActionLink'
+import cn from 'classnames'
 
 function Dictionary(props: DictionaryProps) {
     const { value, meta, widgetName, backgroundColor, readOnly, onDrillDown } = props
@@ -17,7 +18,7 @@ function Dictionary(props: DictionaryProps) {
     if (readOnly) {
         return (
             <div
-                className={styles.coloredValue}
+                className={cn(styles.coloredValue, props.className)}
                 style={backgroundColor ? { color: backgroundColor, backgroundColor: `${backgroundColor}${opacitySuffix}` } : undefined}
             >
                 {onDrillDown ? <ActionLink onClick={onDrillDown}>{value}</ActionLink> : value}

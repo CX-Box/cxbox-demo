@@ -59,11 +59,12 @@ export const AdditionalInfoWidget: React.FC<Props> = ({ meta }) => {
                                                 data-test-field-key={field.key}
                                             >
                                                 <Field
+                                                    className={styles.fieldOverride}
                                                     bcName={meta.bcName}
                                                     cursor={cursor || ''}
                                                     widgetName={meta.name}
                                                     widgetFieldMeta={field}
-                                                    readonly
+                                                    readonly={true}
                                                 />
                                             </div>
                                         </Col>

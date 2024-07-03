@@ -1,4 +1,5 @@
 import { interfaces } from '@cxbox-ui/core'
+import { NAVIGATION_LEVEL_SCREEN } from '@constants'
 
 const { WidgetTypes } = interfaces
 
@@ -9,7 +10,8 @@ export function getNavigationDepth(type?: string) {
         case WidgetTypes.ThirdLevelMenu:
             return 2
         case WidgetTypes.SecondLevelMenu:
-        default:
             return 1
+        default:
+            return NAVIGATION_LEVEL_SCREEN
     }
 }

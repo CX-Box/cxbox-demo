@@ -11,3 +11,5 @@ export const EMPTY_OBJECT = {}
 export const EMPTY_ARRAY: unknown[] = []
 
 export const opacitySuffix = '33'
+
+export const NAVIGATION_LEVEL_SCREEN = 0

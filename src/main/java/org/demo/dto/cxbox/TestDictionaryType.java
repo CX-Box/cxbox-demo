@@ -9,7 +9,6 @@ import org.cxbox.api.data.dictionary.LOV;
 public enum TestDictionaryType implements Serializable,IDictionaryType {
 	REGIONS;
 
-
 	@Override
 	public String getName() {
 		return name();

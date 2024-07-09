@@ -3,7 +3,7 @@ package org.demo.conf;
 import lombok.NonNull;
 import org.cxbox.api.config.CxboxBeanProperties;
 import org.cxbox.api.service.tx.ITransactionStatus;
-import org.cxbox.core.config.APIConfig;
+
 import org.cxbox.core.config.ControllerScan;
 import org.cxbox.core.config.CoreApplicationConfig;
 import org.cxbox.core.config.LocalizationConfig;
@@ -14,6 +14,7 @@ import org.cxbox.model.core.config.PersistenceJPAConfig;
 import org.cxbox.model.core.tx.CxboxJpaTransactionManagerForceActiveAware;
 import java.util.concurrent.Executors;
 import lombok.RequiredArgsConstructor;
+import org.demo.conf.cxbox.customization.mvc.APIConfig; //TODO replace with import org.cxbox.core.config.APIConfig; after ResourceHttpMessageConverter added to it
 import org.demo.util.IntegrationConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

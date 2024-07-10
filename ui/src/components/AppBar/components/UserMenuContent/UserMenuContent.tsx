@@ -24,7 +24,7 @@ export const UserMenuContent: React.FC = () => {
     )
     const handleLogout = React.useCallback(() => dispatch(actions.logout(null)), [dispatch])
     const fullName = `${lastName} ${firstName}`
-    const sortedRoles = React.useMemo(() => roles?.sort(roleComparator), [roles])
+    const sortedRoles = React.useMemo(() => [...(roles || [])]?.sort(roleComparator), [roles])
 
     return (
         <div className={styles.root} data-test-menu-user={true}>

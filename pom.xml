@@ -10,7 +10,7 @@
   <parent>
     <groupId>org.cxbox</groupId>
     <artifactId>cxbox-starter-parent</artifactId>
-    <version>4.0.0-M3-SNAPSHOT</version>
+    <version>4.0.0-M3-CXBOX-348-SNAPSHOT</version>
   </parent>
 
   <properties>
@@ -130,7 +130,7 @@
     <dependency>
       <groupId>org.cxbox</groupId>
       <artifactId>cxbox-starter-meta</artifactId>
-      <version>4.0.0-M3-SNAPSHOT</version>
+      <version>4.0.0-M3-CXBOX-348-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>

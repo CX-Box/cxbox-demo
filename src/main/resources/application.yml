@@ -30,6 +30,7 @@ cxbox:
     dev-panel-enabled: ${DEV_PANEL_ENABLED:true}
     directory: ${META_DIRECTORY:file:./src/main/resources/meta}
     view-allowed-roles-enabled: true
+    bc-default-page-limit: 5
   widget:
     fields:
       include-packages: org.cxbox.meta, org.demo.conf.cxbox

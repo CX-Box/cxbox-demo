@@ -18,6 +18,7 @@ import org.cxbox.meta.entity.Responsibilities.ResponsibilityType;
 import org.demo.conf.cxbox.extension.lov.AdministeredDictionary;
 import org.demo.conf.cxbox.extension.lov.AdministeredDictionaryType;
 
+@SuppressWarnings("java:S1948")
 @Getter
 @Setter
 @NoArgsConstructor

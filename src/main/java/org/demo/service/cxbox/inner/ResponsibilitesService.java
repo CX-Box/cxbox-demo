@@ -38,10 +38,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-@SuppressWarnings({"java:S3252", "java:S1186"})
+@SuppressWarnings({"java:S3252", "java:S1186", "java:S6813"})
 @Service
 public class ResponsibilitesService extends VersionAwareResponseService<ResponsibilitesCrudDTO, Responsibilities> {
-
 
 	@Autowired
 	private ResponsibilitiesServiceExt responsibilitiesServiceExt;

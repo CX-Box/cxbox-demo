@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.cxbox.api.data.dictionary.IDictionaryType;
 import org.cxbox.api.data.dictionary.LOV;
 
+@SuppressWarnings("java:S6548")
 @Getter
 @RequiredArgsConstructor
 public enum AdministeredDictionaryType implements Serializable, IDictionaryType {

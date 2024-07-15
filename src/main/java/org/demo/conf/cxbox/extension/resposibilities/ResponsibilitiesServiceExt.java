@@ -22,6 +22,7 @@ import org.cxbox.meta.metahotreload.repository.MetaRepository;
 import org.cxbox.meta.metahotreload.service.MetaHotReloadServiceImpl;
 import org.demo.repository.ResponsibilitiesRepository;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.cache.Cache;
 import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.stereotype.Service;
 
@@ -64,7 +65,7 @@ public class ResponsibilitiesServiceExt {
 	 * 2) Use cluster ready solutions such as queues if there are any in your infrastructure
 	 */
 	private void refreshCache() {
-		cacheManager.getCache(CacheConfig.USER_CACHE).clear();
+		Optional.ofNullable(cacheManager.getCache(CacheConfig.USER_CACHE)).ifPresent(Cache::clear);
 		cxboxCachingService.evictUserCache();
 		cxboxCachingService.evictRequestCache();
 		cxboxCachingService.evictUiCache();

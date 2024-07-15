@@ -13,9 +13,9 @@ import org.cxbox.meta.ui.model.json.field.FieldMeta;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DashboardWidgetsFieldExtractor extends BaseFieldExtractor {
+public class ExtendedFieldExtractor extends BaseFieldExtractor {
 
-	protected DashboardWidgetsFieldExtractor(LinkFieldExtractor linkFieldExtractor) {
+	protected ExtendedFieldExtractor(LinkFieldExtractor linkFieldExtractor) {
 		super(linkFieldExtractor);
 	}
 
@@ -36,7 +36,8 @@ public class DashboardWidgetsFieldExtractor extends BaseFieldExtractor {
 				"Funnel",
 				"RingProgress",
 				"DashboardList",
-				"FormPopup"
+				"FormPopup",
+				"GroupingHierarchy"
 		);
 	}
 

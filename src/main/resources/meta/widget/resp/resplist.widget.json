@@ -1,19 +1,26 @@
 {
   "name": "resplist",
   "title": "Responsibilites",
-  "type": "List",
+  "type": "GroupingHierarchy",
   "bc": "responsibilities",
   "showCondition": [],
   "fields": [
     {
-      "title": "Internal Role CD",
+      "title": "Role",
       "key": "internalRoleCD",
-      "type": "dictionary"
+      "type": "dictionary",
+      "width": 200
     },
     {
       "title": "View",
       "key": "view",
-      "type": "dictionary"
+      "type": "dictionary",
+      "width": 200
+    },
+    {
+      "title": "widget (endpoint)",
+      "key": "viewWidgets",
+      "type": "multipleSelect"
     },
     {
       "title": "Screens",
@@ -27,7 +34,17 @@
     }
   ],
   "options": {
+    "export": {
+      "enabled": true,
+      "title": "export"
+    },
+    "groupingHierarchy": {
+      "fields": [
+        "internalRoleCD"
+      ]
+    },
     "additional": {
+      "fields": ["screens", "respType"],
       "enabled": true
     },
     "create": {
@@ -39,12 +56,8 @@
     "actionGroups": {
       "include": [
         "create",
-        "edit",
-        "delete",
-        "refresh"
+        "delete"
       ]
     }
   }
-}
-
 }

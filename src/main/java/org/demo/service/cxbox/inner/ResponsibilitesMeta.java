@@ -20,8 +20,8 @@ import org.cxbox.meta.entity.Responsibilities_;
 import org.cxbox.meta.metahotreload.dto.ViewSourceDTO;
 import org.cxbox.meta.metahotreload.service.MetaResourceReaderService;
 import org.cxbox.model.core.dao.JpaDao;
+import org.demo.conf.cxbox.extension.resposibilities.ResponsibilitiesServiceExt;
 import org.demo.dto.cxbox.inner.ResponsibilitesCrudDTO;
-
 import org.demo.dto.cxbox.inner.ResponsibilitesCrudDTO_;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +33,8 @@ public class ResponsibilitesMeta extends FieldMetaBuilder<ResponsibilitesCrudDTO
 	private final MetaResourceReaderService metaResourceReaderService;
 
 	private final JpaDao jpaDao;
+
+	private final ResponsibilitiesServiceExt responsibilitiesServiceExt;
 
 	@Override
 	public void buildRowDependentMeta(RowDependentFieldsMeta<ResponsibilitesCrudDTO> fields,
@@ -58,10 +60,31 @@ public class ResponsibilitesMeta extends FieldMetaBuilder<ResponsibilitesCrudDTO
 	@Override
 	public void buildIndependentMeta(FieldsMeta<ResponsibilitesCrudDTO> fields, InnerBcDescription bcDescription,
 			Long parentId) {
-		fields.setAllFilterValuesByLovType(ResponsibilitesCrudDTO_.internalRoleCD, INTERNAL_ROLE);
-		fields.setDictionaryTypeWithAllValues(ResponsibilitesCrudDTO_.internalRoleCD, INTERNAL_ROLE);
+		fields.enableFilter(ResponsibilitesCrudDTO_.readOnly);
+
 		fields.enableFilter(ResponsibilitesCrudDTO_.internalRoleCD);
+		fields.setAllFilterValuesByLovType(ResponsibilitesCrudDTO_.internalRoleCD, INTERNAL_ROLE);
 		fields.setForceActive(ResponsibilitesCrudDTO_.internalRoleCD);
+
+		fields.enableFilter(ResponsibilitesCrudDTO_.view);
+		fields.setConcreteFilterValues(
+				ResponsibilitesCrudDTO_.view,
+				metaResourceReaderService.getViews().stream()
+						.map(resp -> new SimpleDictionary(resp.getName(), resp.getName(), true)).toList()
+		);
+		fields.setForceActive(ResponsibilitesCrudDTO_.view);
+
+		fields.enableFilter(ResponsibilitesCrudDTO_.respType);
+		fields.setEnumFilterValues(fields, ResponsibilitesCrudDTO_.respType, ResponsibilityType.values());
+
+		fields.enableFilter(
+				ResponsibilitesCrudDTO_.viewWidgets
+		);
+		fields.setConcreteFilterValues(
+				ResponsibilitesCrudDTO_.viewWidgets,
+				responsibilitiesServiceExt.getAllWidgetsNameToDescription().entrySet().stream()
+						.map(entry -> new SimpleDictionary(entry.getKey(), entry.getValue(), true)).toList()
+		);
 	}
 
 	private List<Responsibilities> diffViewDBMeta() {
@@ -73,10 +96,18 @@ public class ResponsibilitesMeta extends FieldMetaBuilder<ResponsibilitesCrudDTO
 						.setInternalRoleCD(new LOV(role)).setView(view.getName()))));
 		if (!viewDB.isEmpty()) {
 			Map<String, Responsibilities> keyViewsBD = viewDB.stream().filter(v -> v.getInternalRoleCD() != null)
-					.collect(Collectors.toMap(a -> a.getInternalRoleCD().getKey() + a.getView(), resp -> resp));
+					.collect(Collectors.toMap(
+							a -> a.getInternalRoleCD().getKey() + a.getView(),
+							resp -> resp,
+							(resp1, resp2) -> resp1
+					));
 
 			Map<String, Responsibilities> keyViewsMeta = responsibilities.stream()
-					.collect(Collectors.toMap(a -> a.getInternalRoleCD().getKey() + a.getView(), resp -> resp));
+					.collect(Collectors.toMap(
+							a -> a.getInternalRoleCD().getKey() + a.getView(),
+							resp -> resp,
+							(resp1, resp2) -> resp1
+					));
 			return searchDiffData(keyViewsMeta, keyViewsBD);
 		}
 		return new ArrayList<>();

@@ -6,7 +6,7 @@
   "showCondition": [],
   "fields": [
     {
-      "label": "Internal Role CD",
+      "label": "Role",
       "key": "internalRoleCD",
       "type": "dictionary"
     },
@@ -14,6 +14,11 @@
       "label": "View",
       "key": "view",
       "type": "dictionary"
+    },
+    {
+      "label": "widget (endpoint)",
+      "key": "viewWidgets",
+      "type": "multipleSelect"
     }
   ],
   "options": {
@@ -38,6 +43,14 @@
             {
               "fieldKey": "view",
               "span": 7
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "viewWidgets",
+              "span": 12
             }
           ]
         }

@@ -1,0 +1,117 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd"
+  logicalFilePath="db/changelog/0000700.xml">
+
+  <changeSet id="MY_ENTITY1223" author="cxbox">
+    <createTable tableName="MY_ENTITY1223">
+      <column name="ID" remarks="Identifier" type="NUMBER(19, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column defaultValueComputed="${now}" name="CREATED_DATE" remarks="Creation date"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="${now}" name="UPDATED_DATE" remarks="Last updated date"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false" foreignKeyName="CONTACT_CREATED_BY" references="USERS"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false" foreignKeyName="CONTACT_LAST_UPD_BY" references="USERS"/>
+      </column>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="CUSTOM_FIELD" type="VARCHAR(200)"/>
+    </createTable>
+  </changeSet>
+  <changeSet id="MY_ENTITY1225" author="cxbox">
+    <createTable tableName="MY_ENTITY1225">
+      <column name="ID" remarks="Identifier" type="NUMBER(19, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column defaultValueComputed="${now}" name="CREATED_DATE" remarks="Creation date"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="${now}" name="UPDATED_DATE" remarks="Last updated date"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false" foreignKeyName="CONTACT_CREATED_BY" references="USERS"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false" foreignKeyName="CONTACT_LAST_UPD_BY" references="USERS"/>
+      </column>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="CUSTOM_FIELD" type="VARCHAR(200)"/>
+      <column name="PARENT_ID_1225" type="NUMBER(19, 0)">
+        <constraints foreignKeyName="REF_125" references="MY_ENTITY1223"/>
+      </column>
+    </createTable>
+  </changeSet>
+  <changeSet id="MY_ENTITY1222" author="cxbox">
+    <createTable tableName="MY_ENTITY1222">
+      <column name="ID" remarks="Identifier" type="NUMBER(19, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column defaultValueComputed="${now}" name="CREATED_DATE" remarks="Creation date"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="${now}" name="UPDATED_DATE" remarks="Last updated date"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false" foreignKeyName="CONTACT_CREATED_BY" references="USERS"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false" foreignKeyName="CONTACT_LAST_UPD_BY" references="USERS"/>
+      </column>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="CUSTOM_FIELD" type="VARCHAR(200)"/>
+      <column name="PARENT_ID_1222" type="NUMBER(19, 0)">
+        <constraints foreignKeyName="REF_122" references="MY_ENTITY1223"/>
+      </column>
+    </createTable>
+  </changeSet>
+  <changeSet id="MY_ENTITY1224" author="cxbox">
+    <createTable tableName="MY_ENTITY1224">
+      <column name="ID" remarks="Identifier" type="NUMBER(19, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column defaultValueComputed="${now}" name="CREATED_DATE" remarks="Creation date"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="${now}" name="UPDATED_DATE" remarks="Last updated date"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false" foreignKeyName="CONTACT_CREATED_BY" references="USERS"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false" foreignKeyName="CONTACT_LAST_UPD_BY" references="USERS"/>
+      </column>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="CUSTOM_FIELD" type="VARCHAR(200)"/>
+      <column name="PARENT_ID_1224" type="NUMBER(19, 0)">
+        <constraints foreignKeyName="CONTACT_REF_CLIENT" references="MY_ENTITY1222"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+</databaseChangeLog>

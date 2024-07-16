@@ -1,0 +1,18 @@
+{
+  "name": "MyExample1224List",
+  "title": "bc 1224 parent 1222",
+  "type": "List",
+  "bc": "myexample1224",
+  "fields": [
+    {
+      "title": "customField",
+      "key": "customField",
+      "type": "input"
+    }
+  ],
+  "options": {
+    "actionGroups": {
+    }
+  }
+}
+

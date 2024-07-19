@@ -69,6 +69,10 @@ export type OperationInfo = {
 export interface AppWidgetMeta extends interfaces.WidgetMeta {
     personalFields?: TableSettingsItem | null // TODO make mandatory
     options?: interfaces.WidgetOptions & {
+        title?: {
+            bgColor?: string
+        }
+
         primary?: {
             enabled: boolean
             title?: string

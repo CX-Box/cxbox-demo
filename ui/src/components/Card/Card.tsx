@@ -6,12 +6,13 @@ import Operations from '../Operations/Operations'
 import DebugWidgetWrapper from '../DebugWidgetWrapper/DebugWidgetWrapper'
 import styles from './Card.less'
 import { useAppSelector } from '@store'
-import { TemplatedTitle } from '@cxboxComponents'
 import { buildBcUrl } from '@utils/buildBcUrl'
+import WidgetTitle from '@components/WidgetTitle/WidgetTitle'
+import { AppWidgetMeta } from '@interfaces/widget'
 
 export interface CardProps {
     children: React.ReactNode
-    meta: interfaces.WidgetMeta
+    meta: AppWidgetMeta
     className?: string
 }
 
@@ -39,9 +40,7 @@ function Card({ meta, children, className }: CardProps) {
                         data-test-widget-name={meta.name}
                     >
                         {meta.title && (
-                            <h2 className={styles.widgetTitle}>
-                                <TemplatedTitle widgetName={meta.name} title={meta.title} />
-                            </h2>
+                            <WidgetTitle level={2} widgetName={meta.name} text={meta.title} bcColor={meta?.options?.title?.bgColor} />
                         )}
                         {isForm && children}
                         {showOperations.includes(type as interfaces.WidgetTypes) && (

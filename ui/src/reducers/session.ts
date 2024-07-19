@@ -3,13 +3,14 @@ import { createReducer } from '@reduxjs/toolkit'
 import { createSettingMap, createSettingPath } from '@utils/tableSettings'
 import { TableSettingsMap } from '@interfaces/tableSettings'
 import { actions } from '@actions'
-import { SessionScreen } from '@interfaces/session'
+import { FeatureSetting, SessionScreen } from '@interfaces/session'
 
 interface Session extends interfaces.Session {
     logout: boolean
     userId?: string
     tableSettings: TableSettingsMap | null
     screens: SessionScreen[]
+    featureSettings?: FeatureSetting[]
 }
 
 const initialState: Session = {

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { interfaces } from '@cxbox-ui/core'
 import { CustomWidgetTypes } from '@interfaces/widget'
 import { useAppSelector } from '@store'
@@ -19,11 +19,7 @@ export const AdditionalInfoWidget: React.FC<Props> = ({ meta }) => {
     const bcUrl = buildBcUrl(bcName, true)
     const bc = useAppSelector(state => (bcName ? state.screen.bo.bc[bcName] : undefined))
     const cursor = bc?.cursor
-    const bcData = useAppSelector(state => state.data[bcName])
     const fields = useAppSelector(state => state.view.rowMeta[bcName]?.[bcUrl]?.fields)
-    const data: Record<string, any> = useMemo(() => {
-        return bcData?.find(v => v.id === cursor) || {}
-    }, [bcData, cursor])
 
     const flattenWidgetFields = useFlatFormFields(widgetFields || [])
 

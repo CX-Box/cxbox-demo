@@ -13,11 +13,12 @@ import { NumberInput, FilterField as CoreFilterField } from '@cxboxComponents'
 
 interface FilterFieldProps extends ColumnFilterControlProps {
     visible?: boolean
+    filterByRangeEnabled?: boolean
 }
 
 const { FieldType } = interfaces
 
-function FilterField({ visible, ...props }: FilterFieldProps) {
+function FilterField({ visible, filterByRangeEnabled, ...props }: FilterFieldProps) {
     const { widgetFieldMeta, value, onChange, rowFieldMeta } = props
     const fieldType = widgetFieldMeta.type as string
 
@@ -65,13 +66,12 @@ function FilterField({ visible, ...props }: FilterFieldProps) {
         case FieldType.dateTimeWithSeconds:
         case FieldType.dateTime:
         case FieldType.date: {
-            if (props.widgetOptions?.filterDateByRange) {
+            if (filterByRangeEnabled) {
                 return (
                     <RangePicker
                         value={props.value as interfaces.DataValue[]}
                         onChange={onChange}
                         format={getFormat(fieldType === FieldType.dateTime, fieldType === FieldType.dateTimeWithSeconds)}
-                        startOf={getStartOf(fieldType)}
                         open={visible}
                         showTime={getShowTime(fieldType)}
                     />
@@ -105,16 +105,5 @@ function getShowTime(type: DateFieldTypes | string) {
             return { format: 'HH:mm' }
         default:
             return undefined
-    }
-}
-
-function getStartOf(type: DateFieldTypes | string) {
-    switch (type) {
-        case FieldType.dateTimeWithSeconds:
-            return 's'
-        case FieldType.dateTime:
-            return 'm'
-        default:
-            return 'd'
     }
 }

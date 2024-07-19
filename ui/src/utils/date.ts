@@ -1,6 +1,8 @@
-import moment from 'moment'
+import moment, { Moment } from 'moment'
 import { dateFormat, DateFormat } from '@interfaces/date'
 import { interfaces } from '@cxbox-ui/core'
+
+export const isoLocalFormatter = (date?: Moment | null) => date?.format('YYYY-MM-DD[T]HH:mm:ss')
 
 export const getFormat = (showTime?: boolean, showSeconds?: boolean, monthYear?: boolean) => {
     if (showSeconds) {

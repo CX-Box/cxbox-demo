@@ -9,7 +9,7 @@ import { DatePickerProps } from 'antd/lib/date-picker/interface'
 
 export interface IDatePickerFieldProps extends BaseFieldProps {
     value?: string | null
-    onChange?: (date: string | null) => void
+    onChange?: (date?: string | null) => void
     showToday?: boolean
     allowClear?: boolean
     onOpenChange?: (status: boolean) => void

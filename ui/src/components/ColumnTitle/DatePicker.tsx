@@ -5,6 +5,7 @@ import { dateFormat } from '@interfaces/date'
 import moment from 'moment'
 import { Moment } from 'moment/moment'
 import { interfaces } from '@cxbox-ui/core'
+import { isoLocalFormatter } from '@utils/date'
 
 interface DatePickerProps extends Omit<AntdDatePickerProps, 'value' | 'onChange' | 'onOpenChange'> {
     value: interfaces.DataValue[]
@@ -39,7 +40,7 @@ function useDatePicker({ value, open, onChange }: DatePickerProps) {
     }, [])
 
     const handleChange = (date: Moment | null) => {
-        onChange([date?.startOf('day').toISOString(), date?.endOf('day').toISOString()])
+        onChange([isoLocalFormatter(date?.startOf('day')), isoLocalFormatter(date?.endOf('day'))])
     }
 
     return {

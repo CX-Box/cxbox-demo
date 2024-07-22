@@ -61,7 +61,11 @@ export const UploadListContainer = forwardRef(
         let hint: ReactElement | null = null
 
         if (addedFileList.some(file => isFileUploadSuccess(file.status)) && successHint) {
-            hint = <Typography.Text type="secondary">{successHint}</Typography.Text>
+            hint = (
+                <div className={styles.hintWrapper}>
+                    <Typography.Text type="secondary">{successHint}</Typography.Text>
+                </div>
+            )
         }
 
         return notificationElement

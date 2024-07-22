@@ -22,6 +22,9 @@ interface ColumnFilterProps {
 
 function ColumnFilter({ widgetName, widgetMeta, rowMeta, components }: ColumnFilterProps) {
     const widget = useAppSelector(state => state.view.widgets.find(item => item.name === widgetName))
+    const filterByRangeEnabled = useAppSelector(
+        state => state.session.featureSettings?.find(featureSetting => featureSetting.key === 'filterByRangeEnabled')?.value === 'true'
+    )
     const bcName = widget?.bcName ?? ''
     const listFields = widget?.fields as interfaces.WidgetListField[]
     const effectiveFieldMeta = (listFields?.find(item => item.key === widgetMeta.filterBy) ?? widgetMeta) as interfaces.WidgetListField
@@ -122,6 +125,7 @@ function ColumnFilter({ widgetName, widgetMeta, rowMeta, components }: ColumnFil
                     onChange={setValue}
                     widgetOptions={widget?.options}
                     visible={visible}
+                    filterByRangeEnabled={filterByRangeEnabled}
                 />
                 {isPickList && <Button icon="ellipsis" onClick={handlePicklistFilterOpen} />}
             </div>

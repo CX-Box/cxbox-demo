@@ -215,6 +215,9 @@ export const Field: FunctionComponent<FieldProps> = ({
         return <HistoryField fieldMeta={widgetFieldMeta} data={data} bcName={bcName} cursor={cursor} widgetName={widgetName} />
     }
 
+    const showTime = [FieldType.dateTime, FieldType.dateTimeWithSeconds].includes(widgetFieldMeta.type)
+    const showSeconds = widgetFieldMeta.type === FieldType.dateTimeWithSeconds
+
     switch (widgetFieldMeta.type) {
         case FieldType.date:
         case FieldType.dateTime:
@@ -224,8 +227,8 @@ export const Field: FunctionComponent<FieldProps> = ({
                     {...commonProps}
                     onChange={handleChange}
                     value={(value || '').toString()}
-                    showTime={widgetFieldMeta.type === FieldType.dateTime}
-                    showSeconds={widgetFieldMeta.type === FieldType.dateTimeWithSeconds}
+                    showTime={showTime}
+                    showSeconds={showSeconds}
                 />
             )
             break

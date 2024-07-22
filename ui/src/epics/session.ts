@@ -2,9 +2,10 @@ import { loginDone, SSO_AUTH } from '@actions'
 import { AxiosError } from 'axios'
 import { keycloak, keycloakOptions } from '../keycloak'
 import { catchError, concat, EMPTY, filter, from, mergeMap, of, switchMap } from 'rxjs'
-import { actions, interfaces, utils } from '@cxbox-ui/core'
+import { actions, utils } from '@cxbox-ui/core'
 import { RootEpic } from '@store'
 import { addSortForGroupHierarchiesMutate } from '@utils/groupingHierarchy'
+import { LoginResponse } from '@interfaces/session'
 
 const { login, loginFail, logout, logoutDone } = actions
 
@@ -35,7 +36,7 @@ const loginEpic: RootEpic = (action$, state$, { api }) =>
             const login = action.payload && action.payload.login
             const password = action.payload && action.payload.password
             return api.getBasicAuthRequest(login, password).pipe(
-                mergeMap((data: interfaces.LoginResponse) => {
+                mergeMap((data: LoginResponse) => {
                     return of(
                         loginDone({
                             devPanelEnabled: data.devPanelEnabled,
@@ -45,7 +46,8 @@ const loginEpic: RootEpic = (action$, state$, { api }) =>
                             lastName: data.lastName,
                             login: data.login,
                             screens: addSortForGroupHierarchiesMutate([...data.screens]),
-                            userId: data.userId
+                            userId: data.userId,
+                            featureSettings: data.featureSettings
                         })
                     )
                 }),

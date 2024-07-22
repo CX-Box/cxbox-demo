@@ -26,9 +26,11 @@ function normalizeFieldValue(value: DataValue | undefined, fieldMeta?: WidgetFie
     const dateFieldMeta = fieldMeta as DateFieldMeta | DateTimeWithSecondsFieldMeta | DateTimeFieldMeta
     const isDateField = [FieldType.date, FieldType.dateTime, FieldType.dateTimeWithSeconds].includes(dateFieldMeta?.type)
     if (isDateField) {
-        return moment(value as moment.MomentInput, moment.ISO_8601)?.format(
-            getDateFormat(dateFieldMeta?.type === FieldType.dateTime, dateFieldMeta?.type === FieldType.dateTimeWithSeconds, false)
-        )
+        return value
+            ? moment(value as moment.MomentInput, moment.ISO_8601)?.format(
+                  getDateFormat(dateFieldMeta?.type === FieldType.dateTime, dateFieldMeta?.type === FieldType.dateTimeWithSeconds, false)
+              )
+            : null
     }
 
     const numberFieldMeta = fieldMeta as NumberFieldMeta

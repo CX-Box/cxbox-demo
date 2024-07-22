@@ -5,7 +5,8 @@
 }
 
 .title {
-    font-weight: bold;
+    font-size: inherit;
+    color: inherit;
 }
 
 .rowLabel {

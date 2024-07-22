@@ -3,14 +3,16 @@ import styles from './Title.less'
 import { Tag } from 'antd'
 import { usePassiveAssociations } from '../hooks/usePassiveAssociations'
 import { useAppSelector } from '@store'
+import WidgetTitle from '@components/WidgetTitle/WidgetTitle'
 
 type TagType = { id: string; _value: string; _closable?: boolean; options?: Record<string, any> }
 
 interface TitleProps {
+    widgetName: string
     title?: string
 }
 
-function Title({ title }: TitleProps) {
+function Title({ title, widgetName }: TitleProps) {
     const assocValueKey = useAppSelector(state => state.view.popupData?.assocValueKey ?? '')
 
     const { values: selectedRecords, selectItem } = usePassiveAssociations()
@@ -24,7 +26,7 @@ function Title({ title }: TitleProps) {
     return tags.length ? (
         <div>
             <div>
-                <h1 className={styles.title}>{title}</h1>
+                <WidgetTitle className={styles.title} level={1} widgetName={widgetName} text={title} />
             </div>
             <div className={styles.tagArea}>
                 {assocValueKey &&
@@ -47,7 +49,7 @@ function Title({ title }: TitleProps) {
             </div>
         </div>
     ) : (
-        <>{title}</>
+        <WidgetTitle className={styles.title} level={1} widgetName={widgetName} text={title} />
     )
 }
 

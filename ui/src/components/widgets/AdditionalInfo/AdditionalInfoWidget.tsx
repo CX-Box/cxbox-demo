@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { interfaces } from '@cxbox-ui/core'
 import { CustomWidgetTypes } from '@interfaces/widget'
 import { useAppSelector } from '@store'
@@ -7,6 +7,7 @@ import { useFlatFormFields } from '@hooks/useFlatFormFields'
 import { Col, Row } from 'antd'
 import { Field } from '@cxboxComponents'
 import styles from './AdditionalInfoWidget.module.css'
+import WidgetTitle from '@components/WidgetTitle/WidgetTitle'
 
 type AdditionalInfoWidgetMeta = Omit<interfaces.WidgetInfoMeta, 'type'>
 
@@ -19,19 +20,15 @@ export const AdditionalInfoWidget: React.FC<Props> = ({ meta }) => {
     const bcUrl = buildBcUrl(bcName, true)
     const bc = useAppSelector(state => (bcName ? state.screen.bo.bc[bcName] : undefined))
     const cursor = bc?.cursor
-    const bcData = useAppSelector(state => state.data[bcName])
     const fields = useAppSelector(state => state.view.rowMeta[bcName]?.[bcUrl]?.fields)
-    const data: Record<string, any> = useMemo(() => {
-        return bcData?.find(v => v.id === cursor) || {}
-    }, [bcData, cursor])
 
     const flattenWidgetFields = useFlatFormFields(widgetFields || [])
 
     return (
         <Row className={styles.widgetContainer}>
             <Row gutter={[8, 18]}>
-                <Col span={24} className={styles.title}>
-                    {meta.title}
+                <Col span={24}>
+                    <WidgetTitle className={styles.title} level={2} widgetName={meta.name} marginBottom={0} text={meta.title} />
                 </Col>
             </Row>
             {options?.layout?.rows.map((row, rowIndex) => {

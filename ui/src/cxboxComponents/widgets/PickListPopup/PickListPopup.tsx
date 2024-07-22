@@ -13,6 +13,7 @@ import { createMapDispatchToProps } from '@utils/redux'
 import { actions, interfaces, RowMetaField } from '@cxbox-ui/core'
 import { TableEventListeners } from 'antd/lib/table/interface'
 import { buildBcUrl } from '@utils/buildBcUrl'
+import WidgetTitle from '@components/WidgetTitle/WidgetTitle'
 
 const { bcRemoveAllFilters, changeDataItem, closeViewPopup, viewClearPickMap } = actions
 
@@ -113,10 +114,10 @@ export const PickListPopup: FunctionComponent<PickListPopupProps & PickListPopup
     const defaultTitle = React.useMemo(
         () => (
             <div>
-                <h1 className={styles.title}>{widget.title}</h1>
+                <WidgetTitle className={styles.title} level={1} widgetName={widget.name} text={widget.title} />
             </div>
         ),
-        [widget.title]
+        [widget.name, widget.title]
     )
     const title = components?.title === undefined ? defaultTitle : components.title
 

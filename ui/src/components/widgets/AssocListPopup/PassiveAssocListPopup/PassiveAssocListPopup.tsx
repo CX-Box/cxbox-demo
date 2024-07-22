@@ -29,7 +29,7 @@ function PassiveAssocListPopup({ meta }: PassiveAssocListPopupProps) {
             className={cn(tableStyles.tableContainer, assocListStyles.container)}
             widget={meta}
             components={{
-                title: <Title title={meta.title} />,
+                title: <Title title={meta.title} widgetName={meta.name} />,
                 table: <AssocTable meta={meta} disablePagination={true} />,
                 footer: (
                     <>

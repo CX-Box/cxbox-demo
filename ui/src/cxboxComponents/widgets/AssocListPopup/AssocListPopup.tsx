@@ -8,6 +8,7 @@ import { interfaces, actions } from '@cxbox-ui/core'
 import { RootState, useAppSelector } from '@store'
 import { useAssocRecords } from '@hooks/useAssocRecords'
 import { createMapDispatchToProps } from '@utils/redux'
+import WidgetTitle from '@components/WidgetTitle/WidgetTitle'
 
 export interface IAssocListRecord {
     id: string
@@ -168,7 +169,7 @@ export const AssocListPopup = ({
     const defaultTitle = tags.length ? (
         <div>
             <div>
-                <h1 className={styles.title}>{widget.title}</h1>
+                <WidgetTitle level={1} widgetName={widget.name} text={widget.title} className={styles.title} />
             </div>
             <div className={styles.tagArea}>
                 {assocValueKey &&
@@ -190,7 +191,7 @@ export const AssocListPopup = ({
             </div>
         </div>
     ) : (
-        widget.title
+        <WidgetTitle level={1} widgetName={widget.name} text={widget.title} className={styles.title} />
     )
 
     const title = components?.title === undefined ? defaultTitle : components.title

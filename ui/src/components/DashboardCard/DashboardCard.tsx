@@ -4,6 +4,7 @@ import DebugWidgetWrapper from '../DebugWidgetWrapper/DebugWidgetWrapper'
 import styles from './DashboardCard.module.css'
 import { useAppSelector } from '@store'
 import { interfaces } from '@cxbox-ui/core'
+import WidgetTitle from '@components/WidgetTitle/WidgetTitle'
 
 interface DashboardCardProps {
     children?: React.ReactNode
@@ -26,7 +27,7 @@ function DashboardCard({ children, meta }: DashboardCardProps) {
             <Row justify="center">
                 <Col span={24}>
                     <DebugWidgetWrapper debugMode={debugMode} meta={meta}>
-                        {title && <h2 className={styles.header}>{title}</h2>}
+                        {title && <WidgetTitle className={styles.header} level={2} widgetName={meta.name} text={title} />}
                         {children}
                     </DebugWidgetWrapper>
                 </Col>

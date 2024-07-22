@@ -7,6 +7,7 @@ import { OperationPreInvokeCustom } from '@interfaces/operation'
 import Popup from '../../Popup/Popup'
 import { useAppDispatch, useAppSelector } from '@store'
 import { actions, interfaces } from '@cxbox-ui/core'
+import WidgetTitle from '@components/WidgetTitle/WidgetTitle'
 
 export interface FormPopupProps {
     meta: WidgetFormPopupMeta
@@ -43,9 +44,12 @@ export function FormPopup(props: FormPopupProps) {
 
     const preInvoke = popupData?.options?.operation?.preInvoke as OperationPreInvokeCustom | undefined
 
+    const popupTitle = (
+        <WidgetTitle className={styles.title} level={1} widgetName={props.meta.name} text={preInvoke?.message ?? props.meta.title} />
+    )
     return (
         <Popup
-            title={preInvoke?.message ?? props.meta.title}
+            title={popupTitle}
             showed
             size="medium"
             onOkHandler={onSave}

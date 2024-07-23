@@ -5,6 +5,23 @@
     display: flex;
     justify-content: space-between;
 
+    :global {
+        .ant-btn {
+            border: 1px solid #D9D9D9;
+            height: 32px;
+            min-width: 32px;
+            width: max-content;
+            margin-right: 8px;
+            border-radius: 2px;
+
+            padding: 4px 6px;
+
+            &:hover {
+                color: @primary-red;
+            }
+        }
+    }
+
     :global(.ant-pagination.mini).pagination {
         :global {
             .ant-pagination-item,

@@ -112,6 +112,7 @@ export interface AppWidgetMeta extends interfaces.WidgetMeta {
             defaultLimit?: number
             hideLimitOptions?: boolean
             availableLimitsList?: number[]
+            type?: 'nextAndPrevious' | 'nextAndPreviousWithCount'
         }
         groupingHierarchy?: {
             fields: string[]

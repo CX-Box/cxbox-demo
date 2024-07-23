@@ -11,7 +11,7 @@ interface LimitProps {
     className: string
     classNameContainer?: string
     value?: number
-    total?: number | string
+    total?: number | string | null
     options?: number[]
     onChange?: (value: number) => void
     disabled?: boolean
@@ -27,6 +27,7 @@ function Limit({
     disabled
 }: LimitProps) {
     const { t } = useTranslation()
+    const hideTotal = total === null
 
     return (
         <div className={cn(styles.root, classNameContainer)}>
@@ -37,7 +38,7 @@ function Limit({
                     </Select.Option>
                 ))}
             </Select>
-            {t('of total', { total })}
+            {!hideTotal ? t('of total', { total }) : null}
         </div>
     )
 }

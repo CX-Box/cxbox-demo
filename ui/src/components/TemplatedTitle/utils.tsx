@@ -74,9 +74,11 @@ const convertTemplatedString = (templatedString: string, item: DataItem | undefi
                 if (value !== null) {
                     const [key, defaultValue] = value[1].split(':')
                     const field = getFieldMeta(key, fields)
+                    const staticBgColor = field?.bgColor
                     const bgColorKey = field?.bgColorKey
-                    const bgColor = bgColorKey ? (item?.[bgColorKey] as string) : undefined
+                    const dynamicBgColor = bgColorKey ? (item?.[bgColorKey] as string) : undefined
                     const normalizedValue = String(normalizeFieldValue(item?.[key], field) || defaultValue || '')
+                    const bgColor = dynamicBgColor || staticBgColor
 
                     acc.push(
                         bgColor ? (

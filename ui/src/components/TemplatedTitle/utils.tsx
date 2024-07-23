@@ -18,7 +18,7 @@ function getFieldMeta<T extends WidgetFieldBase>(key: string, fields?: T[]) {
     return fields?.find(field => field.key === key)
 }
 
-function normalizeFieldValue(value: DataValue | undefined, fieldMeta?: WidgetField) {
+export function normalizeFieldValue(value: DataValue | undefined, fieldMeta?: WidgetField) {
     if (Array.isArray(value)) {
         return Array.isArray(value) ? value.map(item => item.value).join(', ') : undefined
     }

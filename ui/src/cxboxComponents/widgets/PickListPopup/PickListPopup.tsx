@@ -14,6 +14,7 @@ import { actions, interfaces, RowMetaField } from '@cxbox-ui/core'
 import { TableEventListeners } from 'antd/lib/table/interface'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import WidgetTitle from '@components/WidgetTitle/WidgetTitle'
+import { normalizeFieldValue } from '@components/TemplatedTitle/utils'
 
 const { bcRemoveAllFilters, changeDataItem, closeViewPopup, viewClearPickMap } = actions
 
@@ -78,7 +79,7 @@ export const PickListPopup: FunctionComponent<PickListPopupProps & PickListPopup
                 key: item.key,
                 dataIndex: item.key,
                 render: (text, dataItem) => {
-                    return text
+                    return normalizeFieldValue(text, item)
                 },
                 onHeaderCell: () => {
                     return {

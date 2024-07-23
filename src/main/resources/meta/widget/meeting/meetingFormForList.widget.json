@@ -5,8 +5,8 @@
   "bc": "meetingEdit",
   "fields": [
     {
-      "label": "Test",
-      "key": "test",
+      "label": "Meeting Region",
+      "key": "meetingRegion",
       "type": "dictionary"
     },
     {
@@ -52,7 +52,7 @@
         {
           "cols": [
             {
-              "fieldKey": "test",
+              "fieldKey": "meetingRegion",
               "span": 12
             }
           ]

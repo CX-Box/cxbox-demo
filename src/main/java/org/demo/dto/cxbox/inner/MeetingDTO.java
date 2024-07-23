@@ -2,7 +2,7 @@ package org.demo.dto.cxbox.inner;
 
 import static java.util.Optional.ofNullable;
 import static org.demo.conf.cxbox.extension.multivaluePrimary.MultivalueExt.PRIMARY;
-import static org.demo.dto.cxbox.TestDictionaryType.REGIONS;
+import static org.demo.dto.cxbox.RegionDictionaryType.REGIONS;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -23,7 +23,7 @@ import org.cxbox.core.util.filter.provider.impl.LovValueProvider;
 import org.cxbox.core.util.filter.provider.impl.MultiFieldValueProvider;
 import org.cxbox.model.core.entity.BaseEntity;
 import org.demo.conf.cxbox.extension.multivaluePrimary.MultivalueExt;
-import org.demo.dto.cxbox.TestDictionary;
+import org.demo.dto.cxbox.RegionDictionary;
 import org.demo.entity.Client;
 import org.demo.entity.Contact;
 import org.demo.entity.Meeting;
@@ -52,8 +52,9 @@ public class MeetingDTO extends DataResponseDTO {
 	private String address;
 
 	@SearchParameter(provider = LovValueProvider.class)
-	@TestDictionary(REGIONS)
-	private String test;
+	@RegionDictionary(REGIONS)
+	private String meetingRegion;
+	
 	private String notes;
 
 	private String result;
@@ -84,7 +85,7 @@ public class MeetingDTO extends DataResponseDTO {
 
 		this.id = meeting.getId().toString();
 		this.agenda = meeting.getAgenda();
-		this.test = REGIONS.lookupValue(meeting.getTest());
+		this.meetingRegion = REGIONS.lookupValue(meeting.getTest());
 		this.startDateTime = meeting.getStartDateTime();
 		this.endDateTime = meeting.getEndDateTime();
 		this.period = ofNullable(meeting.getStartDateTime()).map(dateTimeFormatter::format).orElse("")

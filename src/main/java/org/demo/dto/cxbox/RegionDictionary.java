@@ -9,8 +9,8 @@ import org.cxbox.api.data.dictionary.BaseLov;
 
 @Target(FIELD)
 @Retention(RUNTIME)
-@BaseLov(type = TestDictionaryType.class)
-public @interface TestDictionary {
+@BaseLov(type = RegionDictionaryType.class)
+public @interface RegionDictionary {
 
-	TestDictionaryType value();
+	RegionDictionaryType value();
 }

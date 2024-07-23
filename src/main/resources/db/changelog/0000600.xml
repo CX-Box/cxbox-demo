@@ -81,7 +81,7 @@
         <constraints primaryKey="true"/>
       </column>
       <column name="AGENDA" type="VARCHAR(200)"/>
-      <column name="TEST" type="VARCHAR2(255 BYTE)"/>
+      <column name="MEETING_REGION" type="VARCHAR2(255 BYTE)"/>
       <column name="STATUS" type="VARCHAR(200)"/>
       <column name="START_DATE_TIME" type="TIMESTAMP(6)"/>
       <column name="END_DATE_TIME" type="TIMESTAMP(6)"/>

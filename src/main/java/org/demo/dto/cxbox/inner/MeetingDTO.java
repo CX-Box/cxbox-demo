@@ -85,7 +85,7 @@ public class MeetingDTO extends DataResponseDTO {
 
 		this.id = meeting.getId().toString();
 		this.agenda = meeting.getAgenda();
-		this.meetingRegion = REGIONS.lookupValue(meeting.getTest());
+		this.meetingRegion = REGIONS.lookupValue(meeting.getMeetingRegion());
 		this.startDateTime = meeting.getStartDateTime();
 		this.endDateTime = meeting.getEndDateTime();
 		this.period = ofNullable(meeting.getStartDateTime()).map(dateTimeFormatter::format).orElse("")

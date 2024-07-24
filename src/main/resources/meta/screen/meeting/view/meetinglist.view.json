@@ -29,6 +29,11 @@
       "position": 40,
       "gridWidth": 24
     }
+  ,{
+      "widgetName": "contactFormForList",
+      "position": 41,
+      "gridWidth": 24
+    }
   ],
   "rolesAllowed": [
    "CXBOX_USER", "ADMIN"

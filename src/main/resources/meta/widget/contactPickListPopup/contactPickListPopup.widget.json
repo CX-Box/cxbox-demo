@@ -5,17 +5,39 @@
   "bc": "contactPickListPopup",
   "showCondition": [],
   "fields": [
-     {
-       "title": "Name",
-       "key": "fullName",
-       "type": "input"
-     },
+    {
+      "title": "Contact Name",
+      "key": "fullName",
+      "type": "input",
+      "drillDown": "true"
+    },
+    {
+      "title": "Phone Number",
+      "key": "phoneNumber",
+      "type": "input"
+    },
+    {
+      "title": "Email",
+      "key": "email",
+      "type": "input"
+    },
     {
       "title": "id",
       "key": "id",
       "type": "hidden"
     }
   ],
-  "axisFields": [],
-  "chart": []
+  "options": {
+    "create": {
+      "widget": "contactFormForList"
+    },
+    "edit": {
+      "widget": "contactFormForList"
+    },
+    "actionGroups": {
+      "include": [
+        "create"
+      ]
+    }
+  }
 }

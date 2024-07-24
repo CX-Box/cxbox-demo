@@ -843,12 +843,6 @@
       <column header="DISPLAY_ORDER" name="DISPLAY_ORDER" type="NUMERIC"/>
       <column header="DESCRIPTION" name="DESCRIPTION" type="STRING"/>
     </loadUpdateData>
-
-    <sql>
-      insert into DICTIONARY_ITEM_TR (ID, LANGUAGE, VALUE)
-      select ID, 'en' as LANGUAGE, VALUE as VALUE
-      from DICTIONARY_ITEM;
-    </sql>
   </changeSet>
 
 </databaseChangeLog>

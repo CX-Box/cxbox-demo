@@ -82,7 +82,6 @@ public class SecurityConfig {
 						.requestMatchers("/css/**").permitAll()
 						.requestMatchers(uiProperties.getPath() + "/**").permitAll()
 						.requestMatchers("/").permitAll()
-						.requestMatchers("").permitAll()
 						.requestMatchers("/api/v1/file/**").permitAll()
 						.requestMatchers("/actuator/metrics/**").permitAll()
 						.requestMatchers("/api/v1/auth/**").permitAll()

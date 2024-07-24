@@ -849,7 +849,11 @@
       select ID, 'ru' as LANGUAGE, VALUE as VALUE
       from DICTIONARY_ITEM;
     </sql>
-
+    <sql>
+      insert into DICTIONARY_ITEM_TR (ID, LANGUAGE, VALUE)
+      select ID, 'en' as LANGUAGE, VALUE as VALUE
+      from DICTIONARY_ITEM;
+    </sql>
   </changeSet>
 
 </databaseChangeLog>

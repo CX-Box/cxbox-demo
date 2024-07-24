@@ -1,11 +1,13 @@
 package org.demo.entity;
 
+import jakarta.persistence.Column;
 import java.util.ArrayList;
 import java.util.List;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import lombok.EqualsAndHashCode;
+import org.cxbox.api.data.dictionary.LOV;
 import org.demo.entity.core.User;
 import org.demo.entity.enums.MeetingStatus;
 import org.cxbox.model.core.entity.BaseEntity;
@@ -30,6 +32,9 @@ import lombok.Setter;
 public class Meeting extends BaseEntity {
 
 	private String agenda;
+
+	@Column
+	private LOV meetingRegion;
 
 	private LocalDateTime startDateTime = LocalDateTime.now();
 

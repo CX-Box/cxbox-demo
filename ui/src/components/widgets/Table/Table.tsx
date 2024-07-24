@@ -43,10 +43,19 @@ interface TableProps extends AntdTableProps<DataItem> {
     primaryColumn?: ControlColumn
     disablePagination?: boolean
     hideRowActions?: boolean
+    disableCellEdit?: boolean
     isGroupingHierarchy?: boolean
 }
 
-function Table({ meta, isGroupingHierarchy, primaryColumn, disablePagination, hideRowActions = false, ...rest }: TableProps) {
+function Table({
+    meta,
+    isGroupingHierarchy,
+    primaryColumn,
+    disablePagination,
+    hideRowActions = false,
+    disableCellEdit = false,
+    ...rest
+}: TableProps) {
     const { bcName = '', name: widgetName = '' } = meta || {}
     const bcUrl = useAppSelector(state => state.screen.bo.bc[meta.bcName] && buildBcUrl(meta.bcName, true))
     const operations = useAppSelector(state => state.view.rowMeta?.[meta.bcName]?.[bcUrl]?.actions)
@@ -151,7 +160,7 @@ function Table({ meta, isGroupingHierarchy, primaryColumn, disablePagination, hi
 
     const dragColumnProps: DragListViewProps = showColumnSettings ? { onDragEnd: changeOrder, nodeSelector: 'th' } : { onDragEnd: () => {} }
 
-    const isAllowEdit = !expandable && !meta.options?.readOnly
+    const isAllowEdit = !expandable && !meta.options?.readOnly && !disableCellEdit
 
     const [operationsRef, parentRef, handleRow] = useRowMenu() // NOSONAR(S6440) hook is called conditionally, fix later
 

@@ -5,7 +5,7 @@ import { useCallback } from 'react'
 import { actions } from '@actions'
 
 export const useWidgetPaginationLimit = (widget: AppWidgetMeta) => {
-    const { hideLimitOptions = false, defaultLimit: widgetPageLimit, availableLimitsList } = widget.options?.pagination ?? {}
+    const { hideLimitOptions = false, availableLimitsList } = widget.options?.pagination ?? {}
     const bcPageLimit = useAppSelector(state => state.screen.bo.bc[widget.bcName].limit)
     const localPageLimit = useAppSelector(state => state.screen.pagination[widget.bcName]?.limit)
 
@@ -22,7 +22,7 @@ export const useWidgetPaginationLimit = (widget: AppWidgetMeta) => {
     return {
         hideLimitOptions,
         changePageLimit,
-        value: localPageLimit ?? widgetPageLimit ?? bcPageLimit,
+        value: localPageLimit ?? bcPageLimit,
         options: availableLimitsList
     }
 }

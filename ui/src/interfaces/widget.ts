@@ -109,7 +109,6 @@ export interface AppWidgetMeta extends interfaces.WidgetMeta {
         }
         buttons?: OperationInfo[]
         pagination?: {
-            defaultLimit?: number
             hideLimitOptions?: boolean
             availableLimitsList?: number[]
             type?: 'nextAndPreviousWihHasNext' | 'nextAndPreviousSmart' | 'nextAndPreviousWithCount'

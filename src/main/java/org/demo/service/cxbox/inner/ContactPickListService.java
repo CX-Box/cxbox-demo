@@ -1,11 +1,14 @@
 package org.demo.service.cxbox.inner;
 
+import static org.cxbox.api.data.dao.SpecificationUtils.and;
+
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.cxbox.core.service.action.Actions;
 import org.cxbox.model.core.entity.BaseEntity_;
+import org.demo.conf.cxbox.extension.fulltextsearch.FullTextSearchExt;
 import org.demo.dto.cxbox.inner.ContactDTO;
 import org.demo.dto.cxbox.inner.ContactDTO_;
 import org.demo.entity.Client;
@@ -38,14 +41,16 @@ public class ContactPickListService extends VersionAwareResponseService<ContactD
 
 	@Override
 	protected Specification<Contact> getParentSpecification(BusinessComponent bc) {
-		Meeting meeting = meetingRepository.getById(bc.getParentIdAsLong());
-		return (root, cq, cb) -> cb.and(
+		Meeting meeting = meetingRepository.findById(bc.getParentIdAsLong()).orElseThrow();
+		Specification<Contact> specification = (root, cq, cb) -> cb.and(
 				super.getParentSpecification(bc).toPredicate(root, cq, cb),
 				cb.equal(
 						root.get(Contact_.client).get(BaseEntity_.id),
 						meeting.getClient() != null ? meeting.getClient().getId() : null
 				)
 		);
+		var fullTextSearchFilterParam = FullTextSearchExt.getFullTextSearchFilterParam(bc);
+		return fullTextSearchFilterParam.map(e -> and(contactRepository.getFullTextSearchSpecification(e), specification)).orElse(specification);
 	}
 
 	@Override

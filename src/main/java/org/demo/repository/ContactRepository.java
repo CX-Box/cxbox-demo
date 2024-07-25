@@ -1,12 +1,8 @@
 package org.demo.repository;
 
-import java.util.List;
 import org.demo.conf.cxbox.extension.fulltextsearch.FullTextSearchExt;
-import org.demo.entity.Client;
-import org.demo.entity.Client_;
 import org.demo.entity.Contact;
 import org.demo.entity.Contact_;
-import org.demo.entity.enums.ClientStatus;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

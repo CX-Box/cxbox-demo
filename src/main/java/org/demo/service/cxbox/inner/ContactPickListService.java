@@ -6,6 +6,7 @@ import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
+import org.cxbox.core.exception.BusinessException;
 import org.cxbox.core.service.action.Actions;
 import org.cxbox.model.core.entity.BaseEntity_;
 import org.demo.conf.cxbox.extension.fulltextsearch.FullTextSearchExt;
@@ -19,6 +20,7 @@ import org.demo.repository.ClientRepository;
 import org.demo.repository.ContactRepository;
 import org.demo.repository.MeetingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -71,6 +73,18 @@ public class ContactPickListService extends VersionAwareResponseService<ContactD
 		setIfChanged(data, ContactDTO_.phoneNumber, entity::setPhoneNumber);
 		contactRepository.save(entity);
 		return new ActionResultDTO<>(entityToDto(bc, entity));
+	}
+
+	@Override
+	public ActionResultDTO<ContactDTO> deleteEntity(BusinessComponent bc) {
+		ActionResultDTO<ContactDTO> contactDTOActionResultDTO;
+		try {
+			contactDTOActionResultDTO = super.deleteEntity(bc);
+			contactRepository.flush();
+		} catch (DataIntegrityViolationException e) {
+			throw new BusinessException(e).addPopup("You are trying to delete row, that is referenced from other place in system. Deletion is not available");
+		}
+		return contactDTOActionResultDTO;
 	}
 
 	@Override

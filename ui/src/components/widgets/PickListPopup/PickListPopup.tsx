@@ -5,7 +5,7 @@ import { useAppSelector } from '@store'
 import Table from '@components/widgets/Table/Table'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import { actions } from '@actions'
-import { useDispatch } from 'react-redux'
+import { shallowEqual, useDispatch } from 'react-redux'
 import Popup from '@components/Popup/Popup'
 import WidgetTitle from '@components/WidgetTitle/WidgetTitle'
 import { TableEventListeners } from 'antd/lib/table/interface'
@@ -31,7 +31,7 @@ function PickListPopup({ meta }: PickListPopupProps) {
             cursor: state.screen.bo.bc[parentBCName as string]?.cursor as string,
             parentBCName: bc?.parentName as string
         }
-    })
+    }, shallowEqual)
 
     const showAssocFilter = useShowAssocFilter()
 

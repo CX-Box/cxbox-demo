@@ -29,7 +29,7 @@
       "title": "clientId",
       "key": "clientId",
       "type": "input",
-      "hidden": "true"
+      "hidden": true
     },
     {
       "title": "Client Name",
@@ -48,6 +48,10 @@
     }
   ],
   "options": {
+    "pagination": {
+      "type": "nextAndPreviousSmart",
+      "hideLimitOptions": true
+    },
     "export": {
       "enabled": true,
       "title": "meeting"

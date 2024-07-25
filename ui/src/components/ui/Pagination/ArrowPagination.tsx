@@ -6,23 +6,35 @@ import { usePagination } from '@hooks/usePagination'
 import { useAppSelector } from '@store'
 import Limit from '@components/ui/Pagination/components/Limit'
 import { useWidgetPaginationLimit } from '@components/ui/Pagination/hooks/useWidgetPaginationLimit'
+import { shallowEqual } from 'react-redux'
 
 interface ArrowPaginationProps {
     meta: WidgetMeta
     disabledLimit?: boolean
+    mode?: 'default' | 'smart'
 }
 
-const ArrowPagination: React.FC<ArrowPaginationProps> = ({ meta, disabledLimit }) => {
+const ArrowPagination: React.FC<ArrowPaginationProps> = ({ meta, disabledLimit, mode = 'default' }) => {
     const { hasNext, nextPage, prevPage, page: bcPage, limit: bcLimit } = usePagination(meta.name)
-    const data = useAppSelector(state => state.data[meta.bcName])
     const limit = meta.limit || bcLimit
 
-    const hardCodeHidePagination = hasNext && data?.length < limit && bcPage === 1
-    const hidePagination = (!hasNext && bcPage === 1) || hardCodeHidePagination
-    const hardCodeDisabledNextButton = hasNext && data?.length < limit
-    const disabledNextButton = !hasNext || hardCodeDisabledNextButton
-
     const { changePageLimit, hideLimitOptions, value: pageLimit, options } = useWidgetPaginationLimit(meta)
+
+    const { hidePagination, disabledNextButton } = useAppSelector(state => {
+        if (mode === 'smart') {
+            const data = state.data[meta.bcName]
+
+            return {
+                hidePagination: data?.length < limit && bcPage === 1,
+                disabledNextButton: data?.length < limit
+            }
+        } else {
+            return {
+                hidePagination: !hasNext && bcPage === 1,
+                disabledNextButton: !hasNext
+            }
+        }
+    }, shallowEqual)
 
     if (hidePagination) {
         return null

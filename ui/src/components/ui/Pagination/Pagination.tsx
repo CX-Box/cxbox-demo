@@ -9,10 +9,15 @@ export interface DefaultPaginationProps {
 }
 
 function Pagination({ meta, disabledLimit }: DefaultPaginationProps) {
-    if (meta.options?.pagination?.type === 'nextAndPrevious') {
-        return <ArrowPaginationContainer meta={meta} disabledLimit={disabledLimit} />
+    if (meta.options?.pagination?.type === 'nextAndPreviousSmart') {
+        return <ArrowPaginationContainer meta={meta} disabledLimit={disabledLimit} mode="smart" />
     }
 
+    if (meta.options?.pagination?.type === 'nextAndPreviousWihHasNext') {
+        return <ArrowPaginationContainer meta={meta} disabledLimit={disabledLimit} mode="default" />
+    }
+
+    // nextAndPreviousWithCount (default)
     return <DefaultPagination meta={meta} disabledLimit={disabledLimit} />
 }
 

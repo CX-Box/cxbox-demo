@@ -50,10 +50,12 @@ public class ContactPickListService extends VersionAwareResponseService<ContactD
 
 	@Override
 	protected CreateResult<ContactDTO> doCreateEntity(Contact entity, BusinessComponent bc) {
-		Client client = clientRepository.findById(bc.getParentIdAsLong()).orElse(null);
+		Meeting meeting = meetingRepository.getById(bc.getParentIdAsLong());
+		Client client = meeting.getClient();
 		entity.setClient(client);
 		contactRepository.save(entity);
-		return new CreateResult<>(entityToDto(bc, entity));
+		ContactDTO contactDTO = entityToDto(bc, entity);
+		return new CreateResult<>(contactDTO);
 	}
 
 	@Override

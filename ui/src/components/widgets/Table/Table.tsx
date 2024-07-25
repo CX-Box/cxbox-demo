@@ -54,6 +54,7 @@ function Table({
     disablePagination,
     hideRowActions = false,
     disableCellEdit = false,
+    onRow,
     ...rest
 }: TableProps) {
     const { bcName = '', name: widgetName = '' } = meta || {}
@@ -162,7 +163,7 @@ function Table({
 
     const isAllowEdit = !expandable && !meta.options?.readOnly && !disableCellEdit
 
-    const [operationsRef, parentRef, handleRow] = useRowMenu() // NOSONAR(S6440) hook is called conditionally, fix later
+    const [operationsRef, parentRef, handleRowMenu] = useRowMenu() // NOSONAR(S6440) hook is called conditionally, fix later
 
     const onHeaderRow = () => {
         return {
@@ -171,8 +172,11 @@ function Table({
         }
     }
 
-    const onRow = (record: DataItem) => {
-        const tableEventListeners = { ...handleRow(record), onDoubleClick: needRowSelectRecord ? () => changeCursor(record.id) : undefined }
+    const handleRow = (record: DataItem, index: number) => {
+        const tableEventListeners = {
+            ...handleRowMenu(record),
+            onDoubleClick: needRowSelectRecord ? () => changeCursor(record.id) : undefined
+        }
 
         const isParentRow = record.children
         const removeRowMenu = isGroupingHierarchy && isParentRow
@@ -180,6 +184,7 @@ function Table({
 
         return {
             ...(!removeRowMenu ? tableEventListeners : undefined),
+            ...onRow?.(record, index),
             ...({ 'data-test-widget-list-row-id': record.id, 'data-test-widget-list-row-type': rowType } as Record<string, unknown>)
         } as TableEventListeners
     }
@@ -628,7 +633,7 @@ function Table({
                         dataSource={dataSource}
                         rowKey={ROW_KEY}
                         pagination={false}
-                        onRow={onRow}
+                        onRow={handleRow}
                         onHeaderRow={onHeaderRow}
                         rowClassName={record => (record.id === bc?.cursor ? 'ant-table-row-selected' : '')}
                         expandedRowKeys={expandedRowKeys}

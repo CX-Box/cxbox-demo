@@ -263,24 +263,12 @@ export const getRowMetaByForceActiveEpic: RootEpic = (action$, state$, { api }) 
                 return EMPTY
             }
 
-            const isPickListPopup = state.view.widgets.find(
-                item =>
-                    item.name === state.view.popupData?.widgetName &&
-                    [WidgetTypes.PickListPopup, WidgetTypes.FlatTreePopup].includes(item.type as WidgetTypes)
-            )
-
             const bcUrl = buildBcUrl(bcName, true, state)
             const pendingChanges = state.view.pendingDataChanges[bcName]?.[cursor]
             const handledForceActive = state.view.handledForceActive[bcName]?.[cursor] || {}
             const currentRecordData = state.data[bcName]?.find(record => record.id === cursor)
             const fieldsRowMeta = state.view.rowMeta[bcName]?.[bcUrl]?.fields
             let changedFiledKey: string = null as any
-
-            const closePopup = concat(
-                of(actions.closeViewPopup(null)),
-                of(actions.viewClearPickMap(null)),
-                of(actions.bcRemoveAllFilters({ bcName }))
-            )
 
             // среди forceActive-полей в дельте ищем то которое изменилось по отношению к обработанным forceActive
             // или не содержится в нем, устанавливаем флаг необходимости отправки запроса если такое поле найдено
@@ -318,9 +306,6 @@ export const getRowMetaByForceActiveEpic: RootEpic = (action$, state$, { api }) 
                                         )
                                     )
                                 }
-                                if (isPickListPopup) {
-                                    result.push(closePopup)
-                                }
                                 return concat(...result)
                             }),
                             catchError((e: AxiosError) => {
@@ -345,7 +330,14 @@ export const getRowMetaByForceActiveEpic: RootEpic = (action$, state$, { api }) 
                                                       disableRetry: true
                                                   })
                                               ),
-                                              of(actions.forceActiveChangeFail({ bcName, bcUrl, viewError, entityError }))
+                                              of(
+                                                  actions.forceActiveChangeFail({
+                                                      bcName,
+                                                      bcUrl,
+                                                      viewError: viewError as string,
+                                                      entityError: entityError as OperationErrorEntity
+                                                  })
+                                              )
                                           )
                                         : EMPTY,
                                     utils.createApiErrorObservable(e)
@@ -354,7 +346,7 @@ export const getRowMetaByForceActiveEpic: RootEpic = (action$, state$, { api }) 
                         )
                 )
             }
-            return isPickListPopup ? closePopup : EMPTY
+            return EMPTY
         })
     )
 

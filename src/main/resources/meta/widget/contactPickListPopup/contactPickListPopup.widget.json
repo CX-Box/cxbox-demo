@@ -28,6 +28,10 @@
     }
   ],
   "options": {
+    "fullTextSearch": {
+      "enabled": true,
+      "placeholder": "Find by Contact Name, Phone Number or Email"
+    },
     "create": {
       "widget": "contactFormForList"
     },
@@ -36,7 +40,8 @@
     },
     "actionGroups": {
       "include": [
-        "create"
+        "create",
+        "delete"
       ]
     }
   }

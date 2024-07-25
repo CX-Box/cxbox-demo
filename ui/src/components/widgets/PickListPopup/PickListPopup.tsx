@@ -55,11 +55,14 @@ function PickListPopup({ meta }: PickListPopupProps) {
                         dispatch?.(
                             actions.changeDataItem({ bcName: parentBCName, cursor, dataItem, bcUrl: buildBcUrl(parentBCName, true) })
                         )
+                        dispatch(actions.closeViewPopup(null))
+                        dispatch(actions.viewClearPickMap(null))
+                        dispatch(actions.bcRemoveAllFilters({ bcName }))
                     }
                 }
             }
         },
-        [cursor, pickMap, dispatch, parentBCName]
+        [cursor, pickMap, dispatch, parentBCName, bcName]
     )
 
     if (showAssocFilter) {

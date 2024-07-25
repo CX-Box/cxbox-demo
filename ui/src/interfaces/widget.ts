@@ -1,5 +1,5 @@
-import { interfaces } from '@cxbox-ui/core'
-import { WidgetField as CoreWidgetField, FileUploadFieldMeta as CoreFileUploadFieldMeta } from '@cxbox-ui/schema'
+import { interfaces, WidgetTypes } from '@cxbox-ui/core'
+import { FileUploadFieldMeta as CoreFileUploadFieldMeta, WidgetField as CoreWidgetField } from '@cxbox-ui/schema'
 import { TableSettingsItem } from '@interfaces/tableSettings'
 
 export enum CustomFieldTypes {
@@ -21,8 +21,9 @@ export enum CustomWidgetTypes {
 }
 
 export const removeRecordOperationWidgets: Array<interfaces.WidgetTypes | string> = [
-    interfaces.WidgetTypes.List,
-    CustomWidgetTypes.GroupingHierarchy
+    WidgetTypes.List,
+    CustomWidgetTypes.GroupingHierarchy,
+    WidgetTypes.PickListPopup
 ]
 
 export interface StepsWidgetMeta extends interfaces.WidgetMeta {

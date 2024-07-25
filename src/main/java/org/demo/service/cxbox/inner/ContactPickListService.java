@@ -74,6 +74,7 @@ public class ContactPickListService extends VersionAwareResponseService<ContactD
 				.create().text("Add").add()
 				.save().text("Save").add()
 				.cancelCreate().text("Cancel").available(bc -> true).add()
+				.delete().text("Delete").add()
 				.build();
 	}
 

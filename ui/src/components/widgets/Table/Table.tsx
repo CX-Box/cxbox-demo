@@ -159,7 +159,7 @@ function Table({
 
     const showSettings = showSaveFiltersButton || showColumnSettings || showExport
 
-    const dragColumnProps: DragListViewProps = showColumnSettings ? { onDragEnd: changeOrder, nodeSelector: 'th' } : { onDragEnd: () => {} }
+    const dragColumnProps: DragListViewProps | null = showColumnSettings ? { onDragEnd: changeOrder, nodeSelector: 'th' } : null
 
     const isAllowEdit = !expandable && !meta.options?.readOnly && !disableCellEdit
 
@@ -510,6 +510,34 @@ function Table({
         return [...controlColumnsLeft, ...columns, ...controlColumnsRight]
     }, [columns, controlColumns])
 
+    const tableElement = (
+        <div className={cn(styles.tableContainer, { [styles.stickyWithHorizontalScroll]: enabledGrouping })} ref={parentRef as any}>
+            <Header meta={meta} />
+            <AntdTable
+                className={cn(styles.table, { [styles.tableWithRowMenu]: !hideRowActions })}
+                columns={resultColumns}
+                dataSource={dataSource}
+                rowKey={ROW_KEY}
+                pagination={false}
+                onRow={handleRow}
+                onHeaderRow={onHeaderRow}
+                rowClassName={record => (record.id === bc?.cursor ? 'ant-table-row-selected' : '')}
+                expandedRowKeys={expandedRowKeys}
+                expandIconColumnIndex={getExpandIconColumnIndex(controlColumns, resultedFields)}
+                expandIconAsCell={false}
+                expandIcon={resultExpandIcon}
+                expandedRowRender={expandedRowRender}
+                onExpand={onExpand}
+                indentSize={0}
+                scroll={enabledGrouping ? { y: true, x: 'calc(700px + 50%)' } : undefined}
+                {...rest}
+            />
+            {!hideRowActions && (
+                <RowOperationsButton meta={meta as AppWidgetTableMeta} ref={operationsRef as any} parent={parentRef as any} />
+            )}
+        </div>
+    )
+
     return (
         <div ref={tableContainerRef} className={styles.tableContainer}>
             <div className={styles.operations}>
@@ -623,34 +651,11 @@ function Table({
                 onCancel={toggleFilterSettingVisible}
                 onSubmit={handleSaveFilterGroup}
             />
-
-            <ReactDragListView.DragColumn {...dragColumnProps}>
-                <div className={cn(styles.tableContainer, { [styles.stickyWithHorizontalScroll]: enabledGrouping })} ref={parentRef as any}>
-                    <Header meta={meta} />
-                    <AntdTable
-                        className={cn(styles.table, { [styles.tableWithRowMenu]: !hideRowActions })}
-                        columns={resultColumns}
-                        dataSource={dataSource}
-                        rowKey={ROW_KEY}
-                        pagination={false}
-                        onRow={handleRow}
-                        onHeaderRow={onHeaderRow}
-                        rowClassName={record => (record.id === bc?.cursor ? 'ant-table-row-selected' : '')}
-                        expandedRowKeys={expandedRowKeys}
-                        expandIconColumnIndex={getExpandIconColumnIndex(controlColumns, resultedFields)}
-                        expandIconAsCell={false}
-                        expandIcon={resultExpandIcon}
-                        expandedRowRender={expandedRowRender}
-                        onExpand={onExpand}
-                        indentSize={0}
-                        scroll={enabledGrouping ? { y: true, x: 'calc(700px + 50%)' } : undefined}
-                        {...rest}
-                    />
-                    {!hideRowActions && (
-                        <RowOperationsButton meta={meta as AppWidgetTableMeta} ref={operationsRef as any} parent={parentRef as any} />
-                    )}
-                </div>
-            </ReactDragListView.DragColumn>
+            {dragColumnProps ? (
+                <ReactDragListView.DragColumn {...dragColumnProps}>{tableElement}</ReactDragListView.DragColumn>
+            ) : (
+                tableElement
+            )}
             {!disablePagination && !enabledGrouping && <Pagination disabledLimit={isGroupingHierarchy} meta={meta} />}
         </div>
     )

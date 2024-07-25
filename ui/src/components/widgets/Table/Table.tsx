@@ -43,10 +43,20 @@ interface TableProps extends AntdTableProps<DataItem> {
     primaryColumn?: ControlColumn
     disablePagination?: boolean
     hideRowActions?: boolean
+    disableCellEdit?: boolean
     isGroupingHierarchy?: boolean
 }
 
-function Table({ meta, isGroupingHierarchy, primaryColumn, disablePagination, hideRowActions = false, ...rest }: TableProps) {
+function Table({
+    meta,
+    isGroupingHierarchy,
+    primaryColumn,
+    disablePagination,
+    hideRowActions = false,
+    disableCellEdit = false,
+    onRow,
+    ...rest
+}: TableProps) {
     const { bcName = '', name: widgetName = '' } = meta || {}
     const bcUrl = useAppSelector(state => state.screen.bo.bc[meta.bcName] && buildBcUrl(meta.bcName, true))
     const operations = useAppSelector(state => state.view.rowMeta?.[meta.bcName]?.[bcUrl]?.actions)
@@ -149,11 +159,11 @@ function Table({ meta, isGroupingHierarchy, primaryColumn, disablePagination, hi
 
     const showSettings = showSaveFiltersButton || showColumnSettings || showExport
 
-    const dragColumnProps: DragListViewProps = showColumnSettings ? { onDragEnd: changeOrder, nodeSelector: 'th' } : { onDragEnd: () => {} }
+    const dragColumnProps: DragListViewProps | null = showColumnSettings ? { onDragEnd: changeOrder, nodeSelector: 'th' } : null
 
-    const isAllowEdit = !expandable && !meta.options?.readOnly
+    const isAllowEdit = !expandable && !meta.options?.readOnly && !disableCellEdit
 
-    const [operationsRef, parentRef, handleRow] = useRowMenu() // NOSONAR(S6440) hook is called conditionally, fix later
+    const [operationsRef, parentRef, handleRowMenu] = useRowMenu() // NOSONAR(S6440) hook is called conditionally, fix later
 
     const onHeaderRow = () => {
         return {
@@ -162,8 +172,11 @@ function Table({ meta, isGroupingHierarchy, primaryColumn, disablePagination, hi
         }
     }
 
-    const onRow = (record: DataItem) => {
-        const tableEventListeners = { ...handleRow(record), onDoubleClick: needRowSelectRecord ? () => changeCursor(record.id) : undefined }
+    const handleRow = (record: DataItem, index: number) => {
+        const tableEventListeners = {
+            ...handleRowMenu(record),
+            onDoubleClick: needRowSelectRecord ? () => changeCursor(record.id) : undefined
+        }
 
         const isParentRow = record.children
         const removeRowMenu = isGroupingHierarchy && isParentRow
@@ -171,6 +184,7 @@ function Table({ meta, isGroupingHierarchy, primaryColumn, disablePagination, hi
 
         return {
             ...(!removeRowMenu ? tableEventListeners : undefined),
+            ...onRow?.(record, index),
             ...({ 'data-test-widget-list-row-id': record.id, 'data-test-widget-list-row-type': rowType } as Record<string, unknown>)
         } as TableEventListeners
     }
@@ -496,6 +510,34 @@ function Table({ meta, isGroupingHierarchy, primaryColumn, disablePagination, hi
         return [...controlColumnsLeft, ...columns, ...controlColumnsRight]
     }, [columns, controlColumns])
 
+    const tableElement = (
+        <div className={cn(styles.tableContainer, { [styles.stickyWithHorizontalScroll]: enabledGrouping })} ref={parentRef as any}>
+            <Header meta={meta} />
+            <AntdTable
+                className={cn(styles.table, { [styles.tableWithRowMenu]: !hideRowActions })}
+                columns={resultColumns}
+                dataSource={dataSource}
+                rowKey={ROW_KEY}
+                pagination={false}
+                onRow={handleRow}
+                onHeaderRow={onHeaderRow}
+                rowClassName={record => (record.id === bc?.cursor ? 'ant-table-row-selected' : '')}
+                expandedRowKeys={expandedRowKeys}
+                expandIconColumnIndex={getExpandIconColumnIndex(controlColumns, resultedFields)}
+                expandIconAsCell={false}
+                expandIcon={resultExpandIcon}
+                expandedRowRender={expandedRowRender}
+                onExpand={onExpand}
+                indentSize={0}
+                scroll={enabledGrouping ? { y: true, x: 'calc(700px + 50%)' } : undefined}
+                {...rest}
+            />
+            {!hideRowActions && (
+                <RowOperationsButton meta={meta as AppWidgetTableMeta} ref={operationsRef as any} parent={parentRef as any} />
+            )}
+        </div>
+    )
+
     return (
         <div ref={tableContainerRef} className={styles.tableContainer}>
             <div className={styles.operations}>
@@ -609,34 +651,11 @@ function Table({ meta, isGroupingHierarchy, primaryColumn, disablePagination, hi
                 onCancel={toggleFilterSettingVisible}
                 onSubmit={handleSaveFilterGroup}
             />
-
-            <ReactDragListView.DragColumn {...dragColumnProps}>
-                <div className={cn(styles.tableContainer, { [styles.stickyWithHorizontalScroll]: enabledGrouping })} ref={parentRef as any}>
-                    <Header meta={meta} />
-                    <AntdTable
-                        className={cn(styles.table, { [styles.tableWithRowMenu]: !hideRowActions })}
-                        columns={resultColumns}
-                        dataSource={dataSource}
-                        rowKey={ROW_KEY}
-                        pagination={false}
-                        onRow={onRow}
-                        onHeaderRow={onHeaderRow}
-                        rowClassName={record => (record.id === bc?.cursor ? 'ant-table-row-selected' : '')}
-                        expandedRowKeys={expandedRowKeys}
-                        expandIconColumnIndex={getExpandIconColumnIndex(controlColumns, resultedFields)}
-                        expandIconAsCell={false}
-                        expandIcon={resultExpandIcon}
-                        expandedRowRender={expandedRowRender}
-                        onExpand={onExpand}
-                        indentSize={0}
-                        scroll={enabledGrouping ? { y: true, x: 'calc(700px + 50%)' } : undefined}
-                        {...rest}
-                    />
-                    {!hideRowActions && (
-                        <RowOperationsButton meta={meta as AppWidgetTableMeta} ref={operationsRef as any} parent={parentRef as any} />
-                    )}
-                </div>
-            </ReactDragListView.DragColumn>
+            {dragColumnProps ? (
+                <ReactDragListView.DragColumn {...dragColumnProps}>{tableElement}</ReactDragListView.DragColumn>
+            ) : (
+                tableElement
+            )}
             {!disablePagination && !enabledGrouping && <Pagination disabledLimit={isGroupingHierarchy} meta={meta} />}
         </div>
     )

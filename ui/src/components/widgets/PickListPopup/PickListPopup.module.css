@@ -1,14 +1,10 @@
-.container :global(.ant-modal-header) {
-    font-weight: 700;
-    border-bottom: none;
-}
-.container :global(.ant-modal-header > tr > th) {
-    background: none;
-}
-.container :global(.ant-modal-footer) {
-    border-top: none;
+.popup {
+    :global .ant-modal-header {
+        border-bottom: 0;
+    }
 }
 
-.container :global(.ant-table-tbody > tr:hover > td) {
-    background: #fafafa !important;
+.container {
+    padding: 0 16px;
 }
+

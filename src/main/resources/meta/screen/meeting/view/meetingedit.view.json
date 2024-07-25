@@ -35,6 +35,11 @@
       "gridWidth": 24
     },
     {
+      "widgetName": "contactFormForList",
+      "position": 41,
+      "gridWidth": 24
+    },
+    {
       "widgetName": "meetingEdit",
       "position": 50,
       "gridWidth": 24

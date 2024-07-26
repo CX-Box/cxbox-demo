@@ -12,7 +12,9 @@ import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.inner.MeetingDTO;
 import org.demo.dto.cxbox.inner.MeetingDTO_;
+import org.demo.entity.Meeting;
 import org.demo.entity.enums.MeetingStatus;
+import org.demo.repository.MeetingRepository;
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S3252", "java:S1186"})
@@ -40,7 +42,6 @@ public class MeetingWriteMeta extends FieldMetaBuilder<MeetingDTO> {
 					MeetingDTO_.responsibleId,
 					MeetingDTO_.clientName,
 					MeetingDTO_.clientId,
-					MeetingDTO_.contactName,
 					MeetingDTO_.contactId
 			);
 			if (fields.get(MeetingDTO_.clientId).getCurrentValue() != null) {

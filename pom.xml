@@ -22,6 +22,15 @@
 
   </properties>
 
+  <repositories>
+    <repository>
+      <id>snapshots-repo</id>
+      <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+      <releases/>
+      <snapshots/>
+    </repository>
+  </repositories>
+
   <dependencies>
     <dependency>
       <groupId>org.jobrunr</groupId>

@@ -9,17 +9,20 @@
       "label": "Contact Name",
       "key": "fullName",
       "type": "input",
-      "drillDown": "true"
+      "drillDown": "true",
+      "maxInput": 200
     },
     {
       "label": "Phone Number",
       "key": "phoneNumber",
-      "type": "input"
+      "type": "input",
+      "maxInput": 13
     },
     {
       "label": "Email",
       "key": "email",
-      "type": "input"
+      "type": "input",
+      "maxInput": 50
     }
   ],
   "options": {

@@ -57,7 +57,6 @@ public enum CxboxRestController implements EnumBcIdentifier {
 		dashboardClientActivities(dashboardFilter, DashboardClientActivitiesService.class),
 	dashboardSalesFunnel(dashboardFilter, DashboardSalesFunnelService.class),
 	dashboardSalesRingProgress(dashboardFilter, DashboardSalesRingProgressService.class),
-	testWidget(MyDictionaryItemService.class),
 	companySuggestionPickList(DadataCompanySuggestionPickListService.class);
 
 	// @formatter:on

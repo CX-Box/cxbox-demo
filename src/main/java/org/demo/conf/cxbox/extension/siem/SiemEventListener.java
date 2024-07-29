@@ -15,13 +15,10 @@ import org.cxbox.core.util.session.SessionService;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
-/**
- * @author Andrey B. Panfilov <andrey@panfilov.tel>
- */
 @RequiredArgsConstructor
 @Component
 @Slf4j
-public class CrudmaEventListener implements ApplicationListener<CrudmaEvent<?>> {
+public class SiemEventListener implements ApplicationListener<CrudmaEvent<?>> {
 
 	private final SessionService sessionService;
 

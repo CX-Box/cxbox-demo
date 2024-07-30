@@ -1,84 +1,87 @@
 package org.demo.conf.cxbox.extension.siem;
+
+import static com.google.common.net.HttpHeaders.X_FORWARDED_FOR;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import jakarta.servlet.http.HttpServletRequest;
+import java.util.Optional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.cxbox.api.data.ResultPage;
 import org.cxbox.api.data.dto.DataResponseDTO;
-import org.cxbox.core.crudma.CrudmaActionType;
 import org.cxbox.core.crudma.CrudmaEvent;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.util.session.SessionService;
 import org.springframework.context.ApplicationListener;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
-@RequiredArgsConstructor
-@Component
 @Slf4j
+@Component
+@RequiredArgsConstructor
 public class SiemEventListener implements ApplicationListener<CrudmaEvent<?>> {
+
+	private static final String IP_REGEX = "^((0|1\\d?\\d?|2[0-4]?\\d?|25[0-5]?|[3-9]\\d?)\\.){3}(0|1\\d?\\d?|2[0-4]?\\d?|25[0-5]?|[3-9]\\d?)$";
 
 	private final SessionService sessionService;
 
 	private final SecurityLogger logger;
 
+	private final ObjectMapper cxboxObjectMapper;
+
 	@Override
+	@SneakyThrows
 	public void onApplicationEvent(@NonNull CrudmaEvent event) {
-		List<?> result = getResult(event);
-		if (result.isEmpty()) {
-			return;
-		}
-		SecurityStatus status = getStatus(event);
-		if (status == null) {
+		var result = getResult(event);
+		if (result == null) {
 			return;
 		}
 		logger.logSecurityEvent(
-				status,
+				event.getCrudmaAction().getActionType().name(),
 				event.getCrudmaAction().getBc(),
-				result,
-				sessionService.getSessionUser().getId().toString(),
-				sessionService.getSessionId()
+				SecurityContextHolder.getContext().getAuthentication().getName(),
+				sessionService.getSessionUserRole().getKey(),
+				sessionService.getSessionId(),
+				getUserIp(),
+				cxboxObjectMapper.writeValueAsString(result)
 		);
 	}
 
-	@NonNull
-	private List<?> getResult(CrudmaEvent<?> event) {
-		var result = event.getResult();
-		if (result instanceof ResultPage<?>) {
-			return ((ResultPage<?>) result).getResult();
+	@Nullable
+	private String getUserIp() {
+		if (RequestContextHolder.getRequestAttributes() instanceof ServletRequestAttributes attributes) {
+			var rq = attributes.getRequest();
+			return Optional.ofNullable(rq.getHeader(X_FORWARDED_FOR))
+					.filter(ip -> !ip.isBlank() && ip.matches(IP_REGEX))
+					.orElse(rq.getRemoteAddr());
 		}
-		if (result instanceof ActionResultDTO<?>) {
-			var actionResult = ((ActionResultDTO<?>) result).getRecord();
-			if (actionResult != null) {
-				return Collections.singletonList(actionResult);
-			}
+		return null;
+	}
+
+
+	@Nullable
+	private Object getResult(@NonNull CrudmaEvent<?> event) {
+		var result = event.getResult();
+		if (result instanceof ResultPage<?> resultPage) {
+			return resultPage.getResult();
+		}
+		if (result instanceof ActionResultDTO<?> actionResultDto) {
+			return actionResultDto.getRecord();
 		}
 		if (result instanceof DataResponseDTO) {
-			return Collections.singletonList(result);
+			return result;
 		}
-		return new ArrayList<>();
-	}
-
-	private SecurityStatus getStatus(CrudmaEvent<?> event) {
-		CrudmaActionType actionType = event.getCrudmaAction().getActionType();
-		return switch (actionType) {
-			case UPDATE -> SecurityStatus.UPDATE;
-			case CREATE -> SecurityStatus.CREATE;
-			case DELETE -> SecurityStatus.DELETE;
-			case FIND -> {
-				if (isExport(event.getCrudmaAction().getBc())) {
-					yield SecurityStatus.EXPORT;
-				}
-				yield SecurityStatus.VIEW;
-			}
-			default -> null;
-		};
-	}
-
-	private boolean isExport(BusinessComponent bc) {
-		return bc.getParameters().getExportType() != null;
+		return null;
 	}
 
 }

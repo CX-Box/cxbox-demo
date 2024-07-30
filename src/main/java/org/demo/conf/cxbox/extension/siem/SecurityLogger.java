@@ -1,23 +1,24 @@
 package org.demo.conf.cxbox.extension.siem;
 
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.springframework.stereotype.Service;
 
-@Service
 @Slf4j
+@Service
 public class SecurityLogger {
 
-	public void logSecurityEvent(SecurityStatus securityStatus, BusinessComponent bc, List<?> objects,
-			String userIdentifier, String sessionIdentifier) {
-		log.info("SIEM event. " +
-				" operation: " + securityStatus.name() +
-				" endpoint (resource): " + bc.getName() +
-				" user: " + userIdentifier +
-				" session: " + sessionIdentifier +
-				" objects: " + objects.stream().map(Object::toString).collect(Collectors.joining(", ")));
+	public void logSecurityEvent(String actionType, BusinessComponent bc, String userIdentifier, String userRole, String sessionIdentifier, String ipAddress, String data) {
+		log.info(
+				"SIEM event. " +
+						"operation: " + actionType +
+						", endpoint (resource): " + bc.getName() +
+						(bc.getId() == null ? "" : " (" + bc.getId() + ")") +
+						", user: " + userIdentifier + " (" + userRole + ")" +
+						", session: " + sessionIdentifier +
+						", ipAddress: " + ipAddress +
+						", data: " + data
+		);
 	}
 
 }

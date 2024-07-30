@@ -4,11 +4,7 @@ import static com.google.common.net.HttpHeaders.X_FORWARDED_FOR;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
-import jakarta.servlet.http.HttpServletRequest;
 import java.util.Optional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.cxbox.api.data.ResultPage;
 import org.cxbox.api.data.dto.DataResponseDTO;
 import org.cxbox.core.crudma.CrudmaEvent;
-import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.util.session.SessionService;
 import org.springframework.context.ApplicationListener;

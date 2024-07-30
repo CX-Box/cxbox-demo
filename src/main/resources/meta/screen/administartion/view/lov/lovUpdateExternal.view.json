@@ -1,0 +1,21 @@
+{
+  "name": "lovUpdateExternal",
+  "title": "Updating a Dictionary entry",
+  "template": "DashboardView",
+  "url": "/screen/admin/view/lovUpdateExternal",
+  "widgets": [
+    {
+      "widgetName": "SecondLevelMenu",
+      "position": 0,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "lovUpdateFormExternal",
+      "position": 10,
+      "gridWidth": 24
+    }
+  ],
+  "rolesAllowed": [
+    "CXBOX_USER"
+  ]
+}

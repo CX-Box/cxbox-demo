@@ -1,8 +1,8 @@
 import React from 'react'
 import { NumberTypes } from './formaters'
-import { NumberFieldMeta } from '@cxbox-ui/schema/dist/interfaces/widget'
 import CoreNumberInput from './CoreNumberInput'
 import styles from './Number.less'
+import { NumberFieldMeta } from '@cxbox-ui/core'
 
 interface NumberProps {
     value: number

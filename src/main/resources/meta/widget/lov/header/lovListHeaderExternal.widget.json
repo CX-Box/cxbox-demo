@@ -1,0 +1,7 @@
+{
+  "name": "lovListHeaderExternal",
+  "title": "External List of Dictionary values",
+  "type": "HeaderWidget",
+  "bc": "lovExternal",
+  "fields": []
+}

@@ -1,0 +1,46 @@
+@import '../../../assets/styles/theme';
+
+.container {
+    margin: 16px 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.arrows {
+    display: flex;
+    column-gap: 8px;
+
+    :global {
+        .ant-btn {
+            border: 1px solid #D9D9D9;
+            height: 32px;
+            min-width: 32px;
+            width: max-content;
+            border-radius: 2px;
+
+            padding: 4px 6px;
+
+            &:hover, &:active, &:focus {
+                color: @primary-red;
+            }
+        }
+    }
+}
+
+.limitContainer {
+    margin-left: auto;
+    margin-right: 0;
+}
+
+.limits {
+    min-width: 70px;
+    text-align: left;
+
+    :global .ant-select-selection {
+        border-radius: 0;
+    }
+
+    :global .ant-select-selection__rendered {
+        margin-right: 34px;
+    }
+}

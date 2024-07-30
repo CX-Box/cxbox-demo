@@ -1,19 +1,15 @@
-import React, { FunctionComponent } from 'react'
-import styles from './Header.less'
-import { interfaces } from '@cxbox-ui/core'
-import { TemplatedTitle } from '@cxboxComponents'
+import React from 'react'
+import { AppWidgetMeta } from '@interfaces/widget'
+import WidgetTitle from '@components/WidgetTitle/WidgetTitle'
 
 interface HeaderProps {
-    meta: interfaces.WidgetMeta
-}
-
-const TitleContainer: FunctionComponent<{ title: string }> = ({ title }) => {
-    return <h1 className={styles.header}>{title}</h1>
+    meta: AppWidgetMeta
 }
 
 function Header({ meta }: HeaderProps) {
-    const { title, name } = meta
-    return <TemplatedTitle title={title} widgetName={name} container={TitleContainer} />
+    const { title, name, options } = meta
+
+    return <WidgetTitle level={1} widgetName={name} text={title} bcColor={options?.title?.bgColor} />
 }
 
 export default React.memo(Header)

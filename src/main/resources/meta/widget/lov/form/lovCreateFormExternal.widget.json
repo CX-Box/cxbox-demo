@@ -1,0 +1,137 @@
+{
+  "name": "lovCreateFormExternal",
+  "title": "New entry",
+  "type": "Form",
+  "bc": "lovExternal",
+  "fields": [
+    {
+      "label": "Value",
+      "key": "value",
+      "type": "input"
+    },
+    {
+      "label": "Description",
+      "key": "descriptionText",
+      "type": "input"
+    },
+    {
+      "label": "Type",
+      "key": "typeName",
+      "type": "input"
+    },
+    {
+      "label": "Code",
+      "key": "code",
+      "type": "input"
+    },
+    {
+      "label": "Order By",
+      "key": "orderBy",
+      "type": "input"
+    },
+    {
+      "label": "Inactive Flag",
+      "key": "inactiveFlag",
+      "type": "checkbox"
+    },
+    {
+      "label": "External Code",
+      "key": "externalCode",
+      "type": "input"
+    },
+    {
+      "label": "Additional parameter 1",
+      "key": "additionalParameter1",
+      "type": "input"
+    },
+    {
+      "label": "Additional parameter 2",
+      "key": "additionalParameter2",
+      "type": "input"
+    }
+  ],
+  "options": {
+    "actionGroups": {
+      "include": [
+        "saveAndBack",
+        "save"
+      ]
+    },
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "value",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "descriptionText",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "typeName",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "code",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "orderBy",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "inactiveFlag",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "externalCode",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "additionalParameter1",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "additionalParameter2",
+              "span": 12
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

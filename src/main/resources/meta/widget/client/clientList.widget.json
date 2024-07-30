@@ -33,9 +33,16 @@
     }
   ],
   "options": {
+    "export": {
+      "enabled": true,
+      "title": "client"
+    },
     "fullTextSearch": {
       "enabled": true,
       "placeholder": "Find by Client or Address"
+    },
+    "filterSetting": {
+      "enabled": true
     },
     "actionGroups": {
       "include": [

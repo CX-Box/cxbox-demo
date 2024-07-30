@@ -1,0 +1,16 @@
+{
+  "name": "lovWriteListOperationsExternal",
+  "title": "",
+  "type": "Form",
+  "bc": "lovExternal",
+  "fields": [
+
+  ],
+  "options": {
+    "actionGroups": {
+      "include": [
+        "create"
+      ]
+    }
+  }
+}

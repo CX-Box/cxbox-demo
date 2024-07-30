@@ -53,7 +53,6 @@ export const AssocTable = ({ ...props }: AssocTableProps) => {
         <Table
             meta={props.meta}
             rowSelection={rowSelection as TableRowSelection<interfaces.DataItem>}
-            paginationMode={interfaces.PaginationMode.page}
             disablePagination={props.disablePagination}
             primaryColumn={primaryColumn}
         />

@@ -103,7 +103,7 @@ export const FormWidget: FunctionComponent<FormWidgetProps> = ({ meta, fields, m
 
 function mapStateToProps(state: RootState, ownProps: FormWidgetOwnProps) {
     const bcName = ownProps.meta.bcName
-    const bc = state.screen.bo.bc[bcName]
+    const bc = bcName ? state.screen.bo.bc[bcName] : undefined
     const bcUrl = buildBcUrl(bcName, true)
     const rowMeta = bcUrl ? state.view.rowMeta[bcName]?.[bcUrl] : undefined
     const fields = rowMeta?.fields

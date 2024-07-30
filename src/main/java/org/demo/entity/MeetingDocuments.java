@@ -1,15 +1,19 @@
 package org.demo.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.cxbox.model.core.entity.BaseEntity;
+import org.demo.entity.enums.Briefings;
+import org.demo.entity.enums.Documents;
 
 @Entity
 @Table(name = "MEETING_DOCUMENTS")
@@ -27,14 +31,16 @@ public class MeetingDocuments extends BaseEntity {
 	@Column
 	private String fileId;
 
-	@Column
-	private String fieldKeyForContentType;
-
-	@Column
-	private byte[] fieldKeyForBase64;
-
 	@ManyToOne
 	@JoinColumn(name = "MEETING_ID")
 	private Meeting meeting;
+
+	@Column
+	@Enumerated(EnumType.STRING)
+	private Briefings briefing;
+
+	@Column
+	@Enumerated(EnumType.STRING)
+	private Documents document;
 
 }

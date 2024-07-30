@@ -11,11 +11,11 @@ import 'rc-select/assets/index.less'
 import styles from './SuggestionPickList.less'
 import { BaseFieldProps } from '@cxboxComponents/Field/Field'
 import { useAppSelector } from '@store'
-import { PendingDataItem } from '@cxbox-ui/core/dist/interfaces'
 import { actions } from '@actions'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import { CxBoxApiInstance } from '../../api'
 import { firstValueFrom } from 'rxjs'
+import { PendingDataItem } from '@cxbox-ui/core'
 
 type DebounceFunc = ReturnType<typeof debounce>
 

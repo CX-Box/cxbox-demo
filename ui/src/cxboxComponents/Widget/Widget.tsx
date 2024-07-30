@@ -9,7 +9,7 @@ import AssocListPopup from '@cxboxComponents/widgets/AssocListPopup/AssocListPop
 import PickListPopup from '@cxboxComponents/widgets/PickListPopup/PickListPopup'
 import DebugPanel from '@cxboxComponents/DebugPanel/DebugPanel'
 import NavigationTabsWidget from '@cxboxComponents/widgets/NavigationTabsWidget/NavigationTabsWidget'
-import { interfaces, utils } from '@cxbox-ui/core'
+import { WidgetTypes, interfaces, utils } from '@cxbox-ui/core'
 import { RootState } from '@store'
 import { WidgetShowCondition } from '@cxbox-ui/schema'
 import { buildBcUrl } from '@utils/buildBcUrl'
@@ -149,7 +149,7 @@ function chooseWidgetType(
         return <DescriptorComponent meta={widgetMeta} />
     }
     const knownWidgetMeta = widgetMeta as interfaces.WidgetMetaAny
-    const { WidgetTypes } = interfaces
+
     switch (knownWidgetMeta.type) {
         case WidgetTypes.List:
         case WidgetTypes.DataGrid:
@@ -171,7 +171,7 @@ function chooseWidgetType(
 
 function mapStateToProps(state: RootState, ownProps: WidgetOwnProps) {
     const bcName = ownProps.meta.bcName
-    const bc = state.screen.bo.bc[bcName]
+    const bc = bcName ? state.screen.bo.bc[bcName] : undefined
     const parent = state.screen.bo.bc[bc?.parentName || '']
     const hasParent = !!parent
     const legacyPopupCheck = state.view.popupData?.bcName === bcName

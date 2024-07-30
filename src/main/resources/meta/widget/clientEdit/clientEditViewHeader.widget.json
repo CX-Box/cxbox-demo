@@ -1,7 +1,15 @@
 {
   "name": "clientEditViewHeader",
-  "title": "Client Overview",
+  "title": "Client Overview ${importance}",
   "type": "HeaderWidget",
-  "bc": "clientEdit",
-  "fields": []
+  "bc": "client",
+  "fields": [
+    {
+      "title": "Importance",
+      "key": "importance",
+      "type": "dictionary",
+      "bgColorKey": "color"
+    }
+  ],
+  "options": {}
 }

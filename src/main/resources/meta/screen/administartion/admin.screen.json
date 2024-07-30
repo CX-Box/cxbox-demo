@@ -1,0 +1,61 @@
+{
+  "name": "admin",
+  "icon": "calendar",
+  "title": "Administration",
+  "order": 4,
+  "primaryViewName": "scheduledJobs",
+  "primaryViews": [
+    "scheduledJobs"
+  ],
+  "navigation": {
+    "menu": [
+      {
+        "title": "Job Administration",
+        "child": [
+          {
+            "viewName": "scheduledJobs"
+          },
+          {
+            "viewName": "enqueuedJobs"
+          },
+          {
+            "viewName": "processingJobs"
+          },
+          {
+            "viewName": "succeededJobs"
+          },
+          {
+            "viewName": "failedJobs"
+          },
+          {
+            "viewName": "deletedJobs"
+          }
+        ]
+      },
+      {
+        "title": "External Administration",
+        "child": [
+          {
+            "viewName": "lovlistexternal"
+          },
+          {
+            "viewName": "lovCreateExternal",
+            "hidden": true
+          },
+          {
+            "viewName": "lovUpdateExternal",
+            "hidden": true
+          }
+        ]
+      },
+      {
+        "title": "Responsibilites Administration",
+        "child": [
+          {
+            "viewName": "resplist"
+          }
+        ]
+      }
+    ]
+  }
+}

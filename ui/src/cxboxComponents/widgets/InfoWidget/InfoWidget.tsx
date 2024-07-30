@@ -5,8 +5,7 @@ import { connect } from 'react-redux'
 import InfoRow from './components/InfoRow'
 import { RootState } from '@store'
 import { useFlatFormFields } from '@hooks/useFlatFormFields'
-import { actions, interfaces } from '@cxbox-ui/core'
-import { RowMetaField } from '@cxbox-ui/core/dist/interfaces'
+import { actions, interfaces, RowMetaField } from '@cxbox-ui/core'
 import { buildBcUrl } from '@utils/buildBcUrl'
 
 interface InfoWidgetOwnProps {
@@ -66,7 +65,7 @@ const emptyObject = {} as interfaces.DataItem
 function mapStateToProps(state: RootState, ownProps: InfoWidgetOwnProps) {
     const bcName = ownProps.meta.bcName
     const bcUrl = buildBcUrl(bcName, true)
-    const bc = state.screen.bo.bc[bcName]
+    const bc = bcName ? state.screen.bo.bc[bcName] : undefined
     const bcCursor = bc?.cursor
     const bcData = state.data[bcName]
     return {

@@ -1,0 +1,41 @@
+{
+  "name": "failedJobs",
+  "title": "Failed",
+  "template": "DashboardView",
+  "url": "/screen/admin/view/failedJobs",
+  "widgets": [
+    {
+      "widgetName": "SecondLevelMenu",
+      "position": 0,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "jobListHeader",
+      "position": 10,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "jobStatsActions",
+      "position": 20,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "jobStats",
+      "position": 30,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "ThirdLevelMenu",
+      "position": 31,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "failedJobsList",
+      "position": 32,
+      "gridWidth": 24
+    }
+  ],
+  "rolesAllowed": [
+    "CXBOX_USER"
+  ]
+}

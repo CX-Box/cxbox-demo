@@ -1,16 +1,21 @@
-import { reducers, interfaces } from '@cxbox-ui/core'
+import { BcMetaState, interfaces, reducers } from '@cxbox-ui/core'
 import { actions, changeMenuCollapsed, customAction, sendOperationSuccess } from '@actions'
 import { createReducer, isAnyOf } from '@reduxjs/toolkit'
+import { FilterGroup } from '@interfaces/filters'
 
 interface ScreenState extends interfaces.ScreenState {
     menuCollapsed: boolean
-    fullTextFilter: Record<string, string>
+    bo: {
+        activeBcName: string
+        bc: Record<string, BcMetaState & { filterGroups?: FilterGroup[] }>
+    }
+    pagination: { [bcName: string]: { limit?: number } }
 }
 
 const initialState: ScreenState = {
     ...reducers.initialScreenState,
-    fullTextFilter: {},
-    menuCollapsed: false
+    menuCollapsed: false,
+    pagination: {}
 }
 
 const screenReducerBuilder = reducers
@@ -24,10 +29,48 @@ const screenReducerBuilder = reducers
          */
         console.log(action.payload)
     })
-    .addCase(actions.changeBcFullTextFilter, (state, action) => {
-        const { bcName, fullTextFilterValue } = action.payload
+    .addCase(actions.removeFilterGroup, (state, action) => {
+        const removedFilterGroup = action.payload
 
-        state.fullTextFilter[bcName] = fullTextFilterValue
+        state.bo.bc[removedFilterGroup.bc] = state.bo.bc[removedFilterGroup.bc] ?? {}
+
+        state.bo.bc[removedFilterGroup.bc].filterGroups = state.bo.bc[removedFilterGroup.bc as string].filterGroups?.filter(
+            filterGroup => filterGroup.name !== removedFilterGroup.name
+        )
+    })
+    .addCase(actions.addFilterGroup, (state, action) => {
+        const newFilterGroup = { ...action.payload, personal: true }
+
+        state.bo.bc[newFilterGroup.bc]?.filterGroups?.push(newFilterGroup)
+    })
+    .addCase(actions.updateIdForFilterGroup, (state, { payload: newFilterGroup }) => {
+        const newFilterGroupIndex =
+            state.bo.bc[newFilterGroup.bc].filterGroups?.findIndex(filterGroup => filterGroup.name === newFilterGroup.name) ?? -1
+
+        if (newFilterGroupIndex !== -1) {
+            ;(state.bo.bc[newFilterGroup.bc].filterGroups as FilterGroup[])[newFilterGroupIndex].id = newFilterGroup.id
+        }
+    })
+    .addCase(actions.changePageLimit, (state, action) => {
+        const { bcName, limit } = action.payload
+
+        state.pagination[bcName] = state.pagination[bcName] ?? {}
+        state.pagination[bcName].limit = limit
+
+        state.bo.bc[bcName] = state.bo.bc[bcName] ?? {}
+        state.bo.bc[bcName].limit = limit as number
+    })
+    .addCase(actions.updateBcData, (state, action) => {
+        const { bcName } = action.payload
+
+        state.bo.bc[bcName] = state.bo.bc[bcName] ?? {}
+        state.bo.bc[bcName].loading = false
+    })
+    .addMatcher(isAnyOf(actions.selectScreen), (state, action) => {
+        // временное решение чтобы сохранялся лимит при сменен экранов
+        Object.values(state.bo.bc).forEach(bc => {
+            bc.limit = state.pagination[bc.name]?.limit ?? bc.limit
+        })
     })
     .addMatcher(isAnyOf(sendOperationSuccess, actions.bcSaveDataSuccess), (state, action) => {
         if (action.payload.dataItem) {

@@ -3,12 +3,11 @@ import { Button, Popover } from 'antd'
 import styles from './ColumnFilter.less'
 import cn from 'classnames'
 import { ReactComponent as FilterIcon } from './filter-solid.svg'
-import { interfaces } from '@cxbox-ui/core'
+import { RowMetaField, interfaces } from '@cxbox-ui/core'
 import FilterPopup from '../FilterPopup/FilterPopup'
 import FilterField from './FilterField'
 import { useAppDispatch, useAppSelector } from '@store'
 import { FieldType, WidgetListField } from '@cxbox-ui/schema'
-import { RowMetaField } from '@cxbox-ui/core/dist/interfaces'
 import { actions } from '@actions'
 import { PickListFieldMeta } from '@cxbox-ui/schema/src/interfaces/widget'
 
@@ -16,7 +15,6 @@ interface ColumnFilterProps {
     widgetName: string
     widgetMeta: WidgetListField
     rowMeta: RowMetaField
-
     components?: {
         popup: React.ReactNode
     }
@@ -24,6 +22,9 @@ interface ColumnFilterProps {
 
 function ColumnFilter({ widgetName, widgetMeta, rowMeta, components }: ColumnFilterProps) {
     const widget = useAppSelector(state => state.view.widgets.find(item => item.name === widgetName))
+    const filterByRangeEnabled = useAppSelector(
+        state => state.session.featureSettings?.find(featureSetting => featureSetting.key === 'filterByRangeEnabled')?.value === 'true'
+    )
     const bcName = widget?.bcName ?? ''
     const listFields = widget?.fields as interfaces.WidgetListField[]
     const effectiveFieldMeta = (listFields?.find(item => item.key === widgetMeta.filterBy) ?? widgetMeta) as interfaces.WidgetListField
@@ -124,6 +125,7 @@ function ColumnFilter({ widgetName, widgetMeta, rowMeta, components }: ColumnFil
                     onChange={setValue}
                     widgetOptions={widget?.options}
                     visible={visible}
+                    filterByRangeEnabled={filterByRangeEnabled}
                 />
                 {isPickList && <Button icon="ellipsis" onClick={handlePicklistFilterOpen} />}
             </div>
@@ -138,7 +140,9 @@ function ColumnFilter({ widgetName, widgetMeta, rowMeta, components }: ColumnFil
             onVisibleChange={handleVisibleChange}
         >
             <div
-                className={cn(styles.icon, { [styles.active]: (filter?.value?.toString()?.length as number) > 0 })}
+                className={cn(styles.icon, {
+                    [styles.active]: (filter?.value?.toString()?.length as number) > 0 || Array.isArray(filter?.value)
+                })}
                 data-test-widget-list-header-column-filter={true}
             >
                 <FilterIcon />

@@ -16,6 +16,7 @@ import { actions, interfaces, utils } from '@cxbox-ui/core'
 import { useTranslation } from 'react-i18next'
 import { useRowMenu } from '@hooks/useRowMenu'
 import { buildBcUrl } from '@utils/buildBcUrl'
+import { BcFilter } from '@interfaces/core'
 
 const { FieldType, PaginationMode } = interfaces
 
@@ -238,7 +239,8 @@ export const TableWidget: FunctionComponent<TableWidgetProps> = props => {
     }, [columns, props.controlColumns])
 
     const [filterGroupName, setFilterGroupName] = React.useState<string | null>(null) // NOSONAR(S6440) hook is called conditionally, fix later
-    const filtersExist = !!props.filters?.length
+    const filtersCount = getFiltersCount(props.filters)
+    const filtersExist = !!filtersCount
 
     // eslint-disable-next-line prettier/prettier
     const handleShowAll = React.useCallback(() => { // NOSONAR(S6440) hook is called conditionally, fix later
@@ -287,11 +289,21 @@ export const TableWidget: FunctionComponent<TableWidgetProps> = props => {
                         ))}
                     </Select>
                 )}
-                {filtersExist && <ActionLink onClick={handleRemoveFilters}> {t('Clear all filters')} </ActionLink>}
+                {filtersExist && <ActionLink onClick={handleRemoveFilters}>{t('Clear filters', { count: filtersCount })}</ActionLink>}
                 {props.limitBySelf && <ActionLink onClick={handleShowAll}> {t('Show all records')} </ActionLink>}
             </div>
         )
-    }, [filterGroups, filterGroupName, filtersExist, props.limitBySelf, t, handleAddFilters, handleRemoveFilters, handleShowAll])
+    }, [
+        filterGroups,
+        filterGroupName,
+        t,
+        handleAddFilters,
+        filtersExist,
+        handleRemoveFilters,
+        filtersCount,
+        props.limitBySelf,
+        handleShowAll
+    ])
 
     const [operationsRef, parentRef, onRow] = useRowMenu() // NOSONAR(S6440) hook is called conditionally, fix later
     const handleRow = (record: interfaces.DataItem, index: number) => {
@@ -337,7 +349,7 @@ function mapStateToProps(state: RootState, ownProps: TableWidgetOwnProps) {
     const bcName = ownProps.meta.bcName
     const bcUrl = buildBcUrl(bcName, true)
     const fields = bcUrl ? state.view.rowMeta[bcName]?.[bcUrl]?.fields : undefined
-    const bc = state.screen.bo.bc[bcName]
+    const bc = bcName ? state.screen.bo.bc[bcName] : undefined
     const cursor = bc?.cursor as string
     const hasNext = bc?.hasNext as boolean
     const limitBySelf = cursor ? !!state.router.bcPath?.includes(`${bcName}/${cursor}`) : false
@@ -394,3 +406,7 @@ TableWidget.displayName = 'TableWidget'
 const ConnectedTable = connect(mapStateToProps, mapDispatchToProps)(TableWidget)
 
 export default ConnectedTable
+
+const getFiltersCount = (filters?: BcFilter[]) => {
+    return filters?.length ?? 0
+}

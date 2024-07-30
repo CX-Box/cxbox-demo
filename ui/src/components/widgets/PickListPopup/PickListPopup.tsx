@@ -1,40 +1,94 @@
 import React from 'react'
-import cn from 'classnames'
-import { PickListPopup as CorePickListPopup } from '@cxboxComponents'
-import tableStyles from '../Table/Table.less'
-import styles from './PickListPopup.module.css'
-import Pagination from '../../ui/Pagination/Pagination'
 import AssocListPopup from '../AssocListPopup/AssocListPopup'
 import { AppWidgetTableMeta } from '@interfaces/widget'
 import { useAppSelector } from '@store'
+import Table from '@components/widgets/Table/Table'
+import { buildBcUrl } from '@utils/buildBcUrl'
+import { actions } from '@actions'
+import { shallowEqual, useDispatch } from 'react-redux'
+import Popup from '@components/Popup/Popup'
+import WidgetTitle from '@components/WidgetTitle/WidgetTitle'
+import { TableEventListeners } from 'antd/lib/table/interface'
+import { DataItem } from '@cxbox-ui/schema'
+import { PendingDataItem } from '@cxbox-ui/core'
+import styles from './PickListPopup.module.css'
+import { Spin } from 'antd'
 
 interface PickListPopupProps {
     meta: AppWidgetTableMeta
 }
 
 function PickListPopup({ meta }: PickListPopupProps) {
-    const customFooter = React.useMemo(() => {
-        if (!meta.options?.hierarchyFull) {
-            return <Pagination meta={meta} />
-        }
-        return null
-    }, [meta])
+    const { bcName = '' } = meta || {}
+    const pending = useAppSelector(state => state.session.pendingRequests?.filter(item => item.type === 'force-active'))
+    const { cursor, parentBCName, pickMap } = useAppSelector(state => {
+        const bcName = meta.bcName
+        const bc = bcName ? state.screen.bo.bc[bcName] : undefined
+        const parentBCName = bc?.parentName
 
-    const components: {
-        title?: React.ReactNode
-        table?: React.ReactNode
-        footer?: React.ReactNode
-    } = {
-        footer: customFooter
-    }
+        return {
+            pickMap: state.view.pickMap ?? {},
+            cursor: state.screen.bo.bc[parentBCName as string]?.cursor as string,
+            parentBCName: bc?.parentName as string
+        }
+    }, shallowEqual)
 
     const showAssocFilter = useShowAssocFilter()
+
+    const dispatch = useDispatch()
+
+    const onClose = () => {
+        dispatch?.(actions.closeViewPopup(null))
+        dispatch?.(actions.viewClearPickMap(null))
+        dispatch?.(actions.bcRemoveAllFilters({ bcName: bcName }))
+    }
+
+    const onRow = React.useCallback(
+        (rowData: DataItem): TableEventListeners => {
+            return {
+                onClick: (e: React.MouseEvent) => {
+                    if (cursor) {
+                        const dataItem: PendingDataItem = {}
+                        Object.keys(pickMap).forEach(field => {
+                            dataItem[field] = rowData[pickMap[field]]
+                        })
+                        dispatch?.(
+                            actions.changeDataItem({ bcName: parentBCName, cursor, dataItem, bcUrl: buildBcUrl(parentBCName, true) })
+                        )
+                        dispatch(actions.closeViewPopup(null))
+                        dispatch(actions.viewClearPickMap(null))
+                        dispatch(actions.bcRemoveAllFilters({ bcName }))
+                    }
+                }
+            }
+        },
+        [cursor, pickMap, dispatch, parentBCName, bcName]
+    )
 
     if (showAssocFilter) {
         return <AssocListPopup meta={meta} />
     }
 
-    return <CorePickListPopup className={cn(tableStyles.tableContainer, styles.container)} widget={meta} components={components} />
+    return (
+        <Popup
+            title={<WidgetTitle className={styles.title} level={1} widgetName={meta.name} text={meta.title} />}
+            size="large"
+            showed
+            onOkHandler={onClose}
+            onCancelHandler={onClose}
+            bcName={meta.bcName}
+            widgetName={meta.name}
+            disablePagination={true}
+            footer={null}
+            className={styles.popup}
+        >
+            <div className={styles.container}>
+                <Spin spinning={(pending?.length as number) > 0}>
+                    <Table meta={meta} disableCellEdit={true} onRow={onRow} />
+                </Spin>
+            </div>
+        </Popup>
+    )
 }
 
 export default React.memo(PickListPopup)

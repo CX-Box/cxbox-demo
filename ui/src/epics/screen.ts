@@ -1,10 +1,11 @@
-import { EMPTY, filter, mergeMap, of } from 'rxjs'
+import { catchError, concat, EMPTY, filter, mergeMap, of, switchMap } from 'rxjs'
 import { OperationPreInvokeCustom, OperationPreInvokeSubType, OperationPreInvokeTypeCustom } from '@interfaces/operation'
-import { interfaces, actions } from '@cxbox-ui/core'
+import { interfaces, utils } from '@cxbox-ui/core'
 import { CustomWidgetTypes } from '@interfaces/widget'
-import { processPreInvoke, sendOperationSuccess, showViewPopup } from '@actions'
+import { actions, processPreInvoke, sendOperationSuccess, showViewPopup } from '@actions'
 import { RootEpic } from '@store'
 import { isAnyOf } from '@reduxjs/toolkit'
+import { getRouteFromString } from '@router'
 
 const findFormPopupWidget = (operationType: string, widgets: interfaces.WidgetMeta[], calleeBcName: string, widgetName?: string) => {
     const formPopupWidget = widgetName
@@ -60,25 +61,79 @@ export const processPreInvokeConfirmEpic: RootEpic = (action$, state$) =>
         })
     )
 
-export const replaceTemporaryIdOnSavingEpic: RootEpic = (action$, state$) =>
+export const replaceTemporaryIdOnSavingEpic: RootEpic = action$ =>
     action$.pipe(
         filter(isAnyOf(sendOperationSuccess, actions.bcSaveDataSuccess)),
         mergeMap(action => {
-            const state = state$.value
             const newCursor = action.payload.dataItem?.id
+            const partPathWithId = `/${action.payload.bcName}/-1`
+            const partPathWithIdRegExp = new RegExp(`${partPathWithId}$`)
+            const needChangeBcPath = partPathWithIdRegExp.test(window.location.href)
 
-            if (newCursor != null) {
-                window.location.href = `${window.location.href}`.replace(
-                    `/${action.payload.bcName}/${state.screen.bo.bc[action.payload.bcName]?.cursor}`,
-                    `/${action.payload.bcName}/${newCursor}`
-                )
+            if (newCursor != null && needChangeBcPath) {
+                const newPathname = window.location.hash
+                    .slice(1)
+                    .replace(`/${action.payload.bcName}/-1`, `/${action.payload.bcName}/${newCursor}`)
+
+                return of(actions.changeLocation({ location: getRouteFromString(newPathname) }))
             }
 
             return EMPTY
         })
     )
 
+const addFilterGroupEpic: RootEpic = (action$, state$, { api }) =>
+    action$.pipe(
+        filter(actions.addFilterGroup.match),
+        switchMap(action => {
+            const newFilterGroup = action.payload
+
+            return api.saveFilterGroup({ filterGroups: [newFilterGroup] }).pipe(
+                switchMap(response =>
+                    concat(
+                        ...(response.data ?? []).map(({ id }) =>
+                            of(
+                                actions.updateIdForFilterGroup({
+                                    id: id,
+                                    bc: newFilterGroup.bc,
+                                    name: newFilterGroup.name
+                                })
+                            )
+                        )
+                    )
+                ),
+                catchError(error => {
+                    console.error('addFilterGroup failed')
+
+                    return concat(
+                        of(actions.removeFilterGroup({ bc: newFilterGroup.bc, name: newFilterGroup.name })),
+                        utils.createApiErrorObservable(error)
+                    )
+                })
+            )
+        })
+    )
+
+const deleteFilterGroupEpic: RootEpic = (action$, state$, { api }) =>
+    action$.pipe(
+        filter(actions.removeFilterGroup.match),
+        switchMap(action => {
+            const { id } = action.payload
+
+            if (id) {
+                api.deleteFilterGroup(+id)
+            }
+
+            return EMPTY
+        }),
+        catchError(error => {
+            return utils.createApiErrorObservable(error)
+        })
+    )
+
 export const screenEpics = {
     replaceTemporaryIdOnSavingEpic,
-    processPreInvokeConfirmEpic
+    processPreInvokeConfirmEpic,
+    addFilterGroupEpic,
+    deleteFilterGroupEpic
 }

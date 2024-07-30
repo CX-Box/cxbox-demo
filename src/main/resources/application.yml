@@ -1,12 +1,12 @@
 app:
   ui-path: /ui
   auth-basic:
-    enabled: ${AUTH_BASIC_ENABLED:true}
-  keycloak:
+    enabled: ${AUTH_BASIC_ENABLED:false}
+  oidc:
     realm: cxbox
     auth-server-url: ${FRONTEND_AUTH_SERVER_URL:http://localhost:9080/auth}
     ssl-require: none
-    resource: cxbox-keycloak-client
+    resource: cxbox-oidc-client
     public-client: true
     cors: true
   stomp:
@@ -16,8 +16,11 @@ app:
     password: ${ACTIVEMQ_ADMIN_PASSWORD:admin}
     user: ${ACTIVEMQ_ADMIN_LOGIN:admin}
     broker-url: tcp://${ACTIVEQM_HOST:localhost}:${ACTIVEMQ_PORT:61616}
-    host: ${ACTIVEMQ_HOST:localhost}
+    host: ${ACTIVEMQ_HOST:}
     port: ${ACTIVEMQ_PORT:61616}
+  integrations:
+    lov-server-url: ${LOV_SERVER_URL:http://localhost:8080/rest/api/v1/lov}
+
 
 cxbox:
   bean:
@@ -27,11 +30,10 @@ cxbox:
     dev-panel-enabled: ${DEV_PANEL_ENABLED:true}
     directory: ${META_DIRECTORY:file:./src/main/resources/meta}
     view-allowed-roles-enabled: true
-    base-lock-timer : ${BASE_LOCK_TIMER:1800}  #sec
-    check-lock-interval: ${CHECK_LOCK_INTERVAL:1000}  #ms
+    bc-default-page-limit: 5
   widget:
     fields:
-      include-packages: org.cxbox.core.ui.model.json.field.subtypes, org.demo.conf.cxbox.meta
+      include-packages: org.cxbox.meta, org.demo.conf.cxbox
   api:
     path: /api/v1
     use-servlet-context-path: false
@@ -99,22 +101,27 @@ spring:
           charSet: UTF-8
         jdbc:
           batch_size: 100
+        hbm2ddl:
+          auto: ${HIBERNATE_DDL_AUTO:none}
     hibernate:
       naming:
         physical-strategy: org.cxbox.model.core.hbn.ImprovedPhysicalNamingStrategy
-      ddl-auto: ${HIBERNATE_DDL_AUTO:update}
+
   main:
     allow-bean-definition-overriding: true
     banner-mode: off
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${FRONTEND_AUTH_SERVER_URL:http://localhost:9080/auth}/realms/cxbox
+          jwk-set-uri: ${BACKEND_AUTH_SERVER_URL:http://localhost:9080/auth}/realms/cxbox/protocol/openid-connect/certs
 
-keycloak:
-  auth-server-url: ${BACKEND_AUTH_SERVER_URL:http://localhost:9080/auth}
-  realm: cxbox
-  resource: cxbox-keycloak-client
-  bearer-only: true
-  public-client: true
-  use-resource-role-mappings: true
-  ssl-required: none
+token:
+  converter:
+    principal-attribute: preferred_username
+    resource-id: cxbox-oidc-client
+
 springdoc:
   packages-to-scan: org.demo
   show-actuator: true
@@ -137,7 +144,20 @@ management:
       exposure:
         include: 'metrics'
 
-integration:
-  dadata:
-    base-url: ${DADATA_URL:https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest}
-    api-key: ${DADATA_API_KEY:885218b4321600b90d4161c85bc11766cd6810c1}
+dadata:
+  client:
+    token: ${DADATA_API_KEY:885218b4321600b90d4161c85bc11766cd6810c1}
+    base-url: ${DADATA_URL:https://suggestions.dadata.ru/suggestions/api/4_1/rs/}
+
+decorator:
+  datasource:
+    datasource-proxy:
+      query:
+        enable-logging: true
+org:
+  jobrunr:
+    background-job-server:
+      enabled: true
+    dashboard:
+      enabled: true
+

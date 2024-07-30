@@ -2,6 +2,7 @@ import { Button, notification } from 'antd'
 import React from 'react'
 
 export interface OpenNotificationType {
+    key?: string
     message?: string
     description?: string
     okText?: string
@@ -10,8 +11,10 @@ export interface OpenNotificationType {
     onOk?: () => void
 }
 
-export const openNotification = ({ message, description, okText, cancelText, onOk, onCancel }: OpenNotificationType = {}) => {
-    const key = `open${Date.now()}`
+export const openNotification = ({ message, description, okText, cancelText, onOk, onCancel, key }: OpenNotificationType = {}) => {
+    const notificationKey = key ?? `open${Date.now()}`
+
+    notification.close(notificationKey)
 
     const buttons = (
         <div style={{ display: 'flex', gap: 20 }}>
@@ -20,7 +23,7 @@ export const openNotification = ({ message, description, okText, cancelText, onO
                 size="small"
                 onClick={() => {
                     onOk?.()
-                    notification.close(key)
+                    notification.close(notificationKey)
                 }}
             >
                 {okText}
@@ -30,7 +33,7 @@ export const openNotification = ({ message, description, okText, cancelText, onO
                 size="small"
                 onClick={() => {
                     onCancel?.()
-                    notification.close(key)
+                    notification.close(notificationKey)
                 }}
             >
                 {cancelText}
@@ -38,11 +41,13 @@ export const openNotification = ({ message, description, okText, cancelText, onO
         </div>
     )
 
-    notification.open({
-        duration: null,
-        message,
-        description,
-        btn: buttons,
-        key
-    })
+    setTimeout(() => {
+        notification.open({
+            duration: null,
+            message,
+            description,
+            btn: buttons,
+            key: notificationKey
+        })
+    }, 100)
 }

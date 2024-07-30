@@ -1,0 +1,64 @@
+{
+  "name": "contactFormForList",
+  "title": "",
+  "type": "Form",
+  "bc": "contactPickListPopup",
+  "showCondition": [],
+  "fields": [
+    {
+      "label": "Contact Name",
+      "key": "fullName",
+      "type": "input",
+      "drillDown": "true",
+      "maxInput": 200
+    },
+    {
+      "label": "Phone Number",
+      "key": "phoneNumber",
+      "type": "input",
+      "maxInput": 13
+    },
+    {
+      "label": "Email",
+      "key": "email",
+      "type": "input",
+      "maxInput": 50
+    }
+  ],
+  "options": {
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "fullName",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "phoneNumber",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "email",
+              "span": 12
+            }
+          ]
+        }
+      ]
+    },
+    "actionGroups": {
+      "include": [
+        "save",
+        "cancel-create"
+      ]
+    }
+  }
+}

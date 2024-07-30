@@ -5,7 +5,8 @@
 }
 
 .title {
-    font-weight: bold;
+    font-size: inherit;
+    color: inherit;
 }
 
 .rowLabel {
@@ -16,4 +17,8 @@
     border-bottom: black dashed 1px;
     opacity: 0.1;
     flex: 1;
+}
+
+.fieldOverride {
+    justify-content: start;
 }

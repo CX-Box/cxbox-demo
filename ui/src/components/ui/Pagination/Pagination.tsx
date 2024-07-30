@@ -1,51 +1,24 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
-import { Pagination as AntPagination } from 'antd'
-import styles from './Pagination.less'
-import { actions, interfaces } from '@cxbox-ui/core'
-import { useAppSelector } from '@store'
+import ArrowPaginationContainer from '@components/ui/Pagination/ArrowPagination'
+import DefaultPagination from '@components/ui/Pagination/DefaultPagination'
+import { AppWidgetMeta } from '@interfaces/widget'
 
-export interface PaginationProps {
-    meta: interfaces.WidgetMeta
+export interface DefaultPaginationProps {
+    meta: AppWidgetMeta
+    disabledLimit?: boolean
 }
 
-function Pagination({ meta }: PaginationProps) {
-    const dispatch = useDispatch()
-
-    const { bcName, limit: metaLimit } = meta
-    const { bcLimit, page } = useAppSelector(state => {
-        const bc = state.screen.bo.bc[bcName]
-        return {
-            bcLimit: bc?.limit,
-            page: bc?.page
-        }
-    })
-    const total = useAppSelector(state => state.view.bcRecordsCount[bcName]?.count)
-    const limit = metaLimit || bcLimit
-
-    const handlePageChange = React.useCallback(
-        (p: number) => {
-            dispatch(actions.bcChangePage({ bcName, page: p }))
-        },
-        [dispatch, bcName]
-    )
-
-    if (!total) {
-        return null
+function Pagination({ meta, disabledLimit }: DefaultPaginationProps) {
+    if (meta.options?.pagination?.type === 'nextAndPreviousSmart') {
+        return <ArrowPaginationContainer meta={meta} disabledLimit={disabledLimit} mode="smart" />
     }
 
-    return (
-        <div className={styles.container} data-test-widget-list-pagination={true}>
-            <AntPagination
-                className={styles.pagination}
-                size="small"
-                pageSize={limit}
-                defaultCurrent={page}
-                current={page}
-                total={total}
-                onChange={handlePageChange}
-            />
-        </div>
-    )
+    if (meta.options?.pagination?.type === 'nextAndPreviousWihHasNext') {
+        return <ArrowPaginationContainer meta={meta} disabledLimit={disabledLimit} mode="default" />
+    }
+
+    // nextAndPreviousWithCount (default)
+    return <DefaultPagination meta={meta} disabledLimit={disabledLimit} />
 }
+
 export default React.memo(Pagination)

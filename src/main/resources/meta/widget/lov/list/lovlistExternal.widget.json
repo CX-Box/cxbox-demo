@@ -1,0 +1,62 @@
+{
+  "name": "lovlistExternal",
+  "title": "",
+  "type": "List",
+  "bc": "lovExternal",
+  "fields": [
+    {
+      "title": "Value",
+      "key": "value",
+      "type": "input"
+    },
+    {
+      "title": "Description Text",
+      "key": "descriptionText",
+      "type": "input"
+    },
+    {
+      "title": "Type",
+      "key": "typeName",
+      "type": "input"
+    },
+    {
+      "title": "Code",
+      "key": "code",
+      "type": "input",
+      "drillDown": true
+    },
+    {
+      "title": "Order By",
+      "key": "orderBy",
+      "type": "input"
+    },
+    {
+      "title": "Inactive Flag",
+      "key": "inactiveFlag",
+      "type": "checkbox"
+    },
+    {
+      "title": "External Code",
+      "key": "externalCode",
+      "type": "input"
+    },
+    {
+      "title": "Additional Parameter 1",
+      "key": "additionalParameter1",
+      "type": "input"
+    },
+    {
+      "title": "Additional Parameter 2",
+      "key": "additionalParameter2",
+      "type": "input"
+    }
+  ],
+  "options": {
+    "actionGroups": {
+      "include": [
+        "change",
+        "deleteLov"
+      ]
+    }
+  }
+}

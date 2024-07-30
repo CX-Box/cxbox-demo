@@ -1,19 +1,9 @@
 {
   "name": "meetingDocumentsList",
   "title": "",
-  "type": "List",
+  "type": "GroupingHierarchy",
   "bc": "meetingDocumentEdit",
   "fields": [
-    {
-      "title": "Field Key For Content Type",
-      "key": "fieldKeyForContentType",
-      "type": "hidden"
-    },
-    {
-      "title": "Field Key For Base 64",
-      "key": "fieldKeyForBase64",
-      "type": "hidden"
-    },
     {
       "title": "Document ID",
       "key": "id",
@@ -21,10 +11,24 @@
       "drillDown": "true"
     },
     {
+      "title": "Document",
+      "key": "document",
+      "type": "dictionary"
+    },
+    {
+      "title": "Briefing",
+      "key": "briefing",
+      "type": "dictionary"
+    },
+    {
       "title": "File",
       "key": "file",
       "type": "fileUpload",
-      "fileIdKey": "fileId"
+      "fileIdKey": "fileId",
+      "preview": {
+        "enabled": true,
+        "mode": "popup"
+      }
     },
     {
       "title": "Notes",
@@ -33,6 +37,19 @@
     }
   ],
   "options": {
+    "groupingHierarchy": {
+      "fields": [
+        "document",
+        "briefing"
+      ]
+    },
+    "buttons": [
+      {
+        "actionKey": "associate",
+        "fieldKey": "file",
+        "mode": "default-and-file-upload-dnd"
+      }
+    ],
     "create": {
       "widget": "meetingDocumentsFormForList"
     },

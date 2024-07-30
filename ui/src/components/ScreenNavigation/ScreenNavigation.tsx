@@ -15,6 +15,7 @@ function ScreenNavigation() {
     const selectedScreen = screens.find(item => item.name === screenName) || screens.find(screen => screen.defaultScreen) || screens[0]
     const screenUrl = selectedScreen?.url ?? `/screen/${screenName}`
     const changeLocation = useChangeLocation()
+    const menuCollapsed = useAppSelector(state => state.screen.menuCollapsed)
     const handleScreen = (e: ClickParam) => {
         changeLocation(e.key)
     }
@@ -27,11 +28,15 @@ function ScreenNavigation() {
         selectedItem?.scrollIntoView()
     }, [screenUrl])
 
+    const menuSearch = !menuCollapsed && (
+        <div className={styles.search}>
+            <Search onSearch={handleSearch} />
+        </div>
+    )
+
     return (
         <div className={styles.menuContainer}>
-            <div className={styles.search}>
-                <Search onSearch={handleSearch} />
-            </div>
+            {menuSearch}
             <Menu className={styles.container} data-test="MAIN_MENU" selectedKeys={[screenUrl]} onClick={handleScreen} theme="dark">
                 {filteredScreens.map(item => {
                     return (

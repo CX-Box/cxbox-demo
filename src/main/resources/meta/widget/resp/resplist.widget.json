@@ -1,0 +1,63 @@
+{
+  "name": "resplist",
+  "title": "Responsibilites",
+  "type": "GroupingHierarchy",
+  "bc": "responsibilities",
+  "showCondition": [],
+  "fields": [
+    {
+      "title": "Role",
+      "key": "internalRoleCD",
+      "type": "dictionary",
+      "width": 200
+    },
+    {
+      "title": "View",
+      "key": "view",
+      "type": "dictionary",
+      "width": 200
+    },
+    {
+      "title": "widget (endpoint)",
+      "key": "viewWidgets",
+      "type": "multipleSelect"
+    },
+    {
+      "title": "Screens",
+      "key": "screens",
+      "type": "input"
+    },
+    {
+      "title": "Resp Type",
+      "key": "respType",
+      "type": "input"
+    }
+  ],
+  "options": {
+    "export": {
+      "enabled": true,
+      "title": "export"
+    },
+    "groupingHierarchy": {
+      "fields": [
+        "internalRoleCD"
+      ]
+    },
+    "additional": {
+      "fields": ["screens", "respType"],
+      "enabled": true
+    },
+    "create": {
+      "widget": "respformedit"
+    },
+    "edit": {
+      "widget": "respformedit"
+    },
+    "actionGroups": {
+      "include": [
+        "create",
+        "delete"
+      ]
+    }
+  }
+}

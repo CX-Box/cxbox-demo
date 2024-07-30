@@ -59,7 +59,7 @@ widgets, fields, layouts (views), navigation (screens).
 
 #####
 
-* java 8+
+* java 17
 * maven 3.6+
 * node.js 18+
 * yarn installed globally (npm install -g yarn / sudo npm install -g yarn)
@@ -75,7 +75,7 @@ widgets, fields, layouts (views), navigation (screens).
 * install dependencies and build back-end and front-end
 
 ```
-mvn clean install -PUI
+mvn clean install -PUI -U
 ```
 
 * start environment

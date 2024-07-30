@@ -7,8 +7,8 @@ import { applyParams } from '@utils/api'
 import { NotificationCheckNewResponse, NotificationCountResponse, NotificationsResponse } from '@interfaces/notification'
 import { fileControllerMapping } from '@constants/notification'
 import { LoginResponse } from '@interfaces/session'
-import { useFullTextInterceptor } from './interceptors'
 import { TableSettingsItem } from '@interfaces/tableSettings'
+import { FilterGroup } from '@interfaces/filters'
 
 class Api extends CXBoxApi {
     fetchBcCount(screenName: string, bcName: string, params: BcCountParamsMap = {}) {
@@ -92,29 +92,41 @@ class Api extends CXBoxApi {
     createPersonalSetting(data: Omit<TableSettingsItem, 'id'>[]) {
         return this.api$.post<{
             success: boolean
-            data: {
-                id: string
-                vstamp: number
-                view: string
-                widget: string
-            }
+            data: [
+                {
+                    id: string
+                    vstamp: number
+                    view: string
+                    widget: string
+                }
+            ]
         }>('/personalAdditionalFields', { data })
     }
 
     updatePersonalSetting(data: Omit<TableSettingsItem, 'id'>[]) {
         return this.api$.put<{
             success: boolean
-            data: {
-                id: string
-                vstamp: number
-                view: string
-                widget: string
-            }
+            data: [
+                {
+                    id: string
+                    vstamp: number
+                    view: string
+                    widget: string
+                }
+            ]
         }>('/personalAdditionalFields', { data })
     }
 
     deletePersonalSetting(id: string) {
-        return this.api$.delete('/personalAdditionalFields', { data: [id] } as AxiosRequestConfig)
+        return this.api$.delete('/personalAdditionalFields', { data: { data: [id] } } as AxiosRequestConfig)
+    }
+
+    saveFilterGroup(data: { filterGroups: FilterGroup[] }) {
+        return this.api$.post<{ data: { id: string }[] }>('personalFilterGroups', { data: data || {} }, undefined)
+    }
+
+    deleteFilterGroup(filterGroupId: number) {
+        return this.api$.delete<{ data: unknown }>(`personalFilterGroups`, { data: [filterGroupId] } as AxiosRequestConfig)
     }
 }
 
@@ -148,6 +160,5 @@ const instance = axios.create({
 if (!process.env['REACT_APP_NO_SSO']) {
     instance.interceptors.request.use(tokenInterceptor, () => Promise.reject())
 }
-instance.interceptors.request.use(useFullTextInterceptor)
 
 export const CxBoxApiInstance = new Api(instance)

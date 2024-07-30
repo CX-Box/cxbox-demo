@@ -9,6 +9,7 @@ import { Middleware } from '@reduxjs/toolkit'
 const { OperationTypeCrud } = interfaces
 
 const TEXTS_FOR_UNSAVED_NOTIFICATION: Omit<OpenNotificationType, 'onOk' | 'onCancel'> = {
+    key: 'unsaved notification',
     okText: 'Save',
     cancelText: 'Cancel',
     message: 'There is unsaved data, save it ?',

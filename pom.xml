@@ -5,32 +5,38 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>cxbox-demo</artifactId>
   <packaging>jar</packaging>
-  <version>1.0.0</version>
+  <version>2.0.2</version>
 
   <parent>
     <groupId>org.cxbox</groupId>
     <artifactId>cxbox-starter-parent</artifactId>
-    <version>3.0.5</version>
+    <version>4.0.0-M4</version>
   </parent>
 
   <properties>
     <checktyle.config>src/main/resources/checkstyle-checker.xml</checktyle.config>
     <java.version>17</java.version>
-
+    <mapstruct.version>1.5.5.Final</mapstruct.version>
     <!-- dependencies versions -->
-    <keycloak-spring-boot-starter.version>14.0.0</keycloak-spring-boot-starter.version>
-
-    <!--delete after fix https://github.com/spring-projects/spring-security/issues/9787-->
-    <spring-cloud.version>2020.0.6</spring-cloud.version>
-    <spring-security.version>5.5.1</spring-security.version>
-    <spring-security-crypto.version>5.5.8</spring-security-crypto.version>
     <minio.version>8.3.0</minio.version>
-
-    <!--minio compatible version-->
-    <okhttp3.version>4.8.1</okhttp3.version>
+    <guava.version>32.1.1-jre</guava.version>
   </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>org.jobrunr</groupId>
+      <artifactId>jobrunr-spring-boot-3-starter</artifactId>
+      <version>7.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.github.gavlyukovskiy</groupId>
+      <artifactId>datasource-proxy-spring-boot-starter</artifactId>
+      <version>1.9.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-activemq</artifactId>
@@ -54,10 +60,7 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-configuration-processor</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -76,14 +79,11 @@
       <artifactId>spring-boot-starter-oauth2-client</artifactId>
     </dependency>
     <dependency>
-    <groupId>org.springframework.cloud</groupId>
-    <artifactId>spring-cloud-starter-openfeign</artifactId>
-  </dependency>
-    <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-crypto</artifactId>
-      <version>${spring-security-crypto.version}</version>
+      <groupId>com.github.kuliginstepan</groupId>
+      <artifactId>dadata-client</artifactId>
+      <version>4.0.0</version>
     </dependency>
+
     <dependency>
       <groupId>io.minio</groupId>
       <artifactId>minio</artifactId>
@@ -94,11 +94,7 @@
       <artifactId>springdoc-openapi-ui</artifactId>
       <version>1.5.13</version>
     </dependency>
-    <dependency>
-      <groupId>org.keycloak</groupId>
-      <artifactId>keycloak-spring-boot-starter</artifactId>
-      <version>${keycloak-spring-boot-starter.version}</version>
-    </dependency>
+
     <dependency>
       <groupId>org.liquibase</groupId>
       <artifactId>liquibase-core</artifactId>
@@ -106,7 +102,7 @@
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
-      <version>42.2.27</version>
+      <version>42.6.1</version>
     </dependency>
     <!--see README_DB.MD
     <dependency>
@@ -125,7 +121,9 @@
     </dependency>
     <dependency>
       <groupId>org.cxbox</groupId>
-      <artifactId>cxbox-crudma</artifactId>
+      <artifactId>cxbox-starter-meta</artifactId>
+      <version>4.0.0-M4</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.cxbox</groupId>
@@ -147,25 +145,19 @@
       <scope>test</scope>
     </dependency>
 
+    <dependency>
+      <groupId>org.mapstruct</groupId>
+      <artifactId>mapstruct</artifactId>
+      <version>${mapstruct.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mapstruct</groupId>
+      <artifactId>mapstruct-processor</artifactId>
+      <version>${mapstruct.version}</version>
+    </dependency>
   </dependencies>
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.keycloak.bom</groupId>
-        <artifactId>keycloak-adapter-bom</artifactId>
-        <version>${keycloak-spring-boot-starter.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.cloud</groupId>
-        <artifactId>spring-cloud-dependencies</artifactId>
-        <version>${spring-cloud.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
+
   <build>
     <finalName>cxbox-demo</finalName>
     <plugins>
@@ -188,10 +180,11 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>3.1.2</version>
+        <version>3.3.0</version>
         <configuration>
           <configLocation>src/main/resources/checkstyle-checker.xml</configLocation>
-          <encoding>UTF-8</encoding>
+          <inputEncoding>UTF-8</inputEncoding>
+          <outputEncoding>UTF-8</outputEncoding>
           <consoleOutput>true</consoleOutput>
           <failsOnError>true</failsOnError>
           <linkXRef>false</linkXRef>
@@ -236,8 +229,8 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
-          <source>11</source>
-          <target>11</target>
+          <source>17</source>
+          <target>17</target>
         </configuration>
       </plugin>
     </plugins>
@@ -308,7 +301,7 @@
           <plugin>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
-            <version>0.8.6</version>
+            <version>0.8.10</version>
             <executions>
               <execution>
                 <id>prepare-agent</id>

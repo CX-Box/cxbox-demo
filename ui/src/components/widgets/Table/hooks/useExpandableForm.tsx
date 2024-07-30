@@ -1,8 +1,7 @@
 import { AppWidgetMeta } from '@interfaces/widget'
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { shallowEqual, useDispatch } from 'react-redux'
 import { useAppSelector } from '@store'
-import { interfaces } from '@cxbox-ui/core'
 import { ExpandIconProps } from 'antd/lib/table'
 import ExpandIcon from '../components/ExpandIcon'
 import ExpandedRow from '../components/ExpandedRow'
@@ -11,16 +10,16 @@ import { resetRecordForm, setRecordForm } from '@actions'
 import { Spin } from 'antd'
 import DebugWidgetWrapper from '../../../DebugWidgetWrapper/DebugWidgetWrapper'
 import { buildBcUrl } from '@utils/buildBcUrl'
+import { DataItem, FieldType } from '@interfaces/core'
+import { WidgetFormMeta } from '@cxbox-ui/core'
 
-const { FieldType } = interfaces
-
-type ControlColumn = { column: ColumnProps<interfaces.DataItem>; position: 'left' | 'right' }
+type ControlColumn = { column: ColumnProps<DataItem>; position: 'left' | 'right' }
 
 type WidgetMetaField = { type: string; hidden?: boolean }
 
-const EXPAND_ICON_COLUMN: ColumnProps<interfaces.DataItem> = {
+const EXPAND_ICON_COLUMN: ColumnProps<DataItem> = {
     title: '',
-    width: '36px',
+    width: '66px',
     key: '_expandIconField'
 }
 
@@ -29,17 +28,17 @@ export function useInternalWidgetSelector(externalWidget: AppWidgetMeta) {
         const widgetNameForCreate = externalWidget.options?.create?.widget
         const widgetNameForEdit = externalWidget.options?.edit?.widget
 
-        const widgetForCreate = state.view.widgets.find(widget => widgetNameForCreate === widget?.name) as interfaces.WidgetFormMeta
-        const widgetForEdit = state.view.widgets.find(widget => widgetNameForEdit === widget?.name) as interfaces.WidgetFormMeta
+        const widgetForCreate = state.view.widgets.find(widget => widgetNameForCreate === widget?.name) as WidgetFormMeta
+        const widgetForEdit = state.view.widgets.find(widget => widgetNameForEdit === widget?.name) as WidgetFormMeta
 
         const bcName = (widgetForCreate || widgetForEdit)?.bcName as string
-        const bc = state.screen.bo.bc[bcName]
-        const bcUrl = bc && buildBcUrl(bcName, true)
+        const bc = bcName ? state.screen.bo.bc[bcName] : undefined
+        const bcUrl = bc ? buildBcUrl(bcName, true) : ''
 
         const rowMeta = state.view.rowMeta?.[bcName]?.[bcUrl]
         const data = state.data[bcName]
 
-        const currentDataItem = data?.find(dataItem => dataItem.id === bc.cursor)
+        const currentDataItem = data?.find(dataItem => dataItem.id === bc?.cursor)
         const isCreateStyle = currentDataItem?.vstamp === -1
 
         return {
@@ -67,27 +66,34 @@ export function useExpandableForm(currentWidgetMeta: AppWidgetMeta) {
 
     const dispatch = useDispatch()
 
-    const expandIcon = useCallback(
-        ({ expanded, record, onExpand }: ExpandIconProps<interfaces.DataItem>) => {
-            const handleExpand = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-                onExpand(record, e)
+    const expandIcon = useCallback(({ expanded, record, onExpand }: ExpandIconProps<DataItem>) => {
+        return (
+            <ExpandIcon
+                expanded={expanded}
+                openIcon="edit"
+                closeIcon="close"
+                onClick={event => {
+                    onExpand(record, event)
+                }}
+            />
+        )
+    }, [])
 
-                if (expanded) {
-                    dispatch(resetRecordForm())
-                } else {
-                    dispatch(
-                        setRecordForm({
-                            widgetName: currentWidgetMeta.name,
-                            cursor: record.id,
-                            bcName: currentWidgetMeta.bcName,
-                            active: true,
-                            create: false
-                        })
-                    )
-                }
+    const handleExpand = useCallback(
+        (expanded, record) => {
+            if (expanded) {
+                dispatch(
+                    setRecordForm({
+                        widgetName: currentWidgetMeta.name,
+                        cursor: record.id,
+                        bcName: currentWidgetMeta.bcName,
+                        active: true,
+                        create: false
+                    })
+                )
+            } else {
+                dispatch(resetRecordForm())
             }
-
-            return <ExpandIcon expanded={expanded} openIcon="edit" closeIcon="close" onClick={handleExpand} />
         },
         [currentWidgetMeta.bcName, currentWidgetMeta.name, dispatch]
     )
@@ -95,13 +101,14 @@ export function useExpandableForm(currentWidgetMeta: AppWidgetMeta) {
     const isLoading = internalWidget && currentActiveRowId !== internalWidgetActiveCursor
 
     const expandedRowRender = useCallback(
-        (record: interfaces.DataItem) => (
-            <DebugWidgetWrapper debugMode={debugMode} meta={internalWidget}>
-                <Spin spinning={isLoading}>
-                    <ExpandedRow widgetMeta={internalWidget} operations={internalWidgetOperations} record={record} />
-                </Spin>
-            </DebugWidgetWrapper>
-        ),
+        (record: DataItem) =>
+            !record.children ? (
+                <DebugWidgetWrapper debugMode={debugMode} meta={internalWidget}>
+                    <Spin spinning={isLoading}>
+                        <ExpandedRow widgetMeta={internalWidget} operations={internalWidgetOperations} record={record} />
+                    </Spin>
+                </DebugWidgetWrapper>
+            ) : null,
         [internalWidget, internalWidgetOperations, isLoading, debugMode]
     )
 
@@ -132,8 +139,30 @@ export function useExpandableForm(currentWidgetMeta: AppWidgetMeta) {
         expandIcon: expandable ? expandIcon : undefined,
         expandIconColumn: expandable ? EXPAND_ICON_COLUMN : undefined,
         expandedRowRender: expandable ? expandedRowRender : undefined,
-        expandedRowKeys: expandable && currentActiveRowId ? [currentActiveRowId] : [],
+        expandedRowKey: expandable ? currentActiveRowId : undefined,
+        onExpand: expandable ? handleExpand : undefined,
         isCreateStyle,
         isEditStyle
     }
+}
+export const useExpandableGroup = () => {
+    const [expandedParentRowKeys, setExpandedParentRowKeys] = useState<string[]>([])
+
+    const changeExpand = useCallback((expanded, id) => {
+        if (id) {
+            setExpandedParentRowKeys(prevState => {
+                if (expanded) {
+                    return prevState.includes(id) ? prevState : [...prevState, id]
+                } else {
+                    return prevState.filter(prevRecordId => prevRecordId !== id)
+                }
+            })
+        }
+    }, [])
+
+    const clearExpand = useCallback(() => {
+        setExpandedParentRowKeys(prevKeys => (prevKeys.length === 0 ? prevKeys : []))
+    }, [])
+
+    return { expandedParentRowKeys, changeExpand, clearExpand }
 }

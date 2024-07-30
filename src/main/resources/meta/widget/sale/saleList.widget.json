@@ -26,6 +26,10 @@
     }
   ],
   "options": {
+    "export": {
+      "enabled": true,
+      "meeting": "sale"
+    },
     "actionGroups": {
       "include": [
         "create",

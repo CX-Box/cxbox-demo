@@ -10,10 +10,11 @@ import Pagination from '@cxboxComponents/ui/Pagination/Pagination'
 import cn from 'classnames'
 import { RootState, useAppSelector } from '@store'
 import { createMapDispatchToProps } from '@utils/redux'
-import { actions, interfaces } from '@cxbox-ui/core'
-import { RowMetaField } from '@cxbox-ui/core/dist/interfaces'
+import { actions, interfaces, RowMetaField } from '@cxbox-ui/core'
 import { TableEventListeners } from 'antd/lib/table/interface'
 import { buildBcUrl } from '@utils/buildBcUrl'
+import WidgetTitle from '@components/WidgetTitle/WidgetTitle'
+import { normalizeFieldValue } from '@components/TemplatedTitle/utils'
 
 const { bcRemoveAllFilters, changeDataItem, closeViewPopup, viewClearPickMap } = actions
 
@@ -78,7 +79,7 @@ export const PickListPopup: FunctionComponent<PickListPopupProps & PickListPopup
                 key: item.key,
                 dataIndex: item.key,
                 render: (text, dataItem) => {
-                    return text
+                    return normalizeFieldValue(text, item)
                 },
                 onHeaderCell: () => {
                     return {
@@ -108,16 +109,16 @@ export const PickListPopup: FunctionComponent<PickListPopupProps & PickListPopup
                 }
             }
         },
-        [pickMap, onChange, parentBCName, cursor, onClose]
+        [pickMap, onChange, parentBCName, cursor]
     )
 
     const defaultTitle = React.useMemo(
         () => (
             <div>
-                <h1 className={styles.title}>{widget.title}</h1>
+                <WidgetTitle className={styles.title} level={1} widgetName={widget.name} text={widget.title} />
             </div>
         ),
-        [widget.title]
+        [widget.name, widget.title]
     )
     const title = components?.title === undefined ? defaultTitle : components.title
 
@@ -172,7 +173,7 @@ function mapStateToProps(state: RootState, props: PickListPopupOwnProps) {
     const bcName = props.widget.bcName
     const bcUrl = buildBcUrl(bcName, true)
     const fields = bcUrl ? state.view.rowMeta[bcName]?.[bcUrl]?.fields : undefined
-    const bc = state.screen.bo.bc[bcName]
+    const bc = bcName ? state.screen.bo.bc[bcName] : undefined
     const parentBCName = bc?.parentName
     return {
         pickMap: state.view.pickMap ?? {},

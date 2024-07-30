@@ -1,14 +1,19 @@
 import { useCallback, useState } from 'react'
 
 export function useVisibility(defaultVisibility: boolean = false) {
-    const [visible, setVisible] = useState(defaultVisibility)
+    const [visibility, setVisibility] = useState(defaultVisibility)
 
     const toggleVisibility = useCallback(() => {
-        setVisible(prevState => !prevState)
+        setVisibility(prevState => !prevState)
+    }, [])
+
+    const changeVisibility = useCallback((visibility: boolean) => {
+        setVisibility(visibility)
     }, [])
 
     return {
-        visible,
-        toggleVisibility
+        visibility,
+        toggleVisibility,
+        changeVisibility
     }
 }

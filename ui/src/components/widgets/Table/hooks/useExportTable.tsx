@@ -1,30 +1,28 @@
 import { useMemo } from 'react'
 import { shallowEqual } from 'react-redux'
 import { ExportOptions, exportTable } from '@utils/export'
-import { AppWidgetMeta } from '@interfaces/widget'
 import { useAppSelector } from '@store'
-import { WidgetMeta } from '@interfaces/core'
 import { WidgetListField } from '@cxbox-ui/schema'
 
 interface UseExportButtonProps {
-    widget: WidgetMeta
+    bcName: string
+    fields: WidgetListField[]
+    title: string
     exportWithDate?: boolean
 }
 
-export const useExportTable = ({ widget, exportWithDate = false }: UseExportButtonProps) => {
+export const useExportTable = ({ bcName, fields, title, exportWithDate = false }: UseExportButtonProps) => {
     const screenName = useAppSelector(state => state.screen.screenName)
-    const { bcName } = widget
     const tableFilters = useAppSelector(state => state.screen.filters[bcName])
     const tableSorters = useAppSelector(state => state.screen.sorters[bcName])
     const widgetData = useAppSelector(state => state.data[bcName])
-    const exportConfig = (widget as AppWidgetMeta).options?.export
-    const showExport = exportConfig?.enabled
-    const title = exportConfig?.title ?? widget.title
+
     const filteredFields = useMemo(() => {
-        return (widget.fields as WidgetListField[])?.filter(field => !field?.hidden)
-    }, [widget.fields])
+        return (fields as WidgetListField[])?.filter(field => !field?.hidden)
+    }, [fields])
+
     const exportOptions: ExportOptions = useAppSelector(state => {
-        const bc = state.screen.bo.bc[bcName]
+        const bc = bcName ? state.screen.bo.bc[bcName] : undefined
 
         return {
             page: bc?.page,
@@ -33,7 +31,6 @@ export const useExportTable = ({ widget, exportWithDate = false }: UseExportButt
     }, shallowEqual)
 
     return {
-        showExport,
         exportTable: () => {
             return exportTable(
                 screenName,

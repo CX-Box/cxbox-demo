@@ -6,6 +6,7 @@
 }
 
 body {
+    overflow: hidden; /* So that the Tooltip from the FileUploadContainer, when scrolling from bottom to top, does not affect the scroll bar due to the fact that it scrolls down */
     font-family: 'Roboto', 'Chinese Quote', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 }
 
@@ -17,4 +18,8 @@ body {
 
 * {
     box-sizing: border-box;
+}
+
+.ant-notification {
+    z-index: 1060 !important;
 }

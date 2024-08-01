@@ -1,4 +1,4 @@
-import { createAction } from '@reduxjs/toolkit'
+import { AnyAction, createAction } from '@reduxjs/toolkit'
 import { actions, interfaces } from '@cxbox-ui/core'
 import { OperationPreInvokeCustom } from '@interfaces/operation'
 import { NotificationState } from '@interfaces/notification'
@@ -106,3 +106,7 @@ export const sendOperationSuccess = createAction<
 >('sendOperationSuccess')
 
 export const updateBcData = createAction<{ bcName: string; data: DataItem[] }>('updateBcData')
+
+export const forceUpdateRowMeta = createAction<{ bcName: string; cursor?: string; onSuccessAction?: AnyAction; wasForcedUpdate?: boolean }>(
+    'forceUpdateRowMeta'
+)

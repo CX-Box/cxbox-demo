@@ -358,7 +358,14 @@ export const bcFetchDataEpic: RootEpic = (action$, state$, { api }) =>
                         const lazyWidget = (!leastOneWidgetIsVisible || PopupWidgetTypes.includes(widget.type)) && !parentOfNotLazyWidget
                         const skipLazy = state.view.popupData?.bcName !== widget.bcName
                         if (lazyWidget && skipLazy) {
-                            return EMPTY
+                            return of(
+                                actions.bcFetchDataSuccess({
+                                    bcName,
+                                    data: response.data,
+                                    bcUrl,
+                                    hasNext: response.hasNext
+                                })
+                            )
                         }
                         const fetchChildren = response.data?.length
                             ? getChildrenData(widgets, state.screen.bo.bc, !!anyHierarchyWidget, isWidgetVisible)

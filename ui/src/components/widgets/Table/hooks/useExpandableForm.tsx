@@ -61,7 +61,7 @@ function isExpandColumn(item: ControlColumn) {
 export function useExpandableForm(currentWidgetMeta: AppWidgetMeta) {
     const { internalWidget, internalWidgetOperations, internalWidgetActiveCursor, isCreateStyle, isEditStyle } =
         useInternalWidgetSelector(currentWidgetMeta)
-    const { cursor: currentActiveRowId } = useAppSelector(state => state.view.recordForm)
+    const currentActiveRowId = useAppSelector(state => state.view.recordForm[currentWidgetMeta.bcName])?.cursor
     const debugMode = useAppSelector(state => state.session.debugMode || false)
 
     const dispatch = useDispatch()
@@ -92,7 +92,7 @@ export function useExpandableForm(currentWidgetMeta: AppWidgetMeta) {
                     })
                 )
             } else {
-                dispatch(resetRecordForm())
+                dispatch(resetRecordForm({ bcName: currentWidgetMeta.bcName }))
             }
         },
         [currentWidgetMeta.bcName, currentWidgetMeta.name, dispatch]

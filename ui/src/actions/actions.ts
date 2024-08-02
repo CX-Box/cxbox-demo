@@ -54,13 +54,13 @@ export const setRecordForm = createAction<{
 
 export const partialUpdateRecordForm = createAction<{
     widgetName?: string
-    bcName?: string
+    bcName: string
     cursor?: string
     active?: boolean
     create?: boolean
 }>('partialUpdateRecordForm')
 
-export const resetRecordForm = createAction('resetRecordForm')
+export const resetRecordForm = createAction<{ bcName?: string } | undefined>('resetRecordForm')
 
 export const processPreInvoke = createAction<
     Omit<ReturnType<typeof actions.processPreInvoke>['payload'], 'preInvoke'> & {

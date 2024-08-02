@@ -370,6 +370,15 @@ export const forceUpdateRowMeta: RootEpic = (action$, state$, { api }) =>
                     .pipe(
                         mergeMap(data => {
                             return concat(
+                                of(
+                                    actions.forceActiveRmUpdate({
+                                        rowMeta: data,
+                                        currentRecordData: currentRecordData as DataItem,
+                                        bcName,
+                                        bcUrl,
+                                        cursor
+                                    })
+                                ),
                                 onSuccessAction
                                     ? of({
                                           ...onSuccessAction,

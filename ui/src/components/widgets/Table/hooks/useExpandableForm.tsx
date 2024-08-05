@@ -5,7 +5,7 @@ import { useAppSelector } from '@store'
 import { ExpandIconProps } from 'antd/lib/table'
 import ExpandIcon from '../components/ExpandIcon'
 import ExpandedRow from '../components/ExpandedRow'
-import { ColumnProps } from 'antd/es/table'
+import { ColumnProps, RowSelectionType } from 'antd/es/table'
 import { resetRecordForm, setRecordForm } from '@actions'
 import { Spin } from 'antd'
 import DebugWidgetWrapper from '../../../DebugWidgetWrapper/DebugWidgetWrapper'
@@ -57,6 +57,8 @@ export function useInternalWidgetSelector(externalWidget: AppWidgetMeta) {
 function isExpandColumn(item: ControlColumn) {
     return item.column.key === EXPAND_ICON_COLUMN.key
 }
+
+const ROW_SELECTION_TYPES: RowSelectionType[] = ['checkbox', 'radio']
 
 export function useExpandableForm(currentWidgetMeta: AppWidgetMeta) {
     const { internalWidget, internalWidgetOperations, internalWidgetActiveCursor, isCreateStyle, isEditStyle } =
@@ -112,7 +114,11 @@ export function useExpandableForm(currentWidgetMeta: AppWidgetMeta) {
         [internalWidget, internalWidgetOperations, isLoading, debugMode]
     )
 
-    const getExpandIconColumnIndex = (controlColumns: ControlColumn[], externalVisibleFields?: WidgetMetaField[]) => {
+    const getExpandIconColumnIndex = (
+        controlColumns: ControlColumn[],
+        externalVisibleFields?: WidgetMetaField[],
+        rowSelectionType?: RowSelectionType
+    ) => {
         if (!internalWidget) {
             return undefined
         }
@@ -127,8 +133,9 @@ export function useExpandableForm(currentWidgetMeta: AppWidgetMeta) {
 
         const widgetFields = currentWidgetMeta.fields as WidgetMetaField[]
         const visibleWidgetFields = externalVisibleFields ?? widgetFields?.filter(item => item.type !== FieldType.hidden && !item.hidden)
+        const rowSelectionCount = ROW_SELECTION_TYPES.includes(rowSelectionType as RowSelectionType) ? 1 : 0
 
-        return leftControlColumns.length + visibleWidgetFields?.length + rightControlColumns.findIndex(isExpandColumn)
+        return leftControlColumns.length + visibleWidgetFields?.length + rightControlColumns.findIndex(isExpandColumn) + rowSelectionCount
     }
 
     const expandable = !!internalWidget

@@ -523,7 +523,7 @@ function Table({
                 onHeaderRow={onHeaderRow}
                 rowClassName={record => (record.id === bc?.cursor ? 'ant-table-row-selected' : '')}
                 expandedRowKeys={expandedRowKeys}
-                expandIconColumnIndex={getExpandIconColumnIndex(controlColumns, resultedFields)}
+                expandIconColumnIndex={getExpandIconColumnIndex(controlColumns, resultedFields, rest.rowSelection?.type)}
                 expandIconAsCell={false}
                 expandIcon={resultExpandIcon}
                 expandedRowRender={expandedRowRender}

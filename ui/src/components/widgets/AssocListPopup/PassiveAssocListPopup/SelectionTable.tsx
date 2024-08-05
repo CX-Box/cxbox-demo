@@ -4,16 +4,16 @@ import Table from '../../Table/Table'
 import { AppWidgetTableMeta } from '@interfaces/widget'
 import { Checkbox } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { usePassiveAssociations } from '../hooks/usePassiveAssociations'
+import { usePassiveAssociations } from './hooks/usePassiveAssociations'
 import { AssociatedItem } from '@cxbox-ui/core'
 import { ControlColumn } from '@components/widgets/Table/Table.interfaces'
 
-export interface AssocTableProps {
+export interface SelectionTableProps {
     meta: AppWidgetTableMeta
     disablePagination?: boolean
 }
 
-export const AssocTable = ({ ...props }: AssocTableProps) => {
+export const SelectionTable = ({ ...props }: SelectionTableProps) => {
     const { values: selectedRecords, selectAllItems, selectItem, changeItem } = usePassiveAssociations()
 
     const rowSelection: TableRowSelection<AssociatedItem> = {
@@ -28,7 +28,6 @@ export const AssocTable = ({ ...props }: AssocTableProps) => {
     const primaryColumn: ControlColumn<AssociatedItem> = useMemo(
         () => ({
             column: {
-                // TODO need to add localization
                 title: props.meta.options?.primary?.title ?? t('Primary'),
                 width: '85px',
                 key: '_primary',
@@ -53,4 +52,4 @@ export const AssocTable = ({ ...props }: AssocTableProps) => {
     return <Table meta={props.meta} rowSelection={rowSelection} disablePagination={props.disablePagination} primaryColumn={primaryColumn} />
 }
 
-export default AssocTable
+export default SelectionTable

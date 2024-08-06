@@ -59,7 +59,7 @@ export const useViewTabs = (depth = 1) => {
         [changeLocation]
     )
 
-    const tabs = useCoreViewTabs(depth).filter(tab => !tab.hidden)
+    const tabs = useCoreViewTabs(depth).filter(tab => !tab.hidden || tab.selected)
 
     return {
         tabs,

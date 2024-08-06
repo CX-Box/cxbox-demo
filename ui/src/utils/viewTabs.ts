@@ -47,12 +47,10 @@ export function getViewTabs(
             })
     }
     // Set titles for groups
-    return result
-        ?.filter(item => !item.hidden)
-        .map(item => {
-            const title = interfaces.isViewNavigationGroup(item) ? { title: item.title } : undefined
-            return { viewName: getReferencedView(item) as string, ...title }
-        })
+    return result.map(item => {
+        const title = interfaces.isViewNavigationGroup(item) ? { title: item.title } : undefined
+        return { viewName: getReferencedView(item) as string, ...title, hidden: item.hidden }
+    })
 }
 
 /**

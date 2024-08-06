@@ -5,7 +5,9 @@ import { useViewTabs as useCoreViewTabs } from '@hooks/useViewTabs'
 import { getRouteFromString, useChangeLocation } from '@router'
 import { useAppSelector } from '@store'
 
-const getBcNameFromBcPath = (bcPath?: string) => {
+const getBcNameFromPath = (path?: string) => {
+    const bcPath = path ? getRouteFromString(path)?.bcPath : undefined
+
     if (!bcPath) {
         return ''
     }
@@ -13,12 +15,6 @@ const getBcNameFromBcPath = (bcPath?: string) => {
     const enpPosition = bcPath.indexOf('/')
 
     return bcPath.slice(0, enpPosition)
-}
-
-const getBcNameFromLocation = () => {
-    const parsedLocation = getRouteFromString(window.location.hash.slice(1))
-
-    return getBcNameFromBcPath(parsedLocation?.bcPath)
 }
 
 export const useLocationContext = (depth: number) => {
@@ -34,7 +30,7 @@ export const useLocationContext = (depth: number) => {
 
     useEffect(() => {
         if (needContextBcName && prevPath !== path) {
-            setContextBcName(getBcNameFromLocation())
+            setContextBcName(getBcNameFromPath(path))
         }
     }, [prevPath, setContextBcName, path, needContextBcName])
 

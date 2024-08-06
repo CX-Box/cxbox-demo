@@ -13,6 +13,7 @@ import { WidgetTypes, interfaces, utils } from '@cxbox-ui/core'
 import { RootState } from '@store'
 import { WidgetShowCondition } from '@cxbox-ui/schema'
 import { buildBcUrl } from '@utils/buildBcUrl'
+import { ScreenState } from '../../reducers/screen'
 
 interface WidgetOwnProps {
     meta: interfaces.WidgetMeta | interfaces.WidgetMetaAny
@@ -30,6 +31,7 @@ interface WidgetProps extends WidgetOwnProps {
     showWidget: boolean
     rowMetaExists: boolean
     dataExists: boolean
+    bc?: ScreenState['bo']['bc'][string]
 }
 
 const skeletonParams = { rows: 5 }
@@ -48,6 +50,10 @@ export const Widget: FunctionComponent<WidgetProps> = props => {
 
     const skipCardWrapping = interfaces.PopupWidgetTypes.includes(props.meta.type)
 
+    const widgetHasBc = props.meta.bcName !== null && props.meta.bcName !== ''
+
+    const widgetElement = props.bc || !widgetHasBc ? chooseWidgetType(props.meta, props.customWidgets, props.children) : null
+
     if (skipCardWrapping) {
         return (
             <div
@@ -57,7 +63,7 @@ export const Widget: FunctionComponent<WidgetProps> = props => {
                 data-test-widget-title={props.meta.title}
                 data-test-widget-name={props.meta.name}
             >
-                {chooseWidgetType(props.meta, props.customWidgets, props.children)}
+                {widgetElement}
             </div>
         )
     }
@@ -66,11 +72,9 @@ export const Widget: FunctionComponent<WidgetProps> = props => {
     const showSkeleton = props.loading && !showSpinner
 
     const spinnerElement = props.customSpinner ? (
-        <props.customSpinner spinning={showSpinner}>
-            {chooseWidgetType(props.meta, props.customWidgets, props.children)}
-        </props.customSpinner>
+        <props.customSpinner spinning={showSpinner}>{widgetElement}</props.customSpinner>
     ) : (
-        <Spin spinning={showSpinner}>{chooseWidgetType(props.meta, props.customWidgets, props.children)}</Spin>
+        <Spin spinning={showSpinner}>{widgetElement}</Spin>
     )
 
     // TODO 2.0.0 delete spinner and skeleton. Spinner and skeleton should be overridden by props.card component
@@ -196,7 +200,8 @@ function mapStateToProps(state: RootState, ownProps: WidgetOwnProps) {
         parentCursor: hasParent && (parent.cursor as string),
         showWidget,
         rowMetaExists: !!rowMeta,
-        dataExists: !!state.data[bcName]
+        dataExists: !!state.data[bcName],
+        bc
     }
 }
 

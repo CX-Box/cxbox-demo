@@ -3,7 +3,7 @@ import { actions, changeMenuCollapsed, customAction, sendOperationSuccess } from
 import { createReducer, isAnyOf } from '@reduxjs/toolkit'
 import { FilterGroup } from '@interfaces/filters'
 
-interface ScreenState extends interfaces.ScreenState {
+export interface ScreenState extends interfaces.ScreenState {
     menuCollapsed: boolean
     bo: {
         activeBcName: string

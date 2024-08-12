@@ -68,11 +68,7 @@ export const FormWidget: FunctionComponent<FormWidgetProps> = ({ meta, fields, m
                                                 data-test-field-type={field?.type}
                                                 data-test-field-title={field?.label || field?.title}
                                                 data-test-field-key={field?.key}
-                                                label={
-                                                    field?.type === 'checkbox' ? null : (
-                                                        <TemplatedTitle widgetName={meta.name} title={field?.label as string} />
-                                                    )
-                                                }
+                                                label={<TemplatedTitle widgetName={meta.name} title={field?.label as string} />}
                                                 validateStatus={error ? 'error' : undefined}
                                                 help={error ? <div data-test-error-text={true}>{t(error)}</div> : undefined}
                                             >

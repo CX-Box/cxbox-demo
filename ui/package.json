@@ -15,11 +15,11 @@
   },
   "dependencies": {
     "@ant-design/charts": "1.4.2",
-    "@cxbox-ui/core": "^2.0.0-alpha.9",
+    "@cxbox-ui/core": "2.0.0",
     "@reduxjs/toolkit": "1.7.2",
     "@stomp/stompjs": "7.0.0",
     "antd": "3.26.20",
-    "axios": "1.5.0",
+    "axios": "1.6.0",
     "classnames": "2.3.2",
     "diff": "5.1.0",
     "exceljs": "4.3.0",
@@ -31,15 +31,12 @@
     "mime-types": "2.0.0",
     "parse-data-url": "^6.0.0",
     "query-string": "5.1.1",
-    "rc-image": "^7.3.1",
-    "rc-select": "^14.9.1",
+    "rc-select": "14.11.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-drag-listview": "2.0.0",
-    "react-file-viewer": "1.2.1",
     "react-i18next": "13.2.1",
     "react-redux": "7.2.9",
-    "react-scripts": "5.0.0",
     "redux-observable": "2.0.0",
     "rxjs": "7.8.1",
     "uuid": "9.0.0"
@@ -75,7 +72,7 @@
     "@cxbox-ui/schema": "^0.7.1",
     "@types/diff": "5.0.3",
     "@types/file-saver": "2.0.5",
-    "@types/lodash.debounce": "^4.0.7",
+    "@types/lodash.debounce": "4.0.9",
     "@types/mime-types": "^2.1.4",
     "@types/parse-data-url": "^3.0.1",
     "@types/query-string": "5.1.0",
@@ -93,6 +90,7 @@
     "http-proxy-middleware": "2.0.6",
     "prettier": "2.8.8",
     "react-app-alias": "2.2.2",
+    "react-scripts": "5.0.0",
     "source-map-loader": "4.0.1",
     "typescript": "5.2.2"
   },
@@ -100,6 +98,18 @@
   "resolutions": {
     "@types/react": "17.0.2",
     "@types/react-dom": "17.0.2",
-    "react-error-overlay": "6.0.9"
+    "react-error-overlay": "6.0.9",
+    "node-fetch": "npm:@favware/skip-dependency@1.0.2",
+    "react-scripts/@svgr/webpack": "8.1.0",
+    "@babel/traverse": "7.25.3",
+    "ip": "2.0.1",
+    "braces": "3.0.3",
+    "fast-loops": "1.1.4",
+    "jsdom/ws": "7.5.10",
+    "webpack-dev-server/ws": "8.16.0",
+    "webpack-dev-middleware": "5.3.4",
+    "follow-redirects": "1.15.6",
+    "express": "4.19.2",
+    "postcss": "8.4.33"
   }
 }

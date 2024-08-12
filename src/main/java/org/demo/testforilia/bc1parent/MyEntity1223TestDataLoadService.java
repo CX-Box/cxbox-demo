@@ -54,21 +54,21 @@ public class MyEntity1223TestDataLoadService {
 		repository3.save(ent124).setCustomFieldEntity(ent2);
 		repository3.save(new MyEntity1222().setCustomField("child 2[1]").setCustomFieldEntity(ent2));
 
-		repository2.save(new MyEntity1224().setCustomField("1").setCustomFieldEntity(ent122));
-		repository2.save(new MyEntity1224().setCustomField("2").setCustomFieldEntity(ent122));
+		repository2.save(new MyEntity1224().setCustomField("child 1[2]").setCustomFieldEntity(ent122));
+		repository2.save(new MyEntity1224().setCustomField("child 1[0.0]").setCustomFieldEntity(ent122));
 
-		repository2.save(new MyEntity1224().setCustomField("1").setCustomFieldEntity(ent123));
-		repository2.save(new MyEntity1224().setCustomField("2").setCustomFieldEntity(ent123));
+		repository2.save(new MyEntity1224().setCustomField("child 1[1.0]").setCustomFieldEntity(ent123));
+		repository2.save(new MyEntity1224().setCustomField("child 1[1.1]").setCustomFieldEntity(ent123));
 
-		repository2.save(new MyEntity1224().setCustomField("1").setCustomFieldEntity(ent124));
+		repository2.save(new MyEntity1224().setCustomField("child 2[0.0]").setCustomFieldEntity(ent124));
 
 		repository4.deleteAll();
-		repository4.save(new MyEntity1225().setCustomField("1").setCustomFieldEntity(ent1));
-		repository4.save(new MyEntity1225().setCustomField("2").setCustomFieldEntity(ent1));
-		repository4.save(new MyEntity1225().setCustomField("3").setCustomFieldEntity(ent1));
+		repository4.save(new MyEntity1225().setCustomField("child 1[3]").setCustomFieldEntity(ent1));
+		repository4.save(new MyEntity1225().setCustomField("child 1[4]").setCustomFieldEntity(ent1));
+		repository4.save(new MyEntity1225().setCustomField("child 1[5]").setCustomFieldEntity(ent1));
 
-		repository4.save(new MyEntity1225().setCustomField("1").setCustomFieldEntity(ent2));
-		repository4.save(new MyEntity1225().setCustomField("2").setCustomFieldEntity(ent2));
+		repository4.save(new MyEntity1225().setCustomField("child 2[2]").setCustomFieldEntity(ent2));
+		repository4.save(new MyEntity1225().setCustomField("child 2[3]").setCustomFieldEntity(ent2));
 	}
 
 }

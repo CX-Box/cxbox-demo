@@ -23,12 +23,14 @@ import { WidgetError } from '@components/WidgetError'
 import { isPopupWidget } from '@constants/widgets'
 import DebugWidgetWrapper from '@components/DebugWidgetWrapper/DebugWidgetWrapper'
 import { useWidgetMeta } from '../queries'
+import { useData } from '../queries/useData'
 
 interface WidgetProps {
     name: string
 }
 
 export interface WidgetAnyProps {
+    bcName: string
     widgetName: string
     testingProps: Record<string, any>
 }
@@ -42,7 +44,6 @@ const skeletonParams = { rows: 5 }
  */
 export const Widget: FunctionComponent<WidgetProps> = ({ name }) => {
     const { data: widgetMeta } = useWidgetMeta(name)
-
     const testingProps = useMemo(() => {
         return {
             'data-test': 'WIDGET',
@@ -59,36 +60,36 @@ export const Widget: FunctionComponent<WidgetProps> = ({ name }) => {
 
     const WidgetComponent: React.FC<WidgetAnyProps> = get(widgets, widgetMeta.type, WidgetError)
 
-    return <WidgetComponent widgetName={widgetMeta.name} testingProps={testingProps} />
+    return <WidgetComponent widgetName={widgetMeta.name} bcName={widgetMeta.bcName} testingProps={testingProps} />
 }
 
-function mapStateToProps(state: RootState, ownProps: WidgetOwnProps) {
-    const bcName = ownProps.meta.bcName
-    const bc = state.screen.bo.bc[bcName]
-    const parent = state.screen.bo.bc[bc?.parentName || '']
-    const hasParent = !!parent
-    const legacyPopupCheck = state.view.popupData?.bcName === bcName
-    const newPopupCheck = state.view.popupData?.widgetName ? state.view.popupData.widgetName === ownProps.meta.name : legacyPopupCheck
-    let showWidget = interfaces.PopupWidgetTypes.includes(ownProps.meta.type) ? newPopupCheck : true
-    if (
-        !utils.checkShowCondition(
-            ownProps.meta.showCondition as WidgetShowCondition,
-            state.screen.bo.bc[ownProps.meta.showCondition?.bcName as string]?.cursor || '',
-            state.data[ownProps.meta.showCondition?.bcName as string],
-            state.view.pendingDataChanges
-        )
-    ) {
-        showWidget = false
-    }
-
-    const bcUrl = buildBcUrl(bcName, true)
-    const rowMeta = bcUrl && state.view.rowMeta[bcName]?.[bcUrl]
-    return {
-        debugMode: state.session.debugMode,
-        loading: bc?.loading,
-        parentCursor: hasParent && (parent.cursor as string),
-        showWidget,
-        rowMetaExists: !!rowMeta,
-        dataExists: !!state.data[bcName]
-    }
-}
+// function mapStateToProps(state: RootState, ownProps: WidgetOwnProps) {
+//     const bcName = ownProps.meta.bcName
+//     const bc = state.screen.bo.bc[bcName]
+//     const parent = state.screen.bo.bc[bc?.parentName || '']
+//     const hasParent = !!parent
+//     const legacyPopupCheck = state.view.popupData?.bcName === bcName
+//     const newPopupCheck = state.view.popupData?.widgetName ? state.view.popupData.widgetName === ownProps.meta.name : legacyPopupCheck
+//     let showWidget = interfaces.PopupWidgetTypes.includes(ownProps.meta.type) ? newPopupCheck : true
+//     if (
+//         !utils.checkShowCondition(
+//             ownProps.meta.showCondition as WidgetShowCondition,
+//             state.screen.bo.bc[ownProps.meta.showCondition?.bcName as string]?.cursor || '',
+//             state.data[ownProps.meta.showCondition?.bcName as string],
+//             state.view.pendingDataChanges
+//         )
+//     ) {
+//         showWidget = false
+//     }
+//
+//     const bcUrl = buildBcUrl(bcName, true)
+//     const rowMeta = bcUrl && state.view.rowMeta[bcName]?.[bcUrl]
+//     return {
+//         debugMode: state.session.debugMode,
+//         loading: bc?.loading,
+//         parentCursor: hasParent && (parent.cursor as string),
+//         showWidget,
+//         rowMetaExists: !!rowMeta,
+//         dataExists: !!state.data[bcName]
+//     }
+// }

@@ -12,7 +12,7 @@ const selectedItemClass = 'selectedItem'
 function ScreenNavigation() {
     const [location, navigate] = useBcLocation()
     const { data } = useMeta()
-    const { data: screen } = useScreenMeta(location.bcMap.get('screen'))
+    const { data: screen } = useScreenMeta()
 
     const screenUrl = screen?.url ?? `/screen/${location.bcMap.get('screen')}`
 

@@ -1,7 +1,5 @@
 import React from 'react'
 import { Row, Col } from 'antd'
-import Widget from '@components/Widget'
-import WidgetErrorBoundary from '@cxboxComponents/WidgetErrorBoundary/WidgetErrorBoundary'
 import { interfaces } from '@cxbox-ui/core'
 
 export interface DashboardLayoutProps {
@@ -28,17 +26,7 @@ export function DashboardLayout(props: DashboardLayoutProps) {
             {Object.values(widgetsByRow).map((row, rowIndex) => (
                 <Row key={rowIndex}>
                     {row.map((widget, colIndex) => (
-                        <Col key={colIndex} span={24}>
-                            <WidgetErrorBoundary meta={widget}>
-                                <Widget
-                                    meta={widget}
-                                    card={props.card}
-                                    customWidgets={props.customWidgets}
-                                    customSpinner={props.customSpinner}
-                                    disableDebugMode={props.disableDebugMode}
-                                />
-                            </WidgetErrorBoundary>
-                        </Col>
+                        <Col key={colIndex} span={24}></Col>
                     ))}
                 </Row>
             ))}

@@ -1,9 +1,9 @@
 import React from 'react'
 import { Collapse } from 'antd'
-import FormattedJSON from './components/FormattedJSON'
 import WidgetInfoLabel from './components/WidgetInfoLabel'
 import { interfaces } from '@cxbox-ui/core'
 import { useAppSelector } from '@store'
+import FormattedJSON from '@components/FormattedJSON/FormattedJSON'
 
 interface DebugPanelProps {
     widgetMeta: interfaces.WidgetMeta

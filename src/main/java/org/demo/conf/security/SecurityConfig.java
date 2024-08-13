@@ -32,7 +32,6 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 @Configuration
 public class SecurityConfig {
 
-	private final UserService userService;
 	private final UIProperties uiProperties;
 	private final MetaConfigurationProperties metaConfigurationProperties;
 	private final OidcJwtTokenConverter oidcJwtTokenConverter;
@@ -40,23 +39,22 @@ public class SecurityConfig {
 
 	public SecurityConfig(UserService userService, UIProperties uiProperties, MetaConfigurationProperties metaConfigurationProperties, @Qualifier("tokenConverterProperties") TokenConverterProperties properties, CxboxAuthUserRepository cxboxAuthUserRepository,
 			AuthBasicConfigProperties authBasicConfigProperties) {
-		this.userService = userService;
 		this.uiProperties = uiProperties;
 		this.metaConfigurationProperties = metaConfigurationProperties;
 		this.authBasicConfigProperties = authBasicConfigProperties;
 		this.oidcJwtTokenConverter = new OidcJwtTokenConverter(new JwtGrantedAuthoritiesConverter(), properties,
-				this.userService, cxboxAuthUserRepository
+				userService, cxboxAuthUserRepository
 		);
 	}
 
 	@Bean
-	@ConditionalOnProperty(prefix = APP_AUTH_BASIC_PROP_PREFIX, name = APP_AUTH_BASIC_PROP_ENABLED, matchIfMissing = false)
+	@ConditionalOnProperty(prefix = APP_AUTH_BASIC_PROP_PREFIX, name = APP_AUTH_BASIC_PROP_ENABLED)
 	public BasicAuthenticationEntryPoint customBasicAuthenticationEntryPoint() {
 		return new CustomBasicAuthenticationEntryPoint("CustomRealm");
 	}
 
 	@Bean
-	@ConditionalOnProperty(prefix = APP_AUTH_BASIC_PROP_PREFIX, name = APP_AUTH_BASIC_PROP_ENABLED, matchIfMissing = false)
+	@ConditionalOnProperty(prefix = APP_AUTH_BASIC_PROP_PREFIX, name = APP_AUTH_BASIC_PROP_ENABLED)
 	public PasswordEncoder encoder() {
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 	}
@@ -89,7 +87,8 @@ public class SecurityConfig {
 						.requestMatchers("/swagger-ui/**").permitAll()
 						.requestMatchers("/v3/api-docs/**").permitAll()
 						.requestMatchers("/api/v1/notification/**").permitAll()
-						.requestMatchers("/**").fullyAuthenticated());
+						.requestMatchers("/**").fullyAuthenticated())
+		;
 		if (Boolean.TRUE.equals(authBasicConfigProperties.getEnabled())) {
 			http.httpBasic(c -> c.authenticationEntryPoint(customBasicAuthenticationEntryPoint()));
 		} else {

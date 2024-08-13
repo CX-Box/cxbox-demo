@@ -16,11 +16,14 @@
   <properties>
     <checktyle.config>src/main/resources/checkstyle-checker.xml</checktyle.config>
     <java.version>17</java.version>
-    <mapstruct.version>1.5.5.Final</mapstruct.version>
     <!-- dependencies versions -->
-    <minio.version>8.5.10</minio.version>
-    <netty.version>4.1.108.Final</netty.version>
-    <nimbus-jose-jwt.version>9.37.2</nimbus-jose-jwt.version>
+    <mapstruct.version>1.5.5.Final</mapstruct.version>
+    <minio.version>8.5.10</minio.version> <!--8.3.0 to 8.5.10 due to CVE-2024-30171-->
+    <guava.version>33.0.0-jre</guava.version> <!--to sync cxbox-starter-parent with minio 8.5.10-->
+    <commons-io.version>2.15.0</commons-io.version> <!--to sync cxbox-starter-parent with minio 8.5.10-->
+    <netty.version>4.1.108.Final</netty.version><!--CVE-2024-29025-->
+    <nimbus-jose-jwt.version>9.37.2</nimbus-jose-jwt.version> <!--CVE-2023-52428-->
+    <spring-framework.version>6.1.6</spring-framework.version> <!--CVE-2024-22262- -->
   </properties>
 
   <dependencies>
@@ -34,7 +37,6 @@
       <artifactId>datasource-proxy-spring-boot-starter</artifactId>
       <version>1.9.1</version>
     </dependency>
-
 
     <!--spring-boot-starter-oauth2-resource-server and spring-boot-starter-oauth2-client temporarily replaced because of CVE-2023-52428. start-->
     <!--
@@ -51,6 +53,12 @@
       <artifactId>spring-security-oauth2-client</artifactId>
       <version>${spring-security.version}</version>
       <scope>compile</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>com.nimbusds</groupId>
+          <artifactId>nimbus-jose-jwt</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.springframework.security</groupId>
@@ -82,7 +90,7 @@
       <version>${nimbus-jose-jwt.version}</version>
       <scope>compile</scope>
     </dependency>
-    <!--spring-boot-starter-oauth2-resource-server and spring-boot-starter-oauth2-client temporarily replaced because of CVE-2023-52428. start-->
+    <!--spring-boot-starter-oauth2-resource-server and spring-boot-starter-oauth2-client temporarily replaced because of CVE-2023-52428. end-->
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -120,14 +128,6 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-security</artifactId>
-    </dependency>
-
-
-
-    <dependency>
-      <groupId>com.github.kuliginstepan</groupId>
-      <artifactId>dadata-client</artifactId>
-      <version>4.0.0</version>
     </dependency>
 
     <dependency>

@@ -1,9 +1,5 @@
 package org.demo.service.cxbox.anysource.dadatacompany;
 
-import com.kuliginstepan.dadata.client.DadataClient;
-import com.kuliginstepan.dadata.client.domain.Suggestion;
-import com.kuliginstepan.dadata.client.domain.organization.Organization;
-import com.kuliginstepan.dadata.client.domain.organization.OrganizationRequestBuilder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -17,6 +13,9 @@ import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.dao.AnySourceBaseDAO;
 import org.cxbox.core.dao.impl.AbstractAnySourceBaseDAO;
 import org.cxbox.core.exception.ClientException;
+import org.demo.conf.dadata.DadataClient;
+import org.demo.conf.dadata.dto.request.PartySuggestionRq;
+import org.demo.conf.dadata.dto.response.PartySuggestionRs;
 import org.demo.dto.cxbox.anysource.CompanySuggestionDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -79,9 +78,9 @@ public class CompanyDao extends AbstractAnySourceBaseDAO<CompanySuggestionDTO> i
 				.filter(StringUtils::isNumeric)
 				.map(Integer::parseInt)
 				.orElse(10);
-		List<Suggestion<Organization>> list = dadataClient.suggestOrganization(
-				OrganizationRequestBuilder.create(query).count(countParameter).build()).collectList().block();
-		return Optional.ofNullable(list).orElseGet(ArrayList::new)
+		PartySuggestionRs list = dadataClient.getPartySuggestion(
+				PartySuggestionRq.builder().build().setQuery(query).setCount(countParameter));
+		return Optional.ofNullable(list.getSuggestions()).orElseGet(ArrayList::new)
 				.stream()
 				.map(suggestion -> CompanySuggestionDTO.builder()
 						.id(UUID.randomUUID().toString())

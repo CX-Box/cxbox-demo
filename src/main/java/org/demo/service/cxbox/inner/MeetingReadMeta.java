@@ -22,8 +22,8 @@ public class MeetingReadMeta extends FieldMetaBuilder<MeetingDTO> {
 	@Override
 	public void buildRowDependentMeta(RowDependentFieldsMeta<MeetingDTO> fields, InnerBcDescription bcDescription,
 			Long id, Long parentId) {
-		fields.setEnabled(MeetingDTO_.meetingRegion);
-		fields.setDictionaryTypeWithAllValues(MeetingDTO_.meetingRegion, REGIONS);
+		fields.setEnabled(MeetingDTO_.region);
+		fields.setDictionaryTypeWithAllValues(MeetingDTO_.region, REGIONS);
 		fields.setDrilldown(
 				MeetingDTO_.id,
 				DrillDownType.INNER,

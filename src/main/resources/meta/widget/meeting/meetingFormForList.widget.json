@@ -6,7 +6,7 @@
   "fields": [
     {
       "label": "Meeting Region",
-      "key": "meetingRegion",
+      "key": "region",
       "type": "dictionary"
     },
     {
@@ -52,7 +52,7 @@
         {
           "cols": [
             {
-              "fieldKey": "meetingRegion",
+              "fieldKey": "region",
               "span": 12
             }
           ]

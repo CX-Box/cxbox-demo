@@ -34,7 +34,7 @@ public class Meeting extends BaseEntity {
 	private String agenda;
 
 	@Column
-	private LOV meetingRegion;
+	private LOV region;
 
 	private LocalDateTime startDateTime = LocalDateTime.now();
 

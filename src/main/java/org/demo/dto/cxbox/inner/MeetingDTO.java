@@ -53,7 +53,7 @@ public class MeetingDTO extends DataResponseDTO {
 
 	@SearchParameter(provider = LovValueProvider.class)
 	@RegionDictionary(REGIONS)
-	private String meetingRegion;
+	private String region;
 	
 	private String notes;
 
@@ -85,7 +85,7 @@ public class MeetingDTO extends DataResponseDTO {
 
 		this.id = meeting.getId().toString();
 		this.agenda = meeting.getAgenda();
-		this.meetingRegion = REGIONS.lookupValue(meeting.getMeetingRegion());
+		this.region = REGIONS.lookupValue(meeting.getRegion());
 		this.startDateTime = meeting.getStartDateTime();
 		this.endDateTime = meeting.getEndDateTime();
 		this.period = ofNullable(meeting.getStartDateTime()).map(dateTimeFormatter::format).orElse("")

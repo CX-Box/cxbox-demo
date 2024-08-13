@@ -18,8 +18,9 @@
     <java.version>17</java.version>
     <mapstruct.version>1.5.5.Final</mapstruct.version>
     <!-- dependencies versions -->
-    <minio.version>8.3.0</minio.version>
-    <guava.version>32.1.1-jre</guava.version>
+    <minio.version>8.5.10</minio.version>
+    <netty.version>4.1.108.Final</netty.version>
+    <nimbus-jose-jwt.version>9.37.2</nimbus-jose-jwt.version>
   </properties>
 
   <dependencies>
@@ -33,10 +34,56 @@
       <artifactId>datasource-proxy-spring-boot-starter</artifactId>
       <version>1.9.1</version>
     </dependency>
+
+
+    <!--spring-boot-starter-oauth2-resource-server and spring-boot-starter-oauth2-client temporarily replaced because of CVE-2023-52428. start-->
+    <!--
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-oauth2-client</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+    </dependency>-->
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-oauth2-client</artifactId>
+      <version>${spring-security.version}</version>
+      <scope>compile</scope>
     </dependency>
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-oauth2-resource-server</artifactId>
+      <version>${spring-security.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-oauth2-core</artifactId>
+      <version>${spring-security.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-oauth2-jose</artifactId>
+      <version>${spring-security.version}</version>
+      <scope>compile</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>com.nimbusds</groupId>
+          <artifactId>nimbus-jose-jwt</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.nimbusds</groupId>
+      <artifactId>nimbus-jose-jwt</artifactId>
+      <version>${nimbus-jose-jwt.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <!--spring-boot-starter-oauth2-resource-server and spring-boot-starter-oauth2-client temporarily replaced because of CVE-2023-52428. start-->
+
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-activemq</artifactId>
@@ -74,10 +121,9 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-security</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-oauth2-client</artifactId>
-    </dependency>
+
+
+
     <dependency>
       <groupId>com.github.kuliginstepan</groupId>
       <artifactId>dadata-client</artifactId>
@@ -91,8 +137,8 @@
     </dependency>
     <dependency>
       <groupId>org.springdoc</groupId>
-      <artifactId>springdoc-openapi-ui</artifactId>
-      <version>1.5.13</version>
+      <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+      <version>2.0.4</version>
     </dependency>
 
     <dependency>
@@ -122,8 +168,6 @@
     <dependency>
       <groupId>org.cxbox</groupId>
       <artifactId>cxbox-starter-meta</artifactId>
-      <version>4.0.0-M4</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.cxbox</groupId>

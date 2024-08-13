@@ -120,6 +120,7 @@ token:
     principal-attribute: preferred_username
     resource-id: cxbox-oidc-client
 
+#see http://localhost:8080/swagger-ui/index.html
 springdoc:
   packages-to-scan: org.demo
   show-actuator: true

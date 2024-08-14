@@ -7,6 +7,8 @@ import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.cxbox.core.service.action.Actions;
 import org.cxbox.model.core.entity.BaseEntity_;
 
+import org.demo.testforilia.bc1parent.MyEntity1223;
+import org.demo.testforilia.bc1parent.MyEntity1223Repository;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +16,12 @@ import org.springframework.stereotype.Service;
 public class MyExample1222Service extends VersionAwareResponseService<MyExample1222DTO, MyEntity1222> {
 
 	private final MyEntity1222Repository repository;
+	private final MyEntity1223Repository repository123;
 
-	public MyExample1222Service(MyEntity1222Repository repository) {
+	public MyExample1222Service(MyEntity1222Repository repository, MyEntity1223Repository repository123) {
 		super(MyExample1222DTO.class, MyEntity1222.class, null, MyExample1222Meta.class);
 		this.repository = repository;
+		this.repository123 = repository123;
 	}
 	@Override
 	protected Specification<MyEntity1222> getParentSpecification(BusinessComponent bc) {
@@ -30,6 +34,8 @@ public class MyExample1222Service extends VersionAwareResponseService<MyExample1
 
 	@Override
 	protected CreateResult<MyExample1222DTO> doCreateEntity(MyEntity1222 entity, BusinessComponent bc) {
+		MyEntity1223 myEntity1223 = repository123.findById(bc.getParentIdAsLong()).orElse(null);
+		entity.setCustomFieldEntity(myEntity1223);
 		repository.save(entity);
 		return new CreateResult<>(entityToDto(bc, entity));
 	}

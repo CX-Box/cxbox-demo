@@ -127,6 +127,9 @@ minio:
     name: ${MINIO_DEFAULT_BUCKETS:edcs3gnsadevb}
 
 management:
+  health:
+    jms:
+      enabled: false
   endpoint:
     metrics:
       enabled: true

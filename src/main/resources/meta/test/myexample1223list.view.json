@@ -15,13 +15,28 @@
       "gridWidth": 12
     },
     {
+      "widgetName": "MyExample1225Form",
+      "position": 41,
+      "gridWidth": 12
+    },
+    {
       "widgetName": "MyExample1222List",
+      "position": 25,
+      "gridWidth": 12
+    },
+    {
+      "widgetName": "MyExample1222Form",
       "position": 30,
       "gridWidth": 12
     },
     {
       "widgetName": "MyExample1224List",
       "position": 50,
+      "gridWidth": 12
+    },
+    {
+      "widgetName": "MyExample1224Form",
+      "position": 55,
       "gridWidth": 12
     }
   ],

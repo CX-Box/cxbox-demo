@@ -1,0 +1,30 @@
+{
+  "name": "MyExample1225Form",
+  "title": "Form bc 1225 parent 1223",
+  "type": "Form",
+  "bc": "myexample1225",
+  "fields": [
+    {
+      "label": "customField",
+      "key": "customField",
+      "type": "input"
+    }
+  ],
+  "options": {
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "customField",
+              "span": 12
+            }
+          ]
+        }
+      ]
+    },
+    "actionGroups": {
+    }
+  }
+}
+

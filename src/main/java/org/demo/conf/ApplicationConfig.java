@@ -64,13 +64,13 @@ public class ApplicationConfig {
 
 			@Override
 			public void configureAsyncSupport(@NonNull AsyncSupportConfigurer configurer) {
-				configurer.setTaskExecutor(getTaskExecutor());
+				configurer.setTaskExecutor(taskExecutor());
 			}
 		};
 	}
 
 	@Bean
-	protected ConcurrentTaskExecutor getTaskExecutor() {
+	protected ConcurrentTaskExecutor taskExecutor() {
 		return new ConcurrentTaskExecutor(Executors.newFixedThreadPool(5));
 	}
 

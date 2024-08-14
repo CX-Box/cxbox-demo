@@ -13,7 +13,7 @@ public class DadataClient {
 	private final RestTemplate restTemplate;
 
 	public PartySuggestionRs getPartySuggestion(PartySuggestionRq rqDto) {
-		var responseEntity = restTemplate.postForEntity("/party", rqDto, PartySuggestionRs.class);
+		var responseEntity = restTemplate.postForEntity("/suggest/party", rqDto, PartySuggestionRs.class);
 		return responseEntity.getBody();
 	}
 

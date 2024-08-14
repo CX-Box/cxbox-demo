@@ -34,8 +34,10 @@ cxbox:
       include-packages: org.cxbox.meta, org.demo.conf.cxbox
   api:
     path: /api/v1
+    use-servlet-context-path: false
   ui:
     path: /ui
+    use-servlet-context-path: false
 
 server:
   port: 8080

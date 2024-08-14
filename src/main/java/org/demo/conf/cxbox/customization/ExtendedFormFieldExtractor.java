@@ -38,9 +38,4 @@ public class ExtendedFormFieldExtractor extends DemoBaseFieldExtractor {
 		);
 	}
 
-	@Override
-	public int getPriority() {
-		return Integer.MAX_VALUE;
-	}
-
 }

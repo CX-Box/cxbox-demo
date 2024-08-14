@@ -28,7 +28,7 @@ public abstract class DemoBaseFieldExtractor implements FieldExtractor {
 
 	private final LinkFieldExtractor linkFieldExtractor;
 
-	private static Set<String> PICKLIST_TYPES = Set.of(
+	private static final Set<String> PICKLIST_TYPES = Set.of(
 			"pickList",
 			"inline-pickList",
 			"suggestionPickList"
@@ -37,14 +37,12 @@ public abstract class DemoBaseFieldExtractor implements FieldExtractor {
 	protected Set<BcField> extract(final WidgetDTO widget, final FieldMeta fieldMeta) {
 		final Set<BcField> widgetFields = new HashSet<>();
 		final Set<BcField> pickListFields = new HashSet<>();
-		if (fieldMeta instanceof FieldMeta.FieldContainer) {
-			final FieldMeta.FieldContainer fieldContainer = (FieldMeta.FieldContainer) fieldMeta;
+		if (fieldMeta instanceof FieldMeta.FieldContainer fieldContainer) {
 			for (final FieldMeta child : fieldContainer.getChildren()) {
 				widgetFields.addAll(extract(widget, child));
 			}
 		}
-		if (fieldMeta instanceof FieldMeta.FieldMetaBase) {
-			final FieldMeta.FieldMetaBase fieldMetaBase = (FieldMeta.FieldMetaBase) fieldMeta;
+		if (fieldMeta instanceof FieldMeta.FieldMetaBase fieldMetaBase) {
 			for (final PickListField pickList : getPickLists(fieldMetaBase)) {
 				if (pickList.getPickMap() != null) {
 					for (final Entry<String, String> entry : pickList.getPickMap().entrySet()) {

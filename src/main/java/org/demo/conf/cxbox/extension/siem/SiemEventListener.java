@@ -1,7 +1,5 @@
 package org.demo.conf.cxbox.extension.siem;
 
-import static com.google.common.net.HttpHeaders.X_FORWARDED_FOR;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Nullable;
 
@@ -56,7 +54,7 @@ public class SiemEventListener implements ApplicationListener<CrudmaEvent<?>> {
 	private String getUserIp() {
 		if (RequestContextHolder.getRequestAttributes() instanceof ServletRequestAttributes attributes) {
 			var rq = attributes.getRequest();
-			return Optional.ofNullable(rq.getHeader(X_FORWARDED_FOR))
+			return Optional.ofNullable(rq.getHeader("X-Forwarded-For"))
 					.filter(ip -> !ip.isBlank() && ip.matches(IP_REGEX))
 					.orElse(rq.getRemoteAddr());
 		}

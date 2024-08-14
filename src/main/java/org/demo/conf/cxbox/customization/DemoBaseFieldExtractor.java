@@ -2,7 +2,6 @@ package org.demo.conf.cxbox.customization;
 
 import static org.cxbox.api.util.i18n.LocalizationFormatter.i18n;
 
-import com.google.common.collect.ImmutableSet;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -29,7 +28,7 @@ public abstract class DemoBaseFieldExtractor implements FieldExtractor {
 
 	private final LinkFieldExtractor linkFieldExtractor;
 
-	private static Set<String> PICKLIST_TYPES = ImmutableSet.of(
+	private static Set<String> PICKLIST_TYPES = Set.of(
 			"pickList",
 			"inline-pickList",
 			"suggestionPickList"

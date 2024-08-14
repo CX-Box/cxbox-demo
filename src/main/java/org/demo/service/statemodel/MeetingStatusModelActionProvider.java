@@ -1,7 +1,7 @@
 package org.demo.service.statemodel;
 
-import com.google.common.collect.ImmutableMap;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.cxbox.core.dto.DrillDownType;
@@ -72,7 +72,7 @@ public class MeetingStatusModelActionProvider {
 						})
 						.withPreAction(PreAction.builder().preActionType(PreActionType.CONFIRMATION)
 								.message("Do You confirm the action on the meeting?")
-								.customParameters(ImmutableMap.of("okText", status.getButton(), "cancelText", "Back to meeting list"))
+								.customParameters(Map.of("okText", status.getButton(), "cancelText", "Back to meeting list"))
 								.build())
 						.scope(ActionScope.RECORD)
 						.add());

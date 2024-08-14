@@ -38,13 +38,11 @@ public class MyEntity1223TestDataLoadService {
 		repository.deleteAll();
 		repository2.deleteAll();
 		repository3.deleteAll();
+		repository.save(new MyEntity1223().setCustomField("parent 3"));
 		MyEntity1223 ent1  =	new MyEntity1223().setCustomField("parent 1");
 		repository.save(ent1);
 		MyEntity1223 ent2  =	new MyEntity1223().setCustomField("parent 2");
 		repository.save(ent2);
-		repository.save(new MyEntity1223().setCustomField("parent 3"));
-
-
 
 		MyEntity1222 ent122  =	new MyEntity1222().setCustomField("child 1[0]");
 		MyEntity1222 ent123  =	new MyEntity1222().setCustomField("child 1[1]");
@@ -52,7 +50,8 @@ public class MyEntity1223TestDataLoadService {
 		repository3.save(ent122).setCustomFieldEntity(ent1);
 		repository3.save(ent123).setCustomFieldEntity(ent1);
 		repository3.save(ent124).setCustomFieldEntity(ent2);
-		repository3.save(new MyEntity1222().setCustomField("child 2[1]").setCustomFieldEntity(ent2));
+		MyEntity1222 myEntity1222 = new MyEntity1222().setCustomField("child 2[1]").setCustomFieldEntity(ent2);
+		repository3.save(myEntity1222);
 
 		repository2.save(new MyEntity1224().setCustomField("child 1[2]").setCustomFieldEntity(ent122));
 		repository2.save(new MyEntity1224().setCustomField("child 1[0.0]").setCustomFieldEntity(ent122));
@@ -60,7 +59,7 @@ public class MyEntity1223TestDataLoadService {
 		repository2.save(new MyEntity1224().setCustomField("child 1[1.0]").setCustomFieldEntity(ent123));
 		repository2.save(new MyEntity1224().setCustomField("child 1[1.1]").setCustomFieldEntity(ent123));
 
-		repository2.save(new MyEntity1224().setCustomField("child 2[0.0]").setCustomFieldEntity(ent124));
+		repository2.save(new MyEntity1224().setCustomField("child 2[0.0]").setCustomFieldEntity(myEntity1222));
 
 		repository4.deleteAll();
 		repository4.save(new MyEntity1225().setCustomField("child 1[3]").setCustomFieldEntity(ent1));

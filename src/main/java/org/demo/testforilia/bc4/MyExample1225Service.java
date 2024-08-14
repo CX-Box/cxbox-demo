@@ -5,6 +5,9 @@ import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.cxbox.core.service.action.Actions;
+import org.cxbox.model.core.entity.BaseEntity_;
+
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,7 +19,14 @@ public class MyExample1225Service extends VersionAwareResponseService<MyExample1
 		super(MyExample1225DTO.class, MyEntity1225.class, null, MyExample1225Meta.class);
 		this.repository = repository;
 	}
+	@Override
+	protected Specification<MyEntity1225> getParentSpecification(BusinessComponent bc) {
+		return (root, cq, cb) -> cb.and(
+				super.getParentSpecification(bc).toPredicate(root, cq, cb),
+				cb.equal(root.get(MyEntity1225_.customFieldEntity).get(BaseEntity_.id), bc.getParentIdAsLong())
+		);
 
+	}
 	@Override
 	protected CreateResult<MyExample1225DTO> doCreateEntity(MyEntity1225 entity, BusinessComponent bc) {
 		repository.save(entity);

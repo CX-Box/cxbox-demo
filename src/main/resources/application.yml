@@ -1,5 +1,4 @@
 app:
-  ui-path: /ui
   auth-basic:
     enabled: ${AUTH_BASIC_ENABLED:false}
   oidc:
@@ -20,7 +19,6 @@ app:
     port: ${ACTIVEMQ_PORT:61616}
   integrations:
     lov-server-url: ${LOV_SERVER_URL:http://localhost:8080/rest/api/v1/lov}
-
 
 cxbox:
   bean:
@@ -120,10 +118,6 @@ token:
     principal-attribute: preferred_username
     resource-id: cxbox-oidc-client
 
-springdoc:
-  packages-to-scan: org.demo
-  show-actuator: true
-
 minio:
   access:
     name: ${MINIO_ACCESS_KEY:4eb6a7db8b58994ea61b}
@@ -133,6 +127,9 @@ minio:
     name: ${MINIO_DEFAULT_BUCKETS:edcs3gnsadevb}
 
 management:
+  health:
+    jms:
+      enabled: false
   endpoint:
     metrics:
       enabled: true
@@ -147,11 +144,6 @@ dadata:
     token: ${DADATA_API_KEY:885218b4321600b90d4161c85bc11766cd6810c1}
     base-url: ${DADATA_URL:https://suggestions.dadata.ru/suggestions/api/4_1/rs/}
 
-decorator:
-  datasource:
-    datasource-proxy:
-      query:
-        enable-logging: true
 org:
   jobrunr:
     background-job-server:

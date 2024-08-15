@@ -10,53 +10,31 @@
   <parent>
     <groupId>org.cxbox</groupId>
     <artifactId>cxbox-starter-parent</artifactId>
-    <version>4.0.0-M4</version>
+    <version>4.0.0-M5</version> <!--based on spring-boot 3.2.5-->
   </parent>
 
   <properties>
     <checktyle.config>src/main/resources/checkstyle-checker.xml</checktyle.config>
     <java.version>17</java.version>
-    <mapstruct.version>1.5.5.Final</mapstruct.version>
+    <!-- override org.springframework.boot/spring-boot-dependencies properties here-->
+
     <!-- dependencies versions -->
-    <minio.version>8.3.0</minio.version>
-    <guava.version>32.1.1-jre</guava.version>
+    <jobrunr-spring-boot-3-starter.version>7.1.1</jobrunr-spring-boot-3-starter.version> <!--based on spring-boot 3.2.5, e.g. synced to cxbox-starter-parent-->
+    <minio.version>8.5.10</minio.version>
+    <postgresql.version>42.6.1</postgresql.version>
   </properties>
 
+  <repositories>
+    <repository>
+      <id>snapshots-repo</id>
+      <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+      <releases/>
+      <snapshots/>
+    </repository>
+  </repositories>
+
   <dependencies>
-    <dependency>
-      <groupId>org.jobrunr</groupId>
-      <artifactId>jobrunr-spring-boot-3-starter</artifactId>
-      <version>7.0.0</version>
-    </dependency>
-    <dependency>
-      <groupId>com.github.gavlyukovskiy</groupId>
-      <artifactId>datasource-proxy-spring-boot-starter</artifactId>
-      <version>1.9.1</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-activemq</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-reactor-netty</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-actuator</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-mail</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-websocket</artifactId>
-    </dependency>
+    <!--spring-boot-starter's-->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-configuration-processor</artifactId>
@@ -79,42 +57,64 @@
       <artifactId>spring-boot-starter-oauth2-client</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.github.kuliginstepan</groupId>
-      <artifactId>dadata-client</artifactId>
-      <version>4.0.0</version>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-mail</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-activemq</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-websocket</artifactId>
     </dependency>
 
+    <!--third party starter's-->
+    <dependency>
+      <groupId>org.jobrunr</groupId>
+      <artifactId>jobrunr-spring-boot-3-starter</artifactId>
+      <version>${jobrunr-spring-boot-3-starter.version}</version>
+    </dependency>
+
+    <!--managed by org.springframework.boot/spring-boot-dependencies dependencies-->
+    <dependency>
+      <groupId>org.liquibase</groupId>
+      <artifactId>liquibase-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <!--third party dependencies-->
     <dependency>
       <groupId>io.minio</groupId>
       <artifactId>minio</artifactId>
       <version>${minio.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.springdoc</groupId>
-      <artifactId>springdoc-openapi-ui</artifactId>
-      <version>1.5.13</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.liquibase</groupId>
-      <artifactId>liquibase-core</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
-      <version>42.6.1</version>
+      <version>${postgresql.version}</version>
     </dependency>
+
     <!--see README_DB.MD
     <dependency>
       <groupId>com.oracle.database.jdbc</groupId>
       <artifactId>ojdbc10</artifactId>
       <version>19.21.0.0</version>
     </dependency>-->
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <scope>provided</scope>
-    </dependency>
+
+    <!--cxbox dependencies-->
     <dependency>
       <groupId>org.cxbox</groupId>
       <artifactId>cxbox-model-core</artifactId>
@@ -122,8 +122,6 @@
     <dependency>
       <groupId>org.cxbox</groupId>
       <artifactId>cxbox-starter-meta</artifactId>
-      <version>4.0.0-M4</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.cxbox</groupId>
@@ -134,24 +132,13 @@
       <artifactId>cxbox-dictionary-all</artifactId>
     </dependency>
 
-    <!-- Test -->
+    <!--test dependencies-->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
     </dependency>
 
-    <dependency>
-      <groupId>org.mapstruct</groupId>
-      <artifactId>mapstruct</artifactId>
-      <version>${mapstruct.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.mapstruct</groupId>
-      <artifactId>mapstruct-processor</artifactId>
-      <version>${mapstruct.version}</version>
-    </dependency>
   </dependencies>
 
   <build>
@@ -176,7 +163,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>3.3.0</version>
+        <version>3.3.1</version>
         <configuration>
           <configLocation>src/main/resources/checkstyle-checker.xml</configLocation>
           <inputEncoding>UTF-8</inputEncoding>
@@ -255,7 +242,7 @@
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>exec-maven-plugin</artifactId>
-            <version>1.6.0</version>
+            <version>3.1.1</version>
             <executions>
               <execution>
                 <id>exec-npm-install</id>
@@ -297,7 +284,7 @@
           <plugin>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
-            <version>0.8.10</version>
+            <version>0.8.11</version>
             <executions>
               <execution>
                 <id>prepare-agent</id>

@@ -8,7 +8,9 @@
     </encoder>
   </appender>
 
-  <logger name="net.ttddyy.dsproxy.listener" level="DEBUG"/>
+  <logger name="org.springframework.context.support.ResourceBundleMessageSource" level="OFF"/>
+  <logger name="org.cxbox.api.util.i18n.ErrorMessageSource" level="OFF"/>
+  <logger name="org.cxbox.api.util.i18n.InfoMessageSource" level="OFF"/>
 
   <root level="INFO">
     <appender-ref ref="STDOUT"/>

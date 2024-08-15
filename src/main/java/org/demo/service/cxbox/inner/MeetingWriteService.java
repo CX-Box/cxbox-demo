@@ -1,5 +1,6 @@
 package org.demo.service.cxbox.inner;
 
+import static org.demo.dto.cxbox.RegionDictionaryType.REGIONS;
 import static org.demo.dto.cxbox.inner.MeetingDTO_.address;
 import static org.demo.dto.cxbox.inner.MeetingDTO_.agenda;
 import static org.demo.dto.cxbox.inner.MeetingDTO_.clientId;
@@ -9,6 +10,7 @@ import static org.demo.dto.cxbox.inner.MeetingDTO_.notes;
 import static org.demo.dto.cxbox.inner.MeetingDTO_.responsibleId;
 import static org.demo.dto.cxbox.inner.MeetingDTO_.result;
 import static org.demo.dto.cxbox.inner.MeetingDTO_.startDateTime;
+import static org.demo.dto.cxbox.inner.MeetingDTO_.region;
 
 import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
@@ -16,6 +18,7 @@ import java.util.Objects;
 import java.util.Optional;
 import lombok.NonNull;
 import lombok.val;
+import org.apache.commons.lang3.StringUtils;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.DrillDownType;
@@ -106,6 +109,11 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 		setIfChanged(data, agenda, entity::setAgenda);
 		setIfChanged(data, startDateTime, entity::setStartDateTime);
 		setIfChanged(data, endDateTime, entity::setEndDateTime);
+		setMappedIfChanged(data, region, entity::setRegion, val ->
+			Optional.ofNullable(StringUtils.defaultIfBlank(val, null))
+					.map(e -> REGIONS.lookupName(val))
+					.orElse(null)
+		);
 		setIfChanged(data, address, entity::setAddress);
 		setIfChanged(data, notes, entity::setNotes);
 		setIfChanged(data, result, entity::setResult);

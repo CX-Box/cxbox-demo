@@ -22,13 +22,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
-//TODO move Transactional to impl-service
 @Transactional
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/rest/api/v1/lov")
-public class LovController /*implements QueryLanguageController<DictDTO, Long>*/ {
+public class LovController {
 
 	private final LovDataRepository lovDataRepository;
 
@@ -36,14 +34,12 @@ public class LovController /*implements QueryLanguageController<DictDTO, Long>*/
 
 	private final InternalAuthorizationService authzService;
 
-	//	@Override
 	@GetMapping("/{id}")
 	public ResponseEntity<DictDTO> getOne(@PathVariable final Long id) {
 		authzService.loginAs(authzService.createAuthentication(VANILLA));
 		return ResponseEntity.ok().body(lovDataRepository.findById(id).map(lovMapper::toDto).orElse(null));
 	}
 
-	//	@Override
 	@GetMapping
 	public ResponseEntity<Page<DictDTO>> getAll(final Pageable pageable,
 			final FilterParameters<DictDTO> parameters) {
@@ -53,11 +49,9 @@ public class LovController /*implements QueryLanguageController<DictDTO, Long>*/
 		return ResponseEntity.ok().body(lovDataRepository.findAll(specification, entityPageable).map(lovMapper::toDto));
 	}
 
-	//	@Override
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> delete(@PathVariable final Long id) {
 		authzService.loginAs(authzService.createAuthentication(VANILLA));
-		//TODO проверка на то, что справочник деактивирован
 		lovDataRepository.deleteById(id);
 		return ResponseEntity.ok().build();
 	}
@@ -66,7 +60,6 @@ public class LovController /*implements QueryLanguageController<DictDTO, Long>*/
 	 * @param request (id must be empty)
 	 * @return dto with filled id and optionally updated fields (accordingly to business logic)
 	 */
-	//	@Override
 	@PostMapping
 	public ResponseEntity<DictDTO> create(@RequestBody final DictDTO request) {
 		authzService.loginAs(authzService.createAuthentication(VANILLA));
@@ -80,14 +73,12 @@ public class LovController /*implements QueryLanguageController<DictDTO, Long>*/
 	 * @param request (id mustn't be empty)
 	 * @return dto with filled id and optionally updated fields (accordingly to business logic)
 	 */
-	//	@Override
 	@PutMapping
 	public ResponseEntity<DictDTO> update(@RequestBody final DictDTO request) {
 		authzService.loginAs(authzService.createAuthentication(VANILLA));
 		if (request.getId() == null) {
 			throw new IllegalArgumentException("Id mustn't be null for update process");
 		}
-		//TODO id convert long
 		final ListOfValues entity = lovMapper.updateEntityByDto(
 				lovDataRepository.findById(Long.valueOf(request.getId())).orElseThrow(),
 				request

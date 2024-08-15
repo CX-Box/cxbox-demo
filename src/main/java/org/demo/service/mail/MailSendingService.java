@@ -80,7 +80,7 @@ public class MailSendingService {
 
 		notificationService.sendAndSave(SocketNotificationDTO.builder()
 				.title(mailSend ? "Successful" : "Error")
-				.text(mailSend ? "Email sent to " + mailTo.orElse("") : "Email don't sent " + mailTo.orElse(""))
+				.text(mailSend ? "Email sent to " + mailTo.orElse("") : "Email was not sent to " + mailTo.orElse(""))
 				.drillDownType(DrillDownType.EXTERNAL_NEW.getValue())
 				.drillDownLabel(link)
 				.drillDownLink(HTTP + link)

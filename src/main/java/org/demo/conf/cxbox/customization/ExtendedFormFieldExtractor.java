@@ -2,7 +2,6 @@ package org.demo.conf.cxbox.customization;
 
 import static org.cxbox.api.util.i18n.LocalizationFormatter.i18n;
 
-import com.google.common.collect.ImmutableList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -34,14 +33,9 @@ public class ExtendedFormFieldExtractor extends DemoBaseFieldExtractor {
 
 	@Override
 	public List<String> getSupportedTypes() {
-		return ImmutableList.of(
+		return List.of(
 				"Form"
 		);
-	}
-
-	@Override
-	public int getPriority() {
-		return Integer.MAX_VALUE;
 	}
 
 }

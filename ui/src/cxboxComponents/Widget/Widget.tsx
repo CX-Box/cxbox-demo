@@ -8,7 +8,6 @@ import styles from './Widget.less'
 import AssocListPopup from '@cxboxComponents/widgets/AssocListPopup/AssocListPopup'
 import PickListPopup from '@cxboxComponents/widgets/PickListPopup/PickListPopup'
 import DebugPanel from '@cxboxComponents/DebugPanel/DebugPanel'
-import NavigationTabsWidget from '@cxboxComponents/widgets/NavigationTabsWidget/NavigationTabsWidget'
 import { WidgetTypes, interfaces, utils } from '@cxbox-ui/core'
 import { RootState } from '@store'
 import { WidgetShowCondition } from '@cxbox-ui/schema'
@@ -166,8 +165,6 @@ function chooseWidgetType(
             return <PickListPopup widget={knownWidgetMeta} />
         case WidgetTypes.Info:
             return <InfoWidget meta={knownWidgetMeta} />
-        case WidgetTypes.NavigationTabs:
-            return <NavigationTabsWidget meta={knownWidgetMeta} />
         default:
             return children
     }

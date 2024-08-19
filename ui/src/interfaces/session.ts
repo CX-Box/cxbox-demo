@@ -21,7 +21,10 @@ export interface SessionScreen extends interfaces.SessionScreen {
     meta?: ScreenMetaResponse
 }
 
+export type NavigationTypes = 'standard'
+
 export interface ScreenMetaResponse extends interfaces.ScreenMetaResponse {
+    navigation?: interfaces.ScreenMetaResponse['navigation'] & { type?: NavigationTypes }
     views: ViewMetaResponse[]
 }
 

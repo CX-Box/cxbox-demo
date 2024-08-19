@@ -1,41 +1,24 @@
 import React from 'react'
-import { Tabs } from 'antd'
-import styles from './ViewNavigation.less'
-import { useViewTabs } from './ViewNavigation.hooks'
 import { TabsProps } from 'antd/es/tabs'
-import cn from 'classnames'
+import { StandardViewNavigation } from '@components/ViewNavigation/tab/standard/StandardViewNavigation'
+import { useNavigationType } from '@hooks/useNavigationType'
+import { ImplementedError } from '@components/ViewNavigation/ui/ImplementedError'
 
 interface ViewNavigationProps extends Pick<TabsProps, 'type'> {
     depth?: number
 }
 
-export function ViewNavigation({ depth = 1, type = 'card' }: ViewNavigationProps) {
-    const { tabs, handleChange, activeKey } = useViewTabs(depth)
+export function ViewNavigation({ depth = 1, type: uiType }: ViewNavigationProps) {
+    const navigationType = useNavigationType()
+
+    if (navigationType === 'standard') {
+        return <StandardViewNavigation depth={depth} type={uiType} />
+    }
 
     return (
-        <nav className={cn(styles.container, styles[type])}>
-            <Tabs
-                data-test-widget-tabs={true}
-                data-test-widget-tabs-depth={depth}
-                activeKey={activeKey}
-                tabBarGutter={24}
-                onChange={handleChange}
-                type={type}
-            >
-                {tabs
-                    .filter(item => item.title !== undefined)
-                    .map(tab => (
-                        <Tabs.TabPane
-                            key={tab.url}
-                            tab={
-                                <span className={styles.item} data-test-navigation-tabs-item={true}>
-                                    {tab.title}
-                                </span>
-                            }
-                        />
-                    ))}
-            </Tabs>
-        </nav>
+        <ImplementedError text={`Navigation with type ${navigationType} not implemented`}>
+            <StandardViewNavigation depth={depth} type={uiType} />
+        </ImplementedError>
     )
 }
 

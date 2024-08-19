@@ -25,7 +25,6 @@ export { default as SearchHighlight } from '@cxboxComponents/ui/SearchHightlight
 export { default as FilterField } from '@cxboxComponents/ui/FilterField/FilterField'
 export { RowOperationsMenu } from './RowOperations/RowOperationsMenu'
 export { default as RowOperationsButton } from './RowOperations/RowOperationsButton'
-export { default as NavigationTabs } from '@cxboxComponents/ui/NavigationTabs/NavigationTabs'
 
 // Containers
 export { default as TemplatedTitle } from './TemplatedTitle/TemplatedTitle'
@@ -39,8 +38,6 @@ export { default as FormWidget } from './widgets/FormWidget/FormWidget'
 export { default as TableWidget } from './widgets/TableWidget/TableWidget'
 export { default as AssocListPopup } from './widgets/AssocListPopup/AssocListPopup'
 export { default as PickListPopup } from './widgets/PickListPopup/PickListPopup'
-export { default as ViewNavigationWidget } from './widgets/ViewNavigationWidget/ViewNavigationWidget'
-export { default as NavigationTabsWidget } from './widgets/NavigationTabsWidget/NavigationTabsWidget'
 // Developer
 export { default as DevToolsPanel } from './DevToolsPanel/DevToolsPanel'
 export { default as WidgetErrorBoundary } from './WidgetErrorBoundary/WidgetErrorBoundary'

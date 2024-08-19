@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import styles from './FileUpload.less'
-import { Icon, Upload } from 'antd'
+import { Icon } from 'antd'
 import { UploadFile } from 'antd/es/upload/interface'
 import cn from 'classnames'
 import { ChangeDataItemPayload } from '@cxboxComponents/Field/Field'
@@ -11,6 +11,7 @@ import { actions, interfaces } from '@cxbox-ui/core'
 import { applyParams, getFileUploadEndpoint } from '@utils/api'
 import { useTranslation } from 'react-i18next'
 import { buildBcUrl } from '@utils/buildBcUrl'
+import Upload from '@components/Upload'
 
 export interface FileUploadOwnProps {
     fieldName: string

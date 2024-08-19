@@ -1,5 +1,5 @@
 import React, { DragEventHandler, ReactNode, useCallback } from 'react'
-import { Icon, Upload } from 'antd'
+import { Icon } from 'antd'
 import styles from './FileUpload.less'
 import { getFileUploadEndpoint } from '@utils/api'
 import { useTranslation } from 'react-i18next'
@@ -18,6 +18,7 @@ import { useAppSelector } from '@store'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import { RowMetaField } from '@interfaces/rowMeta'
 import { UPLOAD_TYPE } from '@components/Operations/components/FileUpload/FileUpload.constants'
+import Upload from '@components/Upload'
 
 interface FileUploadProps {
     widget: WidgetMeta

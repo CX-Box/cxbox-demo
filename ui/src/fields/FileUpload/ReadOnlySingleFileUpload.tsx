@@ -3,6 +3,8 @@ import cn from 'classnames'
 import styles from './FileUpload.less'
 import FileIcon from './FileIconContainer'
 import { trimString } from '@utils/fileViewer'
+import { CxBoxApiInstance } from '../../api'
+import Button from '@components/ui/Button/Button'
 
 export interface ReadOnlySingleFileUploadProps {
     mode?: 'default' | 'snapshot'
@@ -25,6 +27,14 @@ function ReadOnlySingleFileUpload({
 }: ReadOnlySingleFileUploadProps) {
     const smartIcon = <FileIcon fileName={fileName} onFileIconClick={onFileIconClick} />
 
+    const handleDownload = () => {
+        downloadUrl && CxBoxApiInstance.saveBlob(downloadUrl, fileName)
+    }
+
+    const handleDiffDownload = () => {
+        diffDownloadUrl && CxBoxApiInstance.saveBlob(diffDownloadUrl, diffFileName)
+    }
+
     if (mode === 'snapshot') {
         if ((diffDownloadUrl || downloadUrl) && diffDownloadUrl !== downloadUrl) {
             return (
@@ -34,18 +44,18 @@ function ReadOnlySingleFileUpload({
                         {diffDownloadUrl && (
                             <div>
                                 <span className={cn(styles.viewLink, styles.prevValue)}>
-                                    <a href={diffDownloadUrl}>
+                                    <Button type="link" removeIndentation={true} onClick={handleDiffDownload}>
                                         <span>{trimString(diffFileName)}</span>
-                                    </a>
+                                    </Button>
                                 </span>
                             </div>
                         )}
                         {downloadUrl && (
                             <div>
                                 <span className={cn(styles.viewLink, styles.newValue)}>
-                                    <a href={downloadUrl}>
+                                    <Button type="link" removeIndentation={true} onClick={handleDownload}>
                                         <span>{trimString(fileName)}</span>
-                                    </a>
+                                    </Button>
                                 </span>
                             </div>
                         )}
@@ -58,13 +68,9 @@ function ReadOnlySingleFileUpload({
     return (
         <div className={styles.root}>
             {smartIcon}
-            <span className={styles.viewLink}>
-                {downloadUrl && (
-                    <a href={downloadUrl} download={true}>
-                        <span>{trimString(fileName)}</span>
-                    </a>
-                )}
-            </span>
+            <Button type="link" removeIndentation={true} onClick={handleDownload}>
+                <span className={styles.viewLink}>{downloadUrl && <span>{trimString(fileName)}</span>}</span>
+            </Button>
         </div>
     )
 }

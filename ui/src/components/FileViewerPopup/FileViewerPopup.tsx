@@ -13,13 +13,13 @@ import { useDispatch } from 'react-redux'
 import { FileViewerPopupOptions, PopupData } from '@interfaces/view'
 import { WidgetField } from '@cxbox-ui/schema'
 import { applyParams, getFileUploadEndpoint } from '@utils/api'
-import { saveAs } from 'file-saver'
 import FullscreenFileViewer from '@components/FileViewerPopup/FullscreenFileViewer'
 import { useWindowSize } from '@hooks/useWindowSize'
 import { useVisibility } from '@components/widgets/Table/hooks/useVisibility'
 import { trimString } from '@utils/fileViewer'
 import { FileUploadFieldMeta } from '@interfaces/widget'
 import { useTranslation } from 'react-i18next'
+import { CxBoxApiInstance } from '../../api'
 
 const POPUP_WIDTH = 808
 const VIEWER_WIDTH = 760
@@ -73,7 +73,7 @@ function FileViewerPopup() {
     }
 
     const handleDownload = () => {
-        downloadUrl && saveAs(downloadUrl)
+        downloadUrl && CxBoxApiInstance.saveBlob(downloadUrl, fileName)
     }
 
     return (

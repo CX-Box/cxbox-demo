@@ -20,10 +20,18 @@ export interface ButtonProps extends Omit<AntdButtonProps, 'type'> {
     type?: ButtonsTypes | string
     letterCase?: 'upper'
     strong?: boolean
+    removeIndentation?: boolean
 }
 
-function Button({ type = 'customDefault', className, letterCase, strong, ...restProps }: ButtonProps) {
-    const classNames = cn(styles.root, className, type && styles[type], letterCase && styles[letterCase], strong && styles.strong)
+function Button({ type = 'customDefault', className, letterCase, strong, removeIndentation, ...restProps }: ButtonProps) {
+    const classNames = cn(
+        styles.root,
+        className,
+        type && styles[type],
+        letterCase && styles[letterCase],
+        strong && styles.strong,
+        removeIndentation && styles.removeIndentation
+    )
     const normalizedType = normalizeButtonType(type)
 
     return <AntdButton className={classNames} type={normalizedType} {...restProps} />

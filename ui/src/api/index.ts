@@ -9,6 +9,7 @@ import { fileControllerMapping } from '@constants/notification'
 import { LoginResponse } from '@interfaces/session'
 import { TableSettingsItem } from '@interfaces/tableSettings'
 import { FilterGroup } from '@interfaces/filters'
+import { saveAs } from 'file-saver'
 
 class Api extends CXBoxApi {
     fetchBcCount(screenName: string, bcName: string, params: BcCountParamsMap = {}) {
@@ -127,6 +128,19 @@ class Api extends CXBoxApi {
 
     deleteFilterGroup(filterGroupId: number) {
         return this.api$.delete<{ data: unknown }>(`personalFilterGroups`, { data: [filterGroupId] } as AxiosRequestConfig)
+    }
+
+    getBlob(url: string) {
+        return this.api$.instance.get(url, { responseType: 'blob', baseURL: '' })
+    }
+
+    async saveBlob(url: string, filename?: string) {
+        let response = await this.getBlob(url)
+        const disposition = response.request.getResponseHeader('content-disposition')
+        // TODO add parser for disposition
+        saveAs(response.data, filename ?? disposition)
+
+        return response
     }
 }
 

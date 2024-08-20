@@ -1,5 +1,4 @@
 import React from 'react'
-import { useTranslation } from 'react-i18next'
 import styles from './Empty.less'
 import FileIcon, { FileIconProps } from '@components/FileViewer/FileIcon/FileIcon'
 import cn from 'classnames'

@@ -6,6 +6,7 @@ import { actions, processPreInvoke, sendOperationSuccess, showViewPopup } from '
 import { RootEpic } from '@store'
 import { isAnyOf } from '@reduxjs/toolkit'
 import { getRouteFromString } from '@router'
+import { getDefaultVisibleViews } from '@components/ViewNavigation/tab/standard/utils/getDefaultVisibleViews'
 
 const findFormPopupWidget = (operationType: string, widgets: interfaces.WidgetMeta[], calleeBcName: string, widgetName?: string) => {
     const formPopupWidget = widgetName
@@ -131,9 +132,47 @@ const deleteFilterGroupEpic: RootEpic = (action$, state$, { api }) =>
         })
     )
 
+// TODO move the modification to the kernel
+export const selectScreen: RootEpic = (action$, state$) =>
+    action$.pipe(
+        filter(actions.selectScreen.match),
+        switchMap(action => {
+            const state = state$.value
+            const nextViewName = state.router.viewName
+            const requestedView = state.screen.views.find(item => item.name === nextViewName)
+            const defaultView =
+                !nextViewName && state.screen.primaryView && state.screen.views.find(item => item.name === state.screen.primaryView)
+            let nextView = requestedView || defaultView
+
+            if (!nextView) {
+                const navigation = state.session.screens.find(screen => screen.name === state.screen.screenName)?.meta?.navigation
+                const navigationType = navigation?.type ?? 'standard'
+
+                if (navigationType === 'standard') {
+                    const visibleViews = getDefaultVisibleViews(navigation?.menu)
+
+                    nextView = state.screen.views.find(view => visibleViews?.includes(view.name))
+
+                    !nextView &&
+                        console.error(
+                            'Each tab navigation level must have at least one visible tab. e.g. menu/child array must have at least one element: "single view"(view without hidden=false flag) or "aggregate view" (title, child pair)'
+                        )
+
+                    nextView = nextView || state.screen.views[0]
+                } else {
+                    console.error(`Default view selection for navigation with type ${navigationType} not implemented`)
+                    nextView = state.screen.views[0]
+                }
+            }
+
+            return nextView ? of(actions.selectView(nextView)) : of(actions.selectViewFail({ viewName: nextViewName as string }))
+        })
+    )
+
 export const screenEpics = {
     replaceTemporaryIdOnSavingEpic,
     processPreInvokeConfirmEpic,
     addFilterGroupEpic,
-    deleteFilterGroupEpic
+    deleteFilterGroupEpic,
+    changeScreen: selectScreen
 }

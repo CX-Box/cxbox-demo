@@ -159,6 +159,9 @@ export const selectScreen: RootEpic = (action$, state$) =>
                         )
 
                     nextView = nextView || state.screen.views[0]
+                } else {
+                    console.error(`Default view selection for navigation with type ${navigationType} not implemented`)
+                    nextView = state.screen.views[0]
                 }
             }
 

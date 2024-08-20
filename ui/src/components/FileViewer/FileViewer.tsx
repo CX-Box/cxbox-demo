@@ -1,7 +1,6 @@
-import React, { CSSProperties, forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
+import React, { CSSProperties, forwardRef, useEffect, useImperativeHandle, useState } from 'react'
 import { fileViewerType, FileViewerType, getExtension } from '@utils/fileViewer'
 import cn from 'classnames'
-import { saveAs } from 'file-saver'
 import styles from './FileViewer.less'
 import { PdfViewer } from '@components/FileViewer/PdfViewer'
 import { DOCUMENT_PAGE_WIDTH } from '@components/FileViewer/PdfViewer/constants'

@@ -12,24 +12,20 @@ import org.cxbox.model.core.entity.BaseEntity_;
 import org.demo.conf.cxbox.extension.fulltextsearch.FullTextSearchExt;
 import org.demo.dto.cxbox.inner.ContactDTO;
 import org.demo.dto.cxbox.inner.ContactDTO_;
+import org.demo.dto.cxbox.inner.MeetingDTO_;
 import org.demo.entity.Client;
 import org.demo.entity.Contact;
 import org.demo.entity.Contact_;
-import org.demo.entity.Meeting;
 import org.demo.repository.ClientRepository;
 import org.demo.repository.ContactRepository;
-import org.demo.repository.MeetingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-@SuppressWarnings({"java:S3252","java:S1186"})
+@SuppressWarnings({"java:S3252", "java:S1186"})
 @Service
 public class ContactPickListService extends VersionAwareResponseService<ContactDTO, Contact> {
-
-	@Autowired
-	private MeetingRepository meetingRepository;
 
 	@Autowired
 	private ClientRepository clientRepository;
@@ -43,22 +39,23 @@ public class ContactPickListService extends VersionAwareResponseService<ContactD
 
 	@Override
 	protected Specification<Contact> getParentSpecification(BusinessComponent bc) {
-		Meeting meeting = meetingRepository.findById(bc.getParentIdAsLong()).orElseThrow();
+		Long clientId = getParentField(MeetingDTO_.clientId, bc);
 		Specification<Contact> specification = (root, cq, cb) -> cb.and(
 				super.getParentSpecification(bc).toPredicate(root, cq, cb),
 				cb.equal(
 						root.get(Contact_.client).get(BaseEntity_.id),
-						meeting.getClient() != null ? meeting.getClient().getId() : null
+						clientId
 				)
 		);
 		var fullTextSearchFilterParam = FullTextSearchExt.getFullTextSearchFilterParam(bc);
-		return fullTextSearchFilterParam.map(e -> and(contactRepository.getFullTextSearchSpecification(e), specification)).orElse(specification);
+		return fullTextSearchFilterParam.map(e -> and(contactRepository.getFullTextSearchSpecification(e), specification))
+				.orElse(specification);
 	}
 
 	@Override
 	protected CreateResult<ContactDTO> doCreateEntity(Contact entity, BusinessComponent bc) {
-		Meeting meeting = meetingRepository.getById(bc.getParentIdAsLong());
-		Client client = meeting.getClient();
+		Long clientId = getParentField(MeetingDTO_.clientId, bc);
+		Client client = clientRepository.getReferenceById(clientId);
 		entity.setClient(client);
 		contactRepository.save(entity);
 		ContactDTO contactDTO = entityToDto(bc, entity);

@@ -350,10 +350,61 @@ export const getRowMetaByForceActiveEpic: RootEpic = (action$, state$, { api }) 
         })
     )
 
+export const forceUpdateRowMeta: RootEpic = (action$, state$, { api }) =>
+    action$.pipe(
+        filter(actions.forceUpdateRowMeta.match),
+        mergeMap(action => {
+            const state = state$.value
+            const { bcName, onSuccessAction } = action.payload
+            const cursor = action.payload.cursor ?? (state.screen.bo.bc[bcName]?.cursor as string)
+            const bcUrl = buildBcUrl(bcName, true, state)
+            const pendingChanges = state.view.pendingDataChanges[bcName]?.[cursor]
+            const currentRecordData = state.data[bcName]?.find(record => record.id === cursor)
+
+            return concat(
+                api
+                    .getRmByForceActive(state.screen.screenName, bcUrl, {
+                        ...pendingChanges,
+                        vstamp: currentRecordData?.vstamp as number
+                    })
+                    .pipe(
+                        mergeMap(data => {
+                            return concat(
+                                of(
+                                    actions.forceActiveRmUpdate({
+                                        rowMeta: data,
+                                        currentRecordData: currentRecordData as DataItem,
+                                        bcName,
+                                        bcUrl,
+                                        cursor
+                                    })
+                                ),
+                                onSuccessAction
+                                    ? of({
+                                          ...onSuccessAction,
+                                          payload: {
+                                              ...onSuccessAction.payload,
+                                              wasForcedUpdate: true
+                                          }
+                                      })
+                                    : EMPTY
+                            )
+                        }),
+                        catchError((e: AxiosError) => {
+                            console.error(e)
+
+                            return concat(utils.createApiErrorObservable(e))
+                        })
+                    )
+            )
+        })
+    )
+
 export const viewEpics = {
     bcFetchCountEpic,
     sendOperationEpic,
     fileUploadConfirmEpic,
     bcDeleteDataEpic,
-    getRowMetaByForceActiveEpic
+    getRowMetaByForceActiveEpic,
+    forceUpdateRowMeta
 }

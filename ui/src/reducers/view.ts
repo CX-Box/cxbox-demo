@@ -1,6 +1,6 @@
 import { PendingValidationFailsFormat, reducers } from '@cxbox-ui/core'
 import { ViewState as CoreViewState } from '@interfaces/core'
-import { createReducer, isAnyOf } from '@reduxjs/toolkit'
+import { AnyAction, createReducer, isAnyOf } from '@reduxjs/toolkit'
 import { actions, partialUpdateRecordForm, resetRecordForm, setBcCount, setRecordForm, showViewPopup } from '@actions'
 import { PopupData } from '@interfaces/view'
 
@@ -11,11 +11,13 @@ interface ViewState extends Omit<CoreViewState, 'popupData'> {
         }
     }
     recordForm: {
-        active: boolean
-        widgetName: string
-        bcName: string
-        cursor: string
-        create: boolean
+        [bcName: string]: {
+            active: boolean
+            widgetName: string
+            bcName: string
+            cursor: string
+            create: boolean
+        }
     }
     popupData?: PopupData
 }
@@ -36,13 +38,7 @@ const initialState: ViewState = {
     readOnly: false,
     popupData: { bcName: '' },
     bcRecordsCount: {},
-    recordForm: {
-        active: false,
-        create: false,
-        widgetName: '',
-        bcName: ``,
-        cursor: ''
-    }
+    recordForm: {}
 }
 
 const viewReducerBuilder = reducers
@@ -52,17 +48,23 @@ const viewReducerBuilder = reducers
         state.bcRecordsCount[bcCountName] = { count }
     })
     .addCase(setRecordForm, (state, action) => {
-        state.recordForm = action.payload
+        state.recordForm[action.payload.bcName] = action.payload
     })
     .addCase(partialUpdateRecordForm, (state, action) => {
-        state.recordForm = { ...state.recordForm, ...action.payload }
+        state.recordForm[action.payload.bcName] = { ...state.recordForm[action.payload.bcName], ...action.payload }
     })
     .addMatcher(isAnyOf(showViewPopup, actions.showFileViewerPopup), (state, action) => {
         const { options, ...fileViewerPopupData } = action.payload
         state.popupData = { ...fileViewerPopupData, ...state.popupData, options }
     })
-    .addMatcher(isAnyOf(actions.selectView, resetRecordForm), state => {
-        state.recordForm = { ...initialState.recordForm }
+    .addMatcher(isAnyOf(actions.selectView, resetRecordForm), (state, action) => {
+        const bcName = (action as AnyAction).payload?.bcName
+
+        if (bcName) {
+            delete state.recordForm[bcName]
+        } else {
+            state.recordForm = {}
+        }
     }).builder
 
 export const viewReducer = createReducer(initialState, viewReducerBuilder)

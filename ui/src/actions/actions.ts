@@ -1,4 +1,4 @@
-import { createAction } from '@reduxjs/toolkit'
+import { AnyAction, createAction } from '@reduxjs/toolkit'
 import { actions, interfaces } from '@cxbox-ui/core'
 import { OperationPreInvokeCustom } from '@interfaces/operation'
 import { NotificationState } from '@interfaces/notification'
@@ -54,13 +54,13 @@ export const setRecordForm = createAction<{
 
 export const partialUpdateRecordForm = createAction<{
     widgetName?: string
-    bcName?: string
+    bcName: string
     cursor?: string
     active?: boolean
     create?: boolean
 }>('partialUpdateRecordForm')
 
-export const resetRecordForm = createAction('resetRecordForm')
+export const resetRecordForm = createAction<{ bcName?: string } | undefined>('resetRecordForm')
 
 export const processPreInvoke = createAction<
     Omit<ReturnType<typeof actions.processPreInvoke>['payload'], 'preInvoke'> & {
@@ -106,3 +106,7 @@ export const sendOperationSuccess = createAction<
 >('sendOperationSuccess')
 
 export const updateBcData = createAction<{ bcName: string; data: DataItem[] }>('updateBcData')
+
+export const forceUpdateRowMeta = createAction<{ bcName: string; cursor?: string; onSuccessAction?: AnyAction; wasForcedUpdate?: boolean }>(
+    'forceUpdateRowMeta'
+)

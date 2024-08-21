@@ -41,9 +41,9 @@ export const internalFormWidgetMiddleware: Middleware =
         const cancelCreate = (action: AnyAction) => {
             return next(
                 actions.sendOperation({
-                    bcName: action.payload.bcName,
+                    bcName: action.payload?.bcName,
                     operationType: OperationTypeCrud.cancelCreate,
-                    widgetName: recordForm.widgetName
+                    widgetName: recordForm[action.payload?.bcName]?.widgetName
                 })
             )
         }
@@ -51,7 +51,7 @@ export const internalFormWidgetMiddleware: Middleware =
         const resetRecordFormAfter = (action: AnyAction) => {
             next(action)
 
-            return next(resetRecordForm())
+            return next(resetRecordForm({ bcName: action.payload?.bcName }))
         }
 
         const setRecordFormAfterCreateSuccess = (action: AnyAction) => {
@@ -59,8 +59,8 @@ export const internalFormWidgetMiddleware: Middleware =
 
             dispatch(
                 setRecordForm({
-                    widgetName: recordForm.widgetName,
-                    bcName: action.payload.bcName,
+                    widgetName: recordForm[action.payload?.bcName]?.widgetName,
+                    bcName: action.payload?.bcName,
                     cursor: action.payload.dataItem.id,
                     active: true,
                     create: true
@@ -91,9 +91,9 @@ export const internalFormWidgetMiddleware: Middleware =
                 onOk: () => {
                     dispatch(
                         actions.sendOperation({
-                            bcName: action.payload.bcName,
+                            bcName: action.payload?.bcName,
                             operationType: OperationTypeCrud.save,
-                            widgetName: recordForm.widgetName,
+                            widgetName: recordForm[action.payload?.bcName]?.widgetName,
                             onSuccessAction: action
                         })
                     )
@@ -114,9 +114,9 @@ export const internalFormWidgetMiddleware: Middleware =
                 onOk: () => {
                     dispatch(
                         actions.sendOperation({
-                            bcName: action.payload.bcName,
+                            bcName: action.payload?.bcName,
                             operationType: OperationTypeCrud.save,
-                            widgetName: recordForm.widgetName,
+                            widgetName: recordForm[action.payload?.bcName]?.widgetName,
                             onSuccessAction: action
                         })
                     )
@@ -127,8 +127,8 @@ export const internalFormWidgetMiddleware: Middleware =
                     next(action)
                     dispatch(
                         actions.bcSelectRecord({
-                            bcName: action.payload.bcName,
-                            cursor: action.payload.cursor
+                            bcName: action.payload?.bcName,
+                            cursor: action.payload?.cursor
                         })
                     )
                 }
@@ -143,9 +143,9 @@ export const internalFormWidgetMiddleware: Middleware =
                 onOk: () => {
                     dispatch(
                         actions.sendOperation({
-                            bcName: action.payload.bcName,
+                            bcName: action.payload?.bcName,
                             operationType: OperationTypeCrud.save,
-                            widgetName: recordForm.widgetName,
+                            widgetName: recordForm[action.payload?.bcName]?.widgetName,
                             onSuccessAction: action
                         })
                     )
@@ -153,7 +153,7 @@ export const internalFormWidgetMiddleware: Middleware =
                 onCancel: () => {
                     dispatch(actions.bcCancelPendingChanges(null as any))
                     dispatch(actions.clearValidationFails(null))
-                    next(resetRecordForm())
+                    next(resetRecordForm({ bcName: action.payload?.bcName }))
                     next(action)
                 }
             })
@@ -167,9 +167,9 @@ export const internalFormWidgetMiddleware: Middleware =
                 onOk: () => {
                     dispatch(
                         actions.sendOperation({
-                            bcName: action.payload.bcName,
+                            bcName: action.payload?.bcName,
                             operationType: OperationTypeCrud.save,
-                            widgetName: recordForm.widgetName,
+                            widgetName: recordForm[action.payload?.bcName]?.widgetName,
                             onSuccessAction: action
                         })
                     )
@@ -177,9 +177,9 @@ export const internalFormWidgetMiddleware: Middleware =
                 onCancel: () => {
                     next(
                         actions.sendOperation({
-                            bcName: action.payload.bcName,
+                            bcName: action.payload?.bcName,
                             operationType: OperationTypeCrud.cancelCreate,
-                            widgetName: recordForm.widgetName
+                            widgetName: recordForm[action.payload?.bcName]?.widgetName
                         })
                     )
                 }
@@ -190,16 +190,17 @@ export const internalFormWidgetMiddleware: Middleware =
 
         const previousCursor = state.screen.bo.bc[action.payload?.bcName]?.cursor
         const previousPendingDataChanges = previousCursor
-            ? state.view.pendingDataChanges?.[action.payload.bcName]?.[previousCursor]
+            ? state.view.pendingDataChanges?.[action.payload?.bcName]?.[previousCursor]
             : undefined
         const isPreviousPendingDataChanges = previousPendingDataChanges ? !!Object.keys(previousPendingDataChanges).length : false
-        const actionIsDependsOnRecordForm = action.payload?.bcName === recordForm.bcName
+        const actionIsDependsOnRecordForm = action.payload?.bcName === recordForm[action.payload?.bcName]?.bcName
         const isSimpleChangeRecordForActiveRecordForm =
             action.type === actions.bcSelectRecord.toString() &&
             actionIsDependsOnRecordForm &&
-            recordForm.cursor !== action.payload.cursor &&
-            recordForm.active
-        const isChangeActiveRecordForm = action.type === setRecordForm.toString() && action.payload.cursor !== recordForm.cursor
+            recordForm[action.payload?.bcName]?.cursor !== action.payload?.cursor &&
+            recordForm[action.payload?.bcName]?.active
+        const isChangeActiveRecordForm =
+            action.type === setRecordForm.toString() && action.payload?.cursor !== recordForm[action.payload?.bcName]?.cursor
         const actionListForRecordFormReset = [
             actions.bcSaveDataSuccess.toString(),
             actions.sendOperationSuccess.toString(),
@@ -207,11 +208,19 @@ export const internalFormWidgetMiddleware: Middleware =
         ]
 
         // Logic for change cursor before
-        if ((isSimpleChangeRecordForActiveRecordForm || isChangeActiveRecordForm) && recordForm.create && isPreviousPendingDataChanges) {
+        if (
+            (isSimpleChangeRecordForActiveRecordForm || isChangeActiveRecordForm) &&
+            recordForm[action.payload?.bcName]?.create &&
+            isPreviousPendingDataChanges
+        ) {
             return showNotificationAtChangeRecordAfterCreate(action)
         }
 
-        if ((isSimpleChangeRecordForActiveRecordForm || isChangeActiveRecordForm) && recordForm.create && !isPreviousPendingDataChanges) {
+        if (
+            (isSimpleChangeRecordForActiveRecordForm || isChangeActiveRecordForm) &&
+            recordForm[action.payload?.bcName]?.create &&
+            !isPreviousPendingDataChanges
+        ) {
             return cancelCreate(action)
         }
 
@@ -252,7 +261,9 @@ export const internalFormWidgetMiddleware: Middleware =
         }
 
         const isSuccessfulCreateForInternalWidget =
-            action.type === actions.bcNewDataSuccess.toString() && recordForm.widgetName && actionIsDependsOnRecordForm
+            action.type === actions.bcNewDataSuccess.toString() &&
+            recordForm[action.payload?.bcName]?.widgetName &&
+            actionIsDependsOnRecordForm
 
         if (isSuccessfulCreateForInternalWidget) {
             return setRecordFormAfterCreateSuccess(action)
@@ -264,8 +275,10 @@ export const internalFormWidgetMiddleware: Middleware =
         // Logic for create operation after
 
         // Logic for closing the current record form before
-        const currentCursor = recordForm.cursor
-        const currentPendingDataChanges = currentCursor ? state.view.pendingDataChanges?.[recordForm.bcName]?.[currentCursor] : undefined
+        const currentCursor = recordForm[action.payload?.bcname]?.cursor
+        const currentPendingDataChanges = currentCursor
+            ? state.view.pendingDataChanges?.[action.payload?.bcName]?.[currentCursor]
+            : undefined
         const isCurrentPendingDataChanges = currentPendingDataChanges ? !!Object.keys(currentPendingDataChanges).length : false
 
         const showNotificationAtRecordClose = (action: AnyAction) => {
@@ -274,9 +287,9 @@ export const internalFormWidgetMiddleware: Middleware =
                 onOk: () => {
                     dispatch(
                         actions.sendOperation({
-                            bcName: recordForm.bcName,
+                            bcName: recordForm[action.payload?.bcname]?.bcName,
                             operationType: OperationTypeCrud.save,
-                            widgetName: recordForm.widgetName,
+                            widgetName: recordForm[action.payload?.bcName]?.widgetName,
                             onSuccessAction: action
                         })
                     )

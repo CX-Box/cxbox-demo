@@ -5,7 +5,6 @@ import TableWidget from '@cxboxComponents/widgets/TableWidget/TableWidget'
 import FormWidget from '@cxboxComponents/widgets/FormWidget/FormWidget'
 import InfoWidget from '@cxboxComponents/widgets/InfoWidget/InfoWidget'
 import styles from './Widget.less'
-import PickListPopup from '@cxboxComponents/widgets/PickListPopup/PickListPopup'
 import DebugPanel from '@cxboxComponents/DebugPanel/DebugPanel'
 import { WidgetTypes, interfaces, utils } from '@cxbox-ui/core'
 import { RootState } from '@store'
@@ -158,8 +157,6 @@ function chooseWidgetType(
             return <TableWidget meta={knownWidgetMeta} showRowActions />
         case WidgetTypes.Form:
             return <FormWidget meta={knownWidgetMeta} />
-        case WidgetTypes.PickListPopup:
-            return <PickListPopup widget={knownWidgetMeta} />
         case WidgetTypes.Info:
             return <InfoWidget meta={knownWidgetMeta} />
         default:

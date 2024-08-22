@@ -9335,14 +9335,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ejs@npm:^3.1.6":
-  version: 3.1.9
-  resolution: "ejs@npm:3.1.9"
+"ejs@npm:3.1.10":
+  version: 3.1.10
+  resolution: "ejs@npm:3.1.10"
   dependencies:
     jake: "npm:^10.8.5"
   bin:
     ejs: bin/cli.js
-  checksum: f0e249c79128810f5f6d5cbf347fc906d86bb9384263db0b2a9004aea649f2bc2d112736de5716c509c80afb4721c47281bd5b57c757d3b63f1bf5ac5f885893
+  checksum: 52eade9e68416ed04f7f92c492183340582a36482836b11eab97b159fcdcfdedc62233a1bf0bf5e5e1851c501f2dca0e2e9afd111db2599e4e7f53ee29429ae1
   languageName: node
   linkType: hard
 
@@ -14186,10 +14186,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-fetch@npm:@favware/skip-dependency@1.0.2":
-  version: 1.0.2
-  resolution: "@favware/skip-dependency@npm:1.0.2"
-  checksum: c14450be5f8712a1e3d9bac0ff0a07f504b2ce6bbefa5767fcfc73ccb1a20b909de7e0f9f3bf750bd68777b31e71e63e4e7453d3c0ae3122d754a87e23539fd3
+"node-fetch@npm:@favware/skip-dependency@1.1.3":
+  version: 1.1.3
+  resolution: "@favware/skip-dependency@npm:1.1.3"
+  checksum: e47fe957629ebb323da2755b55cfcaa4efb280dea45b88b78fe6f62f3d6e65b9a3eb57836228e415fc943c2e15a6c3ca8b5e02abacd8972b02bdcb400c6298f7
   languageName: node
   linkType: hard
 

@@ -5,6 +5,11 @@
   "bc": "meetingEdit",
   "fields": [
     {
+      "title": "Meeting Region",
+      "key": "region",
+      "type": "dictionary"
+    },
+    {
       "title": "Meeting",
       "key": "id",
       "type": "input",

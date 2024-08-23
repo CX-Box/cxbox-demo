@@ -37,6 +37,7 @@ export const FileUpload = ({ mode, widget, operationInfo, children, uploadType =
     const rowMetaField = rowMeta?.fields.find(field => field.key === operationInfo?.fieldKey)
     const fileAccept = (rowMetaField as RowMetaField)?.fileAccept
     const disabled = !rowMetaField
+    const available = rowMeta?.actions.find(action => action.type === 'associate') !== undefined
 
     const {
         initializeNewAddedFile,
@@ -104,7 +105,7 @@ export const FileUpload = ({ mode, widget, operationInfo, children, uploadType =
             })
     }
 
-    return (
+    return available ? (
         <>
             <div onDrop={disabled ? undefined : handleDrop}>
                 {mode === 'drag' ? (
@@ -132,5 +133,5 @@ export const FileUpload = ({ mode, widget, operationInfo, children, uploadType =
                 data-test-widget-name={widget?.name}
             />
         </>
-    )
+    ) : null
 }

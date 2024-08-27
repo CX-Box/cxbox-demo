@@ -74,9 +74,9 @@ public class SaleProgressStatsDao extends AbstractAnySourceBaseDAO<SalesProgress
 		} else {
 			percent = (double) closedSalesSum / (double) allSalesSum;
 		}
-		dto.setSalesPercent(String.valueOf(percent));
-		dto.setSalesSum("$" + closedSalesSum);
-		dto.setSalesDescription("From $" + allSalesSum + " KPI sales");
+		dto.setPercent(String.valueOf(percent));
+		dto.setSum("$" + closedSalesSum);
+		dto.setDescription("From $" + allSalesSum + " KPI sales");
 		return List.of(dto);
 	}
 

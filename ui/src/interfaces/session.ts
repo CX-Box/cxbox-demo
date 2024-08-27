@@ -6,7 +6,7 @@ export type FeatureSetting = {
     cacheLoaderName: string | null
     description: string | null
     displayOrder: string | null
-    key: 'filterByRangeEnabled' | string
+    key: 'filterByRangeEnabled' | 'sortEnabled' | string
     language: string | null
     type: string | null
     value: string | null

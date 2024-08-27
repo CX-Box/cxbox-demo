@@ -34,8 +34,12 @@ public class MeetingDocumentsWriteMeta extends FieldMetaBuilder<MeetingDocuments
 	public void buildIndependentMeta(FieldsMeta<MeetingDocumentsDTO> fields, InnerBcDescription bcDescription,
 			Long parentId) {
 		fields.enableFilter(MeetingDocumentsDTO_.file);
+		fields.enableSort(MeetingDocumentsDTO_.file);
 		fields.setFileAccept(MeetingDocumentsDTO_.file, List.of(".png", ".pdf", ".jpg", ".jpeg"));
-
+		fields.enableSort(MeetingDocumentsDTO_.document);
+		fields.enableSort(MeetingDocumentsDTO_.briefing);
+		fields.enableSort(MeetingDocumentsDTO_.id);
+		fields.enableSort(MeetingDocumentsDTO_.notes);
 	}
 
 }

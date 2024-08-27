@@ -12,11 +12,11 @@ import org.cxbox.api.data.dto.DataResponseDTO;
 @AllArgsConstructor
 public class SalesProgressStatsDTO extends DataResponseDTO {
 
-	private String salesSum;
+	private String sum;
 
-	private String salesDescription;
+	private String description;
 
-	private String salesPercent;
+	private String percent;
 
 
 }

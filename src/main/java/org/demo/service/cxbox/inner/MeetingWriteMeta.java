@@ -77,11 +77,18 @@ public class MeetingWriteMeta extends FieldMetaBuilder<MeetingDTO> {
 		fields.enableFilter(MeetingDTO_.additionalContacts);
 		fields.enableFilter(MeetingDTO_.clientName);
 		fields.enableFilter(MeetingDTO_.region);
+		fields.enableSort(MeetingDTO_.region);
 		fields.setAllFilterValuesByLovType(MeetingDTO_.region, REGIONS);
 		fields.setForceActive(MeetingDTO_.clientId);
 		fields.setForceActive(MeetingDTO_.clientName);
+		fields.enableSort(MeetingDTO_.clientName);
 		fields.setForceActive(MeetingDTO_.startDateTime);
+		fields.enableSort(MeetingDTO_.startDateTime);
 		fields.setForceActive(MeetingDTO_.endDateTime);
+		fields.enableSort(MeetingDTO_.agenda);
+		fields.enableSort(MeetingDTO_.id);
+		fields.enableSort(MeetingDTO_.status);
+		fields.enableSort(MeetingDTO_.contactName);
 	}
 
 }

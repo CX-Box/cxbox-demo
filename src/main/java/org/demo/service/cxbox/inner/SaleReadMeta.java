@@ -5,6 +5,7 @@ import org.cxbox.core.dto.rowmeta.FieldsMeta;
 import org.cxbox.core.dto.rowmeta.RowDependentFieldsMeta;
 import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
 import org.demo.dto.cxbox.inner.SaleDTO;
+import org.demo.dto.cxbox.inner.SaleDTO_;
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S3252","java:S1186"})
@@ -20,6 +21,12 @@ public class SaleReadMeta extends FieldMetaBuilder<SaleDTO> {
 	@Override
 	public void buildIndependentMeta(FieldsMeta<SaleDTO> fields, InnerBcDescription bcDescription,
 			Long parentId) {
+		fields.enableSort(
+				SaleDTO_.clientName,
+				SaleDTO_.product,
+				SaleDTO_.status,
+				SaleDTO_.sum
+		);
 	}
 
 }

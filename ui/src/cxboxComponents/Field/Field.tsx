@@ -12,7 +12,6 @@ import MultiField from '@cxboxComponents/ui/MultiField/MultiField'
 import ReadOnlyField from '@cxboxComponents/ui/ReadOnlyField/ReadOnlyField'
 import PickListField from '@cxboxComponents/PickListField/PickListField'
 import InlinePickList from '@cxboxComponents/InlinePickList/InlinePickList'
-import FileUpload from '@cxboxComponents/FileUpload/FileUpload'
 import MultivalueHover from '@cxboxComponents/ui/Multivalue/MultivalueHover'
 import cn from 'classnames'
 import readOnlyFieldStyles from '@cxboxComponents/ui/ReadOnlyField/ReadOnlyField.less'
@@ -372,22 +371,6 @@ export const Field: FunctionComponent<FieldProps> = ({
                     bcName={bcName}
                     cursor={cursor}
                     readonly={readOnly}
-                />
-            )
-            break
-        case FieldType.fileUpload:
-            resultField = (
-                <FileUpload
-                    {...commonProps}
-                    fieldName={widgetFieldMeta.key}
-                    bcName={bcName}
-                    cursor={cursor}
-                    fieldDataItem={data}
-                    fieldValue={value as string}
-                    fileIdKey={widgetFieldMeta.fileIdKey}
-                    fileSource={widgetFieldMeta.fileSource}
-                    snapshotKey={widgetFieldMeta.snapshotKey}
-                    snapshotFileIdKey={widgetFieldMeta.snapshotFileIdKey}
                 />
             )
             break

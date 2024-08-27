@@ -130,13 +130,14 @@ class Api extends CXBoxApi {
         return this.api$.delete<{ data: unknown }>(`personalFilterGroups`, { data: [filterGroupId] } as AxiosRequestConfig)
     }
 
-    getBlob(url: string) {
-        return this.api$.instance.get(url, { responseType: 'blob', baseURL: '' })
+    getBlob(url: string, params: { preview: boolean }) {
+        return this.api$.instance.get(url, { responseType: 'blob', baseURL: '', params })
     }
 
     async saveBlob(url: string, filename?: string) {
-        let response = await this.getBlob(url)
+        const response = await this.getBlob(url, { preview: false })
         const disposition = response.request.getResponseHeader('content-disposition')
+
         // TODO add parser for disposition
         saveAs(response.data, filename ?? disposition)
 

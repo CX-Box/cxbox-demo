@@ -18,6 +18,7 @@ package org.demo.conf.cxbox.customization.role;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,7 @@ import org.cxbox.api.data.dictionary.SimpleDictionary;
 import org.cxbox.api.service.session.CoreSessionService;
 import org.cxbox.api.service.session.IUser;
 import org.cxbox.core.config.properties.UIProperties;
+import org.cxbox.core.config.properties.WidgetFieldsIdResolverProperties;
 import org.cxbox.core.dto.LoggedUser;
 import org.cxbox.core.util.session.LoginService;
 import org.cxbox.core.util.session.SessionService;
@@ -58,6 +60,8 @@ public class LoginServiceImpl implements LoginService {
 
 	private final UIProperties uiProperties;
 
+	private final WidgetFieldsIdResolverProperties widgetFieldsIdResolverProperties;
+
 	/**
 	 * Build info for active session user for specific role
 	 *
@@ -73,6 +77,13 @@ public class LoginServiceImpl implements LoginService {
 		IUser<Long> user = sessionService.getSessionUser();
 		User userEntity = userRepository.findById(user.getId()).orElseThrow();
 		LOV activeUserRole = sessionService.getSessionUserRole();
+
+		SimpleDictionary filterByRangeEnabled = new SimpleDictionary(
+				widgetFieldsIdResolverProperties.FILTER_BY_RANGE_ENABLED_DEFAULT_PARAM_NAME,
+				String.valueOf(widgetFieldsIdResolverProperties.isFilterByRangeEnabledDefault())
+		);
+		List<SimpleDictionary> featureSettingsList = new ArrayList<>();
+		featureSettingsList.add(filterByRangeEnabled);
 
 		return LoggedUser.builder()
 				.sessionId(sessionService.getSessionId())
@@ -92,6 +103,7 @@ public class LoginServiceImpl implements LoginService {
 				.language(LocaleContextHolder.getLocale().getLanguage())
 				.timezone(LocaleContextHolder.getTimeZone().getID())
 				.devPanelEnabled(metaConfigurationProperties.isDevPanelEnabled())
+				.featureSettings(featureSettingsList)
 				.build();
 
 	}
@@ -118,4 +130,5 @@ public class LoginServiceImpl implements LoginService {
 	public Collection<SimpleDictionary> getFeatureSettings() {
 		return new ArrayList<>();
 	}
+
 }

@@ -103,7 +103,7 @@ public class CxboxDemoMinioFileController {
 				.build()
 		);
 
-		ContentDisposition contentDisposition = ContentDisposition.builder("inline")
+		ContentDisposition contentDisposition = ContentDisposition.builder(preview ? "inline" : "attachment")
 				.filename(statObjectResponse.userMetadata().get(FILENAME_FIELD), StandardCharsets.UTF_8)
 				.build();
 		HttpHeaders headers = new HttpHeaders();

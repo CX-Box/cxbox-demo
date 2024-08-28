@@ -56,7 +56,7 @@ const FileViewer = forwardRef<FileViewerHandlers | undefined, FileViewerProps>(
             let currentBlobUrl: string = ''
 
             if (url) {
-                CxBoxApiInstance.getBlob(url).then(response => {
+                CxBoxApiInstance.getBlob(url, { preview: true }).then(response => {
                     currentBlobUrl = URL.createObjectURL(response.data)
                     setBlobUrl(currentBlobUrl)
                 })

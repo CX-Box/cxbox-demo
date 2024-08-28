@@ -58,11 +58,7 @@ export const FormWidget: FunctionComponent<FormWidgetProps> = ({ meta, fields, m
                                     const disabled = fields?.find(item => item.key === field?.key && item.disabled)
                                     const error = (!disabled && missingFields?.[field?.key as string]) || metaErrors?.[field?.key as string]
                                     return (
-                                        <Col
-                                            key={colIndex}
-                                            span={col.span}
-                                            className={cn({ [styles.colWrapper]: row.cols.length > 1 || col.span !== 24 })}
-                                        >
+                                        <Col key={colIndex} span={col.span} className={cn(styles.colWrapper)}>
                                             <Form.Item
                                                 data-test="FIELD"
                                                 data-test-field-type={field?.type}

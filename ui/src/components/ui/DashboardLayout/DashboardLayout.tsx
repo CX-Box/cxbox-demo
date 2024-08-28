@@ -24,7 +24,7 @@ export function DashboardLayout(props: DashboardLayoutProps) {
     }, [props.widgets])
 
     const CommonWidgets = Object.values(widgetsByRow).map((row, rowIndex) => (
-        <Row key={rowIndex}>
+        <Row key={rowIndex} gutter={[24, 0]}>
             {row.map((widget, colIndex) => (
                 <Col key={colIndex} span={getColWidth(widget)}>
                     <Widget

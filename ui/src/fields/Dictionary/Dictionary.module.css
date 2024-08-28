@@ -1,7 +1,8 @@
 .coloredValue {
-    width: 100px;
+    min-width: 100px;
+    width: auto;
     border-radius: 8px;
-    padding: 6px 0;
+    padding: 6px 10px;
     display: flex;
     justify-content: center;
 }

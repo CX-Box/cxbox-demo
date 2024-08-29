@@ -32,14 +32,19 @@ function FileViewerPopup() {
     const { type, calleeFieldKey } = (options as FileViewerPopupOptions) ?? {}
     const widget = useAppSelector(state => state.view.widgets?.find(item => item.name === calleeWidgetName))
     const widgetField = (widget?.fields as WidgetField[])?.find(field => field.key === calleeFieldKey) as FileUploadFieldMeta | undefined
-    const { fileSource, fileIdKey, preview } = widgetField ?? {}
+    const { fileSource, fileIdKey = '', preview } = widgetField ?? {}
     const cursor = useAppSelector(state => {
         return state.screen.bo.bc[widget?.bcName as string]?.cursor
     })
+    const pendingData = useAppSelector(
+        state => (widget?.bcName && cursor && state.view.pendingDataChanges[widget?.bcName]?.[cursor]) || undefined
+    )
+    const fileNameDelta = pendingData?.[calleeFieldKey] as string | undefined
+    const fileIdDelta = pendingData?.[fileIdKey] as string | undefined
     const record = useAppSelector(state => state.data[widget?.bcName as string])?.find(item => item.id === cursor) as
         | Record<string, string>
         | undefined
-    const fileName = record?.[calleeFieldKey] ?? ''
+    const fileName = (fileNameDelta || record?.[calleeFieldKey]) ?? ''
 
     const paginationProps = useArrowPagination(widget)
 
@@ -61,7 +66,7 @@ function FileViewerPopup() {
 
     const downloadUrl = getDownloadUrl({
         source: fileSource,
-        id: (fileIdKey && record?.[fileIdKey as string]?.toString()) as string
+        id: fileIdDelta || ((fileIdKey && record?.[fileIdKey as string]?.toString()) as string)
     })
 
     const handleCancel = useCallback(() => {

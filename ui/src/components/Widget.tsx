@@ -22,8 +22,8 @@ import { ErrorBoundary } from 'react-error-boundary'
 import { WidgetError } from '@components/WidgetError'
 import { isPopupWidget } from '@constants/widgets'
 import DebugWidgetWrapper from '@components/DebugWidgetWrapper/DebugWidgetWrapper'
-import { useWidgetMeta } from '../queries'
-import { useData } from '../queries/useData'
+import { useWidgetMeta } from '../hooks/queries'
+import { useData } from '@hooks/queries/useData'
 
 interface WidgetProps {
     name: string

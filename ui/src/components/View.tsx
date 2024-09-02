@@ -36,7 +36,7 @@ import SuggestionPickListField from '../fields/SuggestionPickList/SuggestionPick
 import { StatsBlock } from '@components/widgets/StatsBlock/StatsBlock'
 import FileViewerPopup from '@components/FileViewerPopup/FileViewerPopup'
 import { useBcLocation } from '@hooks/useBcLocation'
-import { useViewMeta } from '../queries'
+import { useViewMeta } from '../hooks/queries'
 
 // TODO We need to remove PopupWidgetTypes from the core and replace imports throughout the entire project
 const { PopupWidgetTypes, FieldType } = interfaces

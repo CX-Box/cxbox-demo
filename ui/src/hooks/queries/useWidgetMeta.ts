@@ -1,6 +1,6 @@
 import { useBcLocation } from '@hooks/useBcLocation'
 import { useCallback } from 'react'
-import { LoginResponse, ViewMetaResponse, WidgetFormMeta, WidgetMeta, WidgetTableMeta } from '@cxbox-ui/core'
+import { LoginResponse, WidgetFormMeta, WidgetInfoMeta, WidgetMeta, WidgetTableMeta } from '@cxbox-ui/core'
 import { useMeta } from './useMeta'
 import { UseQueryResult } from '@tanstack/react-query'
 
@@ -31,3 +31,4 @@ export const useWidgetMeta: Meta = (widgetName: string) => {
 
 export const useTableWidgetMeta = useWidgetMeta as Meta<WidgetTableMeta>
 export const useFormWidgetMeta = useWidgetMeta as Meta<WidgetFormMeta>
+export const useInfoWidgetMeta = useWidgetMeta as Meta<WidgetInfoMeta>

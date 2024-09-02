@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
-import { CxBoxApiInstance } from '../api'
-import { useBcLocation } from '@hooks/useBcLocation'
-import { BcMeta, LoginResponse } from '@cxbox-ui/core'
+import { CxBoxApiInstance } from '../../api'
+import { LoginResponse } from '@cxbox-ui/core'
 import { firstValueFrom } from 'rxjs'
 
 export const useMeta = <TData = LoginResponse>(select?: (data: LoginResponse) => TData) =>

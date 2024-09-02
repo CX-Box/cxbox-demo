@@ -3,7 +3,7 @@ import InfoLabel from './InfoLabel'
 import { useAppSelector } from '@store'
 import styles from './ViewInfoLabel.less'
 import { useBcLocation } from '@hooks/useBcLocation'
-import { useScreenMeta, useViewMeta } from '../../../queries'
+import { useScreenMeta, useViewMeta } from '../../../hooks/queries'
 
 const ViewInfoLabel: React.FunctionComponent = () => {
     const [location] = useBcLocation()

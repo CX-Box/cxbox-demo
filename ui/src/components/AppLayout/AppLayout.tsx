@@ -9,7 +9,7 @@ import SystemNotifications from '../SystemNotifications/SystemNotifications'
 import ErrorPopup from '../containers/ErrorPopup/ErrorPopup'
 import Notifications from '@components/Notifications/Notifications'
 import { Login } from '../Login/Login'
-import { useMeta } from '../../queries'
+import { useMeta } from '../../hooks/queries'
 
 export const AppLayout: React.FC = () => {
     const { isLoading } = useMeta()

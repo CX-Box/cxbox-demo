@@ -8,7 +8,7 @@ import cn from 'classnames'
 import Button from '../../../ui/Button/Button'
 import { useQuery } from '@tanstack/react-query'
 import { CxBoxApiInstance } from '../../../../api'
-import { useMeta } from '../../../../queries'
+import { useMeta } from '../../../../hooks/queries'
 
 export const UserMenuContent: React.FC = () => {
     const { data } = useMeta()

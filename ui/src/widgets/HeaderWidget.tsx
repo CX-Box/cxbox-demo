@@ -1,6 +1,6 @@
 import { WidgetAnyProps } from '@components/Widget'
 import React from 'react'
-import { useBcMeta, useWidgetMeta } from '../queries'
+import { useBcMeta, useWidgetMeta } from '../hooks/queries'
 
 interface HeaderWidgetProps extends WidgetAnyProps {}
 

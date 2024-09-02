@@ -1,6 +1,6 @@
 import React from 'react'
 import { DevToolsPanel } from '@cxboxComponents'
-import { useMeta } from '../../queries'
+import { useMeta } from '../../hooks/queries'
 
 const DevPanel: React.FunctionComponent = () => {
     const { data } = useMeta()

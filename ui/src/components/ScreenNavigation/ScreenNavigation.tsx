@@ -5,7 +5,7 @@ import { ClickParam } from 'antd/lib/menu'
 import Search from 'antd/lib/input/Search'
 import styles from './ScreenNavigation.less'
 import { useBcLocation } from '@hooks/useBcLocation'
-import { useMeta, useScreenMeta } from '../../queries'
+import { useMeta, useScreenMeta } from '../../hooks/queries'
 
 const selectedItemClass = 'selectedItem'
 

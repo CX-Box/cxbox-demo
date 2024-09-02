@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button, Tooltip } from 'antd'
-import { useMeta } from '../../../queries'
+import { useMeta } from '../../../hooks/queries'
 
 interface RefreshMetaButtonProps {
     className?: string

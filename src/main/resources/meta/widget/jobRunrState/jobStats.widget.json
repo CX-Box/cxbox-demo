@@ -2,7 +2,7 @@
   "name": "jobStats",
   "title": "",
   "type": "StatsBlock",
-  "bc": "JobsStats",
+  "bc": "jobsStats",
   "fields": [
     {
       "title": "title",

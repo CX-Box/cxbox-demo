@@ -34,7 +34,7 @@ public class JobStatsService extends AnySourceVersionAwareResponseService<JobSta
 				.newAction()
 				.action("refresh", "Refresh")
 				.invoker((bc, dto) -> {
-					return new ActionResultDTO<JobStatsDTO>().setAction(PostAction.refreshBc(CxboxRestController.JobsStats));
+					return new ActionResultDTO<JobStatsDTO>().setAction(PostAction.refreshBc(CxboxRestController.jobsStats));
 				})
 				.add()
 				.build();

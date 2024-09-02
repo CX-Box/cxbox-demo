@@ -2,7 +2,7 @@
   "name": "jobStatsActions",
   "title": "",
   "type": "Form",
-  "bc": "JobsStats",
+  "bc": "jobsStats",
   "fields": [
 
   ],

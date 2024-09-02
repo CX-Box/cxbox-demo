@@ -70,6 +70,9 @@
         "Please input filter group name": "Please input filter group name",
         "name": "name",
         "create": "create",
-        "No applied filters for saving": "No applied filters for saving"
+        "No applied filters for saving": "No applied filters for saving",
+        "Click Here to Select Files": "Click Here to Select Files",
+        "Or drag files to this area": "Or drag files to this area",
+        "Add at least one file, support for a single or bulk upload": "Add at least one file, support for a single or bulk upload"
     }
 }

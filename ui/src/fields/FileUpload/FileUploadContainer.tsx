@@ -13,11 +13,11 @@ import { useSingleUploadRequest } from '@hooks/useSingleUploadRequest'
 import { AxiosError, CanceledError } from 'axios'
 import SingleFileUpload from './SingleFileUpload'
 import ReadOnlySingleFileUpload, { ReadOnlySingleFileUploadProps } from './ReadOnlySingleFileUpload'
-import { DataValue } from '@interfaces/core'
 import { actions } from '@actions'
 import { FileUploadFieldMeta } from '@interfaces/widget'
 import { useDispatch } from 'react-redux'
 import { usePrevious } from '@hooks/usePrevious'
+import { DataValue } from '@cxbox-ui/core'
 
 interface Props extends Omit<BaseFieldProps, 'meta'> {
     value: string

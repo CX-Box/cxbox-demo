@@ -16,7 +16,7 @@ import { actions, interfaces, utils } from '@cxbox-ui/core'
 import { useTranslation } from 'react-i18next'
 import { useRowMenu } from '@hooks/useRowMenu'
 import { buildBcUrl } from '@utils/buildBcUrl'
-import { BcFilter } from '@interfaces/core'
+import { BcFilter } from '@cxbox-ui/core'
 
 const { FieldType, PaginationMode } = interfaces
 

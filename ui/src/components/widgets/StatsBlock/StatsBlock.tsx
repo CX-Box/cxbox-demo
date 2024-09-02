@@ -2,7 +2,7 @@ import React from 'react'
 import { Icon, List, Tooltip } from 'antd'
 import { useAppDispatch, useAppSelector } from '@store'
 import { AppWidgetTableMeta } from '@interfaces/widget'
-import { DataItem } from '@interfaces/core'
+import { DataItem } from '@cxbox-ui/core'
 import styles from './StatsBlock.less'
 import { actions } from '@actions'
 

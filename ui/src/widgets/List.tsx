@@ -1,33 +1,49 @@
 import React, { useMemo } from 'react'
 import { WidgetAnyProps } from '@components/Widget'
 import { useData } from '../queries'
-import { Table } from 'antd'
+import { Button, Table } from 'antd'
 import { useTableWidgetMeta } from '../queries'
 import { ColumnProps } from 'antd/es/table'
 import { DataItem } from '@interfaces/core'
 import { useBcCursor } from '../queries/useBcCursor'
+import { useRowMeta } from '../queries/useRowMeta'
 
 export const List: React.FC<WidgetAnyProps> = ({ widgetName, bcName }) => {
-    const { data } = useData(bcName)
+    const { data, isFetched } = useData(bcName)
     const { data: widgetMeta } = useTableWidgetMeta(widgetName)
     const [cursor, setCursor] = useBcCursor(bcName)
 
-    const columns = useMemo(
-        () =>
-            widgetMeta?.fields.map<ColumnProps<DataItem>>(field => ({
-                title: field.title,
-                key: field.key,
-                dataIndex: field.key,
-                render: text => JSON.stringify(text)
-            })) || [],
-        [widgetMeta]
-    )
+    const isReadyForRowMeta = isFetched && !!cursor
+
+    const { data: rowMeta } = useRowMeta(bcName, isReadyForRowMeta, cursor)
+
+    const columns = useMemo(() => {
+        const metaColumns = widgetMeta?.fields.map<ColumnProps<DataItem>>(field => ({
+            title: field.title,
+            key: field.key,
+            dataIndex: field.key,
+            render: text => JSON.stringify(text)
+        }))
+
+        if (metaColumns) {
+            metaColumns.push({
+                title: 'actions',
+                render: (_, record) => (
+                    <>
+                        <Button onClick={() => setCursor(record.id)}>...</Button>
+                        {record.id === cursor && rowMeta?.actions.map(action => action.text)}
+                    </>
+                )
+            })
+        }
+
+        return metaColumns || []
+    }, [widgetMeta?.fields, cursor, rowMeta?.actions, setCursor])
 
     const selectedRowKey = data?.data.findIndex(val => val.id === cursor) || 0
 
     return (
         <div>
-            <h1>LIST WIDGET</h1>
             <h2>{widgetMeta?.title}</h2>
             <Table
                 dataSource={data?.data}

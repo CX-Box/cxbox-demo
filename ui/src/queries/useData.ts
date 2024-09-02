@@ -4,28 +4,7 @@ import { useEffect, useMemo } from 'react'
 import { CxBoxApiInstance } from '../api'
 import { useScreenBcMeta, useScreenMeta } from './'
 import { produce } from 'immer'
-
-// function to build keys array
-const keyBuilder = (bcs: BcMeta[], lastCursor?: string) => {
-    //collect all keys without last cursor
-    const bcKeys = bcs?.reduce<(string | null)[]>((acc, bc, index) => {
-        if (index !== bcs.length - 1) {
-            acc.push(bc.name, bc.cursor)
-        } else {
-            acc.push(bc.name)
-            if (lastCursor) {
-                acc.push(lastCursor)
-            }
-        }
-        return acc
-    }, [])
-    //check keys for nullish or empty cursors to disable wrong keys query
-    if (bcKeys.every(key => !!key)) {
-        return bcKeys
-    }
-
-    return []
-}
+import { buildBcKey } from '@utils/buildBcKey'
 
 export const useData = (bcName: string, cursor?: string) => {
     const queryClient = useQueryClient()
@@ -38,7 +17,7 @@ export const useData = (bcName: string, cursor?: string) => {
     //prefetch data for parent bc
     const prefetchData = useQueries({
         queries: prefetchBc.map((bc, index, arr) => {
-            const keyArr = keyBuilder(arr.slice(0, index + 1))
+            const keyArr = buildBcKey(arr.slice(0, index + 1))
             return {
                 queryKey: ['data', ...keyArr],
                 queryFn: () => CxBoxApiInstance.fetchBcData(screenMeta?.name || '', keyArr.join('/')).toPromise(),
@@ -73,7 +52,7 @@ export const useData = (bcName: string, cursor?: string) => {
     }, [prefetchData, queryClient, screenMeta])
 
     const thisBcKeys = useMemo(() => {
-        return keyBuilder(bcMetaList || [], cursor)
+        return buildBcKey(bcMetaList || [], cursor)
     }, [bcMetaList, cursor])
 
     return useQuery({

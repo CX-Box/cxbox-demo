@@ -34,8 +34,7 @@ export const CustomizationContext: React.Context<{
  * @category Components
  */
 export const View: FunctionComponent<ViewProps> = props => {
-    const [location] = useBcLocation()
-    const { data } = useViewMeta(location.bcMap.get('screen'), location.bcMap.get('view'))
+    const { data } = useViewMeta()
 
     const { debugMode, skipWidgetTypes, card, customSpinner, customWidgets, customLayout, customFields, disableDebugMode } = props
     let layout: React.ReactNode = null

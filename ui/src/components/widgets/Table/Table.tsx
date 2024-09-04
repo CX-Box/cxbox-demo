@@ -424,7 +424,7 @@ function Table({
                             const hideFieldForGroupingHierarchy =
                                 isGroupingHierarchy &&
                                 ((dataItem.pseudoRow && !isGroupingField) || (!dataItem.pseudoRow && isGroupingField && !editMode))
-                            const showField = !hideFieldForGroupingHierarchy || (unallocatedRecord && !isParentRow)
+                            const showField = !hideFieldForGroupingHierarchy || (unallocatedRecord && !isParentRow) || !enabledGrouping
 
                             return (
                                 showField && (
@@ -498,7 +498,8 @@ function Table({
         expandedRowKeys,
         bcName,
         onParentExpand,
-        selectCell
+        selectCell,
+        enabledGrouping
     ])
 
     const resultColumns = React.useMemo(() => {

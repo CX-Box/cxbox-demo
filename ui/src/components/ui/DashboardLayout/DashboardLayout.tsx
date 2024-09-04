@@ -4,6 +4,7 @@ import { AppWidgetMeta, CustomWidgetTypes } from '@interfaces/widget'
 import { createSkipWidgetList } from '@utils/createSkipWidgetList'
 import { interfaces } from '@cxbox-ui/core'
 import Widget from '@cxboxComponents/Widget/Widget'
+import styles from './DashboardLayout.less'
 
 export interface DashboardLayoutProps {
     widgets: AppWidgetMeta[]
@@ -43,7 +44,7 @@ export function DashboardLayout(props: DashboardLayoutProps) {
         return (
             <Row gutter={24}>
                 <Col span={18}>{CommonWidgets}</Col>
-                <Col span={6}>
+                <Col span={6} className={styles.additionalInfoContainer}>
                     {additionalInfoWidgets.map(widget => (
                         <Row key={widget.name} gutter={[8, 8]}>
                             <Col span={24}>

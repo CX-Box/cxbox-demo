@@ -234,7 +234,7 @@
       "account-console" : [ ],
       "cxbox-oidc-client" : [ {
         "id" : "0da166ce-96d5-4f69-a5ba-b36e4d50a61a",
-        "name" : "ONLY_ADMIN",
+        "name" : "BUSINESS_ADMIN",
         "composite" : false,
         "clientRole" : true,
         "containerId" : "4a726c64-c69e-4ec8-8df1-bdb983a902c3",

@@ -21,7 +21,7 @@
     "requiredActions" : [ ],
     "realmRoles" : [ "uma_authorization", "offline_access" ],
     "clientRoles" : {
-      "cxbox-oidc-client" : [ "ONLY_ADMIN", "CXBOX_USER" ],
+      "cxbox-oidc-client" : [ "BUSINESS_ADMIN", "CXBOX_USER" ],
       "account" : [ "view-profile", "manage-account" ]
     },
     "notBefore" : 0,

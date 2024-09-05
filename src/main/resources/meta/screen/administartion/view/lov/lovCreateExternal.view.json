@@ -17,6 +17,6 @@
   ],
   "rolesAllowed": [
     "CXBOX_USER",
-    "ONLY_ADMIN"
+    "BUSINESS_ADMIN"
   ]
 }

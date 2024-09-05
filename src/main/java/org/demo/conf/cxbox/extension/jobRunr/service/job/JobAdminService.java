@@ -40,14 +40,14 @@ public class JobAdminService extends AnySourceVersionAwareResponseService<JobAdm
 				.action("requeue", "requeue")
 				.invoker((bc, dto) -> {
 					jobAdminDao.requeueJobById(UUID.fromString(bc.getId()));
-					return new ActionResultDTO<JobAdminDTO>().setAction(PostAction.refreshBc(CxboxRestController.JobsStats));
+					return new ActionResultDTO<JobAdminDTO>().setAction(PostAction.refreshBc(CxboxRestController.jobsStats));
 				})
 				.add()
 				.newAction()
 				.action("delete", "delete")
 				.invoker((bc, dto) -> {
 					jobAdminDao.deleteJobById(UUID.fromString(bc.getId()));
-					return new ActionResultDTO<JobAdminDTO>().setAction(PostAction.refreshBc(CxboxRestController.JobsStats));
+					return new ActionResultDTO<JobAdminDTO>().setAction(PostAction.refreshBc(CxboxRestController.jobsStats));
 				})
 				.add()
 				.build();

@@ -1,6 +1,7 @@
 ﻿ID;DICTIONARY_TYPE_ID;TYPE;KEY;VALUE;ACTIVE;DISPLAY_ORDER;DESCRIPTION
 "100";1;"INTERNAL_ROLE";"ADMIN";"Администратор";true;0;null
 "200";1;"INTERNAL_ROLE";"CXBOX_USER";"Cxbox Пользователь";true;1;null
+"400";1;"INTERNAL_ROLE";"BUSINESS_ADMIN";"Бизнес администратор";true;2;null
 "300";200;"REGIONS";"MOSCOW";"Moscow";true;11;null
 "301";200;"REGIONS";"SAINT PETERBURG";"St. Petersburg";true;null;null
 "302";200;"REGIONS";"KOSTROMA";"Kostroma";true;1;null

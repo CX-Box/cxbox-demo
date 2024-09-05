@@ -26,6 +26,7 @@
     }
   ],
   "rolesAllowed": [
-    "CXBOX_USER"
+    "CXBOX_USER",
+    "BUSINESS_ADMIN"
   ]
 }

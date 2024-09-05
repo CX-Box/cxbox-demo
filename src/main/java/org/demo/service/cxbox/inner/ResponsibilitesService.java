@@ -3,7 +3,6 @@ package org.demo.service.cxbox.inner;
 import static java.util.Optional.ofNullable;
 import static org.demo.conf.cxbox.extension.lov.AdministeredDictionaryType.INTERNAL_ROLE;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -56,9 +55,11 @@ public class ResponsibilitesService extends VersionAwareResponseService<Responsi
 				ResponsibilitesCrudDTO_.viewWidgets.getName()
 		);
 		if (!viewWidgetsFilterValues.isEmpty()) {
-			return super.getSpecification(bc).and(getSpecForViewWidgetsField(viewWidgetsFilterValues));
+			return super.getSpecification(bc)
+					.and(getSpecForViewWidgetsField(viewWidgetsFilterValues))
+					.and(getFilterSpecification());
 		}
-		return super.getSpecification(bc);
+		return super.getSpecification(bc).and(getFilterSpecification());
 	}
 
 
@@ -137,6 +138,13 @@ public class ResponsibilitesService extends VersionAwareResponseService<Responsi
 				.filter(f -> f.getName().contains(fieldName))
 				.map(FilterParameter::getStringValuesAsList)
 				.findFirst().orElse(new ArrayList<>());
+	}
+
+	private Specification<Responsibilities> getFilterSpecification() {
+		return (root, cq, cb) -> cb.and(
+				cb.isNotNull(root.get(Responsibilities_.responsibilityType)),
+				cb.notEqual(root.get(Responsibilities_.responsibilityType), ResponsibilityType.SCREEN)
+		);
 	}
 
 }

@@ -18,9 +18,9 @@ import org.cxbox.core.dto.DrillDownType;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.cxbox.core.dto.rowmeta.PostAction;
-import org.cxbox.core.dto.rowmeta.PreAction;
 import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
+import org.demo.conf.cxbox.extension.action.ActionsExt;
 import org.demo.dto.cxbox.anysource.LovDTO;
 import org.demo.microservice.dto.DictDTO;
 import org.springframework.stereotype.Service;
@@ -69,8 +69,7 @@ public class LovReadService extends AnySourceVersionAwareResponseService<LovDTO,
 						)
 				))).add()
 				.action("deleteLov", "Delete")
-				.withPreAction(PreAction.confirm(
-						"Make sure the entry is deactivated. \n\nAre you sure you want to delete this directory entry?"))
+				.withPreAction(ActionsExt.confirm("Make sure the entry is deactivated. \\n\\nAre you sure you want to delete this directory entry?", "Ops!", "yes", "no"))
 				.scope(ActionScope.RECORD)
 				.invoker((bc, data) -> {
 					getBaseDao().delete(bc);

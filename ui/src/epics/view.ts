@@ -175,14 +175,34 @@ export const fileUploadConfirmEpic: RootEpic = (action$, state$, { api }) =>
                 mergeMap(response => {
                     const postInvoke = response.postActions?.[0]
                     const preInvoke = response.preInvoke
-                    // Needed for local data update without additional request
-                    const newDataItems = isGroupingHierarchy ? response.records : undefined
+                    const isRefreshCurrentBc = postInvoke?.type === OperationPostInvokeType.refreshBC
+                    const needBcForceUpdate = !isRefreshCurrentBc
+                    if (isGroupingHierarchy) {
+                        // Needed for local data update without additional request
+                        const newDataItems = response.records
+                        const allData = [...newDataItems, ...(state.data[bcName as string] || {})]
+                        const oldCursor = state.screen.bo.bc[bcName as string]?.cursor
+                        const newCursor = getCursor(bcName as string, allData, oldCursor) as string
+                        const cursorHasChange = bcName && newCursor !== oldCursor
 
-                    const isRefreshCurrentBc = postInvoke?.type === OperationPostInvokeType.refreshBC && bcName === postInvoke?.bc
-                    const needBcForceUpdate = !isRefreshCurrentBc && !isGroupingHierarchy
-
+                        return concat(
+                            of(actions.sendOperationSuccess({ bcName: bcName as string, cursor: null as any, newDataItems })),
+                            cursorHasChange
+                                ? of(
+                                      actions.bcChangeCursors({
+                                          cursorsMap: {
+                                              [bcName]: newCursor
+                                          }
+                                      })
+                                  )
+                                : EMPTY,
+                            cursorHasChange ? of(actions.bcFetchRowMeta({ widgetName, bcName })) : EMPTY,
+                            isPopup ? of(actions.closeViewPopup(null)) : EMPTY,
+                            ...postOperationRoutine(widgetName as string, postInvoke, preInvoke, OperationTypeCrud.save, bcName as string)
+                        )
+                    }
                     return concat(
-                        of(actions.sendOperationSuccess({ bcName: bcName as string, cursor: null as any, newDataItems })),
+                        of(actions.sendOperationSuccess({ bcName: bcName as string, cursor: null as any })),
                         needBcForceUpdate ? of(actions.bcForceUpdate({ bcName: bcName as string })) : EMPTY,
                         isPopup ? of(actions.closeViewPopup(null)) : EMPTY,
                         ...postOperationRoutine(widgetName as string, postInvoke, preInvoke, OperationTypeCrud.save, bcName as string)
@@ -195,6 +215,12 @@ export const fileUploadConfirmEpic: RootEpic = (action$, state$, { api }) =>
             )
         })
     )
+
+const getCursor = (bcName: string, data: DataItem[], prevCursor: string | null) => {
+    const newCursor = data[0]?.id
+    const cursorShouldChange = !data.some(i => i.id === prevCursor)
+    return cursorShouldChange ? newCursor : prevCursor
+}
 
 const bcDeleteDataEpic: RootEpic = (action$, state$, { api }) =>
     action$.pipe(
@@ -226,6 +252,7 @@ const bcDeleteDataEpic: RootEpic = (action$, state$, { api }) =>
                             isTargetFormatPVF ? of(actions.bcCancelPendingChanges({ bcNames: [bcName] })) : EMPTY,
                             of(actions.updateBcData({ bcName, data: newData })),
                             of(actions.bcChangeCursors({ cursorsMap: { [bcName]: previousCursor } })),
+                            of(actions.bcFetchRowMeta({ widgetName, bcName })),
                             postInvoke ? of(actions.processPostInvoke({ bcName, postInvoke, cursor, widgetName })) : EMPTY
                         )
                     }

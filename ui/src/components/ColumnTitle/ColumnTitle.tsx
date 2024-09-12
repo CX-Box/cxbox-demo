@@ -8,11 +8,13 @@ import { interfaces } from '@cxbox-ui/core'
 import { TemplatedTitle } from '@cxboxComponents'
 import { Icon } from 'antd'
 import Button from '../ui/Button/Button'
+import { useAppSelector } from '@store'
+import { RowMetaField } from '@interfaces/rowMeta'
 
 interface ColumnTitleProps {
     widgetName: string
     widgetMeta: interfaces.WidgetListField
-    rowMeta: interfaces.RowMetaField
+    rowMeta: RowMetaField
     onClose?: (fieldKey: string) => void
     showCloseButton?: boolean
 }
@@ -31,6 +33,9 @@ export const notSortableFields: readonly (interfaces.FieldType | CustomFieldType
 const rightAlignedFields: readonly (interfaces.FieldType | CustomFieldTypes)[] = [FieldType.number, FieldType.money, FieldType.percent]
 
 const ColumnTitle = ({ widgetName, widgetMeta, rowMeta, onClose, showCloseButton }: ColumnTitleProps) => {
+    const sortingSetting = useAppSelector(state => state.session.featureSettings?.find(feature => feature.key === 'sortEnabled'))
+    const isSortingEnabled = sortingSetting?.value === 'true' || rowMeta?.sortable === true
+
     const handleColumnClose = useCallback(() => {
         onClose?.(widgetMeta.key)
     }, [onClose, widgetMeta.key])
@@ -64,7 +69,7 @@ const ColumnTitle = ({ widgetName, widgetMeta, rowMeta, onClose, showCloseButton
         )
     }
 
-    const sort = !notSortableFields.includes(widgetMeta.type) && (
+    const sort = !notSortableFields.includes(widgetMeta.type) && isSortingEnabled && (
         <ColumnSort widgetName={widgetName} fieldKey={widgetMeta.key} className={styles.sort} />
     )
 

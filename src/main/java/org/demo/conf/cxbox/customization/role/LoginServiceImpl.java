@@ -18,7 +18,6 @@ package org.demo.conf.cxbox.customization.role;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -58,9 +57,9 @@ public class LoginServiceImpl implements LoginService {
 
 	private final MetaConfigurationProperties metaConfigurationProperties;
 
-	private final UIProperties uiProperties;
-
 	private final WidgetFieldsIdResolverProperties widgetFieldsIdResolverProperties;
+
+	private final UIProperties uiProperties;
 
 	/**
 	 * Build info for active session user for specific role
@@ -77,13 +76,6 @@ public class LoginServiceImpl implements LoginService {
 		IUser<Long> user = sessionService.getSessionUser();
 		User userEntity = userRepository.findById(user.getId()).orElseThrow();
 		LOV activeUserRole = sessionService.getSessionUserRole();
-
-		SimpleDictionary filterByRangeEnabled = new SimpleDictionary(
-				widgetFieldsIdResolverProperties.FILTER_BY_RANGE_ENABLED_DEFAULT_PARAM_NAME,
-				String.valueOf(widgetFieldsIdResolverProperties.isFilterByRangeEnabledDefault())
-		);
-		List<SimpleDictionary> featureSettingsList = new ArrayList<>();
-		featureSettingsList.add(filterByRangeEnabled);
 
 		return LoggedUser.builder()
 				.sessionId(sessionService.getSessionId())
@@ -103,7 +95,6 @@ public class LoginServiceImpl implements LoginService {
 				.language(LocaleContextHolder.getLocale().getLanguage())
 				.timezone(LocaleContextHolder.getTimeZone().getID())
 				.devPanelEnabled(metaConfigurationProperties.isDevPanelEnabled())
-				.featureSettings(featureSettingsList)
 				.build();
 
 	}
@@ -128,7 +119,16 @@ public class LoginServiceImpl implements LoginService {
 	 * Following keys were supported historically: FEATURE_COMMENTS, FEATURE_NOTIFICATIONS, FEATURE_HIDE_SYSTEM_ERRORS
 	 */
 	public Collection<SimpleDictionary> getFeatureSettings() {
-		return new ArrayList<>();
+		ArrayList<SimpleDictionary> featureSettings = new ArrayList<>();
+		featureSettings.add(new SimpleDictionary(
+				WidgetFieldsIdResolverProperties.SORT_ENABLED_DEFAULT_PARAM_NAME,
+				String.valueOf(widgetFieldsIdResolverProperties.isSortEnabledDefault())
+		));
+		featureSettings.add(new SimpleDictionary(
+				WidgetFieldsIdResolverProperties.FILTER_BY_RANGE_ENABLED_DEFAULT_PARAM_NAME,
+				String.valueOf(widgetFieldsIdResolverProperties.isFilterByRangeEnabledDefault())
+		));
+		return featureSettings;
 	}
 
 }

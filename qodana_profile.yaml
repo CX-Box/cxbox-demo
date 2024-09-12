@@ -1,8 +1,12 @@
 name: "qodana_profile"
 
-baseProfile: qodana.starter
+baseProfile: qodana.recommended
 
 groups:
-  - groupId: Platform
+  - groupId:  EnabledInspections
     groups:
-      - "Platform"
+      - "category:Platform"
+
+inspections:
+  - group: EnabledInspections
+    enabled: true

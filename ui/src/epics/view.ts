@@ -180,7 +180,7 @@ export const fileUploadConfirmEpic: RootEpic = (action$, state$, { api }) =>
                     if (isGroupingHierarchy) {
                         // Needed for local data update without additional request
                         const newDataItems = response.records
-                        const allData = [...newDataItems, ...state.data[bcName as string]]
+                        const allData = [...newDataItems, ...(state.data[bcName as string] || {})]
                         const oldCursor = state.screen.bo.bc[bcName as string]?.cursor
                         const newCursor = getCursor(bcName as string, allData, oldCursor) as string
                         const cursorHasChange = bcName && newCursor !== oldCursor

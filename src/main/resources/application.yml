@@ -14,7 +14,7 @@ app:
   activemq:
     password: ${ACTIVEMQ_ADMIN_PASSWORD:admin}
     user: ${ACTIVEMQ_ADMIN_LOGIN:admin}
-    broker-url: tcp://${ACTIVEQM_HOST:localhost}:${ACTIVEMQ_PORT:61616}
+    broker-url: tcp://${ACTIVEMQ_HOST:localhost}:${ACTIVEMQ_PORT:61616}
     host: ${ACTIVEMQ_HOST:}
     port: ${ACTIVEMQ_PORT:61616}
   integrations:

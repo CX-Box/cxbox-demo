@@ -28,6 +28,8 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class CxboxAuthUserRepository {
 
+	private static final Long USER_DEPARTMENT = 0L;
+
 	@Autowired
 	private UserRepository userRepository;
 
@@ -118,15 +120,9 @@ public class CxboxAuthUserRepository {
 			user.setLogin(login);
 		}
 		user.setInternalRole(new LOV(role));
-		user.setUserPrincipalName(login);
 		user.setFirstName(login);
 		user.setLastName(login);
-		user.setTitle(login);
-		user.setFullUserName(login);
-		user.setEmail(login);
-		user.setPhone(login);
-		user.setActive(true);
-		user.setDepartment(departmentRepository.findById(0L).orElse(null));
+		user.setDepartment(departmentRepository.findById(USER_DEPARTMENT).orElse(null));
 	}
 
 }

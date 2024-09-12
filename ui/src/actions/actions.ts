@@ -10,6 +10,8 @@ import { DataItem } from '@cxbox-ui/core'
 
 export const SSO_AUTH = createAction('SSO_AUTH')
 
+export const EMPTY = actions.emptyAction()
+
 /**
  * Declare your redux actions here with action name and payload type
  *
@@ -107,6 +109,6 @@ export const sendOperationSuccess = createAction<
 
 export const updateBcData = createAction<{ bcName: string; data: DataItem[] }>('updateBcData')
 
-export const forceUpdateRowMeta = createAction<{ bcName: string; cursor?: string; onSuccessAction?: AnyAction; wasForcedUpdate?: boolean }>(
-    'forceUpdateRowMeta'
-)
+export const forceUpdateRowMeta = createAction<{ bcName: string; cursor?: string; onSuccessAction?: AnyAction }>('forceUpdateRowMeta')
+
+export const changeActiveBc = createAction<{ bcName: string | null; onSuccessAction?: AnyAction }>('changeActiveBc')

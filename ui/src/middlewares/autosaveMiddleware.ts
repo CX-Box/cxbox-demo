@@ -4,17 +4,63 @@ import { actions } from '@actions'
 import { coreOperations, OperationTypeCrud } from '@cxbox-ui/core'
 import { RootState } from '@store'
 import { autosaveRoutine, checkUnsavedChangesOfBc } from '@utils/autosave'
+import { openNotification, UNSAVED_NOTIFICATION_COMMON } from './utils/openNotification'
 
 export const saveFormMiddleware: Middleware =
     ({ getState, dispatch }: MiddlewareAPI<Dispatch, RootState>) =>
     (next: Dispatch) =>
     (action: AnyAction) => {
         const state = getState()
-
-        // TODO: Should offer to save pending changes or drop them
-
         const isSendOperation = actions.sendOperation.match(action)
         const isCoreSendOperation = isSendOperation && coreOperations.includes(action.payload.operationType as OperationTypeCrud)
+        const isChangeActiveBc = actions.changeActiveBc.match(action)
+        const isChangeLocation = actions.changeLocation.match(action)
+
+        if (isChangeActiveBc || isChangeLocation || isSendOperation) {
+            const bcNameWithChanges = getBcNameWithChanges(state)
+            const defaultSaveWidget = getWidgetWithDefaultSave(state, bcNameWithChanges)
+            const previousActiveBc = state.screen.bo.activeBcName
+            const needAutoSaveForChangeActiveBc = isChangeActiveBc && bcNameWithChanges && previousActiveBc !== action.payload?.bcName
+            const needAutoSaveForChangeLocation = isChangeLocation && bcNameWithChanges
+            const changeActiveBcForOperation = isSendOperation && bcNameWithChanges && previousActiveBc !== action.payload?.bcName
+
+            // Before calling the operation, make the active bc on which this operation is being performed
+            if (changeActiveBcForOperation) {
+                dispatch(actions.changeActiveBc({ bcName: action.payload.bcName, onSuccessAction: action }))
+
+                return next(actions.EMPTY)
+            }
+
+            // Autosave
+            if (needAutoSaveForChangeLocation || needAutoSaveForChangeActiveBc) {
+                if (defaultSaveWidget) {
+                    return next(
+                        actions.sendOperation({
+                            bcName: defaultSaveWidget.bcName,
+                            operationType: (defaultSaveWidget.options?.actionGroups as WidgetOperations).defaultSave as string,
+                            widgetName: defaultSaveWidget.name,
+                            onSuccessAction: action
+                        })
+                    )
+                } else {
+                    openNotification({
+                        ...UNSAVED_NOTIFICATION_COMMON,
+                        onOk: () =>
+                            next(
+                                actions.sendOperation({
+                                    bcName: bcNameWithChanges,
+                                    operationType: OperationTypeCrud.save,
+                                    widgetName: state.view.widgets.find(widget => widget.bcName === bcNameWithChanges)?.name ?? '',
+                                    onSuccessAction: action
+                                })
+                            )
+                    })
+
+                    return next(actions.EMPTY)
+                }
+            }
+        }
+
         const isSelectTableCellInit = actions.selectTableCellInit.match(action)
 
         /**
@@ -44,28 +90,6 @@ export const saveFormMiddleware: Middleware =
             (selectedCell.widgetName !== action.payload.widgetName || selectedCell.rowId !== action.payload.rowId)
 
         /**
-         * Default save operation as custom action
-         *
-         * If widget have only custom actions, `defaultSave` option mean witch action
-         * must be executed as save record.
-         * Current actions.changeLocation action as onSuccessAction
-         */
-        const defaultSaveWidget = state.view.widgets?.find(item => item?.options?.actionGroups?.defaultSave)
-        const defaultCursor = state.screen.bo.bc?.[defaultSaveWidget?.bcName as string]?.cursor
-        const pendingData = state.view?.pendingDataChanges?.[defaultSaveWidget?.bcName as string]?.[defaultCursor as string]
-        const isChangeLocation = defaultSaveWidget && actions.changeLocation.match(action) && Object.keys(pendingData || {}).length > 0
-        if (isChangeLocation) {
-            return next(
-                actions.sendOperation({
-                    bcName: defaultSaveWidget.bcName,
-                    operationType: (defaultSaveWidget.options?.actionGroups as WidgetOperations).defaultSave as string,
-                    widgetName: defaultSaveWidget.name,
-                    onSuccessAction: action
-                })
-            )
-        }
-
-        /**
          * final condition
          */
         const isNeedSaveCondition = isNotSaveAction && (isSendOperationForAnotherBc || isSelectTableCellInitOnAnotherRowOrWidget)
@@ -81,3 +105,15 @@ export const saveFormMiddleware: Middleware =
 
         return next(action)
     }
+
+const getBcNameWithChanges = (state: RootState) => {
+    const pendingDataChanges = state.view?.pendingDataChanges
+
+    return Object.keys(pendingDataChanges ?? {}).find(
+        bcName => Object.values(Object.values(pendingDataChanges?.[bcName] ?? {})?.find(changes => changes) ?? {}).length > 0
+    )
+}
+
+const getWidgetWithDefaultSave = (state: RootState, bcName?: string) => {
+    return state.view.widgets?.find(widget => widget.bcName === bcName && widget?.options?.actionGroups?.defaultSave)
+}

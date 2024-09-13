@@ -10,8 +10,7 @@ import { resetRecordForm, setRecordForm } from '@actions'
 import { Spin } from 'antd'
 import DebugWidgetWrapper from '../../../DebugWidgetWrapper/DebugWidgetWrapper'
 import { buildBcUrl } from '@utils/buildBcUrl'
-import { DataItem, FieldType } from '@interfaces/core'
-import { WidgetFormMeta } from '@cxbox-ui/core'
+import { WidgetFormMeta, DataItem, FieldType } from '@cxbox-ui/core'
 
 type ControlColumn = { column: ColumnProps<DataItem>; position: 'left' | 'right' }
 

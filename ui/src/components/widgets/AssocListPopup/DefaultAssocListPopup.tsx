@@ -11,7 +11,7 @@ import { useAssocRecords } from '@hooks/useAssocRecords'
 import { AssocListPopup } from '@cxboxComponents'
 import { useTranslation } from 'react-i18next'
 import { DataItem } from '@cxbox-ui/schema'
-import { AssociatedItem, BcFilter, FilterType, WidgetTableMeta } from '@interfaces/core'
+import { AssociatedItem, BcFilter, FilterType, WidgetTableMeta } from '@cxbox-ui/core'
 import { shallowEqual } from 'react-redux'
 
 const emptyData: AssociatedItem[] = []

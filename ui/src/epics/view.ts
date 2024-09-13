@@ -100,7 +100,7 @@ export const sendOperationEpic: RootEpic = (action$, state$, { api }) =>
                     const preInvoke = response.preInvoke as OperationPreInvoke
                     // defaultSaveOperation mean that executed custom autosave and postAction will be ignored
                     // drop pendingChanges and onSuccessAction execute instead
-                    const isRefreshCurrentBc = postInvoke?.type === OperationPostInvokeType.refreshBC && bcName === postInvoke?.bc
+                    const isRefreshCurrentBc = postInvoke?.type === OperationPostInvokeType.refreshBC
                     const needBcForceUpdate = !isRefreshCurrentBc
                     return defaultSaveOperation
                         ? action?.payload?.onSuccessAction

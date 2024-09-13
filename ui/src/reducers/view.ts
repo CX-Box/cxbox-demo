@@ -1,5 +1,4 @@
-import { PendingValidationFailsFormat, reducers } from '@cxbox-ui/core'
-import { ViewState as CoreViewState } from '@interfaces/core'
+import { PendingValidationFailsFormat, reducers, ViewState as CoreViewState } from '@cxbox-ui/core'
 import { AnyAction, createReducer, isAnyOf } from '@reduxjs/toolkit'
 import { actions, partialUpdateRecordForm, resetRecordForm, setBcCount, setRecordForm, showViewPopup } from '@actions'
 import { PopupData } from '@interfaces/view'

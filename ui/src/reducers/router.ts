@@ -1,11 +1,10 @@
-import { interfaces, reducers } from '@cxbox-ui/core'
+import { reducers, Route, RouteType } from '@cxbox-ui/core'
 import { createReducer } from '@reduxjs/toolkit'
-const { RouteType } = interfaces
 
 /**
  * Your initial state for this slice
  */
-export const initialState: interfaces.Route = {
+export const initialState: Route = {
     ...reducers.initialRouterState,
     type: RouteType.default,
     path: '/',

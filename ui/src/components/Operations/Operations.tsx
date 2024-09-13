@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect, useRef } from 'react'
-import { actions, interfaces } from '@cxbox-ui/core'
+import { actions, interfaces, Operation, OperationGroup } from '@cxbox-ui/core'
 import { Icon } from 'antd'
 import { useAppSelector } from '@store'
 import styles from './Operations.less'
@@ -11,7 +11,6 @@ import cn from 'classnames'
 import { useWidgetOperations } from '@hooks/useWidgetOperations'
 import TextSearchInput from '@components/Operations/components/TextSearchInput/TextSearchInput'
 import { FileUpload } from '@components/Operations/components/FileUpload/FileUpload'
-import { Operation, OperationGroup } from '@interfaces/core'
 import { buildBcUrl } from '@utils/buildBcUrl'
 
 const { isOperationGroup, WidgetTypes } = interfaces

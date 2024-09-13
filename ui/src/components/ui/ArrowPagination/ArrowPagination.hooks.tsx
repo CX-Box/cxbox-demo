@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useAppSelector } from '@store'
 import { shallowEqual, useDispatch } from 'react-redux'
 import { actions } from '@actions'
-import { WidgetMeta } from '@interfaces/core'
+import { WidgetMeta } from '@cxbox-ui/core'
 
 export function useArrowPagination(widget?: WidgetMeta) {
     const { bc, data, page, limit, total, hasNext } = useAppSelector(state => {

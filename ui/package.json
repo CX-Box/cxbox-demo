@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@ant-design/charts": "1.4.2",
-    "@cxbox-ui/core": "2.0.0",
+    "@cxbox-ui/core": "2.1.0",
     "@reduxjs/toolkit": "1.7.2",
     "@stomp/stompjs": "7.0.0",
     "antd": "3.26.20",
@@ -69,7 +69,7 @@
   "homepage": ".",
   "devDependencies": {
     "@craco/craco": "7.1.0",
-    "@cxbox-ui/schema": "^0.7.1",
+    "@cxbox-ui/schema": "0.8.0",
     "@types/diff": "5.0.3",
     "@types/file-saver": "2.0.5",
     "@types/lodash.debounce": "4.0.9",

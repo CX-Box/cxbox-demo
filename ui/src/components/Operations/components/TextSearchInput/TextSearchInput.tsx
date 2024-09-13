@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next'
 import { Icon, Popover } from 'antd'
 import { useAppSelector } from '@store'
 import { FilterType } from '@interfaces/filters'
-import { FilterType as CoreFilterType } from '@interfaces/core'
+import { FilterType as CoreFilterType } from '@cxbox-ui/core'
 
 const FULL_TEXT_SEARCH = FilterType.fullTextSearch as CoreFilterType
 

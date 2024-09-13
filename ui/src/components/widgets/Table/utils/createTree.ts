@@ -1,7 +1,6 @@
-import { DataItem, FieldType, WidgetFieldBase } from '@cxbox-ui/schema'
+import { DataItem, DataValue, FieldType, WidgetFieldBase } from '@cxbox-ui/schema'
 import { CustomFieldTypes, WidgetField } from '@interfaces/widget'
 import { changeOrderWithMutate } from '@utils/changeOrderWithMutate'
-import { DataValue } from '@cxbox-ui/schema/src/interfaces/data'
 
 export const createTree = (array?: any[], sortedGroupKeys: string[] = [], fields?: WidgetField[]) => {
     const unallocatedRows: any[] = []

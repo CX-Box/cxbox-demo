@@ -1,14 +1,6 @@
 import { Button, notification } from 'antd'
 import React from 'react'
 
-export const UNSAVED_NOTIFICATION_COMMON: Omit<OpenNotificationType, 'onOk' | 'onCancel'> = {
-    key: 'unsaved notification',
-    okText: 'Save',
-    cancelText: 'Cancel',
-    message: 'There is unsaved data, save it ?',
-    description: ''
-}
-
 export interface OpenNotificationType {
     key?: string
     message?: string

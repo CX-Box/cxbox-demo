@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useCallback } from 'react'
+import React, { FunctionComponent } from 'react'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { Form, Icon, Input, Tooltip } from 'antd'
@@ -22,12 +22,11 @@ import { CustomizationContext } from '@cxboxComponents/View/View'
 import { InteractiveInput } from '@cxboxComponents/ui/InteractiveInput/InteractiveInput'
 import HistoryField from '@cxboxComponents/ui/HistoryField/HistoryField'
 import { TooltipPlacement } from 'antd/es/tooltip'
-import { interfaces } from '@cxbox-ui/core'
+import { interfaces, actions } from '@cxbox-ui/core'
 import { RootState } from '@store'
 import { useDrillDownUrl } from '@hooks/useDrillDownUrl'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import { useTranslation } from 'react-i18next'
-import { actions } from '@actions'
 
 interface FieldOwnProps {
     widgetFieldMeta: interfaces.WidgetField
@@ -48,7 +47,6 @@ interface FieldOwnProps {
 }
 
 interface FieldProps extends FieldOwnProps {
-    activeBc: string | null
     data: interfaces.DataItem
     pendingValue: interfaces.DataValue
     rowFieldMeta: interfaces.RowMetaField
@@ -56,7 +54,6 @@ interface FieldProps extends FieldOwnProps {
     showErrorPopup: boolean
     onChange: (payload: ChangeDataItemPayload) => void
     onDrillDown: (widgetName: string, cursor: string, bcName: string, fieldKey: string) => void
-    changeActiveBc: (bcName: string) => void
 }
 
 /**
@@ -138,9 +135,7 @@ export const Field: FunctionComponent<FieldProps> = ({
     tooltipPlacement,
     customProps,
     onChange,
-    onDrillDown,
-    changeActiveBc,
-    activeBc
+    onDrillDown
 }) => {
     const { t } = useTranslation()
     const [localValue, setLocalValue] = React.useState<string | null>(null)
@@ -153,35 +148,18 @@ export const Field: FunctionComponent<FieldProps> = ({
 
     const placeholder = rowFieldMeta?.placeholder
 
-    const updateActiveBc = useCallback(() => {
-        if (activeBc !== bcName) {
-            changeActiveBc(bcName)
-        }
-    }, [activeBc, bcName, changeActiveBc])
-
     const handleChange = React.useCallback(
         eventValue => {
-            updateActiveBc()
-
-            if (bcName === activeBc) {
-                const dataItem = { [widgetFieldMeta.key]: eventValue }
-                setLocalValue(null)
-                onChange({ bcName, cursor, dataItem })
-            }
+            const dataItem = { [widgetFieldMeta.key]: eventValue }
+            setLocalValue(null)
+            onChange({ bcName, cursor, dataItem })
         },
-        [updateActiveBc, bcName, activeBc, widgetFieldMeta.key, onChange, cursor]
+        [bcName, cursor, widgetFieldMeta.key, onChange]
     )
 
-    const handleInputChange = React.useCallback(
-        (event: React.ChangeEvent<HTMLInputElement>) => {
-            updateActiveBc()
-
-            if (bcName === activeBc) {
-                setLocalValue(event.target.value)
-            }
-        },
-        [activeBc, bcName, updateActiveBc]
-    )
+    const handleInputChange = React.useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+        setLocalValue(event.target.value)
+    }, [])
 
     const bgColor = widgetFieldMeta.bgColorKey ? (data?.[widgetFieldMeta.bgColorKey] as string) : widgetFieldMeta.bgColor
 
@@ -450,7 +428,7 @@ export const Field: FunctionComponent<FieldProps> = ({
                 title={t(metaError)}
                 getPopupContainer={trigger => trigger.parentElement as HTMLElement}
             >
-                <div onFocusCapture={updateActiveBc}>
+                <div>
                     <Form.Item validateStatus="error">{resultField}</Form.Item>
                 </div>
             </Tooltip>
@@ -463,18 +441,16 @@ export const Field: FunctionComponent<FieldProps> = ({
                 if (customFields?.[widgetFieldMeta.type] || customFields?.[widgetFieldMeta.key]) {
                     const CustomComponent = customFields?.[widgetFieldMeta.type] || customFields?.[widgetFieldMeta.key]
                     return (
-                        <div onFocusCapture={updateActiveBc}>
-                            <CustomComponent
-                                {...commonProps}
-                                customProps={customProps}
-                                value={value}
-                                onBlur={handleInputBlur}
-                                onChange={handleChange}
-                            />
-                        </div>
+                        <CustomComponent
+                            {...commonProps}
+                            customProps={customProps}
+                            value={value}
+                            onBlur={handleInputBlur}
+                            onChange={handleChange}
+                        />
                     )
                 }
-                return <div onFocusCapture={updateActiveBc}>{resultField}</div>
+                return resultField
             }}
         </CustomizationContext.Consumer>
     )
@@ -495,7 +471,6 @@ function mapStateToProps(state: RootState, ownProps: FieldOwnProps) {
     const widget = state.view.widgets.find(item => item.name === ownProps.widgetName)
     const showErrorPopup = widget?.type !== interfaces.WidgetTypes.Form && !ownProps.disableHoverError
     return {
-        activeBc: state.screen.bo.activeBcName,
         data: (ownProps.data || state.data[ownProps.bcName]?.find(item => item.id === ownProps.cursor)) as interfaces.DataItem,
         pendingValue,
         rowFieldMeta,
@@ -511,9 +486,6 @@ function mapDispatchToProps(dispatch: Dispatch) {
         },
         onDrillDown: (widgetName: string, cursor: string, bcName: string, fieldKey: string) => {
             dispatch(actions.userDrillDown({ widgetName, cursor, bcName, fieldKey }))
-        },
-        changeActiveBc: (bcName: string) => {
-            dispatch(actions.changeActiveBc({ bcName }))
         }
     }
 }

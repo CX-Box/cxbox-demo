@@ -1,49 +1,55 @@
-import React from 'react'
+import React, { memo, useCallback } from 'react'
 import cn from 'classnames'
-import { AssocListPopup as CoreAssocListPopup } from '@cxboxComponents'
-import tableStyles from '../../Table/Table.less'
-import assocListStyles from '../AssocListPopup.less'
+import styles from '../AssocListPopup.less'
 import Pagination from '../../../ui/Pagination/Pagination'
 import { useDispatch } from 'react-redux'
 import Button from '../../../ui/Button/Button'
-import AssocTable from './AssocTable'
+import SelectionTable from './SelectionTable'
 import { AppWidgetTableMeta } from '@interfaces/widget'
 import Title from './Title'
 import { actions } from '@cxbox-ui/core'
 import { useTranslation } from 'react-i18next'
+import { useAppSelector } from '@store'
+import Popup from '@components/Popup/Popup'
 
 interface PassiveAssocListPopupProps {
     meta: AppWidgetTableMeta
 }
 
 function PassiveAssocListPopup({ meta }: PassiveAssocListPopupProps) {
+    const assocValueKey = useAppSelector(state => state.view.popupData?.assocValueKey ?? '')
+
     const dispatch = useDispatch()
 
-    const onClose = React.useCallback(() => {
+    const onClose = useCallback(() => {
         dispatch(actions.closeViewPopup({ bcName: meta.bcName }))
     }, [meta.bcName, dispatch])
 
     const { t } = useTranslation()
+
     return (
-        <CoreAssocListPopup
-            className={cn(tableStyles.tableContainer, assocListStyles.container)}
-            widget={meta}
-            components={{
-                title: <Title title={meta.title} widgetName={meta.name} />,
-                table: <AssocTable meta={meta} disablePagination={true} />,
-                footer: (
-                    <>
-                        <Pagination meta={meta} />
-                        <div className={assocListStyles.actions}>
-                            <Button data-test-widget-list-close={true} onClick={onClose}>
-                                {t('Close')}
-                            </Button>
-                        </div>
-                    </>
-                )
-            }}
-        />
+        <Popup
+            className={cn(styles.container)}
+            title={<Title title={meta.title} widgetName={meta.name} assocValueKey={assocValueKey} />}
+            showed
+            size="large"
+            onCancelHandler={onClose}
+            bcName={meta.bcName}
+            widgetName={meta.name}
+            footer={
+                <>
+                    <Pagination meta={meta} />
+                    <div className={styles.actions}>
+                        <Button data-test-widget-list-close={true} onClick={onClose}>
+                            {t('Close')}
+                        </Button>
+                    </div>
+                </>
+            }
+        >
+            <SelectionTable meta={meta} disablePagination={true} />
+        </Popup>
     )
 }
 
-export default React.memo(PassiveAssocListPopup)
+export default memo(PassiveAssocListPopup)

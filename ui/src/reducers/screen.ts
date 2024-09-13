@@ -66,9 +66,6 @@ const screenReducerBuilder = reducers
         state.bo.bc[bcName] = state.bo.bc[bcName] ?? {}
         state.bo.bc[bcName].loading = false
     })
-    .addCase(actions.changeActiveBc, (state, action) => {
-        state.bo.activeBcName = action.payload.bcName as string
-    })
     .addMatcher(isAnyOf(actions.selectScreen), (state, action) => {
         // временное решение чтобы сохранялся лимит при сменен экранов
         Object.values(state.bo.bc).forEach(bc => {

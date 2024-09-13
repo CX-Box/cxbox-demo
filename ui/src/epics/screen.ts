@@ -169,23 +169,10 @@ export const selectScreen: RootEpic = (action$, state$) =>
         })
     )
 
-const callSuccessActionAfterChangeActiveBdEpic: RootEpic = (action$, state$, { api }) =>
-    action$.pipe(
-        filter(actions.changeActiveBc.match),
-        switchMap(action => {
-            if (action.payload.onSuccessAction) {
-                return of(action.payload.onSuccessAction)
-            }
-
-            return EMPTY
-        })
-    )
-
 export const screenEpics = {
     replaceTemporaryIdOnSavingEpic,
     processPreInvokeConfirmEpic,
     addFilterGroupEpic,
     deleteFilterGroupEpic,
-    changeScreen: selectScreen,
-    callSuccessActionAfterChangeActiveBdEpic
+    changeScreen: selectScreen
 }

@@ -2,11 +2,19 @@ import { AnyAction, Dispatch, MiddlewareAPI } from 'redux'
 import { RootState } from '@store'
 import { actions, interfaces } from '@cxbox-ui/core'
 import { AppWidgetMeta } from '@interfaces/widget'
-import { openNotification, UNSAVED_NOTIFICATION_COMMON } from './utils/openNotification'
+import { openNotification, OpenNotificationType } from './internalFormWidgetMiddleware.utils'
 import { partialUpdateRecordForm, resetRecordForm, setRecordForm } from '@actions'
 import { Middleware } from '@reduxjs/toolkit'
 
 const { OperationTypeCrud } = interfaces
+
+const TEXTS_FOR_UNSAVED_NOTIFICATION: Omit<OpenNotificationType, 'onOk' | 'onCancel'> = {
+    key: 'unsaved notification',
+    okText: 'Save',
+    cancelText: 'Cancel',
+    message: 'There is unsaved data, save it ?',
+    description: ''
+}
 
 export const internalFormWidgetMiddleware: Middleware =
     ({ getState, dispatch }: MiddlewareAPI<Dispatch<AnyAction>, RootState>) =>
@@ -79,7 +87,7 @@ export const internalFormWidgetMiddleware: Middleware =
 
         const showNotificationBeforeCreatingWhenThereIsAnActiveEdit = (action: AnyAction) => {
             openNotification({
-                ...UNSAVED_NOTIFICATION_COMMON,
+                ...TEXTS_FOR_UNSAVED_NOTIFICATION,
                 onOk: () => {
                     dispatch(
                         actions.sendOperation({
@@ -102,7 +110,7 @@ export const internalFormWidgetMiddleware: Middleware =
 
         const showNotificationAtChangeActiveForm = (action: AnyAction) => {
             openNotification({
-                ...UNSAVED_NOTIFICATION_COMMON,
+                ...TEXTS_FOR_UNSAVED_NOTIFICATION,
                 onOk: () => {
                     dispatch(
                         actions.sendOperation({
@@ -131,7 +139,7 @@ export const internalFormWidgetMiddleware: Middleware =
 
         const showNotificationAtSimpleRecordChange = (action: AnyAction) => {
             openNotification({
-                ...UNSAVED_NOTIFICATION_COMMON,
+                ...TEXTS_FOR_UNSAVED_NOTIFICATION,
                 onOk: () => {
                     dispatch(
                         actions.sendOperation({
@@ -155,7 +163,7 @@ export const internalFormWidgetMiddleware: Middleware =
 
         const showNotificationAtChangeRecordAfterCreate = (action: AnyAction) => {
             openNotification({
-                ...UNSAVED_NOTIFICATION_COMMON,
+                ...TEXTS_FOR_UNSAVED_NOTIFICATION,
                 onOk: () => {
                     dispatch(
                         actions.sendOperation({
@@ -275,7 +283,7 @@ export const internalFormWidgetMiddleware: Middleware =
 
         const showNotificationAtRecordClose = (action: AnyAction) => {
             openNotification({
-                ...UNSAVED_NOTIFICATION_COMMON,
+                ...TEXTS_FOR_UNSAVED_NOTIFICATION,
                 onOk: () => {
                     dispatch(
                         actions.sendOperation({

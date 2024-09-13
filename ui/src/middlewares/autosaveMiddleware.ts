@@ -15,14 +15,18 @@ export const saveFormMiddleware: Middleware =
         const isCoreSendOperation = isSendOperation && coreOperations.includes(action.payload.operationType as OperationTypeCrud)
         const isChangeActiveBc = actions.changeActiveBc.match(action)
         const isChangeLocation = actions.changeLocation.match(action)
+        const isPopup = state.view.popupData?.bcName === (action as AnyAction).payload?.bcName
 
         if (isChangeActiveBc || isChangeLocation || isSendOperation) {
             const bcNameWithChanges = getBcNameWithChanges(state)
             const defaultSaveWidget = getWidgetWithDefaultSave(state, bcNameWithChanges)
             const previousActiveBc = state.screen.bo.activeBcName
-            const needAutoSaveForChangeActiveBc = isChangeActiveBc && bcNameWithChanges && previousActiveBc !== action.payload?.bcName
-            const needAutoSaveForChangeLocation = isChangeLocation && bcNameWithChanges
-            const changeActiveBcForOperation = isSendOperation && bcNameWithChanges && previousActiveBc !== action.payload?.bcName
+            const newBcName = (action as AnyAction).payload?.bcName
+            const isAnotherBc = bcNameWithChanges !== newBcName
+            const needAutoSaveForChangeActiveBc = isChangeActiveBc && bcNameWithChanges && isAnotherBc && previousActiveBc !== newBcName
+            const isChangeScreen = isChangeLocation && action.payload.location.screenName !== state.screen.screenName
+            const needAutoSaveForChangeLocation = isChangeLocation && bcNameWithChanges && isChangeScreen
+            const changeActiveBcForOperation = isSendOperation && previousActiveBc !== action.payload?.bcName
 
             // Before calling the operation, make the active bc on which this operation is being performed
             if (changeActiveBcForOperation) {
@@ -32,7 +36,7 @@ export const saveFormMiddleware: Middleware =
             }
 
             // Autosave
-            if (needAutoSaveForChangeLocation || needAutoSaveForChangeActiveBc) {
+            if ((needAutoSaveForChangeLocation || needAutoSaveForChangeActiveBc) && !isPopup) {
                 if (defaultSaveWidget) {
                     return next(
                         actions.sendOperation({
@@ -93,7 +97,6 @@ export const saveFormMiddleware: Middleware =
          * final condition
          */
         const isNeedSaveCondition = isNotSaveAction && (isSendOperationForAnotherBc || isSelectTableCellInitOnAnotherRowOrWidget)
-        const isPopup = state.view.popupData?.bcName === (action as AnyAction).payload?.bcName
 
         const wasForcedUpdateForPopup = isNeedSaveCondition && isPopup && (action as AnyAction).payload?.wasForcedUpdate
         /**

@@ -84,6 +84,7 @@ public class MeetingWriteMeta extends FieldMetaBuilder<MeetingDTO> {
 		fields.enableSort(MeetingDTO_.clientName);
 		fields.setForceActive(MeetingDTO_.startDateTime);
 		fields.enableSort(MeetingDTO_.startDateTime);
+		fields.enableFilter(MeetingDTO_.startDateTime);
 		fields.setForceActive(MeetingDTO_.endDateTime);
 		fields.enableSort(MeetingDTO_.agenda);
 		fields.enableSort(MeetingDTO_.id);

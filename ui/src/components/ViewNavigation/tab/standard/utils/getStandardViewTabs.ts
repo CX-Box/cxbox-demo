@@ -56,8 +56,9 @@ export const getStandardViewTabs = (
                     const nodesKeys = getArrayFromNodePath(dictionary[nodeId]?.path)
 
                     nodesKeys?.forEach(dictionaryKey => {
-                        // Set viewName of the first leaf of the branch as the default value for all parent nodes
-                        if (!dictionary[dictionaryKey].viewName) {
+                        const isVisibleNode = !node.hidden || selected
+                        // Set viewName of the first visible leaf of the branch as the default value for all parent nodes.
+                        if (!dictionary[dictionaryKey].viewName && isVisibleNode) {
                             dictionary[dictionaryKey].viewName = node.viewName
                         }
 
@@ -88,7 +89,7 @@ export const getStandardViewTabs = (
         const isFirstDepth = currentDepth === 1
         const parentNodeIndex = (nodeFromDictionary?.depth as number) - 2
         const isChildForActiveParentNode = String(nodeFromDictionary.path).includes(activeViewsKeys?.[parentNodeIndex] as string)
-        const nodeVisibility = !nodeFromDictionary.hidden || nodeFromDictionary.selected
+        const nodeVisibility = nodeFromDictionary.viewName && (!nodeFromDictionary.hidden || nodeFromDictionary.selected)
 
         // Leave the visible nodes that are children of the active view
         if (isCurrentDepth && nodeVisibility && (isFirstDepth || isChildForActiveParentNode)) {

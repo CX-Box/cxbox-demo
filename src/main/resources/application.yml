@@ -151,4 +151,4 @@ org:
     background-job-server:
       enabled: true
     dashboard:
-      enabled: true
+      enabled: false

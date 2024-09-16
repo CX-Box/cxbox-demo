@@ -19,10 +19,8 @@ public class DashboardClientActivitiesMeta extends FieldMetaBuilder<DashboardCli
 
 	@Override
 	public void buildIndependentMeta(FieldsMeta<DashboardClientActivitiesDTO> fields, InnerBcDescription bcDescription, Long parentId) {
-		fields.enableSort(
-				DashboardClientActivitiesDTO_.clientName,
-				DashboardClientActivitiesDTO_.numberOfOpenActivities
-		);
+		fields.enableFilter(DashboardClientActivitiesDTO_.clientName);
+		fields.enableSort(DashboardClientActivitiesDTO_.clientName);
 	}
 
 }

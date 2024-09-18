@@ -2,7 +2,7 @@
   "name": "clientAdditional",
   "title": "Additional information",
   "type": "AdditionalInfo",
-  "bc": "client",
+  "bc": "clientEdit",
   "fields": [
     {
       "label": "Importance",

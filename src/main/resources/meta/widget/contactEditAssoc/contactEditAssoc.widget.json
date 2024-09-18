@@ -20,7 +20,5 @@
       "key": "email",
       "type": "input"
     }
-  ],
-  "axisFields": [],
-  "chart": []
+  ]
 }

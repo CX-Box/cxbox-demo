@@ -2,7 +2,7 @@
   "name": "clientViewOperations",
   "title": "",
   "type": "Form",
-  "bc": "client",
+  "bc": "clientEdit",
   "fields": [],
   "options": {
     "actionGroups": {

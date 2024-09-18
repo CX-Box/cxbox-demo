@@ -2,7 +2,7 @@
   "name": "contactViewList",
   "title": "Contacts",
   "type": "List",
-  "bc": "contact",
+  "bc": "contactEdit",
   "fields": [
     {
       "title": "Name",

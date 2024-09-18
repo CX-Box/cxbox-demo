@@ -57,7 +57,7 @@ public class ClientReadWriteMeta extends FieldMetaBuilder<ClientWriteDTO> {
 		fields.setDrilldown(
 				ClientReadDTO_.fullName,
 				DrillDownType.INNER,
-				"/screen/client/view/clientview/" + CxboxRestController.client + "/" + id
+				"/screen/client/view/clientview/" + CxboxRestController.clientEdit + "/" + id
 		);
 	}
 

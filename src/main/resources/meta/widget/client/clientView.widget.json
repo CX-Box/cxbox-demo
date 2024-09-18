@@ -2,7 +2,7 @@
   "name": "clientView",
   "title": "General information",
   "type": "Info",
-  "bc": "client",
+  "bc": "clientEdit",
   "fields": [
     {
       "blockId": "1",

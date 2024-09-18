@@ -29,6 +29,12 @@ public class ClientContactMeta extends FieldMetaBuilder<ContactDTO>  {
 
 	@Override
 	public void buildIndependentMeta(FieldsMeta<ContactDTO> fields, InnerBcDescription bcDescription, Long parentId) {
+		fields.enableFilter(
+				ContactDTO_.fullName,
+				ContactDTO_.email,
+				ContactDTO_.phoneNumber
+		);
+
 		fields.enableSort(
 				ContactDTO_.fullName,
 				ContactDTO_.email,

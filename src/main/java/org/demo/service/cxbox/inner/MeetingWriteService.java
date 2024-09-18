@@ -14,9 +14,13 @@ import static org.demo.dto.cxbox.inner.MeetingDTO_.region;
 
 import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.commons.lang3.StringUtils;
 import org.cxbox.core.crudma.bc.BusinessComponent;
@@ -51,7 +55,11 @@ import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S3252", "java:S1186"})
 @Service
+
+@Slf4j
 public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO, Meeting> {
+
+	private static final String MESSAGE_TEMPLATE = "Status: %s; \nMeeting Result: %s";
 
 	private final MeetingRepository meetingRepository;
 
@@ -65,10 +73,9 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 
 	private final EntityManager entityManager;
 
-	private final  MailSendingService mailSendingService;
+	private final MailSendingService mailSendingService;
 
 	private final SessionService sessionService;
-	private static final String MESSAGE_TEMPLATE = "Status: %s; \nMeeting Result: %s";
 
 	public MeetingWriteService(MeetingRepository meetingRepository, ClientRepository clientRepository,
 			ContactRepository contactRepository, UserRepository userRepository,
@@ -83,6 +90,10 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 		this.entityManager = entityManager;
 		this.mailSendingService = mailSendingService;
 		this.sessionService = sessionService;
+	}
+
+	private static PreAction confirmWithComment(@NonNull String actionText) {
+		return ActionsExt.confirmWithCustomWidget(actionText + "?", "meetingResultFormPopup", "Approve and Save", "Cancel");
 	}
 
 	@Override
@@ -100,7 +111,7 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 					.filter(Objects::nonNull)
 					.map(Long::parseLong)
 					.map(e -> entityManager.getReference(Contact.class, e))
-					.	toList());
+					.toList());
 			val primary = data.getAdditionalContacts().getValues().stream()
 					.filter(e -> e.getOptions().get(MultivalueExt.PRIMARY) != null && e.getOptions().get(MultivalueExt.PRIMARY)
 							.equalsIgnoreCase(Boolean.TRUE.toString())).findAny();
@@ -110,9 +121,9 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 		setIfChanged(data, startDateTime, entity::setStartDateTime);
 		setIfChanged(data, endDateTime, entity::setEndDateTime);
 		setMappedIfChanged(data, region, entity::setRegion, val ->
-			Optional.ofNullable(StringUtils.defaultIfBlank(val, null))
-					.map(e -> REGIONS.lookupName(val))
-					.orElse(null)
+				Optional.ofNullable(StringUtils.defaultIfBlank(val, null))
+						.map(e -> REGIONS.lookupName(val))
+						.orElse(null)
 		);
 		setIfChanged(data, address, entity::setAddress);
 		setIfChanged(data, notes, entity::setNotes);
@@ -137,6 +148,7 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 
 	@Override
 	public ActionResultDTO onCancel(BusinessComponent bc) {
+
 		return new ActionResultDTO<>().setAction(PostAction.drillDown(
 				DrillDownType.INNER,
 				"/screen/meeting/"
@@ -146,43 +158,45 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 	@Override
 	public Actions<MeetingDTO> getActions() {
 		return Actions.<MeetingDTO>builder()
-				.create().text("Add").add()
-				.save().add()
+				.create(cr -> cr.text("Add"))
+				.save(sv -> sv.text("Save"))
+				.cancelCreate(cnc -> cnc.text("Cancel").available(bc -> true))
 				.addGroup(
 						"actions",
 						"Actions",
 						0,
-						addEditAction(statusModelActionProvider.getMeetingActions()).build()
+						addEditAction(statusModelActionProvider.getMeetingActions())
+								.withIcon(ActionIcon.MENU, false)
+								.build()
 				)
-				.withIcon(ActionIcon.MENU, false)
-				.newAction()
-				.scope(ActionScope.RECORD)
-				.withAutoSaveBefore()
-				.action("saveAndContinue", "Save")
-				.withPreAction(confirmWithComment("Approval"))
-				.invoker((bc, dto) -> new ActionResultDTO<MeetingDTO>().setAction(
-						PostAction.drillDown(
-								DrillDownType.INNER,
-								"/screen/meeting/view/meetingview/" + CxboxRestController.meeting + "/" + bc.getId()
-						)))
-				.add()
-				.cancelCreate().text("Cancel").available(bc -> true).add()
-				.action("sendEmail", "Send Email")
-				.invoker((bc, data) -> {
-					Meeting meeting = meetingRepository.getReferenceById(Long.parseLong(bc.getId()));
-					getSend(meeting);
-					return new ActionResultDTO<MeetingDTO>()
-							.setAction(PostAction.showMessage(MessageType.INFO, "The email is currently being sent."));
-				})
-				.add()
-				.action("sendEmailNextDay", "Send Email Next Day")
-				.invoker((bc, data) -> {
-					BackgroundJob.<MailSendingService>schedule(LocalDateTime.now().plusDays(1), x -> x.stats("save pressed job"));
-					return new ActionResultDTO<MeetingDTO>()
-							.setAction(PostAction.showMessage(MessageType.INFO, "The email will be dispatched tomorrow."));
-				})
-				.add()
-
+				.action(act -> act
+						.scope(ActionScope.RECORD)
+						.withAutoSaveBefore()
+						.action("saveAndContinue", "Save")
+						.withPreAction(confirmWithComment("Approval"))
+						.invoker((bc, dto) -> new ActionResultDTO<MeetingDTO>().setAction(
+								PostAction.drillDown(
+										DrillDownType.INNER,
+										"/screen/meeting/view/meetingview/" + CxboxRestController.meeting + "/" + bc.getId()
+								))))
+				.action(act -> act
+						.action("sendEmail", "Send Email")
+						.invoker((bc, data) -> {
+							Meeting meeting = meetingRepository.getReferenceById(Long.parseLong(bc.getId()));
+							getSend(meeting);
+							return new ActionResultDTO<MeetingDTO>()
+									.setAction(PostAction.showMessage(MessageType.INFO, "The email is currently being sent."));
+						}))
+				.action(act -> act
+						.action("sendEmailNextDay", "Send Email Next Day")
+						.invoker((bc, data) -> {
+							BackgroundJob.<MailSendingService>schedule(
+									LocalDateTime.now().plusDays(1),
+									x -> x.stats("save pressed job")
+							);
+							return new ActionResultDTO<MeetingDTO>()
+									.setAction(PostAction.showMessage(MessageType.INFO, "The email will be dispatched tomorrow."));
+						}))
 				.build();
 	}
 
@@ -193,10 +207,6 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 				String.format(MESSAGE_TEMPLATE, meeting.getStatus().getValue(), meeting.getResult()),
 				userRepository.getReferenceById(sessionService.getSessionUser().getId())
 		);
-	}
-
-	private static PreAction confirmWithComment(@NonNull String actionText) {
-		return ActionsExt.confirmWithCustomWidget(actionText + "?", "meetingResultFormPopup", "Approve and Save", "Cancel");
 	}
 
 	private ActionsBuilder<MeetingDTO> addEditAction(ActionsBuilder<MeetingDTO> builder) {

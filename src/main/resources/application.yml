@@ -42,7 +42,7 @@ cxbox:
     use-servlet-context-path: false
 
 server:
-  port: 89
+  port: 8080
   forward-headers-strategy: framework
   servlet:
     session:

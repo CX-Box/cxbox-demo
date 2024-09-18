@@ -1,5 +1,11 @@
 package org.demo.entity;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.EqualsAndHashCode;
 import org.cxbox.model.core.entity.BaseEntity;
 import lombok.Getter;
@@ -7,8 +13,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -19,9 +23,12 @@ import jakarta.persistence.Table;
 @EqualsAndHashCode(of = {}, callSuper = true)
 public class Contact extends BaseEntity {
 
-	@ManyToOne
-	@JoinColumn(name = "CLIENT_ID")
-	private Client client;
+	@JoinTable(name = "Client_Contact",
+			joinColumns = @JoinColumn(name = "Contact_id"),
+			inverseJoinColumns = @JoinColumn(name = "Client_id")
+	)
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	private Set<Client> clients = new HashSet<>();
 
 	private String fullName;
 

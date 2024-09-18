@@ -1,7 +1,10 @@
 package org.demo.service.cxbox.inner;
 
-import java.util.Collections;
+import static org.demo.controller.CxboxRestController.contactEditAssoc;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.cxbox.api.data.dto.AssociateDTO;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
@@ -10,22 +13,22 @@ import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.AssociateResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.cxbox.core.dto.rowmeta.PostAction;
+import org.cxbox.core.exception.BusinessException;
 import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
-import org.cxbox.model.core.entity.BaseEntity_;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.inner.ContactDTO;
 import org.demo.dto.cxbox.inner.ContactDTO_;
 import org.demo.entity.Client;
 import org.demo.entity.Contact;
-import org.demo.entity.Contact_;
 import org.demo.repository.ClientRepository;
 import org.demo.repository.ContactRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-@SuppressWarnings({"java:S3252","java:S1186"})
+@SuppressWarnings({"java:S3252", "java:S1186"})
 @Service
 public class ClientContactService extends VersionAwareResponseService<ContactDTO, Contact> {
 
@@ -41,20 +44,23 @@ public class ClientContactService extends VersionAwareResponseService<ContactDTO
 
 	@Override
 	protected Specification<Contact> getParentSpecification(BusinessComponent bc) {
-		return (root, cq, cb) -> cb.and(
-				super.getParentSpecification(bc).toPredicate(root, cq, cb),
-				cb.equal(root.get(Contact_.client).get(BaseEntity_.id), bc.getParentIdAsLong())
-		);
-
+		var clientId = bc.getParentIdAsLong();
+		if (contactEditAssoc.isBc(bc)) {
+			return contactRepository.getAllContactsNotAlreadyAssociatedWithClient(clientId);
+		} else {
+			return contactRepository.getAllClientContacts(clientId);
+		}
 	}
 
 	@Override
 	protected CreateResult<ContactDTO> doCreateEntity(Contact entity, BusinessComponent bc) {
 		Client client = clientRepository.findById(bc.getParentIdAsLong()).orElse(null);
-		entity.setClient(client);
+		if (client != null) {
+			entity.getClients().add(client);
+		}
 		contactRepository.save(entity);
-		CreateResult<ContactDTO> result = new CreateResult<>(entityToDto(bc, entity));
 
+		CreateResult<ContactDTO> result = new CreateResult<>(entityToDto(bc, entity));
 		if (client != null) {
 			result
 					.setAction(PostAction.drillDown(
@@ -79,8 +85,21 @@ public class ClientContactService extends VersionAwareResponseService<ContactDTO
 
 	@Override
 	protected AssociateResultDTO doAssociate(List<AssociateDTO> data, BusinessComponent bc) {
-		return new AssociateResultDTO(Collections.emptyList())
-				.setAction(PostAction.refreshBc(bc));
+		Client client = clientRepository.findById(bc.getParentIdAsLong()).orElse(null);
+		List<Contact> contacts = new ArrayList<>();
+		if (client != null) {
+			data.stream()
+					.filter(AssociateDTO::getAssociated)
+					.map(AssociateDTO::getId)
+					.forEach(id -> contactRepository.findById(Long.parseLong(id))
+							.ifPresent(e -> {
+								e.getClients().add(client);
+								contacts.add(e);
+							}));
+			contactRepository.saveAll(contacts);
+		}
+		return new AssociateResultDTO(contacts.stream().map(e -> entityToDto(bc, e))
+				.collect(Collectors.toList()));
 	}
 
 	@Override
@@ -116,6 +135,32 @@ public class ClientContactService extends VersionAwareResponseService<ContactDTO
 										+ bc.getId()
 
 						)))
+				.add()
+				.newAction()
+				.action("delete_association_and_save_contact", "Delete association")
+				.invoker((bc, dto) -> {
+					Long contactId = bc.getIdAsLong();
+					Long clientId = bc.getParentIdAsLong();
+					var contact = contactRepository.findById(contactId).orElseThrow();
+					contact.getClients().removeIf(e -> e.getId().equals(clientId));
+					contactRepository.save(contact);
+					return new ActionResultDTO<>();
+				})
+				.add()
+				.newAction()
+				.action("delete_association_and_contact", "Delete contact")
+				.invoker((bc, dto) -> {
+					Long contactId = bc.getIdAsLong();
+					contactRepository.deleteById(contactId);
+					return new ActionResultDTO<ContactDTO>()
+							.setAction(PostAction.drillDown(
+									DrillDownType.INNER,
+									"/screen/client/view/clienteditcontacts/"
+											+ CxboxRestController.clientEdit + "/"
+											+ bc.getParentIdAsLong()
+
+							));
+				})
 				.add()
 				.newAction()
 				.action("cancel", "Cancel")

@@ -18,7 +18,7 @@ app:
     host: ${ACTIVEMQ_HOST:}
     port: ${ACTIVEMQ_PORT:61616}
   integrations:
-    lov-server-url: ${LOV_SERVER_URL:http://localhost:8080/rest/api/v1/lov}
+    lov-server-url: ${LOV_SERVER_URL:http://localhost:${server.port}/rest/api/v1/lov}
 
 cxbox:
   bean:
@@ -42,7 +42,7 @@ cxbox:
     use-servlet-context-path: false
 
 server:
-  port: 8080
+  port: 89
   forward-headers-strategy: framework
   servlet:
     session:

@@ -26,8 +26,9 @@
       "include": [
         "create",
         "save",
-        "add",
         "edit",
+        "delete_association_and_contact",
+        "delete_association_and_save_contact",
         "associate"
       ]
     }

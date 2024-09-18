@@ -1,5 +1,6 @@
 package org.demo.entity;
 
+import jakarta.persistence.ManyToMany;
 import lombok.EqualsAndHashCode;
 import org.demo.entity.enums.ClientEditStep;
 import org.demo.entity.enums.ClientImportance;
@@ -39,7 +40,7 @@ public class Client extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private Set<FieldOfActivity> fieldOfActivities = new HashSet<>();
 
-	@OneToMany(mappedBy = "client")
+	@ManyToMany(mappedBy = "clients")
 	private Set<Contact> contacts = new HashSet<>();
 
 	@OneToMany(mappedBy = "client")

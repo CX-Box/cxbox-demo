@@ -1,11 +1,11 @@
 package org.demo.entity;
 
 import jakarta.persistence.Column;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import java.util.Set;
 import lombok.EqualsAndHashCode;
 import org.cxbox.api.data.dictionary.LOV;
 import org.demo.entity.core.User;
@@ -68,6 +68,6 @@ public class Meeting extends BaseEntity {
 			inverseJoinColumns = @JoinColumn(name = "Contact_id")
 	)
 	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-	private List<Contact> additionalContacts = new ArrayList<>();
+	private Set<Contact> additionalContacts = new HashSet<>();
 
 }

@@ -16,6 +16,7 @@ import org.cxbox.core.dto.rowmeta.PostAction;
 import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
 import org.demo.controller.CxboxRestController;
+import org.demo.dto.cxbox.inner.ClientWriteDTO;
 import org.demo.dto.cxbox.inner.ContactDTO;
 import org.demo.dto.cxbox.inner.ContactDTO_;
 import org.demo.entity.Client;
@@ -101,6 +102,17 @@ public class ClientContactService extends VersionAwareResponseService<ContactDTO
 	}
 
 	@Override
+	public ActionResultDTO<ContactDTO> onCancel(BusinessComponent bc) {
+		return new ActionResultDTO<ContactDTO>().setAction(
+				PostAction.drillDown(
+						DrillDownType.INNER,
+						"/screen/client/view/clienteditcontacts/"
+								+ CxboxRestController.clientEdit + "/"
+								+ bc.getParentIdAsLong()
+				));
+	}
+
+	@Override
 	public Actions<ContactDTO> getActions() {
 
 		return Actions.<ContactDTO>builder()
@@ -160,18 +172,8 @@ public class ClientContactService extends VersionAwareResponseService<ContactDTO
 							));
 				})
 				.add()
-				.newAction()
-				.action("cancel", "Cancel")
-				.scope(ActionScope.BC)
-				.withoutAutoSaveBefore()
-				.invoker((bc, dto) -> new ActionResultDTO<ContactDTO>()
-						.setAction(PostAction.drillDown(
-								DrillDownType.INNER,
-								"/screen/client/view/clienteditcontacts/"
-										+ CxboxRestController.clientEdit + "/"
-										+ bc.getParentIdAsLong()
-
-						)))
+				.cancelCreate()
+				.text("Cancel")
 				.add()
 				.build();
 	}

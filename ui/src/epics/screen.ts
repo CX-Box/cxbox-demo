@@ -1,12 +1,12 @@
 import { catchError, concat, EMPTY, filter, mergeMap, of, switchMap } from 'rxjs'
 import { OperationPreInvokeCustom, OperationPreInvokeSubType, OperationPreInvokeTypeCustom } from '@interfaces/operation'
-import { interfaces, utils } from '@cxbox-ui/core'
+import { interfaces, utils, ViewMetaResponse } from '@cxbox-ui/core'
 import { CustomWidgetTypes } from '@interfaces/widget'
 import { actions, processPreInvoke, sendOperationSuccess, showViewPopup } from '@actions'
 import { RootEpic } from '@store'
 import { isAnyOf } from '@reduxjs/toolkit'
 import { getRouteFromString } from '@router'
-import { getDefaultVisibleViews } from '@components/ViewNavigation/tab/standard/utils/getDefaultVisibleViews'
+import { getDefaultVisibleView } from '@components/ViewNavigation/tab/standard/utils/getDefaultVisibleView'
 
 const findFormPopupWidget = (operationType: string, widgets: interfaces.WidgetMeta[], calleeBcName: string, widgetName?: string) => {
     const formPopupWidget = widgetName
@@ -140,18 +140,20 @@ export const selectScreen: RootEpic = (action$, state$) =>
             const state = state$.value
             const nextViewName = state.router.viewName
             const requestedView = state.screen.views.find(item => item.name === nextViewName)
-            const defaultView =
-                !nextViewName && state.screen.primaryView && state.screen.views.find(item => item.name === state.screen.primaryView)
-            let nextView = requestedView || defaultView
+            const defaultView = !nextViewName
+                ? utils.getDefaultViewForPrimary(state.screen.primaryView, state.screen.views) ??
+                  utils.getDefaultViewFromPrimaries(state.screen.primaryViews, state.screen.views)
+                : null
+            let nextView: ViewMetaResponse | undefined | null = requestedView || defaultView
 
             if (!nextView) {
                 const navigation = state.session.screens.find(screen => screen.name === state.screen.screenName)?.meta?.navigation
                 const navigationType = navigation?.type ?? 'standard'
 
                 if (navigationType === 'standard') {
-                    const visibleViews = getDefaultVisibleViews(navigation?.menu)
+                    const visibleViewName = getDefaultVisibleView(navigation?.menu, state.screen.views ?? [])
 
-                    nextView = state.screen.views.find(view => visibleViews?.includes(view.name))
+                    nextView = state.screen.views?.find(view => view.name === visibleViewName)
 
                     !nextView &&
                         console.error(

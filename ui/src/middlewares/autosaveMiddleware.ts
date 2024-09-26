@@ -15,7 +15,7 @@ export const saveFormMiddleware: Middleware =
 
         const isSendOperation = actions.sendOperation.match(action)
         const isCoreSendOperation = isSendOperation && coreOperations.includes(action.payload.operationType as OperationTypeCrud)
-        const isSelectTableCellInit = actions.selectTableCellInit.match(action)
+        const isSelectTableRowInit = actions.selectTableRowInit.match(action)
 
         /**
          * Saving actions should be ignored
@@ -37,11 +37,11 @@ export const saveFormMiddleware: Middleware =
         /**
          * Checking if the action is `actions.selectTableCellInit` called for another row or another widget
          */
-        const selectedCell = state.view.selectedCell
-        const isSelectTableCellInitOnAnotherRowOrWidget =
-            selectedCell &&
-            isSelectTableCellInit &&
-            (selectedCell.widgetName !== action.payload.widgetName || selectedCell.rowId !== action.payload.rowId)
+        const selectedRow = state.view.selectedRow
+        const isSelectTableRowInitOnAnotherRowOrWidget =
+            selectedRow &&
+            isSelectTableRowInit &&
+            (selectedRow.widgetName !== action.payload.widgetName || selectedRow.rowId !== action.payload.rowId)
 
         /**
          * Default save operation as custom action
@@ -68,7 +68,7 @@ export const saveFormMiddleware: Middleware =
         /**
          * final condition
          */
-        const isNeedSaveCondition = isNotSaveAction && (isSendOperationForAnotherBc || isSelectTableCellInitOnAnotherRowOrWidget)
+        const isNeedSaveCondition = isNotSaveAction && (isSendOperationForAnotherBc || isSelectTableRowInitOnAnotherRowOrWidget)
         const isPopup = state.view.popupData?.bcName === (action as AnyAction).payload?.bcName
 
         const wasForcedUpdateForPopup = isNeedSaveCondition && isPopup && (action as AnyAction).payload?.wasForcedUpdate

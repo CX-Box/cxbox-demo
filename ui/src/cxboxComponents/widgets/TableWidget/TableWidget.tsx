@@ -20,7 +20,7 @@ import { BcFilter } from '@cxbox-ui/core'
 
 const { FieldType, PaginationMode } = interfaces
 
-const { bcAddFilter, bcForceUpdate, bcRemoveAllFilters, selectTableCellInit, showAllTableRecordsInit } = actions
+const { bcAddFilter, bcForceUpdate, bcRemoveAllFilters, selectTableRowInit, showAllTableRecordsInit } = actions
 
 type AdditionalAntdTableProps = Partial<Omit<TableProps<interfaces.DataItem>, 'rowSelection'>>
 export interface TableWidgetOwnProps extends AdditionalAntdTableProps {
@@ -54,7 +54,7 @@ export interface TableWidgetProps extends TableWidgetOwnProps {
      */
     route?: interfaces.Route
     cursor: string
-    selectedCell?: interfaces.ViewSelectedCell
+    selectedRow: interfaces.ViewSelectedRow | null
     /**
      * @deprecated TODO: Remove 2.0 as it is never used
      */
@@ -112,7 +112,7 @@ export const TableWidget: FunctionComponent<TableWidgetProps> = props => {
         widgetName,
         route,
         cursor,
-        selectedCell,
+        selectedRow,
         pendingDataItem,
         hasNext,
         filters,
@@ -173,11 +173,10 @@ export const TableWidget: FunctionComponent<TableWidgetProps> = props => {
                     render: (text: string, dataItem: interfaces.DataItem) => {
                         const editMode =
                             isAllowEdit &&
-                            selectedCell &&
-                            item.key === selectedCell.fieldKey &&
-                            widgetMetaName === selectedCell.widgetName &&
-                            dataItem.id === selectedCell.rowId &&
-                            cursor === selectedCell.rowId
+                            selectedRow !== null &&
+                            widgetMetaName === selectedRow.widgetName &&
+                            dataItem.id === selectedRow.rowId &&
+                            cursor === selectedRow.rowId
                         return (
                             <div
                                 data-test="FIELD"
@@ -225,7 +224,7 @@ export const TableWidget: FunctionComponent<TableWidgetProps> = props => {
         widgetMetaName,
         cursor,
         isAllowEdit,
-        selectedCell
+        selectedRow
     ])
 
     // eslint-disable-next-line prettier/prettier
@@ -365,7 +364,7 @@ function mapStateToProps(state: RootState, ownProps: TableWidgetOwnProps) {
         route: null as unknown as interfaces.Route,
         cursor,
         hasNext,
-        selectedCell: state.view.selectedCell,
+        selectedRow: state.view.selectedRow,
         /**
          * @deprecated
          */
@@ -378,7 +377,7 @@ function mapStateToProps(state: RootState, ownProps: TableWidgetOwnProps) {
 function mapDispatchToProps(dispatch: Dispatch) {
     return {
         onSelectCell: (cursor: string, widgetName: string, fieldKey: string) => {
-            dispatch(selectTableCellInit({ widgetName, rowId: cursor, fieldKey }))
+            dispatch(selectTableRowInit({ widgetName, rowId: cursor }))
         },
         onShowAll: (bcName: string, cursor: string, route?: interfaces.Route) => {
             dispatch(showAllTableRecordsInit({ bcName, cursor }))

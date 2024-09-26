@@ -14,13 +14,9 @@ import static org.demo.dto.cxbox.inner.MeetingDTO_.region;
 
 import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.commons.lang3.StringUtils;
 import org.cxbox.core.crudma.bc.BusinessComponent;
@@ -55,11 +51,7 @@ import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S3252", "java:S1186"})
 @Service
-
-@Slf4j
 public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO, Meeting> {
-
-	private static final String MESSAGE_TEMPLATE = "Status: %s; \nMeeting Result: %s";
 
 	private final MeetingRepository meetingRepository;
 
@@ -76,6 +68,7 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 	private final MailSendingService mailSendingService;
 
 	private final SessionService sessionService;
+	private static final String MESSAGE_TEMPLATE = "Status: %s; \nMeeting Result: %s";
 
 	public MeetingWriteService(MeetingRepository meetingRepository, ClientRepository clientRepository,
 			ContactRepository contactRepository, UserRepository userRepository,
@@ -90,10 +83,6 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 		this.entityManager = entityManager;
 		this.mailSendingService = mailSendingService;
 		this.sessionService = sessionService;
-	}
-
-	private static PreAction confirmWithComment(@NonNull String actionText) {
-		return ActionsExt.confirmWithCustomWidget(actionText + "?", "meetingResultFormPopup", "Approve and Save", "Cancel");
 	}
 
 	@Override
@@ -158,18 +147,16 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 	@Override
 	public Actions<MeetingDTO> getActions() {
 		return Actions.<MeetingDTO>builder()
-				.create(cr -> cr.text("Add"))
-				.save(sv -> sv.text("Save"))
-				.cancelCreate(cnc -> cnc.text("Cancel").available(bc -> true))
+				.create().text("Add").add()
+				.save().add()
 				.addGroup(
 						"actions",
 						"Actions",
 						0,
-						addEditAction(statusModelActionProvider.getMeetingActions())
-								.withIcon(ActionIcon.MENU, false)
-								.build()
+						addEditAction(statusModelActionProvider.getMeetingActions()).build()
 				)
-				.action(act -> act
+								.withIcon(ActionIcon.MENU, false)
+				.newAction()
 						.scope(ActionScope.RECORD)
 						.withAutoSaveBefore()
 						.action("saveAndContinue", "Save")
@@ -178,16 +165,17 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 								PostAction.drillDown(
 										DrillDownType.INNER,
 										"/screen/meeting/view/meetingview/" + CxboxRestController.meeting + "/" + bc.getId()
-								))))
-				.action(act -> act
+						)))
+				.add()
+				.cancelCreate().text("Cancel").available(bc -> true).add()
 						.action("sendEmail", "Send Email")
 						.invoker((bc, data) -> {
 							Meeting meeting = meetingRepository.getReferenceById(Long.parseLong(bc.getId()));
 							getSend(meeting);
 							return new ActionResultDTO<MeetingDTO>()
 									.setAction(PostAction.showMessage(MessageType.INFO, "The email is currently being sent."));
-						}))
-				.action(act -> act
+				})
+				.add()
 						.action("sendEmailNextDay", "Send Email Next Day")
 						.invoker((bc, data) -> {
 							BackgroundJob.<MailSendingService>schedule(
@@ -196,7 +184,9 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 							);
 							return new ActionResultDTO<MeetingDTO>()
 									.setAction(PostAction.showMessage(MessageType.INFO, "The email will be dispatched tomorrow."));
-						}))
+				})
+				.add()
+
 				.build();
 	}
 
@@ -207,6 +197,10 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 				String.format(MESSAGE_TEMPLATE, meeting.getStatus().getValue(), meeting.getResult()),
 				userRepository.getReferenceById(sessionService.getSessionUser().getId())
 		);
+	}
+
+	private static PreAction confirmWithComment(@NonNull String actionText) {
+		return ActionsExt.confirmWithCustomWidget(actionText + "?", "meetingResultFormPopup", "Approve and Save", "Cancel");
 	}
 
 	private ActionsBuilder<MeetingDTO> addEditAction(ActionsBuilder<MeetingDTO> builder) {

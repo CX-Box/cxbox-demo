@@ -114,65 +114,59 @@ public class ClientContactService extends VersionAwareResponseService<ContactDTO
 	public Actions<ContactDTO> getActions() {
 
 		return Actions.<ContactDTO>builder()
-				.create()
-				.text("Add contact")
-				.add()
-				.associate()
-				.text("Add Existing")
-				.add()
-				.newAction()
-				.action("save_and_go_to_client_edit_contacts", "save")
-				.invoker((bc, dto) -> new ActionResultDTO<ContactDTO>()
-						.setAction(PostAction.drillDown(
-								DrillDownType.INNER,
-								"/screen/client/view/clienteditcontacts/"
-										+ CxboxRestController.clientEdit + "/"
-										+ bc.getParentIdAsLong()
+				.create(crt -> crt.text("Add contact"))
+				.associate(ast -> ast.text("Add Existing"))
+				.action(act -> act
+						.action("save_and_go_to_client_edit_contacts", "save")
+						.invoker((bc, dto) -> new ActionResultDTO<ContactDTO>()
+								.setAction(PostAction.drillDown(
+										DrillDownType.INNER,
+										"/screen/client/view/clienteditcontacts/"
+												+ CxboxRestController.clientEdit + "/"
+												+ bc.getParentIdAsLong()
 
-						)))
-				.add()
-				.newAction()
-				.action("edit", "Edit")
-				.invoker((bc, dto) -> new ActionResultDTO<ContactDTO>()
-						.setAction(PostAction.drillDown(
-								DrillDownType.INNER,
-								"/screen/client/view/clienteditcreatecontact/"
-										+ CxboxRestController.clientEdit + "/"
-										+ bc.getParentIdAsLong() + "/"
-										+ CxboxRestController.contactEdit + "/"
-										+ bc.getId()
+								)))
+				)
+				.action(act -> act
+						.action("edit", "Edit")
+						.invoker((bc, dto) -> new ActionResultDTO<ContactDTO>()
+								.setAction(PostAction.drillDown(
+										DrillDownType.INNER,
+										"/screen/client/view/clienteditcreatecontact/"
+												+ CxboxRestController.clientEdit + "/"
+												+ bc.getParentIdAsLong() + "/"
+												+ CxboxRestController.contactEdit + "/"
+												+ bc.getId()
 
-						)))
-				.add()
-				.newAction()
-				.action("delete_association_and_save_contact", "Delete association")
-				.invoker((bc, dto) -> {
-					Long contactId = bc.getIdAsLong();
-					Long clientId = bc.getParentIdAsLong();
-					var contact = contactRepository.findById(contactId).orElseThrow();
-					contact.getClients().removeIf(e -> e.getId().equals(clientId));
-					contactRepository.save(contact);
-					return new ActionResultDTO<>();
-				})
-				.add()
-				.newAction()
-				.action("delete_association_and_contact", "Delete contact")
-				.invoker((bc, dto) -> {
-					Long contactId = bc.getIdAsLong();
-					contactRepository.deleteById(contactId);
-					return new ActionResultDTO<ContactDTO>()
-							.setAction(PostAction.drillDown(
-									DrillDownType.INNER,
-									"/screen/client/view/clienteditcontacts/"
-											+ CxboxRestController.clientEdit + "/"
-											+ bc.getParentIdAsLong()
+								)))
+				)
+				.action(act -> act
+						.action("delete_association_and_save_contact", "Delete association")
+						.invoker((bc, dto) -> {
+							Long contactId = bc.getIdAsLong();
+							Long clientId = bc.getParentIdAsLong();
+							var contact = contactRepository.findById(contactId).orElseThrow();
+							contact.getClients().removeIf(e -> e.getId().equals(clientId));
+							contactRepository.save(contact);
+							return new ActionResultDTO<>();
+						})
+				)
+				.action(act -> act
+						.action("delete_association_and_contact", "Delete contact")
+						.invoker((bc, dto) -> {
+							Long contactId = bc.getIdAsLong();
+							contactRepository.deleteById(contactId);
+							return new ActionResultDTO<ContactDTO>()
+									.setAction(PostAction.drillDown(
+											DrillDownType.INNER,
+											"/screen/client/view/clienteditcontacts/"
+													+ CxboxRestController.clientEdit + "/"
+													+ bc.getParentIdAsLong()
 
-							));
-				})
-				.add()
-				.cancelCreate()
-				.text("Cancel")
-				.add()
+									));
+						})
+				)
+				.cancelCreate(ccr -> ccr.text("Cancel"))
 				.build();
 	}
 

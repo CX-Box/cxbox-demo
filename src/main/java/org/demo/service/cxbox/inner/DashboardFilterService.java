@@ -98,10 +98,11 @@ DashboardFilterService extends VersionAwareResponseService<DashboardFilterDTO, U
 	public Actions<DashboardFilterDTO> getActions() {
 
 		return Actions.<DashboardFilterDTO>builder()
-				.action("filter", "Apply Filters")
-				.invoker((bc, dto) -> new ActionResultDTO<>())
-				.available(bc -> true).withAutoSaveBefore()
-				.add()
+				.action(act -> act
+						.action("filter", "Apply Filters")
+						.invoker((bc, dto) -> new ActionResultDTO<>())
+						.available(bc -> true).withAutoSaveBefore()
+				)
 				.build();
 	}
 

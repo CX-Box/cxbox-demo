@@ -140,48 +140,41 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 	@Override
 	public Actions<MeetingDocumentsDTO> getActions() {
 		return Actions.<MeetingDocumentsDTO>builder()
-				.create().text("Add").add()
-				.save().add()
-				.newAction()
-				.scope(ActionScope.RECORD)
-				.withAutoSaveBefore()
-				.action("saveAndContinue", "Save")
-				.invoker((bc, dto) -> new ActionResultDTO<MeetingDocumentsDTO>().setAction(
-						PostAction.drillDown(
-								DrillDownType.INNER,
-								"/screen/meeting/view/meetingview/" + CxboxRestController.meeting + "/" + bc.getId()
-						)))
-				.add()
-				.cancelCreate().text("Cancel").available(bc -> true).add()
-				/*.newAction()
-				.action("multiFileUpload", "Add files")
-				.scope(ActionScope.BC)
-				.withoutAutoSaveBefore()
-				.invoker((bc, data) -> new ActionResultDTO<>())
-				.add()*/
-				.associate()
-				.withCustomParameter(Map.of("subtype", "multiFileUpload"))
-				.text("Add Files")
-				.add()
-				.delete()
-				.add()
+				.create(crt -> crt.text("Add"))
+				.save(sv -> sv)
+				.action(act -> act
+						.scope(ActionScope.RECORD)
+						.withAutoSaveBefore()
+						.action("saveAndContinue", "Save")
+						.invoker((bc, dto) -> new ActionResultDTO<MeetingDocumentsDTO>().setAction(
+								PostAction.drillDown(
+										DrillDownType.INNER,
+										"/screen/meeting/view/meetingview/" + CxboxRestController.meeting + "/" + bc.getId()
+								)))
+				)
+				.cancelCreate(ccr -> ccr.text("Cancel").available(bc -> true))
+				.associate(ast -> ast
+						.withCustomParameter(Map.of("subtype", "multiFileUpload"))
+						.text("Add Files")
+				)
+				.delete(dlt -> dlt)
 				.build();
 	}
 
 	private ActionsBuilder<MeetingDocumentsDTO> addEditAction(ActionsBuilder<MeetingDocumentsDTO> builder) {
 		return builder
-				.newAction()
-				.action("edit", "Edit")
-				.scope(ActionScope.RECORD)
-				.withoutAutoSaveBefore()
-				.invoker((bc, data) -> new ActionResultDTO<MeetingDocumentsDTO>()
-						.setAction(PostAction.drillDown(
-								DrillDownType.INNER,
-								"/screen/meeting/view/meetingedit/" +
-										CxboxRestController.meetingEdit + "/" +
-										bc.getId()
-						)))
-				.add();
+				.action(act -> act
+						.action("edit", "Edit")
+						.scope(ActionScope.RECORD)
+						.withoutAutoSaveBefore()
+						.invoker((bc, data) -> new ActionResultDTO<MeetingDocumentsDTO>()
+								.setAction(PostAction.drillDown(
+										DrillDownType.INNER,
+										"/screen/meeting/view/meetingedit/" +
+												CxboxRestController.meetingEdit + "/" +
+												bc.getId()
+								)))
+				);
 	}
 
 }

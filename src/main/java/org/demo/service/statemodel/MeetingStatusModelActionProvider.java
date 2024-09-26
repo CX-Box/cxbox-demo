@@ -40,7 +40,7 @@ public class MeetingStatusModelActionProvider {
 	public ActionsBuilder<MeetingDTO> getMeetingActions() {
 		ActionsBuilder<MeetingDTO> builder = Actions.builder();
 		Arrays.stream(MeetingStatus.values()).sequential()
-				.forEach(status -> builder.newAction().action(status.getValue(), status.getButton())
+				.forEach(status -> builder.action(act -> act.action(status.getValue(), status.getButton())
 						.invoker((bc, dto) -> {
 							Meeting meeting = meetingRepository.getById(Long.parseLong(bc.getId()));
 							status.transition(status, meeting);
@@ -75,7 +75,7 @@ public class MeetingStatusModelActionProvider {
 								.customParameters(Map.of("okText", status.getButton(), "cancelText", "Back to meeting list"))
 								.build())
 						.scope(ActionScope.RECORD)
-						.add());
+				));
 		return builder;
 	}
 

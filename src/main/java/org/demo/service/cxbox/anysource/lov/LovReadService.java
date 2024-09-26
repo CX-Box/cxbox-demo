@@ -58,38 +58,46 @@ public class LovReadService extends AnySourceVersionAwareResponseService<LovDTO,
 	@Override
 	public Actions<LovDTO> getActions() {
 		return Actions.<LovDTO>builder()
-				.create().text("Create").available(bc -> true).add()
-				.action("change", "Edit")
-				.available(bc -> true)
-				.scope(ActionScope.RECORD)
-				.invoker(((bc, data) -> new ActionResultDTO<LovDTO>().setAction(
-						PostAction.drillDown(
-								DrillDownType.INNER,
-								"/screen/admin/view/lovUpdateExternal/" + lovExternal + "/" + bc.getId()
-						)
-				))).add()
-				.action("deleteLov", "Delete")
-				.withPreAction(ActionsExt.confirm("Make sure the entry is deactivated. \\n\\nAre you sure you want to delete this directory entry?", "Ops!", "yes", "no"))
-				.scope(ActionScope.RECORD)
-				.invoker((bc, data) -> {
-					getBaseDao().delete(bc);
-					return new ActionResultDTO<LovDTO>().setAction(
-							PostAction.drillDown(
-									DrillDownType.INNER,
-									"/screen/admin/view/lovlistexternal"
-							)
-					);
-				}).add()
-				.action("saveAndBack", "Save and back")
-				.available(bc -> true)
-				.invoker((bc, data1) -> {
-					ActionResultDTO<LovDTO> result = save(bc, data1);
-					return result.setAction(PostAction.drillDown(DrillDownType.INNER, "/screen/admin"));
-				})
-				.add()
-				.save().text("Save")
-				.available(bc -> true)
-				.add()
+				.create(crt -> crt.text("Create").available(bc -> true))
+				.action(act -> act
+						.action("change", "Edit")
+						.available(bc -> true)
+						.scope(ActionScope.RECORD)
+						.invoker(((bc, data) -> new ActionResultDTO<LovDTO>().setAction(
+								PostAction.drillDown(
+										DrillDownType.INNER,
+										"/screen/admin/view/lovUpdateExternal/" + lovExternal + "/" + bc.getId()
+								)
+						))))
+				.action(act -> act
+						.action("deleteLov", "Delete")
+						.withPreAction(ActionsExt.confirm(
+								"Make sure the entry is deactivated. \\n\\nAre you sure you want to delete this directory entry?",
+								"Ops!",
+								"yes",
+								"no"
+						))
+						.scope(ActionScope.RECORD)
+						.invoker((bc, data) -> {
+							getBaseDao().delete(bc);
+							return new ActionResultDTO<LovDTO>().setAction(
+									PostAction.drillDown(
+											DrillDownType.INNER,
+											"/screen/admin/view/lovlistexternal"
+									)
+							);
+						}))
+				.action(act -> act
+						.action("saveAndBack", "Save and back")
+						.available(bc -> true)
+						.invoker((bc, data1) -> {
+							ActionResultDTO<LovDTO> result = save(bc, data1);
+							return result.setAction(PostAction.drillDown(DrillDownType.INNER, "/screen/admin"));
+						})
+				)
+				.save(sv -> sv.text("Save")
+						.available(bc -> true)
+				)
 				.build();
 	}
 

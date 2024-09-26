@@ -44,18 +44,18 @@ public class SaleReadService extends VersionAwareResponseService<SaleDTO, Sale> 
 	@Override
 	public Actions<SaleDTO> getActions() {
 		return Actions.<SaleDTO>builder()
-				.create().text("Add").add()
-				.delete().text("Delete").add()
-				.newAction()
-				.action("edit", "Edit")
-				.withoutAutoSaveBefore()
-				.scope(ActionScope.RECORD)
-				.invoker((bc, data) -> new ActionResultDTO<SaleDTO>()
-						.setAction(PostAction.drillDown(
-								DrillDownType.INNER,
-								"/screen/sale/view/saleedit/" + CxboxRestController.saleEdit + "/" + bc.getId()
-						)))
-				.add()
+				.create(crt -> crt.text("Add"))
+				.delete(dlt -> dlt.text("Delete"))
+				.action(act -> act
+						.action("edit", "Edit")
+						.withoutAutoSaveBefore()
+						.scope(ActionScope.RECORD)
+						.invoker((bc, data) -> new ActionResultDTO<SaleDTO>()
+								.setAction(PostAction.drillDown(
+										DrillDownType.INNER,
+										"/screen/sale/view/saleedit/" + CxboxRestController.saleEdit + "/" + bc.getId()
+								)))
+				)
 				.build();
 	}
 

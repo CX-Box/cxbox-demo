@@ -70,17 +70,17 @@ public class SaleWriteService extends VersionAwareResponseService<SaleDTO, Sale>
 	@Override
 	public Actions<SaleDTO> getActions() {
 		return Actions.<SaleDTO>builder()
-				.newAction()
-				.scope(ActionScope.RECORD)
-				.withAutoSaveBefore()
-				.action("saveAndContinue", "Save")
-				.invoker((bc, dto) -> new ActionResultDTO<SaleDTO>().setAction(
-						PostAction.drillDown(
-								DrillDownType.INNER,
-								"/screen/sale/view/salelist/" + CxboxRestController.sale + "/" + bc.getId()
-						)))
-				.add()
-				.cancelCreate().text("Cancel").withIcon(CxboxActionIconSpecifier.CLOSE, false).add()
+				.action(act -> act
+						.scope(ActionScope.RECORD)
+						.withAutoSaveBefore()
+						.action("saveAndContinue", "Save")
+						.invoker((bc, dto) -> new ActionResultDTO<SaleDTO>().setAction(
+								PostAction.drillDown(
+										DrillDownType.INNER,
+										"/screen/sale/view/salelist/" + CxboxRestController.sale + "/" + bc.getId()
+								)))
+				)
+				.cancelCreate(ccr -> ccr.text("Cancel").withIcon(CxboxActionIconSpecifier.CLOSE, false))
 				.build();
 	}
 

@@ -1,6 +1,13 @@
 import { preorderDfsTreeTraversal } from '@components/ViewNavigation/tab/standard/utils/preorderDfsTreeTraversal'
 import { MenuItem } from '@interfaces/navigation'
-import { getArrayFromNodePath, getNodePath, hasTitle, isViewNavigationItem } from '@components/ViewNavigation/tab/standard/utils/common'
+import {
+    getArrayFromNodePath,
+    getNodePath,
+    hasDefaultView,
+    hasTitle,
+    isViewNavigationItem
+} from '@components/ViewNavigation/tab/standard/utils/common'
+import { ViewMetaResponse } from '@interfaces/session'
 
 export type MenuItemNode = Omit<MenuItem, 'title'> & {
     path?: string
@@ -13,6 +20,7 @@ export type MenuItemNode = Omit<MenuItem, 'title'> & {
 
 export const getStandardViewTabs = (
     navigation: MenuItem[] | undefined,
+    availableViews: ViewMetaResponse[],
     currentDepth: number,
     activeView: string | undefined,
     { idKey = 'id' }: { idKey?: string } = {}
@@ -26,8 +34,8 @@ export const getStandardViewTabs = (
     }
 
     const orderedDictionaryKeys: string[] = []
-    const availableViews: string[] = []
     const dictionary: Record<string, MenuItemNode> = {}
+    const isAvailableView = (viewName: string | undefined) => availableViews.some(availableView => availableView.name === viewName)
     let activeViewsKeys: string[] | undefined
     /**
      * Depth-first traversal of the navigation tree
@@ -51,12 +59,24 @@ export const getStandardViewTabs = (
                 // Preserve the order of passing nodes
                 orderedDictionaryKeys.push(nodeId)
 
-                if (isViewNavigationItem(node)) {
+                //  defaultView is always above navigationItem
+                if (hasDefaultView(node) && !isViewNavigationItem(node) && isAvailableView(node.defaultView)) {
+                    const nodesKeys = getArrayFromNodePath(dictionary[nodeId]?.path)
+                    nodesKeys?.forEach(dictionaryKey => {
+                        const isCurrentView = nodeId === dictionaryKey
+
+                        if ((!hasDefaultView(dictionary[dictionaryKey]) || isCurrentView) && !dictionary[dictionaryKey].viewName) {
+                            dictionary[dictionaryKey].viewName = node.defaultView
+                        }
+                    })
+                }
+
+                if (isViewNavigationItem(node) && isAvailableView(node.viewName)) {
                     const selected = node.viewName === activeView
                     const nodesKeys = getArrayFromNodePath(dictionary[nodeId]?.path)
 
                     nodesKeys?.forEach(dictionaryKey => {
-                        const isVisibleNode = !node.hidden || selected
+                        const isVisibleNode = !node.hidden
                         // Set viewName of the first visible leaf of the branch as the default value for all parent nodes.
                         if (!dictionary[dictionaryKey].viewName && isVisibleNode) {
                             dictionary[dictionaryKey].viewName = node.viewName
@@ -69,9 +89,6 @@ export const getStandardViewTabs = (
                     })
 
                     activeViewsKeys = selected ? nodesKeys : activeViewsKeys
-
-                    // Based on the leaves of the tree, we form a list of available views
-                    node.viewName && availableViews.push(node.viewName)
                 }
             }
         })
@@ -79,12 +96,6 @@ export const getStandardViewTabs = (
 
     return orderedDictionaryKeys.reduce<MenuItemNode[]>((acc, dictionaryKey) => {
         const nodeFromDictionary = dictionary[dictionaryKey]
-        const defaultView = (nodeFromDictionary as { defaultView?: string }).defaultView
-        // Set defaultView after receiving the list of available views
-        if (defaultView && availableViews.includes(defaultView)) {
-            nodeFromDictionary.viewName = defaultView
-        }
-
         const isCurrentDepth = currentDepth === nodeFromDictionary.depth
         const isFirstDepth = currentDepth === 1
         const parentNodeIndex = (nodeFromDictionary?.depth as number) - 2

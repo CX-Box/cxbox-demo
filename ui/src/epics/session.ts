@@ -7,8 +7,6 @@ import { RootEpic } from '@store'
 import { addSortForGroupHierarchiesMutate } from '@utils/groupingHierarchy'
 import { LoginResponse } from '@interfaces/session'
 
-const { login, loginFail, logout, logoutDone } = actions
-
 const responseStatusMessages: Record<number, string> = {
     401: 'Unauthorized',
     403: 'Access denied'
@@ -19,7 +17,7 @@ const ssoAuthEpic: RootEpic = action$ =>
         filter(SSO_AUTH.match),
         switchMap(() => {
             return from(keycloak.init(keycloakOptions)).pipe(
-                switchMap(() => of(login({ login: '', password: '' }))),
+                switchMap(() => of(actions.login({ login: '', password: '' }))),
                 catchError(() => {
                     console.error('Authentication failed')
                     return EMPTY
@@ -30,7 +28,7 @@ const ssoAuthEpic: RootEpic = action$ =>
 
 const loginEpic: RootEpic = (action$, state$, { api }) =>
     action$.pipe(
-        filter(login.match),
+        filter(actions.login.match),
         filter(action => !action.payload?.role),
         switchMap(action => {
             const login = action.payload && action.payload.login
@@ -55,7 +53,71 @@ const loginEpic: RootEpic = (action$, state$, { api }) =>
                     const errorMsg = error.response
                         ? responseStatusMessages[error.response.status] || 'Server application unavailable'
                         : 'Empty response from server'
-                    return concat(of(loginFail({ errorMsg })), utils.createApiErrorObservable(error))
+                    return concat(of(actions.loginFail({ errorMsg })), utils.createApiErrorObservable(error))
+                })
+            )
+        })
+    )
+
+/**
+ * Performed on role switching
+ */
+export const loginByAnotherRoleEpic: RootEpic = (action$, state$, { api }) =>
+    action$.pipe(
+        filter(actions.login.match),
+        filter(action => !!action.payload?.role),
+        switchMap(action => {
+            /**
+             * Default implementation of `loginByAnotherRoleEpic` epic
+             *
+             * Performs login request with `role` parameter
+             *
+             * If `role` changed, epic changes location to default view
+             */
+
+            const role = action.payload.role ?? ''
+            const isSwitchRole = role && role !== state$.value.session.activeRole
+            return api.loginByRoleRequest(role).pipe(
+                mergeMap(data => {
+                    const result = []
+                    if (isSwitchRole) {
+                        const defaultScreen = data.screens.find(screen => screen.defaultScreen) || data.screens[0]
+                        const views = defaultScreen.meta?.views ?? []
+                        const defaultView =
+                            utils.getDefaultViewForPrimary(defaultScreen.primary ?? '', views) ??
+                            utils.getDefaultViewFromPrimaries(defaultScreen.primaries, views) ??
+                            views[0]
+
+                        if (defaultView) {
+                            result.push(
+                                actions.changeLocation({
+                                    location: utils.defaultParseURL(new URL(defaultView.url, window.location.origin))
+                                })
+                            )
+                        }
+                    }
+
+                    return concat([
+                        ...result,
+                        actions.loginDone({
+                            devPanelEnabled: data.devPanelEnabled,
+                            activeRole: data.activeRole,
+                            roles: data.roles,
+                            firstName: data.firstName,
+                            lastName: data.lastName,
+                            login: data.login,
+                            screens: addSortForGroupHierarchiesMutate([...data.screens]),
+                            userId: data.userId,
+                            featureSettings: data.featureSettings
+                        })
+                    ])
+                }),
+                catchError((error: AxiosError) => {
+                    console.error(error)
+                    const errorMsg = error.response
+                        ? responseStatusMessages[error.response.status] || 'Server application unavailable'
+                        : 'Empty server response'
+                    return concat(of(actions.loginFail({ errorMsg })), utils.createApiErrorObservable(error))
                 })
             )
         })
@@ -63,16 +125,16 @@ const loginEpic: RootEpic = (action$, state$, { api }) =>
 
 const logoutEpic: RootEpic = action$ =>
     action$.pipe(
-        filter(logout.match),
+        filter(actions.logout.match),
         switchMap(() => {
             keycloak.logout()
-            return of(logoutDone(null))
+            return of(actions.logoutDone(null))
         })
     )
 
 const logoutDoneEpic: RootEpic = action$ =>
     action$.pipe(
-        filter(logoutDone.match),
+        filter(actions.logoutDone.match),
         switchMap(() => {
             return EMPTY
         })
@@ -82,5 +144,6 @@ export const sessionEpics = {
     ssoAuthEpic,
     logoutEpic,
     logoutDoneEpic,
-    loginEpic
+    loginEpic,
+    loginByAnotherRoleEpic
 }

@@ -1,5 +1,7 @@
 package org.demo.service.cxbox.anysource.lov;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.cxbox.core.controller.param.QueryParameters;
@@ -8,6 +10,7 @@ import org.cxbox.core.dao.AnySourceBaseDAO;
 import org.cxbox.core.dao.impl.AbstractAnySourceBaseDAO;
 import org.demo.microservice.dto.DictDTO;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -38,7 +41,19 @@ public class LovDao extends AbstractAnySourceBaseDAO<DictDTO> implements AnySour
 
 	@Override
 	public Page<DictDTO> getList(final BusinessComponent bc, final QueryParameters queryParameters) {
-		return lovClient.getAll(bc).getBody();
+		return new PageImpl<>(getAllListDictDTO(bc));
+	}
+
+	private List<DictDTO> getAllListDictDTO(final BusinessComponent bc) {
+		List<DictDTO> listDictDTO = lovClient.getAll(bc)
+				.getBody().stream().toList();
+		if (listDictDTO == null) {
+			return new ArrayList<>();
+		}
+		return listDictDTO.stream()
+				.skip((long) bc.getParameters().getPageNumber() * bc.getParameters().getPageSize())
+				.limit(bc.getParameters().getPageSize())
+				.toList();
 	}
 
 	@Override

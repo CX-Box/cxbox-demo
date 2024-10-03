@@ -397,24 +397,11 @@
       </column>
       <column name="FIRST_NAME" remarks="Имя" type="VARCHAR2(255)"/>
       <column name="LAST_NAME" remarks="Фамилия" type="VARCHAR2(255)"/>
-      <column name="PATRONYMIC" remarks="Отчество" type="VARCHAR2(255)"/>
       <column name="LOGIN" remarks="Логин" type="VARCHAR2(255)"/>
-      <column name="PASSWORD" remarks="Пароль" type="VARCHAR2(255)"/>
       <column name="INTERNAL_ROLE_CD" remarks="Внутренняя роль" type="VARCHAR2(255)">
         <constraints nullable="false"/>
       </column>
-      <column name="USER_PRINCIPAL_NAME" type="VARCHAR2(255)"/>
-      <column name="PHONE" remarks="Телефон" type="VARCHAR2(255)"/>
-      <column name="EMAIL" remarks="Эл. почта" type="VARCHAR2(255)"/>
-      <column name="FULL_USER_NAME" remarks="displayName" type="VARCHAR2(255)"/>
-      <column name="TITLE" remarks="title" type="VARCHAR2(255)"/>
-      <column name="EXT_ATTR_11" remarks="attribute11" type="VARCHAR2(255)"/>
-      <column name="EXT_ATTR_12" remarks="attribute12" type="VARCHAR2(255)"/>
-      <column name="EXT_ATTR_13" remarks="attribute13" type="VARCHAR2(255)"/>
       <column name="DEPT_ID" remarks="Идентификатор Департамента" type="NUMBER(19, 0)"/>
-      <column name="ORIG_DEPT_CODE" remarks="Дочерний департамент" type="VARCHAR2(255)"/>
-      <column name="TIMEZONE" type="VARCHAR2(255 BYTE)"/>
-      <column name="LOCALE" type="VARCHAR2(20 BYTE)"/>
       <column defaultValueComputed="current_timestamp" name="CREATED_DATE" type="TIMESTAMP(6)">
         <constraints nullable="false"/>
       </column>
@@ -427,13 +414,9 @@
       <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
         <constraints nullable="false"/>
       </column>
-      <column name="EXT_ATTR_14" remarks="5й уровень иерархии" type="VARCHAR2(255)"/>
-      <column name="EXT_ATTR_15" remarks="6й уровень иерархии" type="VARCHAR2(255)"/>
-      <column name="DN" remarks="LDAP Distinguished Name" type="VARCHAR2(255)"/>
       <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
         <constraints nullable="false"/>
       </column>
-      <column defaultValueNumeric="1" name="ACTIVE" remarks="Признак активности" type="BOOLEAN"/>
     </createTable>
   </changeSet>
 
@@ -542,10 +525,6 @@
     <addUniqueConstraint columnNames="LOGIN" constraintName="UK_LOGIN_NAME" tableName="USERS"/>
     <createIndex indexName="UK_LOGIN_NAME_INDEX" tableName="USERS" unique="true">
       <column name="LOGIN"/>
-    </createIndex>
-    <addUniqueConstraint columnNames="DN" constraintName="USERS_DN_UNIQUE" tableName="USERS"/>
-    <createIndex indexName="USERS_DN_UNIQUE_INDEX" tableName="USERS" unique="true">
-      <column name="DN"/>
     </createIndex>
     <createIndex indexName="USERS_IND1" tableName="USERS">
       <column defaultValueNumeric="1" name="CREATED_BY_USER_ID"/>
@@ -783,18 +762,9 @@
       <column header="ID" name="ID" type="NUMERIC"/>
       <column header="FIRST_NAME" name="FIRST_NAME" type="STRING"/>
       <column header="LAST_NAME" name="LAST_NAME" type="STRING"/>
-      <column header="PATRONYMIC" name="PATRONYMIC" type="STRING"/>
       <column header="LOGIN" name="LOGIN" type="STRING"/>
-      <column header="PASSWORD" name="PASSWORD" type="STRING"/>
       <column header="INTERNAL_ROLE_CD" name="INTERNAL_ROLE_CD" type="STRING"/>
-      <column header="USER_PRINCIPAL_NAME" name="USER_PRINCIPAL_NAME" type="STRING"/>
-      <column header="PHONE" name="PHONE" type="STRING"/>
-      <column header="EMAIL" name="EMAIL" type="STRING"/>
-      <column header="FULL_USER_NAME" name="FULL_USER_NAME" type="STRING"/>
-      <column header="TITLE" name="TITLE" type="STRING"/>
       <column header="DEPT_ID" name="DEPT_ID" type="NUMERIC"/>
-      <column header="ORIG_DEPT_CODE" name="ORIG_DEPT_CODE" type="STRING"/>
-      <column header="TIMEZONE" name="TIMEZONE" type="STRING"/>
     </loadData>
     <loadData tableName="DEPT" encoding="UTF-8" separator=";" quotchar="&quot;"
       file="db/data/CXBOX-DEPT.csv">

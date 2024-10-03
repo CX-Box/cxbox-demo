@@ -60,13 +60,13 @@ function Table({
     const { bcName = '', name: widgetName = '' } = meta || {}
     const bcUrl = useAppSelector(state => state.screen.bo.bc[meta.bcName] && buildBcUrl(meta.bcName, true))
     const operations = useAppSelector(state => state.view.rowMeta?.[meta.bcName]?.[bcUrl]?.actions)
-    const { bc, selectedCell, cursor } = useAppSelector(state => {
+    const { bc, selectedRow, cursor } = useAppSelector(state => {
         const bc = bcName ? state.screen.bo.bc[bcName] : undefined
 
         return {
             bc: bc,
             cursor: bc?.cursor,
-            selectedCell: state.view.selectedCell
+            selectedRow: state.view.selectedRow
         }
     }, shallowEqual)
 
@@ -143,13 +143,13 @@ function Table({
     const dispatch = useDispatch()
 
     const changeCursor = (rowId: string) => {
-        if (rowId !== bc?.cursor) {
-            dispatch(actions.bcSelectRecord({ bcName: bc?.name as string, cursor: rowId }))
+        if (rowId !== selectedRow?.rowId) {
+            dispatch(actions.selectTableRowInit({ widgetName: meta.name, rowId: rowId }))
         }
     }
 
     // TODO the condition is necessary because of editable table cells inside the core, so that there would not be duplicated actions of record change
-    const needRowSelectRecord = expandable || meta.options?.readOnly
+    const needRowSelectRecord = !expandable && meta.options?.readOnly !== true && meta.options?.edit?.style !== 'none'
 
     const exportConfig = meta.options?.export
     const showExport = exportConfig?.enabled
@@ -175,7 +175,14 @@ function Table({
     const handleRow = (record: DataItem, index: number) => {
         const tableEventListeners = {
             ...handleRowMenu(record),
-            onDoubleClick: needRowSelectRecord ? () => changeCursor(record.id) : undefined
+            onClick: needRowSelectRecord
+                ? () => {
+                      const selection = window.getSelection()
+                      if (selection === null || selection.type !== 'Range') {
+                          changeCursor(record.id)
+                      }
+                  }
+                : undefined
         }
 
         const isParentRow = record.children
@@ -371,13 +378,6 @@ function Table({
         return bcUrl ? state.view.rowMeta[bcName]?.[bcUrl] : undefined
     })
 
-    const selectCell = useCallback(
-        (recordId: string, fieldKey: string) => {
-            dispatch(actions.selectTableCellInit({ widgetName, rowId: recordId, fieldKey }))
-        },
-        [dispatch, widgetName]
-    )
-
     const columns: Array<ColumnProps<interfaces.DataItem>> = React.useMemo(() => {
         return (
             resultedFields
@@ -406,11 +406,10 @@ function Table({
                         render: (text: string, dataItem: interfaces.DataItem) => {
                             const editMode =
                                 isAllowEdit &&
-                                selectedCell &&
-                                item.key === selectedCell.fieldKey &&
-                                widgetName === selectedCell.widgetName &&
-                                dataItem.id === selectedCell.rowId &&
-                                cursor === selectedCell.rowId
+                                selectedRow !== null &&
+                                widgetName === selectedRow.widgetName &&
+                                dataItem.id === selectedRow.rowId &&
+                                cursor === selectedRow.rowId
                             const expanded = expandedRowKeys?.includes(dataItem.id) ?? false
 
                             const isParentRow = !!dataItem.children
@@ -461,19 +460,6 @@ function Table({
                                 )
                             )
                         },
-                        onCell: isAllowEdit
-                            ? (record: interfaces.DataItem, rowIndex: number) => {
-                                  const isParentRow = !!record.children
-
-                                  return !isParentRow
-                                      ? {
-                                            onDoubleClick: (event: React.MouseEvent) => {
-                                                selectCell(record.id, item.key)
-                                            }
-                                        }
-                                      : {}
-                              }
-                            : undefined,
                         onHeaderCell: () => {
                             return {
                                 'data-test-widget-list-header-column-title': item?.title,
@@ -485,21 +471,20 @@ function Table({
                 }) ?? []
         )
     }, [
-        resultedFields,
-        bcRowMeta?.fields,
-        meta?.type,
-        meta?.options?.groupingHierarchy?.fields,
-        showCloseButton,
-        handleColumnClose,
-        widgetName,
-        isAllowEdit,
-        selectedCell,
-        cursor,
-        expandedRowKeys,
         bcName,
+        bcRowMeta?.fields,
+        cursor,
+        enabledGrouping,
+        expandedRowKeys,
+        handleColumnClose,
+        isAllowEdit,
+        meta?.options?.groupingHierarchy?.fields,
+        meta?.type,
         onParentExpand,
-        selectCell,
-        enabledGrouping
+        resultedFields,
+        selectedRow,
+        showCloseButton,
+        widgetName
     ])
 
     const resultColumns = React.useMemo(() => {

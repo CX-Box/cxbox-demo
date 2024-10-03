@@ -26,9 +26,14 @@ export function useInternalWidgetSelector(externalWidget: AppWidgetMeta) {
     return useAppSelector(state => {
         const widgetNameForCreate = externalWidget.options?.create?.widget
         const widgetNameForEdit = externalWidget.options?.edit?.widget
+        const isWidgetForEditIsInline = externalWidget.options?.edit?.style === 'inline'
+        const isWidgetForEditIsDisabled = externalWidget.options?.edit?.style === 'none'
 
         const widgetForCreate = state.view.widgets.find(widget => widgetNameForCreate === widget?.name) as WidgetFormMeta
-        const widgetForEdit = state.view.widgets.find(widget => widgetNameForEdit === widget?.name) as WidgetFormMeta
+        const widgetForEdit =
+            !isWidgetForEditIsInline && !isWidgetForEditIsDisabled
+                ? (state.view.widgets.find(widget => widgetNameForEdit === widget?.name) as WidgetFormMeta)
+                : undefined
 
         const bcName = (widgetForCreate || widgetForEdit)?.bcName as string
         const bc = bcName ? state.screen.bo.bc[bcName] : undefined
@@ -101,7 +106,7 @@ export function useExpandableForm(currentWidgetMeta: AppWidgetMeta) {
 
     const expandedRowRender = useCallback(
         (record: DataItem) =>
-            !record.children ? (
+            !record.children && internalWidget !== undefined ? (
                 <DebugWidgetWrapper debugMode={debugMode} meta={internalWidget}>
                     <Spin spinning={isLoading}>
                         <ExpandedRow widgetMeta={internalWidget} operations={internalWidgetOperations} record={record} />

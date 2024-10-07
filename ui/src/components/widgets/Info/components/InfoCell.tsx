@@ -5,13 +5,15 @@ import InfoValueWrapper from './InfoValueWrapper'
 import { EMPTY_ARRAY } from '@constants'
 import { useAppSelector } from '@store'
 import { interfaces } from '@cxbox-ui/core'
+import { AppWidgetInfoMeta } from '@interfaces/widget'
+
 const { FieldType } = interfaces
 
 export interface ValueCellProps {
     row: interfaces.LayoutRow
     colSpan: number
     cursor: string
-    meta: interfaces.WidgetInfoMeta
+    meta: AppWidgetInfoMeta
     field: interfaces.WidgetInfoField
     onDrillDown: (widgetName: string, cursor: string, bcName: string, fieldKey: string) => void
 }
@@ -55,7 +57,7 @@ function InfoCell({ field, colSpan, row, meta, cursor, onDrillDown }: ValueCellP
             data-test-field-title={field.label || field.title}
             data-test-field-key={field.key}
         >
-            <InfoValueWrapper key={field.key} row={row} colSpan={colSpan}>
+            <InfoValueWrapper key={field.key} row={row} colSpan={colSpan} titleMode={meta.options?.layout?.titleMode}>
                 {field.label?.length !== 0 && (
                     <div className={styles.labelArea}>
                         <span className={styles.label}>{field.label}</span>

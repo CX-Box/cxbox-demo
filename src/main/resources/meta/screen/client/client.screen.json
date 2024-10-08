@@ -4,6 +4,7 @@
   "order": 0,
   "title": "Client",
   "navigation": {
+    "type": "standard",
     "menu": [
       {
         "title": "Clients",

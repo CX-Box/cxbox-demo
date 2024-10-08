@@ -4,6 +4,7 @@
   "order": 3,
   "title": "Dashboard",
   "navigation": {
+    "type": "standard",
     "menu": [
       {
         "title": "Dashboard",

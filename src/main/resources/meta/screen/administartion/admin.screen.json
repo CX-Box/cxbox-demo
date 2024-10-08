@@ -8,6 +8,7 @@
     "scheduledJobs"
   ],
   "navigation": {
+    "type": "standard",
     "menu": [
       {
         "title": "Job Administration",

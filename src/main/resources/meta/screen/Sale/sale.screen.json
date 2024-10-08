@@ -4,6 +4,7 @@
   "order": 2,
   "title": "Sale",
   "navigation": {
+    "type": "standard",
     "menu": [
       {
         "title": "Sales",

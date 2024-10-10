@@ -7,9 +7,10 @@ import { useAppSelector } from '@store'
 import { EMPTY_ARRAY } from '@constants'
 import { interfaces } from '@cxbox-ui/core'
 import { buildBcUrl } from '@utils/buildBcUrl'
+import { AppWidgetInfoMeta } from '@interfaces/widget'
 
 export interface InfoRowProps {
-    meta: interfaces.WidgetInfoMeta
+    meta: AppWidgetInfoMeta
     flattenWidgetFields: interfaces.WidgetInfoField[]
     onDrillDown: (widgetName: string, cursor: string, bcName: string, fieldKey: string) => void
     row: interfaces.LayoutRow

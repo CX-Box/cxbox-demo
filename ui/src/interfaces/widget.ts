@@ -173,3 +173,16 @@ export type FileUploadFieldMeta = CoreFileUploadFieldMeta & {
 }
 
 export type WidgetField = CoreWidgetField | FileUploadFieldMeta
+
+export const enum ETitleMode {
+    left = 'left',
+    top = 'top'
+}
+
+export interface AppWidgetInfoMeta extends interfaces.WidgetInfoMeta {
+    options?: interfaces.WidgetInfoMeta['options'] & {
+        layout?: interfaces.WidgetOptions['layout'] & {
+            titleMode?: ETitleMode
+        }
+    }
+}

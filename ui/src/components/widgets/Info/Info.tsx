@@ -1,4 +1,5 @@
 import React from 'react'
+import cn from 'classnames'
 import { interfaces } from '@cxbox-ui/core'
 import { useDispatch } from 'react-redux'
 import { useAppSelector } from '@store'
@@ -6,9 +7,11 @@ import { actions } from '@cxbox-ui/core'
 import InfoRow from './components/InfoRow'
 import { Row } from 'antd'
 import { useFlatFormFields } from '@hooks/useFlatFormFields'
+import { AppWidgetInfoMeta } from '@interfaces/widget'
+import styles from './Info.less'
 
 interface InfoProps {
-    meta: interfaces.WidgetInfoMeta
+    meta: AppWidgetInfoMeta
 }
 
 /**
@@ -45,7 +48,7 @@ function Info({ meta }: InfoProps) {
             />
         ))
 
-    return <Row>{InfoRows}</Row>
+    return <Row className={cn({ [styles.margin]: meta.options?.layout?.titleMode })}>{InfoRows}</Row>
 }
 
 export default React.memo(Info)

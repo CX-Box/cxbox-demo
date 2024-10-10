@@ -52,6 +52,9 @@
     }
   ],
   "options": {
+    "pagination": {
+      "type": "nextAndPreviousSmart"
+    },
     "actionGroups": {
       "include": [
         "change",

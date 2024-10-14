@@ -6,9 +6,9 @@ import moment from 'moment'
 import { getFormat as getDateFormat } from '@utils/date'
 import { FieldType } from '@cxbox-ui/core'
 import { NumberInputFormat } from '@cxboxComponents/ui/NumberInput/formaters'
-import { DateFieldMeta, DateTimeFieldMeta, DateTimeWithSecondsFieldMeta, NumberFieldMeta } from '@cxbox-ui/core'
+import { DateFieldMeta, DateTimeFieldMeta, DateTimeWithSecondsFieldMeta } from '@cxbox-ui/core'
 import { ITimePickerFieldMeta, TimeFormat } from '../../fields/TimePicker/TimePickerField'
-import { CustomFieldTypes } from '@interfaces/widget'
+import { AppNumberFieldMeta, CustomFieldTypes } from '@interfaces/widget'
 
 // Token format: '${fieldName:defaultValue}'
 const TAG_PLACEHOLDER_VALUE = /\${([^{}]+)}/
@@ -33,10 +33,11 @@ export function normalizeFieldValue(value: DataValue | undefined, fieldMeta?: Wi
             : null
     }
 
-    const numberFieldMeta = fieldMeta as NumberFieldMeta
-    const isNumberField = [FieldType.number, FieldType.money, FieldType.percent].includes(numberFieldMeta?.type)
+    const { type, digits, nullable, currency } = (fieldMeta as AppNumberFieldMeta) || {}
+
+    const isNumberField = [FieldType.number, FieldType.money, FieldType.percent].includes(type)
     if (isNumberField) {
-        return NumberInputFormat[numberFieldMeta?.type](value as number, numberFieldMeta?.digits, numberFieldMeta?.nullable)
+        return NumberInputFormat[type](value as number, digits, nullable) + (type === FieldType.money && currency ? ` ${currency}` : '')
     }
 
     const timeFieldMeta = fieldMeta as ITimePickerFieldMeta

@@ -3,12 +3,13 @@ import { Button, Popover } from 'antd'
 import styles from './ColumnFilter.less'
 import cn from 'classnames'
 import { ReactComponent as FilterIcon } from './filter-solid.svg'
-import { RowMetaField, interfaces } from '@cxbox-ui/core'
+import { interfaces, RowMetaField } from '@cxbox-ui/core'
 import FilterPopup from '../FilterPopup/FilterPopup'
 import FilterField from './FilterField'
 import { useAppDispatch, useAppSelector } from '@store'
-import { FieldType, WidgetListField, PickListFieldMeta } from '@cxbox-ui/schema'
+import { FieldType, PickListFieldMeta, WidgetListField } from '@cxbox-ui/schema'
 import { actions } from '@actions'
+import { AppMoneyFieldMeta } from '@interfaces/widget'
 
 interface ColumnFilterProps {
     widgetName: string
@@ -20,6 +21,8 @@ interface ColumnFilterProps {
 }
 
 function ColumnFilter({ widgetName, widgetMeta, rowMeta, components }: ColumnFilterProps) {
+    const dispatch = useAppDispatch()
+
     const widget = useAppSelector(state => state.view.widgets.find(item => item.name === widgetName))
     const filterByRangeEnabled = useAppSelector(
         state => state.session.featureSettings?.find(featureSetting => featureSetting.key === 'filterByRangeEnabled')?.value === 'true'
@@ -28,10 +31,12 @@ function ColumnFilter({ widgetName, widgetMeta, rowMeta, components }: ColumnFil
     const listFields = widget?.fields as interfaces.WidgetListField[]
     const effectiveFieldMeta = (listFields?.find(item => item.key === widgetMeta.filterBy) ?? widgetMeta) as interfaces.WidgetListField
     const filter = useAppSelector(state => state.screen.filters[bcName]?.find(item => item.fieldName === effectiveFieldMeta.key))
+
+    const additionalFieldMetaKey = getAdditionalFieldMetaKey(effectiveFieldMeta)
+    const additionalFilter = useAppSelector(state => state.screen.filters[bcName]?.find(item => item.fieldName === additionalFieldMetaKey))
+
     const [value, setValue] = React.useState(filter?.value)
     const [visible, setVisible] = React.useState(false)
-
-    const dispatch = useAppDispatch()
 
     React.useEffect(() => {
         setValue(filter?.value)
@@ -100,7 +105,17 @@ function ColumnFilter({ widgetName, widgetMeta, rowMeta, components }: ColumnFil
     const handleClose = useCallback(() => {
         setVisible(false)
         setValue(undefined)
-    }, [])
+
+        if (additionalFieldMetaKey) {
+            dispatch(
+                actions.setLocalFilterValue({
+                    value: undefined,
+                    fieldKey: additionalFieldMetaKey,
+                    bcName
+                })
+            )
+        }
+    }, [additionalFieldMetaKey, bcName, dispatch])
 
     const handlePicklistFilterOpen = useCallback(() => {
         setVisible(false)
@@ -111,6 +126,7 @@ function ColumnFilter({ widgetName, widgetMeta, rowMeta, components }: ColumnFil
         <FilterPopup
             widgetName={widgetName}
             fieldKey={effectiveFieldMeta.key}
+            additionalFieldMetaKey={additionalFieldMetaKey}
             value={value}
             onApply={handleApply}
             onCancel={handleClose}
@@ -118,6 +134,7 @@ function ColumnFilter({ widgetName, widgetMeta, rowMeta, components }: ColumnFil
         >
             <div className={styles.filterContainer}>
                 <FilterField
+                    bcName={bcName}
                     widgetFieldMeta={effectiveFieldMeta}
                     rowFieldMeta={rowMeta}
                     value={value}
@@ -140,7 +157,10 @@ function ColumnFilter({ widgetName, widgetMeta, rowMeta, components }: ColumnFil
         >
             <div
                 className={cn(styles.icon, {
-                    [styles.active]: (filter?.value?.toString()?.length as number) > 0 || Array.isArray(filter?.value)
+                    [styles.active]:
+                        (filter?.value?.toString()?.length as number) > 0 ||
+                        Array.isArray(filter?.value) ||
+                        additionalFilter?.value?.toString()
                 })}
                 data-test-widget-list-header-column-filter={true}
             >
@@ -178,5 +198,12 @@ export function useAssociateFieldKeyForPickList(fieldMeta: PickListFieldMeta) {
 
     return {
         associateFieldKeyForPickList
+    }
+}
+
+export function getAdditionalFieldMetaKey(fieldMeta: WidgetListField) {
+    if (fieldMeta.type === FieldType.money) {
+        const fieldMetaMoney = fieldMeta as AppMoneyFieldMeta
+        return fieldMetaMoney?.currencyKey
     }
 }

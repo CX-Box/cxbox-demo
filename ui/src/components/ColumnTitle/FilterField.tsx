@@ -1,6 +1,6 @@
 import React from 'react'
 import { CheckboxFilter } from './CheckboxFilter/CheckboxFilter'
-import { CustomFieldTypes } from '@interfaces/widget'
+import { AppMoneyFieldMeta, CustomFieldTypes } from '@interfaces/widget'
 import { getFormat } from '@utils/date'
 import RangePicker from './RangePicker'
 import DatePicker from './DatePicker'
@@ -10,15 +10,17 @@ import { Checkbox } from 'antd'
 import { interfaces } from '@cxbox-ui/core'
 import { ColumnFilterControlProps } from '@cxboxComponents/ui/FilterField/FilterField'
 import { NumberInput, FilterField as CoreFilterField } from '@cxboxComponents'
+import { MoneyFilter } from '@components/ColumnTitle/MoneyFilter/MoneyFilter'
 
 interface FilterFieldProps extends ColumnFilterControlProps {
+    bcName: string
     visible?: boolean
     filterByRangeEnabled?: boolean
 }
 
 const { FieldType } = interfaces
 
-function FilterField({ visible, filterByRangeEnabled, ...props }: FilterFieldProps) {
+function FilterField({ visible, filterByRangeEnabled, bcName, ...props }: FilterFieldProps) {
     const { widgetFieldMeta, value, onChange, rowFieldMeta } = props
     const fieldType = widgetFieldMeta.type as string
 
@@ -34,8 +36,18 @@ function FilterField({ visible, filterByRangeEnabled, ...props }: FilterFieldPro
                 />
             )
         }
-        case FieldType.number:
         case FieldType.money:
+            const moneyFieldMeta = widgetFieldMeta as AppMoneyFieldMeta
+            return (
+                <MoneyFilter
+                    data-test-filter-popup-value={true}
+                    value={value as number}
+                    bcName={bcName}
+                    meta={moneyFieldMeta}
+                    onChange={onChange}
+                />
+            )
+        case FieldType.number:
         case FieldType.percent:
             const fieldMeta = widgetFieldMeta as interfaces.NumberFieldMeta
             return (

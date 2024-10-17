@@ -2,7 +2,7 @@ import { reducers, interfaces } from '@cxbox-ui/core'
 import { createReducer, isAnyOf } from '@reduxjs/toolkit'
 import { actions } from '@actions'
 import { DataItem } from '@cxbox-ui/schema'
-import { changeRecordPositionMutate } from '@components/widgets/Table/utils/createTree'
+import { changeRecordPositionMutate } from '@components/widgets/Table/groupingHierarchy/utils/changeRecordPositionMutate'
 
 /**
  * Your initial state for this slice

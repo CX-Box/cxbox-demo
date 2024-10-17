@@ -20,6 +20,7 @@ import DashboardCard from '../DashboardCard/DashboardCard'
 import DashboardList from '../widgets/DashboardList/DashboardList'
 import LevelMenu from '../widgets/LevelMenu/LevelMenu'
 import { Number } from '../../fields/NumberInput/NumberInput'
+import { MoneyInput } from '../../fields/NumberInput/MoneyInput'
 import { FormPopup } from '../widgets/FormPopup/FormPopup'
 import MultivalueField from '../../fields/Multivalue/MultivalueField'
 import InlinePickList from '../../fields/InlinePickList/InlinePickList'
@@ -49,7 +50,7 @@ const skipWidgetTypes: (WidgetTypes | CustomWidgetTypes)[] = [CustomWidgetTypes.
 const customFields = {
     [FieldType.number]: Number,
     [FieldType.percent]: Number,
-    [FieldType.money]: Number,
+    [FieldType.money]: MoneyInput,
     [FieldType.dictionary]: Dictionary,
     [FieldType.multivalue]: MultivalueField,
     [FieldType.pickList]: PickListField,

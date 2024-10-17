@@ -1,5 +1,5 @@
 import { AnyAction, createAction } from '@reduxjs/toolkit'
-import { actions, interfaces } from '@cxbox-ui/core'
+import { actions, DataValue, interfaces } from '@cxbox-ui/core'
 import { OperationPreInvokeCustom } from '@interfaces/operation'
 import { NotificationState } from '@interfaces/notification'
 import { LoginResponse } from '@interfaces/session'
@@ -110,3 +110,5 @@ export const updateBcData = createAction<{ bcName: string; data: DataItem[] }>('
 export const forceUpdateRowMeta = createAction<{ bcName: string; cursor?: string; onSuccessAction?: AnyAction; wasForcedUpdate?: boolean }>(
     'forceUpdateRowMeta'
 )
+
+export const setLocalFilterValue = createAction<{ bcName: string; fieldKey: string; value: DataValue | DataValue[] }>('setLocalFilterValue')

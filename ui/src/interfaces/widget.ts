@@ -174,6 +174,10 @@ export type FileUploadFieldMeta = CoreFileUploadFieldMeta & {
 
 export type WidgetField = CoreWidgetField | FileUploadFieldMeta
 
+export type AppNumberFieldMeta = interfaces.NumberFieldMeta & {
+    currency?: string
+}
+
 export const enum ETitleMode {
     left = 'left',
     top = 'top'

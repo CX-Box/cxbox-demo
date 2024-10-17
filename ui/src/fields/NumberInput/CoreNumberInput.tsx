@@ -14,7 +14,7 @@ export interface CoreNumberInputProps extends BaseFieldProps {
     type: NumberTypes
     maxInput?: number
     forceFocus?: boolean
-    currency?: string
+    currencyComponent?: React.ReactNode
 }
 
 /**
@@ -23,10 +23,8 @@ export interface CoreNumberInputProps extends BaseFieldProps {
  * @category Components
  */
 const CoreNumberInput: React.FunctionComponent<CoreNumberInputProps> = props => {
-    const { type, value, digits, nullable, maxInput, onChange } = props
+    const { type, value, currencyComponent, digits, nullable, maxInput, onChange } = props
     const inputRef = React.useRef<Input>(null)
-
-    const currency = type === NumberTypes.money && props.currency
 
     const getDisplayedValueText = React.useCallback(
         (newValue?: number): string => {
@@ -129,7 +127,7 @@ const CoreNumberInput: React.FunctionComponent<CoreNumberInputProps> = props => 
             backgroundColor: props.backgroundColor || '#fff'
         },
         className: styles.container,
-        addonAfter: currency,
+        addonAfter: currencyComponent,
         onChange: handleOnChange,
         onBlur: handleOnBlur,
         onFocus: handleOnFocus,
@@ -149,7 +147,7 @@ const CoreNumberInput: React.FunctionComponent<CoreNumberInputProps> = props => 
                 backgroundColor={props.backgroundColor}
                 onDrillDown={props.onDrillDown}
             >
-                {NumberInputFormat[type](props.value, props.digits, props.nullable)} {currency}
+                {NumberInputFormat[type](props.value, props.digits, props.nullable)} {currencyComponent}
             </ReadOnlyField>
         )
     }

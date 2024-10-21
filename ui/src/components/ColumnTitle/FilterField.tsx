@@ -31,7 +31,9 @@ function FilterField({ visible, filterByRangeEnabled, ...props }: FilterFieldPro
                     onChange={(e: CheckboxChangeEvent) => {
                         onChange(e.target.checked)
                     }}
-                />
+                >
+                    {rowFieldMeta?.placeholder}
+                </Checkbox>
             )
         }
         case FieldType.number:

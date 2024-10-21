@@ -142,12 +142,6 @@ function Table({
 
     const dispatch = useDispatch()
 
-    const changeCursor = (rowId: string) => {
-        if (rowId !== selectedRow?.rowId) {
-            dispatch(actions.selectTableRowInit({ widgetName: meta.name, rowId: rowId }))
-        }
-    }
-
     // TODO the condition is necessary because of editable table cells inside the core, so that there would not be duplicated actions of record change
     const needRowSelectRecord = !expandable && meta.options?.readOnly !== true && meta.options?.edit?.style !== 'none'
 
@@ -175,14 +169,20 @@ function Table({
     const handleRow = (record: DataItem, index: number) => {
         const tableEventListeners = {
             ...handleRowMenu(record),
-            onClick: needRowSelectRecord
-                ? () => {
-                      const selection = window.getSelection()
-                      if (selection === null || selection.type !== 'Range') {
-                          changeCursor(record.id)
-                      }
-                  }
-                : undefined
+            onClick: () => {
+                const selection = window.getSelection()
+                if (selection === null || selection.type !== 'Range') {
+                    if (needRowSelectRecord) {
+                        if (record.id !== selectedRow?.rowId) {
+                            dispatch(actions.selectTableRowInit({ widgetName: meta.name, rowId: record.id }))
+                        }
+                    } else {
+                        if (record.id !== bc?.cursor) {
+                            dispatch(actions.bcSelectRecord({ bcName: bc?.name as string, cursor: record.id }))
+                        }
+                    }
+                }
+            }
         }
 
         const isParentRow = record.children

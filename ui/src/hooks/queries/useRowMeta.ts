@@ -6,11 +6,13 @@ import { buildBcKey } from '@utils/buildBcKey'
 
 export const useRowMeta = (bcName: string) => {
     const { data: screenMeta } = useScreenMeta()
-    const { bcPathKeys, cursor } = useScreenBcPath(bcName)
+    const { thisBcPath, cursor } = useScreenBcPath(bcName)
+
+    const metaPath = cursor && thisBcPath ? `${thisBcPath}/${cursor}` : ''
 
     return useQuery({
-        queryKey: ['rowMeta', ...bcPathKeys],
-        queryFn: () => CxBoxApiInstance.fetchRowMeta(screenMeta?.name || '', bcPathKeys?.join('/')).toPromise(),
+        queryKey: ['rowMeta', metaPath],
+        queryFn: () => CxBoxApiInstance.fetchRowMeta(screenMeta?.name || '', metaPath).toPromise(),
         enabled: cursor !== null,
         staleTime: 10000
     })

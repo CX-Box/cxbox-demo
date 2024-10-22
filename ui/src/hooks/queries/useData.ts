@@ -2,48 +2,35 @@ import { useQueries, useQuery, useQueryClient } from '@tanstack/react-query'
 import { LoginResponse } from '@cxbox-ui/core'
 import { useEffect, useMemo } from 'react'
 import { CxBoxApiInstance } from '../../api'
-import { BcPath, useScreenBcPath, useScreenMeta } from './'
+import { useScreenBcPath, useScreenMeta } from './'
 import { produce } from 'immer'
 
 export const useData = (bcName: string, cursor?: string | null) => {
     const queryClient = useQueryClient()
     const { data: screenMeta } = useScreenMeta()
-    const { bcPaths } = useScreenBcPath(bcName)
+    const { bcPaths, thisBcPath } = useScreenBcPath(bcName)
 
-    /**
-     * Array of keys for prefetching, if bc is parent then this array would be empty.
-     * Recursively slices keys, also all prefetch bcPaths should exclude their own cursors to reduce number of useless requests
-     */
-    // const prefetchBc = useMemo(() => {
-    //     const prefetchPathList: BcPath[] = []
-    //     sliceLastBcKeys(bcPaths)
-    //     function sliceLastBcKeys(keys: BcPath) {
-    //         const currentPath = keys.slice(0, -2)
-    //         if (currentPath.length !== 0) {
-    //             prefetchPathList.push(currentPath.slice(0, -1))
-    //             sliceLastBcKeys(currentPath)
-    //         }
-    //     }
-    //
-    //     return prefetchPathList.reverse()
-    // }, [bcPaths])
+    const prefetchPaths = useMemo(() => {
+        return bcPaths.slice(0, -1).filter(path => path !== null) as string[]
+    }, [bcPaths])
 
     //prefetch data for parent bc
     const prefetchData = useQueries({
-        queries: bcPaths.map(bc => {
+        queries: prefetchPaths.map(bc => {
             return {
                 queryKey: ['data', bc],
-                queryFn: () => CxBoxApiInstance.fetchBcData(screenMeta?.name || '', bc).toPromise(),
-                enabled: bc !== ''
+                queryFn: () => CxBoxApiInstance.fetchBcData(screenMeta?.name || '', bc).toPromise()
             }
         }),
         combine: result => {
             /**
              * Combine function is using for ability to set first cursors of each BC list of cascade prefetching
-             * Used only for initial data fetching
              */
             return result.map((query, index) => {
-                return [prefetchBc[index][prefetchBc.length - 1], query.data?.data?.[0]?.id ? query.data.data[0].id : null]
+                const sliceIndex = prefetchPaths[index].lastIndexOf('/')
+                const bcName = prefetchPaths[index].slice(sliceIndex + 1)
+                const cursor = query.data?.data?.[0]?.id ? query.data.data[0].id : null
+                return [bcName, cursor]
             })
         }
     })
@@ -65,17 +52,13 @@ export const useData = (bcName: string, cursor?: string | null) => {
         })
     }, [prefetchData, queryClient, screenMeta])
 
-    const thisBcPath = useMemo(() => {
-        const path = cursor ? bcPaths : bcPaths.slice(0, -1)
-        if (path.every(key => key !== null)) {
-            return path
-        }
-        return []
-    }, [bcPaths, cursor])
+    const dataPath = cursor && thisBcPath ? `${thisBcPath}/${cursor}` : thisBcPath
+
+    console.log(bcPaths)
 
     return useQuery({
-        queryKey: ['data', ...thisBcPath],
-        queryFn: () => CxBoxApiInstance.fetchBcData(screenMeta?.name || '', thisBcPath.join('/')).toPromise(),
-        enabled: thisBcPath.length > 0
+        queryKey: ['data', dataPath],
+        queryFn: () => CxBoxApiInstance.fetchBcData(screenMeta?.name || '', dataPath ?? '').toPromise(),
+        enabled: dataPath !== null
     })
 }

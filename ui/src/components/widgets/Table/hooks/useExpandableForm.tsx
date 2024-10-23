@@ -28,13 +28,19 @@ export function useInternalWidgetSelector(externalWidget: AppWidgetMeta) {
         const widgetNameForEdit = externalWidget.options?.edit?.widget
         const isWidgetForEditIsInline = externalWidget.options?.edit?.style === 'inline'
         const isWidgetForEditIsDisabled = externalWidget.options?.edit?.style === 'none'
+        const isWidgetForEditIsInlineForm = externalWidget.options?.edit?.style === 'inlineForm'
+        if (isWidgetForEditIsInlineForm && !widgetNameForEdit) {
+            console.error('There is no widget for edit! Instead will be applied inline edit.')
+        }
+        if (isWidgetForEditIsInline && widgetNameForEdit) {
+            console.error('There is meta collision, edit widget would not be applied! Instead will be applied inline edit.')
+        }
 
         const widgetForCreate = state.view.widgets.find(widget => widgetNameForCreate === widget?.name) as WidgetFormMeta
         const widgetForEdit =
             !isWidgetForEditIsInline && !isWidgetForEditIsDisabled
                 ? (state.view.widgets.find(widget => widgetNameForEdit === widget?.name) as WidgetFormMeta)
                 : undefined
-
         const bcName = (widgetForCreate || widgetForEdit)?.bcName as string
         const bc = bcName ? state.screen.bo.bc[bcName] : undefined
         const bcUrl = bc ? buildBcUrl(bcName, true) : ''

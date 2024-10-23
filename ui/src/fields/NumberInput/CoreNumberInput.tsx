@@ -4,6 +4,7 @@ import { InputProps } from 'antd/es/input'
 import { fractionsRound, NumberInputFormat, NumberTypes } from './formaters'
 import ReadOnlyField from '../../components/ui/ReadOnlyField/ReadOnlyField'
 import { BaseFieldProps } from '@cxboxComponents/Field/Field'
+import styles from './CoreNumberInput.less'
 
 export interface CoreNumberInputProps extends BaseFieldProps {
     onChange?: (value: number) => void
@@ -13,6 +14,7 @@ export interface CoreNumberInputProps extends BaseFieldProps {
     type: NumberTypes
     maxInput?: number
     forceFocus?: boolean
+    currency?: string
 }
 
 /**
@@ -23,6 +25,8 @@ export interface CoreNumberInputProps extends BaseFieldProps {
 const CoreNumberInput: React.FunctionComponent<CoreNumberInputProps> = props => {
     const { type, value, digits, nullable, maxInput, onChange } = props
     const inputRef = React.useRef<Input>(null)
+
+    const currency = type === NumberTypes.money && props.currency
 
     const getDisplayedValueText = React.useCallback(
         (newValue?: number): string => {
@@ -124,6 +128,8 @@ const CoreNumberInput: React.FunctionComponent<CoreNumberInputProps> = props => 
         style: {
             backgroundColor: props.backgroundColor || '#fff'
         },
+        className: styles.container,
+        addonAfter: currency,
         onChange: handleOnChange,
         onBlur: handleOnBlur,
         onFocus: handleOnFocus,
@@ -143,7 +149,7 @@ const CoreNumberInput: React.FunctionComponent<CoreNumberInputProps> = props => 
                 backgroundColor={props.backgroundColor}
                 onDrillDown={props.onDrillDown}
             >
-                {NumberInputFormat[type](props.value, props.digits, props.nullable)}
+                {NumberInputFormat[type](props.value, props.digits, props.nullable)} {currency}
             </ReadOnlyField>
         )
     }

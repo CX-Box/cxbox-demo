@@ -3,10 +3,6 @@
     flex-flow: row wrap;
 }
 
-.rowWrapper:last-child [class^="InfoValueWrapper_fieldArea"] {
-    border-bottom: 0;
-}
-
-.rowWrapper:first-child:not(:last-child) [class*="InfoValueWrapper_rowDirection"] {
+.rowWrapper:first-child [class*="InfoValueWrapper_rowDirection"] {
     border-top: 0;
 }

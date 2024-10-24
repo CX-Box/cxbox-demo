@@ -5,7 +5,7 @@ import InfoValueWrapper from './InfoValueWrapper'
 import { EMPTY_ARRAY } from '@constants'
 import { useAppSelector } from '@store'
 import { interfaces } from '@cxbox-ui/core'
-import { AppWidgetInfoMeta } from '@interfaces/widget'
+import { AppWidgetInfoMeta, ETitleMode } from '@interfaces/widget'
 
 const { FieldType } = interfaces
 
@@ -57,7 +57,7 @@ function InfoCell({ field, colSpan, row, meta, cursor, onDrillDown }: ValueCellP
             data-test-field-title={field.label || field.title}
             data-test-field-key={field.key}
         >
-            <InfoValueWrapper key={field.key} row={row} colSpan={colSpan} titleMode={meta.options?.layout?.titleMode}>
+            <InfoValueWrapper key={field.key} row={row} colSpan={colSpan} titleMode={meta.options?.layout?.titleMode || ETitleMode.left}>
                 {field.label?.length !== 0 && (
                     <div className={styles.labelArea}>
                         <span className={styles.label}>{field.label}</span>

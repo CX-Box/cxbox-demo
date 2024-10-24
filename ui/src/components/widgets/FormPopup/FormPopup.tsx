@@ -16,8 +16,9 @@ export interface FormPopupProps {
 export function FormPopup(props: FormPopupProps) {
     const dispatch = useAppDispatch()
     const bcName = props.meta.bcName
+    const widgetName = props.meta.name
     const popupData = useAppSelector(state => state.view.popupData)
-    const showed = popupData?.bcName === bcName
+    const showed = popupData?.widgetName === widgetName
     const bc = useAppSelector(state => (bcName ? state.screen.bo.bc[bcName] : undefined))
     const bcLoading = bc && bc.loading
 

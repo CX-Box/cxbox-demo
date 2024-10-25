@@ -2,13 +2,14 @@ import { useQueries, useQuery, useQueryClient } from '@tanstack/react-query'
 import { LoginResponse } from '@cxbox-ui/core'
 import { useEffect, useMemo } from 'react'
 import { CxBoxApiInstance } from '../../api'
-import { useScreenBcPath, useScreenMeta } from './'
+import { useScreenMeta } from './'
 import { produce } from 'immer'
+import { useScreenBcPath } from '@hooks/useScreenBcPath'
 
 export const useData = (bcName: string, cursor?: string | null) => {
     const queryClient = useQueryClient()
     const { data: screenMeta } = useScreenMeta()
-    const { bcPaths, thisBcPath } = useScreenBcPath(bcName)
+    const { bcPaths, thisBcPath, setCursor } = useScreenBcPath(bcName)
 
     const prefetchPaths = useMemo(() => {
         return bcPaths.slice(0, -1).filter(path => path !== null) as string[]
@@ -52,13 +53,19 @@ export const useData = (bcName: string, cursor?: string | null) => {
         })
     }, [prefetchData, queryClient, screenMeta])
 
-    const dataPath = cursor && thisBcPath ? `${thisBcPath}/${cursor}` : thisBcPath
+    const dataPath = thisBcPath ? (cursor ? `${thisBcPath}/${cursor}` : thisBcPath) : ''
 
-    console.log(bcPaths)
-
-    return useQuery({
+    const query = useQuery({
         queryKey: ['data', dataPath],
-        queryFn: () => CxBoxApiInstance.fetchBcData(screenMeta?.name || '', dataPath ?? '').toPromise(),
-        enabled: dataPath !== null
+        queryFn: () => CxBoxApiInstance.fetchBcData(screenMeta?.name || '', dataPath).toPromise(),
+        enabled: thisBcPath !== null
     })
+
+    useEffect(() => {
+        if (query.isFetchedAfterMount && query.data?.data[0]?.id && !cursor) {
+            setCursor(query.data?.data[0]?.id)
+        }
+    }, [cursor, query.data?.data, query.isFetchedAfterMount, setCursor])
+
+    return query
 }

@@ -1,17 +1,17 @@
 import React, { useMemo } from 'react'
 import { WidgetAnyProps } from '@components/Widget'
-import { useData, useScreenBcPath } from '../hooks/queries'
+import { useData } from '../hooks/queries'
 import { Button, Table } from 'antd'
 import { useTableWidgetMeta } from '../hooks/queries'
 import { ColumnProps } from 'antd/es/table'
 import { DataItem } from '@interfaces/core'
 import { useRowMeta } from '@hooks/queries/useRowMeta'
+import { useScreenBcPath } from '@hooks/useScreenBcPath'
 
 export const List: React.FC<WidgetAnyProps> = ({ widgetName, bcName }) => {
     const { data } = useData(bcName)
     const { data: widgetMeta } = useTableWidgetMeta(widgetName)
     const { cursor, setCursor } = useScreenBcPath(bcName)
-
     const { data: rowMeta } = useRowMeta(bcName)
 
     const columns = useMemo(() => {

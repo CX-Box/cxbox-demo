@@ -52,30 +52,21 @@ export const useScreenBcPath = (bcName: string) => {
 
         const bcLadder = branchFromRoot.map((_, i, arr) => arr.slice(0, i + 1))
 
-        return bcLadder.map(step => {
+        return bcLadder.map((step, i) => {
             /**
-             * we should know, is in step any intermediate null cursor
-             * !! ONLY LAST NULL CURSOR ALLOWED
+             * collect path keys for every step of the ladder
+             * then we should search empty cursors from both sides
+             * it's means that if indexes of cursors are different
+             * and path can't be built correctly because there's no
+             * option to make path without previous bc cursor
              */
-            const nullBcCursorIndex = step.findIndex(bc => bc.cursor === '' || bc.cursor === null)
-            if (nullBcCursorIndex !== step.length - 1) {
+            const draftPathKeys = step.map(bc => [bc.name, bc.cursor]).flat()
+            const firstNullCursorIndex = draftPathKeys.findIndex(key => key === null || key === '')
+            const lastNullCursorIndex = draftPathKeys.findLastIndex(key => key === null || key === '')
+            if (firstNullCursorIndex !== lastNullCursorIndex) {
                 return null
             }
-
-            /**
-             * concat step into array of [bcName1, bcCursor1, bcName2, bcCursor2, ...]
-             * then join with slashes to make path
-             */
-            return step
-                .reduce<string[]>((acc, bc) => {
-                    if (bc.cursor === null) {
-                        acc.push(bc.name)
-                    } else {
-                        acc.push(bc.name, bc.cursor as string)
-                    }
-                    return acc
-                }, [])
-                .join('/')
+            return draftPathKeys.slice(0, lastNullCursorIndex).join('/')
         })
     }, [bcList, thisBc])
 

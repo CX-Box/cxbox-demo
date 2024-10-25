@@ -1,6 +1,6 @@
 export * from './useMeta'
 export * from './useData'
-export * from './useScreenBcPath'
 export * from './useScreenMeta'
 export * from './useViewMeta'
 export * from './useWidgetMeta'
+export * from './useRowMeta'

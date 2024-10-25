@@ -28,13 +28,28 @@ export function useInternalWidgetSelector(externalWidget: AppWidgetMeta) {
         const widgetNameForEdit = externalWidget.options?.edit?.widget
         const isWidgetForEditIsInline = externalWidget.options?.edit?.style === 'inline'
         const isWidgetForEditIsDisabled = externalWidget.options?.edit?.style === 'none'
+        const isWidgetForEditIsInlineForm = externalWidget.options?.edit?.style === 'inlineForm'
+        if (isWidgetForEditIsInlineForm && !widgetNameForEdit) {
+            console.error(`Widget "name": ${externalWidget.name} has meta inspection warning! 
+Inspection Description: options.edit.widget must be set for options.edit.style = "inlineForm" and must not be set in other cases
+Fallback behavior: options.edit.style = "inline", because edit widget was not set.`)
+        }
+        if (isWidgetForEditIsInline && widgetNameForEdit) {
+            console.error(`Widget "name": ${externalWidget.name} has meta inspection warning! 
+Inspection Description: options.edit.widget must be set for options.edit.style = "inlineForm" and must not be set in other cases
+Fallback behavior: options.edit.style = "inline" has higher priority than option.edit.widget`)
+        }
+        if (isWidgetForEditIsDisabled && widgetNameForEdit) {
+            console.error(`Widget "name": ${externalWidget.name} has meta inspection warning! 
+Inspection Description: options.edit.widget must be set for options.edit.style = "inlineForm" and must not be set in other cases
+Fallback behavior: options.edit.style = "none" has higher priority than option.edit.widget`)
+        }
 
         const widgetForCreate = state.view.widgets.find(widget => widgetNameForCreate === widget?.name) as WidgetFormMeta
         const widgetForEdit =
             !isWidgetForEditIsInline && !isWidgetForEditIsDisabled
                 ? (state.view.widgets.find(widget => widgetNameForEdit === widget?.name) as WidgetFormMeta)
                 : undefined
-
         const bcName = (widgetForCreate || widgetForEdit)?.bcName as string
         const bc = bcName ? state.screen.bo.bc[bcName] : undefined
         const bcUrl = bc ? buildBcUrl(bcName, true) : ''

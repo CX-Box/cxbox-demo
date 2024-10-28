@@ -25,7 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-@SuppressWarnings({"java:S3252","java:S1186"})
+@SuppressWarnings({"java:S3252", "java:S1186"})
 @Service
 public class ClientContactService extends VersionAwareResponseService<ContactDTO, Contact> {
 
@@ -94,6 +94,7 @@ public class ClientContactService extends VersionAwareResponseService<ContactDTO
 				.text("Add Existing")
 				.add()
 				.newAction()
+				.add(true)
 				.action("save_and_go_to_client_edit_contacts", "save")
 				.invoker((bc, dto) -> new ActionResultDTO<ContactDTO>()
 						.setAction(PostAction.drillDown(

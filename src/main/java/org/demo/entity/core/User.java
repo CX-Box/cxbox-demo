@@ -19,18 +19,17 @@ package org.demo.entity.core;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
 import org.cxbox.api.data.dictionary.LOV;
 import org.cxbox.model.core.entity.BaseEntity;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.hibernate.envers.NotAudited;
 
 /**
@@ -49,10 +48,8 @@ public class User extends BaseEntity {
 
 	private String lastName;
 
-	@ManyToOne
-	@Fetch(FetchMode.JOIN)
-	@JoinColumn(name = "dept_id")
-	private Department department;
+	@Transient
+	private final long DEFAULT_DEPARTMENT_ID = 0L;
 
 	@Deprecated
 	@Column(name = "internal_role_cd")
@@ -63,45 +60,15 @@ public class User extends BaseEntity {
 	private List<UserRole> userRoleList;
 
 	public String getFullName() {
-		StringBuilder sB = new StringBuilder();
-		if (lastName != null) {
-			sB.append(lastName);
-			if (firstName != null) {
-				sB.append(" ");
-			}
-		}
-		if (firstName != null) {
-			sB.append(firstName);
-		}
-		return sB.toString();
+		return Stream.of(lastName, firstName)
+				.filter(Objects::nonNull)
+				.collect(Collectors.joining(" "))
+				.trim();
 	}
 
-	public String getUserNameInitials() {
-		StringBuilder sB = new StringBuilder();
-		if (lastName != null) {
-			sB.append(lastName);
-			if (firstName != null) {
-				sB.append(" ");
-			}
-		}
-		if (firstName != null) {
-			sB.append(StringUtils.left(firstName, 1).toUpperCase() + ".");
-		}
-		return sB.toString();
-	}
-
-	public String getUserNameInitialsWithoutSpace() {
-		StringBuilder sB = new StringBuilder();
-		if (lastName != null) {
-			sB.append(lastName);
-			if (firstName != null) {
-				sB.append(" ");
-			}
-		}
-		if (firstName != null) {
-			sB.append(StringUtils.left(firstName, 1).toUpperCase() + ".");
-		}
-		return sB.toString();
+	@Deprecated(forRemoval = true, since = "release 2.0.8")
+	public Long getDepartment() {
+		return DEFAULT_DEPARTMENT_ID;
 	}
 
 }

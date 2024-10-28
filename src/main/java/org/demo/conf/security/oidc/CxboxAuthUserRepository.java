@@ -12,11 +12,11 @@ import org.cxbox.api.service.session.InternalAuthorizationService;
 import org.cxbox.api.service.tx.TransactionService;
 import org.cxbox.core.util.SQLExceptions;
 import org.cxbox.model.core.dao.JpaDao;
+import org.demo.conf.cxbox.customization.role.UserRoleService;
+import org.demo.conf.cxbox.customization.role.UserService;
 import org.demo.entity.core.User;
 import org.demo.repository.core.DepartmentRepository;
 import org.demo.repository.core.UserRepository;
-import org.demo.conf.cxbox.customization.role.UserRoleService;
-import org.demo.conf.cxbox.customization.role.UserService;
 import org.hibernate.LockOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
@@ -122,7 +122,6 @@ public class CxboxAuthUserRepository {
 		user.setInternalRole(new LOV(role));
 		user.setFirstName(login);
 		user.setLastName(login);
-		user.setDepartment(departmentRepository.findById(USER_DEPARTMENT).orElse(null));
 	}
 
 }

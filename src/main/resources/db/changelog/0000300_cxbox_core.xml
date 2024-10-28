@@ -401,7 +401,6 @@
       <column name="INTERNAL_ROLE_CD" remarks="Внутренняя роль" type="VARCHAR2(255)">
         <constraints nullable="false"/>
       </column>
-      <column name="DEPT_ID" remarks="Идентификатор Департамента" type="NUMBER(19, 0)"/>
       <column defaultValueComputed="current_timestamp" name="CREATED_DATE" type="TIMESTAMP(6)">
         <constraints nullable="false"/>
       </column>
@@ -531,9 +530,6 @@
     </createIndex>
     <createIndex indexName="USERS_IND2" tableName="USERS">
       <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"/>
-    </createIndex>
-    <createIndex indexName="USERS_IND3" tableName="USERS">
-      <column name="DEPT_ID"/>
     </createIndex>
   </changeSet>
 
@@ -773,12 +769,6 @@
       <column name="SHORT_NAME" header="SHORT_NAME" type="STRING"/>
       <column name="FULL_NAME" header="FULL_NAME" type="STRING"/>
     </loadData>
-  </changeSet>
-
-  <changeSet author="cxbox" id="USERS CONSTRAINTS(2)">
-    <addForeignKeyConstraint baseColumnNames="DEPT_ID" baseTableName="USERS" constraintName="USERS_FK_1"
-      deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
-      referencedColumnNames="ID" referencedTableName="DEPT" validate="true"/>
   </changeSet>
 
   <changeSet author="cxbox" id="INITIAL DATA(2)">

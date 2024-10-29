@@ -1,3 +1,5 @@
+@import '@assets/styles/theme.less';
+
 .div[class*="FormWidget__required"] {
     :global(.ant-form-item-label label.ant-form-item-no-colon::after) {
         content: "*";
@@ -147,23 +149,7 @@
 }
 /* fix for grid form ant.d 3.x.x after */
 
-/* fix for displaying checkbox before */
 .formContainer div[class^="CheckboxPicker__container"] :global(.ant-checkbox-wrapper) {
-    display: flex;
-    flex-direction: column-reverse;
+    min-height: 40px;
+    font-size: 16px;
 }
-
-.formContainer div[class^="CheckboxPicker__container"] :global(.ant-checkbox + span) {
-    padding: 0 0 8px;
-    font-weight: 700;
-    line-height: 20px;
-    color: #141F35;
-    white-space: initial;
-    text-align: left;
-    font-size: 14px;
-}
-
-.formContainer div[class^="CheckboxPicker__container"] :global(.ant-checkbox) {
-    align-self: flex-start;
-}
-/* fix for displaying checkbox after */

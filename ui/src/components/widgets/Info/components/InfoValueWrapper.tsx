@@ -12,15 +12,12 @@ interface ValueWrapperProps {
     children?: ReactNode
 }
 function InfoValueWrapper({ row, titleMode, colSpan, children }: ValueWrapperProps) {
-    const isMultipleColumns = row.cols.length > 1
-
     return (
         <Col span={colSpan}>
             <div
                 className={cn(styles.fieldArea, {
-                    [styles.columnDirectionDefault]: isMultipleColumns && titleMode !== ETitleMode.left,
-                    [styles.columnDirection]: titleMode === ETitleMode.top,
-                    [styles.rowDirection]: titleMode === ETitleMode.left
+                    [styles.rowDirection]: titleMode === ETitleMode.left,
+                    [styles.columnDirection]: titleMode === ETitleMode.top
                 })}
             >
                 {children}

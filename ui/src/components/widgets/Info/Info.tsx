@@ -1,5 +1,4 @@
 import React from 'react'
-import cn from 'classnames'
 import { interfaces } from '@cxbox-ui/core'
 import { useDispatch } from 'react-redux'
 import { useAppSelector } from '@store'
@@ -48,7 +47,7 @@ function Info({ meta }: InfoProps) {
             />
         ))
 
-    return <Row className={cn({ [styles.margin]: meta.options?.layout?.titleMode })}>{InfoRows}</Row>
+    return <Row className={styles.container}>{InfoRows}</Row>
 }
 
 export default React.memo(Info)

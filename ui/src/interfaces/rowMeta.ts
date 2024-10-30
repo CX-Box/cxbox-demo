@@ -8,7 +8,7 @@ export interface RowMetaField extends CoreRowMetaField {
      */
     sortable?: boolean
     groupingHierarchy?: {
-        groupByFields: string[]
+        groupByFields: { name: string; options: null }[]
         levels: EmptyNodeLevel[]
     }
 }

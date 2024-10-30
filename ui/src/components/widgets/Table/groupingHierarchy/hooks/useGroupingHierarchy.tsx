@@ -35,7 +35,7 @@ export const useGroupingHierarchy = <T extends CustomDataItem>(
     const bcCount = useAppSelector(state => state.view.bcRecordsCount[meta.bcName]?.count)
     const correctGroupingCount = bcPageLimit != null && bcCount != null && bcPageLimit >= bcCount
     const bcData = useAppSelector(state => state.data[meta.bcName] as T[] | undefined)
-    const groupingHierarchyEmptyNodes = useGroupingHierarchyLevels(meta.bcName, sortedGroupKeys)
+    const groupingHierarchyEmptyNodes = useGroupingHierarchyLevels(meta, sortedGroupKeys)
 
     const { tree, nodeDictionary } = useMemo(
         () =>

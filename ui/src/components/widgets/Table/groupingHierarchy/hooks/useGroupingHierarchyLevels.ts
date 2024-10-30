@@ -1,10 +1,12 @@
 import { useAppSelector } from '@store'
 import { buildBcUrl } from '@utils/buildBcUrl'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { usePrevious } from '@hooks/usePrevious'
 import { EmptyNodeLevel } from '@components/widgets/Table/groupingHierarchy'
+import { AppWidgetGroupingHierarchyMeta } from '@interfaces/widget'
 
-export const useGroupingHierarchyLevels = (bcName: string, sortedGroupKeys: string[]) => {
+export const useGroupingHierarchyLevels = (meta: AppWidgetGroupingHierarchyMeta, sortedGroupKeys: string[]) => {
+    const bcName = meta.bcName
     const bcRowMeta = useAppSelector(state => {
         const bcUrl = buildBcUrl(bcName, true, state)
         return bcUrl ? state.view.rowMeta[bcName]?.[bcUrl] : undefined
@@ -17,12 +19,37 @@ export const useGroupingHierarchyLevels = (bcName: string, sortedGroupKeys: stri
     )?.groupingHierarchy
 
     const [groupingHierarchyLevels, setGroupingHierarchyLevels] = useState<EmptyNodeLevel[] | undefined | null>()
+
+    const isValidRowMetaGroupingHierarchy = useCallback(() => {
+        const groupByFields = rowMetaGroupingHierarchy?.groupByFields
+        const metaGroupingHierarchyFields = meta.options?.groupingHierarchy?.fields
+
+        return (
+            groupByFields &&
+            groupByFields.length === metaGroupingHierarchyFields?.length &&
+            groupByFields
+                .map(groupByField => groupByField.name)
+                .every((groupByFieldName, index) => groupByFieldName === metaGroupingHierarchyFields[index])
+        )
+    }, [meta.options?.groupingHierarchy?.fields, rowMetaGroupingHierarchy?.groupByFields])
+
+    const validateRowMetaGroupingHierarchy = useCallback(() => {
+        rowMetaGroupingHierarchy &&
+            !isValidRowMetaGroupingHierarchy() &&
+            console.info(
+                'Error: fields in rowMeta do not match fields in widget meta.\n\n',
+                `Content rowMeta: ${JSON.stringify(rowMetaGroupingHierarchy.groupByFields, null, 2)}\n\n`,
+                `Content meta.options.groupingHierarchy: ${JSON.stringify(meta.options?.groupingHierarchy)}\n\n`
+            )
+    }, [isValidRowMetaGroupingHierarchy, meta.options?.groupingHierarchy, rowMetaGroupingHierarchy])
+
     // set the first available value
     useEffect(() => {
         if (!rowMetaInProgress && !groupingHierarchyLevels && groupingHierarchyLevels !== null) {
             setGroupingHierarchyLevels(rowMetaGroupingHierarchy?.levels ?? null)
+            validateRowMetaGroupingHierarchy()
         }
-    }, [groupingHierarchyLevels, rowMetaGroupingHierarchy, rowMetaInProgress])
+    }, [groupingHierarchyLevels, rowMetaGroupingHierarchy, rowMetaInProgress, validateRowMetaGroupingHierarchy])
 
     const previousRowMetaGroupingHierarchy = usePrevious(rowMetaGroupingHierarchy)
     // update the structure if the structure changes when the active cursor changes
@@ -34,8 +61,9 @@ export const useGroupingHierarchyLevels = (bcName: string, sortedGroupKeys: stri
             (groupingHierarchyLevels === null && rowMetaGroupingHierarchy?.levels)
         ) {
             setGroupingHierarchyLevels(rowMetaGroupingHierarchy.levels)
+            validateRowMetaGroupingHierarchy()
         }
-    }, [groupingHierarchyLevels, previousRowMetaGroupingHierarchy, rowMetaGroupingHierarchy])
+    }, [groupingHierarchyLevels, previousRowMetaGroupingHierarchy, rowMetaGroupingHierarchy, validateRowMetaGroupingHierarchy])
 
     return groupingHierarchyLevels
 }

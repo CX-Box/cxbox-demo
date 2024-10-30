@@ -1,5 +1,6 @@
 package org.demo.service.cxbox.inner;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -41,7 +42,7 @@ public class MeetingDocumentsWriteMeta extends FieldMetaBuilder<MeetingDocuments
 		fields.enableSort(MeetingDocumentsDTO_.briefing);
 		fields.enableSort(MeetingDocumentsDTO_.id);
 		fields.enableSort(MeetingDocumentsDTO_.notes);
-		fields.groupingHierarchy(
+		fields.defaultGroupingHierarchy(
 				MeetingDocumentsDTO_.document,
 				MeetingDocumentsDTO_.briefing,
 				Set.of(

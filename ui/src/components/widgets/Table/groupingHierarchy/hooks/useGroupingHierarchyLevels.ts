@@ -39,7 +39,7 @@ export const useGroupingHierarchyLevels = (meta: AppWidgetGroupingHierarchyMeta,
             console.info(
                 'Error: fields in rowMeta do not match fields in widget meta.\n\n',
                 `Content rowMeta: ${JSON.stringify(rowMetaGroupingHierarchy.groupByFields, null, 2)}\n\n`,
-                `Content meta.options.groupingHierarchy: ${JSON.stringify(meta.options?.groupingHierarchy)}\n\n`
+                `Content meta.options.groupingHierarchy: ${JSON.stringify(meta.options?.groupingHierarchy, null, 2)}\n\n`
             )
     }, [isValidRowMetaGroupingHierarchy, meta.options?.groupingHierarchy, rowMetaGroupingHierarchy])
 

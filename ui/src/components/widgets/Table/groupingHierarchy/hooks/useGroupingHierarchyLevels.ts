@@ -15,8 +15,8 @@ export const useGroupingHierarchyLevels = (meta: AppWidgetGroupingHierarchyMeta,
         return state.view.metaInProgress[bcName]
     })
     const rowMetaGroupingHierarchy = bcRowMeta?.fields.find(
-        field => sortedGroupKeys.includes(field.key) && field.groupingHierarchy
-    )?.groupingHierarchy
+        field => sortedGroupKeys.includes(field.key) && field.defaultGroupingHierarchy
+    )?.defaultGroupingHierarchy
 
     const [groupingHierarchyLevels, setGroupingHierarchyLevels] = useState<EmptyNodeLevel[] | undefined | null>()
 

@@ -7,7 +7,7 @@ export interface RowMetaField extends CoreRowMetaField {
      * TODO: move to core
      */
     sortable?: boolean
-    groupingHierarchy?: {
+    defaultGroupingHierarchy?: {
         groupByFields: { name: string; options: null }[]
         levels: EmptyNodeLevel[]
     }

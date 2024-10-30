@@ -69,7 +69,7 @@ public class OidcJwtTokenConverter implements Converter<Jwt, OidcAuthenticationT
 				user,
 				new LOV(roles.stream().findFirst().get().getAuthority())
 		);
-		return new OidcAuthenticationToken(jwt, authorities, properties.getPrincipalAttribute(), userDetails);
+		return new OidcAuthenticationToken(jwt, authorities, login, userDetails);
 
 
 	}

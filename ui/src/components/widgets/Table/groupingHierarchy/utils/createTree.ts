@@ -2,7 +2,6 @@ import { CustomDataItem } from '@components/widgets/Table/Table.interfaces'
 import { BcSorter } from '@cxbox-ui/core'
 import { createEmptyGroupNodes } from '@components/widgets/Table/groupingHierarchy/utils/createEmptyGroupNodes'
 import { isUnallocatedRecord } from '@components/widgets/Table/groupingHierarchy/utils/isUnallocatedRecord'
-import { dynamicSort } from '@components/widgets/Table/groupingHierarchy/utils/dynamicSort'
 import { getGroupPaths } from '@components/widgets/Table/groupingHierarchy/utils/getGroupPaths'
 import { updateGroupCountMutate } from '@components/widgets/Table/groupingHierarchy/utils/updateGroupCountMutate'
 import {
@@ -11,6 +10,7 @@ import {
     GroupingHierarchyEmptyGroupNode,
     GroupingHierarchyGroupNode
 } from '@components/widgets/Table/groupingHierarchy'
+import { mergeEmptyGroupRowsWithOther } from '@components/widgets/Table/groupingHierarchy/utils/mergeEmptyGroupRowsWithOther'
 
 export const createTree = <T extends CustomDataItem>(
     array: T[] = [] as T[],
@@ -21,18 +21,14 @@ export const createTree = <T extends CustomDataItem>(
     type NodeType = T & GroupingHierarchyCommonNode
     type GroupNodeType = T & (GroupingHierarchyGroupNode | GroupingHierarchyEmptyGroupNode)
 
-    const emptyNodesList = (emptyNodes ? createEmptyGroupNodes(emptyNodes, sortedGroupKeys) : []) as GroupNodeType[]
     const unallocatedRows: NodeType[] = []
     const tree: NodeType[] = []
     const groupsDictionary: Record<string, GroupNodeType> = {}
     // for easy access to a node using the cursor
     const nodeDictionary: Record<string, NodeType> = {}
-    const normalizedArray = [...array, ...emptyNodesList]
 
-    if (sorters) {
-        // sort for correct display of the combined parent group
-        normalizedArray.sort(dynamicSort(sorters))
-    }
+    const emptyNodesList = (emptyNodes ? createEmptyGroupNodes(emptyNodes, sortedGroupKeys) : []) as GroupNodeType[]
+    const normalizedArray = mergeEmptyGroupRowsWithOther(array, emptyNodesList, sortedGroupKeys, sorters) as NodeType[]
 
     normalizedArray.forEach(item => {
         if (isUnallocatedRecord(item, sortedGroupKeys)) {
@@ -52,10 +48,6 @@ export const createTree = <T extends CustomDataItem>(
             const previousGroupPath = groupPaths[index + 1]
             const previousGroup = groupsDictionary[previousGroupPath]
 
-            if (currentGroup && !previousGroup && item._emptyNode) {
-                break
-            }
-
             // creates the first group
             if (!currentGroup && !previousGroup) {
                 groupsDictionary[currentGroupPath] = {
@@ -66,6 +58,10 @@ export const createTree = <T extends CustomDataItem>(
                     _countOfRecordsPerLevel: { [currentGroupLevel]: item._emptyNode ? 0 : 1 }
                 }
                 nodeDictionary[item.id] = groupsDictionary[currentGroupPath]
+
+                if (currentGroupLevel === 1) {
+                    tree.push(groupsDictionary[currentGroupPath])
+                }
 
                 continue
             }

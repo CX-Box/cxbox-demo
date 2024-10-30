@@ -8,6 +8,7 @@ export interface GroupingHierarchyGroupNode extends CustomDataItem {
     _groupPath: string
     _countOfRecordsPerLevel: Record<number, number>
     _groupLevel: number
+    _groupOptions?: null
     children: (GroupingHierarchyGroupNode | GroupingHierarchyItemNode)[]
 }
 

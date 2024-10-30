@@ -21,13 +21,8 @@ export type GroupingHierarchyCommonNode = CustomDataItem &
     Partial<GroupingHierarchyItemNode> &
     Partial<GroupingHierarchyEmptyGroupNode>
 
-export interface EmptyNodesStructureNode {
-    key: string
-    values: EmptyNodesStructureValue[]
-}
-
-export interface EmptyNodesStructureValue {
+export interface EmptyNodeLevel {
     value: string
-    emptyStatusValue?: string
-    child?: EmptyNodesStructureNode
+    child?: EmptyNodeLevel[]
+    options?: null
 }

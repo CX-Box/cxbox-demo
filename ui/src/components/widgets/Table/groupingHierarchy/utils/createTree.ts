@@ -6,7 +6,7 @@ import { dynamicSort } from '@components/widgets/Table/groupingHierarchy/utils/d
 import { getGroupPaths } from '@components/widgets/Table/groupingHierarchy/utils/getGroupPaths'
 import { updateGroupCountMutate } from '@components/widgets/Table/groupingHierarchy/utils/updateGroupCountMutate'
 import {
-    EmptyNodesStructureNode,
+    EmptyNodeLevel,
     GroupingHierarchyCommonNode,
     GroupingHierarchyEmptyGroupNode,
     GroupingHierarchyGroupNode
@@ -15,30 +15,24 @@ import {
 export const createTree = <T extends CustomDataItem>(
     array: T[] = [] as T[],
     sortedGroupKeys: string[] = [],
-    emptyNode?: EmptyNodesStructureNode | null,
+    emptyNodes?: EmptyNodeLevel[] | null,
     sorters?: BcSorter[]
 ) => {
     type NodeType = T & GroupingHierarchyCommonNode
     type GroupNodeType = T & (GroupingHierarchyGroupNode | GroupingHierarchyEmptyGroupNode)
 
-    const emptyNodes = (emptyNode ? createEmptyGroupNodes(emptyNode, sortedGroupKeys) : []) as GroupNodeType[]
-
+    const emptyNodesList = (emptyNodes ? createEmptyGroupNodes(emptyNodes, sortedGroupKeys) : []) as GroupNodeType[]
     const unallocatedRows: NodeType[] = []
     const tree: NodeType[] = []
     const groupsDictionary: Record<string, GroupNodeType> = {}
     // for easy access to a node using the cursor
     const nodeDictionary: Record<string, NodeType> = {}
-    const nodesToSort: NodeType[][] = []
-    const addNodesForSeparateSorting = (nodes: GroupNodeType[]) => !nodesToSort.includes(nodes) && nodesToSort.push(nodes)
+    const normalizedArray = [...array, ...emptyNodesList]
 
     if (sorters) {
         // sort for correct display of the combined parent group
-        emptyNodes.sort(dynamicSort(sorters))
-
-        nodesToSort.push(tree)
+        normalizedArray.sort(dynamicSort(sorters))
     }
-
-    const normalizedArray = [...array, ...emptyNodes]
 
     normalizedArray.forEach(item => {
         if (isUnallocatedRecord(item, sortedGroupKeys)) {
@@ -95,8 +89,6 @@ export const createTree = <T extends CustomDataItem>(
 
                 updateGroupCountMutate(currentGroup, currentGroupLevel)
 
-                item._emptyNode && addNodesForSeparateSorting(currentGroup.children as GroupNodeType[])
-
                 break
             }
             // adding records to the level group
@@ -112,13 +104,6 @@ export const createTree = <T extends CustomDataItem>(
             }
         }
     })
-
-    if (sorters) {
-        // sort the nodes to which unordered empty groups were added
-        nodesToSort.forEach(nodes => {
-            nodes.sort(dynamicSort(sorters))
-        })
-    }
 
     return { tree: [...unallocatedRows, ...tree], nodeDictionary, groupsDictionary }
 }

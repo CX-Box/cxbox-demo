@@ -16,7 +16,7 @@ import { formGroupPathFromRecord } from '@components/widgets/Table/groupingHiera
 import { createTree } from '@components/widgets/Table/groupingHierarchy/utils/createTree'
 import { getGroupingHierarchyRowKey } from '@components/widgets/Table/groupingHierarchy/utils/getGroupingHierarchyRowKey'
 import { getGroupPaths } from '@components/widgets/Table/groupingHierarchy/utils/getGroupPaths'
-import { useGroupingHierarchyEmptyNodesStructure } from '@components/widgets/Table/groupingHierarchy/hooks/useGroupingHierarchyEmptyNodesStructure'
+import { useGroupingHierarchyLevels } from '@components/widgets/Table/groupingHierarchy/hooks/useGroupingHierarchyLevels'
 
 export const useGroupingHierarchy = <T extends CustomDataItem>(
     meta: AppWidgetGroupingHierarchyMeta,
@@ -35,14 +35,14 @@ export const useGroupingHierarchy = <T extends CustomDataItem>(
     const bcCount = useAppSelector(state => state.view.bcRecordsCount[meta.bcName]?.count)
     const correctGroupingCount = bcPageLimit != null && bcCount != null && bcPageLimit >= bcCount
     const bcData = useAppSelector(state => state.data[meta.bcName] as T[] | undefined)
-    const groupingHierarchyEmptyNodesStructure = useGroupingHierarchyEmptyNodesStructure(meta.bcName, sortedGroupKeys)
+    const groupingHierarchyEmptyNodes = useGroupingHierarchyLevels(meta.bcName, sortedGroupKeys)
 
     const { tree, nodeDictionary } = useMemo(
         () =>
             isGroupingHierarchy
-                ? createTree(bcData, sortedGroupKeys, groupingHierarchyEmptyNodesStructure, sorters)
+                ? createTree(bcData, sortedGroupKeys, groupingHierarchyEmptyNodes, sorters)
                 : { tree: undefined, nodeDictionary: undefined },
-        [bcData, groupingHierarchyEmptyNodesStructure, isGroupingHierarchy, sortedGroupKeys, sorters]
+        [bcData, groupingHierarchyEmptyNodes, isGroupingHierarchy, sortedGroupKeys, sorters]
     )
     const { expandedParentRowKeys, changeExpand, clearExpand } = useExpandableGroup()
 

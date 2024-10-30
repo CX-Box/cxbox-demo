@@ -1,41 +1,41 @@
-import { dfsEmptyGroupStructureTraversal } from '@components/widgets/Table/groupingHierarchy/utils/dfsEmptyGroupStructureTraversal'
 import { formGroupPathFromRecord } from '@components/widgets/Table/groupingHierarchy/utils/formGroupPathFromRecord'
 import { getPreviousLevelPath } from '@components/widgets/Table/groupingHierarchy/utils/getPreviousLevelPath'
-import { EmptyNodesStructureNode, GroupingHierarchyEmptyGroupNode } from '@components/widgets/Table/groupingHierarchy'
+import { EmptyNodeLevel, GroupingHierarchyEmptyGroupNode } from '@components/widgets/Table/groupingHierarchy'
+import { preorderDfsTreeTraversal } from '@components/ViewNavigation/tab/standard/utils/preorderDfsTreeTraversal'
 
 // It was decided to create empty groups at the front
-export const createEmptyGroupNodes = <T extends Record<string, any>>(
-    emptyNode: EmptyNodesStructureNode,
-    sortedGroupKeys: string[] = []
-) => {
+export const createEmptyGroupNodes = <T extends Record<string, any>>(emptyNodes: EmptyNodeLevel[], sortedGroupKeys: string[] = []) => {
     const result: Record<string, GroupingHierarchyEmptyGroupNode & T> = {}
     const temporaryMapKeyToValue: Record<string, string> = {}
 
-    dfsEmptyGroupStructureTraversal(emptyNode, null, (emptyNodeKey, emptyNode, parentNodeValue) => {
-        if ('value' in emptyNode) {
-            const currentLevel = sortedGroupKeys.findIndex(key => key === emptyNodeKey) + 1
-            sortedGroupKeys.slice(currentLevel).forEach(key => delete temporaryMapKeyToValue[key])
+    emptyNodes.forEach(emptyNode => {
+        preorderDfsTreeTraversal(emptyNode, (node, currentLevel) => {
+            if ('value' in node) {
+                const emptyNodeKey = sortedGroupKeys[currentLevel - 1]
 
-            const item = {
-                ...temporaryMapKeyToValue,
-                [emptyNodeKey]: emptyNode.value,
-                _emptyNode: true,
-                _emptyNodeLastLevel: currentLevel,
-                vstamp: 0
-            } as GroupingHierarchyEmptyGroupNode & T
+                sortedGroupKeys.slice(currentLevel).forEach(key => delete temporaryMapKeyToValue[key])
 
-            temporaryMapKeyToValue[emptyNodeKey] = emptyNode.value
+                const item = {
+                    ...temporaryMapKeyToValue,
+                    [emptyNodeKey]: node.value,
+                    _emptyNode: true,
+                    _emptyNodeLastLevel: currentLevel,
+                    vstamp: 0
+                } as GroupingHierarchyEmptyGroupNode & T
 
-            const groupPath = formGroupPathFromRecord(item, sortedGroupKeys, currentLevel)
+                temporaryMapKeyToValue[emptyNodeKey] = node.value
 
-            item.id = groupPath
-            item._groupPath = groupPath
+                const groupPath = formGroupPathFromRecord(item, sortedGroupKeys, currentLevel)
 
-            result[groupPath] = item
+                item.id = groupPath
+                item._groupPath = groupPath
 
-            const previousGroupPath = getPreviousLevelPath(groupPath, currentLevel)
-            previousGroupPath && delete result[previousGroupPath]
-        }
+                result[groupPath] = item
+
+                const previousGroupPath = getPreviousLevelPath(groupPath, currentLevel)
+                previousGroupPath && delete result[previousGroupPath]
+            }
+        })
     })
 
     return Object.values(result)

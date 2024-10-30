@@ -44,23 +44,15 @@ public class MeetingDocumentsWriteMeta extends FieldMetaBuilder<MeetingDocuments
 		fields.groupingHierarchy(
 				MeetingDocumentsDTO_.document,
 				MeetingDocumentsDTO_.briefing,
-				MeetingDocumentsDTO_.document,
 				Set.of(
 						Level.builder(
 										Documents.COMPLIANCE_DOCUMENT,
 										Set.of(
 												Level.builder(
-														Briefings.FINANCIAL_BRIEFING,
-														Set.of(
-																Level.builder(
-																		Documents.REFERENCE_DOCUMENT
-																).build())
+														Briefings.FINANCIAL_BRIEFING
 												).build(),
 												Level.builder(
-														Briefings.PROJECT_BRIEFING,
-														Set.of(Level.builder(
-																Documents.TECHNICAL_DOCUMENT
-														).build())
+														Briefings.PROJECT_BRIEFING
 												).build()
 										)
 								)
@@ -70,11 +62,7 @@ public class MeetingDocumentsWriteMeta extends FieldMetaBuilder<MeetingDocuments
 										Documents.POLICY_DOCUMENT,
 										Set.of(
 												Level.builder(
-																Briefings.SECURITY_BRIEFING,
-																Set.of(
-																		Level.builder(
-																						Documents.LEGAL_DOCUMENT)
-																				.build())
+																Briefings.SECURITY_BRIEFING
 														)
 														.build())
 								)

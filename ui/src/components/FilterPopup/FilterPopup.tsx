@@ -10,11 +10,10 @@ import { useAppSelector } from '@store'
 import { useTranslation } from 'react-i18next'
 import { FieldType, WidgetField, WidgetTypes } from '@cxbox-ui/schema'
 import { useAssociateFieldKeyForPickList } from '../ColumnTitle/ColumnFilter'
-import { BcFilter, DataValue, FilterType as CoreFilterType } from '@interfaces/core'
-import { PickListFieldMeta } from '@cxbox-ui/schema/src/interfaces/widget'
 import { useDispatch } from 'react-redux'
 import { actions } from '@actions'
 import { FilterType } from '@interfaces/filters'
+import { PickListFieldMeta, BcFilter, DataValue, FilterType as CoreFilterType } from '@cxbox-ui/core'
 
 interface FilterPopupProps {
     widgetName: string

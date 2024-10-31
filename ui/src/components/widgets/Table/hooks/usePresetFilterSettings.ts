@@ -1,9 +1,8 @@
-import { utils } from '@cxbox-ui/core'
+import { utils, BcFilter } from '@cxbox-ui/core'
 import { useCallback, useMemo } from 'react'
 import { shallowEqual, useDispatch } from 'react-redux'
 import qs from 'query-string'
 import { useAppSelector } from '@store'
-import { BcFilter } from '@interfaces/core'
 import { actions } from '@actions'
 
 export function usePresetFilterSettings(bcName: string) {

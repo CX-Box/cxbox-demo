@@ -76,8 +76,8 @@ public class MeetingReadService extends VersionAwareResponseService<MeetingDTO, 
 	@Override
 	public Actions<MeetingDTO> getActions() {
 		return Actions.<MeetingDTO>builder()
-				.create().text("Add").add()
-				.cancelCreate().text("Cancel").withIcon(CxboxActionIconSpecifier.CLOSE, false).add()
+				.create(crt -> crt.text("Add"))
+				.cancelCreate(ccr -> ccr.text("Cancel").withIcon(CxboxActionIconSpecifier.CLOSE, false))
 				.addGroup(
 						"actions",
 						"Actions",
@@ -85,22 +85,26 @@ public class MeetingReadService extends VersionAwareResponseService<MeetingDTO, 
 						addEditAction(statusModelActionProvider.getMeetingActions()).build()
 				)
 				.withIcon(ActionIcon.MENU, false)
-				.action("sendEmail", "Send Email")
-				.invoker((bc, data) -> {
-					Meeting meeting = meetingRepository.getReferenceById(Long.parseLong(bc.getId()));
-					getSend(meeting);
-					return new ActionResultDTO<MeetingDTO>()
-							.setAction(PostAction.showMessage(MessageType.INFO, "Create action on the email sent."));
-				})
-				.add()
-				.newAction()
-				.action("sendEmailNextDay", "Send Email Next Day")
-				.invoker((bc, data) -> {
-					BackgroundJob.<MailSendingService>schedule(LocalDateTime.now().plusDays(1), x -> x.stats("save pressed job"));
-					return new ActionResultDTO<MeetingDTO>()
-							.setAction(PostAction.showMessage(MessageType.INFO, "The email will be dispatched tomorrow."));
-				})
-				.add()
+				.action(act -> act
+						.action("sendEmail", "Send Email")
+						.invoker((bc, data) -> {
+							Meeting meeting = meetingRepository.getReferenceById(Long.parseLong(bc.getId()));
+							getSend(meeting);
+							return new ActionResultDTO<MeetingDTO>()
+									.setAction(PostAction.showMessage(MessageType.INFO, "Create action on the email sent."));
+						})
+				)
+				.action(act -> act
+						.action("sendEmailNextDay", "Send Email Next Day")
+						.invoker((bc, data) -> {
+							BackgroundJob.<MailSendingService>schedule(
+									LocalDateTime.now().plusDays(1),
+									x -> x.stats("save pressed job")
+							);
+							return new ActionResultDTO<MeetingDTO>()
+									.setAction(PostAction.showMessage(MessageType.INFO, "The email will be dispatched tomorrow."));
+						})
+				)
 				.build();
 	}
 
@@ -115,18 +119,18 @@ public class MeetingReadService extends VersionAwareResponseService<MeetingDTO, 
 
 	private ActionsBuilder<MeetingDTO> addEditAction(ActionsBuilder<MeetingDTO> builder) {
 		return builder
-				.newAction()
-				.action("edit", "Edit")
-				.scope(ActionScope.RECORD)
-				.withoutAutoSaveBefore()
-				.invoker((bc, data) -> new ActionResultDTO<MeetingDTO>()
-						.setAction(PostAction.drillDown(
-								DrillDownType.INNER,
-								"/screen/meeting/view/meetingedit/" +
-										CxboxRestController.meetingEdit + "/" +
-										bc.getId()
-						)))
-				.add();
+				.action(act -> act
+						.action("edit", "Edit")
+						.scope(ActionScope.RECORD)
+						.withoutAutoSaveBefore()
+						.invoker((bc, data) -> new ActionResultDTO<MeetingDTO>()
+								.setAction(PostAction.drillDown(
+										DrillDownType.INNER,
+										"/screen/meeting/view/meetingedit/" +
+												CxboxRestController.meetingEdit + "/" +
+												bc.getId()
+								)))
+				);
 	}
 
 

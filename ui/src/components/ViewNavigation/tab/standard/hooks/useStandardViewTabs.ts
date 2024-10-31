@@ -29,7 +29,7 @@ export function useStandardViewTabs(depth: number) {
 
     return useMemo(
         () =>
-            getStandardViewTabs(navigation, depth, activeView)?.map(item => {
+            getStandardViewTabs(navigation, views, depth, activeView)?.map(item => {
                 const { title, url } = screenViewsDictionary[item.viewName as string] ?? {}
                 return {
                     ...item,
@@ -37,6 +37,6 @@ export function useStandardViewTabs(depth: number) {
                     url
                 }
             }),
-        [activeView, depth, navigation, screenViewsDictionary]
+        [activeView, depth, navigation, screenViewsDictionary, views]
     )
 }

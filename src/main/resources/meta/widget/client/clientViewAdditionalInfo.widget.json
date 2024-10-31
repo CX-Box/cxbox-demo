@@ -2,7 +2,7 @@
   "name": "clientViewAdditionalInfo",
   "title": "General information",
   "type": "AdditionalInfo",
-  "bc": "client",
+  "bc": "clientEdit",
   "fields": [
     {
       "label": "Client Name",

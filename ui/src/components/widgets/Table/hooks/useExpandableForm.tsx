@@ -10,8 +10,7 @@ import { resetRecordForm, setRecordForm } from '@actions'
 import { Spin } from 'antd'
 import DebugWidgetWrapper from '../../../DebugWidgetWrapper/DebugWidgetWrapper'
 import { buildBcUrl } from '@utils/buildBcUrl'
-import { DataItem, FieldType } from '@interfaces/core'
-import { WidgetFormMeta } from '@cxbox-ui/core'
+import { WidgetFormMeta, DataItem, FieldType } from '@cxbox-ui/core'
 
 type ControlColumn = { column: ColumnProps<DataItem>; position: 'left' | 'right' }
 
@@ -27,10 +26,30 @@ export function useInternalWidgetSelector(externalWidget: AppWidgetMeta) {
     return useAppSelector(state => {
         const widgetNameForCreate = externalWidget.options?.create?.widget
         const widgetNameForEdit = externalWidget.options?.edit?.widget
+        const isWidgetForEditIsInline = externalWidget.options?.edit?.style === 'inline'
+        const isWidgetForEditIsDisabled = externalWidget.options?.edit?.style === 'none'
+        const isWidgetForEditIsInlineForm = externalWidget.options?.edit?.style === 'inlineForm'
+        if (isWidgetForEditIsInlineForm && !widgetNameForEdit) {
+            console.error(`Widget "name": ${externalWidget.name} has meta inspection warning! 
+Inspection Description: options.edit.widget must be set for options.edit.style = "inlineForm" and must not be set in other cases
+Fallback behavior: options.edit.style = "inline", because edit widget was not set.`)
+        }
+        if (isWidgetForEditIsInline && widgetNameForEdit) {
+            console.error(`Widget "name": ${externalWidget.name} has meta inspection warning! 
+Inspection Description: options.edit.widget must be set for options.edit.style = "inlineForm" and must not be set in other cases
+Fallback behavior: options.edit.style = "inline" has higher priority than option.edit.widget`)
+        }
+        if (isWidgetForEditIsDisabled && widgetNameForEdit) {
+            console.error(`Widget "name": ${externalWidget.name} has meta inspection warning! 
+Inspection Description: options.edit.widget must be set for options.edit.style = "inlineForm" and must not be set in other cases
+Fallback behavior: options.edit.style = "none" has higher priority than option.edit.widget`)
+        }
 
         const widgetForCreate = state.view.widgets.find(widget => widgetNameForCreate === widget?.name) as WidgetFormMeta
-        const widgetForEdit = state.view.widgets.find(widget => widgetNameForEdit === widget?.name) as WidgetFormMeta
-
+        const widgetForEdit =
+            !isWidgetForEditIsInline && !isWidgetForEditIsDisabled
+                ? (state.view.widgets.find(widget => widgetNameForEdit === widget?.name) as WidgetFormMeta)
+                : undefined
         const bcName = (widgetForCreate || widgetForEdit)?.bcName as string
         const bc = bcName ? state.screen.bo.bc[bcName] : undefined
         const bcUrl = bc ? buildBcUrl(bcName, true) : ''
@@ -102,7 +121,7 @@ export function useExpandableForm(currentWidgetMeta: AppWidgetMeta) {
 
     const expandedRowRender = useCallback(
         (record: DataItem) =>
-            !record.children ? (
+            !record.children && internalWidget !== undefined ? (
                 <DebugWidgetWrapper debugMode={debugMode} meta={internalWidget}>
                     <Spin spinning={isLoading}>
                         <ExpandedRow widgetMeta={internalWidget} operations={internalWidgetOperations} record={record} />

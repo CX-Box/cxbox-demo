@@ -5,6 +5,7 @@ import org.cxbox.core.dto.rowmeta.FieldsMeta;
 import org.cxbox.core.dto.rowmeta.RowDependentFieldsMeta;
 import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
 import org.demo.dto.cxbox.inner.DashboardClientActivitiesDTO;
+import org.demo.dto.cxbox.inner.DashboardClientActivitiesDTO_;
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S3252","java:S1186"})
@@ -18,7 +19,8 @@ public class DashboardClientActivitiesMeta extends FieldMetaBuilder<DashboardCli
 
 	@Override
 	public void buildIndependentMeta(FieldsMeta<DashboardClientActivitiesDTO> fields, InnerBcDescription bcDescription, Long parentId) {
-
+		fields.enableFilter(DashboardClientActivitiesDTO_.clientName);
+		fields.enableSort(DashboardClientActivitiesDTO_.clientName);
 	}
 
 }

@@ -108,19 +108,20 @@ public class ResponsibilitesService extends VersionAwareResponseService<Responsi
 	@Override
 	public Actions<ResponsibilitesCrudDTO> getActions() {
 		return Actions.<ResponsibilitesCrudDTO>builder()
-				.create().text("Add").add()
-				.save().add()
-				.delete().text("Delete").add()
-				.newAction()
-				.action("edit", "Edit")
-				.add()
-				.action("refreshRespCache", "Refresh Cache")
-				.scope(ActionScope.BC)
-				.invoker((data, bc) -> {
-					responsibilitiesServiceExt.refreshCacheAfterTx();
-					return new ActionResultDTO<ResponsibilitesCrudDTO>().setAction(PostAction.refreshBc(CxboxRestController.responsibilities));
-				})
-				.add()
+				.create(crt -> crt.text("Add"))
+				.save(sv -> sv)
+				.delete(dlt -> dlt.text("Delete"))
+				.action(act -> act
+						.action("edit", "Edit")
+				)
+				.action(act -> act
+						.action("refreshRespCache", "Refresh Cache")
+						.scope(ActionScope.BC)
+						.invoker((data, bc) -> {
+							responsibilitiesServiceExt.refreshCacheAfterTx();
+							return new ActionResultDTO<ResponsibilitesCrudDTO>().setAction(PostAction.refreshBc(CxboxRestController.responsibilities));
+						})
+				)
 				.build();
 	}
 

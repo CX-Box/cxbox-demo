@@ -25,7 +25,7 @@
     "actionGroups": {
       "include": [
         "save_and_go_to_client_edit_contacts",
-        "cancel"
+        "cancel-create"
       ]
     },
     "layout": {

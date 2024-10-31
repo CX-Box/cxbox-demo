@@ -14,7 +14,7 @@ function ScreenNavigation() {
     const screenName = useAppSelector(state => state.router.screenName)
     const selectedScreen = screens.find(item => item.name === screenName) || screens.find(screen => screen.defaultScreen) || screens[0]
     const screenUrl = selectedScreen?.url ?? `/screen/${screenName}`
-    const changeLocation = useChangeLocation()
+    const changeLocation = useChangeLocation({ forceUpdate: true })
     const menuCollapsed = useAppSelector(state => state.screen.menuCollapsed)
     const handleScreen = (e: ClickParam) => {
         changeLocation(e.key)

@@ -18,7 +18,7 @@ app:
     host: ${ACTIVEMQ_HOST:}
     port: ${ACTIVEMQ_PORT:61616}
   integrations:
-    lov-server-url: ${LOV_SERVER_URL:http://localhost:8080/rest/api/v1/lov}
+    lov-server-url: ${LOV_SERVER_URL:http://localhost:${server.port}/rest/api/v1/lov}
 
 cxbox:
   bean:
@@ -32,6 +32,8 @@ cxbox:
   widget:
     fields:
       include-packages: org.cxbox.meta, org.demo.conf.cxbox
+      sort-enabled-default: false
+      filter-by-range-enabled-default: true
   api:
     path: /api/v1
     use-servlet-context-path: false
@@ -149,4 +151,4 @@ org:
     background-job-server:
       enabled: true
     dashboard:
-      enabled: true
+      enabled: false

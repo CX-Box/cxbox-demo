@@ -2,6 +2,6 @@
   "name": "contactListHeader",
   "title": " ",
   "type": "HeaderWidget",
-  "bc": "contact",
+  "bc": "clientEdit",
   "fields": []
 }

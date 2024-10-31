@@ -3,16 +3,25 @@ import React, { ReactNode } from 'react'
 import styles from './InfoValueWrapper.module.css'
 import { Col } from 'antd'
 import { interfaces } from '@cxbox-ui/core'
+import { ETitleMode } from '@interfaces/widget'
 
 interface ValueWrapperProps {
     row: interfaces.LayoutRow
+    titleMode?: ETitleMode
     colSpan?: number
     children?: ReactNode
 }
-function InfoValueWrapper({ row, colSpan, children }: ValueWrapperProps) {
+function InfoValueWrapper({ row, titleMode, colSpan, children }: ValueWrapperProps) {
     return (
         <Col span={colSpan}>
-            <div className={cn(styles.fieldArea, { [styles.columnDirection]: row.cols.length > 1 })}>{children}</div>
+            <div
+                className={cn(styles.fieldArea, {
+                    [styles.rowDirection]: titleMode === ETitleMode.left,
+                    [styles.columnDirection]: titleMode === ETitleMode.top
+                })}
+            >
+                {children}
+            </div>
         </Col>
     )
 }

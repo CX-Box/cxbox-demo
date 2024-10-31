@@ -43,9 +43,18 @@ public class LovReadMeta extends AnySourceFieldMetaBuilder<LovDTO> {
 	public void buildIndependentMeta(FieldsMeta<LovDTO> fields, BcDescription bcDescription,
 			String parentId) {
 		fields.setForceActive(LovDTO_.additionalParameter1);
+		fields.enableSort(LovDTO_.additionalParameter1);
 		fields.setForceActive(LovDTO_.additionalParameter2);
+		fields.enableSort(LovDTO_.additionalParameter2);
 		fields.enableFilter(LovDTO_.code);
+		fields.enableSort(LovDTO_.code);
 		fields.enableFilter(LovDTO_.value);
+		fields.enableSort(LovDTO_.value);
+		fields.enableSort(LovDTO_.descriptionText);
+		fields.enableSort(LovDTO_.typeName);
+		fields.enableSort(LovDTO_.orderBy);
+		fields.enableSort(LovDTO_.inactiveFlag);
+		fields.enableSort(LovDTO_.externalCode);
 	}
 
 }

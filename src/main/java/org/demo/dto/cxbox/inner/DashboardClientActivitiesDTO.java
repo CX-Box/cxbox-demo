@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.cxbox.api.data.dto.DataResponseDTO;
+import org.cxbox.core.util.filter.SearchParameter;
 import org.demo.entity.Client;
 
 @Getter
@@ -11,6 +12,7 @@ import org.demo.entity.Client;
 @NoArgsConstructor
 public class DashboardClientActivitiesDTO extends DataResponseDTO {
 
+	@SearchParameter(name = "fullName")
 	private String clientName;
 
 	private Long numberOfOpenActivities;

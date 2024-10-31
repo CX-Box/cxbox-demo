@@ -8,14 +8,11 @@ import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.cxbox.core.exception.BusinessException;
 import org.cxbox.core.service.action.Actions;
-import org.cxbox.model.core.entity.BaseEntity_;
 import org.demo.conf.cxbox.extension.fulltextsearch.FullTextSearchExt;
 import org.demo.dto.cxbox.inner.ContactDTO;
 import org.demo.dto.cxbox.inner.ContactDTO_;
 import org.demo.dto.cxbox.inner.MeetingDTO_;
-import org.demo.entity.Client;
 import org.demo.entity.Contact;
-import org.demo.entity.Contact_;
 import org.demo.repository.ClientRepository;
 import org.demo.repository.ContactRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,13 +37,7 @@ public class ContactPickListService extends VersionAwareResponseService<ContactD
 	@Override
 	protected Specification<Contact> getParentSpecification(BusinessComponent bc) {
 		Long clientId = getParentField(MeetingDTO_.clientId, bc);
-		Specification<Contact> specification = (root, cq, cb) -> cb.and(
-				super.getParentSpecification(bc).toPredicate(root, cq, cb),
-				cb.equal(
-						root.get(Contact_.client).get(BaseEntity_.id),
-						clientId
-				)
-		);
+		var specification = contactRepository.getAllClientContacts(clientId);
 		var fullTextSearchFilterParam = FullTextSearchExt.getFullTextSearchFilterParam(bc);
 		return fullTextSearchFilterParam.map(e -> and(contactRepository.getFullTextSearchSpecification(e), specification))
 				.orElse(specification);
@@ -55,11 +46,11 @@ public class ContactPickListService extends VersionAwareResponseService<ContactD
 	@Override
 	protected CreateResult<ContactDTO> doCreateEntity(Contact entity, BusinessComponent bc) {
 		Long clientId = getParentField(MeetingDTO_.clientId, bc);
-		Client client = clientRepository.getReferenceById(clientId);
-		entity.setClient(client);
+		if (clientId != null) {
+			entity.getClients().add(clientRepository.getReferenceById(clientId));
+		}
 		contactRepository.save(entity);
-		ContactDTO contactDTO = entityToDto(bc, entity);
-		return new CreateResult<>(contactDTO);
+		return new CreateResult<>(entityToDto(bc, entity));
 	}
 
 	@Override
@@ -87,10 +78,10 @@ public class ContactPickListService extends VersionAwareResponseService<ContactD
 	@Override
 	public Actions<ContactDTO> getActions() {
 		return Actions.<ContactDTO>builder()
-				.create().text("Add").add()
-				.save().text("Save").add()
-				.cancelCreate().text("Cancel").available(bc -> true).add()
-				.delete().text("Delete").add()
+				.create(crt -> crt.text("Add"))
+				.save(sv -> sv.text("Save"))
+				.cancelCreate(ccr -> ccr.text("Cancel").available(bc -> true))
+				.delete(dlt -> dlt.text("Delete"))
 				.build();
 	}
 

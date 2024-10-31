@@ -6,26 +6,26 @@
   "fields": [
     {
       "title": "",
-      "key": "salesPercent",
+      "key": "percent",
       "type": "input"
     },
     {
       "title": "",
-      "key": "salesSum",
+      "key": "sum",
       "type": "input"
     },
     {
       "title": "",
-      "key": "salesDescription",
+      "key": "description",
       "type": "input"
     }
   ],
   "options": {
     "ringProgressOptions": {
       "text": "Sum of closed sales",
-      "percentField": "salesPercent",
-      "numberField": "salesSum",
-      "descriptionField": "salesDescription"
+      "percentField": "percent",
+      "numberField": "sum",
+      "descriptionField": "description"
     }
   }
 }

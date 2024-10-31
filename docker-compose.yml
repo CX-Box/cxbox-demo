@@ -11,7 +11,7 @@ services:
     ports:
       - "5432:5432"
   keycloak:
-    image: maxird/keycloak:12.0.3
+    image: maxird/keycloak:12.0.4
     command:
       [
         '-b',

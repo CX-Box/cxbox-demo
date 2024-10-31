@@ -1,12 +1,29 @@
-.container {
-    display: flex;
-    flex-direction: column;
+@import '@assets/styles/theme.less';
 
-    > :global(.ant-checkbox-wrapper){
-        margin-left: 0 !important;
-        margin-bottom: 10px;
+.container :global {
+    .ant-checkbox-wrapper {
+        display: flex;
+        align-items: center;
+        min-height: 32px;
+        font-style: normal;
+        font-weight: 400;
         font-size: 14px;
-        line-height: 1.57;
-        color: rgba(0, 0, 0, 0.85);
+        line-height: normal;
+
+        .ant-checkbox {
+            top: 0;
+
+            + span {
+                color: #bfbfbf;
+            }
+        }
     }
+
+    .ant-checkbox-wrapper-disabled {
+        min-height: auto;
+    }
+}
+
+td .container {
+    padding: 0 8px;
 }

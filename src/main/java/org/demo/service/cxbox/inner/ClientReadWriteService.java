@@ -111,121 +111,122 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 	@Override
 	public Actions<ClientWriteDTO> getActions() {
 		return Actions.<ClientWriteDTO>builder()
-				.save().add()
-				.newAction()
-				.scope(ActionScope.RECORD)
-				.action("next", "Save and Continue")
-				.invoker((bc, dto) -> {
-					Client client = clientRepository.getById(bc.getIdAsLong());
-					ClientEditStep nextStep = ClientEditStep.getNextEditStep(client).get();
-					client.setEditStep(nextStep);
-					clientRepository.save(client);
+				.save(sv -> sv)
+				.action(act -> act
+								.scope(ActionScope.RECORD)
+								.action("next", "Save and Continue")
+								.invoker((bc, dto) -> {
+									Client client = clientRepository.getById(bc.getIdAsLong());
+									ClientEditStep nextStep = ClientEditStep.getNextEditStep(client).get();
+									client.setEditStep(nextStep);
+									clientRepository.save(client);
 
-					BackgroundJob.<MailSendingService>schedule(LocalDateTime.now().plusHours(5), x -> x.stats("save pressed job"));
+									BackgroundJob.<MailSendingService>schedule(
+											LocalDateTime.now().plusHours(5),
+											x -> x.stats("save pressed job")
+									);
 
-				/*	jobRequestScheduler.schedule(
-							Instant.now().plus(24, ChronoUnit.HOURS),
-							new SendNewlyRegisteredEmailJobRequest());*/
-					return new ActionResultDTO<ClientWriteDTO>().setAction(
-							PostAction.drillDown(
-									DrillDownType.INNER,
-									nextStep.getEditView() + CxboxRestController.clientEdit + "/" + bc.getId()
-							));
-				})
-				.available(ActionAvailableChecker.and(ActionAvailableChecker.NOT_NULL_ID, bc -> {
-					Client client = clientRepository.getById(bc.getIdAsLong());
-					return ClientEditStep.getNextEditStep(client).isPresent();
-				}))
-				.add()
-				.newAction()
-				.scope(ActionScope.RECORD)
-				.action("finish", "Save and Close")
-				.invoker((bc, dto) -> {
-					Client client = clientRepository.getById(bc.getIdAsLong());
-					ClientEditStep firstStep = Arrays.stream(ClientEditStep.values()).findFirst().get();
-					client.setEditStep(firstStep);
-					clientRepository.save(client);
-					return new ActionResultDTO<ClientWriteDTO>().setAction(
-							PostAction.drillDown(
-									DrillDownType.INNER,
-									"/screen/client"
-							));
-				})
-				.available(ActionAvailableChecker.and(ActionAvailableChecker.NOT_NULL_ID, bc -> {
-					Client client = clientRepository.getById(bc.getIdAsLong());
-					return !ClientEditStep.getNextEditStep(client).isPresent();
-				}))
-				.add()
-				.action("previous", "Back")
-				.scope(ActionScope.RECORD)
-				.invoker((bc, dto) -> {
-					Client client = clientRepository.getById(bc.getIdAsLong());
-					ClientEditStep previousStep = ClientEditStep.getPreviousEditStep(client).get();
-					client.setEditStep(previousStep);
-					clientRepository.save(client);
-					return new ActionResultDTO<ClientWriteDTO>().setAction(
-							PostAction.drillDown(
-									DrillDownType.INNER,
-									previousStep.getEditView() + CxboxRestController.clientEdit + "/" + bc.getId()
-							));
-				})
-				.available(ActionAvailableChecker.and(ActionAvailableChecker.NOT_NULL_ID,bc -> {
-					Client client = clientRepository.getById(bc.getIdAsLong());
-					return ClientEditStep.getPreviousEditStep(client).isPresent();
-				}))
-				.add()
-				.cancelCreate().text("Cancel").available(bc -> true).add()
-				.create().text("Add").add()
+									return new ActionResultDTO<ClientWriteDTO>().setAction(
+											PostAction.drillDown(
+													DrillDownType.INNER,
+													nextStep.getEditView() + CxboxRestController.clientEdit + "/" + bc.getId()
+											));
+								})
+								.available(ActionAvailableChecker.and(ActionAvailableChecker.NOT_NULL_ID, bc -> {
+									Client client = clientRepository.getById(bc.getIdAsLong());
+									return ClientEditStep.getNextEditStep(client).isPresent();
+								}))
+				)
+				.action(act -> act
+						.scope(ActionScope.RECORD)
+						.action("finish", "Save and Close")
+						.invoker((bc, dto) -> {
+							Client client = clientRepository.getById(bc.getIdAsLong());
+							ClientEditStep firstStep = Arrays.stream(ClientEditStep.values()).findFirst().get();
+							client.setEditStep(firstStep);
+							clientRepository.save(client);
+							return new ActionResultDTO<ClientWriteDTO>().setAction(
+									PostAction.drillDown(
+											DrillDownType.INNER,
+											"/screen/client"
+									));
+						})
+						.available(ActionAvailableChecker.and(ActionAvailableChecker.NOT_NULL_ID, bc -> {
+							Client client = clientRepository.getById(bc.getIdAsLong());
+							return !ClientEditStep.getNextEditStep(client).isPresent();
+						}))
+				)
+				.action(act -> act
+						.action("previous", "Back")
+						.scope(ActionScope.RECORD)
+						.invoker((bc, dto) -> {
+							Client client = clientRepository.getById(bc.getIdAsLong());
+							ClientEditStep previousStep = ClientEditStep.getPreviousEditStep(client).get();
+							client.setEditStep(previousStep);
+							clientRepository.save(client);
+							return new ActionResultDTO<ClientWriteDTO>().setAction(
+									PostAction.drillDown(
+											DrillDownType.INNER,
+											previousStep.getEditView() + CxboxRestController.clientEdit + "/" + bc.getId()
+									));
+						})
+						.available(ActionAvailableChecker.and(ActionAvailableChecker.NOT_NULL_ID, bc -> {
+							Client client = clientRepository.getById(bc.getIdAsLong());
+							return ClientEditStep.getPreviousEditStep(client).isPresent();
+						}))
+				)
+				.cancelCreate(ccr -> ccr.text("Cancel").available(bc -> true))
+				.create(crt -> crt.text("Add"))
 				.addGroup(
 						"actions",
 						"Actions",
 						0,
 						Actions.<ClientWriteDTO>builder()
-								.newAction()
-								.action("edit", "Edit")
-								.withoutAutoSaveBefore()
-								.invoker((bc, data) -> {
-									Client client = clientRepository.getById(bc.getIdAsLong());
-									return new ActionResultDTO<ClientWriteDTO>()
-											.setAction(PostAction.drillDown(
-													DrillDownType.INNER,
-													client.getEditStep().getEditView()
-															+ CxboxRestController.clientEdit + "/"
-															+ bc.getId()
-											));
-								})
-								.add()
-								.newAction()
-								.action("create_meeting", "Create Meeting")
-								.withAutoSaveBefore()
-								.invoker((bc, data) -> {
-									Client client = clientRepository.getById(bc.getIdAsLong());
-									Meeting meeting = meetingRepository.save(new Meeting()
-											.setResponsible(userRepository.getReferenceById(sessionService.getSessionUser().getId()))
-											.setClient(client)
-									);
-									return new ActionResultDTO<ClientWriteDTO>()
-											.setAction(PostAction.drillDown(
-													DrillDownType.INNER,
-													"screen/meeting/view/meetingedit/"
-															+ CxboxRestController.meetingEdit + "/"
-															+ meeting.getId()
-											));
-								})
-								.available(bc -> false)//TODO>>remove false, after fixing UI error for this drill-down
-								.add()
-								.newAction()
-								.action("deactivate", "Deactivate")
-								.withAutoSaveBefore()
-								.withPreAction(PreAction.confirm("Are You sure You want to deactivate the client?"))
-								.invoker((bc, data) -> {
-									Client client = clientRepository.getById(bc.getIdAsLong());
-									client.setStatus(ClientStatus.INACTIVE);
-									clientRepository.save(client);
-									return new ActionResultDTO<ClientWriteDTO>()
-											.setAction(PostAction.showMessage(MessageType.INFO, "Client deactivated!"));
-								})
-								.add()
+								.action(act -> act
+										.action("edit", "Edit")
+										.withoutAutoSaveBefore()
+										.invoker((bc, data) -> {
+											Client client = clientRepository.getById(bc.getIdAsLong());
+											return new ActionResultDTO<ClientWriteDTO>()
+													.setAction(PostAction.drillDown(
+															DrillDownType.INNER,
+															client.getEditStep().getEditView()
+																	+ CxboxRestController.clientEdit + "/"
+																	+ bc.getId()
+													));
+										})
+								)
+								.action(act -> act
+										.action("create_meeting", "Create Meeting")
+										.withAutoSaveBefore()
+										.invoker((bc, data) -> {
+											Client client = clientRepository.getById(bc.getIdAsLong());
+											Meeting meeting = meetingRepository.save(new Meeting()
+													.setResponsible(userRepository.getReferenceById(sessionService.getSessionUser().getId()))
+													.setClient(client)
+											);
+											return new ActionResultDTO<ClientWriteDTO>()
+													.setAction(PostAction.drillDown(
+															DrillDownType.INNER,
+															"screen/meeting/view/meetingedit/"
+																	+ CxboxRestController.meetingEdit + "/"
+																	+ meeting.getId()
+													));
+										})
+										.available(bc -> false)//TODO>>remove false, after fixing UI error for this drill-down
+								)
+								.action(act -> act
+										.action("deactivate", "Deactivate")
+										.withAutoSaveBefore()
+										.withPreAction(PreAction.confirm("Are You sure You want to deactivate the client?"))
+										.invoker((bc, data) -> {
+											Client client = clientRepository.getById(bc.getIdAsLong());
+											client.setStatus(ClientStatus.INACTIVE);
+											clientRepository.save(client);
+											return new ActionResultDTO<ClientWriteDTO>()
+													.setAction(PostAction.showMessage(MessageType.INFO, "Client deactivated!"));
+										})
+								)
 								.build()
 				).withIcon(ActionIcon.MENU, false)
 				.build();

@@ -57,7 +57,7 @@ public class ClientReadWriteMeta extends FieldMetaBuilder<ClientWriteDTO> {
 		fields.setDrilldown(
 				ClientReadDTO_.fullName,
 				DrillDownType.INNER,
-				"/screen/client/view/clientview/" + CxboxRestController.client + "/" + id
+				"/screen/client/view/clientview/" + CxboxRestController.clientEdit + "/" + id
 		);
 	}
 
@@ -71,10 +71,15 @@ public class ClientReadWriteMeta extends FieldMetaBuilder<ClientWriteDTO> {
 				.collect(Collectors.toList())
 		);*/
 		fields.enableFilter(ClientWriteDTO_.fullName);
+		fields.enableSort(ClientWriteDTO_.fullName);
 		fields.enableFilter(ClientWriteDTO_.address);
+		fields.enableSort(ClientWriteDTO_.address);
 		fields.enableFilter(ClientWriteDTO_.importance);
+		fields.enableSort(ClientWriteDTO_.importance);
 		fields.setEnumFilterValues(fields, ClientWriteDTO_.importance, ClientImportance.values());
+		fields.enableSort(ClientWriteDTO_.importance);
 		fields.enableFilter(ClientWriteDTO_.status);
+		fields.enableSort(ClientWriteDTO_.status);
 		fields.setEnumFilterValues(fields, ClientWriteDTO_.status, ClientStatus.values());
 	}
 

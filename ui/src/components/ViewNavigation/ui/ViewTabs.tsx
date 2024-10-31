@@ -13,21 +13,18 @@ interface ViewTabsProps extends Pick<TabsProps, 'type' | 'activeKey' | 'onChange
 export function ViewTabs({ activeKey, onChange, type = 'card', depth, tabs }: ViewTabsProps) {
     return (
         <nav className={cn(styles.container, styles[type])}>
-            <Tabs
-                data-test-widget-tabs={true}
-                data-test-widget-tabs-depth={depth}
-                activeKey={activeKey}
-                tabBarGutter={24}
-                onChange={onChange}
-                type={type}
-            >
+            <Tabs data-test-widget-tabs={true} data-test-widget-tabs-depth={depth} activeKey={activeKey} tabBarGutter={24} type={type}>
                 {tabs
                     ?.filter(item => item.title !== undefined)
                     .map(tab => (
                         <Tabs.TabPane
                             key={tab.url}
                             tab={
-                                <span className={styles.item} data-test-navigation-tabs-item={true}>
+                                <span
+                                    className={styles.item}
+                                    data-test-navigation-tabs-item={true}
+                                    onClick={onChange ? () => onChange(tab.url) : undefined}
+                                >
                                     {tab.title}
                                 </span>
                             }

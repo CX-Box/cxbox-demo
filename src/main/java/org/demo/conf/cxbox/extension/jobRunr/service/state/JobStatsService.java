@@ -31,12 +31,12 @@ public class JobStatsService extends AnySourceVersionAwareResponseService<JobSta
 	public Actions<JobStatsDTO> getActions() {
 
 		return Actions.<JobStatsDTO>builder()
-				.newAction()
-				.action("refresh", "Refresh")
-				.invoker((bc, dto) -> {
-					return new ActionResultDTO<JobStatsDTO>().setAction(PostAction.refreshBc(CxboxRestController.jobsStats));
-				})
-				.add()
+				.action(act -> act
+						.action("refresh", "Refresh")
+						.invoker((bc, dto) -> {
+							return new ActionResultDTO<JobStatsDTO>().setAction(PostAction.refreshBc(CxboxRestController.jobsStats));
+						})
+				)
 				.build();
 	}
 }

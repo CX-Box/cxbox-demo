@@ -200,6 +200,17 @@
     </addColumn>
   </changeSet>
 
+  <changeSet id="client_contact table" author="cxbox">
+    <createTable tableName="client_contact">
+      <column name="client_id" type="NUMBER(19, 0)">
+        <constraints nullable="false" foreignKeyName="client_contact_meeting" references="client"/>
+      </column>
+      <column name="contact_id" type="NUMBER(19, 0)">
+        <constraints nullable="false" foreignKeyName="client_contact_contact" references="contact"/>
+      </column>
+    </createTable>
+  </changeSet>
+
   <changeSet id="meeting_contact table" author="cxbox">
     <createTable tableName="meeting_contact">
       <column name="meeting_id" type="NUMBER(19, 0)">
@@ -437,7 +448,11 @@
       <column header="full_name" name="full_name" type="STRING"/>
       <column header="phone_number" name="phone_number" type="STRING"/>
       <column header="email" name="email" type="STRING"/>
-      <column header="client_id" name="client_id" type="STRING"/>
+    </loadUpdateData>
+    <loadUpdateData tableName="CLIENT_CONTACT" primaryKey="CONTACT_ID,CLIENT_ID" encoding="UTF-8" separator="," quotchar="&quot;"
+      file="db/data/CLIENT_CONTACT.csv">
+      <column header="CONTACT_ID" name="CONTACT_ID" type="STRING"/>
+      <column header="CLIENT_ID" name="CLIENT_ID" type="STRING"/>
     </loadUpdateData>
     <loadUpdateData tableName="MEETING" primaryKey="ID" encoding="UTF-8" separator="," quotchar="&quot;"
       file="db/data/MEETING.csv">

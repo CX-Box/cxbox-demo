@@ -2,7 +2,7 @@
   "name": "clientEditViewHeader",
   "title": "Client Overview ${importance}",
   "type": "HeaderWidget",
-  "bc": "client",
+  "bc": "clientEdit",
   "fields": [
     {
       "title": "Importance",

@@ -65,6 +65,7 @@ public class ResponsibilitesMeta extends FieldMetaBuilder<ResponsibilitesCrudDTO
 		fields.enableFilter(ResponsibilitesCrudDTO_.internalRoleCD);
 		fields.setAllFilterValuesByLovType(ResponsibilitesCrudDTO_.internalRoleCD, INTERNAL_ROLE);
 		fields.setForceActive(ResponsibilitesCrudDTO_.internalRoleCD);
+		fields.enableSort(ResponsibilitesCrudDTO_.internalRoleCD);
 
 		fields.enableFilter(ResponsibilitesCrudDTO_.view);
 		fields.setConcreteFilterValues(
@@ -73,6 +74,7 @@ public class ResponsibilitesMeta extends FieldMetaBuilder<ResponsibilitesCrudDTO
 						.map(resp -> new SimpleDictionary(resp.getName(), resp.getName(), true)).toList()
 		);
 		fields.setForceActive(ResponsibilitesCrudDTO_.view);
+		fields.enableSort(ResponsibilitesCrudDTO_.view);
 
 		fields.enableFilter(ResponsibilitesCrudDTO_.respType);
 		fields.setEnumFilterValues(fields, ResponsibilitesCrudDTO_.respType, ResponsibilityType.values());

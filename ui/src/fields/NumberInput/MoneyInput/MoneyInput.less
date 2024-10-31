@@ -1,0 +1,23 @@
+@import '@assets/styles/theme.less';
+
+:global(.ant-table) table {
+  .container {
+    text-align: right;
+  }
+}
+
+.container :global(.ant-input-group-wrapper .ant-input-wrapper.ant-input-group .ant-input-group-addon) {
+  width: 72px;
+}
+
+.container {
+  :global {
+    .ant-input-group-addon .ant-select {
+      width: 72px;
+    }
+  }
+}
+
+.currencyError :global(.ant-select) {
+  outline: 1px solid #f5222d;
+}

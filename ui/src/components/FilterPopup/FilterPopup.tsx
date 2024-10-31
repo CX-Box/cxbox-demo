@@ -20,6 +20,7 @@ interface FilterPopupProps {
     fieldKey: string
     value: DataValue | DataValue[]
     children: React.ReactNode
+    additionalFieldMetaKey?: string
     fieldType?: FieldType
     onApply?: () => void
     onCancel?: () => void
@@ -39,6 +40,15 @@ const FilterPopup: React.FC<FilterPopupProps> = props => {
         return state.screen.filters[widget?.bcName as string]
     })
     const widgetMeta = (widget?.fields as WidgetField[])?.find(item => item.key === props.fieldKey)
+
+    const additionalFieldMetaKey = props.additionalFieldMetaKey as string
+    const activeAdditionalFilter = useAppSelector(state => {
+        return state.screen.filters[widget?.bcName as string]?.find(item => item.fieldName === additionalFieldMetaKey)
+    })
+    const localAdditionalFilterValue = useAppSelector(
+        state => state.screen.bo.bc[widget?.bcName as string]?.localFilterValues?.[additionalFieldMetaKey]
+    )
+
     const fieldMetaPickListField = widgetMeta as PickListFieldMeta
 
     const { associateFieldKeyForPickList } = useAssociateFieldKeyForPickList(fieldMetaPickListField)
@@ -78,6 +88,20 @@ const FilterPopup: React.FC<FilterPopupProps> = props => {
                 picklistPopupWidget?.bcName && dispatch(actions.bcCancelPendingChanges({ bcNames: [picklistPopupWidget?.bcName] }))
             }
         }
+        if (additionalFieldMetaKey && localAdditionalFilterValue?.toString()) {
+            dispatch(
+                actions.bcAddFilter({
+                    bcName: widget?.bcName as string,
+                    filter: {
+                        ...newFilter,
+                        type: FilterType.equalsOneOf,
+                        fieldName: additionalFieldMetaKey,
+                        value: localAdditionalFilterValue
+                    },
+                    widgetName: widget?.name as string
+                })
+            )
+        }
         if ((props.value === null || props.value === undefined) && FieldType.checkbox === props.fieldType) {
             dispatch(
                 actions.bcAddFilter({
@@ -100,8 +124,15 @@ const FilterPopup: React.FC<FilterPopupProps> = props => {
 
     const handleCancel = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
         e.preventDefault()
-        if (filter) {
-            dispatch(actions.bcRemoveFilter({ bcName: widget?.bcName as string, filter }))
+        if (filter || activeAdditionalFilter) {
+            if (filter) {
+                dispatch(actions.bcRemoveFilter({ bcName: widget?.bcName as string, filter }))
+            }
+
+            if (activeAdditionalFilter) {
+                dispatch(actions.bcRemoveFilter({ bcName: widget?.bcName as string, filter: activeAdditionalFilter }))
+            }
+
             if (!widget?.options?.hierarchyFull) {
                 dispatch(actions.bcForceUpdate({ bcName: widget?.bcName as string }))
             }

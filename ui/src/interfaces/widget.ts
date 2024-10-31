@@ -178,6 +178,11 @@ export type AppNumberFieldMeta = interfaces.NumberFieldMeta & {
     currency?: string
 }
 
+export type AppMoneyFieldMeta = interfaces.NumberFieldMeta & {
+    currency?: string
+    currencyKey?: string
+}
+
 export const enum ETitleMode {
     left = 'left',
     top = 'top'

@@ -21,7 +21,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -42,14 +41,13 @@ import org.hibernate.envers.NotAudited;
 @Setter
 public class User extends BaseEntity {
 
+	private static final long DEFAULT_DEPARTMENT_ID = 0L;
+
 	private String login;
 
 	private String firstName;
 
 	private String lastName;
-
-	@Transient
-	private final long DEFAULT_DEPARTMENT_ID = 0L;
 
 	@Deprecated
 	@Column(name = "internal_role_cd")
@@ -67,7 +65,7 @@ public class User extends BaseEntity {
 	}
 
 	@Deprecated(forRemoval = true, since = "release 2.0.8")
-	public Long getDepartment() {
+	public Long getDepartmentId() {
 		return DEFAULT_DEPARTMENT_ID;
 	}
 

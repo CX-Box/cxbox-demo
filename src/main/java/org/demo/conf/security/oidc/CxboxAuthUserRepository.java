@@ -15,7 +15,6 @@ import org.cxbox.model.core.dao.JpaDao;
 import org.demo.conf.cxbox.customization.role.UserRoleService;
 import org.demo.conf.cxbox.customization.role.UserService;
 import org.demo.entity.core.User;
-import org.demo.repository.core.DepartmentRepository;
 import org.demo.repository.core.UserRepository;
 import org.hibernate.LockOptions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +27,8 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class CxboxAuthUserRepository {
 
-	private static final Long USER_DEPARTMENT = 0L;
-
 	@Autowired
 	private UserRepository userRepository;
-
-	@Autowired
-	private DepartmentRepository departmentRepository;
 
 	@Autowired
 	private JpaDao jpaDao;

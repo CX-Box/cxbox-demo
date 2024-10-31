@@ -25,7 +25,7 @@ public class UserService {
 	public CxboxUserDetailsInterface createUserDetails(final User user, final LOV userRole) {
 		return CxboxUserDetails.builder()
 				.id(user.getId())
-				.departmentId(user.getDepartment())
+				.departmentId(user.getDepartmentId())
 				.userRole(userRole)
 				.authorities(Collections.emptySet())
 				.build();

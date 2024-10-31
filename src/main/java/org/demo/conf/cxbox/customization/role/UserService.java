@@ -25,12 +25,8 @@ public class UserService {
 	public CxboxUserDetailsInterface createUserDetails(final User user, final LOV userRole) {
 		return CxboxUserDetails.builder()
 				.id(user.getId())
-				.departmentId(user.getDepartment().getId())
-				.username(user.getLogin())
-				.password(user.getPassword())
+				.departmentId(user.getDepartmentId())
 				.userRole(userRole)
-				.timezone(user.getTimezone())
-				.localeCd(user.getLocale())
 				.authorities(Collections.emptySet())
 				.build();
 	}

@@ -60,7 +60,7 @@ public class UserRoleService {
 				.orElse(userRoleList.stream()
 						.findFirst()
 						.map(UserRole::getInternalRoleCd)
-						.orElse(user.getInternalRole())) : user.getInternalRole();
+						.orElse(null)) : null;
 	}
 
 	/**
@@ -126,7 +126,6 @@ public class UserRoleService {
 	 * @param mainUserRole main role
 	 */
 	public void updateMainUserRole(User user, LOV mainUserRole) {
-		user.setInternalRole(mainUserRole);
 		List<UserRole> userRoleList = getListByUser(user);
 		if (userRoleList != null && mainUserRole != null) {
 			userRoleList.stream()

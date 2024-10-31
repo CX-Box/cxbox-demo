@@ -7,16 +7,14 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
-import org.cxbox.api.data.dictionary.LOV;
 import org.cxbox.api.service.session.InternalAuthorizationService;
 import org.cxbox.api.service.tx.TransactionService;
 import org.cxbox.core.util.SQLExceptions;
 import org.cxbox.model.core.dao.JpaDao;
-import org.demo.entity.core.User;
-import org.demo.repository.core.DepartmentRepository;
-import org.demo.repository.core.UserRepository;
 import org.demo.conf.cxbox.customization.role.UserRoleService;
 import org.demo.conf.cxbox.customization.role.UserService;
+import org.demo.entity.core.User;
+import org.demo.repository.core.UserRepository;
 import org.hibernate.LockOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
@@ -30,9 +28,6 @@ public class CxboxAuthUserRepository {
 
 	@Autowired
 	private UserRepository userRepository;
-
-	@Autowired
-	private DepartmentRepository departmentRepository;
 
 	@Autowired
 	private JpaDao jpaDao;
@@ -60,7 +55,7 @@ public class CxboxAuthUserRepository {
 			try {
 				user = userService.getUserByLogin(login.toUpperCase());
 				if (user == null) {
-					upsert(login, roles.stream().findFirst().orElse(null));
+					upsert(login);
 				}
 				user = userService.getUserByLogin(login.toUpperCase());
 				Set<String> currentRoles = user.getUserRoleList().stream().map(e -> e.getInternalRoleCd().getKey())
@@ -83,19 +78,19 @@ public class CxboxAuthUserRepository {
 	}
 
 	//TODO>>taken "as is" from real project - refactor
-	public User upsert(String login, String role) {
+	public User upsert(String login) {
 		txService.invokeInNewTx(() -> {
 					authzService.loginAs(authzService.createAuthentication(VANILLA));
 					for (int i = 1; i <= 10; i++) {
 						User existing = userService.getUserByLogin(login.toUpperCase());
 						if (existing != null) {
 							jpaDao.lockAndRefresh(existing, LockOptions.WAIT_FOREVER);
-							updateUser(login, role, existing);
+							updateUser(login, existing);
 							return existing;
 						}
 						try {
 							User newUser = new User();
-							updateUser(login, role, newUser);
+							updateUser(login, newUser);
 							Long id = txService.invokeNoTx(() -> userRepository.save(newUser).getId());
 							return userRepository.findById(id);
 						} catch (Exception ex) {
@@ -113,20 +108,12 @@ public class CxboxAuthUserRepository {
 		return null;
 	}
 
-	private void updateUser(String login, String role, User user) {
+	private void updateUser(String login, User user) {
 		if (user.getLogin() == null) {
 			user.setLogin(login);
 		}
-		user.setInternalRole(new LOV(role));
-		user.setUserPrincipalName(login);
 		user.setFirstName(login);
 		user.setLastName(login);
-		user.setTitle(login);
-		user.setFullUserName(login);
-		user.setEmail(login);
-		user.setPhone(login);
-		user.setActive(true);
-		user.setDepartment(departmentRepository.findById(0L).orElse(null));
 	}
 
 }

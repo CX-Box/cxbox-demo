@@ -2,6 +2,7 @@ package org.demo.service.cxbox.inner;
 
 import static java.util.Optional.ofNullable;
 import static org.demo.conf.cxbox.extension.lov.AdministeredDictionaryType.INTERNAL_ROLE;
+import static org.demo.entity.core.User.DEFAULT_DEPARTMENT_ID;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +67,7 @@ public class ResponsibilitesService extends VersionAwareResponseService<Responsi
 	@Override
 	protected CreateResult<ResponsibilitesCrudDTO> doCreateEntity(Responsibilities entity, BusinessComponent bc) {
 		entity.setResponsibilityType(ResponsibilityType.VIEW);
-		entity.setDepartmentId(0L);
+		entity.setDepartmentId(DEFAULT_DEPARTMENT_ID);
 		entity.setReadOnly(false);
 		responsibilitiesServiceExt.save(entity);
 		return new CreateResult<>(entityToDto(bc, entity));

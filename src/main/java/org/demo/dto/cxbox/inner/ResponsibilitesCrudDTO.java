@@ -36,12 +36,9 @@ public class ResponsibilitesCrudDTO extends DataResponseDTO {
 	@SearchParameter(name = "responsibilityType", provider = EnumValueProvider.class)
 	private ResponsibilityType respType;
 
-	//deprecated
+	@Deprecated
 	@SearchParameter(provider = BooleanValueProvider.class)
 	private boolean readOnly;
-
-	//deprecated
-	private Long departmentId;
 
 	/**
 	 * This is complex computed column, so it is:
@@ -58,7 +55,6 @@ public class ResponsibilitesCrudDTO extends DataResponseDTO {
 		this.view = responsibilities.getView();
 		this.respType = responsibilities.getResponsibilityType();
 		this.readOnly = responsibilities.isReadOnly();
-		this.departmentId = responsibilities.getDepartmentId();
 	}
 
 }

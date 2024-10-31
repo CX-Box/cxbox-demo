@@ -46,7 +46,6 @@ public class ResponsibilitesMeta extends FieldMetaBuilder<ResponsibilitesCrudDTO
 		fields.setEnabled(ResponsibilitesCrudDTO_.internalRoleCD);
 		fields.setEnabled(ResponsibilitesCrudDTO_.view);
 		fields.setEnabled(ResponsibilitesCrudDTO_.readOnly);
-		fields.setEnabled(ResponsibilitesCrudDTO_.departmentId);
 		fields.setEnumValues(ResponsibilitesCrudDTO_.respType, ResponsibilityType.values());
 
 		List<SimpleDictionary> viewNameSimpl = new ArrayList<>();

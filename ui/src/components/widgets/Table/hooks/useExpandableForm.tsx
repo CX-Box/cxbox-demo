@@ -81,8 +81,8 @@ export function useExpandableForm<R extends CustomDataItem>(currentWidgetMeta: A
     const recordForm = useAppSelector(state => state.view.recordForm[currentWidgetMeta.bcName])
     const currentActiveRowId = recordForm?.cursor
     const isActiveRecord = useCallback(
-        (record: R) => recordForm?.cursor === record.id && currentWidgetMeta.name === recordForm?.widgetName,
-        [currentWidgetMeta.name, recordForm?.cursor, recordForm?.widgetName]
+        (record: R) => recordForm?.cursor === record.id && currentWidgetMeta.bcName === recordForm?.bcName,
+        [currentWidgetMeta.bcName, recordForm?.bcName, recordForm?.cursor]
     )
     const debugMode = useAppSelector(state => state.session.debugMode || false)
 

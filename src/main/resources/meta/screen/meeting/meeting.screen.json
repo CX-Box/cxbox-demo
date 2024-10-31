@@ -4,6 +4,7 @@
   "order": 1,
   "title": "Meeting",
   "navigation": {
+    "type": "standard",
     "menu": [
       {
         "title": "Meetings",

@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
-import org.cxbox.api.data.dictionary.LOV;
 import org.cxbox.api.service.session.InternalAuthorizationService;
 import org.cxbox.api.service.tx.TransactionService;
 import org.cxbox.core.util.SQLExceptions;
@@ -56,7 +55,7 @@ public class CxboxAuthUserRepository {
 			try {
 				user = userService.getUserByLogin(login.toUpperCase());
 				if (user == null) {
-					upsert(login, roles.stream().findFirst().orElse(null));
+					upsert(login);
 				}
 				user = userService.getUserByLogin(login.toUpperCase());
 				Set<String> currentRoles = user.getUserRoleList().stream().map(e -> e.getInternalRoleCd().getKey())
@@ -79,19 +78,19 @@ public class CxboxAuthUserRepository {
 	}
 
 	//TODO>>taken "as is" from real project - refactor
-	public User upsert(String login, String role) {
+	public User upsert(String login) {
 		txService.invokeInNewTx(() -> {
 					authzService.loginAs(authzService.createAuthentication(VANILLA));
 					for (int i = 1; i <= 10; i++) {
 						User existing = userService.getUserByLogin(login.toUpperCase());
 						if (existing != null) {
 							jpaDao.lockAndRefresh(existing, LockOptions.WAIT_FOREVER);
-							updateUser(login, role, existing);
+							updateUser(login, existing);
 							return existing;
 						}
 						try {
 							User newUser = new User();
-							updateUser(login, role, newUser);
+							updateUser(login, newUser);
 							Long id = txService.invokeNoTx(() -> userRepository.save(newUser).getId());
 							return userRepository.findById(id);
 						} catch (Exception ex) {
@@ -109,11 +108,10 @@ public class CxboxAuthUserRepository {
 		return null;
 	}
 
-	private void updateUser(String login, String role, User user) {
+	private void updateUser(String login, User user) {
 		if (user.getLogin() == null) {
 			user.setLogin(login);
 		}
-		user.setInternalRole(new LOV(role));
 		user.setFirstName(login);
 		user.setLastName(login);
 	}

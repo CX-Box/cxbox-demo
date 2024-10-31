@@ -1,2 +1,2 @@
-﻿ID;FIRST_NAME;LAST_NAME;LOGIN;INTERNAL_ROLE_CD
-1;"User";"System";"vanilla";"ADMIN"
+﻿ID;FIRST_NAME;LAST_NAME;LOGIN
+1;"User";"System";"vanilla"

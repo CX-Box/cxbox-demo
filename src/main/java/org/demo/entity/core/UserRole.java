@@ -41,19 +41,13 @@ public class UserRole extends BaseEntity {
 	@JoinColumn(name = "USER_ID")
 	private User user;
 
-/*	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "DIVISION_ID")
-	private Division division;*/
-
 	@Column(name = "INTERNAL_ROLE_CD")
 	private LOV internalRoleCd;
 
 	@Column
-	//@Convert(converter = org.hibernate.type.NumericBooleanConverter.class)
 	private Boolean active;
 
 	@Column
-	//@Convert(converter = org.hibernate.type.NumericBooleanConverter.class)
 	private Boolean main;
 
 }

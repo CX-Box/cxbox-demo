@@ -1,5 +1,6 @@
 package org.demo.service.cxbox.inner;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.cxbox.api.data.dto.hierarhy.grouping.Level;

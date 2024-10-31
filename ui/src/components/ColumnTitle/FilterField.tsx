@@ -1,6 +1,6 @@
 import React from 'react'
 import { CheckboxFilter } from './CheckboxFilter/CheckboxFilter'
-import { CustomFieldTypes } from '@interfaces/widget'
+import { AppNumberFieldMeta, CustomFieldTypes } from '@interfaces/widget'
 import { getFormat } from '@utils/date'
 import RangePicker from './RangePicker'
 import DatePicker from './DatePicker'
@@ -39,7 +39,7 @@ function FilterField({ visible, filterByRangeEnabled, ...props }: FilterFieldPro
         case FieldType.number:
         case FieldType.money:
         case FieldType.percent:
-            const fieldMeta = widgetFieldMeta as interfaces.NumberFieldMeta
+            const fieldMeta = widgetFieldMeta as AppNumberFieldMeta
             return (
                 <NumberInput
                     data-test-filter-popup-value={true}
@@ -48,6 +48,7 @@ function FilterField({ visible, filterByRangeEnabled, ...props }: FilterFieldPro
                     onChange={onChange}
                     digits={fieldMeta.digits}
                     nullable={fieldMeta.nullable}
+                    currency={fieldMeta.currency}
                     forceFocus={true}
                 />
             )

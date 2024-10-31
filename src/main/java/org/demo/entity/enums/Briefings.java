@@ -10,11 +10,11 @@ import lombok.NonNull;
 @Getter
 @AllArgsConstructor
 public enum Briefings {
-	PROJECT_BRIEFING("Project Briefing"),
-	SECURITY_BRIEFING("Security Briefing"),
-	MARKET_BRIEFING("Market Briefing"),
-	FINANCIAL_BRIEFING("Financial Briefing"),
-	OPERATIONAL_BRIEFING("Operational Briefing");
+	PROJECT("Project"),
+	SECURITY("Security"),
+	MARKET("Market"),
+	FINANCIAL("Financial"),
+	OPERATIONAL("Operational");
 
 	@JsonValue
 	private final String value;

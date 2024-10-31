@@ -11,11 +11,11 @@ import lombok.NonNull;
 @AllArgsConstructor
 public enum Documents {
 
-	REFERENCE_DOCUMENT("Reference Document"),
-	POLICY_DOCUMENT("Policy Document"),
-	TECHNICAL_DOCUMENT("Technical Document"),
-	LEGAL_DOCUMENT("Legal Document"),
-	COMPLIANCE_DOCUMENT("Compliance Document");
+	REFERENCE("Reference"),
+	POLICY("Policy"),
+	TECHNICAL("Technical"),
+	LEGAL("Legal"),
+	COMPLIANCE("Compliance");
 
 	@JsonValue
 	private final String value;

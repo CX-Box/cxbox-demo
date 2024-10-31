@@ -1,7 +1,6 @@
 package org.demo.service.cxbox.inner;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import org.cxbox.api.data.dto.hierarhy.grouping.Level;
 import org.cxbox.core.crudma.bc.impl.InnerBcDescription;
@@ -20,8 +19,7 @@ public class MeetingDocumentsWriteMeta extends FieldMetaBuilder<MeetingDocuments
 
 	@Override
 	public void buildRowDependentMeta(RowDependentFieldsMeta<MeetingDocumentsDTO> fields,
-			InnerBcDescription bcDescription,
-			Long id, Long parentId) {
+			InnerBcDescription bcDescription, Long id, Long parentId) {
 		fields.setEnabled(MeetingDocumentsDTO_.fileId);
 		fields.setEnabled(MeetingDocumentsDTO_.file);
 		fields.setEnabled(MeetingDocumentsDTO_.notes);
@@ -46,27 +44,16 @@ public class MeetingDocumentsWriteMeta extends FieldMetaBuilder<MeetingDocuments
 				MeetingDocumentsDTO_.briefing,
 				Set.of(
 						Level.builder(
-										Documents.COMPLIANCE_DOCUMENT,
-										Set.of(
-												Level.builder(
-														Briefings.FINANCIAL_BRIEFING
-												).build(),
-												Level.builder(
-														Briefings.PROJECT_BRIEFING
-												).build()
-										)
+								Documents.REFERENCE,
+								Set.of(
+										Level.builder(Briefings.FINANCIAL).build(),
+										Level.builder(Briefings.PROJECT).build()
 								)
-								.options(Map.of("asd", "asd"))
-								.build(),
+						).build(),
 						Level.builder(
-										Documents.POLICY_DOCUMENT,
-										Set.of(
-												Level.builder(
-																Briefings.SECURITY_BRIEFING
-														)
-														.build())
-								)
-								.build()
+								Documents.POLICY,
+								new HashSet<Level<Briefings, ?>>()
+						).build()
 				)
 		);
 	}

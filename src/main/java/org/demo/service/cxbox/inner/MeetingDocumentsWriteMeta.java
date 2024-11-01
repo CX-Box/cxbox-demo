@@ -1,9 +1,6 @@
 package org.demo.service.cxbox.inner;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import org.cxbox.api.data.dto.hierarhy.grouping.Hierarchy;
 import org.cxbox.core.crudma.bc.impl.InnerBcDescription;
 import org.cxbox.core.dto.rowmeta.FieldsMeta;
 import org.cxbox.core.dto.rowmeta.RowDependentFieldsMeta;

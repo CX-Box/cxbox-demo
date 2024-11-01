@@ -56,24 +56,6 @@ public class MeetingDocumentsWriteMeta extends FieldMetaBuilder<MeetingDocuments
 								Documents.POLICY
 						)
 		);
-
-		fields.defaultGroupingHierarchy(
-				MeetingDocumentsDTO_.document,
-				l -> Arrays.stream(Documents.values()).collect(Hierarchy.toHierarchyWithCfg(
-								e -> e,
-								(e, cfg) -> cfg.options(Map.of("sdfsdf", "sdzfdsf")),
-								(e, lvl) -> lvl
-						)
-				)
-		);
-		fields.defaultGroupingHierarchy(
-				MeetingDocumentsDTO_.document,
-				l -> Arrays.stream(Documents.values()).collect(Hierarchy.toHierarchyWithCfg(
-								e -> e,
-								(e, cfg) -> cfg.options(Map.of("sdfsdf", "sdzfdsf"))
-						)
-				)
-		);
 	}
 
 }

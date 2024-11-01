@@ -1,9 +1,9 @@
 package org.demo.service.cxbox.inner;
 
-import java.util.HashSet;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
-import org.cxbox.api.data.dto.hierarhy.grouping.Level;
+import java.util.Map;
+import org.cxbox.api.data.dto.hierarhy.grouping.Hierarchy;
 import org.cxbox.core.crudma.bc.impl.InnerBcDescription;
 import org.cxbox.core.dto.rowmeta.FieldsMeta;
 import org.cxbox.core.dto.rowmeta.RowDependentFieldsMeta;
@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 @SuppressWarnings({"java:S3252", "java:S1186"})
 @Service
 public class MeetingDocumentsWriteMeta extends FieldMetaBuilder<MeetingDocumentsDTO> {
+
+
 
 	@Override
 	public void buildRowDependentMeta(RowDependentFieldsMeta<MeetingDocumentsDTO> fields,
@@ -40,22 +42,31 @@ public class MeetingDocumentsWriteMeta extends FieldMetaBuilder<MeetingDocuments
 		fields.enableSort(MeetingDocumentsDTO_.briefing);
 		fields.enableSort(MeetingDocumentsDTO_.id);
 		fields.enableSort(MeetingDocumentsDTO_.notes);
+
 		fields.defaultGroupingHierarchy(
 				MeetingDocumentsDTO_.document,
 				MeetingDocumentsDTO_.briefing,
-				Set.of(
-						Level.builder(
-								Documents.REFERENCE,
-								Set.of(
-										Level.builder(Briefings.FINANCIAL).build(),
-										Level.builder(Briefings.PROJECT).build()
-								)
-						).build(),
-						Level.builder(
+				lvl -> lvl
+						.addWithCfg(
 								Documents.POLICY,
-								new HashSet<Level<Briefings, ?>>()
-						).build()
-				)
+								cfg -> cfg.options(Map.of("sdfsdf", "sdzfdsf")),
+								lvl2 -> lvl2
+										.add(Briefings.PROJECT)
+										.add(Briefings.PROJECT)
+						)
+						.add(
+								Documents.POLICY
+						)
+		);
+
+
+		var hb = new Hierarchy<Documents, Hierarchy<Briefings, ?>>();
+		Arrays.stream(Documents.values()).forEach(e -> hb.addWithCfg(e, cfg -> cfg));
+
+		fields.defaultGroupingHierarchy(
+				MeetingDocumentsDTO_.document,
+				MeetingDocumentsDTO_.briefing,
+				lvl -> hb
 		);
 	}
 

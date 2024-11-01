@@ -2,10 +2,10 @@ import { BcSorter } from '@cxbox-ui/core'
 import { isExistRecordItem } from '@components/widgets/Table/groupingHierarchy/utils/isExistRecordItem'
 import { getFieldValue } from '@components/widgets/Table/groupingHierarchy/utils/getFieldValue'
 
-export const dynamicSort = <T extends Record<string, any>>(fields: BcSorter[]) => {
+export const dynamicSort = <T extends Record<string, any>>(sorters: BcSorter[]) => {
     return (a: T, b: T) => {
-        for (let i = 0; i < fields.length; i++) {
-            const { fieldName, direction } = fields[i]
+        for (let i = 0; i < sorters.length; i++) {
+            const { fieldName, direction } = sorters[i]
             if (a[fieldName] !== b[fieldName]) {
                 const valuesTypes = [typeof a[fieldName], typeof b[fieldName]]
                 if (valuesTypes.includes('string') || !isExistRecordItem(a[fieldName]) || !isExistRecordItem(b[fieldName])) {

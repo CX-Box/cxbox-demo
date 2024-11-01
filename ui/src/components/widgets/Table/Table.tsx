@@ -385,12 +385,10 @@ function Table<T extends CustomDataItem>({
                             const isGroupingField = !!meta?.options?.groupingHierarchy?.fields?.includes(item.key)
                             const isExpandCell = isParentRow && isGroupingField && dataItem[item.key]
 
-                            const showGroupingField =
-                                isGroupingHierarchy &&
-                                !editMode &&
-                                fieldShowCondition(item.key, dataItem, sortedGroupKeys, expandedParentRowKeys)
-
-                            const showField = isGroupingHierarchy ? showGroupingField || !enabledGrouping : true
+                            const showField =
+                                isGroupingHierarchy && enabledGrouping
+                                    ? fieldShowCondition(item.key, dataItem, sortedGroupKeys, expandedParentRowKeys) || editMode
+                                    : true
                             const fieldGroupLevel = sortedGroupKeys.findIndex(sortedGroupKey => sortedGroupKey === item.key) + 1
                             const countOfRecords = dataItem._countOfRecordsPerLevel?.[fieldGroupLevel] ?? 0
                             const counterMode = meta?.options?.groupingHierarchy?.counterMode || 'none'

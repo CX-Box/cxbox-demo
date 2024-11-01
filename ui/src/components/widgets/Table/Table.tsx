@@ -392,8 +392,9 @@ function Table<T extends CustomDataItem>({
                             const fieldGroupLevel = sortedGroupKeys.findIndex(sortedGroupKey => sortedGroupKey === item.key) + 1
                             const countOfRecords = dataItem._countOfRecordsPerLevel?.[fieldGroupLevel] ?? 0
                             const counterMode = meta?.options?.groupingHierarchy?.counterMode || 'none'
-                            const showCounter =
-                                isExpandCell && fieldGroupLevel && (counterMode === 'always' || (counterMode === 'collapsed' && !expanded))
+                            // const showCounter =
+                            //     isExpandCell && fieldGroupLevel && (counterMode === 'always' || (counterMode === 'collapsed' && !expanded))
+                            const showCounter = false
 
                             return (
                                 showField && (

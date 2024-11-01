@@ -38,7 +38,7 @@
   ],
   "options": {
     "groupingHierarchy": {
-      "counterMode": "collapsed",
+      "counterMode": "always",
       "fields": [
         "document",
         "briefing"

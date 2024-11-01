@@ -71,7 +71,9 @@ export const createTree = <T extends CustomDataItem>(
                 previousGroup._groupPath = currentGroupPath
                 groupsDictionary[currentGroupPath] = previousGroup // for combined groups we create additional links for convenience
 
-                updateGroupCountMutate(groupsDictionary[currentGroupPath], currentGroupLevel)
+                if (!groupsDictionary[currentGroupPath]?._emptyNode) {
+                    updateGroupCountMutate(groupsDictionary[currentGroupPath], currentGroupLevel)
+                }
 
                 if (currentGroupLevel === 1) {
                     tree.push(groupsDictionary[currentGroupPath])
@@ -82,8 +84,9 @@ export const createTree = <T extends CustomDataItem>(
             // if necessary, changes the group level, forms a hierarchy of groups
             if (currentGroup && previousGroup) {
                 currentGroup.children?.push(previousGroup)
-
-                updateGroupCountMutate(currentGroup, currentGroupLevel)
+                if (!previousGroup?._emptyNode) {
+                    updateGroupCountMutate(currentGroup, currentGroupLevel)
+                }
 
                 break
             }

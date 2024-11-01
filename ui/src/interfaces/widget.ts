@@ -115,6 +115,7 @@ export interface AppWidgetMeta extends interfaces.WidgetMeta {
             type?: 'nextAndPreviousWihHasNext' | 'nextAndPreviousSmart' | 'nextAndPreviousWithCount'
         }
         groupingHierarchy?: {
+            counterMode?: 'none' | 'always' | 'collapsed'
             fields: string[]
         }
     }

@@ -5,7 +5,7 @@ import cn from 'classnames'
 
 interface ExpandIconProps {
     expanded: boolean
-    onClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+    onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
     openIcon?: string
     openRotate?: number
     closeIcon?: string

@@ -2,8 +2,14 @@ import { PendingValidationFailsFormat, reducers, ViewState as CoreViewState } fr
 import { AnyAction, createReducer, isAnyOf } from '@reduxjs/toolkit'
 import { actions, partialUpdateRecordForm, resetRecordForm, setBcCount, setRecordForm, showViewPopup } from '@actions'
 import { PopupData } from '@interfaces/view'
+import { RowMeta } from '@interfaces/rowMeta'
 
 interface ViewState extends Omit<CoreViewState, 'popupData'> {
+    rowMeta: {
+        [bcName: string]: {
+            [bcUrl: string]: RowMeta
+        }
+    }
     bcRecordsCount: {
         [bcName: string]: {
             count: number

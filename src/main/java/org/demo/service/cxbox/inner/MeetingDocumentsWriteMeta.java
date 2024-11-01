@@ -15,17 +15,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class MeetingDocumentsWriteMeta extends FieldMetaBuilder<MeetingDocumentsDTO> {
 
+
 	@Override
 	public void buildRowDependentMeta(RowDependentFieldsMeta<MeetingDocumentsDTO> fields,
-			InnerBcDescription bcDescription,
-			Long id, Long parentId) {
+			InnerBcDescription bcDescription, Long id, Long parentId) {
 		fields.setEnabled(MeetingDocumentsDTO_.fileId);
 		fields.setEnabled(MeetingDocumentsDTO_.file);
-		fields.setEnabled(
-				MeetingDocumentsDTO_.notes);
+		fields.setEnabled(MeetingDocumentsDTO_.notes);
 		fields.setEnabled(MeetingDocumentsDTO_.briefing);
 		fields.setEnabled(MeetingDocumentsDTO_.document);
-
 		fields.setEnumValues(MeetingDocumentsDTO_.briefing, Briefings.values());
 		fields.setEnumValues(MeetingDocumentsDTO_.document, Documents.values());
 	}
@@ -40,6 +38,21 @@ public class MeetingDocumentsWriteMeta extends FieldMetaBuilder<MeetingDocuments
 		fields.enableSort(MeetingDocumentsDTO_.briefing);
 		fields.enableSort(MeetingDocumentsDTO_.id);
 		fields.enableSort(MeetingDocumentsDTO_.notes);
+
+		fields.defaultGroupingHierarchy(
+				MeetingDocumentsDTO_.document,
+				MeetingDocumentsDTO_.briefing,
+				lvl -> lvl
+						.add(
+								Documents.POLICY,
+								lvl2 -> lvl2
+										.add(Briefings.PROJECT)
+										.add(Briefings.PROJECT)
+						)
+						.add(
+								Documents.POLICY
+						)
+		);
 	}
 
 }

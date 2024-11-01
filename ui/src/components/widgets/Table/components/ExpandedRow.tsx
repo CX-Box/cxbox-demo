@@ -2,15 +2,16 @@ import React from 'react'
 import Operations from '../../../Operations/Operations'
 import Form from '../../Form/Form'
 import styles from '../Table.less'
-import { interfaces } from '@cxbox-ui/core'
+import { Operation, OperationGroup, WidgetFormMeta } from '@cxbox-ui/core'
+import { CustomDataItem } from '@components/widgets/Table/Table.interfaces'
 
-interface ExpandedRowProps {
-    widgetMeta?: interfaces.WidgetFormMeta
-    operations?: Array<interfaces.Operation | interfaces.OperationGroup>
-    record: interfaces.DataItem
+interface ExpandedRowProps<T> {
+    widgetMeta?: WidgetFormMeta
+    operations?: Array<Operation | OperationGroup>
+    record: T
 }
 
-function ExpandedRow({ widgetMeta, operations, record }: ExpandedRowProps) {
+function ExpandedRow<T extends CustomDataItem>({ widgetMeta, operations, record }: ExpandedRowProps<T>) {
     if (!widgetMeta) {
         return null
     }
@@ -23,4 +24,4 @@ function ExpandedRow({ widgetMeta, operations, record }: ExpandedRowProps) {
     )
 }
 
-export default React.memo(ExpandedRow)
+export default React.memo(ExpandedRow) as typeof ExpandedRow

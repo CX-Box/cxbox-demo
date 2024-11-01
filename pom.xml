@@ -10,8 +10,17 @@
   <parent>
     <groupId>org.cxbox</groupId>
     <artifactId>cxbox-starter-parent</artifactId>
-    <version>4.0.0-M9</version><!-- based on spring-boot-starter-parent 3.2.5-->
+    <version>4.0.0-M10-CXBOX-439-SNAPSHOT</version><!-- based on spring-boot-starter-parent 3.2.5-->
   </parent>
+
+  <repositories>
+    <repository>
+      <id>snapshots-repo</id>
+      <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+      <releases/>
+      <snapshots/>
+    </repository>
+  </repositories>
 
   <properties>
     <checktyle.config>src/main/resources/checkstyle-checker.xml</checktyle.config>

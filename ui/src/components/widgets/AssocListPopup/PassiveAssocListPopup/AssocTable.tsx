@@ -1,11 +1,12 @@
 import React, { useMemo } from 'react'
 import { TableRowSelection } from 'antd/lib/table'
-import Table, { ControlColumn } from '../../Table/Table'
+import Table from '../../Table/Table'
 import { AppWidgetTableMeta } from '@interfaces/widget'
 import { Checkbox } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { usePassiveAssociations } from '../hooks/usePassiveAssociations'
-import { interfaces } from '@cxbox-ui/core'
+import { AssociatedItem } from '@cxbox-ui/core'
+import { ControlColumn } from '@components/widgets/Table/Table.interfaces'
 
 export interface AssocTableProps {
     meta: AppWidgetTableMeta
@@ -15,7 +16,7 @@ export interface AssocTableProps {
 export const AssocTable = ({ ...props }: AssocTableProps) => {
     const { values: selectedRecords, selectAllItems, selectItem, changeItem } = usePassiveAssociations()
 
-    const rowSelection: TableRowSelection<interfaces.AssociatedItem> = {
+    const rowSelection: TableRowSelection<AssociatedItem> = {
         type: 'checkbox',
         selectedRowKeys: selectedRecords.map(item => item.id),
         onSelect: selectItem,
@@ -24,7 +25,7 @@ export const AssocTable = ({ ...props }: AssocTableProps) => {
 
     const { t } = useTranslation()
 
-    const primaryColumn: ControlColumn = useMemo(
+    const primaryColumn: ControlColumn<AssociatedItem> = useMemo(
         () => ({
             column: {
                 // TODO need to add localization
@@ -49,14 +50,7 @@ export const AssocTable = ({ ...props }: AssocTableProps) => {
         [changeItem, props.meta.options?.primary?.title, selectedRecords, t]
     )
 
-    return (
-        <Table
-            meta={props.meta}
-            rowSelection={rowSelection as TableRowSelection<interfaces.DataItem>}
-            disablePagination={props.disablePagination}
-            primaryColumn={primaryColumn}
-        />
-    )
+    return <Table meta={props.meta} rowSelection={rowSelection} disablePagination={props.disablePagination} primaryColumn={primaryColumn} />
 }
 
 export default AssocTable

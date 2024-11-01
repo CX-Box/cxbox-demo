@@ -50,6 +50,17 @@
                 border: none;
             }
         }
+
+        tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
+            min-height: 0;
+            height: auto;
+
+            td {
+                min-height: 0;
+                height: auto;
+                border: none;
+            }
+        }
     }
 }
 
@@ -231,8 +242,11 @@
 
 
     .parentExpandIcon {
+        min-height: 30px;
+        min-width: max-content;
         margin-right: 15px;
         font-size: 14px;
+        cursor: pointer;
         :global .anticon svg {
             width: 14px;
             height: 14px;

@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 public class MeetingDocumentsWriteMeta extends FieldMetaBuilder<MeetingDocumentsDTO> {
 
 
-
 	@Override
 	public void buildRowDependentMeta(RowDependentFieldsMeta<MeetingDocumentsDTO> fields,
 			InnerBcDescription bcDescription, Long id, Long parentId) {
@@ -47,9 +46,8 @@ public class MeetingDocumentsWriteMeta extends FieldMetaBuilder<MeetingDocuments
 				MeetingDocumentsDTO_.document,
 				MeetingDocumentsDTO_.briefing,
 				lvl -> lvl
-						.addWithCfg(
+						.add(
 								Documents.POLICY,
-								cfg -> cfg.options(Map.of("sdfsdf", "sdzfdsf")),
 								lvl2 -> lvl2
 										.add(Briefings.PROJECT)
 										.add(Briefings.PROJECT)
@@ -57,6 +55,24 @@ public class MeetingDocumentsWriteMeta extends FieldMetaBuilder<MeetingDocuments
 						.add(
 								Documents.POLICY
 						)
+		);
+
+		fields.defaultGroupingHierarchy(
+				MeetingDocumentsDTO_.document,
+				l -> Arrays.stream(Documents.values()).collect(Hierarchy.toHierarchyWithCfg(
+								e -> e,
+								(e, cfg) -> cfg.options(Map.of("sdfsdf", "sdzfdsf")),
+								(e, lvl) -> lvl
+						)
+				)
+		);
+		fields.defaultGroupingHierarchy(
+				MeetingDocumentsDTO_.document,
+				l -> Arrays.stream(Documents.values()).collect(Hierarchy.toHierarchyWithCfg(
+								e -> e,
+								(e, cfg) -> cfg.options(Map.of("sdfsdf", "sdzfdsf"))
+						)
+				)
 		);
 	}
 

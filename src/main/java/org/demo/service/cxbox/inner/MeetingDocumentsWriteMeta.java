@@ -58,16 +58,6 @@ public class MeetingDocumentsWriteMeta extends FieldMetaBuilder<MeetingDocuments
 								Documents.POLICY
 						)
 		);
-
-
-		var hb = new Hierarchy<Documents, Hierarchy<Briefings, ?>>();
-		Arrays.stream(Documents.values()).forEach(e -> hb.addWithCfg(e, cfg -> cfg));
-
-		fields.defaultGroupingHierarchy(
-				MeetingDocumentsDTO_.document,
-				MeetingDocumentsDTO_.briefing,
-				lvl -> hb
-		);
 	}
 
 }

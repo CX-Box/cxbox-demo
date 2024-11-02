@@ -31,7 +31,21 @@ const { FieldType } = interfaces
  */
 export const ColumnFilterControl: React.FC<ColumnFilterControlProps> = props => {
     switch (props.widgetFieldMeta.type as string) {
-        case FieldType.dictionary:
+        case FieldType.dictionary: {
+            const rowFieldMeta = props.rowFieldMeta
+            const rowFieldMetaFilterValues = rowFieldMeta?.filterValues?.map(item => ({
+                ...item,
+                icon: rowFieldMeta?.allValues?.find(allValuesItem => allValuesItem.value === item.value)?.icon
+            }))
+            return (
+                <CheckboxFilter
+                    title={props.widgetFieldMeta.title}
+                    value={props.value as interfaces.DataValue[]}
+                    filterValues={rowFieldMetaFilterValues}
+                    onChange={props.onChange}
+                />
+            )
+        }
         case FieldType.pickList: {
             return (
                 <CheckboxFilter

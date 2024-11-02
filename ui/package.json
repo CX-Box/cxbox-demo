@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@ant-design/charts": "1.4.2",
-    "@cxbox-ui/core": "2.4.0",
+    "@cxbox-ui/core": "2.4.1-CXBOX-451-alpha.0",
     "@reduxjs/toolkit": "1.7.2",
     "@stomp/stompjs": "7.0.0",
     "antd": "3.26.20",

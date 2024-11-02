@@ -75,6 +75,7 @@
         "No applied filters for saving": "Нет примененных фильтров для сохранения",
         "Click Here to Select Files": "Нажмите для выбора файлов",
         "Or drag files to this area": "Или перетащите файлы в область",
-        "Add at least one file, support for a single or bulk upload": "Добавьте хотя бы один файл, поддерживается одиночная или массовая загрузка"
+        "Add at least one file, support for a single or bulk upload": "Добавьте хотя бы один файл, поддерживается одиночная или массовая загрузка",
+        "Select all": "Выбрать все"
     }
 }

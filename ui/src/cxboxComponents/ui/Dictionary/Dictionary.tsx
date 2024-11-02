@@ -1,9 +1,11 @@
 import React from 'react'
-import { Icon, Select as AntdSelect } from 'antd'
+import { Icon, Select as AntdSelect, Tooltip } from 'antd'
 import { BaseFieldProps } from '@cxboxComponents/Field/Field'
 import Select, { SelectProps } from '@cxboxComponents/ui/Select/Select'
 import ReadOnlyField from '@cxboxComponents/ui/ReadOnlyField/ReadOnlyField'
+import * as dictionaryCustomIcons from '@assets/icons/dictionaryCustomIcons'
 import { interfaces } from '@cxbox-ui/core'
+import { AppDictionaryFieldMeta, EDictionaryMode } from '@interfaces/widget'
 
 export interface DictionaryProps extends BaseFieldProps {
     value?: interfaces.MultivalueSingleValue[] | string | null
@@ -24,8 +26,8 @@ export interface DictionaryProps extends BaseFieldProps {
  * @category Components
  */
 const Dictionary: React.FunctionComponent<DictionaryProps> = props => {
-    const { multiple, onChange, values, value, valueIcon, meta, metaIcon, readOnly, className, backgroundColor, onDrillDown, widgetName } =
-        props
+    const { multiple, onChange, values, value, valueIcon, metaIcon, readOnly, className, backgroundColor, onDrillDown, widgetName } = props
+    const meta = props.meta as AppDictionaryFieldMeta
     const selectRef = React.useRef<AntdSelect<string | string[]>>(null)
 
     const handleChange = React.useCallback(
@@ -85,14 +87,21 @@ const Dictionary: React.FunctionComponent<DictionaryProps> = props => {
             )
         }
         return values?.map(item => {
-            return (
+            const icon = item.icon && getIconByParams(item.icon)
+            return meta.mode === EDictionaryMode.icon ? (
+                <Select.Option key={item.value}>
+                    <Tooltip title={item.value} placement="top">
+                        {icon}
+                    </Tooltip>
+                </Select.Option>
+            ) : (
                 <Select.Option key={item.value} title={item.value}>
-                    {item.icon && getIconByParams(item.icon)}
+                    {icon}
                     <span data-test-field-dictionary-item={true}>{item.value}</span>
                 </Select.Option>
             )
         })
-    }, [value, values, multiple, metaIcon, valueIcon])
+    }, [values, multiple, value, metaIcon, valueIcon, meta.mode])
 
     if (readOnly) {
         let readOnlyValue = value ?? ''
@@ -121,10 +130,11 @@ const Dictionary: React.FunctionComponent<DictionaryProps> = props => {
  * @param params Contains `type` and `color`
  * @param extraStyleClasses extra css classes
  */
-export function getIconByParams(params: string, extraStyleClasses?: string) {
+export function getIconByParams(params?: string, extraStyleClasses?: string) {
     if (params) {
-        const [antIconType, cssColor] = params.split(' ')
-        return <Icon type={antIconType} style={{ color: cssColor }} className={extraStyleClasses} />
+        const [iconType, cssColor] = params.split(' ')
+        const CustomIcon = dictionaryCustomIcons[iconType as keyof typeof dictionaryCustomIcons]
+        return <Icon component={CustomIcon} type={iconType} style={{ color: cssColor }} className={extraStyleClasses} />
     }
     return null
 }

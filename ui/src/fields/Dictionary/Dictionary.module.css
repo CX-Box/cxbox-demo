@@ -1,8 +1,13 @@
 .coloredValue {
     min-width: 100px;
+    min-height: 32px;
     width: auto;
     border-radius: 8px;
     padding: 6px 10px;
     display: flex;
     justify-content: center;
+}
+
+.iconTooltip {
+    cursor: pointer;
 }

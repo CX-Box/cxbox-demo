@@ -47,10 +47,10 @@ public class MeetingDocumentsWriteMeta extends FieldMetaBuilder<MeetingDocuments
 								Documents.POLICY,
 								lvl2 -> lvl2
 										.add(Briefings.PROJECT)
-										.add(Briefings.PROJECT)
+										.add(Briefings.SECURITY)
 						)
 						.add(
-								Documents.POLICY
+								Documents.COMPLIANCE
 						)
 		);
 	}

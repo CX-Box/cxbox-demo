@@ -391,7 +391,8 @@ function Table<T extends CustomDataItem>({
                                     : true
                             const fieldGroupLevel = sortedGroupKeys.findIndex(sortedGroupKey => sortedGroupKey === item.key) + 1
                             const countOfRecords = dataItem._countOfRecordsPerLevel?.[fieldGroupLevel] ?? 0
-                            // TODO return code will need a counter
+                            // TODO return code will need a counter.
+                            //  And fix the styles for the counter only for grouping fields with a counter and hierarchy enabled (width: fit-content)
                             // const counterMode = meta?.options?.groupingHierarchy?.counterMode || 'none'
                             // const showCounter =
                             //     isExpandCell && fieldGroupLevel && (counterMode === 'always' || (counterMode === 'collapsed' && !expanded))
@@ -419,18 +420,16 @@ function Table<T extends CustomDataItem>({
                                                 closeIcon="down"
                                             />
                                         )}
-                                        <div style={{ width: 'fit-content' }}>
-                                            <Field
-                                                data={dataItem as DataItem}
-                                                bcName={bcName}
-                                                cursor={dataItem.id}
-                                                widgetName={widgetName}
-                                                widgetFieldMeta={item as WidgetListField}
-                                                readonly={!editMode}
-                                                forceFocus={editMode}
-                                                className={styles.tableField}
-                                            />
-                                        </div>
+                                        <Field
+                                            data={dataItem as DataItem}
+                                            bcName={bcName}
+                                            cursor={dataItem.id}
+                                            widgetName={widgetName}
+                                            widgetFieldMeta={item as WidgetListField}
+                                            readonly={!editMode}
+                                            forceFocus={editMode}
+                                            className={styles.tableField}
+                                        />
                                         {showCounter && `(${countOfRecords})`}
                                     </div>
                                 )

@@ -46,7 +46,7 @@ export const CheckboxFilter: React.FC<CheckboxFilterProps> = props => {
                     checked={props.value?.length === filterValues.length}
                     onChange={handleAll}
                 />
-                {props.title || t('Select all')}
+                {props.title ?? t('Select all')}
             </li>
             <ul className={styles.list}>
                 {filterValues.map((item, index) => {

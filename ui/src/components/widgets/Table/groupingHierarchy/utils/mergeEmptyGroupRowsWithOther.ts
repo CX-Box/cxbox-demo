@@ -27,7 +27,6 @@ export const mergeEmptyGroupRowsWithOther = <T extends CustomDataItem>(
 
         if (emptyNodesListIndex >= 0) {
             resultEmptyNodesList.splice(emptyNodesListIndex, 1)
-            resultRecords[index] = { ...resultRecords[index], _groupOptions: null }
         }
 
         if (resultEmptyNodesList.length === 0) {

@@ -32,17 +32,18 @@ export const useGroupingHierarchy = <T extends CustomDataItem>(
     const cursor = useAppSelector(state => state.screen.bo.bc[meta.bcName].cursor)
     const bcPageLimit = useAppSelector(state => state.screen.bo.bc[meta.bcName].limit)
     const sorters = useAppSelector(state => state.screen.sorters[meta.bcName])
+    const filters = useAppSelector(state => state.screen.filters[meta.bcName])
     const bcCount = useAppSelector(state => state.view.bcRecordsCount[meta.bcName]?.count)
     const correctGroupingCount = bcPageLimit != null && bcCount != null && bcPageLimit >= bcCount
     const bcData = useAppSelector(state => state.data[meta.bcName] as T[] | undefined)
     const groupingHierarchyEmptyNodes = useGroupingHierarchyLevels(meta, sortedGroupKeys)
 
-    const { tree, nodeDictionary } = useMemo(
+    const { tree, nodeDictionary, groupsDictionary, defaultExtendedDictionary } = useMemo(
         () =>
             isGroupingHierarchy
-                ? createTree(bcData, sortedGroupKeys, groupingHierarchyEmptyNodes, sorters)
-                : { tree: undefined, nodeDictionary: undefined },
-        [bcData, groupingHierarchyEmptyNodes, isGroupingHierarchy, sortedGroupKeys, sorters]
+                ? createTree(bcData, sortedGroupKeys, groupingHierarchyEmptyNodes, sorters, filters)
+                : { tree: undefined, nodeDictionary: undefined, groupsDictionary: undefined, defaultExtendedDictionary: undefined },
+        [bcData, filters, groupingHierarchyEmptyNodes, isGroupingHierarchy, sortedGroupKeys, sorters]
     )
     const { expandedParentRowKeys, changeExpand, clearExpand } = useExpandableGroup()
 
@@ -61,7 +62,7 @@ export const useGroupingHierarchy = <T extends CustomDataItem>(
             return flatTree
                 ?.filter(node => nodeHasGroupWithCertainCountOfChildNodes(node, childNodesCounts))
                 .flatMap(node => {
-                    const levels = node._countOfRecordsPerLevel && Object.keys(node._countOfRecordsPerLevel).map(item => +item)
+                    const levels = node._countOfRecordsPerLevel && Object.keys(node._countOfRecordsPerLevel).map(Number)
                     return levels
                         ?.filter(level => nodeHasGroupWithCertainCountOfChildNodes(node, childNodesCounts, level))
                         .map(level => formGroupPathFromRecord(node, sortedGroupKeys, level))
@@ -75,12 +76,28 @@ export const useGroupingHierarchy = <T extends CustomDataItem>(
             const flatTree = getFlatTree()
 
             if (!bcLoading && flatTree?.length) {
-                getGroupKeysWithCertainCountOfChildNodes(flatTree, [0, 1])?.forEach(groupPath => {
-                    changeExpand(true, groupPath)
+                const groupKeys =
+                    getGroupKeysWithCertainCountOfChildNodes(flatTree, [0, 1])?.filter(
+                        groupKey => typeof defaultExtendedDictionary?.[groupKey as string] !== 'boolean'
+                    ) ?? []
+
+                defaultExtendedDictionary && Object.keys(defaultExtendedDictionary).forEach(path => groupKeys.push(path))
+
+                groupKeys?.forEach(groupPath => {
+                    groupPath && changeExpand(defaultExtendedDictionary?.[groupPath] ?? true, groupPath)
                 })
             }
         }
-    }, [bcLoading, changeExpand, getFlatTree, getGroupKeysWithCertainCountOfChildNodes, isGroupingHierarchy, sortedGroupKeys])
+    }, [
+        bcLoading,
+        changeExpand,
+        defaultExtendedDictionary,
+        getFlatTree,
+        getGroupKeysWithCertainCountOfChildNodes,
+        groupsDictionary,
+        isGroupingHierarchy,
+        sortedGroupKeys
+    ])
 
     const toggleEnabledGrouping = useCallback(() => {
         setEnabledGrouping(enabledGrouping => !enabledGrouping)

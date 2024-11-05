@@ -43,8 +43,9 @@ public class MeetingDocumentsWriteMeta extends FieldMetaBuilder<MeetingDocuments
 				MeetingDocumentsDTO_.document,
 				MeetingDocumentsDTO_.briefing,
 				lvl -> lvl
-						.add(
+						.addWithCfg(
 								Documents.POLICY,
+								cfg -> cfg.defaultExpanded(true),
 								lvl2 -> lvl2
 										.add(Briefings.PROJECT)
 										.add(Briefings.SECURITY)

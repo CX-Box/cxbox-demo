@@ -389,7 +389,8 @@ function Table<T extends CustomDataItem>({
                                 isGroupingHierarchy && enabledGrouping
                                     ? fieldShowCondition(item.key, dataItem, sortedGroupKeys, expandedParentRowKeys)
                                     : true
-                            const showExpandIcon = isGroupingField && dataItem[item.key] && enabledGrouping && showReadonlyField
+                            const showExpandIcon =
+                                isGroupingField && dataItem[item.key] && enabledGrouping && showReadonlyField && !!dataItem.children
                             const fieldGroupLevel = sortedGroupKeys.findIndex(sortedGroupKey => sortedGroupKey === item.key) + 1
                             const countOfRecords = dataItem._countOfRecordsPerLevel?.[fieldGroupLevel] ?? 0
                             const counterMode = meta?.options?.groupingHierarchy?.counterMode || 'none'

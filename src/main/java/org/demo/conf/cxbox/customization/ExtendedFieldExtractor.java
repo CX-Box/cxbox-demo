@@ -30,6 +30,7 @@ public class ExtendedFieldExtractor extends BaseFieldExtractor {
 	@Override
 	public List<String> getSupportedTypes() {
 		return List.of(
+				"AdditionalList",
 				"StatsBlock",
 				"AdditionalInfo",
 				"Funnel",

@@ -1,0 +1,5 @@
+.divider {}
+
+.divider:last-child {
+    display: none;
+}

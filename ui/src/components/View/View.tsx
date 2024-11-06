@@ -36,6 +36,7 @@ import SuggestionPickListField from '../../fields/SuggestionPickList/SuggestionP
 import { StatsBlock } from '@components/widgets/StatsBlock/StatsBlock'
 import FileViewerPopup from '@components/FileViewerPopup/FileViewerPopup'
 import GroupingHierarchy from '@components/widgets/GroupingHierarchy/GroupingHierarchy'
+import { AdditionalListWidget } from '@components/widgets/AdditionalListWidget/AdditionalListWidget'
 
 // TODO We need to remove PopupWidgetTypes from the core and replace imports throughout the entire project
 const { PopupWidgetTypes, FieldType } = interfaces
@@ -43,8 +44,6 @@ const { PopupWidgetTypes, FieldType } = interfaces
 const customPopupWidgetTypes: CustomWidgetTypes[] = [CustomWidgetTypes.FormPopup]
 
 const allPopupWidgetTypes: string[] = [...customPopupWidgetTypes, ...PopupWidgetTypes]
-
-const skipWidgetTypes: (WidgetTypes | CustomWidgetTypes)[] = [CustomWidgetTypes.AdditionalInfo]
 
 const customFields = {
     [FieldType.number]: Number,
@@ -72,6 +71,7 @@ const customWidgets: Partial<Record<CustomWidgetTypes | interfaces.WidgetTypes, 
     [CustomWidgetTypes.DashboardList]: { component: DashboardList, card: DashboardCard },
     [CustomWidgetTypes.FormPopup]: { component: FormPopup, card: null },
     [CustomWidgetTypes.AdditionalInfo]: { component: AdditionalInfoWidget, card: EmptyCard },
+    [CustomWidgetTypes.AdditionalList]: { component: AdditionalListWidget, card: EmptyCard },
     [WidgetTypes.AssocListPopup]: AssocListPopup,
     [WidgetTypes.PickListPopup]: PickListPopup,
     [WidgetTypes.SecondLevelMenu]: { component: LevelMenu, card: EmptyCard },
@@ -92,7 +92,6 @@ function View() {
                 customWidgets={customWidgets as Record<string, interfaces.CustomWidgetDescriptor>}
                 customFields={customFields}
                 card={Card as any}
-                skipWidgetTypes={skipWidgetTypes}
                 customLayout={DashboardLayout}
                 disableDebugMode={true}
             />

@@ -1,7 +1,10 @@
 import React, { createElement, ReactNode } from 'react'
+import { Icon } from 'antd'
 import cn from 'classnames'
-import styles from './WidgetTitle.less'
+import { useAppDispatch, useAppSelector } from '@store'
 import TemplatedTitle from '@components/TemplatedTitle/TemplatedTitle'
+import { setCollapsedWidgets } from '@actions'
+import styles from './WidgetTitle.less'
 
 interface WidgetTitleProps {
     id?: string
@@ -15,8 +18,27 @@ interface WidgetTitleProps {
 }
 
 const WidgetTitle: React.FC<WidgetTitleProps> = ({ widgetName, text, bcColor, buttons, level = 1, className, id, marginBottom = 12 }) => {
+    const dispatch = useAppDispatch()
+    // todo вынести в хук мб
+    const isCollapseEnabled = useAppSelector(state => state.view.groups?.find(item => item.widgetNames[0] === widgetName))
+    const isCollapsed = useAppSelector(state => state.view.collapsedWidgets?.find(item => item === widgetName))
+    //
+
+    const handleCollapseClick = React.useCallback(() => {
+        dispatch(setCollapsedWidgets({ mainWidgetName: widgetName }))
+    }, [dispatch, widgetName])
+
     const element = `h${level}`
-    const title = <TemplatedTitle widgetName={widgetName} title={text ?? ''} id={id} />
+    const templatedTitle = <TemplatedTitle widgetName={widgetName} title={text ?? ''} id={id} />
+    const title = isCollapseEnabled ? (
+        <div className={styles.collapse} onClick={handleCollapseClick}>
+            <Icon className={styles.collapseIcon} type={isCollapsed ? 'right' : 'down'} />
+            {templatedTitle}
+        </div>
+    ) : (
+        templatedTitle
+    )
+
     return createElement(
         element,
         {

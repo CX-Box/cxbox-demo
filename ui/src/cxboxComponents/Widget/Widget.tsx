@@ -9,7 +9,7 @@ import AssocListPopup from '@cxboxComponents/widgets/AssocListPopup/AssocListPop
 import PickListPopup from '@cxboxComponents/widgets/PickListPopup/PickListPopup'
 import DebugPanel from '@cxboxComponents/DebugPanel/DebugPanel'
 import { WidgetTypes, interfaces, utils } from '@cxbox-ui/core'
-import { RootState } from '@store'
+import { RootState, useAppSelector } from '@store'
 import { WidgetShowCondition } from '@cxbox-ui/schema'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import { ScreenState } from '../../reducers/screen'
@@ -41,7 +41,12 @@ const skeletonParams = { rows: 5 }
  * @category Components
  */
 export const Widget: FunctionComponent<WidgetProps> = props => {
-    if (!props.showWidget) {
+    // todo вынести в хук мб
+    const isMainWidget = useAppSelector(state => state.view.groups?.find(item => item.widgetNames[0] === props.meta.name))
+    const isWidgetCollapsed = useAppSelector(state => !!state.view.collapsedWidgets?.find(item => item === props.meta.name))
+    //
+
+    if (!props.showWidget || (!isMainWidget && isWidgetCollapsed)) {
         return null
     }
 

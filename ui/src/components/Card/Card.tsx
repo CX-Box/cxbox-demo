@@ -22,10 +22,15 @@ const showOperations = [WidgetTypes.DataGrid, WidgetTypes.Form]
 
 function Card({ meta, children, className }: CardProps) {
     const { type, bcName } = meta
+    // todo вынести в хук мб
+    const isMainWidget = useAppSelector(state => state.view.groups?.find(item => item.widgetNames[0] === meta.name))
+    const isWidgetCollapsed = useAppSelector(state => !!state.view.collapsedWidgets?.find(item => item === meta.name))
+    //
     const bcUrl = useAppSelector(state => state.screen.bo.bc[bcName] && buildBcUrl(bcName, true))
     const operations = useAppSelector(state => state.view.rowMeta?.[bcName]?.[bcUrl]?.actions)
     const debugMode = useAppSelector(state => state.session.debugMode || false)
     const isForm = type === WidgetTypes.Form
+    const isCollapsed = isMainWidget && isWidgetCollapsed
 
     return (
         <Row justify="center">
@@ -42,18 +47,22 @@ function Card({ meta, children, className }: CardProps) {
                         {meta.title && (
                             <WidgetTitle level={2} widgetName={meta.name} text={meta.title} bcColor={meta?.options?.title?.bgColor} />
                         )}
-                        {isForm && children}
-                        {showOperations.includes(type as interfaces.WidgetTypes) && (
-                            <Operations
-                                operations={operations}
-                                bcName={bcName}
-                                widgetMeta={meta}
-                                className={cn({
-                                    [styles.operations]: !isForm
-                                })}
-                            />
+                        {!isCollapsed && (
+                            <>
+                                {isForm && children}
+                                {showOperations.includes(type as interfaces.WidgetTypes) && (
+                                    <Operations
+                                        operations={operations}
+                                        bcName={bcName}
+                                        widgetMeta={meta}
+                                        className={cn({
+                                            [styles.operations]: !isForm
+                                        })}
+                                    />
+                                )}
+                                {!isForm && children}
+                            </>
                         )}
-                        {!isForm && children}
                     </div>
                 </DebugWidgetWrapper>
             </Col>

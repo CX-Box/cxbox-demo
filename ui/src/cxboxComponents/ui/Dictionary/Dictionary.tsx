@@ -96,8 +96,7 @@ const Dictionary: React.FunctionComponent<DictionaryProps> = props => {
                 </Select.Option>
             ) : (
                 <Select.Option key={item.value} title={item.value}>
-                    {icon}
-                    <span data-test-field-dictionary-item={true}>{item.value}</span>
+                    {icon} <span data-test-field-dictionary-item={true}>{item.value}</span>
                 </Select.Option>
             )
         })

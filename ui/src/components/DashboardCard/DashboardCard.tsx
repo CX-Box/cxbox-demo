@@ -1,10 +1,11 @@
 import React from 'react'
 import { Col, Row } from 'antd'
 import DebugWidgetWrapper from '../DebugWidgetWrapper/DebugWidgetWrapper'
-import styles from './DashboardCard.module.css'
 import { useAppSelector } from '@store'
+import { useWidgetCollapse } from '@hooks/useWidgetCollapse'
 import { interfaces } from '@cxbox-ui/core'
 import WidgetTitle from '@components/WidgetTitle/WidgetTitle'
+import styles from './DashboardCard.module.css'
 
 interface DashboardCardProps {
     children?: React.ReactNode
@@ -14,6 +15,8 @@ interface DashboardCardProps {
 function DashboardCard({ children, meta }: DashboardCardProps) {
     const title = meta?.title
     const debugMode = useAppSelector(state => state.session.debugMode || false)
+
+    const { isMainWidget, isCollapsed } = useWidgetCollapse(meta.name)
 
     return (
         <div
@@ -27,8 +30,8 @@ function DashboardCard({ children, meta }: DashboardCardProps) {
             <Row justify="center">
                 <Col span={24}>
                     <DebugWidgetWrapper debugMode={debugMode} meta={meta}>
-                        {title && <WidgetTitle className={styles.header} level={2} widgetName={meta.name} text={title} />}
-                        {children}
+                        <WidgetTitle className={styles.header} level={2} widgetName={meta.name} text={title} />
+                        {!(isMainWidget && isCollapsed) && children}
                     </DebugWidgetWrapper>
                 </Col>
             </Row>

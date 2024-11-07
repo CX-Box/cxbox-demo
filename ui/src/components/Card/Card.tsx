@@ -4,11 +4,12 @@ import cn from 'classnames'
 import { interfaces } from '@cxbox-ui/core'
 import Operations from '../Operations/Operations'
 import DebugWidgetWrapper from '../DebugWidgetWrapper/DebugWidgetWrapper'
-import styles from './Card.less'
 import { useAppSelector } from '@store'
+import { useWidgetCollapse } from '@hooks/useWidgetCollapse'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import WidgetTitle from '@components/WidgetTitle/WidgetTitle'
 import { AppWidgetMeta } from '@interfaces/widget'
+import styles from './Card.less'
 
 export interface CardProps {
     children: React.ReactNode
@@ -22,15 +23,12 @@ const showOperations = [WidgetTypes.DataGrid, WidgetTypes.Form]
 
 function Card({ meta, children, className }: CardProps) {
     const { type, bcName } = meta
-    // todo вынести в хук мб
-    const isMainWidget = useAppSelector(state => state.view.groups?.find(item => item.widgetNames[0] === meta.name))
-    const isWidgetCollapsed = useAppSelector(state => !!state.view.collapsedWidgets?.find(item => item === meta.name))
-    //
+    const { isMainWidget, isCollapsed } = useWidgetCollapse(meta.name)
+
     const bcUrl = useAppSelector(state => state.screen.bo.bc[bcName] && buildBcUrl(bcName, true))
     const operations = useAppSelector(state => state.view.rowMeta?.[bcName]?.[bcUrl]?.actions)
     const debugMode = useAppSelector(state => state.session.debugMode || false)
     const isForm = type === WidgetTypes.Form
-    const isCollapsed = isMainWidget && isWidgetCollapsed
 
     return (
         <Row justify="center">
@@ -44,10 +42,8 @@ function Card({ meta, children, className }: CardProps) {
                         data-test-widget-title={meta.title}
                         data-test-widget-name={meta.name}
                     >
-                        {meta.title && (
-                            <WidgetTitle level={2} widgetName={meta.name} text={meta.title} bcColor={meta?.options?.title?.bgColor} />
-                        )}
-                        {!isCollapsed && (
+                        <WidgetTitle level={2} widgetName={meta.name} text={meta.title} bcColor={meta?.options?.title?.bgColor} />
+                        {!(isMainWidget && isCollapsed) && (
                             <>
                                 {isForm && children}
                                 {showOperations.includes(type as interfaces.WidgetTypes) && (

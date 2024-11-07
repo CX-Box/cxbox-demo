@@ -4,15 +4,16 @@ import { Skeleton, Spin } from 'antd'
 import TableWidget from '@cxboxComponents/widgets/TableWidget/TableWidget'
 import FormWidget from '@cxboxComponents/widgets/FormWidget/FormWidget'
 import InfoWidget from '@cxboxComponents/widgets/InfoWidget/InfoWidget'
-import styles from './Widget.less'
 import AssocListPopup from '@cxboxComponents/widgets/AssocListPopup/AssocListPopup'
 import PickListPopup from '@cxboxComponents/widgets/PickListPopup/PickListPopup'
 import DebugPanel from '@cxboxComponents/DebugPanel/DebugPanel'
+import { useWidgetCollapse } from '@hooks/useWidgetCollapse'
 import { WidgetTypes, interfaces, utils } from '@cxbox-ui/core'
-import { RootState, useAppSelector } from '@store'
+import { RootState } from '@store'
 import { WidgetShowCondition } from '@cxbox-ui/schema'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import { ScreenState } from '../../reducers/screen'
+import styles from './Widget.less'
 
 interface WidgetOwnProps {
     meta: interfaces.WidgetMeta | interfaces.WidgetMetaAny
@@ -41,12 +42,9 @@ const skeletonParams = { rows: 5 }
  * @category Components
  */
 export const Widget: FunctionComponent<WidgetProps> = props => {
-    // todo вынести в хук мб
-    const isMainWidget = useAppSelector(state => state.view.groups?.find(item => item.widgetNames[0] === props.meta.name))
-    const isWidgetCollapsed = useAppSelector(state => !!state.view.collapsedWidgets?.find(item => item === props.meta.name))
-    //
+    const { isMainWidget, isCollapsed } = useWidgetCollapse(props.meta.name)
 
-    if (!props.showWidget || (!isMainWidget && isWidgetCollapsed)) {
+    if (!props.showWidget || (!isMainWidget && isCollapsed)) {
         return null
     }
 

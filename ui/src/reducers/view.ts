@@ -1,6 +1,6 @@
 import { PendingValidationFailsFormat, reducers, ViewState as CoreViewState } from '@cxbox-ui/core'
 import { AnyAction, createReducer, isAnyOf } from '@reduxjs/toolkit'
-import { actions, partialUpdateRecordForm, resetRecordForm, setBcCount, setCollapsedWidgets, setRecordForm, showViewPopup } from '@actions'
+import { actions, partialUpdateRecordForm, resetRecordForm, setBcCount, setRecordForm, showViewPopup } from '@actions'
 import { PopupData } from '@interfaces/view'
 import { RowMeta } from '@interfaces/rowMeta'
 
@@ -28,7 +28,6 @@ interface ViewState extends Omit<CoreViewState, 'popupData'> {
     groups?: {
         widgetNames: string[]
     }[]
-    collapsedWidgets?: string[]
 }
 
 const initialState: ViewState = {
@@ -61,17 +60,6 @@ const viewReducerBuilder = reducers
     })
     .addCase(partialUpdateRecordForm, (state, action) => {
         state.recordForm[action.payload.bcName] = { ...state.recordForm[action.payload.bcName], ...action.payload }
-    })
-    .addCase(setCollapsedWidgets, (state, action) => {
-        const mainWidgetName = action.payload.mainWidgetName
-        const widgetGroup = state.groups?.find(item => item.widgetNames.includes(mainWidgetName))?.widgetNames || []
-        const collapsedWidgets = state.collapsedWidgets || []
-        state.collapsedWidgets = collapsedWidgets?.includes(mainWidgetName)
-            ? collapsedWidgets?.filter(item => !widgetGroup?.includes(item))
-            : [...collapsedWidgets, ...widgetGroup]
-    })
-    .addMatcher(isAnyOf(actions.selectScreen), state => {
-        state.collapsedWidgets = initialState.collapsedWidgets
     })
     .addMatcher(isAnyOf(showViewPopup, actions.showFileViewerPopup), (state, action) => {
         const { options, ...fileViewerPopupData } = action.payload

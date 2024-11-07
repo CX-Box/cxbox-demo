@@ -111,4 +111,4 @@ export const forceUpdateRowMeta = createAction<{ bcName: string; cursor?: string
     'forceUpdateRowMeta'
 )
 
-export const setCollapsedWidgets = createAction<{ mainWidgetName: string }>('setCollapsedWidgets')
+export const setCollapsedWidgets = createAction<{ viewName: string; widgetNameGroup: string[] }>('setCollapsedWidgets')

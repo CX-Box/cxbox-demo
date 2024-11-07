@@ -1,0 +1,8 @@
+.rowLabel {
+    display: flex;
+    color: #aeaeae
+}
+
+.fieldOverride {
+    justify-content: start;
+}

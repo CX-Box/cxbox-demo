@@ -1,4 +1,14 @@
-import { interfaces, WidgetTypes } from '@cxbox-ui/core'
+import {
+    NumberFieldMeta,
+    PickListFieldMeta,
+    WidgetFormMeta,
+    WidgetInfoMeta,
+    WidgetListFieldBase,
+    WidgetMeta,
+    WidgetOptions,
+    WidgetTableMeta,
+    WidgetTypes
+} from '@cxbox-ui/core'
 import { FileUploadFieldMeta as CoreFileUploadFieldMeta, WidgetField as CoreWidgetField } from '@cxbox-ui/schema'
 import { TableSettingsItem } from '@interfaces/tableSettings'
 
@@ -15,39 +25,40 @@ export enum CustomWidgetTypes {
     RingProgress = 'RingProgress',
     DashboardList = 'DashboardList',
     AdditionalInfo = 'AdditionalInfo',
+    AdditionalList = 'AdditionalList',
     SuggestionPickList = 'SuggestionPickList',
     StatsBlock = 'StatsBlock',
     GroupingHierarchy = 'GroupingHierarchy'
 }
 
-export const removeRecordOperationWidgets: Array<interfaces.WidgetTypes | string> = [
+export const removeRecordOperationWidgets: Array<WidgetTypes | string> = [
     WidgetTypes.List,
     CustomWidgetTypes.GroupingHierarchy,
     WidgetTypes.PickListPopup
 ]
 
-export interface StepsWidgetMeta extends interfaces.WidgetMeta {
+export interface StepsWidgetMeta extends WidgetMeta {
     type: CustomWidgetTypes.Steps
-    options: interfaces.WidgetOptions & {
+    options: WidgetOptions & {
         stepsOptions: {
             stepsDictionaryKey: string
         }
     }
 }
 
-export interface FunnelWidgetMeta extends interfaces.WidgetMeta {
+export interface FunnelWidgetMeta extends WidgetMeta {
     type: CustomWidgetTypes.Funnel
-    options: interfaces.WidgetOptions & { funnelOptions: { dataKey: string } }
+    options: WidgetOptions & { funnelOptions: { dataKey: string } }
 }
 
-export interface RingProgressWidgetMeta extends interfaces.WidgetMeta {
+export interface RingProgressWidgetMeta extends WidgetMeta {
     type: CustomWidgetTypes.RingProgress
-    options: interfaces.WidgetOptions & {
+    options: WidgetOptions & {
         ringProgressOptions: { text: string; numberField: string; descriptionField: string; percentField: string }
     }
 }
 
-export type TableWidgetField = interfaces.WidgetListFieldBase & {
+export type TableWidgetField = WidgetListFieldBase & {
     /**
      * Width (px) to be set for the field when exporting to Excel
      */
@@ -67,9 +78,9 @@ export type OperationInfo = {
     mode?: OperationCustomMode | string
 }
 
-export interface AppWidgetMeta extends interfaces.WidgetMeta {
+export interface AppWidgetMeta extends WidgetMeta {
     personalFields?: TableSettingsItem | null // TODO make mandatory
-    options?: interfaces.WidgetOptions & {
+    options?: WidgetOptions & {
         title?: {
             bgColor?: string
         }
@@ -118,10 +129,13 @@ export interface AppWidgetMeta extends interfaces.WidgetMeta {
             counterMode?: 'none' | 'always' | 'collapsed'
             fields: string[]
         }
+        read?: {
+            widget: string
+        }
     }
 }
 
-export interface AppWidgetTableMeta extends interfaces.WidgetTableMeta {
+export interface AppWidgetTableMeta extends WidgetTableMeta {
     options?: AppWidgetMeta['options']
 }
 
@@ -130,11 +144,11 @@ export interface AppWidgetGroupingHierarchyMeta extends Omit<AppWidgetTableMeta,
     options?: AppWidgetTableMeta['options']
 }
 
-export interface WidgetFormPopupMeta extends Omit<interfaces.WidgetFormMeta, 'type'> {
+export interface WidgetFormPopupMeta extends Omit<WidgetFormMeta, 'type'> {
     type: CustomWidgetTypes.FormPopup
 }
 
-export interface SuggestionPickListWidgetMeta extends interfaces.WidgetMeta {
+export interface SuggestionPickListWidgetMeta extends WidgetMeta {
     type: CustomWidgetTypes.SuggestionPickList
     fields: Array<{
         title: string
@@ -142,7 +156,7 @@ export interface SuggestionPickListWidgetMeta extends interfaces.WidgetMeta {
     }>
 }
 
-export interface SuggestionPickListField extends Omit<interfaces.PickListFieldMeta, 'type'> {
+export interface SuggestionPickListField extends Omit<PickListFieldMeta, 'type'> {
     type: CustomFieldTypes.SuggestionPickList
 }
 
@@ -175,7 +189,7 @@ export type FileUploadFieldMeta = CoreFileUploadFieldMeta & {
 
 export type WidgetField = CoreWidgetField | FileUploadFieldMeta
 // todo нужно ли вынести в cxbox-ui?
-export type AppNumberFieldMeta = interfaces.NumberFieldMeta & {
+export type AppNumberFieldMeta = NumberFieldMeta & {
     currency?: string
 }
 
@@ -184,10 +198,16 @@ export const enum ETitleMode {
     top = 'top'
 }
 
-export interface AppWidgetInfoMeta extends interfaces.WidgetInfoMeta {
-    options?: interfaces.WidgetInfoMeta['options'] & {
-        layout?: interfaces.WidgetOptions['layout'] & {
+export interface AppWidgetInfoMeta extends WidgetInfoMeta {
+    options?: WidgetInfoMeta['options'] & {
+        layout?: WidgetOptions['layout'] & {
             titleMode?: ETitleMode
         }
     }
 }
+
+export interface AdditionalInfoWidgetMeta extends Omit<WidgetInfoMeta, 'type'> {
+    type: string
+}
+
+export interface AdditionalListWidgetMeta extends AppWidgetMeta {}

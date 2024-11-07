@@ -1,0 +1,16 @@
+{
+  "name": "contactAdditionalList",
+  "title": "Contacts",
+  "type": "AdditionalList",
+  "bc": "contactEdit",
+  "fields": [
+  ],
+  "options": {
+    "read": {
+      "widget": "contactAdditionalInfo"
+    },
+    "actionGroups": {
+      "include": []
+    }
+  }
+}

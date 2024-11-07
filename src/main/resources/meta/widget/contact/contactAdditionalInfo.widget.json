@@ -1,0 +1,57 @@
+{
+  "name": "contactAdditionalInfo",
+  "title": "",
+  "type": "AdditionalInfo",
+  "bc": "contactEdit",
+  "fields": [
+    {
+      "label": "Name",
+      "key": "fullName",
+      "type": "input",
+      "drillDown": "true"
+    },
+    {
+      "label": "Phone Number",
+      "key": "phoneNumber",
+      "type": "input"
+    },
+    {
+      "label": "E-mail",
+      "key": "email",
+      "type": "input"
+    }
+  ],
+  "options": {
+    "actionGroups": {
+      "include": []
+    },
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "fullName",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "phoneNumber",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "email",
+              "span": 12
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

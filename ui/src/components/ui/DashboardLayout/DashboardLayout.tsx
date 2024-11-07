@@ -15,13 +15,17 @@ export interface DashboardLayoutProps {
     disableDebugMode?: boolean
 }
 
+const sidebarWidgetsTypes: string[] = [CustomWidgetTypes.AdditionalInfo, CustomWidgetTypes.AdditionalList]
+
 export function DashboardLayout(props: DashboardLayoutProps) {
     const widgetsByRow = React.useMemo(() => {
         return groupByRow(props.widgets, props.skipWidgetTypes || [])
     }, [props.widgets, props.skipWidgetTypes])
 
     const additionalInfoWidgets = useMemo(() => {
-        return props.widgets.filter(widget => widget.type === CustomWidgetTypes.AdditionalInfo)
+        const skipWidgetList = createSkipWidgetList(props.widgets)
+
+        return props.widgets.filter(widget => sidebarWidgetsTypes.includes(widget.type) && !skipWidgetList.includes(widget.name))
     }, [props.widgets])
 
     const CommonWidgets = Object.values(widgetsByRow).map((row, rowIndex) => (
@@ -71,7 +75,7 @@ function groupByRow<WidgetMeta extends AppWidgetMeta>(widgets: WidgetMeta[], ski
 
     widgets
         .filter(item => {
-            return !skipWidgetTypes.includes(item.type) && !skipWidgetList.includes(item.name)
+            return !skipWidgetTypes.includes(item.type) && !skipWidgetList.includes(item.name) && !sidebarWidgetsTypes.includes(item.type)
         })
         .forEach(item => {
             if (!byRow[item.position]) {

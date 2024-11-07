@@ -1,4 +1,7 @@
 import { CustomDataItem } from '@components/widgets/Table/Table.interfaces'
+import { countersTypeToParamKey } from '@components/widgets/Table/groupingHierarchy/constants'
+
+export type CounterType = keyof typeof countersTypeToParamKey
 
 export interface GroupingHierarchyItemNode extends CustomDataItem {
     _parentGroupPath: string
@@ -7,6 +10,7 @@ export interface GroupingHierarchyItemNode extends CustomDataItem {
 export interface GroupingHierarchyGroupNode extends CustomDataItem {
     _groupPath: string
     _countOfRecordsPerLevel: Record<number, number>
+    _countOfGroupsAndRecordsPerLevel: Record<number, number>
     _groupLevel: number
     children: (GroupingHierarchyGroupNode | GroupingHierarchyItemNode)[]
 }

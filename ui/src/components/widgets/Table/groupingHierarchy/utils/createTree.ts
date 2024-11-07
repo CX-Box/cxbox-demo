@@ -4,9 +4,9 @@ import { createEmptyGroupNodes } from '@components/widgets/Table/groupingHierarc
 import { isUnallocatedRecord } from '@components/widgets/Table/groupingHierarchy/utils/isUnallocatedRecord'
 import { getGroupPaths } from '@components/widgets/Table/groupingHierarchy/utils/getGroupPaths'
 import {
-    updateCountersForAllGroupsMutate,
-    updateGroupCountMutate
-} from '@components/widgets/Table/groupingHierarchy/utils/updateGroupCountMutate'
+    updateItemCountersForAllGroupsMutate,
+    updateItemCountMutate
+} from '@components/widgets/Table/groupingHierarchy/utils/updateItemCountMutate'
 import {
     EmptyNodeLevel,
     GroupingHierarchyCommonNode,
@@ -64,7 +64,8 @@ export const createTree = <T extends CustomDataItem>(
                     _groupLevel: currentGroupLevel,
                     children: [],
                     _groupPath: currentGroupPath,
-                    _countOfRecordsPerLevel: { [currentGroupLevel]: item._emptyNode ? 0 : 1 }
+                    _countOfRecordsPerLevel: { [currentGroupLevel]: item._emptyNode ? 0 : 1 },
+                    _countOfGroupsAndRecordsPerLevel: { [currentGroupLevel]: item._emptyNode ? 0 : 1 }
                 }
                 nodeDictionary[item.id] = groupsDictionary[currentGroupPath]
 
@@ -80,11 +81,12 @@ export const createTree = <T extends CustomDataItem>(
                 previousGroup._groupPath = currentGroupPath
                 groupsDictionary[currentGroupPath] = previousGroup // for combined groups we create additional links for convenience
 
-                updateGroupCountMutate(
+                updateItemCountMutate(
                     groupsDictionary[currentGroupPath],
                     currentGroupLevel,
                     groupsDictionary[currentGroupPath]?._emptyNode ? 0 : 1
                 )
+                updateItemCountMutate(groupsDictionary[currentGroupPath], currentGroupLevel, 1, 'groupAndRecords')
 
                 if (currentGroupLevel === 1) {
                     tree.push(groupsDictionary[currentGroupPath])
@@ -96,7 +98,8 @@ export const createTree = <T extends CustomDataItem>(
             if (currentGroup && previousGroup) {
                 currentGroup.children?.push(previousGroup)
 
-                updateCountersForAllGroupsMutate(groupPaths, groupsDictionary, currentGroupLevel, previousGroup?._emptyNode ? 0 : 1)
+                updateItemCountersForAllGroupsMutate(groupPaths, groupsDictionary, currentGroupLevel, previousGroup?._emptyNode ? 0 : 1)
+                updateItemCountMutate(currentGroup, currentGroupLevel, 1, 'groupAndRecords')
 
                 break
             }
@@ -106,7 +109,8 @@ export const createTree = <T extends CustomDataItem>(
 
                 currentGroup.children?.push(childNode)
 
-                updateCountersForAllGroupsMutate(groupPaths, groupsDictionary, currentGroupLevel)
+                updateItemCountersForAllGroupsMutate(groupPaths, groupsDictionary, currentGroupLevel)
+                updateItemCountMutate(currentGroup, currentGroupLevel, 1, 'groupAndRecords')
 
                 nodeDictionary[item.id] = childNode
 

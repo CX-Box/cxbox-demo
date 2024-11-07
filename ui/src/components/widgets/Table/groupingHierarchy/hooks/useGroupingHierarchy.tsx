@@ -60,11 +60,11 @@ export const useGroupingHierarchy = <T extends CustomDataItem>(
     const getGroupKeysWithCertainCountOfChildNodes = useCallback(
         (flatTree: typeof tree, childNodesCounts: number[]) => {
             return flatTree
-                ?.filter(node => nodeHasGroupWithCertainCountOfChildNodes(node, childNodesCounts))
+                ?.filter(node => nodeHasGroupWithCertainCountOfChildNodes(node, childNodesCounts, 'groupAndRecords'))
                 .flatMap(node => {
                     const levels = node._countOfRecordsPerLevel && Object.keys(node._countOfRecordsPerLevel).map(Number)
                     return levels
-                        ?.filter(level => nodeHasGroupWithCertainCountOfChildNodes(node, childNodesCounts, level))
+                        ?.filter(level => nodeHasGroupWithCertainCountOfChildNodes(node, childNodesCounts, 'groupAndRecords', level))
                         .map(level => formGroupPathFromRecord(node, sortedGroupKeys, level))
                 })
         },

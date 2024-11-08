@@ -5,4 +5,5 @@
 
 .fieldOverride {
     justify-content: start;
+    word-break: break-word;
 }

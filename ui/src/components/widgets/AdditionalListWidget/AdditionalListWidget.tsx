@@ -42,7 +42,7 @@ export const AdditionalListWidget: React.FC<Props> = ({ meta }) => {
                 bcData.map(dataItem => {
                     return (
                         <React.Fragment key={dataItem.id}>
-                            <DebugWidgetWrapper debugMode={debugMode} meta={meta}>
+                            <DebugWidgetWrapper debugMode={debugMode} meta={additionalInfoMeta}>
                                 <AdditionalInfoItem meta={additionalInfoMeta} rowMeta={rowMeta} cursor={dataItem.id} />
                             </DebugWidgetWrapper>
                             <Divider className={styles.divider} />

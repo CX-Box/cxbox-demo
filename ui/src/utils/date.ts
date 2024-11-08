@@ -1,6 +1,6 @@
 import moment, { Moment } from 'moment'
 import { dateFormat, DateFormat } from '@interfaces/date'
-import { interfaces } from '@cxbox-ui/core'
+import { FieldType, interfaces } from '@cxbox-ui/core'
 
 export const isoLocalFormatter = (date?: Moment | null) => date?.format('YYYY-MM-DD[T]HH:mm:ss')
 
@@ -28,7 +28,6 @@ export const convertDate = (date: string | null, withTime?: boolean, withSeconds
     return moment(date, dateFormat).format(getFormat(withTime, withSeconds, monthYear))
 }
 
-const { FieldType } = interfaces
 export const isDateField = (type: string) => {
     return [FieldType.date, FieldType.dateTime, FieldType.dateTimeWithSeconds].includes(type as interfaces.FieldType)
 }

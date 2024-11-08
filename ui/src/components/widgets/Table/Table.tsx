@@ -374,29 +374,32 @@ function Table<T extends CustomDataItem>({
                         dataIndex: item.key,
                         width: item.width,
                         render: (text: string, dataItem: T & GroupingHierarchyCommonNode) => {
-                            const editMode = isEditMode(dataItem)
+                            const editMode =
+                                isGroupingHierarchy && enabledGrouping
+                                    ? isEditMode(dataItem) && !needHideActions(dataItem)
+                                    : isEditMode(dataItem)
 
                             const expandRowId = isGroupingHierarchy
                                 ? getInternalGroupPath(item.key, dataItem, sortedGroupKeys)
                                 : dataItem[ROW_KEY]
                             const expanded = expandedParentRowKeys?.includes(expandRowId) ?? false
 
-                            const isParentRow = !!dataItem.children
                             const isGroupingField = !!meta?.options?.groupingHierarchy?.fields?.includes(item.key)
-                            const isExpandCell = isParentRow && isGroupingField && dataItem[item.key]
-
-                            const showField =
+                            const showReadonlyField =
                                 isGroupingHierarchy && enabledGrouping
-                                    ? fieldShowCondition(item.key, dataItem, sortedGroupKeys, expandedParentRowKeys) || editMode
+                                    ? fieldShowCondition(item.key, dataItem, sortedGroupKeys, expandedParentRowKeys)
                                     : true
+                            const showExpandIcon =
+                                isGroupingField && dataItem[item.key] && enabledGrouping && showReadonlyField && !!dataItem.children
                             const fieldGroupLevel = sortedGroupKeys.findIndex(sortedGroupKey => sortedGroupKey === item.key) + 1
                             const countOfRecords = dataItem._countOfRecordsPerLevel?.[fieldGroupLevel] ?? 0
-                            // TODO return code will need a counter.
-                            //  And fix the styles for the counter only for grouping fields with a counter and hierarchy enabled (width: fit-content)
-                            // const counterMode = meta?.options?.groupingHierarchy?.counterMode || 'none'
-                            // const showCounter =
-                            //     isExpandCell && fieldGroupLevel && (counterMode === 'always' || (counterMode === 'collapsed' && !expanded))
-                            const showCounter = false
+                            const counterMode = meta?.options?.groupingHierarchy?.counterMode || 'none'
+                            const showCounter =
+                                showExpandIcon &&
+                                fieldGroupLevel &&
+                                !editMode &&
+                                (counterMode === 'always' || (counterMode === 'collapsed' && !expanded))
+                            const showField = showReadonlyField || editMode
 
                             return (
                                 showField && (
@@ -407,7 +410,7 @@ function Table<T extends CustomDataItem>({
                                         data-test-field-key={item.key}
                                         style={{ display: 'flex', alignItems: 'center', gap: 4 }}
                                     >
-                                        {isExpandCell && (
+                                        {showExpandIcon && (
                                             <ExpandIcon
                                                 className={styles.parentExpandIcon}
                                                 expanded={expanded}
@@ -428,7 +431,7 @@ function Table<T extends CustomDataItem>({
                                             widgetFieldMeta={item as WidgetListField}
                                             readonly={!editMode}
                                             forceFocus={editMode}
-                                            className={styles.tableField}
+                                            className={cn(editMode ? styles.fullWidth : styles.fitContentWidth)}
                                         />
                                         {showCounter && `(${countOfRecords})`}
                                     </div>
@@ -452,8 +455,10 @@ function Table<T extends CustomDataItem>({
         expandedParentRowKeys,
         handleColumnClose,
         isEditMode,
+        meta?.options?.groupingHierarchy?.counterMode,
         meta?.options?.groupingHierarchy?.fields,
         meta?.type,
+        needHideActions,
         onParentExpand,
         resultedFields,
         showCloseButton,

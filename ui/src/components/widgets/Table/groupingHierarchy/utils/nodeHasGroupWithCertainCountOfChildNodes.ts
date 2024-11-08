@@ -1,12 +1,21 @@
-// implementation taking into account the fact that some nodes are combined groups
-import { GroupingHierarchyCommonNode } from '@components/widgets/Table/groupingHierarchy'
+import { CounterType, GroupingHierarchyCommonNode } from '@components/widgets/Table/groupingHierarchy'
+import { countersTypeToParamKey } from '@components/widgets/Table/groupingHierarchy/constants'
 
-export const nodeHasGroupWithCertainCountOfChildNodes = (node: GroupingHierarchyCommonNode, childNodesCounts: number[], level?: number) => {
+// implementation taking into account the fact that some nodes are combined groups
+export const nodeHasGroupWithCertainCountOfChildNodes = (
+    node: GroupingHierarchyCommonNode,
+    childNodesCounts: number[],
+    counterType: CounterType,
+    level?: number
+) => {
+    const paramKey = countersTypeToParamKey[counterType]
+    const counters = node[paramKey]
+
     if (typeof level !== 'number') {
-        return node._countOfRecordsPerLevel && Object.values(node._countOfRecordsPerLevel).some(count => childNodesCounts.includes(count))
+        return counters && Object.values(counters).some(count => childNodesCounts.includes(count))
     }
 
-    const countOfChildrenAtCertainLevel = node?._countOfRecordsPerLevel?.[level] ? +node._countOfRecordsPerLevel[level] : 0
+    const countOfChildrenAtCertainLevel = counters?.[level] ? +counters[level] : 0
 
     return childNodesCounts.includes(countOfChildrenAtCertainLevel)
 }

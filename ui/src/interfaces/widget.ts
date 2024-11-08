@@ -1,4 +1,5 @@
 import {
+    DictionaryFieldMeta,
     NumberFieldMeta,
     PickListFieldMeta,
     WidgetFormMeta,
@@ -191,6 +192,15 @@ export type WidgetField = CoreWidgetField | FileUploadFieldMeta
 // todo нужно ли вынести в cxbox-ui?
 export type AppNumberFieldMeta = NumberFieldMeta & {
     currency?: string
+}
+
+export const enum EDictionaryMode {
+    default = 'default',
+    icon = 'icon'
+}
+
+export type AppDictionaryFieldMeta = DictionaryFieldMeta & {
+    mode?: EDictionaryMode
 }
 
 export const enum ETitleMode {

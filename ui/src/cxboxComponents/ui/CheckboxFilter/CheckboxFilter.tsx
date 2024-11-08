@@ -1,14 +1,16 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Checkbox } from 'antd'
 import { CheckboxChangeEvent } from 'antd/lib/checkbox'
 import cn from 'classnames'
-import styles from './CheckboxFilter.less'
+import { getIconByParams } from '@cxboxComponents/ui/Dictionary/Dictionary'
 import { interfaces } from '@cxbox-ui/core'
+import styles from './CheckboxFilter.less'
 
 export interface CheckboxFilterProps {
     title: string
     value: interfaces.DataValue[]
-    filterValues?: Array<{ value: string }>
+    filterValues?: Array<{ value: string; icon?: string }>
     onChange?: (values: interfaces.DataValue[]) => void
 }
 
@@ -20,6 +22,8 @@ const emptyValue: interfaces.DataValue[] = []
  * @category Components
  */
 export const CheckboxFilter: React.FC<CheckboxFilterProps> = props => {
+    const { t } = useTranslation()
+
     const { filterValues = [] } = props
     const handleCheckbox = (e: CheckboxChangeEvent) => {
         const prevValues = props.value || emptyValue
@@ -42,11 +46,12 @@ export const CheckboxFilter: React.FC<CheckboxFilterProps> = props => {
                     checked={props.value?.length === filterValues.length}
                     onChange={handleAll}
                 />
-                {props.title}
+                {props.title || t('Select all')}
             </li>
             <ul className={styles.list}>
                 {filterValues.map((item, index) => {
                     const checked = props.value?.some(filterValue => item.value === filterValue)
+                    const icon = getIconByParams(item.icon)
                     return (
                         <li className={styles.listItem} key={index}>
                             <Checkbox
@@ -56,6 +61,7 @@ export const CheckboxFilter: React.FC<CheckboxFilterProps> = props => {
                                 value={item.value}
                                 onChange={handleCheckbox}
                             />
+                            {icon && <span className={styles.listItemIcon}>{icon}</span>}
                             {item.value}
                         </li>
                     )

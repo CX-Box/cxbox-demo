@@ -38,7 +38,7 @@ public class MeetingDocumentsWriteMeta extends FieldMetaBuilder<MeetingDocuments
 		fields.enableSort(MeetingDocumentsDTO_.briefing);
 		fields.enableSort(MeetingDocumentsDTO_.id);
 		fields.enableSort(MeetingDocumentsDTO_.notes);
-
+		fields.setAllValuesWithIcons(MeetingDocumentsDTO_.document,Documents.iconMap());
 		fields.defaultGroupingHierarchy(
 				MeetingDocumentsDTO_.document,
 				MeetingDocumentsDTO_.briefing,

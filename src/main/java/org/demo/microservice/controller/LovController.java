@@ -41,7 +41,8 @@ public class LovController {
 	}
 
 	@GetMapping
-	public ResponseEntity<Page<DictDTO>> getAll(final Pageable pageable,
+	public ResponseEntity<Page<DictDTO>> getAll(
+			final Pageable pageable,
 			final FilterParameters<DictDTO> parameters) {
 		authzService.loginAs(authzService.createAuthentication(VANILLA));
 		final var specification = lovDataRepository.getSpecification(parameters, DictDTO.class);

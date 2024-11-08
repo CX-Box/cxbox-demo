@@ -10,7 +10,7 @@ import org.cxbox.core.crudma.bc.BusinessComponent;
 @UtilityClass
 public class BcParseHelper {
 
-	private static final String DEFAULT_SORTING_FIELD_NAME = "created";
+	private static final String DEFAULT_SORTING_FIELD_NAME = "id";
 
 	private static final String DEFAULT_SORTING = "desc";
 

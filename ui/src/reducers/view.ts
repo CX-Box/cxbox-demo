@@ -25,6 +25,9 @@ interface ViewState extends Omit<CoreViewState, 'popupData'> {
         }
     }
     popupData?: PopupData
+    groups?: {
+        widgetNames: string[]
+    }[]
 }
 
 const initialState: ViewState = {

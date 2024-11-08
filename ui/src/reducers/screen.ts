@@ -1,5 +1,5 @@
 import { BcMetaState, interfaces, reducers } from '@cxbox-ui/core'
-import { actions, changeMenuCollapsed, customAction, sendOperationSuccess } from '@actions'
+import { actions, changeMenuCollapsed, customAction, sendOperationSuccess, setCollapsedWidgets } from '@actions'
 import { createReducer, isAnyOf } from '@reduxjs/toolkit'
 import { FilterGroup } from '@interfaces/filters'
 
@@ -10,12 +10,14 @@ export interface ScreenState extends interfaces.ScreenState {
         bc: Record<string, BcMetaState & { filterGroups?: FilterGroup[] }>
     }
     pagination: { [bcName: string]: { limit?: number } }
+    collapsedWidgets: { [viewName: string]: string[] }
 }
 
 const initialState: ScreenState = {
     ...reducers.initialScreenState,
     menuCollapsed: false,
-    pagination: {}
+    pagination: {},
+    collapsedWidgets: {}
 }
 
 const screenReducerBuilder = reducers
@@ -66,7 +68,15 @@ const screenReducerBuilder = reducers
         state.bo.bc[bcName] = state.bo.bc[bcName] ?? {}
         state.bo.bc[bcName].loading = false
     })
+    .addCase(setCollapsedWidgets, (state, action) => {
+        const { viewName, widgetNameGroup } = action.payload
+        const collapsedViewWidgets = state.collapsedWidgets[viewName] || []
+        state.collapsedWidgets[viewName] = collapsedViewWidgets?.includes(widgetNameGroup[0])
+            ? collapsedViewWidgets?.filter(item => !widgetNameGroup?.includes(item))
+            : [...collapsedViewWidgets, ...widgetNameGroup]
+    })
     .addMatcher(isAnyOf(actions.selectScreen), (state, action) => {
+        state.collapsedWidgets = initialState.collapsedWidgets
         // временное решение чтобы сохранялся лимит при сменен экранов
         Object.values(state.bo.bc).forEach(bc => {
             bc.limit = state.pagination[bc.name]?.limit ?? bc.limit

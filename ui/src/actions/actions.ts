@@ -110,3 +110,5 @@ export const updateBcData = createAction<{ bcName: string; data: DataItem[] }>('
 export const forceUpdateRowMeta = createAction<{ bcName: string; cursor?: string; onSuccessAction?: AnyAction; wasForcedUpdate?: boolean }>(
     'forceUpdateRowMeta'
 )
+
+export const setCollapsedWidgets = createAction<{ viewName: string; widgetNameGroup: string[] }>('setCollapsedWidgets')

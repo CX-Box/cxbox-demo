@@ -1,8 +1,9 @@
 import React from 'react'
 import { Col, Row } from 'antd'
-import styles from './AdditionalInfoHeader.module.css'
 import WidgetTitle from '@components/WidgetTitle/WidgetTitle'
+import { useWidgetCollapse } from '@hooks/useWidgetCollapse'
 import { WidgetMeta } from '@cxbox-ui/core'
+import styles from './AdditionalInfoHeader.module.css'
 
 interface Props {
     meta: WidgetMeta
@@ -11,7 +12,9 @@ interface Props {
 }
 
 export const AdditionalInfoHeader: React.FC<Props> = ({ meta, id, level = 2 }) => {
-    return meta.title ? (
+    const { isMainWidget } = useWidgetCollapse(meta.name)
+
+    return meta.title || isMainWidget ? (
         <Row gutter={[8, 18]}>
             <Col span={24}>
                 <WidgetTitle

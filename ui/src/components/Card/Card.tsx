@@ -4,11 +4,12 @@ import cn from 'classnames'
 import { interfaces } from '@cxbox-ui/core'
 import Operations from '../Operations/Operations'
 import DebugWidgetWrapper from '../DebugWidgetWrapper/DebugWidgetWrapper'
-import styles from './Card.less'
 import { useAppSelector } from '@store'
+import { useWidgetCollapse } from '@hooks/useWidgetCollapse'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import WidgetTitle from '@components/WidgetTitle/WidgetTitle'
 import { AppWidgetMeta } from '@interfaces/widget'
+import styles from './Card.less'
 
 export interface CardProps {
     children: React.ReactNode
@@ -22,6 +23,8 @@ const showOperations = [WidgetTypes.DataGrid, WidgetTypes.Form]
 
 function Card({ meta, children, className }: CardProps) {
     const { type, bcName } = meta
+    const { isMainWidget, isCollapsed } = useWidgetCollapse(meta.name)
+
     const bcUrl = useAppSelector(state => state.screen.bo.bc[bcName] && buildBcUrl(bcName, true))
     const operations = useAppSelector(state => state.view.rowMeta?.[bcName]?.[bcUrl]?.actions)
     const debugMode = useAppSelector(state => state.session.debugMode || false)
@@ -39,21 +42,23 @@ function Card({ meta, children, className }: CardProps) {
                         data-test-widget-title={meta.title}
                         data-test-widget-name={meta.name}
                     >
-                        {meta.title && (
-                            <WidgetTitle level={2} widgetName={meta.name} text={meta.title} bcColor={meta?.options?.title?.bgColor} />
+                        <WidgetTitle level={2} widgetName={meta.name} text={meta.title} bcColor={meta?.options?.title?.bgColor} />
+                        {!(isMainWidget && isCollapsed) && (
+                            <>
+                                {isForm && children}
+                                {showOperations.includes(type as interfaces.WidgetTypes) && (
+                                    <Operations
+                                        operations={operations}
+                                        bcName={bcName}
+                                        widgetMeta={meta}
+                                        className={cn({
+                                            [styles.operations]: !isForm
+                                        })}
+                                    />
+                                )}
+                                {!isForm && children}
+                            </>
                         )}
-                        {isForm && children}
-                        {showOperations.includes(type as interfaces.WidgetTypes) && (
-                            <Operations
-                                operations={operations}
-                                bcName={bcName}
-                                widgetMeta={meta}
-                                className={cn({
-                                    [styles.operations]: !isForm
-                                })}
-                            />
-                        )}
-                        {!isForm && children}
                     </div>
                 </DebugWidgetWrapper>
             </Col>

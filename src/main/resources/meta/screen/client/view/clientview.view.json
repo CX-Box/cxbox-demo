@@ -55,6 +55,15 @@
       "gridWidth": 24
     }
   ],
+  "groups": [
+    {
+      "widgetNames": [
+        "clientEditViewHeader",
+        "clientViewOperations",
+        "clientView"
+      ]
+    }
+  ],
   "rolesAllowed": [
     "CXBOX_USER",
     "ADMIN"

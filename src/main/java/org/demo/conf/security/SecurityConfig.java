@@ -23,6 +23,7 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
+import org.springframework.security.oauth2.server.resource.web.DefaultBearerTokenResolver;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
@@ -82,10 +83,10 @@ public class SecurityConfig {
 						.requestMatchers("/").permitAll()
 						.requestMatchers("/actuator/metrics/**").permitAll()
 						.requestMatchers("/api/v1/auth/**").permitAll()
-						.requestMatchers("/api/v1/websocketnotification/**").permitAll()
 						.requestMatchers("/swagger-ui/**").permitAll()
 						.requestMatchers("/v3/api-docs/**").permitAll()
-						.requestMatchers("/api/v1/notification/**").permitAll()
+						.requestMatchers("/api/v1/websocketnotification/**").fullyAuthenticated()
+						.requestMatchers("/api/v1/notification/**").fullyAuthenticated()
 						.requestMatchers("/**").fullyAuthenticated())
 		;
 		if (Boolean.TRUE.equals(authBasicConfigProperties.getEnabled())) {
@@ -93,6 +94,12 @@ public class SecurityConfig {
 		} else {
 			http
 					.oauth2ResourceServer(oauth2ResourceServer -> oauth2ResourceServer
+							.bearerTokenResolver(request -> {
+								var resolver = new DefaultBearerTokenResolver();
+								//socksJs client restrictions. see https://github.com/sockjs/sockjs-client/issues/196#issuecomment-352276042
+								resolver.setAllowUriQueryParameter(true);
+								return resolver.resolve(request);
+							})
 							.jwt(jwt -> jwt.jwtAuthenticationConverter(oidcJwtTokenConverter)));
 		}
 		return http.build();

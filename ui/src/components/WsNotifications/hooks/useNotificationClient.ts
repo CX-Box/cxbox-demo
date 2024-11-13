@@ -8,6 +8,7 @@ import { Client } from '@stomp/stompjs'
 import { SocketNotification } from '@interfaces/notification'
 import { createUserSubscribeUrl } from '../utils'
 import { useAppSelector } from '@store'
+import { keycloak, KEYCLOAK_MIN_VALIDITY } from '../../../keycloak'
 import { IFrame } from '@stomp/stompjs/src/i-frame'
 
 const { ApplicationErrorType } = interfaces
@@ -16,7 +17,15 @@ const notificationClient = new Client({
     brokerURL: brokerURL,
     reconnectDelay: reconnectDelay,
     heartbeatIncoming: heartbeatIncoming,
-    heartbeatOutgoing: heartbeatOutgoing
+    heartbeatOutgoing: heartbeatOutgoing,
+    beforeConnect: (): Promise<void> => {
+        return new Promise<void>(async (resolve, _) => {
+            await keycloak.updateToken(KEYCLOAK_MIN_VALIDITY).then(() => {
+                notificationClient.brokerURL = brokerURL + '?access_token=' + encodeURI(`${keycloak.token}`)
+            })
+            resolve()
+        })
+    }
 })
 
 export function useNotificationClient(subscribeCallback?: (messageBody: SocketNotification) => void) {

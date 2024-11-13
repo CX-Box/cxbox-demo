@@ -71,11 +71,13 @@ const InlinePickList: React.FunctionComponent<Props> = ({
     const [searchTerm, setSearchTerm] = React.useState('')
     const debouncedSearchTerm = useDebounce(searchTerm, 500)
 
+    const handleFocus = useCallback(() => onSearch(popupBcName, processedSearchSpec, ''), [onSearch, popupBcName, processedSearchSpec])
+
     React.useEffect(() => {
         if (debouncedSearchTerm && processedSearchSpec) {
-            onSearch(popupBcName, processedSearchSpec, searchTerm)
+            onSearch(popupBcName, processedSearchSpec, debouncedSearchTerm)
         }
-    }, [debouncedSearchTerm, onSearch, popupBcName, processedSearchSpec, searchTerm])
+    }, [debouncedSearchTerm, onSearch, popupBcName, processedSearchSpec])
 
     const handleClick = React.useCallback(() => {
         if (!disabled) {
@@ -132,6 +134,7 @@ const InlinePickList: React.FunctionComponent<Props> = ({
                 showArrow={false}
                 filterOption={false}
                 onSearch={setSearchTerm}
+                onFocus={handleFocus}
                 onChange={onChange}
                 notFoundContent={null}
             >

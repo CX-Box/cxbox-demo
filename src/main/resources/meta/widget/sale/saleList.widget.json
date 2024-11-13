@@ -26,6 +26,9 @@
     }
   ],
   "options": {
+    "edit": {
+      "style": "none"
+    },
     "export": {
       "enabled": true,
       "meeting": "sale"

@@ -32,6 +32,8 @@ jobs:
         run: mvn -v
       - name: Node version
         run: node -v
+      - name: Npm version
+        run: npm -v
       - name: Yarn version
         run: yarn -v
       - name: Yarn version /usr/local/bin/

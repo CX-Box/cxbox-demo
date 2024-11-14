@@ -26,6 +26,14 @@ jobs:
           node-version: '18'
           cache: "yarn"
           cache-dependency-path: ui
+      - name: java version
+        run: java -version
+      - name: maven version
+        run: mvn -v
+      - name: node version
+        run: node -v
+      - name: yarn version
+        run: yarn -v
       - name: Build with Maven
         run: mvn clean install -U -PUI -Pcoverage sonar:sonar -Dsonar.organization=cx-box -Dsonar.projectKey=CX-Box_cxbox-demo -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN
         env:

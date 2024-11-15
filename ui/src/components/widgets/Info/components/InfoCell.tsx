@@ -28,7 +28,7 @@ function InfoCell({ field, colSpan, row, meta, cursor, onDrillDown }: ValueCellP
     }, [onDrillDown, meta, dataId, field.key])
 
     const ResultField = isMultiValue ? (
-        ((data[field.key] || EMPTY_ARRAY) as interfaces.MultivalueSingleValue[]).map((multiValueSingleValue, index) => {
+        ((data?.[field.key] || EMPTY_ARRAY) as interfaces.MultivalueSingleValue[]).map((multiValueSingleValue, index) => {
             return <MultiValueListRecord key={index} isFloat={false} multivalueSingleValue={multiValueSingleValue} />
         })
     ) : (

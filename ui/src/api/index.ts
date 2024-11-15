@@ -10,6 +10,7 @@ import { LoginResponse } from '@interfaces/session'
 import { TableSettingsItem } from '@interfaces/tableSettings'
 import { FilterGroup } from '@interfaces/filters'
 import { saveAs } from 'file-saver'
+import { Buffer } from 'buffer'
 
 class Api extends CXBoxApi {
     fetchBcCount(screenName: string, bcName: string, params: BcCountParamsMap = {}) {
@@ -34,7 +35,7 @@ class Api extends CXBoxApi {
     }
 
     getBasicAuthRequest(login?: string, password?: string) {
-        const hash = login && Buffer.from(`${login}:${password}`).toString('base64') //TODO delete?
+        const hash = Buffer.from(`${login}:${password}`).toString('base64')
         const tzOffset = -new Date().getTimezoneOffset() * 60
         const entrypointUrl = `/${window.location.hash}`
         const config: AxiosRequestConfig = hash

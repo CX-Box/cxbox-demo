@@ -1,6 +1,6 @@
 app:
   auth-basic:
-    enabled: ${AUTH_BASIC_ENABLED:false}
+    enabled: ${AUTH_BASIC_ENABLED:true}
   oidc:
     realm: cxbox
     auth-server-url: ${FRONTEND_AUTH_SERVER_URL:http://localhost:9080/auth}

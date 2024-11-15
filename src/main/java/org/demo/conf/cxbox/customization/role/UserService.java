@@ -28,6 +28,8 @@ public class UserService {
 				.departmentId(user.getDepartmentId())
 				.userRole(userRole)
 				.authorities(Collections.emptySet())
+				.password("{noop}vanilla")
+				.username("vanilla")
 				.build();
 	}
 

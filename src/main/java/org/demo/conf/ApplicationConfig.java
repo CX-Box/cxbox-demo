@@ -58,7 +58,7 @@ public class ApplicationConfig {
 				registry
 						.addMapping("/**")
 						.allowedMethods("*")
-						.allowedOrigins("*")
+						.allowedOriginPatterns("*")
 						.allowedHeaders("*");
 			}
 

@@ -34,7 +34,7 @@ class Api extends CXBoxApi {
     }
 
     getBasicAuthRequest(login?: string, password?: string) {
-        const hash = login && Buffer.from(`${login}:${password}`).toString('base64') //TODO delete?
+        const hash = login && btoa(`${login}:${password}`)
         const tzOffset = -new Date().getTimezoneOffset() * 60
         const entrypointUrl = `/${window.location.hash}`
         const config: AxiosRequestConfig = hash

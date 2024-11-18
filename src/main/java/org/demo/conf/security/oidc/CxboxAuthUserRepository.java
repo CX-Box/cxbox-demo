@@ -58,7 +58,7 @@ public class CxboxAuthUserRepository {
 					upsert(login);
 				}
 				user = userService.getUserByLogin(login.toUpperCase());
-				Set<String> currentRoles = user.getUserRoleList().stream().map(e -> e.getInternalRoleCd().getKey())
+				Set<String> currentRoles = user.getUserRoleList().stream().map(e -> e.getInternalRoleCd())
 						.collect(Collectors.toSet());
 				if (!(currentRoles.containsAll(roles) && roles.containsAll(currentRoles))) {
 					authzService.loginAs(authzService.createAuthentication(VANILLA));

@@ -1,0 +1,60 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd"
+  logicalFilePath="db/changelog/0000999_data.xml">
+
+  <property name="app_seq_next_val" value="nextval('APP_SEQ')" dbms="postgresql"/>
+  <property name="app_seq_next_val" value="APP_SEQ.NEXTVAL" dbms="oracle"/>
+
+  <changeSet id="local example data" author="cxbox" runOnChange="true" context="local">
+    <loadUpdateData tableName="CLIENT" primaryKey="ID" encoding="UTF-8" separator="," quotchar="&quot;"
+      file="db/data/CLIENT.csv">
+      <column header="ID" name="ID" type="STRING"/>
+      <column header="created_by_user_id" name="created_by_user_id" type="STRING"/>
+      <column header="last_upd_by_user_id" name="last_upd_by_user_id" type="STRING"/>
+      <column header="full_name" name="full_name" type="STRING"/>
+      <column header="address" name="address" type="STRING"/>
+      <column header="importance" name="importance" type="STRING"/>
+      <column header="edit_step" name="edit_step" type="STRING"/>
+      <column header="status" name="status" type="STRING"/>
+    </loadUpdateData>
+    <loadUpdateData tableName="FIELD_OF_ACTIVITY" primaryKey="value,client_id" encoding="UTF-8" separator="," quotchar="&quot;"
+      file="db/data/FIELD_OF_ACTIVITY.csv">
+      <column header="value" name="value" type="STRING"/>
+      <column header="client_id" name="client_id" type="STRING"/>
+    </loadUpdateData>
+    <loadUpdateData tableName="CONTACT" primaryKey="ID" encoding="UTF-8" separator="," quotchar="&quot;"
+      file="db/data/CONTACT.csv">
+      <column header="ID" name="ID" type="STRING"/>
+      <column header="created_by_user_id" name="created_by_user_id" type="STRING"/>
+      <column header="last_upd_by_user_id" name="last_upd_by_user_id" type="STRING"/>
+      <column header="full_name" name="full_name" type="STRING"/>
+      <column header="phone_number" name="phone_number" type="STRING"/>
+      <column header="email" name="email" type="STRING"/>
+    </loadUpdateData>
+    <loadUpdateData tableName="CLIENT_CONTACT" primaryKey="CONTACT_ID,CLIENT_ID" encoding="UTF-8" separator="," quotchar="&quot;"
+      file="db/data/CLIENT_CONTACT.csv">
+      <column header="CONTACT_ID" name="CONTACT_ID" type="STRING"/>
+      <column header="CLIENT_ID" name="CLIENT_ID" type="STRING"/>
+    </loadUpdateData>
+    <loadUpdateData tableName="MEETING" primaryKey="ID" encoding="UTF-8" separator="," quotchar="&quot;"
+      file="db/data/MEETING.csv">
+      <column header="ID" name="ID" type="STRING"/>
+      <column header="agenda" name="agenda" type="STRING"/>
+      <column header="start_date_time" name="start_date_time" type="datetime"/>
+      <column header="end_date_time" name="end_date_time" type="datetime"/>
+      <column header="address" name="address" type="STRING"/>
+      <column header="notes" name="notes" type="STRING"/>
+      <column header="result" name="result" type="STRING"/>
+      <column header="responsible_id" name="responsible_id" type="STRING"/>
+      <column header="client_id" name="client_id" type="STRING"/>
+      <column header="contact_id" name="contact_id" type="STRING"/>
+      <column header="created_by_user_id" name="created_by_user_id" type="STRING"/>
+      <column header="last_upd_by_user_id" name="last_upd_by_user_id" type="STRING"/>
+      <column header="region" name="region" type="STRING"/>
+    </loadUpdateData>
+  </changeSet>
+
+
+</databaseChangeLog>

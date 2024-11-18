@@ -2,7 +2,7 @@
 <databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd"
-  logicalFilePath="db/changelog/0000600.xml">
+  logicalFilePath="db/changelog/0000100.xml">
 
   <property name="now" value="current_timestamp" dbms="postgresql"/>
   <property name="now" value="sysdate" dbms="oracle"/>
@@ -100,6 +100,10 @@
         <constraints nullable="true" foreignKeyName="MEETING_CONTACT_ID" referencedColumnNames="ID"
           referencedTableName="CONTACT"/>
       </column>
+      <column name="additional_contact_primary_id" type="NUMBER(19, 0)">
+        <constraints nullable="true" foreignKeyName="additional_contact_primary_id" referencedColumnNames="ID"
+          referencedTableName="CONTACT"/>
+      </column>
 
       <column defaultValueComputed="${now}" name="CREATED_DATE" remarks="Creation date"
         type="TIMESTAMP(6)">
@@ -131,8 +135,10 @@
       </column>
       <column name="NOTES" type="VARCHAR(200)"/>
       <column name="FILE" type="VARCHAR(255)"/>
+      <column name="FILE_ID" type="VARCHAR(50)"/>
       <column name="BRIEFING" type="VARCHAR(50)"/>
       <column name="DOCUMENT" type="VARCHAR(50)"/>
+      <column name="MEETING_ID" type="NUMBER(19, 0)"/>
 
       <column defaultValueComputed="${now}" name="CREATED_DATE" remarks="Creation date"
         type="TIMESTAMP(6)">
@@ -154,50 +160,6 @@
         <constraints nullable="false"/>
       </column>
     </createTable>
-  </changeSet>
-
-  <changeSet id="meetingdoc table field_key_for_base64" author="cxbox">
-    <addColumn tableName="MEETING_DOCUMENTS">
-      <column name="field_key_for_base64" type="bytea">
-      </column>
-    </addColumn>
-  </changeSet>
-
-  <changeSet id="meetingdoc table field_key_for_content_type" author="cxbox">
-    <addColumn tableName="MEETING_DOCUMENTS">
-      <column name="field_key_for_content_type" type="VARCHAR(50)">
-      </column>
-    </addColumn>
-  </changeSet>
-
-  <changeSet id="meetingdoc table field_id" author="cxbox">
-    <addColumn tableName="MEETING_DOCUMENTS">
-      <column name="field_id" type="VARCHAR(50)">
-      </column>
-    </addColumn>
-  </changeSet>
-
-  <changeSet id="meetingdoc table file_id" author="cxbox">
-    <addColumn tableName="MEETING_DOCUMENTS">
-      <column name="file_id" type="VARCHAR(50)">
-      </column>
-    </addColumn>
-  </changeSet>
-
-  <changeSet id="meetingdoc table meeting_id" author="cxbox">
-    <addColumn tableName="MEETING_DOCUMENTS">
-      <column name="meeting_id" type="VARCHAR(50)">
-      </column>
-    </addColumn>
-  </changeSet>
-
-  <changeSet id="meeting table primary" author="cxbox">
-    <addColumn tableName="MEETING">
-      <column name="additional_contact_primary_id" type="NUMBER(19, 0)">
-        <constraints nullable="true" foreignKeyName="additional_contact_primary_id" referencedColumnNames="ID"
-          referencedTableName="CONTACT"/>
-      </column>
-    </addColumn>
   </changeSet>
 
   <changeSet id="client_contact table" author="cxbox">
@@ -328,7 +290,7 @@
       <column name="external_code" type="VARCHAR(255)"/>
       <column name="additional_parameter_1" type="VARCHAR(255)"/>
       <column name="additional_parameter_2" type="VARCHAR(255)"/>
-      <column  name="primary_child_id" type="NUMBER(19, 0)">
+      <column name="primary_child_id" type="NUMBER(19, 0)">
         <constraints nullable="true" foreignKeyName="t_list_of_values_primary_child" referencedColumnNames="ID"
           referencedTableName="t_list_of_values"/>
       </column>
@@ -357,11 +319,11 @@
       <column name="ID" remarks="Identifier" type="NUMBER(19, 0)">
         <constraints primaryKey="true"/>
       </column>
-      <column  name="parent_lov_id" type="NUMBER(19, 0)">
+      <column name="parent_lov_id" type="NUMBER(19, 0)">
         <constraints nullable="false" foreignKeyName="t_lov_hierarchy_parent" referencedColumnNames="ID"
           referencedTableName="t_list_of_values"/>
       </column>
-      <column  name="child_lov_id" type="NUMBER(19, 0)">
+      <column name="child_lov_id" type="NUMBER(19, 0)">
         <constraints nullable="false" foreignKeyName="t_lov_hierarchy_child" referencedColumnNames="ID"
           referencedTableName="t_list_of_values"/>
       </column>
@@ -423,67 +385,5 @@
     </createTable>
   </changeSet>
 
-  <changeSet id="local example data" author="cxbox" runOnChange="true" context="local">
-    <loadUpdateData tableName="CLIENT" primaryKey="ID" encoding="UTF-8" separator="," quotchar="&quot;"
-      file="db/data/CLIENT.csv">
-      <column header="ID" name="ID" type="STRING"/>
-      <column header="created_by_user_id" name="created_by_user_id" type="STRING"/>
-      <column header="last_upd_by_user_id" name="last_upd_by_user_id" type="STRING"/>
-      <column header="full_name" name="full_name" type="STRING"/>
-      <column header="address" name="address" type="STRING"/>
-      <column header="importance" name="importance" type="STRING"/>
-      <column header="edit_step" name="edit_step" type="STRING"/>
-      <column header="status" name="status" type="STRING"/>
-    </loadUpdateData>
-    <loadUpdateData tableName="FIELD_OF_ACTIVITY" primaryKey="value,client_id" encoding="UTF-8" separator="," quotchar="&quot;"
-      file="db/data/FIELD_OF_ACTIVITY.csv">
-      <column header="value" name="value" type="STRING"/>
-      <column header="client_id" name="client_id" type="STRING"/>
-    </loadUpdateData>
-    <loadUpdateData tableName="CONTACT" primaryKey="ID" encoding="UTF-8" separator="," quotchar="&quot;"
-      file="db/data/CONTACT.csv">
-      <column header="ID" name="ID" type="STRING"/>
-      <column header="created_by_user_id" name="created_by_user_id" type="STRING"/>
-      <column header="last_upd_by_user_id" name="last_upd_by_user_id" type="STRING"/>
-      <column header="full_name" name="full_name" type="STRING"/>
-      <column header="phone_number" name="phone_number" type="STRING"/>
-      <column header="email" name="email" type="STRING"/>
-    </loadUpdateData>
-    <loadUpdateData tableName="CLIENT_CONTACT" primaryKey="CONTACT_ID,CLIENT_ID" encoding="UTF-8" separator="," quotchar="&quot;"
-      file="db/data/CLIENT_CONTACT.csv">
-      <column header="CONTACT_ID" name="CONTACT_ID" type="STRING"/>
-      <column header="CLIENT_ID" name="CLIENT_ID" type="STRING"/>
-    </loadUpdateData>
-    <loadUpdateData tableName="MEETING" primaryKey="ID" encoding="UTF-8" separator="," quotchar="&quot;"
-      file="db/data/MEETING.csv">
-      <column header="ID" name="ID" type="STRING"/>
-      <column header="agenda" name="agenda" type="STRING"/>
-      <column header="start_date_time" name="start_date_time" type="datetime"/>
-      <column header="end_date_time" name="end_date_time" type="datetime"/>
-      <column header="address" name="address" type="STRING"/>
-      <column header="notes" name="notes" type="STRING"/>
-      <column header="result" name="result" type="STRING"/>
-      <column header="responsible_id" name="responsible_id" type="STRING"/>
-      <column header="client_id" name="client_id" type="STRING"/>
-      <column header="contact_id" name="contact_id" type="STRING"/>
-      <column header="created_by_user_id" name="created_by_user_id" type="STRING"/>
-      <column header="last_upd_by_user_id" name="last_upd_by_user_id" type="STRING"/>
-    </loadUpdateData>
-    <loadUpdateData tableName="bc_filter_groups" primaryKey="ID" encoding="UTF-8" separator="," quotchar="&quot;"
-      file="db/data/BC_FILTER_GROUPS.csv">
-      <column header="ID" name="ID" type="STRING"/>
-      <column header="name" name="name" type="STRING"/>
-      <column header="bc" name="bc" type="STRING"/>
-      <column header="filters" name="filters" type="STRING"/>
-    </loadUpdateData>
-    <loadUpdateData tableName="BC_PROPERTIES" primaryKey="ID" separator=";" quotchar="'"
-      file="db/data/BC_PROPERTIES.csv">
-      <column header="ID" name="ID" type="NUMERIC"/>
-      <column header="BC" name="BC" type="STRING"/>
-      <column header="PAGE_LIMIT" name="PAGE_LIMIT" type="NUMERIC"/>
-      <column header="SORT" name="SORT" type="STRING"/>
-      <column header="FILTER" name="FILTER" type="STRING"/>
-    </loadUpdateData>
-  </changeSet>
 
 </databaseChangeLog>

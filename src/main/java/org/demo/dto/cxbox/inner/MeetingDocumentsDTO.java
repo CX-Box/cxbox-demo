@@ -8,7 +8,7 @@ import org.cxbox.core.util.filter.SearchParameter;
 import org.cxbox.core.util.filter.provider.impl.EnumValueProvider;
 import org.cxbox.core.util.filter.provider.impl.StringValueProvider;
 import org.demo.entity.MeetingDocuments;
-import org.demo.entity.enums.Briefings;
+import org.demo.entity.dictionary.Briefings;
 import org.demo.entity.enums.Documents;
 
 @Getter

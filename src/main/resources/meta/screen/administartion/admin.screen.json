@@ -56,6 +56,15 @@
             "viewName": "resplist"
           }
         ]
+      },
+      {
+        "title": "Dictionary Administration",
+        "child": [
+          {
+            "viewName": "dictionary",
+            "hidden": false
+          }
+        ]
       }
     ]
   }

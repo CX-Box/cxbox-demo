@@ -6,7 +6,6 @@ import org.cxbox.core.dto.rowmeta.RowDependentFieldsMeta;
 import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
 import org.demo.dto.cxbox.inner.SaleDTO;
 import org.demo.dto.cxbox.inner.SaleDTO_;
-import org.demo.entity.enums.Product;
 import org.demo.entity.enums.SaleStatus;
 import org.springframework.stereotype.Service;
 
@@ -33,8 +32,7 @@ public class SaleWriteMeta extends FieldMetaBuilder<SaleDTO> {
 				SaleDTO_.status,
 				SaleDTO_.sum
 		);
-
-		fields.setEnumValues(SaleDTO_.product, Product.values());
+		fields.setDictionaryValues(SaleDTO_.product);
 		fields.setEnumValues(SaleDTO_.status, SaleStatus.values());
 
 	}

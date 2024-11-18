@@ -7,7 +7,7 @@ import org.cxbox.core.dto.rowmeta.RowDependentFieldsMeta;
 import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
 import org.demo.dto.cxbox.inner.MeetingDocumentsDTO;
 import org.demo.dto.cxbox.inner.MeetingDocumentsDTO_;
-import org.demo.entity.enums.Briefings;
+import org.demo.entity.dictionary.Briefings;
 import org.demo.entity.enums.Documents;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +24,7 @@ public class MeetingDocumentsWriteMeta extends FieldMetaBuilder<MeetingDocuments
 		fields.setEnabled(MeetingDocumentsDTO_.notes);
 		fields.setEnabled(MeetingDocumentsDTO_.briefing);
 		fields.setEnabled(MeetingDocumentsDTO_.document);
-		fields.setEnumValues(MeetingDocumentsDTO_.briefing, Briefings.values());
+		fields.setDictionaryValues(MeetingDocumentsDTO_.briefing);
 		fields.setEnumValues(MeetingDocumentsDTO_.document, Documents.values());
 	}
 
@@ -38,7 +38,7 @@ public class MeetingDocumentsWriteMeta extends FieldMetaBuilder<MeetingDocuments
 		fields.enableSort(MeetingDocumentsDTO_.briefing);
 		fields.enableSort(MeetingDocumentsDTO_.id);
 		fields.enableSort(MeetingDocumentsDTO_.notes);
-		fields.setAllValuesWithIcons(MeetingDocumentsDTO_.document,Documents.iconMap());
+		fields.setEnumIcons(MeetingDocumentsDTO_.document, Documents.iconMap());
 		fields.defaultGroupingHierarchy(
 				MeetingDocumentsDTO_.document,
 				MeetingDocumentsDTO_.briefing,

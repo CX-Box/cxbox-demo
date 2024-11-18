@@ -2,7 +2,6 @@ package org.demo.dto.cxbox.inner;
 
 import static java.util.Optional.ofNullable;
 import static org.demo.conf.cxbox.extension.multivaluePrimary.MultivalueExt.PRIMARY;
-import static org.demo.dto.cxbox.RegionDictionaryType.REGIONS;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -17,17 +16,17 @@ import org.cxbox.api.data.dto.DataResponseDTO;
 import org.cxbox.core.dto.multivalue.MultivalueField;
 import org.cxbox.core.util.filter.SearchParameter;
 import org.cxbox.core.util.filter.provider.impl.DateTimeValueProvider;
+import org.cxbox.core.util.filter.provider.impl.DictionaryValueProvider;
 import org.cxbox.core.util.filter.provider.impl.EnumValueProvider;
 import org.cxbox.core.util.filter.provider.impl.LongValueProvider;
-import org.cxbox.core.util.filter.provider.impl.LovValueProvider;
 import org.cxbox.core.util.filter.provider.impl.MultiFieldValueProvider;
 import org.cxbox.model.core.entity.BaseEntity;
 import org.demo.conf.cxbox.extension.multivaluePrimary.MultivalueExt;
-import org.demo.dto.cxbox.RegionDictionary;
 import org.demo.entity.Client;
 import org.demo.entity.Contact;
 import org.demo.entity.Meeting;
 import org.demo.entity.core.User;
+import org.demo.entity.dictionary.Regions;
 import org.demo.entity.enums.MeetingStatus;
 
 @Getter
@@ -51,10 +50,9 @@ public class MeetingDTO extends DataResponseDTO {
 	@SearchParameter(name = "address")
 	private String address;
 
-	@SearchParameter(provider = LovValueProvider.class)
-	@RegionDictionary(REGIONS)
-	private String region;
-	
+	@SearchParameter(provider = DictionaryValueProvider.class)
+	private Regions region;
+
 	private String notes;
 
 	private String result;
@@ -85,7 +83,7 @@ public class MeetingDTO extends DataResponseDTO {
 
 		this.id = meeting.getId().toString();
 		this.agenda = meeting.getAgenda();
-		this.region = REGIONS.lookupValue(meeting.getRegion());
+		this.region = meeting.getRegion();
 		this.startDateTime = meeting.getStartDateTime();
 		this.endDateTime = meeting.getEndDateTime();
 		this.period = ofNullable(meeting.getStartDateTime()).map(dateTimeFormatter::format).orElse("")

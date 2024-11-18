@@ -10,7 +10,7 @@
   <parent>
     <groupId>org.cxbox</groupId>
     <artifactId>cxbox-starter-parent</artifactId>
-    <version>4.0.0-M11</version><!-- based on spring-boot-starter-parent 3.2.5-->
+    <version>4.0.0-M12-SNAPSHOT</version><!-- based on spring-boot-starter-parent 3.2.5-->
     <relativePath/><!-- lookup parent from repository -->
   </parent>
 
@@ -32,6 +32,7 @@
     <jobrunr-spring-boot-3-starter.version>7.1.1</jobrunr-spring-boot-3-starter.version> <!--based on spring-boot 3.2.5, e.g. synced to cxbox-starter-parent-->
     <minio.version>8.5.10</minio.version>
     <postgresql.version>42.6.1</postgresql.version>
+    <tomcat.version>10.1.25</tomcat.version>
   </properties>
 
   <dependencies>
@@ -127,10 +128,6 @@
     <dependency>
       <groupId>org.cxbox</groupId>
       <artifactId>cxbox-starter-meta</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.cxbox</groupId>
-      <artifactId>cxbox-dictionary-model</artifactId>
     </dependency>
     <dependency>
       <groupId>org.cxbox</groupId>

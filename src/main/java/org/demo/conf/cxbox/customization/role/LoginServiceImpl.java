@@ -22,7 +22,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.cxbox.api.ScreenResponsibilityService;
-import org.cxbox.api.data.dictionary.LOV;
 import org.cxbox.api.data.dictionary.SimpleDictionary;
 import org.cxbox.api.service.session.CoreSessionService;
 import org.cxbox.api.service.session.IUser;
@@ -75,12 +74,12 @@ public class LoginServiceImpl implements LoginService {
 
 		IUser<Long> user = sessionService.getSessionUser();
 		User userEntity = userRepository.findById(user.getId()).orElseThrow();
-		LOV activeUserRole = sessionService.getSessionUserRole();
+		String activeUserRole = sessionService.getSessionUserRole();
 
 		return LoggedUser.builder()
 				.sessionId(sessionService.getSessionId())
 				.userId(userEntity.getId())
-				.activeRole(activeUserRole.getKey())
+				.activeRole(activeUserRole)
 				.roles(userRoleService.getUserRoles(userEntity))
 				.screens(screenResponsibilityService.getScreens(user, activeUserRole))
 				.userSettingsVersion(null)
@@ -102,10 +101,8 @@ public class LoginServiceImpl implements LoginService {
 			return;
 		}
 		User user = userRepository.getById(userDetails.getId());
-
-		LOV userRole = new LOV(role);
-		userDetails.setUserRole(userRole);
-		userRoleService.updateMainUserRole(user, userRole);
+		userDetails.setUserRole(role);
+		userRoleService.updateMainUserRole(user, role);
 	}
 
 	/**

@@ -1,7 +1,6 @@
 package org.demo.service.cxbox.inner;
 
 import static java.util.Optional.ofNullable;
-import static org.demo.conf.cxbox.extension.lov.AdministeredDictionaryType.INTERNAL_ROLE;
 import static org.demo.entity.core.User.DEFAULT_DEPARTMENT_ID;
 
 import java.util.ArrayList;
@@ -33,6 +32,7 @@ import org.demo.dto.cxbox.inner.ResponsibilitesCrudDTO;
 
 import org.demo.dto.cxbox.inner.ResponsibilitesCrudDTO_;
 
+import org.demo.entity.dictionary.InternalRole;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -89,7 +89,7 @@ public class ResponsibilitesService extends VersionAwareResponseService<Responsi
 		setIfChanged(data, ResponsibilitesCrudDTO_.respType, entity::setResponsibilityType);
 		setIfChanged(data, ResponsibilitesCrudDTO_.readOnly, entity::setReadOnly);
 		setMappedIfChanged(data, ResponsibilitesCrudDTO_.internalRoleCD, entity::setInternalRoleCD, val -> ofNullable(val)
-				.map(INTERNAL_ROLE::lookupName)
+				.map(InternalRole::key)
 				.orElse(null));
 
 		responsibilitiesServiceExt.save(entity);

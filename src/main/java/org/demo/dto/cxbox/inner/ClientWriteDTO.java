@@ -12,8 +12,8 @@ import org.demo.entity.enums.FieldOfActivity;
 @NoArgsConstructor
 public class ClientWriteDTO extends ClientAbstractDTO {
 
-/*	@BaseEnum(FieldOfActivity.class)
-	@SearchParameter(name = "fieldOfActivities", provider = MultiFieldValueProvider.class, multiFieldKey = EnumValueProvider.class)*/
+	/*	@BaseEnum(FieldOfActivity.class)
+		@SearchParameter(name = "fieldOfActivities", provider = MultiFieldValueProvider.class, multiFieldKey = EnumValueProvider.class)*/
 	private MultivalueField fieldOfActivity;
 
 	public ClientWriteDTO(Client client) {

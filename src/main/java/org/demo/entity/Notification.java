@@ -1,10 +1,13 @@
 package org.demo.entity;
 
-import java.time.LocalDateTime;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -43,5 +46,12 @@ public class Notification extends BaseEntity {
 	 * Create date UTC format
 	 */
 	private LocalDateTime createdDateUtc;
+
+	/**
+	 * Links associated with the notification
+	 */
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "notification_id")
+	private List<NotificationLink> links;
 
 }

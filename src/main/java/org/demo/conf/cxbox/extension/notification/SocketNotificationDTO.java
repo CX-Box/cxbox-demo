@@ -2,6 +2,7 @@ package org.demo.conf.cxbox.extension.notification;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -43,19 +44,9 @@ public class SocketNotificationDTO {
 	private String iconColor;
 
 	/**
-	 * Link in the notification
+	 * The list of links in the notification
 	 */
-	private String drillDownLink;
-
-	/**
-	 * Details of the link type, configures the link click
-	 */
-	private String drillDownType;
-
-	/**
-	 * Link display name
-	 */
-	private String drillDownLabel;
+	private List<NotificationLinkDTO> links;
 
 	private Integer page;
 

@@ -4,11 +4,13 @@ import static org.cxbox.api.service.session.InternalAuthorizationService.VANILLA
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.cxbox.api.service.session.InternalAuthorizationService;
 import org.cxbox.core.dto.DrillDownType;
+import org.demo.conf.cxbox.extension.notification.NotificationLinkDTO;
 import org.demo.conf.cxbox.extension.notification.NotificationService;
 import org.demo.conf.cxbox.extension.notification.SocketNotificationDTO;
 import org.demo.conf.cxbox.extension.notification.SocketNotificationErrorDTO;
@@ -81,9 +83,14 @@ public class MailSendingService {
 		notificationService.sendAndSave(SocketNotificationDTO.builder()
 				.title(mailSend ? "Successful" : "Error")
 				.text(mailSend ? "Email sent to " + mailTo.orElse("") : "Email was not sent to " + mailTo.orElse(""))
-				.drillDownType(DrillDownType.EXTERNAL_NEW.getValue())
-				.drillDownLabel(link)
-				.drillDownLink(HTTP + link)
+				.links(
+						List.of(
+								NotificationLinkDTO.builder()
+										.drillDownType(DrillDownType.EXTERNAL_NEW.getValue())
+										.drillDownLabel(link)
+										.drillDownLink(HTTP + link)
+										.build()
+						))
 				.time(LocalDateTime.now(ZoneOffset.UTC))
 				.build(), currentUser);
 

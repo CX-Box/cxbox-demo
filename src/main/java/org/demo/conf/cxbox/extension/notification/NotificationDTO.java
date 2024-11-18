@@ -1,13 +1,14 @@
 package org.demo.conf.cxbox.extension.notification;
 
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.List;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.demo.entity.Notification;
 
 @Setter
 @Getter
+@Builder
 public class NotificationDTO {
 
 	private Long id;
@@ -18,11 +19,7 @@ public class NotificationDTO {
 
 	private ZonedDateTime createTime;
 
-	public NotificationDTO(Notification notification) {
-		this.id = notification.getId();
-		this.isRead = notification.getIsRead();
-		this.text = notification.getText();
-		this.createTime = ZonedDateTime.of(notification.getCreatedDateUtc(), ZoneId.of("Z"));
-	}
+	private List<NotificationLinkDTO> links;
+
 
 }

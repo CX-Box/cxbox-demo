@@ -1,11 +1,14 @@
 package org.demo.conf.cxbox.extension.notification;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.cxbox.core.util.session.SessionService;
 import org.demo.entity.Notification;
+import org.demo.entity.NotificationLink;
 import org.demo.entity.core.User;
 import org.demo.repository.NotificationRepository;
 import org.demo.repository.core.UserRepository;
@@ -30,14 +33,17 @@ public class NotificationServiceImpl implements NotificationService {
 
 		webSocketNotificationService.send(socketNotificationDTO, notificationOwner);
 
-		Notification notification = notificationRepository.save(Notification.builder()
+		Notification notification = Notification.builder()
 				.user(notificationOwner)
 				.text(socketNotificationDTO.getText())
+				.links(socketNotificationDTO.getLinks()
+						.stream().map(this::notificationLinkDtoToEntity)
+						.toList())
 				.isRead(false)
 				.createdDateUtc(LocalDateTime.now(ZoneOffset.UTC))
-				.build());
+				.build();
 
-		return notification;
+		return notificationRepository.save(notification);
 	}
 
 	@Override
@@ -46,7 +52,7 @@ public class NotificationServiceImpl implements NotificationService {
 						userRepository.getReferenceById(sessionService.getSessionUser().getId()),
 						PageRequest.of(page, limit)
 				)
-				.map(NotificationDTO::new)
+				.map(this::notificationEntityToDto)
 				.toList();
 	}
 
@@ -69,7 +75,30 @@ public class NotificationServiceImpl implements NotificationService {
 
 	@Override
 	public Long getCountWithMark(Boolean mark) {
-		return notificationRepository.countByUserAndIsRead(userRepository.getReferenceById(sessionService.getSessionUser().getId()), mark);
+		return notificationRepository.countByUserAndIsRead(userRepository.getReferenceById(sessionService.getSessionUser()
+				.getId()), mark);
+	}
+
+
+	private NotificationDTO notificationEntityToDto(Notification notification) {
+		return NotificationDTO.builder()
+				.id(notification.getId())
+				.isRead(notification.getIsRead())
+				.text(notification.getText())
+				.createTime(ZonedDateTime.of(notification.getCreatedDateUtc(), ZoneId.of("Z")))
+				.links(notification.getLinks()
+						.stream()
+						.map(NotificationLinkDTO::new)
+						.toList())
+				.build();
+	}
+
+	private NotificationLink notificationLinkDtoToEntity(NotificationLinkDTO notificationLinkDTO) {
+		return NotificationLink.builder()
+				.drillDownLink(notificationLinkDTO.getDrillDownLink())
+				.drillDownType(notificationLinkDTO.getDrillDownType())
+				.drillDownLabel(notificationLinkDTO.getDrillDownLabel())
+				.build();
 	}
 
 }

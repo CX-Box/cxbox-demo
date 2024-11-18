@@ -26,6 +26,7 @@ import org.cxbox.api.data.dictionary.LOV;
 import org.cxbox.api.data.dictionary.SimpleDictionary;
 import org.cxbox.api.service.session.CoreSessionService;
 import org.cxbox.api.service.session.IUser;
+import org.cxbox.core.config.properties.ScreenResolverProperties;
 import org.cxbox.core.config.properties.UIProperties;
 import org.cxbox.core.config.properties.WidgetFieldsIdResolverProperties;
 import org.cxbox.core.dto.LoggedUser;
@@ -60,6 +61,8 @@ public class LoginServiceImpl implements LoginService {
 	private final WidgetFieldsIdResolverProperties widgetFieldsIdResolverProperties;
 
 	private final UIProperties uiProperties;
+
+	private final ScreenResolverProperties screenResolverProperties;
 
 	/**
 	 * Build info for active session user for specific role
@@ -124,6 +127,10 @@ public class LoginServiceImpl implements LoginService {
 		featureSettings.add(new SimpleDictionary(
 				WidgetFieldsIdResolverProperties.FILTER_BY_RANGE_ENABLED_DEFAULT_PARAM_NAME,
 				String.valueOf(widgetFieldsIdResolverProperties.isFilterByRangeEnabledDefault())
+		));
+		featureSettings.add(new SimpleDictionary(
+				ScreenResolverProperties.SIDEBAR_ITEMS_NAME_TRANSFER_ENABLED_DEFAULT_PARAM_NAME,
+				String.valueOf(screenResolverProperties.isSidebarItemsNameTransferEnabledDefault())
 		));
 		return featureSettings;
 	}

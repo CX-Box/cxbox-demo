@@ -1,4 +1,4 @@
-package org.demo.service.cxbox.inner;
+package org.demo.service.cxbox.inner.core;
 
 import lombok.Getter;
 import org.cxbox.core.service.action.Actions;

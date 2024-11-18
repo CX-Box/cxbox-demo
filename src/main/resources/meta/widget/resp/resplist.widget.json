@@ -1,6 +1,6 @@
 {
   "name": "resplist",
-  "title": "Responsibilites",
+  "title": "Role View",
   "type": "GroupingHierarchy",
   "bc": "responsibilities",
   "showCondition": [],
@@ -21,30 +21,16 @@
       "title": "widget (endpoint)",
       "key": "viewWidgets",
       "type": "multipleSelect"
-    },
-    {
-      "title": "Screens",
-      "key": "screens",
-      "type": "input"
-    },
-    {
-      "title": "Resp Type",
-      "key": "respType",
-      "type": "input"
     }
   ],
   "options": {
-    "export": {
-      "enabled": true,
-      "title": "export"
-    },
     "groupingHierarchy": {
       "fields": [
         "internalRoleCD"
       ]
     },
     "additional": {
-      "fields": ["screens", "respType"],
+      "fields": ["viewWidgets"],
       "enabled": true
     },
     "create": {
@@ -56,7 +42,9 @@
     "actionGroups": {
       "include": [
         "create",
-        "delete"
+        "delete",
+        "clear_cache",
+        "export_liquibase"
       ]
     }
   }

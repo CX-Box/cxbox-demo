@@ -81,4 +81,26 @@
     </sql>
   </changeSet>
 
+  <changeSet author="cxbox" id="RESPONSIBILITIES_VIEW" runOnChange="true">
+    <delete tableName="RESPONSIBILITIES"/>
+
+    <loadUpdateData tableName="RESPONSIBILITIES" primaryKey="INTERNAL_ROLE_CD,RESPONSIBILITIES" encoding="UTF-8" separator=";"
+      quotchar="&quot;" file="db/data/cxbox/ROLE_VIEW.csv">
+      <column header="INTERNAL_ROLE_CD" name="INTERNAL_ROLE_CD" type="STRING"/>
+      <column header="RESPONSIBILITIES" name="RESPONSIBILITIES" type="STRING"/>
+      <column header="ID" name="ID" type="NUMERIC" defaultValue="${app_seq_next_val}"/>
+    </loadUpdateData>
+
+    <loadUpdateData tableName="RESPONSIBILITIES" primaryKey="INTERNAL_ROLE_CD,RESP_TYPE" encoding="UTF-8" separator=";"
+      quotchar="&quot;" file="db/data/cxbox/ROLE_SCREEN_OVERRIDE.csv">
+      <column header="INTERNAL_ROLE_CD" name="INTERNAL_ROLE_CD" type="STRING"/>
+      <column header="RESP_TYPE" name="RESP_TYPE" type="STRING"/>
+      <column header="SCREEN" name="SCREEN" type="STRING"/>
+      <column header="ID" name="ID" type="NUMERIC" defaultValue="${app_seq_next_val}"/>
+    </loadUpdateData>
+
+  </changeSet>
+
+
+
 </databaseChangeLog>

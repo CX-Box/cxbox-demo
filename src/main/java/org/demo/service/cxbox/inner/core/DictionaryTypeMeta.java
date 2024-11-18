@@ -1,4 +1,4 @@
-package org.demo.service.cxbox.inner;
+package org.demo.service.cxbox.inner.core;
 
 import org.cxbox.core.crudma.bc.impl.InnerBcDescription;
 import org.cxbox.core.dto.rowmeta.FieldsMeta;

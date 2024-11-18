@@ -14,10 +14,14 @@
  * limitations under the License.
  */
 
-package org.demo.service.cxbox.inner;
+package org.demo.service.cxbox.inner.core;
 
 import jakarta.persistence.EntityManager;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import lombok.SneakyThrows;
 import org.cxbox.api.data.dictionary.DictionaryCache;
 import org.cxbox.api.data.dto.DataResponseDTO;
 import org.cxbox.api.service.LocaleService;
@@ -26,7 +30,10 @@ import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.BusinessError.Entity;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
+import org.cxbox.core.dto.rowmeta.PostAction;
 import org.cxbox.core.exception.BusinessException;
+import org.cxbox.core.file.dto.FileDownloadDto;
+import org.cxbox.core.file.service.CxboxFileService;
 import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
 import org.cxbox.model.core.api.TranslationId;
@@ -37,7 +44,9 @@ import org.cxbox.model.dictionary.entity.DictionaryTypeDesc;
 import org.demo.dto.cxbox.inner.DictionaryItemDTO;
 import org.demo.dto.cxbox.inner.DictionaryItemDTO_;
 import org.demo.repository.DictionaryRepository;
+import org.demo.util.CSVUtils;
 import org.hibernate.exception.ConstraintViolationException;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -57,6 +66,9 @@ public class DictionaryService extends VersionAwareResponseService<DictionaryIte
 
 	@Autowired
 	private LocaleService localeService;
+
+	@Autowired
+	private CxboxFileService cxboxFileService;
 
 	public DictionaryService() {
 		super(DictionaryItemDTO.class, DictionaryItem.class, null, DictionaryMeta.class);
@@ -108,7 +120,7 @@ public class DictionaryService extends VersionAwareResponseService<DictionaryIte
 				.cancelCreate(ccr -> ccr.text("Cancel"))
 				.delete(dlt -> dlt.text("Delete"))
 				.action(act -> act
-						.action("reload-cache", "Clear Cache")
+						.action("clear_cache", "Clear Cache")
 						.scope(ActionScope.BC)
 						.invoker((bc, data) -> {
 							// This will not work in cluster (>1 app nodes).
@@ -116,6 +128,12 @@ public class DictionaryService extends VersionAwareResponseService<DictionaryIte
 							dictionaryCache.reload();
 							return new ActionResultDTO<>();
 						}))
+				.action(act -> act
+						.action("export_liquibase", "Export")
+						.scope(ActionScope.BC)
+						.invoker((data, bc) -> new ActionResultDTO<DictionaryItemDTO>()
+								.setAction(PostAction.downloadFile(cxboxFileService.upload(toCsv(), null))))
+				)
 				.build();
 	}
 
@@ -127,16 +145,41 @@ public class DictionaryService extends VersionAwareResponseService<DictionaryIte
 				if (DictionaryItem.CONSTRAINT_UNIQ_TYPE_KEY.equalsIgnoreCase(uniqEx.getConstraintName())) {
 					throw new BusinessException(e).setEntity(new Entity(bc).addField(
 							DictionaryItem_.key.getName(),
-							"Key already exists for type " + result.getRecord().getType()));
+							"Key already exists for type " + result.getRecord().getType()
+					));
 				}
 				if (DictionaryItem.CONSTRAINT_UNIQ_TYPE_VALUE.equalsIgnoreCase(uniqEx.getConstraintName())) {
 					throw new BusinessException(e).setEntity(new Entity(bc).addField(
 							DictionaryItem_.value.getName(),
-							"Value already exists for type " + result.getRecord().getType()));
+							"Value already exists for type " + result.getRecord().getType()
+					));
 				}
 			}
 			throw e;
 		}
+	}
+
+	@SneakyThrows
+	@NotNull
+	private FileDownloadDto toCsv() {
+		String name = "DICTIONARY.csv";
+		var header = List.of("TYPE", "KEY", "VALUE", "DISPLAY_ORDER", "DESCRIPTION", "ACTIVE", "ID");
+		var body = dictionaryRepository.findAll().stream()
+				.sorted(Comparator.comparing(DictionaryItem::getType)
+						.thenComparing(dictionaryItem -> Optional.ofNullable(dictionaryItem.getDisplayOrder()).orElse(Integer.MAX_VALUE))
+						.thenComparing(DictionaryItem::getValue)
+						.thenComparing(DictionaryItem::getId)
+				)
+				.map(e -> List.of(
+						e.getType(),
+						e.getKey(),
+						e.getValue(),
+						Optional.ofNullable(e.getDisplayOrder()).map(d -> "" + d).orElse(""),
+						e.getDescription(),
+						e.isActive() ? "" : "false",
+						""
+				));
+		return CSVUtils.toCsv(header, body, name, ";");
 	}
 
 }

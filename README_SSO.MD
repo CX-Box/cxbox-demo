@@ -3,7 +3,7 @@
 `ui/src/keycloak/index.ts`
 
 `ui/public/keycloak.json`
-  
+
 For more details about this options see [docs](https://www.keycloak.org/docs/latest/securing_apps/#_javascript_adapter)
 
 ##### 2 Backend configuration

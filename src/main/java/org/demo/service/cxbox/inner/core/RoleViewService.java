@@ -1,14 +1,15 @@
-package org.demo.service.cxbox.inner;
+package org.demo.service.cxbox.inner.core;
 
 import static java.util.Optional.ofNullable;
-import static org.demo.entity.core.User.DEFAULT_DEPARTMENT_ID;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
+import lombok.SneakyThrows;
 import org.cxbox.core.controller.param.FilterParameter;
 import org.cxbox.core.controller.param.QueryParameters;
 import org.cxbox.core.crudma.bc.BusinessComponent;
@@ -19,6 +20,8 @@ import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
 
 import org.cxbox.core.dto.rowmeta.PostAction;
+import org.cxbox.core.file.dto.FileDownloadDto;
+import org.cxbox.core.file.service.CxboxFileService;
 import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
 import org.cxbox.meta.entity.Responsibilities;
@@ -26,13 +29,14 @@ import org.cxbox.meta.entity.Responsibilities;
 import org.cxbox.meta.entity.Responsibilities.ResponsibilityType;
 import org.cxbox.meta.entity.Responsibilities_;
 import org.demo.conf.cxbox.extension.resposibilities.ResponsibilitiesServiceExt;
-import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.inner.ResponsibilitesCrudDTO;
 
 
 import org.demo.dto.cxbox.inner.ResponsibilitesCrudDTO_;
 
 import org.demo.entity.dictionary.InternalRole;
+import org.demo.repository.ResponsibilitiesRepository;
+import org.demo.util.CSVUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -40,13 +44,19 @@ import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S3252", "java:S1186", "java:S6813"})
 @Service
-public class ResponsibilitesService extends VersionAwareResponseService<ResponsibilitesCrudDTO, Responsibilities> {
+public class RoleViewService extends VersionAwareResponseService<ResponsibilitesCrudDTO, Responsibilities> {
 
 	@Autowired
 	private ResponsibilitiesServiceExt responsibilitiesServiceExt;
 
-	public ResponsibilitesService() {
-		super(ResponsibilitesCrudDTO.class, Responsibilities.class, null, ResponsibilitesMeta.class);
+	@Autowired
+	private ResponsibilitiesRepository responsibilitiesRepository;
+
+	@Autowired
+	private CxboxFileService cxboxFileService;
+
+	public RoleViewService() {
+		super(ResponsibilitesCrudDTO.class, Responsibilities.class, null, RoleViewMeta.class);
 	}
 
 	@Override
@@ -67,16 +77,14 @@ public class ResponsibilitesService extends VersionAwareResponseService<Responsi
 	@Override
 	protected CreateResult<ResponsibilitesCrudDTO> doCreateEntity(Responsibilities entity, BusinessComponent bc) {
 		entity.setResponsibilityType(ResponsibilityType.VIEW);
-		entity.setDepartmentId(DEFAULT_DEPARTMENT_ID);
 		entity.setReadOnly(false);
-		responsibilitiesServiceExt.save(entity);
+		responsibilitiesRepository.save(entity);
 		return new CreateResult<>(entityToDto(bc, entity));
 	}
 
 	@Override
 	public ActionResultDTO<ResponsibilitesCrudDTO> deleteEntity(BusinessComponent bc) {
 		super.deleteEntity(bc);
-		responsibilitiesServiceExt.refreshCacheAfterTx();
 		return new ActionResultDTO<>();
 	}
 
@@ -84,17 +92,23 @@ public class ResponsibilitesService extends VersionAwareResponseService<Responsi
 	protected ActionResultDTO<ResponsibilitesCrudDTO> doUpdateEntity(Responsibilities entity,
 			ResponsibilitesCrudDTO data,
 			BusinessComponent bc) {
-		setIfChanged(data, ResponsibilitesCrudDTO_.view, entity::setView);
-		setIfChanged(data, ResponsibilitesCrudDTO_.screens, entity::setScreens);
-		setIfChanged(data, ResponsibilitesCrudDTO_.respType, entity::setResponsibilityType);
-		setIfChanged(data, ResponsibilitesCrudDTO_.readOnly, entity::setReadOnly);
-		setMappedIfChanged(data, ResponsibilitesCrudDTO_.internalRoleCD, entity::setInternalRoleCD, val -> ofNullable(val)
+		String internalRoleCD = ofNullable(data.getInternalRoleCD())
 				.map(InternalRole::key)
-				.orElse(null));
-
-		responsibilitiesServiceExt.save(entity);
+				.orElse(null);
+		if (data.isFieldChanged(ResponsibilitesCrudDTO_.internalRoleCD)) {
+			entity.setInternalRoleCD(internalRoleCD);
+		}
+		setIfChanged(data, ResponsibilitesCrudDTO_.view, entity::setView);
+		if (responsibilitiesRepository.countByInternalRoleCDAndViewAndResponsibilityTypeAndIdNot(
+				internalRoleCD,
+				entity.getView(),
+				ResponsibilityType.VIEW,
+				bc.getIdAsLong()
+		) > 0) {
+			entity.setView(null);
+		}
+		responsibilitiesRepository.save(entity);
 		return new ActionResultDTO<>(entityToDto(bc, entity));
-
 	}
 
 	@Override
@@ -106,27 +120,49 @@ public class ResponsibilitesService extends VersionAwareResponseService<Responsi
 		return responsibilitesCrudDTO;
 	}
 
+	@SneakyThrows
 	@Override
 	public Actions<ResponsibilitesCrudDTO> getActions() {
 		return Actions.<ResponsibilitesCrudDTO>builder()
-				.create(crt -> crt.text("Add"))
+				.create(crt -> crt.text("Create"))
 				.save(sv -> sv)
 				.delete(dlt -> dlt.text("Delete"))
 				.action(act -> act
-						.action("edit", "Edit")
-				)
-				.action(act -> act
-						.action("refreshRespCache", "Refresh Cache")
+						.action("clear_cache", "Clear Cache")
 						.scope(ActionScope.BC)
 						.invoker((data, bc) -> {
 							responsibilitiesServiceExt.refreshCacheAfterTx();
-							return new ActionResultDTO<ResponsibilitesCrudDTO>().setAction(PostAction.refreshBc(CxboxRestController.responsibilities));
+							return new ActionResultDTO<>();
+						})
+				)
+				.action(act -> act
+						.action("export_liquibase", "Export")
+						.scope(ActionScope.BC)
+						.invoker((data, bc) -> {
+							responsibilitiesServiceExt.refreshCacheAfterTx();
+							return new ActionResultDTO<ResponsibilitesCrudDTO>().setAction(PostAction.downloadFile(cxboxFileService.upload(toCsv(), null)));
 						})
 				)
 				.build();
 	}
 
-	private @NotNull Specification<Responsibilities> getSpecForViewWidgetsField(List<String> filterCustomField) {
+	@SneakyThrows
+	@NotNull
+	private FileDownloadDto toCsv() {
+		String name = "ROLE_VIEW.csv";
+		var header = List.of("INTERNAL_ROLE_CD", "RESPONSIBILITIES", "ID");
+		var body = responsibilitiesRepository.findAll().stream()
+				.filter(e -> ResponsibilityType.VIEW.equals(e.getResponsibilityType()))
+				.sorted(Comparator.comparing(Responsibilities::getInternalRoleCD)
+						.thenComparing(Responsibilities::getView)
+						.thenComparing(Responsibilities::getCreatedDate)
+						.thenComparing(Responsibilities::getId)
+				)
+				.map(e -> List.of(e.getInternalRoleCD(), e.getView(), ""));
+		return CSVUtils.toCsv(header, body, name, ";");
+	}
+
+	private Specification<Responsibilities> getSpecForViewWidgetsField(List<String> filterCustomField) {
 		Set<String> widgetNames = responsibilitiesServiceExt.getAllWidgetsNameToDescription().entrySet()
 				.stream()
 				.filter(entry -> filterCustomField.contains(entry.getValue())).map(Entry::getKey)

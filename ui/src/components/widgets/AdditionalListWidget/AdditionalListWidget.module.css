@@ -3,3 +3,22 @@
 .divider:last-child {
     display: none;
 }
+
+.container {
+    margin-left: -16px;
+}
+
+.container :global(.ant-table .ant-table-thead > tr > th) {
+    color: #aeaeae;
+    font-weight: normal;
+    background: none;
+}
+
+.container :global(.ant-table .ant-table-row > td) {
+    padding: 20px 8px;
+}
+
+.container :global(.ant-table .ant-table-row:hover td) {
+    /* Override the style that is already declared as !important */
+    background: none !important;
+}

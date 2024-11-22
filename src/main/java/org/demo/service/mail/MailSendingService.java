@@ -90,7 +90,13 @@ public class MailSendingService {
 		notificationService.sendAndSave(
 				SocketNotificationDTO.builder()
 						.title(mailSend ? "Successful" : "Error")
-						.text(mailSend ? "Email sent to " + mailTo.orElse("") : "Email was not sent to " + mailTo.orElse(""))
+						.text(
+								String.format(
+										"%s from meeting №%s",
+										mailSend ? "Email sent to " + mailTo.orElse("") : "Email was not sent to " + mailTo.orElse(""),
+										meeting.isPresent() ? meeting.get().getId() : ""
+								)
+						)
 						.links(getLinks(link, meeting))
 						.time(LocalDateTime.now(ZoneOffset.UTC))
 						.build(), currentUser

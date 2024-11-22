@@ -4,6 +4,7 @@ import static org.cxbox.api.service.session.InternalAuthorizationService.VANILLA
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,8 @@ import org.demo.conf.cxbox.extension.notification.NotificationService;
 import org.demo.conf.cxbox.extension.notification.SocketNotificationDTO;
 import org.demo.conf.cxbox.extension.notification.SocketNotificationErrorDTO;
 import org.demo.conf.cxbox.extension.notification.enums.SocketNotificationErrorType;
+import org.demo.entity.Contact;
+import org.demo.entity.Meeting;
 import org.demo.entity.core.User;
 import org.jobrunr.jobs.annotations.Job;
 import org.springframework.boot.autoconfigure.mail.MailProperties;
@@ -47,8 +50,10 @@ public class MailSendingService {
 	}
 
 	@Async
-	public void send(Optional<String> mailTo, String subject, String message, User currentUser) {
+	public void send(Optional<Meeting> meeting, String subject, String message, User currentUser) {
+		Optional<String> mailTo = meeting.map(Meeting::getContact).map(Contact::getEmail);
 		boolean mailSend = mailTo.isPresent() && mailSenderEnabled();
+
 		if (mailSend) {
 			try {
 				SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
@@ -61,7 +66,8 @@ public class MailSendingService {
 
 			} catch (MailParseException | MailPreparationException e) {
 				notificationService.sendAndSave(
-						getSocketNotificationDTOWithError(SocketNotificationErrorType.BusinessError, e.getMessage(),
+						getSocketNotificationDTOWithError(
+								SocketNotificationErrorType.BusinessError, e.getMessage(),
 								mailTo.orElse("")
 						),
 						currentUser
@@ -69,7 +75,8 @@ public class MailSendingService {
 
 			} catch (MailException e) {
 				notificationService.sendAndSave(
-						getSocketNotificationDTOWithError(SocketNotificationErrorType.SystemError, e.getMessage(),
+						getSocketNotificationDTOWithError(
+								SocketNotificationErrorType.SystemError, e.getMessage(),
 								mailTo.orElse("")
 						),
 						currentUser
@@ -80,19 +87,14 @@ public class MailSendingService {
 
 		String link = mailTo.map(mail -> mail.substring(mail.indexOf("@") + 1)).orElse("");
 
-		notificationService.sendAndSave(SocketNotificationDTO.builder()
-				.title(mailSend ? "Successful" : "Error")
-				.text(mailSend ? "Email sent to " + mailTo.orElse("") : "Email was not sent to " + mailTo.orElse(""))
-				.links(
-						List.of(
-								NotificationLinkDTO.builder()
-										.drillDownType(DrillDownType.EXTERNAL_NEW.getValue())
-										.drillDownLabel(link)
-										.drillDownLink(HTTP + link)
-										.build()
-						))
-				.time(LocalDateTime.now(ZoneOffset.UTC))
-				.build(), currentUser);
+		notificationService.sendAndSave(
+				SocketNotificationDTO.builder()
+						.title(mailSend ? "Successful" : "Error")
+						.text(mailSend ? "Email sent to " + mailTo.orElse("") : "Email was not sent to " + mailTo.orElse(""))
+						.links(getLinks(link, meeting))
+						.time(LocalDateTime.now(ZoneOffset.UTC))
+						.build(), currentUser
+		);
 
 	}
 
@@ -111,6 +113,23 @@ public class MailSendingService {
 				.time(LocalDateTime.now(ZoneOffset.UTC))
 				.error(new SocketNotificationErrorDTO(type, message))
 				.build();
+	}
+
+	private List<NotificationLinkDTO> getLinks(String link, Optional<Meeting> meeting) {
+		List<NotificationLinkDTO> result = new ArrayList<>();
+		result.add(NotificationLinkDTO.builder()
+				.drillDownType(DrillDownType.EXTERNAL_NEW.getValue())
+				.drillDownLabel(link)
+				.drillDownLink(HTTP + link)
+				.build());
+
+		meeting.ifPresent(value -> result.add(NotificationLinkDTO.builder()
+				.drillDownType(DrillDownType.INNER.getValue())
+				.drillDownLabel(String.format("Meeting %s", value.getId()))
+				.drillDownLink(String.format("/screen/meeting/view/meetingview/meeting/%s", value.getId()))
+				.build()));
+
+		return result;
 	}
 
 }

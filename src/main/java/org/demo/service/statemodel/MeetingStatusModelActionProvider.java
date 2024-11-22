@@ -15,7 +15,6 @@ import org.cxbox.core.service.action.ActionsBuilder;
 import org.cxbox.core.util.session.SessionService;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.inner.MeetingDTO;
-import org.demo.entity.Contact;
 import org.demo.entity.Meeting;
 import org.demo.entity.enums.MeetingStatus;
 import org.demo.repository.MeetingRepository;
@@ -46,7 +45,7 @@ public class MeetingStatusModelActionProvider {
 							status.transition(status, meeting);
 							if (meeting.getStatus().equals(MeetingStatus.COMPLETED)) {
 								mailSendingService.send(
-										Optional.ofNullable(meeting).map(Meeting::getContact).map(Contact::getEmail),
+										Optional.ofNullable(meeting),
 										meeting.getAgenda(),
 										String.format(messageTemplate, MeetingStatus.COMPLETED.getValue(), meeting.getResult()),
 										userRepository.getReferenceById(sessionService.getSessionUser().getId())

@@ -189,7 +189,7 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 
 	private void getSend(Meeting meeting) {
 		mailSendingService.send(
-				Optional.ofNullable(meeting).map(Meeting::getContact).map(Contact::getEmail),
+				Optional.ofNullable(meeting),
 				meeting.getAgenda(),
 				String.format(MESSAGE_TEMPLATE, meeting.getStatus().getValue(), meeting.getResult()),
 				userRepository.getReferenceById(sessionService.getSessionUser().getId())

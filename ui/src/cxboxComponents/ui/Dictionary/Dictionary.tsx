@@ -6,6 +6,7 @@ import ReadOnlyField from '@cxboxComponents/ui/ReadOnlyField/ReadOnlyField'
 import * as dictionaryCustomIcons from '@assets/icons/dictionaryCustomIcons'
 import { interfaces } from '@cxbox-ui/core'
 import { AppDictionaryFieldMeta, EDictionaryMode } from '@interfaces/widget'
+import styles from './Dictionary.module.css'
 
 export interface DictionaryProps extends BaseFieldProps {
     value?: interfaces.MultivalueSingleValue[] | string | null
@@ -51,13 +52,13 @@ const Dictionary: React.FunctionComponent<DictionaryProps> = props => {
 
     const extendedProps: SelectProps<string | string[]> = {
         ...props,
+        dropdownClassName: styles.dropdown,
         mode: multiple ? 'multiple' : 'default',
         value: resultValue as string | string[],
         allowClear: !!value,
         showSearch: true,
         onChange: handleChange,
         dropdownMatchSelectWidth: false,
-        getPopupContainer: trigger => trigger.parentElement as HTMLElement,
         forwardedRef: selectRef,
         suffixIcon: <Icon type="down" data-test-field-dictionary-popup={true} />,
         clearIcon: <Icon type="close-circle" theme="filled" data-test-field-dictionary-item-clear={true} />

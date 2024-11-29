@@ -114,6 +114,7 @@ const Dictionary: React.FunctionComponent<DictionaryProps> = props => {
                 meta={meta}
                 className={className}
                 backgroundColor={backgroundColor}
+                cursor={props.cursor}
                 onDrillDown={onDrillDown}
             >
                 {readOnlyValue}

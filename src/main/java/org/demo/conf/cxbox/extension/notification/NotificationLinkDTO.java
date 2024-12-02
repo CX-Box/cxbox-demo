@@ -1,31 +1,29 @@
 package org.demo.conf.cxbox.extension.notification;
 
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.cxbox.api.data.dto.DataResponseDTO;
+import org.cxbox.core.dto.DrillDownType;
 import org.demo.entity.NotificationLink;
 
-@Setter
 @Getter
-@Builder
+@Setter
+@NoArgsConstructor
 @AllArgsConstructor
-public class NotificationLinkDTO {
+public class NotificationLinkDTO extends DataResponseDTO {
 
-	@Column
 	private String drillDownLink;
 
-	@Column
 	private String drillDownLabel;
 
-	@Column
-	private String drillDownType;
+	private DrillDownType drillDownType;
 
-	public NotificationLinkDTO(NotificationLink notificationLink) {
-		this.drillDownLink = notificationLink.getDrillDownLink();
-		this.drillDownLabel = notificationLink.getDrillDownLabel();
-		this.drillDownType = notificationLink.getDrillDownType();
+	public NotificationLinkDTO(NotificationLink entity) {
+		this.drillDownLink = entity.getDrillDownLink();
+		this.drillDownLabel = entity.getDrillDownLabel();
+		this.drillDownType = entity.getDrillDownType();
 	}
 
 }

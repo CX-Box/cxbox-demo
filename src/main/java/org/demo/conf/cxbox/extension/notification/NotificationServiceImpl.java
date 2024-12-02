@@ -1,9 +1,7 @@
 package org.demo.conf.cxbox.extension.notification;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.cxbox.core.util.session.SessionService;
@@ -52,7 +50,7 @@ public class NotificationServiceImpl implements NotificationService {
 						userRepository.getReferenceById(sessionService.getSessionUser().getId()),
 						PageRequest.of(page, limit)
 				)
-				.map(this::notificationEntityToDto)
+				.map(NotificationDTO::new)
 				.toList();
 	}
 
@@ -75,22 +73,10 @@ public class NotificationServiceImpl implements NotificationService {
 
 	@Override
 	public Long getCountWithMark(Boolean mark) {
-		return notificationRepository.countByUserAndIsRead(userRepository.getReferenceById(sessionService.getSessionUser()
-				.getId()), mark);
-	}
-
-
-	private NotificationDTO notificationEntityToDto(Notification notification) {
-		return NotificationDTO.builder()
-				.id(notification.getId())
-				.isRead(notification.getIsRead())
-				.text(notification.getText())
-				.createTime(ZonedDateTime.of(notification.getCreatedDateUtc(), ZoneId.of("Z")))
-				.links(notification.getLinks()
-						.stream()
-						.map(NotificationLinkDTO::new)
-						.toList())
-				.build();
+		return notificationRepository.countByUserAndIsRead(
+				userRepository.getReferenceById(sessionService.getSessionUser()
+						.getId()), mark
+		);
 	}
 
 	private NotificationLink notificationLinkDtoToEntity(NotificationLinkDTO notificationLinkDTO) {

@@ -1,17 +1,18 @@
 package org.demo.conf.cxbox.extension.notification;
 
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
-import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.cxbox.api.data.dto.DataResponseDTO;
+import org.demo.entity.Notification;
 
-@Setter
 @Getter
-@Builder
-public class NotificationDTO {
-
-	private Long id;
+@Setter
+@NoArgsConstructor
+public class NotificationDTO extends DataResponseDTO {
 
 	private Boolean isRead;
 
@@ -21,5 +22,15 @@ public class NotificationDTO {
 
 	private List<NotificationLinkDTO> links;
 
+	public NotificationDTO(Notification entity) {
+		this.id = entity.getId().toString();
+		this.isRead = entity.getIsRead();
+		this.text = entity.getText();
+		this.createTime = ZonedDateTime.of(entity.getCreatedDateUtc(), ZoneId.of("Z"));
+		this.links = entity.getLinks()
+				.stream()
+				.map(NotificationLinkDTO::new)
+				.toList();
+	}
 
 }

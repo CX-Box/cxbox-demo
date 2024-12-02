@@ -123,17 +123,13 @@ public class MailSendingService {
 
 	private List<NotificationLinkDTO> getLinks(String link, Optional<Meeting> meeting) {
 		List<NotificationLinkDTO> result = new ArrayList<>();
-		result.add(NotificationLinkDTO.builder()
-				.drillDownType(DrillDownType.EXTERNAL_NEW.getValue())
-				.drillDownLabel(link)
-				.drillDownLink(HTTP + link)
-				.build());
+		result.add(new NotificationLinkDTO(link, HTTP + link, DrillDownType.EXTERNAL_NEW));
 
-		meeting.ifPresent(value -> result.add(NotificationLinkDTO.builder()
-				.drillDownType(DrillDownType.INNER.getValue())
-				.drillDownLabel(String.format("Meeting %s", value.getId()))
-				.drillDownLink(String.format("/screen/meeting/view/meetingview/meeting/%s", value.getId()))
-				.build()));
+		meeting.ifPresent(value -> result.add(
+						new NotificationLinkDTO(
+								String.format("/screen/meeting/view/meetingview/meeting/" + value.getId()),
+								String.format("Meeting " + value.getId()),
+								DrillDownType.INNER)));
 
 		return result;
 	}

@@ -2,6 +2,7 @@ package org.demo.entity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
@@ -50,7 +51,7 @@ public class Notification extends BaseEntity {
 	/**
 	 * Links associated with the notification
 	 */
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "notification_id")
 	private List<NotificationLink> links;
 

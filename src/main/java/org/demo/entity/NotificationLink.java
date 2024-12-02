@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.cxbox.core.dto.DrillDownType;
 import org.cxbox.model.core.entity.BaseEntity;
 
 @Setter
@@ -26,6 +27,6 @@ public class NotificationLink extends BaseEntity {
 	private String drillDownLabel;
 
 	@Column
-	private String drillDownType;
+	private DrillDownType drillDownType;
 
 }

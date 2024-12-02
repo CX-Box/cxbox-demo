@@ -122,6 +122,10 @@ public class LoginServiceImpl implements LoginService {
 				WidgetFieldsIdResolverProperties.FILTER_BY_RANGE_ENABLED_DEFAULT_PARAM_NAME,
 				String.valueOf(widgetFieldsIdResolverProperties.isFilterByRangeEnabledDefault())
 		));
+		featureSettings.add(new SimpleDictionary(
+				UIProperties.DRILL_DOWN_TOOLTIP_NAME,
+				String.valueOf(uiProperties.getDrillDownTooltip())
+		));
 		return featureSettings;
 	}
 

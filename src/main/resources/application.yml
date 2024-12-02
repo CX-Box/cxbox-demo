@@ -38,6 +38,7 @@ cxbox:
     path: /api/v1
   ui:
     path: /ui
+    drill-down-tooltip: newAndCopy
 
 server:
   port: 8080

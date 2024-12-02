@@ -189,7 +189,7 @@ export type FileUploadFieldMeta = CoreFileUploadFieldMeta & {
 }
 
 export type WidgetField = CoreWidgetField | FileUploadFieldMeta
-// todo нужно ли вынести в cxbox-ui?
+
 export type AppNumberFieldMeta = NumberFieldMeta & {
     currency?: string
 }

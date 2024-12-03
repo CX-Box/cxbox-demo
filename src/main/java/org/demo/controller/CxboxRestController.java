@@ -19,6 +19,8 @@ import org.demo.service.cxbox.inner.ContactMultivalueService;
 import org.demo.service.cxbox.inner.ContactPickListService;
 import org.demo.service.cxbox.inner.DashboardClientActivitiesService;
 import org.demo.service.cxbox.inner.DashboardFilterService;
+import org.demo.service.cxbox.inner.DictionaryService;
+import org.demo.service.cxbox.inner.DictionaryTypeService;
 import org.demo.service.cxbox.inner.MeetingDocumentsWriteService;
 import org.demo.service.cxbox.inner.MeetingReadService;
 import org.demo.service.cxbox.inner.MeetingWriteService;
@@ -36,21 +38,13 @@ import org.springframework.stereotype.Component;
  * but current enum approach shows, that it is less error-prone in huge enterprise projects
  * (because single line in this enum creates >5 rest endpoints)
  */
-@SuppressWarnings({"java:S115","java:S1144"})
+@SuppressWarnings({"java:S115", "java:S1144"})
 @Getter
 public enum CxboxRestController implements EnumBcIdentifier {
 
-	// @formatter:on
+	// @formatter:off
+	//application
 	clientStats(ClientStatsService.class),
-	lovExternal(LovReadService.class),
-	jobsStats(JobStatsService.class),
-		scheduledJobs(jobsStats, JobAdminService.class),
-		enqueuedJobs(jobsStats, JobAdminService.class),
-		processingJobs(jobsStats, JobAdminService.class),
-		succeededJobs(jobsStats, JobAdminService.class),
-		failedJobs(jobsStats, JobAdminService.class),
-		deletedJobs(jobsStats, JobAdminService.class),
-
 	client(ClientReadWriteService.class),
 		contact(client, ClientContactService.class),
 	clientEdit(ClientReadWriteService.class),
@@ -71,7 +65,20 @@ public enum CxboxRestController implements EnumBcIdentifier {
 	dashboardSalesFunnel(dashboardFilter, SaleStatsService.class),
 	dashboardSalesRingProgress(dashboardFilter, SaleProgressStatsService.class),
 	companySuggestionPickList(CompanyService.class),
+
+	//administration
+	dictionary(DictionaryService.class),
+		dictionaryType(dictionary, DictionaryTypeService.class),
+	lovExternal(LovReadService.class),
+	jobsStats(JobStatsService.class),
+		scheduledJobs(jobsStats, JobAdminService.class),
+		enqueuedJobs(jobsStats, JobAdminService.class),
+		processingJobs(jobsStats, JobAdminService.class),
+		succeededJobs(jobsStats, JobAdminService.class),
+		failedJobs(jobsStats, JobAdminService.class),
+		deletedJobs(jobsStats, JobAdminService.class),
 	responsibilities(ResponsibilitesService.class);
+
 	// @formatter:on
 
 	public static final EnumBcIdentifier.Holder<CxboxRestController> Holder = new Holder<>(CxboxRestController.class);

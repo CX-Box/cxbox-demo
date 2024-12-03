@@ -6,10 +6,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.cxbox.api.data.dto.DataResponseDTO;
 import org.cxbox.core.util.filter.SearchParameter;
+import org.cxbox.core.util.filter.provider.impl.DictionaryValueProvider;
 import org.cxbox.core.util.filter.provider.impl.EnumValueProvider;
 import org.demo.entity.Client;
+import org.demo.entity.dictionary.ClientImportance;
 import org.demo.entity.enums.ClientEditStep;
-import org.demo.entity.enums.ClientImportance;
 import org.demo.entity.enums.ClientStatus;
 
 @Getter
@@ -23,7 +24,7 @@ public abstract class ClientAbstractDTO extends DataResponseDTO {
 	@SearchParameter(name = "address")
 	private String address;
 
-	@SearchParameter(name = "importance", provider = EnumValueProvider.class)
+	@SearchParameter(name = "importance", provider = DictionaryValueProvider.class)
 	private ClientImportance importance;
 
 	private ClientEditStep editStep;
@@ -48,7 +49,7 @@ public abstract class ClientAbstractDTO extends DataResponseDTO {
 		this.importance = client.getImportance();
 		this.editStep = client.getEditStep();
 		this.status = client.getStatus();
-		this.color = Optional.ofNullable(client.getImportance()).map(ClientImportance::getColor).orElse(null);
+		this.color = Optional.ofNullable(client.getImportance()).map(ClientImportance.colors::get).orElse(null);
 		this.brief = client.getBrief();
 		this.briefId = client.getBriefId();
 	}

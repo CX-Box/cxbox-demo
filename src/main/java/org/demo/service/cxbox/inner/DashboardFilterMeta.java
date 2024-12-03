@@ -1,6 +1,7 @@
 package org.demo.service.cxbox.inner;
 
 import java.util.Arrays;
+import org.cxbox.api.data.dictionary.SimpleDictionary;
 import org.cxbox.core.crudma.bc.impl.InnerBcDescription;
 import org.cxbox.core.dto.rowmeta.FieldsMeta;
 import org.cxbox.core.dto.rowmeta.RowDependentFieldsMeta;
@@ -18,20 +19,21 @@ public class DashboardFilterMeta extends FieldMetaBuilder<DashboardFilterDTO> {
 	@Override
 	public void buildRowDependentMeta(RowDependentFieldsMeta<DashboardFilterDTO> fields, InnerBcDescription bcDescription,
 			Long id, Long parentId) {
+		fields.setEnabled(
+				DashboardFilterDTO_.fieldOfActivity
+		);
+		fields.setConcreteValues(
+				DashboardFilterDTO_.fieldOfActivity,
+				Arrays.stream(FieldOfActivity.values())
+						.map(e -> new SimpleDictionary(e.name(), e.getValue()))
+						.toList()
+		);
 	}
 
 	@Override
 	public void buildIndependentMeta(FieldsMeta<DashboardFilterDTO> fields, InnerBcDescription bcDescription,
 			Long parentId) {
-		fields.setEnabled(
-				DashboardFilterDTO_.fieldOfActivity
-		);
-		fields.setDictionaryTypeWithCustomValues(
-				DashboardFilterDTO_.fieldOfActivity,
-				Arrays.stream(FieldOfActivity.values())
-						.map(FieldOfActivity::getValue)
-						.toArray(String[]::new)
-		);
+
 		fields.setForceActive(DashboardFilterDTO_.fieldOfActivity);
 	}
 

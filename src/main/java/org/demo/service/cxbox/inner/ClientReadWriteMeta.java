@@ -1,6 +1,7 @@
 package org.demo.service.cxbox.inner;
 
 import java.util.Arrays;
+import org.cxbox.api.data.dictionary.SimpleDictionary;
 import org.cxbox.core.crudma.bc.impl.InnerBcDescription;
 import org.cxbox.core.dto.DrillDownType;
 import org.cxbox.core.dto.rowmeta.FieldsMeta;
@@ -11,7 +12,6 @@ import org.demo.dto.cxbox.inner.ClientReadDTO_;
 import org.demo.dto.cxbox.inner.ClientWriteDTO;
 import org.demo.dto.cxbox.inner.ClientWriteDTO_;
 import org.demo.entity.enums.ClientEditStep;
-import org.demo.entity.enums.ClientImportance;
 import org.demo.entity.enums.ClientStatus;
 import org.demo.entity.enums.FieldOfActivity;
 import org.springframework.stereotype.Service;
@@ -41,17 +41,17 @@ public class ClientReadWriteMeta extends FieldMetaBuilder<ClientWriteDTO> {
 				ClientWriteDTO_.status
 		);
 
-		fields.setEnumValues(ClientWriteDTO_.importance, ClientImportance.values());
+		fields.setDictionaryValues(ClientWriteDTO_.importance);
 
 		fields.setEnumValues(ClientWriteDTO_.editStep, ClientEditStep.values());
 
 		fields.setEnumValues(ClientWriteDTO_.status, ClientStatus.values());
 
-		fields.setDictionaryTypeWithCustomValues(
+		fields.setConcreteValues(
 				ClientWriteDTO_.fieldOfActivity,
 				Arrays.stream(FieldOfActivity.values())
-						.map(FieldOfActivity::getValue)
-						.toArray(String[]::new)
+						.map(e -> new SimpleDictionary(e.name(), e.getValue()))
+						.toList()
 		);
 
 		fields.setDrilldown(
@@ -76,7 +76,7 @@ public class ClientReadWriteMeta extends FieldMetaBuilder<ClientWriteDTO> {
 		fields.enableSort(ClientWriteDTO_.address);
 		fields.enableFilter(ClientWriteDTO_.importance);
 		fields.enableSort(ClientWriteDTO_.importance);
-		fields.setEnumFilterValues(fields, ClientWriteDTO_.importance, ClientImportance.values());
+		fields.setDictionaryFilterValues(ClientWriteDTO_.importance);
 		fields.enableSort(ClientWriteDTO_.importance);
 		fields.enableFilter(ClientWriteDTO_.status);
 		fields.enableSort(ClientWriteDTO_.status);

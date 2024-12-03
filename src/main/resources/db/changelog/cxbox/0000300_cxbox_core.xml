@@ -2,8 +2,10 @@
 <databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd"
-  logicalFilePath="db/changelog/0000300_cxbox_core.xml">
+  logicalFilePath="db/changelog/0000999_data.xml">
 
+  <property name="app_seq_next_val" value="nextval('APP_SEQ')" dbms="postgresql"/>
+  <property name="app_seq_next_val" value="APP_SEQ.NEXTVAL" dbms="oracle"/>
 
   <changeSet author="cxbox" id="BC_FILTER_GROUPS TABLE">
     <createTable remarks="Группы фильтров" tableName="BC_FILTER_GROUPS">
@@ -36,6 +38,15 @@
       </column>
     </createTable>
   </changeSet>
+
+  <changeSet id="BC_FILTER_GROUPS TABLE_USER" author="cxbox">
+    <addColumn tableName="BC_FILTER_GROUPS">
+      <column name="USER_ID" type="VARCHAR2(255)" remarks="Идентификатор пользователя">
+        <constraints nullable="true"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
   <changeSet author="cxbox" id="BC_PROPERTIES TABLE">
     <createTable remarks="Поиск по умолчанию" tableName="BC_PROPERTIES">
       <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
@@ -153,7 +164,7 @@
       </column>
       <column defaultValueNumeric="0" name="ADDITION_FLG" remarks="Вспомогательный" type="NUMBER(1, 0)"/>
       <column name="DICTIONARY_TYPE_ID" type="NUMBER(19, 0)">
-        <constraints nullable="false"/>
+        <constraints nullable="true"/>
       </column>
       <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
         <constraints nullable="false"/>
@@ -452,6 +463,54 @@
     </createTable>
   </changeSet>
 
+  <changeSet author="cxbox" id="ADDITIONAL_FIELDS TABLE">
+    <createTable remarks="Добавленные поля" tableName="ADDITIONAL_FIELDS">
+      <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="USER_ID" remarks="Идентификатор пользователя" type="VARCHAR2(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="VIEW" remarks="Название VIEW" type="VARCHAR2(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="WIDGET" remarks="Название WIDGET" type="VARCHAR2(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="ORDER_FIELDS" remarks="Последовательность полей" type="VARCHAR2(400 BYTE)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="ADDED_TO_ADDITIONAL_FIELDS" remarks="Добавленные поля" type="VARCHAR2(4000 BYTE)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REMOVED_FROM_ADDITIONAL_FIELDS" remarks="Скрытые поля" type="VARCHAR2(4000 BYTE)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" remarks="Дата изменения"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet id="ADDITIONAL_FIELDS ADD DATE" author="cxbox">
+    <addColumn tableName="ADDITIONAL_FIELDS">
+      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" remarks="Дата создания"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
   <changeSet author="cxbox" id="BC_FILTER_GROUPS INDEXES">
     <addUniqueConstraint columnNames="NAME, BC" constraintName="BC_FILTER_GROUPS_UNIQUE"
       tableName="BC_FILTER_GROUPS"/>
@@ -486,12 +545,12 @@
       <column name="TYPE"/>
       <column name="KEY"/>
     </createIndex>
-    <addUniqueConstraint columnNames="TYPE, DISPLAY_ORDER" constraintName="DIC_SELECT_UNIQUE_TYPE_ORDER"
-      tableName="DICTIONARY_ITEM"/>
-    <createIndex indexName="DIC_SELECT_UNIQUE_TYPE_ORDER_INDEX" tableName="DICTIONARY_ITEM" unique="true">
+    <!--<addUniqueConstraint columnNames="TYPE, DISPLAY_ORDER" constraintName="DIC_SELECT_UNIQUE_TYPE_ORDER"
+      tableName="DICTIONARY_ITEM"/>-->
+    <!--<createIndex indexName="DIC_SELECT_UNIQUE_TYPE_ORDER_INDEX" tableName="DICTIONARY_ITEM" unique="true">
       <column name="TYPE"/>
       <column name="DISPLAY_ORDER"/>
-    </createIndex>
+    </createIndex>-->
     <createIndex indexName="DICTIONARY_ITEM_IND1" tableName="DICTIONARY_ITEM">
       <column defaultValueNumeric="1" name="CREATED_BY_USER_ID"/>
     </createIndex>
@@ -516,7 +575,6 @@
       tableName="DICTIONARY_ITEM_TR"/>
   </changeSet>
 
-
   <changeSet author="cxbox" id="USERS INDEXES">
     <addUniqueConstraint columnNames="LOGIN" constraintName="UK_LOGIN_NAME" tableName="USERS"/>
     <createIndex indexName="UK_LOGIN_NAME_INDEX" tableName="USERS" unique="true">
@@ -527,6 +585,15 @@
     </createIndex>
     <createIndex indexName="USERS_IND2" tableName="USERS">
       <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet author="cxbox" id="DICTIONARY_ITEM INDEXES Part 2">
+    <addUniqueConstraint columnNames="TYPE, VALUE" constraintName="DIC_SELECT_UNIQUE_TYPE_VALUE"
+      tableName="DICTIONARY_ITEM"/>
+    <createIndex indexName="DIC_SELECT_UNIQUE_TYPE_VALUE_INDEX" tableName="DICTIONARY_ITEM" unique="true">
+      <column name="TYPE"/>
+      <column name="VALUE"/>
     </createIndex>
   </changeSet>
 
@@ -747,50 +814,6 @@
       constraintName="SEARCH_SPEC_UPDATED_USER_FK" deferrable="false"
       initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
       referencedColumnNames="ID" referencedTableName="USERS" validate="true"/>
-  </changeSet>
-
-  <changeSet author="cxbox" id="INITIAL DATA">
-    <loadData tableName="USERS" encoding="UTF-8" separator=";" quotchar="&quot;"
-      file="db/data/CXBOX-USERS.csv">
-      <column header="ID" name="ID" type="NUMERIC"/>
-      <column header="FIRST_NAME" name="FIRST_NAME" type="STRING"/>
-      <column header="LAST_NAME" name="LAST_NAME" type="STRING"/>
-      <column header="LOGIN" name="LOGIN" type="STRING"/>
-    </loadData>
-  </changeSet>
-
-  <changeSet author="cxbox" id="INITIAL DATA(2)">
-    <loadData tableName="USER_ROLE" encoding="UTF-8" separator=";" quotchar="&quot;"
-      file="db/data/CXBOX-USER_ROLE.csv">
-      <column header="ID" name="ID" type="NUMERIC"/>
-      <column header="USER_ID" name="USER_ID" type="NUMERIC"/>
-      <column header="INTERNAL_ROLE_CD" name="INTERNAL_ROLE_CD" type="STRING"/>
-      <column header="ACTIVE" name="ACTIVE" type="NUMERIC"/>
-      <column header="MAIN" name="MAIN" type="NUMERIC"/>
-    </loadData>
-  </changeSet>
-
-  <changeSet author="cxbox" id="DICTIONARIES" runOnChange="true">
-    <delete tableName="DICTIONARY_ITEM_TR"/>
-
-    <loadUpdateData tableName="DICTIONARY_TYPE" primaryKey="ID" encoding="UTF-8" separator=";" quotchar="&quot;"
-      file="db/data/CXBOX-DICTIONARY_TYPE.csv">
-      <column header="ID" name="ID" type="NUMERIC"/>
-      <column header="TYPE" name="TYPE" type="STRING"/>
-      <column header="TYPE_DESC" name="TYPE_DESC" type="STRING"/>
-    </loadUpdateData>
-
-    <loadUpdateData tableName="DICTIONARY_ITEM" primaryKey="TYPE,KEY" encoding="UTF-8" separator=";"
-      quotchar="&quot;" file="db/data/CXBOX-DICTIONARY_ITEM.csv">
-      <column header="ID" name="ID" type="NUMERIC"/>
-      <column header="DICTIONARY_TYPE_ID" name="DICTIONARY_TYPE_ID" type="NUMERIC"/>
-      <column header="TYPE" name="TYPE" type="STRING"/>
-      <column header="KEY" name="KEY" type="STRING"/>
-      <column header="VALUE" name="VALUE" type="STRING"/>
-      <column header="ACTIVE" name="ACTIVE" type="NUMERIC"/>
-      <column header="DISPLAY_ORDER" name="DISPLAY_ORDER" type="NUMERIC"/>
-      <column header="DESCRIPTION" name="DESCRIPTION" type="STRING"/>
-    </loadUpdateData>
   </changeSet>
 
 </databaseChangeLog>

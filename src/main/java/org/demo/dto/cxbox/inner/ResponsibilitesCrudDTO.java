@@ -1,7 +1,5 @@
 package org.demo.dto.cxbox.inner;
 
-import static org.demo.conf.cxbox.extension.lov.AdministeredDictionaryType.INTERNAL_ROLE;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,13 +8,12 @@ import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.dto.multivalue.MultivalueField;
 import org.cxbox.core.util.filter.SearchParameter;
 import org.cxbox.core.util.filter.provider.impl.BooleanValueProvider;
+import org.cxbox.core.util.filter.provider.impl.DictionaryValueProvider;
 import org.cxbox.core.util.filter.provider.impl.EnumValueProvider;
-import org.cxbox.core.util.filter.provider.impl.LovValueProvider;
 import org.cxbox.core.util.filter.provider.impl.StringValueProvider;
 import org.cxbox.meta.entity.Responsibilities;
 import org.cxbox.meta.entity.Responsibilities.ResponsibilityType;
-import org.demo.conf.cxbox.extension.lov.AdministeredDictionary;
-import org.demo.conf.cxbox.extension.lov.AdministeredDictionaryType;
+import org.demo.entity.dictionary.InternalRole;
 
 @SuppressWarnings("java:S1948")
 @Getter
@@ -24,9 +21,8 @@ import org.demo.conf.cxbox.extension.lov.AdministeredDictionaryType;
 @NoArgsConstructor
 public class ResponsibilitesCrudDTO extends DataResponseDTO {
 
-	@SearchParameter(provider = LovValueProvider.class)
-	@AdministeredDictionary(AdministeredDictionaryType.INTERNAL_ROLE)
-	private String internalRoleCD;
+	@SearchParameter(provider = DictionaryValueProvider.class)
+	private InternalRole internalRoleCD;
 
 	private String screens;
 
@@ -50,7 +46,7 @@ public class ResponsibilitesCrudDTO extends DataResponseDTO {
 
 	public ResponsibilitesCrudDTO(Responsibilities responsibilities) {
 		this.id = responsibilities.getId().toString();
-		this.internalRoleCD = INTERNAL_ROLE.lookupValue(responsibilities.getInternalRoleCD());
+		this.internalRoleCD = new InternalRole(responsibilities.getInternalRoleCD());
 		this.screens = responsibilities.getScreens();
 		this.view = responsibilities.getView();
 		this.respType = responsibilities.getResponsibilityType();

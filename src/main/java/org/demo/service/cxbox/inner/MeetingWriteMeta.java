@@ -1,7 +1,5 @@
 package org.demo.service.cxbox.inner;
 
-import static org.demo.dto.cxbox.RegionDictionaryType.REGIONS;
-
 import java.util.Optional;
 import org.cxbox.api.data.dto.rowmeta.FieldDTO;
 import org.cxbox.core.crudma.bc.impl.InnerBcDescription;
@@ -23,7 +21,7 @@ public class MeetingWriteMeta extends FieldMetaBuilder<MeetingDTO> {
 	public void buildRowDependentMeta(RowDependentFieldsMeta<MeetingDTO> fields, InnerBcDescription bcDescription,
 			Long id, Long parentId) {
 		fields.setEnabled(MeetingDTO_.region);
-		fields.setDictionaryTypeWithAllValues(MeetingDTO_.region, REGIONS);
+		fields.setDictionaryValues(MeetingDTO_.region);
 		fields.setEnabled(MeetingDTO_.additionalContacts);
 		if (MeetingStatus.IN_COMPLETION.equals(fields.get(MeetingDTO_.status).getCurrentValue())) {
 			fields.setEnabled(
@@ -77,8 +75,8 @@ public class MeetingWriteMeta extends FieldMetaBuilder<MeetingDTO> {
 		fields.enableFilter(MeetingDTO_.additionalContacts);
 		fields.enableFilter(MeetingDTO_.clientName);
 		fields.enableFilter(MeetingDTO_.region);
+		fields.setDictionaryFilterValues(MeetingDTO_.region);
 		fields.enableSort(MeetingDTO_.region);
-		fields.setAllFilterValuesByLovType(MeetingDTO_.region, REGIONS);
 		fields.setForceActive(MeetingDTO_.clientId);
 		fields.setForceActive(MeetingDTO_.clientName);
 		fields.enableSort(MeetingDTO_.clientName);

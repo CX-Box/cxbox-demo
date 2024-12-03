@@ -11,6 +11,9 @@
   <logger name="org.springframework.context.support.ResourceBundleMessageSource" level="OFF"/>
   <logger name="org.cxbox.api.util.i18n.ErrorMessageSource" level="OFF"/>
   <logger name="org.cxbox.api.util.i18n.InfoMessageSource" level="OFF"/>
+  <logger name="org.hibernate.SQL" level="TRACE"/>
+  <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE"/>
+  <logger name="oorg.hibernate.orm.jdbc.bind" level="OFF"/>
 
   <root level="INFO">
     <appender-ref ref="STDOUT"/>

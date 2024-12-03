@@ -4,3 +4,4 @@ ID;BC;PAGE_LIMIT;SORT;FILTER
 3;'companySuggestionPickList';NULL;NULL;'""'
 4;'meetingDocumentEdit';1000;NULL;'""'
 5;'responsibilities';1000;NULL;'""'
+6;'dictionary';1000;_sort.0.desc=displayOrder;'""'

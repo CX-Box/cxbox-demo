@@ -12,7 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.cxbox.model.core.entity.BaseEntity;
-import org.demo.entity.enums.Briefings;
+import org.demo.entity.dictionary.Briefings;
 import org.demo.entity.enums.Documents;
 
 @Entity
@@ -36,7 +36,6 @@ public class MeetingDocuments extends BaseEntity {
 	private Meeting meeting;
 
 	@Column
-	@Enumerated(EnumType.STRING)
 	private Briefings briefing;
 
 	@Column

@@ -26,7 +26,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.cxbox.api.data.dictionary.LOV;
 import org.cxbox.model.core.entity.BaseEntity;
 
 @Entity
@@ -42,7 +41,7 @@ public class UserRole extends BaseEntity {
 	private User user;
 
 	@Column(name = "INTERNAL_ROLE_CD")
-	private LOV internalRoleCd;
+	private String internalRoleCd;
 
 	@Column
 	private Boolean active;

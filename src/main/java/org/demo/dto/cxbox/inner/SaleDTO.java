@@ -5,9 +5,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.cxbox.api.data.dto.DataResponseDTO;
 import org.cxbox.core.util.filter.SearchParameter;
+import org.cxbox.core.util.filter.provider.impl.DictionaryValueProvider;
 import org.cxbox.core.util.filter.provider.impl.EnumValueProvider;
 import org.demo.entity.Sale;
-import org.demo.entity.enums.Product;
+import org.demo.entity.dictionary.Product;
 import org.demo.entity.enums.SaleStatus;
 
 @Getter
@@ -20,7 +21,7 @@ public class SaleDTO extends DataResponseDTO {
 
 	private Long clientId;
 
-	@SearchParameter(name = "product", provider = EnumValueProvider.class)
+	@SearchParameter(name = "product", provider = DictionaryValueProvider.class)
 	private Product product;
 
 	@SearchParameter(name = "status", provider = EnumValueProvider.class)

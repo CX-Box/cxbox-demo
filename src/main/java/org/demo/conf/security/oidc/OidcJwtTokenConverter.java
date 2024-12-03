@@ -7,7 +7,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.cxbox.api.data.dictionary.LOV;
 import org.cxbox.api.service.session.CxboxUserDetailsInterface;
 import org.demo.conf.cxbox.customization.role.UserService;
 import org.demo.entity.core.User;
@@ -67,7 +66,7 @@ public class OidcJwtTokenConverter implements Converter<Jwt, OidcAuthenticationT
 
 		CxboxUserDetailsInterface userDetails = userService.createUserDetails(
 				user,
-				new LOV(roles.stream().findFirst().get().getAuthority())
+				roles.stream().findFirst().get().getAuthority()
 		);
 		return new OidcAuthenticationToken(jwt, authorities, login, userDetails);
 

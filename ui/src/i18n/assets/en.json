@@ -77,6 +77,7 @@
         "Select all": "Select all",
         "Open link in new tab": "Open link in new tab",
         "Copy link address": "Copy link address",
-        "Link copied successfully": "Link copied successfully"
+        "Link copied successfully": "Link copied successfully",
+        "Opening drill-downs with non-ID-based filtering in a new tab is currently not supported. Please contact your administrator": "Opening drill-downs with non-ID-based filtering in a new tab is currently not supported. Please contact your administrator"
     }
 }

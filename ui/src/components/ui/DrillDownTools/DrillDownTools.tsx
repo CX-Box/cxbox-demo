@@ -1,11 +1,10 @@
 import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
-import { Icon } from 'antd'
+import DrillDownTooltipContent from '@components/ui/DrillDownTooltipContent/DrillDownTooltipContent'
 import { drillDownInNewTab } from '@actions'
 import copyTextToClipboard from '@utils/copyTextToClipboard'
 import { WidgetFieldBase } from '@cxbox-ui/schema'
-import styles from './DrillDownTools.less'
 
 export interface DrillDownToolsProps {
     widgetName?: string
@@ -47,12 +46,7 @@ const DrillDownTools: React.FunctionComponent<DrillDownToolsProps> = ({ meta, cu
         [fullUrl, handleDrillDownInNewTab, t]
     )
 
-    return (
-        <div className={styles.container}>
-            <Icon title={t('Open link in new tab')} type="export" onClick={handleDrillDownInNewTab} />
-            <Icon title={t('Copy link address')} type="copy" onClick={handleCopyLink} />
-        </div>
-    )
+    return <DrillDownTooltipContent onDrillDownInNewTab={handleDrillDownInNewTab} onCopyLink={handleCopyLink} />
 }
 
 export default React.memo(DrillDownTools)

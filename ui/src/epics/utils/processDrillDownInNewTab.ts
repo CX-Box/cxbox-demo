@@ -1,3 +1,4 @@
+import { notification } from 'antd'
 import { t } from 'i18next'
 import copyTextToClipboard from '@utils/copyTextToClipboard'
 import getFullUrl from '@utils/getFullUrl'
@@ -18,13 +19,28 @@ const processDrillDownInNewTab = (
         state.view.widgets.find(widget => widget.bcName === bcName)?.fields.find((field: any) => field.key === fieldKey) as WidgetFieldBase
     )?.drillDownKey as string
     const customDrillDownUrl = state.data[bcName]?.find(record => record.id === cursor)?.[drillDownKey] as string
-    const drillDownUrl = getFullUrl(customDrillDownUrl || drillDownField?.drillDown, drillDownField?.drillDownType as DrillDownType)
+    const drillDownUrl = customDrillDownUrl || drillDownField?.drillDown
 
     if (drillDownUrl) {
+        const urlObject = new URL(drillDownUrl, window.location.origin)
+
+        if (urlObject.searchParams?.size) {
+            notification.warn({
+                message: t(
+                    'Opening drill-downs with non-ID-based filtering in a new tab is currently not supported. Please contact your administrator'
+                )
+            })
+            return
+        }
+    }
+
+    const drillDownFullUrl = getFullUrl(drillDownUrl, drillDownField?.drillDownType as DrillDownType)
+
+    if (drillDownFullUrl) {
         if (copyLink) {
-            copyTextToClipboard(drillDownUrl, t('Link copied successfully'))
+            copyTextToClipboard(drillDownFullUrl, t('Link copied successfully'))
         } else {
-            window.open(drillDownUrl, '_blank')
+            window.open(drillDownFullUrl, '_blank')
         }
     }
 }

@@ -4,7 +4,8 @@ import { AppWidgetMeta } from '@interfaces/widget'
 export enum EFeatureSettingKey {
     filterByRangeEnabled = 'filterByRangeEnabled',
     sortEnabled = 'sortEnabled',
-    drillDownTooltip = 'drillDownTooltip'
+    drillDownTooltip = 'drillDownTooltip',
+    multiroleEnabled = 'multirole-enabled'
 }
 
 export type FeatureSetting = {

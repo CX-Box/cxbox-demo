@@ -10,21 +10,25 @@ import { WidgetFieldBase } from '@cxbox-ui/schema'
 import { DrillDownType } from '@cxbox-ui/core'
 
 export interface DrillDownProps {
-    displayedValue: React.ReactNode
+    displayedValue?: React.ReactNode
     widgetName?: string
     cursor?: string
     meta?: WidgetFieldBase
     url?: string
     type?: DrillDownType
+    drillDownComponent?: React.ReactNode
     onDrillDown: () => void
 }
 
-const DrillDown: React.FC<DrillDownProps> = ({ displayedValue, widgetName, cursor, meta, url, type, onDrillDown }) => {
+const DrillDown: React.FC<DrillDownProps> = ({ displayedValue, widgetName, cursor, meta, url, type, drillDownComponent, onDrillDown }) => {
     const drillDownTooltip = useAppSelector(state =>
         state.session.featureSettings?.find(featureSetting => featureSetting.key === EFeatureSettingKey.drillDownTooltip)
     )
 
-    const drillDownLink = useMemo(() => <ActionLink onClick={onDrillDown}>{displayedValue}</ActionLink>, [displayedValue, onDrillDown])
+    const drillDownLink = useMemo(
+        () => drillDownComponent || <ActionLink onClick={onDrillDown}>{displayedValue}</ActionLink>,
+        [displayedValue, drillDownComponent, onDrillDown]
+    )
 
     return (
         <>

@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.cxbox.api.data.dto.DataResponseDTO;
-import org.cxbox.core.dto.DrillDownType;
 import org.demo.entity.NotificationLink;
 
 @Getter
@@ -18,12 +17,12 @@ public class NotificationLinkDTO extends DataResponseDTO {
 
 	private String drillDownLabel;
 
-	private DrillDownType drillDownType;
+	private String drillDownType;
 
 	public NotificationLinkDTO(NotificationLink entity) {
 		this.drillDownLink = entity.getDrillDownLink();
 		this.drillDownLabel = entity.getDrillDownLabel();
-		this.drillDownType = entity.getDrillDownType();
+		this.drillDownType = entity.getDrillDownType().getValue();
 	}
 
 }

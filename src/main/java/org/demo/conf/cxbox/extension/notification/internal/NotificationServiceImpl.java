@@ -5,7 +5,6 @@ import static java.util.Optional.ofNullable;
 
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.cxbox.api.service.session.IUser;
@@ -13,6 +12,7 @@ import org.cxbox.core.dto.DrillDownType;
 import org.cxbox.core.util.session.SessionService;
 import org.demo.conf.cxbox.extension.notification.AbstractNotification;
 import org.demo.conf.cxbox.extension.notification.Notification;
+import org.demo.conf.cxbox.extension.notification.NotificationLink;
 import org.demo.entity.NotificationEntity;
 import org.demo.entity.core.NotificationLinkEntity;
 import org.demo.repository.core.NotificationRepository;
@@ -61,14 +61,15 @@ public class NotificationServiceImpl implements NotificationService {
 				.user(userRepository.getReferenceById(user.getId()))
 				.text(message.getText())
 				.isRead(false)
-				.createdDateUtc(LocalDateTime.now(UTC));
+				.createdDateUtc(LocalDateTime.now(UTC))
+				.build();
 		if (message instanceof Notification notificationMessage) {
-			notification.links(ofNullable(notificationMessage.getLinks()).orElse(new ArrayList<>())
+			notification.addNotificationLinks(notificationMessage.getLinks()
 					.stream()
 					.map(this::linkToEntity)
 					.toList());
 		}
-		notificationRepository.save(notification.build());
+		notificationRepository.save(notification);
 		notificationRepository.flush();
 		webSocketNotificationService.send(message, user);
 	}
@@ -91,14 +92,14 @@ public class NotificationServiceImpl implements NotificationService {
 				.time(ZonedDateTime.of(entity.getCreatedDateUtc(), UTC))
 				.links(entity.getLinks()
 						.stream()
-						.map(link -> org.demo.conf.cxbox.extension.notification.NotificationLink
+						.map(link -> NotificationLink
 								.of(link.getDrillDownLabel())
 								.setDrillDown(link.getDrillDownType(), link.getDrillDownLink()))
 						.toList())
 				.build();
 	}
 
-	public NotificationLinkEntity linkToEntity(org.demo.conf.cxbox.extension.notification.NotificationLink entity) {
+	public NotificationLinkEntity linkToEntity(NotificationLink entity) {
 		return NotificationLinkEntity.builder()
 				.drillDownLink(entity.getDrillDownLink())
 				.drillDownType(ofNullable(entity.getDrillDownType()).map(DrillDownType::of).orElse(null))

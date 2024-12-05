@@ -8,6 +8,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,8 +40,21 @@ public class NotificationEntity extends BaseEntity {
 
 	private LocalDateTime createdDateUtc;
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-	@JoinColumn(name = "NOTIFICATION_ID")
-	private List<NotificationLinkEntity> links;
+	@Builder.Default
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "notification")
+	private List<NotificationLinkEntity> links = new ArrayList<>();
+
+	/**
+	 * see <a href="https://vladmihalcea.com/the-best-way-to-map-a-onetomany-association-with-jpa-and-hibernate/">best way to map a OneToMany association</a>
+	 */
+	public void addNotificationLinks(List<NotificationLinkEntity> links) {
+		this.links.addAll(links);
+		links.forEach(link -> link.setNotification(this));
+	}
+
+	public void removeNotificationLinks(NotificationLinkEntity link) {
+		this.links.remove(link);
+		link.setNotification(null);
+	}
 
 }

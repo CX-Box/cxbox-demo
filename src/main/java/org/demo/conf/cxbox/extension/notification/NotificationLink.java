@@ -5,7 +5,6 @@ import lombok.NonNull;
 import org.cxbox.core.service.action.DrillDownTypeSpecifier;
 
 @Getter
-@NonNull
 public class NotificationLink {
 
 	private String drillDownLink;

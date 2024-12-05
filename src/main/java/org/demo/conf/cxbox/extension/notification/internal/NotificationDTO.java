@@ -1,7 +1,9 @@
 package org.demo.conf.cxbox.extension.notification.internal;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 import org.demo.conf.cxbox.extension.notification.NotificationLink;
@@ -18,6 +20,7 @@ public class NotificationDTO {
 
 	private String text;
 
-	private List<NotificationLink> links;
+	@Builder.Default
+	private List<NotificationLink> links = new ArrayList<>();
 
 }

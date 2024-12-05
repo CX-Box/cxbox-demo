@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.cxbox.core.dto.DrillDownType;
 import org.cxbox.core.util.session.SessionService;
 import org.demo.entity.Notification;
 import org.demo.entity.NotificationLink;
@@ -82,7 +83,7 @@ public class NotificationServiceImpl implements NotificationService {
 	private NotificationLink notificationLinkDtoToEntity(NotificationLinkDTO notificationLinkDTO) {
 		return NotificationLink.builder()
 				.drillDownLink(notificationLinkDTO.getDrillDownLink())
-				.drillDownType(notificationLinkDTO.getDrillDownType())
+				.drillDownType(DrillDownType.of(notificationLinkDTO.getDrillDownType()))
 				.drillDownLabel(notificationLinkDTO.getDrillDownLabel())
 				.build();
 	}

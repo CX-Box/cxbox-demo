@@ -66,7 +66,7 @@ export function useNotificationClient(subscribeCallback?: (messageBody: SocketNo
 
         notificationClient.subscribe(subscribeUrl, message => {
             const messageBody = JSON.parse(message.body) as SocketNotification
-            const { title, time, text, icon, iconColor, drillDownLink, drillDownType, drillDownLabel, errorType } = messageBody
+            const { title, time, text, icon, iconColor, links, errorType } = messageBody
 
             if (checkAndShowErrorMessage(errorType as number, text)) {
                 return
@@ -76,9 +76,7 @@ export function useNotificationClient(subscribeCallback?: (messageBody: SocketNo
                 route: router,
                 dispatch,
                 time,
-                drillDownLink,
-                drillDownType,
-                drillDownLabel,
+                links,
                 message: title,
                 description: text,
                 icon,

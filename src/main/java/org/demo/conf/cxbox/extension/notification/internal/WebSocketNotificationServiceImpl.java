@@ -1,12 +1,10 @@
-package org.demo.conf.cxbox.extension.notification;
-
-import static org.demo.conf.websocket.WebSocketConfig.getUserNotificationsDestination;
+package org.demo.conf.cxbox.extension.notification.internal;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.cxbox.api.service.session.IUser;
-import org.demo.entity.core.User;
+import org.demo.conf.cxbox.extension.notification.AbstractNotification;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -27,21 +25,10 @@ public class WebSocketNotificationServiceImpl implements WebSocketNotificationSe
 
 	@Override
 	@SneakyThrows
-	public void send(SocketNotificationDTO socketNotificationDTO, User currentUser) {
-
+	public <T extends AbstractNotification> void send(T message, IUser<Long> user) {
 		simpMessagingTemplate.convertAndSend(
-				getUserNotificationsDestination(prefix, urlPath, new IUser<>() {
-					@Override
-					public Long getId() {
-						return currentUser.getId();
-					}
-
-					@Override
-					public Long getDepartmentId() {
-						return currentUser.getDepartmentId();
-					}
-				}),
-				objectMapper.writeValueAsString(socketNotificationDTO)
+				prefix + "/" + user.getId() + urlPath,
+				objectMapper.writeValueAsString(message)
 		);
 	}
 

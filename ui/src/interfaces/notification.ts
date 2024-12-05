@@ -1,4 +1,4 @@
-import { interfaces } from '@cxbox-ui/core'
+import { DrillDownType, interfaces } from '@cxbox-ui/core'
 
 export interface NotificationState {
     data?: Notification[]
@@ -13,6 +13,13 @@ export interface Notification {
     createTime: string
     isRead: boolean
     text: string
+    links?: NotificationLink[]
+}
+
+export interface NotificationLink {
+    drillDownLink: string
+    drillDownLabel: string
+    drillDownType: DrillDownType
 }
 
 export interface NotificationsResponse {
@@ -37,9 +44,7 @@ export interface SocketNotification {
     text?: string
     icon?: string
     iconColor?: string
-    drillDownLink?: string
-    drillDownType?: string
-    drillDownLabel?: string
+    links?: NotificationLink[]
     page?: number
     limit?: number
 }

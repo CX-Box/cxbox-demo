@@ -385,5 +385,42 @@
     </createTable>
   </changeSet>
 
+  <changeSet author="cxbox" id="NOTIFICATION_LINKS TABLE">
+    <createTable tableName="NOTIFICATION_LINKS">
+      <column name="ID" type="NUMBER(19, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="NOTIFICATION_ID" type="NUMBER(50)">
+        <constraints nullable="false" foreignKeyName="NOTIF_LINK_NOTIF" references="NOTIFICATION"/>
+      </column>
+      <column name="DRILL_DOWN_LINK" type="VARCHAR2(4000 BYTE)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="DRILL_DOWN_LABEL" type="VARCHAR2(4000 BYTE)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="DRILL_DOWN_TYPE" type="VARCHAR2(4000 BYTE)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="${now}" name="CREATED_DATE"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="${now}" name="UPDATED_DATE"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
 
 </databaseChangeLog>

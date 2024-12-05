@@ -15,16 +15,18 @@ interface NotificationProps extends Omit<ArgsProps, 'icon'>, SocketNotification 
 }
 
 function showSocketNotification(props: NotificationProps) {
-    const { route, dispatch, time, icon, iconColor, drillDownLink = '', drillDownType, drillDownLabel, className, ...rest } = props
+    const { route, dispatch, time, icon, iconColor, links, className, ...rest } = props
+    const drilldown = links?.[0]
     let key = `open${Date.now()}`
     let btnOptions: ButtonProps = {
         type: 'link'
     }
-    if (drillDownType === 'downloadFile') {
+
+    if (drilldown?.drillDownType.toString() === 'downloadFile') {
         btnOptions = {
             ...btnOptions,
             target: '_blank',
-            href: CxBoxApiInstance.getMessageDownloadFileEndpoint(drillDownLink),
+            href: CxBoxApiInstance.getMessageDownloadFileEndpoint(drilldown.drillDownLink),
             onClick: () => {
                 notification.destroy()
             }
@@ -35,7 +37,9 @@ function showSocketNotification(props: NotificationProps) {
         btnOptions = {
             ...btnOptions,
             onClick: () => {
-                dispatch(actions.drillDown({ url: drillDownLink, drillDownType: drillDownType as interfaces.DrillDownType, route }))
+                if (drilldown) {
+                    dispatch(actions.drillDown({ url: drilldown.drillDownLink, drillDownType: drilldown.drillDownType, route }))
+                }
                 // notification.close(key) // uncomment if needed
             }
         }
@@ -44,7 +48,12 @@ function showSocketNotification(props: NotificationProps) {
         key,
         className: cn(styles.notification, className),
         duration: 0,
-        btn: <Button {...btnOptions}>{drillDownLabel}</Button>,
+        btn: drilldown ? (
+            <span>
+                <Button {...btnOptions}>{drilldown.drillDownLabel}</Button>
+                {links?.length > 1 ? `and ${links.length - 1} more...` : null}
+            </span>
+        ) : null,
         icon: icon ? <Icon type={icon} style={{ color: iconColor }} /> : null,
         ...rest
     })

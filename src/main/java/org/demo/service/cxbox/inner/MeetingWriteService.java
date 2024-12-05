@@ -192,7 +192,7 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 				Optional.ofNullable(meeting),
 				meeting.getAgenda(),
 				String.format(MESSAGE_TEMPLATE, meeting.getStatus().getValue(), meeting.getResult()),
-				userRepository.getReferenceById(sessionService.getSessionUser().getId())
+				sessionService.getSessionUser()
 		);
 	}
 

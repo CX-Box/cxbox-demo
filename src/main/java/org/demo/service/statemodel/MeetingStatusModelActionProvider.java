@@ -48,7 +48,7 @@ public class MeetingStatusModelActionProvider {
 										Optional.ofNullable(meeting),
 										meeting.getAgenda(),
 										String.format(messageTemplate, MeetingStatus.COMPLETED.getValue(), meeting.getResult()),
-										userRepository.getReferenceById(sessionService.getSessionUser().getId())
+										sessionService.getSessionUser()
 								);
 							}
 

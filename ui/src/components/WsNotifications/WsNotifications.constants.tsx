@@ -10,7 +10,7 @@ export const DEFAULT_MODAL_BODY_HEIGHT = 500
 export const columns = [
     {
         title: 'Create Time',
-        dataIndex: 'createTime',
+        dataIndex: 'time',
         render: (value: string) => {
             return <span>{moment(value).format('DD.MM.YYYY, HH:mm')}</span>
         }

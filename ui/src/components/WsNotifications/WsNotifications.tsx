@@ -66,7 +66,6 @@ export function WsNotifications(props: NotificationProps) {
             return lastValueFrom(instance.deleteNotifications(selectedRowKeys)).then(
                 () => {
                     setSelectedRowKeys([])
-                    notification.getCount()
                     notification.getCurrentPage()
                 },
                 (e: AxiosError) => {

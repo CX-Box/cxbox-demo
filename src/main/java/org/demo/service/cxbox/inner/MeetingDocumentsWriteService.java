@@ -1,10 +1,7 @@
 package org.demo.service.cxbox.inner;
 
-import static org.demo.conf.cxbox.customization.file.CxboxDemoMinioFileController.FILENAME_FIELD;
 import static org.demo.dto.cxbox.inner.MeetingDocumentsDTO_.notes;
 
-import io.minio.MinioClient;
-import io.minio.StatObjectArgs;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -18,11 +15,12 @@ import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.AssociateResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.cxbox.core.dto.rowmeta.PostAction;
+import org.cxbox.core.file.dto.FileDownloadDto;
+import org.cxbox.core.file.service.CxboxFileService;
 import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
 import org.cxbox.core.service.action.ActionsBuilder;
 import org.cxbox.model.core.entity.BaseEntity_;
-import org.demo.conf.cxbox.customization.file.CustomFileServices;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.inner.MeetingDocumentsDTO;
 import org.demo.dto.cxbox.inner.MeetingDocumentsDTO_;
@@ -32,7 +30,6 @@ import org.demo.entity.MeetingDocuments_;
 import org.demo.repository.MeetingDocumentsRepository;
 import org.demo.repository.MeetingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -48,13 +45,7 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 	private MeetingRepository meetingRepository;
 
 	@Autowired
-	private MinioClient minioClient; //TODO>>refactor to decouple code with CxboxDemoMinioFileController
-
-	@Value("${minio.bucket.name}")
-	private String defaultBucketName; //TODO>>refactor to decouple code with CxboxDemoMinioFileController
-
-	@Autowired
-	private CustomFileServices customFileServices;
+	private CxboxFileService cxboxFileService;
 
 	public MeetingDocumentsWriteService() {
 		super(MeetingDocumentsDTO.class, MeetingDocuments.class, null, MeetingDocumentsWriteMeta.class);
@@ -121,16 +112,9 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 		for (AssociateDTO item : fileIds) {
 			var meetingDocuments = new MeetingDocuments();
 			var fileId = item.getId();
-			meetingDocuments.setMeeting(meetingRepository.findById(bc.getParentIdAsLong()).get());
+			FileDownloadDto download = cxboxFileService.download(fileId, null);
 			meetingDocuments.setFileId(fileId);
-			var statObjectResponse = minioClient.statObject(StatObjectArgs
-					.builder()
-					.bucket(defaultBucketName)
-					.object(fileId)
-					.build()
-			);
-			var fileName = statObjectResponse.userMetadata().get(FILENAME_FIELD);
-			meetingDocuments.setFile(fileName);
+			meetingDocuments.setFile(download.getName());
 			meetingDocumentsList.add(meetingDocumentsRepository.save(meetingDocuments));
 
 		}

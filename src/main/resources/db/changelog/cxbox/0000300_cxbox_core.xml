@@ -340,12 +340,12 @@
       <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
         <constraints primaryKey="true"/>
       </column>
-      <column name="INTERNAL_ROLE_CD" remarks="Роль" type="VARCHAR2(255 BYTE)"/>
-      <column name="DEPT_ID" remarks="Департмент" type="NUMBER(19, 0)"/>
-      <column name="RESPONSIBILITIES" remarks="Респонсибилити" type="VARCHAR2(255 BYTE)"/>
-      <column name="SCREENS" remarks="Доступные пользователю скрины" type="CLOB"/>
-      <column name="RESP_TYPE" type="VARCHAR2(255)"/>
-      <column defaultValueNumeric="0" name="READ_ONLY" type="BOOLEAN">
+      <column name="INTERNAL_ROLE_CD" remarks="role" type="VARCHAR2(255 BYTE)"/>
+      <column name="DEPT_ID" remarks="department" type="NUMBER(19, 0)" defaultValue="0"/>
+      <column name="RESPONSIBILITIES" remarks="responsibilities" type="VARCHAR2(255 BYTE)"/>
+      <column name="SCREENS" remarks="screens available to the user" type="java.sql.Types.CLOB"/>
+      <column name="RESP_TYPE" type="VARCHAR2(255)" defaultValue="VIEW"/>
+      <column defaultValueNumeric="0" name="READ_ONLY" type="BOOLEAN" defaultValue="false">
         <constraints nullable="false"/>
       </column>
       <column defaultValueComputed="current_timestamp" name="CREATED_DATE" remarks="Дата создания"

@@ -10,6 +10,7 @@ import { LoginResponse } from '@interfaces/session'
 import { TableSettingsItem } from '@interfaces/tableSettings'
 import { FilterGroup } from '@interfaces/filters'
 import { saveAs } from 'file-saver'
+import { getFileNameFromDisposition } from '@utils/getFileNameFromDisposition'
 
 class Api extends CXBoxApi {
     fetchBcCount(screenName: string, bcName: string, params: BcCountParamsMap = {}) {
@@ -139,7 +140,7 @@ class Api extends CXBoxApi {
         const disposition = response.request.getResponseHeader('content-disposition')
 
         // TODO add parser for disposition
-        saveAs(response.data, filename ?? disposition)
+        saveAs(response.data, filename ?? getFileNameFromDisposition(disposition))
 
         return response
     }

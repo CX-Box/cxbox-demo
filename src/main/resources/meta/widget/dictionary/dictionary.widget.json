@@ -63,7 +63,8 @@
         "create",
         "save",
         "delete",
-        "reload-cache"
+        "clear_cache",
+        "export_liquibase"
       ]
     }
   }

@@ -1,0 +1,12 @@
+INTERNAL_ROLE_CD;RESP_TYPE;SCREENS;ID
+CXBOX_USER;SCREEN;"[{
+ ""name"": ""admin"",
+ ""text"": ""Admin"",
+ ""icon"": ""stock"",
+ ""order"": 999
+}]";
+BUSINESS_ADMIN;SCREEN;"[{
+ ""name"": ""admin"",
+ ""icon"": ""team"",
+ ""text"": ""Admin111""
+}]";

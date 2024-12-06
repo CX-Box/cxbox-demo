@@ -17,10 +17,9 @@ import org.cxbox.core.config.cache.CxboxCachingService;
 import org.cxbox.meta.data.ScreenDTO;
 import org.cxbox.meta.data.ViewDTO;
 import org.cxbox.meta.data.WidgetDTO;
-import org.cxbox.meta.entity.Responsibilities;
+import org.cxbox.meta.metahotreload.dto.ViewSourceDTO;
 import org.cxbox.meta.metahotreload.repository.MetaRepository;
-import org.cxbox.meta.metahotreload.service.MetaHotReloadServiceImpl;
-import org.demo.repository.ResponsibilitiesRepository;
+import org.cxbox.meta.metahotreload.service.MetaResourceReaderService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.cache.Cache;
 import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
@@ -34,24 +33,11 @@ public class ResponsibilitiesServiceExt {
 
 	private final MetaRepository metaRepository;
 
-	private final ResponsibilitiesRepository resposibilitiesRepository;
+	private final MetaResourceReaderService metaResourceReaderService;
 
 	private final CxboxCachingService cxboxCachingService;
 
 	private final ConcurrentMapCacheManager cacheManager;
-
-	/**
-	 * TODO >> update screen responsibility when first view in screen added and when last view in screen removed.
-	 * See {@link MetaHotReloadServiceImpl#responsibilitiesProcess(List, List) core resp creation} process part where ResponsibilityType.SCREEN is added if and only if at least one view available in screen.
- 	 */
-
-	public Responsibilities save(Responsibilities responsibilities) {
-		Responsibilities save = resposibilitiesRepository.save(responsibilities);
-		if (save.getView() != null && save.getInternalRoleCD() != null) {
-			refreshCacheAfterTx();
-		}
-		return save;
-	}
 
 	public void refreshCacheAfterTx() {
 		txService.invokeAfterCompletion(Invoker.of(this::refreshCache));
@@ -72,9 +58,9 @@ public class ResponsibilitiesServiceExt {
 	}
 
 	public Set<String> getViewsByWidgetNames(@NotNull Set<String> widgetNames) {
-		Map<String, ScreenDTO> allScreens = metaRepository.getAllScreens();
+		var allScreens = metaRepository.getAllScreens();
 		Set<String> result = new HashSet<>();
-		allScreens.values().forEach(screenDTO -> screenDTO
+		allScreens.values().forEach(screenDTO -> ((ScreenDTO) screenDTO.getMeta())
 				.getViews()
 				.forEach(viewDTO -> {
 					if (viewDTO.getWidgets().stream().anyMatch(widgetDTO -> widgetNames.contains(widgetDTO.getName()))) {
@@ -88,10 +74,10 @@ public class ResponsibilitiesServiceExt {
 		if (view == null || view.isEmpty()) {
 			return new HashMap<>();
 		}
-		Map<String, ScreenDTO> allScreens = metaRepository.getAllScreens();
+		var allScreens = metaRepository.getAllScreens();
 		List<WidgetDTO> viewWidgets = new ArrayList<>();
 		allScreens.values().forEach(screenDTO -> {
-			Optional<ViewDTO> first = screenDTO.getViews().stream().filter(viewDTO -> Objects.equals(viewDTO.getName(), view))
+			Optional<ViewDTO> first = ((ScreenDTO) screenDTO.getMeta()).getViews().stream().filter(viewDTO -> Objects.equals(viewDTO.getName(), view))
 					.findFirst();
 			first.ifPresent(viewDTO -> viewWidgets.addAll(viewDTO.getWidgets()));
 		});
@@ -99,11 +85,16 @@ public class ResponsibilitiesServiceExt {
 	}
 
 	public Map<String, String> getAllWidgetsNameToDescription() {
-		Map<String, ScreenDTO> allScreens = metaRepository.getAllScreens();
+		var allScreens = metaRepository.getAllScreens();
 		List<WidgetDTO> viewWidgets = new ArrayList<>();
 		allScreens.values()
-				.forEach(screenDTO -> screenDTO.getViews().forEach(viewDTO -> viewWidgets.addAll(viewDTO.getWidgets())));
+				.forEach(screenDTO -> ((ScreenDTO) screenDTO.getMeta()).getViews().forEach(viewDTO -> viewWidgets.addAll(viewDTO.getWidgets())));
 		return widgetToNameAndDescription(viewWidgets);
+	}
+
+	@NotNull
+	public List<ViewSourceDTO> getAllViews() {
+		return metaResourceReaderService.getViews();
 	}
 
 	public @NotNull Map<String, String> widgetToNameAndDescription(List<WidgetDTO> viewWidgets) {

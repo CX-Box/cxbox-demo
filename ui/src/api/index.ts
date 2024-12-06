@@ -81,13 +81,9 @@ class Api extends CXBoxApi {
     }
 
     deleteNotifications(selectedRowKeys: number[]) {
-        return fetch(`${__API__}notification/delete-notification`, {
-            headers: {
-                ...HEADERS,
-                'Content-type': 'application/json'
-            },
-            method: 'DELETE',
-            body: JSON.stringify(selectedRowKeys)
+        return this.api$.delete('/notification/delete-notification', {
+            data: JSON.stringify(selectedRowKeys),
+            headers: { 'Content-Type': 'application/json' }
         })
     }
 

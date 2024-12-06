@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -36,7 +35,7 @@ public class CSVUtils {
 				},
 				tmpFile.length(),
 				name,
-				Files.probeContentType(tmpFile.toPath())
+				"text/csv"
 		);
 	}
 

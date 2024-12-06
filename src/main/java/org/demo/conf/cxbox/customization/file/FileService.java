@@ -11,15 +11,14 @@ import io.minio.StatObjectResponse;
 import java.util.Collections;
 import java.util.UUID;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.cxbox.core.file.dto.FileDownloadDto;
 import org.cxbox.core.file.service.CxboxFileService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
-@Service
+@RequiredArgsConstructor
 public class FileService implements CxboxFileService {
 
 	public static final String FILENAME_FIELD = "filename";
@@ -27,13 +26,6 @@ public class FileService implements CxboxFileService {
 
 	private final MinioClient minioClient;
 	private final String defaultBucketName;
-
-	public FileService(
-			MinioClient minioClient,
-			@Value("${minio.bucket.name}") String defaultBucketName) {
-		this.minioClient = minioClient;
-		this.defaultBucketName = defaultBucketName;
-	}
 
 	@SneakyThrows
 	@Override

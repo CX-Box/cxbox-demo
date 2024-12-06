@@ -17,7 +17,10 @@ import org.cxbox.core.file.dto.FileDownloadDto;
 import org.cxbox.core.file.service.CxboxFileService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
+@Service
 @RequiredArgsConstructor
 public class FileService implements CxboxFileService {
 
@@ -25,6 +28,8 @@ public class FileService implements CxboxFileService {
 	public static final	int FIVE_MIB = 5242880;
 
 	private final MinioClient minioClient;
+
+	@Value("${minio.bucket.name}")
 	private final String defaultBucketName;
 
 	@SneakyThrows
@@ -53,7 +58,11 @@ public class FileService implements CxboxFileService {
 				.object(id)
 				.build()
 		);
-		return new FileDownloadDto(() -> getObject(id), statObjectResponse.size(), statObjectResponse.userMetadata().get(FILENAME_FIELD), statObjectResponse.contentType());
+		return new FileDownloadDto(
+				() -> getObject(id), statObjectResponse.size(),
+				statObjectResponse.userMetadata().get(FILENAME_FIELD),
+				statObjectResponse.contentType()
+		);
 	}
 
 	@SneakyThrows

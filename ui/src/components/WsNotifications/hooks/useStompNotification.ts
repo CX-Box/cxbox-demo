@@ -43,14 +43,15 @@ export function useStompNotification({ check = false } = {}) {
                 .getNotificationList(page, limit)
                 .then(response => {
                     if (response?.success) {
-                        dispatch(changeNotification({ data: response.data }))
+                        dispatch(changeNotification({ data: response.data, page, limit }))
                     }
                 })
                 .catch((error: AxiosError) => {
                     console.error('Error while loading notification list', error)
                 })
+            getCount()
         },
-        [dispatch]
+        [dispatch, getCount]
     )
 
     const getCurrentPage = useCallback(() => {
@@ -62,7 +63,6 @@ export function useStompNotification({ check = false } = {}) {
             instance
                 .setNotificationsRead(selectedRowKeys)
                 .then(data => {
-                    getCount()
                     checkNew()
                     getList(notificationState.page, notificationState.limit)
                 })
@@ -70,7 +70,7 @@ export function useStompNotification({ check = false } = {}) {
                     console.error(error)
                 })
         },
-        [checkNew, getCount, getList, notificationState.limit, notificationState.page]
+        [checkNew, getList, notificationState.limit, notificationState.page]
     )
 
     const changePage = useCallback(
@@ -83,7 +83,6 @@ export function useStompNotification({ check = false } = {}) {
 
     useNotificationClient(messageBody => {
         getList(messageBody.page, messageBody.limit)
-        getCount()
         checkNew()
     })
 
@@ -98,7 +97,6 @@ export function useStompNotification({ check = false } = {}) {
 
     return {
         state: notificationState,
-        getCount,
         setRead,
         getList,
         checkNew,

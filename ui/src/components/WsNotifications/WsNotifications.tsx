@@ -14,6 +14,7 @@ import Button from '../ui/Button/Button'
 import { CxBoxApiInstance as instance } from '../../api'
 import { useStompNotification } from '@components/WsNotifications/hooks'
 import { isArray } from '@craco/craco/dist/lib/utils'
+import { lastValueFrom } from 'rxjs'
 
 interface NotificationProps {}
 
@@ -62,10 +63,9 @@ export function WsNotifications(props: NotificationProps) {
 
     const deleteSelectedRows = () => {
         if (selectedRowKeys.length > 0) {
-            return instance.deleteNotifications(selectedRowKeys).then(
+            return lastValueFrom(instance.deleteNotifications(selectedRowKeys)).then(
                 () => {
                     setSelectedRowKeys([])
-                    notification.getCount()
                     notification.getCurrentPage()
                 },
                 (e: AxiosError) => {

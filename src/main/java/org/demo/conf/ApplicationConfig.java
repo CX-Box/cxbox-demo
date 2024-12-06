@@ -12,7 +12,6 @@ import org.cxbox.core.config.JacksonConfig;
 import org.cxbox.core.config.LocalizationConfig;
 import org.cxbox.core.config.UIConfig;
 import org.cxbox.core.config.properties.WidgetFieldsIdResolverProperties;
-import org.cxbox.core.file.conf.CxboxFileConfiguration;
 import org.cxbox.meta.MetaApplicationConfig;
 import org.cxbox.meta.metahotreload.conf.MetaHotReloadConfiguration;
 import org.cxbox.model.core.config.PersistenceJPAConfig;
@@ -43,8 +42,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 		UIConfig.class,
 		APIConfig.class,
 		LocalizationConfig.class,
-		JacksonConfig.class,
-		CxboxFileConfiguration.class
+		JacksonConfig.class
 })
 @ControllerScan({"org.cxbox.meta"})
 @EnableJpaRepositories(basePackages = "org.demo")

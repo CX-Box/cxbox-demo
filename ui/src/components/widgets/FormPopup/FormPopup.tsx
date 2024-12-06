@@ -1,5 +1,5 @@
 import { Skeleton } from 'antd'
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import Form from '../Form/Form'
 import Popup from '../../Popup/Popup'
 import WidgetTitle from '@components/WidgetTitle/WidgetTitle'
@@ -14,6 +14,8 @@ export interface FormPopupProps {
     meta: WidgetFormPopupMeta
 }
 
+const forceUpdateSetting = true // todo temporary enabled for all FormPopup widgets
+
 export function FormPopup(props: FormPopupProps) {
     const dispatch = useAppDispatch()
     const formPopupRef = useRef<HTMLDivElement>(null)
@@ -22,6 +24,12 @@ export function FormPopup(props: FormPopupProps) {
 
     const popupData = useAppSelector(state => state.view.popupData)
     const bc = useAppSelector(state => (bcName ? state.screen.bo.bc[bcName] : undefined))
+    // todo get from featureSettings or from options
+    // const forceUpdateSetting = useAppSelector(
+    //     state => state.session.featureSettings?.find(featureSetting => featureSetting.key === 'formPopupForceUpdate')?.value === 'true'
+    // )
+    //
+    // const forceUpdateOption = meta?.options?.forceUpdate
 
     const widgetName = props.meta.name
     const showed = popupData?.widgetName === widgetName
@@ -51,6 +59,12 @@ export function FormPopup(props: FormPopupProps) {
         <WidgetTitle className={styles.title} level={1} widgetName={props.meta.name} text={preInvoke?.message ?? props.meta.title} />
     )
 
+    useEffect(() => {
+        if (forceUpdateSetting && showed) {
+            dispatch(actions.bcForceUpdate({ bcName }))
+        }
+    }, [bcName, dispatch, showed])
+
     return (
         <div ref={formPopupRef}>
             {showed && (
@@ -63,6 +77,7 @@ export function FormPopup(props: FormPopupProps) {
                     bcName={bcName}
                     widgetName={props.meta.name}
                     disablePagination={true}
+                    getContainer={null}
                     defaultOkText={preInvoke?.yesText}
                     defaultCancelText={preInvoke?.noText}
                 >

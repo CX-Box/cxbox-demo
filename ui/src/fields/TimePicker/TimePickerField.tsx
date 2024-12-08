@@ -115,6 +115,7 @@ const TimePickerField: React.FunctionComponent<ITimePickerProps> = ({
                 meta={meta}
                 className={className}
                 backgroundColor={backgroundColor}
+                cursor={props.cursor}
                 onDrillDown={onDrillDown}
             >
                 {momentObject?.format(format)}

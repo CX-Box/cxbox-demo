@@ -1,11 +1,12 @@
 import React from 'react'
 import { Divider } from 'antd'
 import { shallowEqual, useDispatch } from 'react-redux'
-import { useAppSelector } from '@store'
-import { actions, interfaces } from '@cxbox-ui/core'
-import styles from './UserMenuContent.less'
 import cn from 'classnames'
+import { useAppSelector } from '@store'
 import Button from '../../../ui/Button/Button'
+import { actions, interfaces } from '@cxbox-ui/core'
+import { EFeatureSettingKey } from '@interfaces/session'
+import styles from './UserMenuContent.less'
 
 export const UserMenuContent: React.FC = () => {
     const { firstName, lastName, login, activeRole, roles, multiroleEnabled } = useAppSelector(state => {
@@ -15,7 +16,8 @@ export const UserMenuContent: React.FC = () => {
             login: state.session.login,
             activeRole: state.session.activeRole,
             roles: state.session.roles,
-            multiroleEnabled: state.session.featureSettings?.find(feature => feature.key === 'multirole-enabled')?.value === 'true'
+            multiroleEnabled:
+                state.session.featureSettings?.find(feature => feature.key === EFeatureSettingKey.multiroleEnabled)?.value === 'true'
         }
     }, shallowEqual)
     const dispatch = useDispatch()

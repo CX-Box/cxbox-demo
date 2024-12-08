@@ -86,6 +86,7 @@ export const TextArea: React.FunctionComponent<TextAreaProps> = ({
                 meta={meta}
                 className={className}
                 backgroundColor={backgroundColor}
+                cursor={rest.cursor}
                 onDrillDown={onDrillDown}
             >
                 {defaultValue}

@@ -9,6 +9,7 @@ import FilterField from './FilterField'
 import { useAppDispatch, useAppSelector } from '@store'
 import { FieldType, WidgetListField, PickListFieldMeta } from '@cxbox-ui/schema'
 import { actions } from '@actions'
+import { EFeatureSettingKey } from '@interfaces/session'
 
 interface ColumnFilterProps {
     widgetName: string
@@ -22,7 +23,9 @@ interface ColumnFilterProps {
 function ColumnFilter({ widgetName, widgetMeta, rowMeta, components }: ColumnFilterProps) {
     const widget = useAppSelector(state => state.view.widgets.find(item => item.name === widgetName))
     const filterByRangeEnabled = useAppSelector(
-        state => state.session.featureSettings?.find(featureSetting => featureSetting.key === 'filterByRangeEnabled')?.value === 'true'
+        state =>
+            state.session.featureSettings?.find(featureSetting => featureSetting.key === EFeatureSettingKey.filterByRangeEnabled)?.value ===
+            'true'
     )
     const bcName = widget?.bcName ?? ''
     const listFields = widget?.fields as interfaces.WidgetListField[]

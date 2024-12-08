@@ -104,6 +104,7 @@ const DatePickerField: React.FunctionComponent<IDatePickerFieldProps> = ({
                 meta={meta}
                 className={className}
                 backgroundColor={backgroundColor}
+                cursor={props.cursor}
                 onDrillDown={onDrillDown}
             >
                 {datePickerFormat}

@@ -112,3 +112,10 @@ export const forceUpdateRowMeta = createAction<{ bcName: string; cursor?: string
 )
 
 export const setCollapsedWidgets = createAction<{ viewName: string; widgetNameGroup: string[] }>('setCollapsedWidgets')
+
+export const drillDownInNewTab = createAction<{
+    widgetName: string
+    cursor: string
+    fieldKey: string
+    copyLink?: boolean
+}>('drillDownInNewTab')

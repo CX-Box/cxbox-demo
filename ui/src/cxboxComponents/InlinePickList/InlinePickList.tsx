@@ -96,6 +96,7 @@ const InlinePickList: React.FunctionComponent<InlinePickListProps> = ({
                 meta={meta}
                 className={className}
                 backgroundColor={backgroundColor}
+                cursor={cursor}
                 onDrillDown={onDrillDown}
             >
                 {value}

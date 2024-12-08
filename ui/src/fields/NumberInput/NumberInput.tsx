@@ -12,7 +12,8 @@ interface NumberProps {
     readOnly: boolean
 }
 
-export const Number = ({ widgetName, value, readOnly, onChange, meta, ...rest }: NumberProps) => {
+export const Number = ({ value, readOnly, onChange, ...rest }: NumberProps) => {
+    const meta = rest.meta
     const type = meta.type as unknown as NumberTypes
     return (
         <div className={styles.number}>

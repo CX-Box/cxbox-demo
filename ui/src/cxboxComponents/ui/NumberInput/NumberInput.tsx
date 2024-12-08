@@ -145,6 +145,7 @@ const NumberInput: React.FunctionComponent<NumberInputProps> = props => {
                 meta={props.meta}
                 className={props.className}
                 backgroundColor={props.backgroundColor}
+                cursor={props.cursor}
                 onDrillDown={props.onDrillDown}
             >
                 {NumberInputFormat.number(props.value, props.digits, props.nullable)} {currency}

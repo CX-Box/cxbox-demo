@@ -9,6 +9,7 @@ import { TemplatedTitle } from '@cxboxComponents'
 import { Icon } from 'antd'
 import Button from '../ui/Button/Button'
 import { useAppSelector } from '@store'
+import { EFeatureSettingKey } from '@interfaces/session'
 import { RowMetaField } from '@interfaces/rowMeta'
 
 interface ColumnTitleProps {
@@ -33,7 +34,9 @@ export const notSortableFields: readonly (interfaces.FieldType | CustomFieldType
 const rightAlignedFields: readonly (interfaces.FieldType | CustomFieldTypes)[] = [FieldType.number, FieldType.money, FieldType.percent]
 
 const ColumnTitle = ({ widgetName, widgetMeta, rowMeta, onClose, showCloseButton }: ColumnTitleProps) => {
-    const sortingSetting = useAppSelector(state => state.session.featureSettings?.find(feature => feature.key === 'sortEnabled'))
+    const sortingSetting = useAppSelector(state =>
+        state.session.featureSettings?.find(feature => feature.key === EFeatureSettingKey.sortEnabled)
+    )
     const isSortingEnabled = sortingSetting?.value === 'true' || rowMeta?.sortable === true
 
     const handleColumnClose = useCallback(() => {

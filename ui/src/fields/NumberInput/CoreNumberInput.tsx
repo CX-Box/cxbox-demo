@@ -147,6 +147,7 @@ const CoreNumberInput: React.FunctionComponent<CoreNumberInputProps> = props => 
                 meta={props.meta}
                 className={props.className}
                 backgroundColor={props.backgroundColor}
+                cursor={props.cursor}
                 onDrillDown={props.onDrillDown}
             >
                 {NumberInputFormat[type](props.value, props.digits, props.nullable)} {currency}

@@ -28,6 +28,7 @@ const RadioButton: React.FunctionComponent<RadioButtonProps> = ({
     backgroundColor,
     disabled,
     onChange,
+    cursor,
     onDrillDown
 }) => {
     const handleOnChange = React.useCallback(
@@ -58,6 +59,7 @@ const RadioButton: React.FunctionComponent<RadioButtonProps> = ({
                 meta={meta}
                 className={className}
                 backgroundColor={backgroundColor}
+                cursor={cursor}
                 onDrillDown={onDrillDown}
             >
                 {readOnlyValue}

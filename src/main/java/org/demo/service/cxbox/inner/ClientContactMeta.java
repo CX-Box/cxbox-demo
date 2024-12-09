@@ -1,11 +1,9 @@
 package org.demo.service.cxbox.inner;
 
 import org.cxbox.core.crudma.bc.impl.InnerBcDescription;
-import org.cxbox.core.dto.DrillDownType;
 import org.cxbox.core.dto.rowmeta.FieldsMeta;
 import org.cxbox.core.dto.rowmeta.RowDependentFieldsMeta;
 import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
-import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.inner.ContactDTO;
 import org.demo.dto.cxbox.inner.ContactDTO_;
 import org.springframework.stereotype.Service;

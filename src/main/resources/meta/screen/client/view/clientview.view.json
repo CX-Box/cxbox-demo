@@ -40,18 +40,18 @@
       "gridWidth": 24
     },
     {
-      "widgetName": "clientAdditional",
-      "position": 60,
-      "gridWidth": 24
-    },
-    {
-      "widgetName": "contactAdditionalList",
+      "widgetName": "contactWithReadAdditionalList",
       "position": 70,
       "gridWidth": 24
     },
     {
       "widgetName": "contactAdditionalInfo",
       "position": 80,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "contactAdditionalList",
+      "position": 90,
       "gridWidth": 24
     }
   ],

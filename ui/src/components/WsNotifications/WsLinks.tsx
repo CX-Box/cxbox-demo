@@ -1,8 +1,9 @@
 import React from 'react'
-import { NotificationLink } from '@interfaces/notification'
 import { useDispatch } from 'react-redux'
+import DrillDown from '@components/ui/DrillDown/DrillDown'
 import { actions } from '@actions'
 import { useAppSelector } from '@store'
+import { NotificationLink } from '@interfaces/notification'
 import styles from './WsLinks.module.less'
 
 interface Props {
@@ -20,8 +21,13 @@ export const WsLinks: React.FC<Props> = ({ links }) => {
     return (
         <div className={styles.linksWrapper}>
             {links.map((link, i) => (
-                <span className={styles.link} key={i} onClick={() => drilldown(link)}>
-                    {link.drillDownLabel}
+                <span key={i}>
+                    <DrillDown
+                        displayedValue={link.drillDownLabel}
+                        url={link.drillDownLink}
+                        type={link.drillDownType}
+                        onDrillDown={() => drilldown(link)}
+                    />
                 </span>
             ))}
         </div>

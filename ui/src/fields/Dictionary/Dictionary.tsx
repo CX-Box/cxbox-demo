@@ -6,7 +6,7 @@ import CoreDictionary, { DictionaryProps, getIconByParams } from '@cxboxComponen
 import { useAppSelector } from '@store'
 import { interfaces } from '@cxbox-ui/core'
 import { buildBcUrl } from '@utils/buildBcUrl'
-import ActionLink from '@cxboxComponents/ui/ActionLink/ActionLink'
+import DrillDown from '@components/ui/DrillDown/DrillDown'
 import { AppDictionaryFieldMeta, EDictionaryMode } from '@interfaces/widget'
 import styles from './Dictionary.module.css'
 
@@ -44,7 +44,17 @@ function Dictionary(props: DictionaryProps) {
                 className={cn(styles.coloredValue, props.className)}
                 style={backgroundColor ? { color: backgroundColor, backgroundColor: `${backgroundColor}${opacitySuffix}` } : undefined}
             >
-                {onDrillDown ? <ActionLink onClick={onDrillDown}>{valueComponent}</ActionLink> : valueComponent}
+                {onDrillDown ? (
+                    <DrillDown
+                        displayedValue={valueComponent}
+                        meta={meta}
+                        widgetName={widgetName}
+                        cursor={props.cursor}
+                        onDrillDown={onDrillDown}
+                    />
+                ) : (
+                    valueComponent
+                )}
             </div>
         )
     }

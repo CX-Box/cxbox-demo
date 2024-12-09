@@ -3,7 +3,7 @@ import TemplatedTitle from '@cxboxComponents/TemplatedTitle/TemplatedTitle'
 import cn from 'classnames'
 import styles from './InfoCell.less'
 import Field from '@cxboxComponents/Field/Field'
-import ActionLink from '@cxboxComponents/ui/ActionLink/ActionLink'
+import DrillDown from '@components/ui/DrillDown/DrillDown'
 import InfoValueWrapper from './InfoValueWrapper'
 import MultiValueListRecord from '@cxboxComponents/Multivalue/MultiValueListRecord'
 import { interfaces } from '@cxbox-ui/core'
@@ -46,9 +46,13 @@ export const InfoCell: React.FunctionComponent<ValueCellProps> = ({ flattenWidge
                 readonly
             />
             {separateDrillDownTitle && (
-                <div>
-                    <ActionLink onClick={handleDrillDown}>{separateDrillDownTitle}</ActionLink>
-                </div>
+                <DrillDown
+                    displayedValue={separateDrillDownTitle}
+                    meta={field}
+                    widgetName={meta.name}
+                    cursor={cursor}
+                    onDrillDown={handleDrillDown}
+                />
             )}
         </>
     )

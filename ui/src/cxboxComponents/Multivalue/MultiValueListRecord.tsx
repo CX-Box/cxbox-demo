@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import cn from 'classnames'
 import styles from './MultiValueListRecord.less'
-import ActionLink from '@cxboxComponents/ui/ActionLink/ActionLink'
+import DrillDown from '@components/ui/DrillDown/DrillDown'
 import { actions, interfaces } from '@cxbox-ui/core'
 import { store } from '@store'
 import { RecordSnapshotState } from '@cxbox-ui/schema'
@@ -43,7 +43,12 @@ const MultiValueListRecord: FunctionComponent<MultiValueListRecordProps> = props
             <div className={historyClass}>
                 <div className={styles.recordValue}>
                     {singleValue.options?.drillDown ? (
-                        <ActionLink onClick={handleDrillDown}>{singleValue.value}</ActionLink>
+                        <DrillDown
+                            displayedValue={singleValue.value}
+                            url={singleValue.options?.drillDown}
+                            type={singleValue.options?.drillDownType}
+                            onDrillDown={handleDrillDown}
+                        />
                     ) : (
                         singleValue.value
                     )}

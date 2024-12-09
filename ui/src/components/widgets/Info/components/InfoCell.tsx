@@ -1,6 +1,7 @@
 import React from 'react'
 import styles from './InfoCell.less'
-import { ActionLink, Field, MultiValueListRecord } from '@cxboxComponents'
+import { Field, MultiValueListRecord } from '@cxboxComponents'
+import DrillDown from '@components/ui/DrillDown/DrillDown'
 import InfoValueWrapper from './InfoValueWrapper'
 import { EMPTY_ARRAY } from '@constants'
 import { useAppSelector } from '@store'
@@ -43,9 +44,13 @@ function InfoCell({ field, colSpan, row, meta, cursor, onDrillDown }: ValueCellP
                 readonly
             />
             {separateDrillDownTitle && (
-                <div>
-                    <ActionLink onClick={handleDrillDown}>{separateDrillDownTitle}</ActionLink>
-                </div>
+                <DrillDown
+                    displayedValue={separateDrillDownTitle}
+                    meta={field}
+                    widgetName={meta.name}
+                    cursor={cursor}
+                    onDrillDown={handleDrillDown}
+                />
             )}
         </>
     )

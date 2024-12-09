@@ -77,6 +77,8 @@ public class ClientContactService extends VersionAwareResponseService<ContactDTO
 		setIfChanged(data, ContactDTO_.fullName, entity::setFullName);
 		setIfChanged(data, ContactDTO_.email, entity::setEmail);
 		setIfChanged(data, ContactDTO_.phoneNumber, entity::setPhoneNumber);
+		setIfChanged(data, ContactDTO_.phoneNumberWithoutFilter, entity::setPhoneNumber);
+		setIfChanged(data, ContactDTO_.fullNameWithoutFilter, entity::setFullName);
 		return new ActionResultDTO<>(entityToDto(bc, entity));
 	}
 

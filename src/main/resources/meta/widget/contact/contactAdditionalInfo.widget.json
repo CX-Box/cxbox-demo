@@ -11,11 +11,6 @@
       "drillDown": "true"
     },
     {
-      "label": "Phone Number",
-      "key": "phoneNumber",
-      "type": "input"
-    },
-    {
       "label": "E-mail",
       "key": "email",
       "type": "input"
@@ -31,14 +26,6 @@
           "cols": [
             {
               "fieldKey": "fullName",
-              "span": 12
-            }
-          ]
-        },
-        {
-          "cols": [
-            {
-              "fieldKey": "phoneNumber",
               "span": 12
             }
           ]

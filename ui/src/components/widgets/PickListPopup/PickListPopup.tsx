@@ -20,6 +20,7 @@ interface PickListPopupProps {
 
 function PickListPopup({ meta }: PickListPopupProps) {
     const { bcName = '' } = meta || {}
+    const selectedRowId = useAppSelector(state => state.view.selectedRow?.rowId)
     const pending = useAppSelector(state => state.session.pendingRequests?.filter(item => item.type === 'force-active'))
     const { cursor, parentBCName, pickMap } = useAppSelector(state => {
         const bcName = meta.bcName
@@ -47,6 +48,9 @@ function PickListPopup({ meta }: PickListPopupProps) {
         (rowData: DataItem): TableEventListeners => {
             return {
                 onClick: (e: React.MouseEvent) => {
+                    if (rowData['id'] === selectedRowId) {
+                        return
+                    }
                     if (cursor) {
                         const dataItem: PendingDataItem = {}
                         Object.keys(pickMap).forEach(field => {
@@ -58,11 +62,12 @@ function PickListPopup({ meta }: PickListPopupProps) {
                         dispatch(actions.closeViewPopup(null))
                         dispatch(actions.viewClearPickMap(null))
                         dispatch(actions.bcRemoveAllFilters({ bcName }))
+                        dispatch(actions.deselectTableRow())
                     }
                 }
             }
         },
-        [cursor, pickMap, dispatch, parentBCName, bcName]
+        [selectedRowId, cursor, pickMap, dispatch, parentBCName, bcName]
     )
 
     if (showAssocFilter) {
@@ -84,7 +89,7 @@ function PickListPopup({ meta }: PickListPopupProps) {
         >
             <div className={styles.container}>
                 <Spin spinning={(pending?.length as number) > 0}>
-                    <Table meta={meta} disableCellEdit={true} onRow={onRow} />
+                    <Table meta={meta} disableCellEdit={false} onRow={onRow} />
                 </Spin>
             </div>
         </Popup>

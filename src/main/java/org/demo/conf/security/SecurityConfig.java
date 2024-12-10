@@ -44,7 +44,7 @@ public class SecurityConfig {
 		this.metaConfigurationProperties = metaConfigurationProperties;
 		this.authBasicConfigProperties = authBasicConfigProperties;
 		this.oidcJwtTokenConverter = new OidcJwtTokenConverter(new JwtGrantedAuthoritiesConverter(), properties,
-				userService, cxboxAuthUserRepository
+				userService, cxboxAuthUserRepository, uiProperties
 		);
 	}
 

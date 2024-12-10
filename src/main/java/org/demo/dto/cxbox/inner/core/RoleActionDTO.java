@@ -5,9 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.cxbox.api.data.dto.DataResponseDTO;
 import org.cxbox.core.util.filter.SearchParameter;
-import org.cxbox.core.util.filter.provider.impl.DictionaryValueProvider;
 import org.demo.entity.core.RoleAction;
-import org.demo.entity.dictionary.InternalRole;
 
 @SuppressWarnings("java:S1948")
 @Getter
@@ -15,8 +13,8 @@ import org.demo.entity.dictionary.InternalRole;
 @NoArgsConstructor
 public class RoleActionDTO extends DataResponseDTO {
 
-	@SearchParameter(provider = DictionaryValueProvider.class)
-	private InternalRole internalRoleCD;
+	@SearchParameter
+	private String internalRoleCD;
 
 	private String bc;
 
@@ -31,7 +29,7 @@ public class RoleActionDTO extends DataResponseDTO {
 
 	public RoleActionDTO(RoleAction entity) {
 		this.id = entity.getId().toString();
-		this.internalRoleCD = new InternalRole(entity.getInternalRoleCD());
+		this.internalRoleCD = entity.getInternalRoleCD();
 		this.action = entity.getAction();
 		this.view = entity.getView();
 		this.widget = entity.getWidget();

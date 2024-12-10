@@ -35,6 +35,7 @@ import org.cxbox.api.service.session.IUser;
 import org.cxbox.core.service.ResponsibilitiesService;
 import org.cxbox.dto.ScreenResponsibility;
 import org.cxbox.meta.data.ScreenDTO;
+import org.cxbox.meta.metahotreload.conf.properties.MetaConfigurationProperties;
 import org.cxbox.meta.metahotreload.repository.UserMetaProvider;
 import org.demo.entity.core.RoleAction;
 import org.demo.repository.core.RoleActionRepository;
@@ -58,6 +59,8 @@ public class ScreenResponsibilityService1 implements ScreenResponsibilityService
 	private final UserMetaProvider userMetaProvider;
 
 	private final RoleActionRepository roleActionRepository;
+
+	private final MetaConfigurationProperties metaConfigurationProperties;
 
 	/**
 	 * Get all available screens with respect of user role
@@ -87,25 +90,27 @@ public class ScreenResponsibilityService1 implements ScreenResponsibilityService
 
 				)
 		);
-		allUserScreens.values().stream().map(s -> ((ScreenDTO) s.getMeta())).forEach(sc -> sc.getViews()
-				.forEach(v -> {
-					v.setWidgets(v.getWidgets().stream().map(SerializationUtils::clone).toList());
-					v.getWidgets().forEach(w -> {
-						try {
-							ObjectNode widgetJson = objectMapper.readValue(objectMapper.writeValueAsString(w), ObjectNode.class);
-							ObjectNode optionsNode = getObjectPropOrElseCreate(widgetJson, "options");
-							ObjectNode actionsGroups = getObjectPropReCreate(optionsNode, "actionGroups");
-							ArrayNode include = getArrayPropOrElseCreate(actionsGroups, "include");
-							roleAction.stream()
-									.filter(ra -> ra.isAvailable(userRole, v.getName(), w.getName()))
-									.map(RoleAction::getAction)
-									.forEach(include::add);
-							w.setOptions(objectMapper.writeValueAsString(optionsNode));
-						} catch (JsonProcessingException e) {
-							throw new IllegalStateException(e);
-						}
-					});
-				}));
+		if (!metaConfigurationProperties.isWidgetActionGroupsEnabled()) {
+			allUserScreens.values().stream().map(s -> ((ScreenDTO) s.getMeta())).forEach(sc -> sc.getViews()
+					.forEach(v -> {
+						v.setWidgets(v.getWidgets().stream().map(SerializationUtils::clone).toList());
+						v.getWidgets().forEach(w -> {
+							try {
+								ObjectNode widgetJson = objectMapper.readValue(objectMapper.writeValueAsString(w), ObjectNode.class);
+								ObjectNode optionsNode = getObjectPropOrElseCreate(widgetJson, "options");
+								ObjectNode actionsGroups = getObjectPropReCreate(optionsNode, "actionGroups");
+								ArrayNode include = getArrayPropOrElseCreate(actionsGroups, "include");
+								roleAction.stream()
+										.filter(ra -> ra.isAvailable(userRole, v.getName(), w.getName()))
+										.map(RoleAction::getAction)
+										.forEach(include::add);
+								w.setOptions(objectMapper.writeValueAsString(optionsNode));
+							} catch (JsonProcessingException e) {
+								throw new IllegalStateException(e);
+							}
+						});
+					}));
+		}
 		return allUserScreens.values().stream()
 				.sorted(Comparator.comparing(ScreenResponsibility::getOrder).thenComparing(ScreenResponsibility::getName))
 				.toList();

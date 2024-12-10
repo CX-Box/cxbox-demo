@@ -1,7 +1,5 @@
 package org.demo.service.cxbox.inner.core;
 
-import static java.util.Optional.ofNullable;
-
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +21,6 @@ import org.demo.conf.cxbox.extension.resposibilities.ResponsibilitiesServiceExt;
 import org.demo.dto.cxbox.inner.core.RoleActionDTO;
 import org.demo.dto.cxbox.inner.core.RoleActionDTO_;
 import org.demo.entity.core.RoleAction;
-import org.demo.entity.dictionary.InternalRole;
 import org.demo.repository.core.RoleActionRepository;
 import org.demo.util.CSVUtils;
 import org.jetbrains.annotations.NotNull;
@@ -67,9 +64,7 @@ public class RoleActionService extends VersionAwareResponseService<RoleActionDTO
 	protected ActionResultDTO<RoleActionDTO> doUpdateEntity(RoleAction entity,
 			RoleActionDTO data,
 			BusinessComponent bc) {
-		String internalRoleCD = ofNullable(data.getInternalRoleCD())
-				.map(InternalRole::key)
-				.orElse(null);
+		String internalRoleCD = data.getInternalRoleCD();
 		if (data.isFieldChanged(RoleActionDTO_.internalRoleCD)) {
 			entity.setInternalRoleCD(internalRoleCD);
 		}

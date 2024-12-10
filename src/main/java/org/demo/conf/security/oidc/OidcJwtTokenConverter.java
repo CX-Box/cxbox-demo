@@ -12,7 +12,6 @@ import org.cxbox.api.service.session.CxboxUserDetailsInterface;
 import org.cxbox.core.config.properties.UIProperties;
 import org.demo.conf.cxbox.customization.role.UserService;
 import org.demo.entity.core.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.NonNull;
 import org.springframework.security.core.GrantedAuthority;

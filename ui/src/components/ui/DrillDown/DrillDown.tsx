@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import { Popover } from 'antd'
 import ActionLink from '@cxboxComponents/ui/ActionLink/ActionLink'
-import DrillDownTools from '@components/ui/DrillDownTools/DrillDownTools'
+import DrillDownTools from './components/DrillDownTools/DrillDownTools'
 import { useAppSelector } from '@store'
 import getFullUrl from '@utils/getFullUrl'
 import { EFeatureSettingKey } from '@interfaces/session'

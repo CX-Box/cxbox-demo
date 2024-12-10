@@ -27,10 +27,10 @@ cxbox:
   meta:
     dev-panel-enabled: ${DEV_PANEL_ENABLED:true}
     directory: ${META_DIRECTORY:file:./src/main/resources/meta}
-    view-allowed-roles-enabled: false
+    view-allowed-roles-enabled: true
     bc-default-page-limit: 5
     widget-action-groups-enabled: false
-    widget-action-groups-compact: false
+    widget-action-groups-compact: true
   widget:
     fields:
       include-packages: org.cxbox.meta, org.demo.conf.cxbox

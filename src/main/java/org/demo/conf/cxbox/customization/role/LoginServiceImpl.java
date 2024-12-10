@@ -81,7 +81,7 @@ public class LoginServiceImpl implements LoginService {
 					.map(SimpleDictionary::getKey)
 					.collect(Collectors.toSet()));
 		} else {
-			throw new IllegalStateException("Role must be either set by UI or cxbox.ui.multiRoleEnabled must be true");
+			setSessionUserInternalRole(Set.of());
 		}
 
 		User userEntity = userRepository.findById(user.getId()).orElseThrow();

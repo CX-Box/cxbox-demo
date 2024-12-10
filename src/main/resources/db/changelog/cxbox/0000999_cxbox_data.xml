@@ -4,8 +4,8 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd"
   logicalFilePath="db/changelog/0000999_data.xml">
 
-  <property name="app_seq_next_val" value="nextval('APP_SEQ')" dbms="postgresql"/>
-  <property name="app_seq_next_val" value="APP_SEQ.NEXTVAL" dbms="oracle"/>
+  <property name="meta_seq_next_val" value="nextval('META_SEQ')" dbms="postgresql"/>
+  <property name="meta_seq_next_val" value="META_SEQ.NEXTVAL" dbms="oracle"/>
 
   <changeSet author="cxbox" id="INITIAL DATA">
     <loadData tableName="USERS" encoding="UTF-8" separator=";" quotchar="&quot;"
@@ -88,7 +88,7 @@
       quotchar="&quot;" file="db/data/cxbox/ROLE_VIEW.csv">
       <column header="INTERNAL_ROLE_CD" name="INTERNAL_ROLE_CD" type="STRING"/>
       <column header="RESPONSIBILITIES" name="RESPONSIBILITIES" type="STRING"/>
-      <column header="ID" name="ID" type="NUMERIC" defaultValue="${app_seq_next_val}"/>
+      <column header="ID" name="ID" type="NUMERIC" defaultValue="${meta_seq_next_val}"/>
     </loadUpdateData>
 
     <loadUpdateData tableName="RESPONSIBILITIES" primaryKey="INTERNAL_ROLE_CD,RESP_TYPE" encoding="UTF-8" separator=";"
@@ -96,7 +96,7 @@
       <column header="INTERNAL_ROLE_CD" name="INTERNAL_ROLE_CD" type="STRING"/>
       <column header="RESP_TYPE" name="RESP_TYPE" type="STRING"/>
       <column header="SCREEN" name="SCREEN" type="STRING"/>
-      <column header="ID" name="ID" type="NUMERIC" defaultValue="${app_seq_next_val}"/>
+      <column header="ID" name="ID" type="NUMERIC" defaultValue="${meta_seq_next_val}"/>
     </loadUpdateData>
 
   </changeSet>
@@ -109,7 +109,7 @@
       <column header="ACTION" name="ACTION" type="STRING"/>
       <column header="VIEW" name="VIEW" type="STRING"/>
       <column header="WIDGET" name="WIDGET" type="STRING"/>
-      <column header="ID" name="ID" type="NUMERIC" defaultValue="${app_seq_next_val}"/>
+      <column header="ID" name="ID" type="NUMERIC" defaultValue="${meta_seq_next_val}"/>
     </loadUpdateData>
 
   </changeSet>

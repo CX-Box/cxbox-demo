@@ -20,7 +20,7 @@
     {
       "label": "action",
       "key": "action",
-      "type": "dictionary",
+      "type": "input",
       "width": 200
     },
     {

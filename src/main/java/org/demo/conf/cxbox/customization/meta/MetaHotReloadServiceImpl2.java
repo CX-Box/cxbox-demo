@@ -36,7 +36,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Slf4j
 public class MetaHotReloadServiceImpl2 extends MetaHotReloadServiceImpl {
 
-
 	protected final MetaConfigurationProperties config;
 
 	protected final MetaResourceReaderService metaResourceReaderService;
@@ -103,50 +102,51 @@ public class MetaHotReloadServiceImpl2 extends MetaHotReloadServiceImpl {
 				));
 
 		authzService.loginAs(authzService.createAuthentication(InternalAuthorizationService.VANILLA));
-		txService.invokeInTx(() -> {
-			roleActionRepository.flush();
-			roleActionRepository.deleteAllInBatch();
-			List<RoleAction> roleActions = new ArrayList<>();
+		if (metaConfigurationProperties.isWidgetActionGroupsEnabled()) {
+			txService.invokeInTx(() -> {
+				roleActionRepository.flush();
+				roleActionRepository.deleteAllInBatch();
+				List<RoleAction> roleActions = new ArrayList<>();
 
-			if (metaConfigurationProperties.isWidgetActionGroupsCompact()) {
-				widgetsToInclude.forEach((widget, actionList) -> {
-					actionList.forEach(action -> {
-						roleActions.add(new RoleAction()
-								.setInternalRoleCD(RoleAction.ANY_INTERNAL_ROLE_CD)
-								//.setBc(widget.getBc())
-								.setAction(action)
-								.setView(RoleAction.ANY_VIEW)
-								.setWidget(widget.getName())
-						);
+				if (metaConfigurationProperties.isWidgetActionGroupsCompact()) {
+					widgetsToInclude.forEach((widget, actionList) -> {
+						actionList.forEach(action -> {
+							roleActions.add(new RoleAction()
+									.setInternalRoleCD(RoleAction.ANY_INTERNAL_ROLE_CD)
+									//.setBc(widget.getBc())
+									.setAction(action)
+									.setView(RoleAction.ANY_VIEW)
+									.setWidget(widget.getName())
+							);
+						});
 					});
-				});
-			} else {
-				widgetsToInclude.forEach((widget, actionList) -> {
-					actionList.forEach(action -> {
-						viewDtos.stream()
-								.filter(view -> view.getWidgets().stream()
-										.anyMatch(vw -> Objects.equals(vw.getWidgetName(), widget.getName())))
-								.forEach(view -> {
-									dictionaryProvider.getAll(InternalRole.class).forEach(role -> {
-										roleActions.add(new RoleAction()
-												.setInternalRoleCD(role.key())
-												//.setBc(widget.getBc())
-												.setAction(action)
-												.setView(view.getName())
-												.setWidget(widget.getName())
-										);
+				} else {
+					widgetsToInclude.forEach((widget, actionList) -> {
+						actionList.forEach(action -> {
+							viewDtos.stream()
+									.filter(view -> view.getWidgets().stream()
+											.anyMatch(vw -> Objects.equals(vw.getWidgetName(), widget.getName())))
+									.forEach(view -> {
+										dictionaryProvider.getAll(InternalRole.class).forEach(role -> {
+											roleActions.add(new RoleAction()
+													.setInternalRoleCD(role.key())
+													//.setBc(widget.getBc())
+													.setAction(action)
+													.setView(view.getName())
+													.setWidget(widget.getName())
+											);
+										});
 									});
-								});
+						});
 					});
-				});
-			}
+				}
 
-			roleActionRepository.saveAll(roleActions);
-			roleActionRepository.flush();
-			return null;
-		});
-		log.info(widgetsToInclude.toString());
-
+				roleActionRepository.saveAll(roleActions);
+				roleActionRepository.flush();
+				return null;
+			});
+			log.info(widgetsToInclude.toString());
+		}
 		txService.invokeInTx(() -> {
 			metaRepository.deleteAllMeta();
 			responsibilitiesProcess(screenDtos, viewDtos);

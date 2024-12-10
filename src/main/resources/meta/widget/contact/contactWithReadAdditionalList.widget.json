@@ -1,6 +1,6 @@
 {
   "name": "contactWithReadAdditionalList",
-  "title": "Contacts",
+  "title": "E-mail contacts",
   "type": "AdditionalList",
   "bc": "contactEdit",
   "fields": [

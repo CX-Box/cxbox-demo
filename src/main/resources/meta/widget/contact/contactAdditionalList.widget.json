@@ -1,6 +1,6 @@
 {
   "name": "contactAdditionalList",
-  "title": "Contacts",
+  "title": "Phone contacts",
   "type": "AdditionalList",
   "bc": "contactEdit",
   "fields": [

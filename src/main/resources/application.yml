@@ -27,7 +27,9 @@ cxbox:
   meta:
     dev-panel-enabled: ${DEV_PANEL_ENABLED:true}
     directory: ${META_DIRECTORY:file:./src/main/resources/meta}
-    view-allowed-roles-enabled: false
+    view-allowed-roles-enabled: true
+    widget-action-groups-enabled: true
+    widget-action-groups-compact: true
     bc-default-page-limit: 5
   widget:
     fields:
@@ -38,6 +40,7 @@ cxbox:
     path: /api/v1
   ui:
     path: /ui
+    multi-role-enabled: true
     drill-down-tooltip: newAndCopy
 
 server:

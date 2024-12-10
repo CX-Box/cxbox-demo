@@ -57,21 +57,28 @@ export function getIncludedOperations(
 ) {
     const result: Array<interfaces.Operation | interfaces.OperationGroup> = []
     operations.forEach(item => {
-        if (shouldPickOperation(item, include, exclude)) {
+        if (shouldPickOperationOrGroupWithOperation(item, include, exclude)) {
             if (isOperationGroup(item)) {
                 const filtered = item.actions.filter(operation => {
                     if (!include) {
                         return shouldPickOperation(operation, null, exclude)
                     }
+
                     const nestedDescriptor = include.find(descriptor => getDescriptorValue(descriptor) === item.type)
+
                     const excludeAll =
                         nestedDescriptor && typeof nestedDescriptor === 'string'
                             ? [nestedDescriptor, ...(exclude || [])]
-                            : [...((nestedDescriptor as any).exclude || []), ...(exclude || [])]
-                    return (
-                        nestedDescriptor &&
-                        shouldPickOperation(operation, typeof nestedDescriptor !== 'string' ? nestedDescriptor.include : null, excludeAll)
-                    )
+                            : [...((nestedDescriptor as any)?.exclude || []), ...(exclude || [])]
+
+                    const includeAll =
+                        typeof nestedDescriptor === 'object'
+                            ? nestedDescriptor.include
+                            : typeof nestedDescriptor === 'string'
+                            ? null
+                            : include
+
+                    return shouldPickOperation(operation, includeAll, excludeAll)
                 })
                 result.push({ ...item, actions: filtered })
             } else {
@@ -110,6 +117,18 @@ export function shouldPickOperation(
         )
     }
     return true
+}
+
+export function shouldPickOperationOrGroupWithOperation(
+    item: interfaces.Operation | interfaces.OperationGroup,
+    include?: interfaces.OperationInclusionDescriptor[] | null,
+    exclude?: interfaces.OperationInclusionDescriptor[] | null
+) {
+    if (isOperationGroup(item)) {
+        return shouldPickOperation(item, include, exclude) || item.actions.some(action => shouldPickOperation(action, include, exclude))
+    }
+
+    return shouldPickOperation(item, include, exclude)
 }
 
 /**

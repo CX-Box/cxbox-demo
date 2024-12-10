@@ -1,0 +1,72 @@
+{
+  "name": "dictionaryGroupingHierarchy",
+  "title": "",
+  "type": "GroupingHierarchy",
+  "bc": "dictionary",
+  "fields": [
+    {
+      "title": "Type",
+      "key": "type",
+      "type": "pickList",
+      "popupBcName": "dictionaryType",
+      "pickMap": {
+        "type": "type",
+        "dictionaryTypeId": "id"
+      },
+      "width": 300
+    },
+    {
+      "title": "Key",
+      "key": "key",
+      "type": "input",
+      "width": 300
+    },
+    {
+      "title": "Value",
+      "key": "value",
+      "type": "input",
+      "width": 300
+    },
+    {
+      "title": "Order",
+      "key": "displayOrder",
+      "type": "number",
+      "width": 50
+    },
+    {
+      "title": "Description",
+      "key": "description",
+      "type": "input"
+    },
+    {
+      "title": "Active",
+      "key": "active",
+      "type": "checkbox",
+      "width": 50
+    }
+  ],
+  "options": {
+    "create": {
+      "widget": "dictionaryForm"
+    },
+    "edit": {
+      "widget": "dictionaryForm"
+    },
+    "groupingHierarchy": {
+      "counterMode": "always",
+      "fields": [
+        "type"
+      ]
+    },
+    "actionGroups": {
+      "include": [
+        "create",
+        "save",
+        "delete",
+        "clear_cache",
+        "export_liquibase"
+      ]
+    }
+  }
+}
+

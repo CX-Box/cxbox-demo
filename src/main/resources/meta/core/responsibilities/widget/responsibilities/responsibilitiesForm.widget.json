@@ -1,0 +1,59 @@
+{
+  "name": "responsibilitiesForm",
+  "title": "Responsibilities",
+  "type": "Form",
+  "bc": "responsibilities",
+  "fields": [
+    {
+      "label": "Role",
+      "key": "internalRoleCD",
+      "type": "dictionary"
+    },
+    {
+      "label": "View",
+      "key": "view",
+      "type": "dictionary"
+    },
+    {
+      "label": "widget (endpoint)",
+      "key": "viewWidgets",
+      "type": "multipleSelect"
+    }
+  ],
+  "options": {
+    "actionGroups": {
+      "include": [
+        "save",
+        "cancel-create"
+      ]
+    },
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "internalRoleCD",
+              "span": 7
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "view",
+              "span": 7
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "viewWidgets",
+              "span": 12
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

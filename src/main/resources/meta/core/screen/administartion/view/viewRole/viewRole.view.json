@@ -1,8 +1,8 @@
 {
-  "name": "resplist",
+  "name": "viewRole",
   "title": "Responsibilities",
   "template": "DashboardView",
-  "url": "/screen/admin/view/resplist",
+  "url": "/screen/admin/view/viewRole",
   "widgets": [
     {
       "widgetName": "SecondLevelMenu",
@@ -10,12 +10,12 @@
       "gridWidth": 24
     },
     {
-      "widgetName": "resplist",
+      "widgetName": "roleView",
       "position": 10,
       "gridWidth": 24
     },
     {
-      "widgetName": "respformedit",
+      "widgetName": "roleViewformedit",
       "position": 20,
       "gridWidth": 24
     }

@@ -50,10 +50,18 @@
         ]
       },
       {
-        "title": "Responsibilites Administration",
+        "title": "View Role Administration",
         "child": [
           {
-            "viewName": "resplist"
+            "viewName": "viewRole"
+          }
+        ]
+      },
+      {
+        "title": "Action Role Administration",
+        "child": [
+          {
+            "viewName": "actionRole"
           }
         ]
       },

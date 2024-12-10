@@ -66,7 +66,7 @@ public class OidcJwtTokenConverter implements Converter<Jwt, OidcAuthenticationT
 
 		CxboxUserDetailsInterface userDetails = userService.createUserDetails(
 				user,
-				roles.stream().findFirst().get().getAuthority()
+				roles.stream().map(SimpleGrantedAuthority::getAuthority).collect(Collectors.toSet())
 		);
 		return new OidcAuthenticationToken(jwt, authorities, login, userDetails);
 

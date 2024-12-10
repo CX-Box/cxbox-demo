@@ -29,10 +29,10 @@ import org.cxbox.meta.entity.Responsibilities;
 import org.cxbox.meta.entity.Responsibilities.ResponsibilityType;
 import org.cxbox.meta.entity.Responsibilities_;
 import org.demo.conf.cxbox.extension.resposibilities.ResponsibilitiesServiceExt;
-import org.demo.dto.cxbox.inner.ResponsibilitesCrudDTO;
+import org.demo.dto.cxbox.inner.core.ResponsibilitesCrudDTO;
 
 
-import org.demo.dto.cxbox.inner.ResponsibilitesCrudDTO_;
+import org.demo.dto.cxbox.inner.core.ResponsibilitesCrudDTO_;
 
 import org.demo.entity.dictionary.InternalRole;
 import org.demo.repository.ResponsibilitiesRepository;

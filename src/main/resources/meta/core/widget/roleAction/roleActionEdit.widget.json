@@ -1,0 +1,91 @@
+{
+  "name": "roleActionEdit",
+  "title": "Role Action Responsibilities",
+  "type": "Form",
+  "bc": "roleAction",
+  "showCondition": [],
+  "fields": [
+    {
+      "label": "Role",
+      "key": "internalRoleCD",
+      "type": "dictionary",
+      "width": 200
+    },
+    {
+      "label": "bc",
+      "key": "bc",
+      "type": "dictionary",
+      "width": 200
+    },
+    {
+      "label": "action",
+      "key": "action",
+      "type": "dictionary",
+      "width": 200
+    },
+    {
+      "label": "View",
+      "key": "view",
+      "type": "dictionary",
+      "width": 200
+    },
+    {
+      "label": "widget",
+      "key": "widget",
+      "type": "dictionary",
+      "width": 200
+    }
+  ],
+  "options": {
+    "actionGroups": {
+      "include": [
+        "save",
+        "cancel-create"
+      ]
+    },
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "internalRoleCD",
+              "span": 7
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "widget",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "bc",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "action",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "view",
+              "span": 7
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

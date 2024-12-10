@@ -1,0 +1,27 @@
+{
+  "name": "actionRole",
+  "title": "Action Responsibilities",
+  "template": "DashboardView",
+  "url": "/screen/admin/view/actionRole",
+  "widgets": [
+    {
+      "widgetName": "SecondLevelMenu",
+      "position": 0,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "roleAction",
+      "position": 30,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "roleActionEdit",
+      "position": 40,
+      "gridWidth": 24
+    }
+  ],
+  "rolesAllowed": [
+    "CXBOX_USER",
+    "BUSINESS_ADMIN"
+  ]
+}

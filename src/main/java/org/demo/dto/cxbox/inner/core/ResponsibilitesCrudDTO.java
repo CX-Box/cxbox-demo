@@ -1,4 +1,4 @@
-package org.demo.dto.cxbox.inner;
+package org.demo.dto.cxbox.inner.core;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

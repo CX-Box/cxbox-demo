@@ -101,6 +101,19 @@
 
   </changeSet>
 
+  <changeSet author="cxbox" id="RESPONSIBILITIES_ACTION" runOnChange="true">
+    <delete tableName="RESPONSIBILITIES_ACTION"/>
+    <loadUpdateData tableName="RESPONSIBILITIES_ACTION" primaryKey="INTERNAL_ROLE_CD,ACTION,VIEW,WIDGET" encoding="UTF-8" separator=";"
+      quotchar="&quot;" file="db/data/cxbox/ROLE_ACTION.csv">
+      <column header="INTERNAL_ROLE_CD" name="INTERNAL_ROLE_CD" type="STRING"/>
+      <column header="ACTION" name="ACTION" type="STRING"/>
+      <column header="VIEW" name="VIEW" type="STRING"/>
+      <column header="WIDGET" name="WIDGET" type="STRING"/>
+      <column header="ID" name="ID" type="NUMERIC" defaultValue="${app_seq_next_val}"/>
+    </loadUpdateData>
+
+  </changeSet>
+
 
 
 </databaseChangeLog>

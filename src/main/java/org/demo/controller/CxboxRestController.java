@@ -24,6 +24,7 @@ import org.demo.service.cxbox.inner.core.DictionaryTypeService;
 import org.demo.service.cxbox.inner.MeetingDocumentsWriteService;
 import org.demo.service.cxbox.inner.MeetingReadService;
 import org.demo.service.cxbox.inner.MeetingWriteService;
+import org.demo.service.cxbox.inner.core.RoleActionService;
 import org.demo.service.cxbox.inner.core.RoleViewService;
 import org.demo.service.cxbox.inner.ResponsiblePickListService;
 
@@ -77,7 +78,8 @@ public enum CxboxRestController implements EnumBcIdentifier {
 		succeededJobs(jobsStats, JobAdminService.class),
 		failedJobs(jobsStats, JobAdminService.class),
 		deletedJobs(jobsStats, JobAdminService.class),
-	responsibilities(RoleViewService.class);
+	responsibilities(RoleViewService.class),
+	roleAction(RoleActionService.class);
 
 	// @formatter:on
 

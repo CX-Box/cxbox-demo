@@ -1,13 +1,25 @@
 {
-  "name": "resplist",
-  "title": "Role View",
+  "name": "roleAction",
+  "title": "Role Action",
   "type": "GroupingHierarchy",
-  "bc": "responsibilities",
+  "bc": "roleAction",
   "showCondition": [],
   "fields": [
     {
       "title": "Role",
       "key": "internalRoleCD",
+      "type": "dictionary",
+      "width": 200
+    },
+    {
+      "title": "bc",
+      "key": "bc",
+      "type": "dictionary",
+      "width": 200
+    },
+    {
+      "title": "action",
+      "key": "action",
       "type": "dictionary",
       "width": 200
     },
@@ -18,26 +30,25 @@
       "width": 200
     },
     {
-      "title": "widget (endpoint)",
-      "key": "viewWidgets",
-      "type": "multipleSelect"
+      "title": "widget",
+      "key": "widget",
+      "type": "dictionary",
+      "width": 200
     }
   ],
   "options": {
     "groupingHierarchy": {
       "fields": [
-        "internalRoleCD"
+        "internalRoleCD",
+        "bc",
+        "action"
       ]
     },
-    "additional": {
-      "fields": ["viewWidgets"],
-      "enabled": true
-    },
     "create": {
-      "widget": "respformedit"
+      "widget": "roleActionEdit"
     },
     "edit": {
-      "widget": "respformedit"
+      "widget": "roleActionEdit"
     },
     "actionGroups": {
       "include": [

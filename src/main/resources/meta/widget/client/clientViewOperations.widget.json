@@ -7,7 +7,16 @@
   "options": {
     "actionGroups": {
       "include": [
-        "actions"
+        {
+          "type": "ic2plangeneral-actions"
+        },
+        "create111"
+      ],
+      "exclude": [
+        "edit-ic2-plan",
+        "cancel-ic2plan-edit",
+        "save-ic2plan",
+        "cancel-ic2plan-creation"
       ]
     }
   }

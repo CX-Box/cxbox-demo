@@ -1,19 +1,11 @@
 package org.demo.service.cxbox.inner.core;
 
-import jakarta.annotation.Nullable;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import org.cxbox.api.data.dictionary.SimpleDictionary;
 import org.cxbox.core.crudma.bc.impl.InnerBcDescription;
 import org.cxbox.core.dto.rowmeta.FieldsMeta;
 import org.cxbox.core.dto.rowmeta.RowDependentFieldsMeta;
 import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
-import org.cxbox.meta.entity.Responsibilities;
-import org.cxbox.meta.entity.Responsibilities.ResponsibilityType;
-import org.cxbox.meta.entity.Responsibilities_;
 import org.cxbox.meta.metahotreload.dto.ViewSourceDTO;
 import org.cxbox.meta.metahotreload.dto.WidgetSourceDTO;
 import org.cxbox.meta.metahotreload.service.MetaResourceReaderService;
@@ -21,8 +13,6 @@ import org.cxbox.model.core.dao.JpaDao;
 import org.demo.conf.cxbox.extension.resposibilities.ResponsibilitiesServiceExt;
 import org.demo.dto.cxbox.inner.core.RoleActionDTO;
 import org.demo.dto.cxbox.inner.core.RoleActionDTO_;
-import org.demo.entity.dictionary.InternalRole;
-import org.demo.repository.ResponsibilitiesRepository;
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S3252", "java:S1186"})

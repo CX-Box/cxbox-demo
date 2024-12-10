@@ -74,9 +74,9 @@ export function getIncludedOperations(
                     const includeAll =
                         typeof nestedDescriptor === 'object'
                             ? nestedDescriptor.include
-                            : item.actions.some(action => include.includes(action.type))
-                            ? include
-                            : null
+                            : typeof nestedDescriptor === 'string'
+                            ? null
+                            : include
 
                     return shouldPickOperation(operation, includeAll, excludeAll)
                 })

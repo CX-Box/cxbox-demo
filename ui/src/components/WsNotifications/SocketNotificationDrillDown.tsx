@@ -4,6 +4,7 @@ import { t } from 'i18next'
 import DrillDownTooltipContent from '@components/ui/DrillDownTooltipContent/DrillDownTooltipContent'
 import { DrillDownType } from '@cxbox-ui/core'
 import copyTextToClipboard from '@utils/copyTextToClipboard'
+import openInNewTab from '@utils/openInNewTab'
 import getFullUrl from '@utils/getFullUrl'
 
 export interface SocketNotificationDrillDownProps {
@@ -25,7 +26,7 @@ const SocketNotificationDrillDown: React.FC<SocketNotificationDrillDownProps> = 
         e.stopPropagation()
 
         if (fullUrl) {
-            window.open(fullUrl, '_blank')
+            openInNewTab(fullUrl)
         }
     }
 

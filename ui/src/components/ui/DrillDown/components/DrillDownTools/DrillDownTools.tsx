@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux'
 import DrillDownTooltipContent from '@components/ui/DrillDownTooltipContent/DrillDownTooltipContent'
 import { drillDownInNewTab } from '@actions'
 import copyTextToClipboard from '@utils/copyTextToClipboard'
+import openInNewTab from '@utils/openInNewTab'
 import { WidgetFieldBase } from '@cxbox-ui/schema'
 
 export interface DrillDownToolsProps {
@@ -23,7 +24,7 @@ const DrillDownTools: React.FunctionComponent<DrillDownToolsProps> = ({ meta, cu
             e.stopPropagation()
 
             if (fullUrl) {
-                window.open(fullUrl, '_blank')
+                openInNewTab(fullUrl)
             } else {
                 if (widgetName && cursor && meta?.key) {
                     dispatch(drillDownInNewTab({ widgetName, cursor, fieldKey: meta.key, copyLink }))

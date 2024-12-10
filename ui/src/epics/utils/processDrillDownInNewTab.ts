@@ -2,6 +2,7 @@ import { notification } from 'antd'
 import { t } from 'i18next'
 import copyTextToClipboard from '@utils/copyTextToClipboard'
 import getFullUrl from '@utils/getFullUrl'
+import openInNewTab from '@utils/openInNewTab'
 import { RootState } from '@store'
 import { DrillDownType, RowMeta } from '@cxbox-ui/core'
 import { WidgetFieldBase } from '@cxbox-ui/schema'
@@ -40,7 +41,7 @@ const processDrillDownInNewTab = (
         if (copyLink) {
             copyTextToClipboard(drillDownFullUrl, t('Link copied successfully'))
         } else {
-            window.open(drillDownFullUrl, '_blank')
+            openInNewTab(drillDownFullUrl)
         }
     }
 }

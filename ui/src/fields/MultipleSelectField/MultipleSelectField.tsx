@@ -49,6 +49,7 @@ const MultipleSelectField: React.FunctionComponent<MultipleSelectFieldProps> = p
     const extendedProps: SelectProps<string[]> = {
         ...props,
         dropdownClassName: styles.dropDownMenu,
+        getPopupContainer: trigger => trigger.parentElement as HTMLElement,
         mode: 'multiple',
         optionLabelProp: 'label',
         value: value?.map(i => i.value),

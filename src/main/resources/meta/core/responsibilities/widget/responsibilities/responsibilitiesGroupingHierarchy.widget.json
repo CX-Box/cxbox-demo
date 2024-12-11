@@ -1,0 +1,50 @@
+{
+  "name": "responsibilitiesGroupingHierarchy",
+  "title": "",
+  "type": "GroupingHierarchy",
+  "bc": "responsibilities",
+  "fields": [
+    {
+      "title": "Role",
+      "key": "internalRoleCD",
+      "type": "dictionary",
+      "width": 200
+    },
+    {
+      "title": "View",
+      "key": "view",
+      "type": "dictionary",
+      "width": 200
+    },
+    {
+      "title": "widget (endpoint)",
+      "key": "viewWidgets",
+      "type": "multipleSelect"
+    }
+  ],
+  "options": {
+    "groupingHierarchy": {
+      "fields": [
+        "internalRoleCD"
+      ]
+    },
+    "additional": {
+      "fields": ["viewWidgets"],
+      "enabled": true
+    },
+    "create": {
+      "widget": "responsibilitiesForm"
+    },
+    "edit": {
+      "widget": "responsibilitiesForm"
+    },
+    "actionGroups": {
+      "include": [
+        "create",
+        "delete",
+        "clear_cache",
+        "export_liquibase"
+      ]
+    }
+  }
+}

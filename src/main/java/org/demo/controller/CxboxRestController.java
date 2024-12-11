@@ -5,6 +5,7 @@ import org.cxbox.api.data.BcIdentifier;
 import org.cxbox.core.crudma.bc.EnumBcIdentifier;
 import org.cxbox.core.crudma.bc.impl.AbstractEnumBcSupplier;
 import org.cxbox.core.crudma.bc.impl.BcDescription;
+import org.demo.conf.cxbox.customization.responsibilitiesAction.service.ResponsibilitiesActionAdminService;
 import org.demo.conf.cxbox.extension.jobRunr.service.state.JobStatsService;
 import org.demo.service.cxbox.anysource.clientstats.ClientStatsService;
 import org.demo.conf.cxbox.extension.jobRunr.service.job.JobAdminService;
@@ -19,16 +20,17 @@ import org.demo.service.cxbox.inner.ContactMultivalueService;
 import org.demo.service.cxbox.inner.ContactPickListService;
 import org.demo.service.cxbox.inner.DashboardClientActivitiesService;
 import org.demo.service.cxbox.inner.DashboardFilterService;
-import org.demo.service.cxbox.inner.core.DictionaryService;
-import org.demo.service.cxbox.inner.core.DictionaryTypeService;
+import org.demo.conf.cxbox.customization.dictionary.service.DictionaryAdminService;
+import org.demo.conf.cxbox.customization.dictionary.service.DictionaryTypeAdminService;
 import org.demo.service.cxbox.inner.MeetingDocumentsWriteService;
 import org.demo.service.cxbox.inner.MeetingReadService;
 import org.demo.service.cxbox.inner.MeetingWriteService;
-import org.demo.service.cxbox.inner.core.RoleViewService;
+import org.demo.conf.cxbox.customization.responsibilities.service.ResponsibilitiesAdminService;
 import org.demo.service.cxbox.inner.ResponsiblePickListService;
 
 import org.demo.service.cxbox.inner.SaleReadService;
 import org.demo.service.cxbox.inner.SaleWriteService;
+import org.demo.conf.cxbox.customization.responsibilitiesAction.service.ActionSuggestionAdminService;
 import org.springframework.stereotype.Component;
 
 /**
@@ -50,6 +52,7 @@ public enum CxboxRestController implements EnumBcIdentifier {
 	clientEdit(ClientReadWriteService.class),
 		contactEdit(clientEdit, ClientContactService.class),
 		contactEditAssoc(clientEdit, ClientContactService.class),
+		companySuggestionPickList(clientEdit, CompanyService.class),
 	meeting(MeetingReadService.class),
 		meetingDocumentEdit(meeting, MeetingDocumentsWriteService.class),
 	meetingEdit(MeetingWriteService.class),
@@ -64,12 +67,15 @@ public enum CxboxRestController implements EnumBcIdentifier {
 		dashboardClientActivities(dashboardFilter, DashboardClientActivitiesService.class),
 	dashboardSalesFunnel(dashboardFilter, SaleStatsService.class),
 	dashboardSalesRingProgress(dashboardFilter, SaleProgressStatsService.class),
-	companySuggestionPickList(CompanyService.class),
 
-	//administration
-	dictionary(DictionaryService.class),
-		dictionaryType(dictionary, DictionaryTypeService.class),
-	lovExternal(LovReadService.class),
+	//core administration
+	dictionary(DictionaryAdminService.class),
+		dictionaryType(dictionary, DictionaryTypeAdminService.class),
+	responsibilities(ResponsibilitiesAdminService.class),
+	responsibilitiesAction(ResponsibilitiesActionAdminService.class),
+		responsibilitiesActionSuggestion(responsibilitiesAction, ActionSuggestionAdminService.class),
+
+	//application administration
 	jobsStats(JobStatsService.class),
 		scheduledJobs(jobsStats, JobAdminService.class),
 		enqueuedJobs(jobsStats, JobAdminService.class),
@@ -77,7 +83,8 @@ public enum CxboxRestController implements EnumBcIdentifier {
 		succeededJobs(jobsStats, JobAdminService.class),
 		failedJobs(jobsStats, JobAdminService.class),
 		deletedJobs(jobsStats, JobAdminService.class),
-	responsibilities(RoleViewService.class);
+	lovExternal(LovReadService.class);
+
 
 	// @formatter:on
 

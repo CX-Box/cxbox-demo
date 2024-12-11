@@ -27,9 +27,9 @@ export interface SuggestionPickListProps extends Omit<BaseFieldProps, 'meta'> {
 }
 
 export function SuggestionPickList({ meta: fieldMeta, widgetName, cursor, value, disabled, placeholder }: SuggestionPickListProps) {
-    const { fieldBcUrl, fieldBc, screenName, widget, widgetBcName } = useAppSelector(state => {
+    const fieldBc = useAppSelector(state => (fieldMeta.popupBcName ? state.screen.bo.bc[fieldMeta.popupBcName] : undefined))
+    const { fieldBcUrl, screenName, widget, widgetBcName } = useAppSelector(state => {
         const fieldBcName = fieldMeta.popupBcName
-        const fieldBc = state.screen.bo.bc[fieldBcName]
         const limitBySelfCursor = state.router.bcPath?.includes(`${fieldBcName}/${cursor}`)
         const widgetBcName = state.view.widgets.find(item => item.name === widgetName)?.bcName
 
@@ -99,11 +99,11 @@ export function SuggestionPickList({ meta: fieldMeta, widgetName, cursor, value,
         (query?: string) => {
             fetchOptions.current?.(screenName, fieldBcUrl, {
                 query: query ?? '',
-                _page: fieldBc.page,
-                _limit: widget.limit || fieldBc.limit
+                _page: fieldBc?.page,
+                _limit: widget.limit || fieldBc?.limit
             })
         },
-        [fetchOptions, fieldBc.limit, fieldBc.page, fieldBcUrl, screenName, widget.limit]
+        [fetchOptions, fieldBc, fieldBc?.limit, fieldBc?.page, fieldBcUrl, screenName, widget.limit]
     )
 
     const handleInputChange = useCallback(
@@ -137,6 +137,8 @@ export function SuggestionPickList({ meta: fieldMeta, widgetName, cursor, value,
         changeData(null)
     }, [changeData])
 
+    const handleFocus = useCallback(() => handleSearch(''), [handleSearch])
+
     return (
         <Select
             style={{ width: '100%' }}
@@ -157,6 +159,7 @@ export function SuggestionPickList({ meta: fieldMeta, widgetName, cursor, value,
             )}
             notFoundContent={<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
             onSelect={handleSelect}
+            onFocus={handleFocus}
             filterOption={false}
             disabled={disabled}
         >
@@ -167,7 +170,7 @@ export function SuggestionPickList({ meta: fieldMeta, widgetName, cursor, value,
 
 export default SuggestionPickList
 
-const MIN_SEARCH_VALUE_LENGTH = 1
+const MIN_SEARCH_VALUE_LENGTH = 0
 
 function useOptions({ widget }: { widget: SuggestionPickListWidgetMeta }) {
     const [options, setOptions] = useState<SuggestionPickListDataItem[] | undefined>()

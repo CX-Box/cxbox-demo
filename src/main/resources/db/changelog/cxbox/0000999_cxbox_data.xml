@@ -4,8 +4,8 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd"
   logicalFilePath="db/changelog/0000999_data.xml">
 
-  <property name="app_seq_next_val" value="nextval('APP_SEQ')" dbms="postgresql"/>
-  <property name="app_seq_next_val" value="APP_SEQ.NEXTVAL" dbms="oracle"/>
+  <property name="meta_seq_next_val" value="nextval('META_SEQ')" dbms="postgresql"/>
+  <property name="meta_seq_next_val" value="META_SEQ.NEXTVAL" dbms="oracle"/>
 
   <changeSet author="cxbox" id="INITIAL DATA">
     <loadData tableName="USERS" encoding="UTF-8" separator=";" quotchar="&quot;"
@@ -29,23 +29,23 @@
   </changeSet>
 
   <changeSet id="cxbox_bc_filter_groups" author="cxbox" runOnChange="true" context="local">
-    <loadUpdateData tableName="bc_filter_groups" primaryKey="ID" encoding="UTF-8" separator="," quotchar="&quot;"
+    <loadUpdateData tableName="bc_filter_groups" primaryKey="ID" encoding="UTF-8" separator=";" quotchar="&quot;"
       file="db/data/cxbox/BC_FILTER_GROUPS.csv">
-      <column header="ID" name="ID" type="STRING"/>
       <column header="name" name="name" type="STRING"/>
       <column header="bc" name="bc" type="STRING"/>
       <column header="filters" name="filters" type="STRING"/>
+      <column header="ID" name="ID" type="NUMERIC" defaultValue="${app_seq_next_val}"/>
     </loadUpdateData>
   </changeSet>
 
   <changeSet id="cxbox_bc_properties" author="cxbox" runOnChange="true" context="local">
     <loadUpdateData tableName="BC_PROPERTIES" primaryKey="ID" separator=";" quotchar="'"
       file="db/data/cxbox/BC_PROPERTIES.csv">
-      <column header="ID" name="ID" type="NUMERIC"/>
       <column header="BC" name="BC" type="STRING"/>
       <column header="PAGE_LIMIT" name="PAGE_LIMIT" type="NUMERIC"/>
       <column header="SORT" name="SORT" type="STRING"/>
       <column header="FILTER" name="FILTER" type="STRING"/>
+      <column header="ID" name="ID" type="NUMERIC" defaultValue="${app_seq_next_val}"/>
     </loadUpdateData>
   </changeSet>
 
@@ -85,18 +85,31 @@
     <delete tableName="RESPONSIBILITIES"/>
 
     <loadUpdateData tableName="RESPONSIBILITIES" primaryKey="INTERNAL_ROLE_CD,RESPONSIBILITIES" encoding="UTF-8" separator=";"
-      quotchar="&quot;" file="db/data/cxbox/ROLE_VIEW.csv">
+      quotchar="&quot;" file="db/data/cxbox/RESPONSIBILITIES.csv">
       <column header="INTERNAL_ROLE_CD" name="INTERNAL_ROLE_CD" type="STRING"/>
       <column header="RESPONSIBILITIES" name="RESPONSIBILITIES" type="STRING"/>
-      <column header="ID" name="ID" type="NUMERIC" defaultValue="${app_seq_next_val}"/>
+      <column header="ID" name="ID" type="NUMERIC" defaultValue="${meta_seq_next_val}"/>
     </loadUpdateData>
 
     <loadUpdateData tableName="RESPONSIBILITIES" primaryKey="INTERNAL_ROLE_CD,RESP_TYPE" encoding="UTF-8" separator=";"
-      quotchar="&quot;" file="db/data/cxbox/ROLE_SCREEN_OVERRIDE.csv">
+      quotchar="&quot;" file="db/data/cxbox/RESPONSIBILITIES_SCREEN_OVERRIDE.csv">
       <column header="INTERNAL_ROLE_CD" name="INTERNAL_ROLE_CD" type="STRING"/>
       <column header="RESP_TYPE" name="RESP_TYPE" type="STRING"/>
       <column header="SCREEN" name="SCREEN" type="STRING"/>
-      <column header="ID" name="ID" type="NUMERIC" defaultValue="${app_seq_next_val}"/>
+      <column header="ID" name="ID" type="NUMERIC" defaultValue="${meta_seq_next_val}"/>
+    </loadUpdateData>
+
+  </changeSet>
+
+  <changeSet author="cxbox" id="RESPONSIBILITIES_ACTION" runOnChange="true">
+    <delete tableName="RESPONSIBILITIES_ACTION"/>
+    <loadUpdateData tableName="RESPONSIBILITIES_ACTION" primaryKey="INTERNAL_ROLE_CD,ACTION,VIEW,WIDGET" encoding="UTF-8" separator=";"
+      quotchar="&quot;" file="db/data/cxbox/RESPONSIBILITIES_ACTION.csv">
+      <column header="INTERNAL_ROLE_CD" name="INTERNAL_ROLE_CD" type="STRING"/>
+      <column header="ACTION" name="ACTION" type="STRING"/>
+      <column header="VIEW" name="VIEW" type="STRING"/>
+      <column header="WIDGET" name="WIDGET" type="STRING"/>
+      <column header="ID" name="ID" type="NUMERIC" defaultValue="${meta_seq_next_val}"/>
     </loadUpdateData>
 
   </changeSet>

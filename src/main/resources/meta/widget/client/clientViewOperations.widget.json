@@ -6,9 +6,6 @@
   "fields": [],
   "options": {
     "actionGroups": {
-      "include": [
-        "actions"
-      ]
     }
   }
 }

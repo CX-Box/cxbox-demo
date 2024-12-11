@@ -69,6 +69,7 @@ export function FormPopup(props: FormPopupProps) {
         <div ref={formPopupRef}>
             {showed && (
                 <Popup
+                    className={styles.popupContainer}
                     title={popupTitle}
                     showed
                     width={popupWidth}

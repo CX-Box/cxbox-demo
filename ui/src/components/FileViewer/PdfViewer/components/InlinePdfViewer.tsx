@@ -60,7 +60,7 @@ function InlinePdfViewer({ mode, hideToolbar, isFirefox, ...restProps }: InlineP
                     style={{ border: 0 }}
                     height={'100%'}
                 >
-                    <Empty type="brokenFile" mode={mode} size="big" text={'Oops, something went wrong'} />
+                    <Empty type="broken" mode={mode} size="big" text={'Oops, something went wrong'} />
                 </object>
             </div>
         </Spin>

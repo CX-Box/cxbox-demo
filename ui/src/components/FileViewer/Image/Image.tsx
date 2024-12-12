@@ -35,7 +35,7 @@ function Image({ alt, src, mode, ...restProps }: ImageProps) {
     return (
         <div className={styles.root}>
             {!error && <img ref={imageRef} alt={alt} src={src} {...restProps} />}
-            {error && <Empty type="brokenFile" mode={mode} size="big" text={'Oops, something went wrong'} />}
+            {error && <Empty type="broken" mode={mode} size="big" text={'Oops, something went wrong'} />}
         </div>
     )
 }

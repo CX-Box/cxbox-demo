@@ -14,7 +14,7 @@ export interface FileIconProps {
 
 function FileIcon({ className, size = 'small', type, onClick, eye, hoverEnabled }: FileIconProps) {
     const currentIcons = size === 'small' ? icons.small : icons.full
-    const Icon = currentIcons[type as keyof typeof currentIcons] ?? currentIcons.file
+    const Icon = currentIcons[type?.toLowerCase() as keyof typeof currentIcons] ?? currentIcons.file
     const EyeIcon = icons.others.eye
 
     return (

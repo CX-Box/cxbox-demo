@@ -1,4 +1,4 @@
-export { ReactComponent as brokenFile } from './broken-file.svg'
+export { ReactComponent as broken } from './broken-file.svg'
 export { ReactComponent as csv } from './csv.svg'
 export { ReactComponent as doc } from './doc.svg'
 export { ReactComponent as docx } from './docx.svg'

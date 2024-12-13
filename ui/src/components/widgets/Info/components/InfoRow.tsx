@@ -28,7 +28,6 @@ function InfoRow({ meta, flattenWidgetFields, onDrillDown, row, cursor }: InfoRo
         return fieldMeta ? !fieldMeta.hidden : true
     })
     const totalWidth = visibleColumns.reduce((prev, current) => prev + (current.span ?? 0), 0)
-    const totalColumnWidthExceedsMaximum = totalWidth > MAX_COL_SPAN
     const calculateColSpan = useCallback(
         (colSpan: number) => {
             const proportionalityFactor = MAX_COL_SPAN / totalWidth
@@ -40,7 +39,7 @@ function InfoRow({ meta, flattenWidgetFields, onDrillDown, row, cursor }: InfoRo
 
     return (
         <Row className={styles.rowWrapper}>
-            <Col span={24} className={cn({ [styles.extraWidth]: totalColumnWidthExceedsMaximum })}>
+            <Col span={24}>
                 {visibleColumns.map((col, colIndex) => {
                     const field = flattenWidgetFields.find(i => i.key === col.fieldKey) as interfaces.WidgetInfoField
                     return (

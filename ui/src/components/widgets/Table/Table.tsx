@@ -181,7 +181,7 @@ function Table<T extends CustomDataItem>({
     const bcData = useAppSelector(state => state.data[meta.bcName] as T[] | undefined)
 
     const expandedRowKeys = useMemo(() => {
-        if (isGroupingHierarchy) {
+        if (enabledGrouping) {
             const expandedRowKey = getGroupingHierarchyRowKeyByRecordId(expandedRowId)
 
             return expandedRowKey && !expandedParentRowKeys.includes(expandedRowKey)
@@ -190,7 +190,7 @@ function Table<T extends CustomDataItem>({
         }
 
         return expandedRowId ? [expandedRowId, ...expandedParentRowKeys] : expandedParentRowKeys
-    }, [expandedParentRowKeys, expandedRowId, getGroupingHierarchyRowKeyByRecordId, isGroupingHierarchy])
+    }, [enabledGrouping, expandedParentRowKeys, expandedRowId, getGroupingHierarchyRowKeyByRecordId])
 
     const needHideActions = useCallback(
         (record: T) => {

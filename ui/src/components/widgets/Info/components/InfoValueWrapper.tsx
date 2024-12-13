@@ -11,9 +11,9 @@ interface ValueWrapperProps {
     colSpan?: number
     children?: ReactNode
 }
-function InfoValueWrapper({ row, titleMode, colSpan, children }: ValueWrapperProps) {
+function InfoValueWrapper({ row, titleMode, colSpan, children, ...restColProps }: ValueWrapperProps) {
     return (
-        <Col span={colSpan}>
+        <Col span={colSpan} {...restColProps}>
             <div
                 className={cn(styles.fieldArea, {
                     [styles.rowDirection]: titleMode === ETitleMode.left,

@@ -42,7 +42,11 @@
     <!-- dependencies versions -->
     <jobrunr-spring-boot-3-starter.version>7.3.0</jobrunr-spring-boot-3-starter.version> <!--based on spring-boot 3.3.4, e.g. synced to cxbox-starter-parent-->
     <minio.version>8.5.12</minio.version>
-    <postgresql.version>42.7.4</postgresql.version>
+    <postgresql.version>42.7.4</postgresql.version>.
+
+	  <!--Checkstyle-->
+	  <checkstyle.version>10.12.3</checkstyle.version>
+	  <checkstyle.plugin.version>3.3.1</checkstyle.plugin.version>
   </properties>
 
   <dependencies>
@@ -175,7 +179,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>3.3.1</version>
+        <version>${checkstyle.plugin.version}</version>
         <configuration>
           <configLocation>src/main/resources/checkstyle-checker.xml</configLocation>
           <inputEncoding>UTF-8</inputEncoding>
@@ -197,6 +201,13 @@
             </goals>
           </execution>
         </executions>
+	      <dependencies>
+		      <dependency>
+			      <groupId>com.puppycrawl.tools</groupId>
+			      <artifactId>checkstyle</artifactId>
+			      <version>${checkstyle.version}</version>
+		      </dependency>
+	      </dependencies>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

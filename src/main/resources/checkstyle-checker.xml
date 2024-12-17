@@ -1,74 +1,219 @@
 <?xml version="1.0"?>
 <!DOCTYPE module PUBLIC
-  "-//Puppy Crawl//DTD Check Configuration 1.3//EN"
-  "http://checkstyle.sourceforge.net/dtds/configuration_1_3.dtd">
+  "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
+  "https://checkstyle.org/dtds/configuration_1_3.dtd">
 <module name="Checker">
+  <property name="tabWidth" value="2"/>
   <property name="charset" value="UTF-8"/>
-
   <property name="severity" value="error"/>
-
   <property name="fileExtensions" value="java, properties, xml"/>
 
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value="module\-info\.java$"/>
+  </module>
+
+  <module name="UniqueProperties"/>
+
+  <module name="NewlineAtEndOfFile"/>
+
+  <module name="RegexpMultiline">
+    <property name="id" value="RegexpMultilineEmptyRowAfterClassDef"/>
+    <property name="format" value="^([^\r\n ]+ )*(class|interface|@interface|enum) [^{]*\{[\r]?\n[^\r\n}]"/>
+    <property name="message" value="class/interface/@interface/enum начинается не с пустой строки."/>
+    <property name="severity" value="error"/>
+    <property name="fileExtensions" value="java"/>
+  </module>
+
+  <module name="RegexpMultiline">
+    <property name="id" value="RegexpMultilineEmptyRowBeforeClassEnd"/>
+    <property name="format" value="[^\r\n{][\r]?\n\}[\r]?\n"/>
+    <property name="message" value="class/interface/@interface/enum не заканчивается пустой строкой."/>
+    <property name="severity" value="error"/>
+    <property name="fileExtensions" value="java"/>
+  </module>
+
   <module name="TreeWalker">
-    <module name="RegexpSinglelineJava">
-      <property name="format" value="^\t* "/>
-      <property name="message" value="Indent must use tab characters"/>
-      <property name="ignoreComments" value="true"/>
+    <property name="tabWidth" value="2"/>
+
+    <module name="AnnotationLocation">
+      <property name="id" value="AnnotationLocationMostCases"/>
+      <property name="tokens" value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF, METHOD_DEF, CTOR_DEF, RECORD_DEF, COMPACT_CTOR_DEF"/>
     </module>
-    <module name="OuterTypeFilename"/>
-    <module name="IllegalTokenText">
-      <property name="tokens" value="STRING_LITERAL, CHAR_LITERAL"/>
-      <property name="format"
-        value="\\u00(09|0(a|A)|0(c|C)|0(d|D)|22|27|5(C|c))|\\(0(10|11|12|14|15|42|47)|134)"/>
-      <property name="message"
-        value="Consider using special escape sequence instead of octal value or Unicode escaped value."/>
+    <module name="AnnotationLocation">
+      <property name="id" value="AnnotationLocationVariables"/>
+      <property name="tokens" value="VARIABLE_DEF"/>
+      <property name="allowSamelineMultipleAnnotations" value="true"/>
     </module>
-    <module name="Regexp">
-      <property name="format" value="(System\.out\.println|System\.err\.println|\.printStackTrace)"/>
-      <property name="illegalPattern" value="true"/>
-      <property name="message" value="Запрещено логирование не методами slf4j"/>
-    </module>
+    <module name="AnnotationUseStyle"/>
+    <module name="ArrayTypeStyle"/>
+    <module name="AvoidDoubleBraceInitialization"/>
     <module name="AvoidEscapedUnicodeCharacters">
       <property name="allowEscapesForControlCharacters" value="true"/>
       <property name="allowByTailComment" value="true"/>
       <property name="allowNonPrintableEscapes" value="true"/>
     </module>
-    <module name="OneTopLevelClass"/>
-    <module name="NoLineWrap"/>
-    <module name="EmptyBlock">
-      <property name="option" value="TEXT"/>
-      <property name="tokens" value="LITERAL_TRY, LITERAL_FINALLY, LITERAL_IF, LITERAL_ELSE, LITERAL_SWITCH"/>
+    <module name="AvoidNestedBlocks"/>
+    <module name="AvoidNoArgumentSuperConstructorCall"/>
+    <module name="AvoidStarImport"/>
+    <module name="CatchParameterName"/>
+    <module name="ClassTypeParameterName">
+      <property name="format" value="^[A-Z]*$"/>
     </module>
-    <module name="NeedBraces"/>
+    <module name="CommentsIndentation">
+      <property name="tokens" value="SINGLE_LINE_COMMENT, BLOCK_COMMENT_BEGIN"/>
+    </module>
+    <module name="ConstantName"/>
+    <module name="CovariantEquals"/>
+    <module name="CustomImportOrder">
+      <property name="sortImportsInGroupAlphabetically" value="true"/>
+      <property name="separateLineBetweenGroups" value="true"/>
+      <property name="customImportOrderRules" value="STANDARD_JAVA_PACKAGE###THIRD_PARTY_PACKAGE###STATIC"/>
+      <property name="tokens" value="IMPORT, STATIC_IMPORT, PACKAGE_DEF"/>
+    </module>
+    <module name="DeclarationOrder"/>
+    <module name="DefaultComesLast"/>
+    <module name="EmptyBlock"/>
+    <module name="EmptyCatchBlock">
+      <property name="exceptionVariableName" value="expected|ignore"/>
+    </module>
+    <module name="EmptyForInitializerPad"/>
+    <module name="EmptyForIteratorPad"/>
+    <module name="EmptyLineSeparator">
+      <property name="allowNoEmptyLineBetweenFields" value="true"/>
+      <property name="allowMultipleEmptyLines" value="false"/>
+      <property name="allowMultipleEmptyLinesInsideClassMembers" value="false"/>
+    </module>
+    <module name="EmptyStatement"/>
+    <module name="EqualsAvoidNull"/>
+    <module name="EqualsHashCode"/>
+    <module name="FallThrough"/>
+    <module name="FinalLocalVariable"/>
+    <module name="FinalParameters"/>
+    <module name="GenericWhitespace"/>
+    <module name="IllegalImport">
+      <property name="regexp" value="true"/>
+      <property name="illegalClasses" value="^org\.junit\.Test, ^org\.junit\.jupiter\.api\.Assertions, ^org\.junit\.Test, ^org\.junit\.jupiter\.api\.Assertions\..*"/>
+      <property name="illegalPkgs" value="^org\.hamcrest"/>
+    </module>
+    <module name="IllegalInstantiation">
+      <property name="classes" value="java.lang.Boolean, java.lang.Integer"/>
+    </module>
+    <module name="IllegalThrows"/>
+    <module name="IllegalToken"/>
+    <module name="IllegalTokenText">
+      <property name="tokens" value="STRING_LITERAL, CHAR_LITERAL"/>
+      <property name="format" value="\\u00(09|0(a|A)|0(c|C)|0(d|D)|22|27|5(C|c))|\\(0(10|11|12|14|15|42|47)|134)"/>
+      <property name="message" value="Consider using special escape sequence instead of octal value or Unicode escaped value."/>
+    </module>
+    <module name="IllegalType"/>
+    <module name="Indentation">
+      <property name="basicOffset" value="2"/>
+      <property name="braceAdjustment" value="2"/>
+      <property name="caseIndent" value="2"/>
+      <property name="throwsIndent" value="2"/>
+      <property name="arrayInitIndent" value="2"/>
+      <property name="lineWrappingIndentation" value="2"/>
+    </module>
+    <module name="InnerAssignment"/>
+    <module name="InnerTypeLast"/>
+    <module name="InterfaceIsType"/>
+    <module name="InterfaceTypeParameterName"/>
+    <module name="InvalidJavadocPosition"/>
+    <module name="JavadocMethod">
+      <property name="accessModifiers" value="public"/>
+      <property name="allowMissingParamTags" value="true"/>
+      <property name="allowMissingReturnTag" value="true"/>
+      <property name="allowedAnnotations" value="Override, Test"/>
+      <property name="tokens" value="METHOD_DEF, CTOR_DEF, ANNOTATION_FIELD_DEF, COMPACT_CTOR_DEF"/>
+    </module>
+    <module name="MissingJavadocMethod">
+      <property name="allowedAnnotations" value="Override, Test"/>
+      <property name="scope" value="public"/>
+      <property name="tokens" value="METHOD_DEF, CTOR_DEF, ANNOTATION_FIELD_DEF, COMPACT_CTOR_DEF"/>
+    </module>
+    <module name="MissingJavadocType">
+      <property name="scope" value="protected"/>
+      <property name="tokens" value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF, RECORD_DEF, ANNOTATION_DEF"/>
+    </module>
+    <module name="JavadocMissingLeadingAsterisk"/>
+    <module name="JavadocMissingWhitespaceAfterAsterisk"/>
+    <module name="JavadocParagraph"/>
+    <module name="JavadocTagContinuationIndentation"/>
+    <module name="LambdaParameterName"/>
     <module name="LeftCurly"/>
+    <module name="LocalFinalVariableName"/>
+    <module name="LocalVariableName"/>
+    <module name="MemberName"/>
+    <module name="MethodName">
+      <property name="format" value="^[a-z][a-zA-Z0-9_]*$"/>
+    </module>
+    <module name="MethodParamPad"/>
+    <module name="MethodTypeParameterName"/>
+    <module name="MissingOverride"/>
+    <module name="MissingSwitchDefault"/>
+    <module name="ModifiedControlVariable"/>
+    <module name="ModifierOrder"/>
+    <module name="MultipleVariableDeclarations"/>
+    <module name="MutableException"/>
+    <module name="NeedBraces"/>
+    <module name="NoArrayTrailingComma"/>
+    <module name="NoClone"/>
+    <module name="NoCodeInFile"/>
+    <module name="NoEnumTrailingComma"/>
+    <module name="NoFinalizer"/>
+    <module name="NoLineWrap"/>
+    <module name="NonEmptyAtclauseDescription"/>
+    <module name="NoWhitespaceAfter"/>
+    <module name="NoWhitespaceBefore">
+      <property name="tokens" value="COMMA, SEMI, POST_INC, POST_DEC, DOT, LABELED_STAT, METHOD_REF"/>
+      <property name="allowLineBreaks" value="true"/>
+    </module>
+    <module name="NoWhitespaceBeforeCaseDefaultColon"/>
+    <module name="OneStatementPerLine"/>
+    <module name="OneTopLevelClass"/>
+    <module name="OperatorWrap">
+      <property name="option" value="NL"/>
+    </module>
+    <module name="OuterTypeFilename"/>
+    <module name="OuterTypeNumber"/>
+    <module name="OverloadMethodsDeclarationOrder"/>
+    <module name="PackageDeclaration"/>
+    <module name="PackageName"/>
+    <module name="ParameterAssignment"/>
+    <module name="ParameterName"/>
+    <module name="ParenPad"/>
+    <module name="PatternVariableName"/>
+    <module name="RecordComponentName"/>
+    <module name="RecordTypeParameterName"/>
+    <module name="RedundantImport"/>
+    <module name="RedundantModifier"/>
+    <module name="RegexpSinglelineJava">
+      <property name="id" value="AvoidPrintStackTraceCall"/>
+      <property name="format" value="\.printStackTrace?\("/>
+      <property name="message" value="Используйте логгер вместо вызова printStacktrace."/>
+      <property name="ignoreComments" value="true"/>
+    </module>
+    <module name="RegexpSinglelineJava">
+      <property name="id" value="AvoidConsoleOutput"/>
+      <property name="format" value="System\.(out)|(err)\.print(ln)?\("/>
+      <property name="message" value="Используйте логгер вместо вывода в консоль."/>
+      <property name="ignoreComments" value="true"/>
+    </module>
+    <module name="RegexpSinglelineJava">
+      <property name="id" value="TabIndentation"/>
+      <property name="format" value="^\t* "/>
+      <property name="message" value="Для отступов должны использоваться символы табуляции."/>
+      <property name="ignoreComments" value="true"/>
+    </module>
+    <module name="RequireEmptyLineBeforeBlockTagGroup"/>
     <module name="RightCurly">
       <property name="id" value="RightCurlySame"/>
-      <property name="tokens"
-        value="LITERAL_TRY, LITERAL_CATCH, LITERAL_FINALLY, LITERAL_IF, LITERAL_ELSE, LITERAL_DO"/>
+      <property name="tokens" value="LITERAL_TRY, LITERAL_CATCH, LITERAL_FINALLY, LITERAL_IF, LITERAL_ELSE, LITERAL_DO"/>
     </module>
     <module name="RightCurly">
       <property name="id" value="RightCurlyAlone"/>
       <property name="option" value="alone"/>
-      <property name="tokens"
-        value="CLASS_DEF, METHOD_DEF, CTOR_DEF, LITERAL_FOR, LITERAL_WHILE, STATIC_INIT, INSTANCE_INIT"/>
-    </module>
-    <module name="WhitespaceAround">
-      <property name="allowEmptyConstructors" value="true"/>
-      <property name="allowEmptyMethods" value="true"/>
-      <property name="allowEmptyTypes" value="true"/>
-      <property name="allowEmptyLoops" value="true"/>
-      <message key="ws.notFollowed"
-        value="WhitespaceAround: ''{0}'' is not followed by whitespace. Empty blocks may only be represented as '{}' when not part of a multi-block statement (4.1.3)"/>
-      <message key="ws.notPreceded" value="WhitespaceAround: ''{0}'' is not preceded with whitespace."/>
-    </module>
-    <module name="OneStatementPerLine"/>
-    <module name="MultipleVariableDeclarations"/>
-    <module name="ArrayTypeStyle"/>
-    <module name="FallThrough"/>
-    <module name="UpperEll"/>
-    <module name="ModifierOrder"/>
-    <module name="EmptyLineSeparator">
-      <property name="allowNoEmptyLineBetweenFields" value="true"/>
+      <property name="tokens" value="CLASS_DEF, METHOD_DEF, CTOR_DEF, LITERAL_FOR, LITERAL_WHILE, STATIC_INIT, INSTANCE_INIT, ANNOTATION_DEF, ENUM_DEF, INTERFACE_DEF, RECORD_DEF, COMPACT_CTOR_DEF"/>
     </module>
     <module name="SeparatorWrap">
       <property name="id" value="SeparatorWrapDot"/>
@@ -81,11 +226,13 @@
       <property name="option" value="EOL"/>
     </module>
     <module name="SeparatorWrap">
+      <!-- ELLIPSIS is EOL until https://github.com/google/styleguide/issues/259 -->
       <property name="id" value="SeparatorWrapEllipsis"/>
       <property name="tokens" value="ELLIPSIS"/>
       <property name="option" value="EOL"/>
     </module>
     <module name="SeparatorWrap">
+      <!-- ARRAY_DECLARATOR is EOL until https://github.com/google/styleguide/issues/258 -->
       <property name="id" value="SeparatorWrapArrayDeclarator"/>
       <property name="tokens" value="ARRAY_DECLARATOR"/>
       <property name="option" value="EOL"/>
@@ -95,24 +242,27 @@
       <property name="tokens" value="METHOD_REF"/>
       <property name="option" value="nl"/>
     </module>
-    <module name="NoFinalizer"/>
-    <module name="GenericWhitespace">
-      <message key="ws.followed" value="GenericWhitespace ''{0}'' is followed by whitespace."/>
-      <message key="ws.preceded" value="GenericWhitespace ''{0}'' is preceded with whitespace."/>
-      <message key="ws.illegalFollow" value="GenericWhitespace ''{0}'' should followed by whitespace."/>
-      <message key="ws.notPreceded" value="GenericWhitespace ''{0}'' is not preceded with whitespace."/>
-    </module>
-    <module name="MethodParamPad"/>
-    <module name="NoWhitespaceBefore">
-      <property name="tokens"
-        value="COMMA, SEMI, POST_INC, POST_DEC, DOT, ELLIPSIS, METHOD_REF"/>
-      <property name="allowLineBreaks" value="true"/>
-    </module>
-    <module name="ParenPad"/>
-
-    <module name="UnusedImports"/>
-    <module name="EqualsAvoidNull"/>
-    <module name="StringLiteralEquality"/>
     <module name="SimplifyBooleanExpression"/>
+    <module name="SingleLineJavadoc"/>
+    <module name="SingleSpaceSeparator"/>
+    <module name="StaticVariableName"/>
+    <module name="StringLiteralEquality"/>
+    <module name="SuperClone"/>
+    <module name="SuperFinalize"/>
+    <module name="SuppressWarningsHolder"/>
+    <module name="TrailingComment"/>
+    <module name="TypecastParenPad"/>
+    <module name="TypeName"/>
+    <module name="UnnecessaryParentheses"/>
+    <module name="UnnecessarySemicolonAfterOuterTypeDeclaration"/>
+    <module name="UnnecessarySemicolonAfterTypeMemberDeclaration"/>
+    <module name="UnnecessarySemicolonInEnumeration"/>
+    <module name="UnnecessarySemicolonInTryWithResources"/>
+    <module name="UnusedImports"/>
+    <module name="UnusedLocalVariable"/>
+    <module name="UpperEll"/>
+    <module name="VariableDeclarationUsageDistance"/>
+    <module name="WhitespaceAfter"/>
+    <module name="WhitespaceAround"/>
   </module>
 </module>

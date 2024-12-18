@@ -13,7 +13,6 @@ import Pagination from './Pagination'
 import Button from '../ui/Button/Button'
 import { CxBoxApiInstance as instance } from '../../api'
 import { useStompNotification } from '@components/WsNotifications/hooks'
-import { isArray } from '@craco/craco/dist/lib/utils'
 import { lastValueFrom } from 'rxjs'
 
 interface NotificationProps {}
@@ -105,7 +104,7 @@ export function WsNotifications(props: NotificationProps) {
         </div>
     )
 
-    const isLinksEnabled = notification.state.data?.some(message => isArray(message.links))
+    const isLinksEnabled = notification.state.data?.some(message => Array.isArray(message.links))
 
     return (
         <>

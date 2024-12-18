@@ -34,15 +34,13 @@ cxbox:
       include-packages: org.cxbox.meta, org.demo.conf.cxbox
       sort-enabled-default: false
       filter-by-range-enabled-default: true
-  screen:
-    menu:
-      sidebar-items-name-transfer-enabled-default: false
   api:
     path: /api/v1
     use-servlet-context-path: false
   ui:
     path: /ui
     use-servlet-context-path: false
+    side-bar-word-break: none
 
 server:
   port: 8080

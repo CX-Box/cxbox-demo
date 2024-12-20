@@ -68,7 +68,7 @@ function ReadOnlySingleFileUpload({
     return (
         <div className={styles.root}>
             {smartIcon}
-            <Button type="link" removeIndentation={true} onClick={handleDownload}>
+            <Button className={styles.readOnlyFileButton} type="link" removeIndentation={true} onClick={handleDownload}>
                 <span className={styles.viewLink}>{downloadUrl && <span>{trimString(fileName)}</span>}</span>
             </Button>
         </div>

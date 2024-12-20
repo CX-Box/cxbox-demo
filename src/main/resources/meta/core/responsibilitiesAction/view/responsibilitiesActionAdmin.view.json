@@ -1,0 +1,33 @@
+{
+  "name": "responsibilitiesActionAdmin",
+  "title": "Responsibilities Action",
+  "template": "DashboardView",
+  "url": "/screen/admin/view/responsibilitiesActionAdmin",
+  "widgets": [
+
+    {
+      "widgetName": "SecondLevelMenu",
+      "position": 0,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "responsibilitiesActionGroupingHierarchy",
+      "position": 30,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "responsibilitiesActionForm",
+      "position": 40,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "responsibilitiesActionSuggestionPickListPopup",
+      "position": 2,
+      "gridWidth": 24
+    }
+  ],
+  "rolesAllowed": [
+    "CXBOX_USER",
+    "BUSINESS_ADMIN"
+  ]
+}

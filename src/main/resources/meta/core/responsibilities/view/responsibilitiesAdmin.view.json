@@ -1,0 +1,27 @@
+{
+  "name": "responsibilitiesAdmin",
+  "title": "Responsibilities View",
+  "template": "DashboardView",
+  "url": "/screen/admin/view/responsibilitiesAdmin",
+  "widgets": [
+    {
+      "widgetName": "SecondLevelMenu",
+      "position": 0,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "responsibilitiesGroupingHierarchy",
+      "position": 10,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "responsibilitiesForm",
+      "position": 20,
+      "gridWidth": 24
+    }
+  ],
+  "rolesAllowed": [
+    "CXBOX_USER",
+    "BUSINESS_ADMIN"
+  ]
+}

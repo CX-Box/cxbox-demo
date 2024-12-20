@@ -1,6 +1,7 @@
 package org.demo.conf.security.oidc;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -8,6 +9,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.cxbox.api.service.session.CxboxUserDetailsInterface;
+import org.cxbox.core.config.properties.UIProperties;
 import org.demo.conf.cxbox.customization.role.UserService;
 import org.demo.entity.core.User;
 import org.springframework.core.convert.converter.Converter;
@@ -33,13 +35,17 @@ public class OidcJwtTokenConverter implements Converter<Jwt, OidcAuthenticationT
 
 	private final CxboxAuthUserRepository cxboxAuthUserRepository;
 
+	private final UIProperties uiProperties;
+
 	public OidcJwtTokenConverter(
 			JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter,
-			TokenConverterProperties properties, UserService userService, CxboxAuthUserRepository cxboxAuthUserRepository) {
+			TokenConverterProperties properties, UserService userService, CxboxAuthUserRepository cxboxAuthUserRepository,
+			UIProperties uiProperties) {
 		this.jwtGrantedAuthoritiesConverter = jwtGrantedAuthoritiesConverter;
 		this.properties = properties;
 		this.userService = userService;
 		this.cxboxAuthUserRepository = cxboxAuthUserRepository;
+		this.uiProperties = uiProperties;
 	}
 
 	@Override
@@ -66,7 +72,9 @@ public class OidcJwtTokenConverter implements Converter<Jwt, OidcAuthenticationT
 
 		CxboxUserDetailsInterface userDetails = userService.createUserDetails(
 				user,
-				roles.stream().findFirst().get().getAuthority()
+				uiProperties.isMultiRoleEnabled()
+						? roles.stream().map(SimpleGrantedAuthority::getAuthority).collect(Collectors.toSet())
+						: roles.stream().findFirst().map(SimpleGrantedAuthority::getAuthority).map(Set::of).orElse(new HashSet<>())
 		);
 		return new OidcAuthenticationToken(jwt, authorities, login, userDetails);
 

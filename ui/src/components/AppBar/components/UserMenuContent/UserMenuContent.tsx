@@ -17,7 +17,7 @@ export const UserMenuContent: React.FC = () => {
             activeRole: state.session.activeRole,
             roles: state.session.roles,
             multiroleEnabled:
-                state.session.featureSettings?.find(feature => feature.key === EFeatureSettingKey.multiroleEnabled)?.value === 'true'
+                state.session.featureSettings?.find(feature => feature.key === EFeatureSettingKey.multiRoleEnabled)?.value === 'true'
         }
     }, shallowEqual)
     const dispatch = useDispatch()

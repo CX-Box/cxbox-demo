@@ -1,0 +1,37 @@
+{
+  "name": "dictionaryAdmin",
+  "title": "Dictionary",
+  "template": "DashboardView",
+  "url": "/screen/admin/view/dictionaryAdmin",
+  "widgets": [
+    {
+      "widgetName": "SecondLevelMenu",
+      "position": 0,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "dictionaryGroupingHierarchy",
+      "position": 10,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "dictionaryForm",
+      "position": 11,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "dictionaryPickListPopup",
+      "position": 12,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "dictionaryTypeForm",
+      "position": 13,
+      "gridWidth": 24
+    }
+  ],
+  "rolesAllowed": [
+    "CXBOX_USER",
+    "BUSINESS_ADMIN"
+  ]
+}

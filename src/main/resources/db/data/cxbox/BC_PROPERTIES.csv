@@ -1,7 +1,9 @@
-ID;BC;PAGE_LIMIT;SORT;FILTER
-1;'meetingEdit';NULL;_sort.0.desc=agenda;'""'
-2;'client';NULL;_sort.0.desc=fullName;'""'
-3;'companySuggestionPickList';NULL;NULL;'""'
-4;'meetingDocumentEdit';1000;NULL;'""'
-5;'responsibilities';1000;NULL;'""'
-6;'dictionary';1000;_sort.0.desc=displayOrder;'""'
+BC;PAGE_LIMIT;SORT;FILTER;ID
+meetingEdit;NULL;_sort.0.desc=agenda;'""';
+client;NULL;_sort.0.desc=fullName;'""';
+companySuggestionPickList;NULL;NULL;'""';
+meetingDocumentEdit;1000;NULL;'""';
+dictionary;1000;_sort.0.desc=displayOrder;'""';
+responsibilities;10000;NULL;'""';
+responsibilitiesAction;10000;NULL;'""';
+responsibilitiesActionSuggestion;100;NULL;'""';

@@ -368,6 +368,35 @@
     </createTable>
   </changeSet>
 
+  <changeSet author="cxbox" id="RESPONSIBILITIES_ACTION TABLE">
+    <createTable remarks="ROLE_ACTION" tableName="RESPONSIBILITIES_ACTION">
+      <column name="ID" remarks="ID" type="NUMBER(19, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+
+      <column name="INTERNAL_ROLE_CD" type="VARCHAR2(255)"/>
+      <column name="ACTION" type="VARCHAR2(255)"/>
+      <column name="VIEW" type="VARCHAR2(255)"/>
+      <column name="WIDGET" type="VARCHAR2(255)"/>
+
+      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
   <changeSet author="cxbox" id="SEARCH_SPEC TABLE">
     <createTable remarks="Критерии поиска" tableName="SEARCH_SPEC">
       <column name="ID" type="NUMBER(19, 0)">

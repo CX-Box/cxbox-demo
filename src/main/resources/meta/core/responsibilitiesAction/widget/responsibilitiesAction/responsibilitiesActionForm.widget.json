@@ -1,0 +1,89 @@
+{
+  "name": "responsibilitiesActionForm",
+  "title": "Role Action Responsibilities",
+  "type": "Form",
+  "bc": "responsibilitiesAction",
+  "fields": [
+    {
+      "label": "Action",
+      "key": "actionKey",
+      "type": "suggestionPickList",
+      "popupBcName": "responsibilitiesActionSuggestion",
+      "pickMap": {
+        "actionKey": "value"
+      }
+    },
+    {
+      "label": "Role",
+      "key": "internalRoleCD",
+      "type": "dictionary",
+      "width": 200
+    },
+    {
+      "label": "bc",
+      "key": "bc",
+      "type": "dictionary",
+      "width": 200
+    },
+    {
+      "label": "View",
+      "key": "view",
+      "type": "dictionary",
+      "width": 200
+    },
+    {
+      "label": "widget",
+      "key": "widget",
+      "type": "dictionary",
+      "width": 200
+    }
+  ],
+  "options": {
+    "actionGroups": {
+      "include": [
+        "save",
+        "cancel-create"
+      ]
+    },
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "internalRoleCD",
+              "span": 14
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "widget",
+              "span": 7
+            },
+            {
+              "fieldKey": "bc",
+              "span": 7
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "actionKey",
+              "span": 14
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "view",
+              "span": 14
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

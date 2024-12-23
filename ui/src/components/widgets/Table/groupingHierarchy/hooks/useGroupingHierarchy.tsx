@@ -258,7 +258,7 @@ export const useGroupingHierarchy = <T extends CustomDataItem>(
                 title={
                     !correctGroupingCount
                         ? t(
-                              `Worning! {{count}} rows were fetched from backend - limit for "Grouping Hierarhical" mode is {{limit}}. Only "List" mode is available`,
+                              `Warning! {{count}} rows were fetched from backend - limit for "Grouping Hierarchy" mode is {{limit}}. Only "List" mode is available`,
                               { limit: bcPageLimit, count: bcCount }
                           )
                         : undefined

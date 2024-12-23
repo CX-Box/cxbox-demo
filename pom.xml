@@ -37,7 +37,7 @@
     <spring-framework.version>6.1.14</spring-framework.version> Oct 17, 2024. due to CVE-2024-38820 in 6.1.14 from spring-boot-starter-parent 3.3.4
     <spring-security.version>6.3.4</spring-security.version> Oct 21, 2024. due to GHSA-c4q5-6c82-3qpw in 6.3.3 from spring-boot-starter-parent 3.3.4
     -->
-
+    <springdoc-openapi-starter-webmvc-ui.version>2.6.0</springdoc-openapi-starter-webmvc-ui.version>
 
     <!-- dependencies versions -->
     <jobrunr-spring-boot-3-starter.version>7.3.0</jobrunr-spring-boot-3-starter.version> <!--based on spring-boot 3.3.4, e.g. synced to cxbox-starter-parent-->
@@ -98,6 +98,11 @@
       <groupId>org.jobrunr</groupId>
       <artifactId>jobrunr-spring-boot-3-starter</artifactId>
       <version>${jobrunr-spring-boot-3-starter.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+      <version>${springdoc-openapi-starter-webmvc-ui.version}</version>
     </dependency>
 
     <!--managed by org.springframework.boot/spring-boot-dependencies dependencies-->

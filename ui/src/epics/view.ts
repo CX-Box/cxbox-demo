@@ -182,7 +182,8 @@ export const fileUploadConfirmEpic: RootEpic = (action$, state$, { api }) =>
                         const newDataItems = response.records
                         const allData = [...newDataItems, ...(state.data[bcName as string] || {})]
                         const oldCursor = state.screen.bo.bc[bcName as string]?.cursor
-                        const newCursor = getCursor(bcName as string, allData, oldCursor) as string
+                        const newItem = newDataItems?.length && newDataItems.find((item: DataItem) => item.id)
+                        const newCursor = newItem ? newItem.id : (getCursor(allData, oldCursor) as string)
                         const cursorHasChange = bcName && newCursor !== oldCursor
 
                         return concat(
@@ -216,7 +217,7 @@ export const fileUploadConfirmEpic: RootEpic = (action$, state$, { api }) =>
         })
     )
 
-const getCursor = (bcName: string, data: DataItem[], prevCursor: string | null) => {
+const getCursor = (data: DataItem[], prevCursor: string | null) => {
     const newCursor = data[0]?.id
     const cursorShouldChange = !data.some(i => i.id === prevCursor)
     return cursorShouldChange ? newCursor : prevCursor

@@ -8,6 +8,7 @@ import { useFlatFormFields } from '@hooks/useFlatFormFields'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import { RootState } from '@store'
 import { interfaces } from '@cxbox-ui/core'
+import styles from './FormWidget.less'
 
 const { FieldType, PendingValidationFailsFormat } = interfaces
 
@@ -44,7 +45,7 @@ export const FormWidget: FunctionComponent<FormWidgetProps> = ({ meta, fields, m
             <Row>
                 {meta.options?.layout?.rows.map((row, index) => {
                     return (
-                        <Row gutter={24} key={index}>
+                        <Row gutter={24} key={index} type="flex" align="stretch">
                             {row.cols
                                 .filter(field => {
                                     const fieldMeta = fields?.find(item => item.key === field?.fieldKey)
@@ -58,6 +59,7 @@ export const FormWidget: FunctionComponent<FormWidgetProps> = ({ meta, fields, m
                                     return (
                                         <Col key={colIndex} span={col.span}>
                                             <Form.Item
+                                                className={styles.formItem}
                                                 data-test="FIELD"
                                                 data-test-field-type={field?.type}
                                                 data-test-field-title={field?.label || field?.title}

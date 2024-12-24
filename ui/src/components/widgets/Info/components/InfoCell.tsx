@@ -71,7 +71,9 @@ function InfoCell({ field, colSpan, row, meta, cursor, onDrillDown }: ValueCellP
                     <span className={styles.label}>{field.label}</span>
                 </div>
             )}
-            <div className={styles.fieldData}>{ResultField}</div>
+            <div className={styles.fieldData}>
+                <span>{ResultField}</span>
+            </div>
         </InfoValueWrapper>
     )
 }

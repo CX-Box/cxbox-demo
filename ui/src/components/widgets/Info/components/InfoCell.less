@@ -15,12 +15,15 @@
     opacity: 0.5;
 }
 
-.fieldData>:global([class^='ReadOnlyField']) {
+.fieldData :global([class^='ReadOnlyField']) {
     line-height: 20px;
     color: @main-light-mode;
 }
 
 .fieldData {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
     flex: 3 0;
     overflow: hidden;
     padding: 5px 0;

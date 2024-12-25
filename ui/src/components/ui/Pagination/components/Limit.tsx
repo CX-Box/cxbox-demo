@@ -31,7 +31,13 @@ function Limit({
 
     return (
         <div className={cn(styles.root, classNameContainer)}>
-            <Select value={value} className={className} onSelect={onChange} disabled={disabled}>
+            <Select
+                className={className}
+                value={value}
+                getPopupContainer={trigger => trigger.parentElement as HTMLElement}
+                disabled={disabled}
+                onSelect={onChange}
+            >
                 {options.map(limit => (
                     <Select.Option key={limit} value={limit}>
                         {t('limit / page', { limit })}

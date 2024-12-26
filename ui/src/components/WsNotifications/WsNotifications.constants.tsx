@@ -1,5 +1,5 @@
-import moment from 'moment/moment'
 import React from 'react'
+import moment from 'moment/moment'
 import { NotificationLink } from '@interfaces/notification'
 import { WsLinks } from '@components/WsNotifications/WsLinks'
 

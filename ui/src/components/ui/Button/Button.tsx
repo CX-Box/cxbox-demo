@@ -6,7 +6,7 @@ import styles from './Button.less'
 
 export const customTypes = {
     formOperation: 'formOperation',
-    formOperationYellow: 'formOperationYellow',
+    formOperationRed: 'formOperationRed',
     customDefault: 'customDefault',
     bar: 'bar',
     empty: 'empty'

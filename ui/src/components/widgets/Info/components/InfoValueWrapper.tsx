@@ -13,7 +13,7 @@ interface ValueWrapperProps {
 }
 function InfoValueWrapper({ row, titleMode, colSpan, children, ...restColProps }: ValueWrapperProps) {
     return (
-        <Col span={colSpan} {...restColProps}>
+        <Col className={styles.container} span={colSpan} {...restColProps}>
             <div
                 className={cn(styles.fieldArea, {
                     [styles.rowDirection]: titleMode === ETitleMode.left,

@@ -1,7 +1,12 @@
-.colWrapper {
-    padding: 0 24px 0 0;
+.formItem {
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 16px);
+    margin-bottom: 16px;
 
-    &:last-child {
-        padding: 0;
+    :global {
+        .ant-form-item-control-wrapper {
+            margin-top: auto;
+        }
     }
 }

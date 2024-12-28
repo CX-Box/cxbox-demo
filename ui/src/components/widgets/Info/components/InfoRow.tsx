@@ -1,13 +1,12 @@
 import React, { useCallback } from 'react'
 import { Col, Row } from 'antd'
-import styles from './InfoRow.module.css'
-import cn from 'classnames'
 import InfoCell from './InfoCell'
 import { useAppSelector } from '@store'
 import { EMPTY_ARRAY } from '@constants'
 import { interfaces } from '@cxbox-ui/core'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import { AppWidgetInfoMeta } from '@interfaces/widget'
+import styles from './InfoRow.module.css'
 
 const MAX_COL_SPAN = 24
 
@@ -38,7 +37,7 @@ function InfoRow({ meta, flattenWidgetFields, onDrillDown, row, cursor }: InfoRo
     )
 
     return (
-        <Row className={styles.rowWrapper}>
+        <Row className={styles.rowWrapper} type="flex" align="stretch">
             <Col span={24}>
                 {visibleColumns.map((col, colIndex) => {
                     const field = flattenWidgetFields.find(i => i.key === col.fieldKey) as interfaces.WidgetInfoField

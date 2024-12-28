@@ -5,6 +5,7 @@ import static org.demo.dto.cxbox.inner.MeetingDocumentsDTO_.notes;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.SneakyThrows;
 import org.cxbox.api.data.dto.AssociateDTO;
@@ -109,10 +110,12 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 	@SneakyThrows
 	private List<MeetingDocuments> fileUpload(BusinessComponent bc, List<AssociateDTO> fileIds) {
 		List<MeetingDocuments> meetingDocumentsList = new ArrayList<>();
+		Optional<Meeting> meeting = meetingRepository.findById(Long.valueOf(bc.getParentIdAsLong()));
 		for (AssociateDTO item : fileIds) {
 			var meetingDocuments = new MeetingDocuments();
 			var fileId = item.getId();
 			FileDownloadDto download = cxboxFileService.download(fileId, null);
+			meetingDocuments.setMeeting(meeting.get());
 			meetingDocuments.setFileId(fileId);
 			meetingDocuments.setFile(download.getName());
 			meetingDocumentsList.add(meetingDocumentsRepository.save(meetingDocuments));

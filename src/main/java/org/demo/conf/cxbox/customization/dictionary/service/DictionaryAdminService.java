@@ -172,11 +172,11 @@ public class DictionaryAdminService extends VersionAwareResponseService<Dictiona
 						.thenComparing(DictionaryItem::getId)
 				)
 				.map(e -> List.of(
-						e.getType(),
-						e.getKey(),
-						e.getValue(),
+						Optional.ofNullable(e.getType()).orElse(""),
+						Optional.ofNullable(e.getKey()).orElse(""),
+						Optional.ofNullable(e.getValue()).orElse(""),
 						Optional.ofNullable(e.getDisplayOrder()).map(d -> "" + d).orElse(""),
-						e.getDescription(),
+						Optional.ofNullable(e.getDescription()).orElse(""),
 						e.isActive() ? "" : "false",
 						""
 				));

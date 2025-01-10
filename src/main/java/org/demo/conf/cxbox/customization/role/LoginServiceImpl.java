@@ -141,6 +141,10 @@ public class LoginServiceImpl implements LoginService {
 				UIProperties.DRILL_DOWN_TOOLTIP_NAME,
 				String.valueOf(uiProperties.getDrillDownTooltip())
 		));
+		featureSettings.add(new SimpleDictionary(
+				UIProperties.SIDE_BAR_WORD_BREAK,
+				String.valueOf(uiProperties.getSideBarWordBreak())
+		));
 		return featureSettings;
 	}
 

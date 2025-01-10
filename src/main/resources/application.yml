@@ -42,6 +42,8 @@ cxbox:
     path: /ui
     multi-role-enabled: true
     drill-down-tooltip: newAndCopy
+    use-servlet-context-path: false
+    side-bar-word-break: none
 
 server:
   port: 8080

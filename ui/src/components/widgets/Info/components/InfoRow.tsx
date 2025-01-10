@@ -37,24 +37,28 @@ function InfoRow({ meta, flattenWidgetFields, onDrillDown, row, cursor }: InfoRo
     )
 
     return (
-        <Row className={styles.rowWrapper} type="flex" align="stretch">
-            <Col span={24}>
-                {visibleColumns.map((col, colIndex) => {
-                    const field = flattenWidgetFields.find(i => i.key === col.fieldKey) as interfaces.WidgetInfoField
-                    return (
-                        <InfoCell
-                            key={colIndex}
-                            row={row}
-                            colSpan={calculateColSpan(col.span ?? 0)}
-                            cursor={cursor}
-                            meta={meta}
-                            field={field}
-                            onDrillDown={onDrillDown}
-                        />
-                    )
-                })}
-            </Col>
-        </Row>
+        <>
+            {visibleColumns?.length > 0 && (
+                <Row className={styles.rowWrapper} type="flex" align="stretch">
+                    <Col span={24}>
+                        {visibleColumns.map((col, colIndex) => {
+                            const field = flattenWidgetFields.find(i => i.key === col.fieldKey) as interfaces.WidgetInfoField
+                            return (
+                                <InfoCell
+                                    key={colIndex}
+                                    row={row}
+                                    colSpan={calculateColSpan(col.span ?? 0)}
+                                    cursor={cursor}
+                                    meta={meta}
+                                    field={field}
+                                    onDrillDown={onDrillDown}
+                                />
+                            )
+                        })}
+                    </Col>
+                </Row>
+            )}
+        </>
     )
 }
 

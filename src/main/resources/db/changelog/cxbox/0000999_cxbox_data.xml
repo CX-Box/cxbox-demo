@@ -1,0 +1,119 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd"
+  logicalFilePath="db/changelog/0000999_data.xml">
+
+  <property name="meta_seq_next_val" value="nextval('META_SEQ')" dbms="postgresql"/>
+  <property name="meta_seq_next_val" value="META_SEQ.NEXTVAL" dbms="oracle"/>
+
+  <changeSet author="cxbox" id="INITIAL DATA">
+    <loadData tableName="USERS" encoding="UTF-8" separator=";" quotchar="&quot;"
+      file="db/data/cxbox/USERS.csv">
+      <column header="ID" name="ID" type="NUMERIC"/>
+      <column header="FIRST_NAME" name="FIRST_NAME" type="STRING"/>
+      <column header="LAST_NAME" name="LAST_NAME" type="STRING"/>
+      <column header="LOGIN" name="LOGIN" type="STRING"/>
+    </loadData>
+  </changeSet>
+
+  <changeSet author="cxbox" id="INITIAL DATA(2)">
+    <loadData tableName="USER_ROLE" encoding="UTF-8" separator=";" quotchar="&quot;"
+      file="db/data/cxbox/USER_ROLE.csv">
+      <column header="ID" name="ID" type="NUMERIC"/>
+      <column header="USER_ID" name="USER_ID" type="NUMERIC"/>
+      <column header="INTERNAL_ROLE_CD" name="INTERNAL_ROLE_CD" type="STRING"/>
+      <column header="ACTIVE" name="ACTIVE" type="NUMERIC"/>
+      <column header="MAIN" name="MAIN" type="NUMERIC"/>
+    </loadData>
+  </changeSet>
+
+  <changeSet id="cxbox_bc_filter_groups" author="cxbox" runOnChange="true" context="local">
+    <loadUpdateData tableName="bc_filter_groups" primaryKey="ID" encoding="UTF-8" separator=";" quotchar="&quot;"
+      file="db/data/cxbox/BC_FILTER_GROUPS.csv">
+      <column header="name" name="name" type="STRING"/>
+      <column header="bc" name="bc" type="STRING"/>
+      <column header="filters" name="filters" type="STRING"/>
+      <column header="ID" name="ID" type="NUMERIC" defaultValue="${app_seq_next_val}"/>
+    </loadUpdateData>
+  </changeSet>
+
+  <changeSet id="cxbox_bc_properties" author="cxbox" runOnChange="true" context="local">
+    <loadUpdateData tableName="BC_PROPERTIES" primaryKey="ID" separator=";" quotchar="'"
+      file="db/data/cxbox/BC_PROPERTIES.csv">
+      <column header="BC" name="BC" type="STRING"/>
+      <column header="PAGE_LIMIT" name="PAGE_LIMIT" type="NUMERIC"/>
+      <column header="SORT" name="SORT" type="STRING"/>
+      <column header="FILTER" name="FILTER" type="STRING"/>
+      <column header="ID" name="ID" type="NUMERIC" defaultValue="${app_seq_next_val}"/>
+    </loadUpdateData>
+  </changeSet>
+
+  <changeSet author="cxbox" id="DICTIONARIES" runOnChange="true">
+    <delete tableName="DICTIONARY_ITEM_TR"/>
+    <delete tableName="DICTIONARY_TYPE"/>
+
+    <loadUpdateData tableName="DICTIONARY_ITEM" primaryKey="TYPE,KEY" encoding="UTF-8" separator=";"
+      quotchar="&quot;" file="db/data/cxbox/DICTIONARY.csv">
+      <column header="TYPE" name="TYPE" type="STRING"/>
+      <column header="DISPLAY_ORDER" name="DISPLAY_ORDER" type="NUMERIC"/>
+      <column header="KEY" name="KEY" type="STRING"/>
+      <column header="VALUE" name="VALUE" type="STRING"/>
+      <column header="DESCRIPTION" name="DESCRIPTION" type="STRING"/>
+      <column header="ACTIVE" name="ACTIVE" type="NUMERIC" defaultValue="true"/>
+      <column header="ID" name="ID" type="NUMERIC" defaultValue="${app_seq_next_val}"/>
+    </loadUpdateData>
+
+    <sql>
+      insert into dictionary_type
+      select MIN(ID), TYPE
+      from DICTIONARY_ITEM
+      group by TYPE;
+
+      update DICTIONARY_ITEM di
+      set dictionary_type_id = (select dt.id from dictionary_type dt where dt.type = di.type)
+    </sql>
+
+    <sql>
+      insert into DICTIONARY_ITEM_TR (ID, LANGUAGE, VALUE)
+      select ID, 'en' as LANGUAGE, VALUE as VALUE
+      from DICTIONARY_ITEM;
+    </sql>
+  </changeSet>
+
+  <changeSet author="cxbox" id="RESPONSIBILITIES_VIEW" runOnChange="true">
+    <delete tableName="RESPONSIBILITIES"/>
+
+    <loadUpdateData tableName="RESPONSIBILITIES" primaryKey="INTERNAL_ROLE_CD,RESPONSIBILITIES" encoding="UTF-8" separator=";"
+      quotchar="&quot;" file="db/data/cxbox/RESPONSIBILITIES.csv">
+      <column header="INTERNAL_ROLE_CD" name="INTERNAL_ROLE_CD" type="STRING"/>
+      <column header="RESPONSIBILITIES" name="RESPONSIBILITIES" type="STRING"/>
+      <column header="ID" name="ID" type="NUMERIC" defaultValue="${meta_seq_next_val}"/>
+    </loadUpdateData>
+
+    <loadUpdateData tableName="RESPONSIBILITIES" primaryKey="INTERNAL_ROLE_CD,RESP_TYPE" encoding="UTF-8" separator=";"
+      quotchar="&quot;" file="db/data/cxbox/RESPONSIBILITIES_SCREEN_OVERRIDE.csv">
+      <column header="INTERNAL_ROLE_CD" name="INTERNAL_ROLE_CD" type="STRING"/>
+      <column header="RESP_TYPE" name="RESP_TYPE" type="STRING"/>
+      <column header="SCREEN" name="SCREEN" type="STRING"/>
+      <column header="ID" name="ID" type="NUMERIC" defaultValue="${meta_seq_next_val}"/>
+    </loadUpdateData>
+
+  </changeSet>
+
+  <changeSet author="cxbox" id="RESPONSIBILITIES_ACTION" runOnChange="true">
+    <delete tableName="RESPONSIBILITIES_ACTION"/>
+    <loadUpdateData tableName="RESPONSIBILITIES_ACTION" primaryKey="INTERNAL_ROLE_CD,ACTION,VIEW,WIDGET" encoding="UTF-8" separator=";"
+      quotchar="&quot;" file="db/data/cxbox/RESPONSIBILITIES_ACTION.csv">
+      <column header="INTERNAL_ROLE_CD" name="INTERNAL_ROLE_CD" type="STRING"/>
+      <column header="ACTION" name="ACTION" type="STRING"/>
+      <column header="VIEW" name="VIEW" type="STRING"/>
+      <column header="WIDGET" name="WIDGET" type="STRING"/>
+      <column header="ID" name="ID" type="NUMERIC" defaultValue="${meta_seq_next_val}"/>
+    </loadUpdateData>
+
+  </changeSet>
+
+
+
+</databaseChangeLog>

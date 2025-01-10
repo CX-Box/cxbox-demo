@@ -21,11 +21,17 @@ public class ContactDTO extends DataResponseDTO {
 	@SearchParameter
 	private String email;
 
+	private String fullNameWithoutFilter;
+
+	private String phoneNumberWithoutFilter;
+
 	public ContactDTO(Contact contact) {
 		this.id = contact.getId().toString();
 		this.fullName = contact.getFullName();
 		this.phoneNumber = contact.getPhoneNumber();
 		this.email = contact.getEmail();
+		this.fullNameWithoutFilter = contact.getFullName();
+		this.phoneNumberWithoutFilter = contact.getPhoneNumber();
 	}
 
 }

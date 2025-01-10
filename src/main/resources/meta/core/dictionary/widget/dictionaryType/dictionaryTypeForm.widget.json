@@ -1,0 +1,33 @@
+{
+  "title": "Dictionary Type",
+  "name": "dictionaryTypeForm",
+  "type": "Form",
+  "bc": "dictionaryType",
+  "fields": [
+    {
+      "label": "Type",
+      "key": "type",
+      "type": "input"
+    }
+  ],
+  "options": {
+    "actionGroups": {
+      "include": [
+        "cancel-create",
+        "save"
+      ]
+    },
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "type",
+              "span": 12
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

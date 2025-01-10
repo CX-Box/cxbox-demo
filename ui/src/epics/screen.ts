@@ -171,10 +171,32 @@ export const selectScreen: RootEpic = (action$, state$) =>
         })
     )
 
+export const downloadFileEpic: RootEpic = (action$, state$, { api }) =>
+    action$.pipe(
+        filter(actions.downloadFile.match),
+        mergeMap(action => {
+            api.saveBlob(`${api.fileUploadEndpoint}?id=${encodeURIComponent(action.payload.fileId)}`)
+
+            return EMPTY
+        })
+    )
+
+export const downloadFileByUrlEpic: RootEpic = (action$, state$, { api }) =>
+    action$.pipe(
+        filter(actions.downloadFileByUrl.match),
+        mergeMap(action => {
+            api.saveBlob(action.payload.url)
+
+            return EMPTY
+        })
+    )
+
 export const screenEpics = {
     replaceTemporaryIdOnSavingEpic,
     processPreInvokeConfirmEpic,
     addFilterGroupEpic,
     deleteFilterGroupEpic,
-    changeScreen: selectScreen
+    changeScreen: selectScreen,
+    downloadFileByUrlEpic,
+    downloadFileEpic
 }

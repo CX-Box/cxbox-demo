@@ -146,15 +146,22 @@ export const useGroupingHierarchy = <T extends CustomDataItem>(
     }, [])
 
     const previousCursor = usePrevious(cursor)
-    const previousIndex = usePrevious(bcData?.findIndex(item => item.id === cursor))
     const currentIndex = bcData?.findIndex(item => item.id === cursor)
+    const previousIndex = usePrevious(currentIndex)
+    const currentItem = bcData?.[currentIndex as number] ?? null
+    const previousItem = usePrevious(currentItem)
 
     useEffect(() => {
         const rowKey = getGroupingHierarchyRowKeyByRecordId(cursor as string)
 
         const rowElement = tableContainerRef.current?.querySelector(`[data-row-key="${rowKey}"]`)
+        const rowHasChangedPosition = previousIndex !== currentIndex
+        const groupingHasBeenChanged =
+            previousItem &&
+            currentItem &&
+            formGroupPathFromRecord(previousItem, sortedGroupKeys) !== formGroupPathFromRecord(currentItem, sortedGroupKeys)
 
-        if (isGroupingHierarchy && (previousCursor !== cursor || previousIndex !== currentIndex)) {
+        if (enabledGrouping && (previousCursor !== cursor || (rowHasChangedPosition && groupingHasBeenChanged))) {
             openTreeToLeaf(cursor)
 
             if (currentIndex !== 0 && (!rowElement || !rowElement?.checkVisibility() || !isFullVisibleElement(rowElement))) {
@@ -163,12 +170,15 @@ export const useGroupingHierarchy = <T extends CustomDataItem>(
         }
     }, [
         currentIndex,
+        currentItem,
         cursor,
+        enabledGrouping,
         getGroupingHierarchyRowKeyByRecordId,
         isGroupingHierarchy,
         openTreeToLeaf,
         previousCursor,
         previousIndex,
+        previousItem,
         scrollToLeaf,
         sortedGroupKeys
     ])
@@ -248,7 +258,7 @@ export const useGroupingHierarchy = <T extends CustomDataItem>(
                 title={
                     !correctGroupingCount
                         ? t(
-                              `Worning! {{count}} rows were fetched from backend - limit for "Grouping Hierarhical" mode is {{limit}}. Only "List" mode is available`,
+                              `Warning! {{count}} rows were fetched from backend - limit for "Grouping Hierarchy" mode is {{limit}}. Only "List" mode is available`,
                               { limit: bcPageLimit, count: bcCount }
                           )
                         : undefined

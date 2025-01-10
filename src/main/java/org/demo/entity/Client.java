@@ -2,8 +2,8 @@ package org.demo.entity;
 
 import jakarta.persistence.ManyToMany;
 import lombok.EqualsAndHashCode;
+import org.demo.entity.dictionary.ClientImportance;
 import org.demo.entity.enums.ClientEditStep;
-import org.demo.entity.enums.ClientImportance;
 import org.demo.entity.enums.ClientStatus;
 import org.demo.entity.enums.FieldOfActivity;
 import org.cxbox.model.core.entity.BaseEntity;
@@ -46,7 +46,6 @@ public class Client extends BaseEntity {
 	@OneToMany(mappedBy = "client")
 	private Set<Meeting> meetings = new HashSet<>();
 
-	@Enumerated(value = EnumType.STRING)
 	private ClientImportance importance = ClientImportance.LOW;
 
 	@Enumerated(value = EnumType.STRING)

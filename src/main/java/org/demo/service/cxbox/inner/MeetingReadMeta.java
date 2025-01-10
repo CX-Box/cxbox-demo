@@ -1,7 +1,5 @@
 package org.demo.service.cxbox.inner;
 
-import static org.demo.dto.cxbox.RegionDictionaryType.REGIONS;
-
 import java.util.Optional;
 import org.cxbox.api.data.dto.rowmeta.FieldDTO;
 import org.cxbox.core.crudma.bc.impl.InnerBcDescription;
@@ -23,7 +21,6 @@ public class MeetingReadMeta extends FieldMetaBuilder<MeetingDTO> {
 	public void buildRowDependentMeta(RowDependentFieldsMeta<MeetingDTO> fields, InnerBcDescription bcDescription,
 			Long id, Long parentId) {
 		fields.setEnabled(MeetingDTO_.region);
-		fields.setDictionaryTypeWithAllValues(MeetingDTO_.region, REGIONS);
 		fields.setDrilldown(
 				MeetingDTO_.id,
 				DrillDownType.INNER,

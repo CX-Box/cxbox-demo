@@ -33,7 +33,6 @@ import org.demo.repository.MeetingRepository;
 import org.demo.repository.core.UserRepository;
 import org.demo.service.mail.MailSendingService;
 import org.jobrunr.scheduling.BackgroundJob;
-import org.jobrunr.scheduling.JobRequestScheduler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -53,12 +52,6 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 
 	@Autowired
 	private SessionService sessionService;
-
-	@Autowired
-	private MailSendingService mailSendingService;
-
-	@Autowired
-	private JobRequestScheduler jobRequestScheduler;
 
 	public ClientReadWriteService() {
 		super(ClientWriteDTO.class, Client.class, null, ClientReadWriteMeta.class);
@@ -180,7 +173,7 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 				.addGroup(
 						"actions",
 						"Actions",
-						0,
+						3,
 						Actions.<ClientWriteDTO>builder()
 								.action(act -> act
 										.action("edit", "Edit")
@@ -218,7 +211,7 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 								.action(act -> act
 										.action("deactivate", "Deactivate")
 										.withAutoSaveBefore()
-										.withPreAction(PreAction.confirm("Are You sure You want to deactivate the client?"))
+										.withPreAction(bc -> PreAction.confirm("Are You sure You want to deactivate the client?"))
 										.invoker((bc, data) -> {
 											Client client = clientRepository.getById(bc.getIdAsLong());
 											client.setStatus(ClientStatus.INACTIVE);

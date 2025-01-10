@@ -43,7 +43,7 @@ public class SiemEventListener implements ApplicationListener<CrudmaEvent<?>> {
 				event.getCrudmaAction().getActionType().name(),
 				event.getCrudmaAction().getBc(),
 				SecurityContextHolder.getContext().getAuthentication().getName(),
-				sessionService.getSessionUserRole().getKey(),
+				String.join(",", sessionService.getSessionUserRoles()),
 				sessionService.getSessionId(),
 				getUserIp(),
 				cxboxObjectMapper.writeValueAsString(result)

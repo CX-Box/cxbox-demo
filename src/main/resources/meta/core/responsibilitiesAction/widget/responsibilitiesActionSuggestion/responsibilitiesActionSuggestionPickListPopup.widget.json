@@ -1,0 +1,24 @@
+{
+  "name": "responsibilitiesActionSuggestionPickListPopup",
+  "title": "",
+  "type": "PickListPopup",
+  "bc": "responsibilitiesActionSuggestion",
+  "showCondition": [],
+  "fields": [
+    {
+      "title": "",
+      "key": "value",
+      "type": "input"
+    },
+    {
+      "title": "",
+      "key": "text",
+      "type": "input"
+    },
+    {
+      "title": "",
+      "key": "description",
+      "type": "input"
+    }
+  ]
+}

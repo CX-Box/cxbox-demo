@@ -1,6 +1,11 @@
+.container {
+    height: 100%;
+    min-height: 52px;
+}
+
 .fieldArea {
     display: flex;
-    min-height: 52px;
+    min-height: 100%;
     margin: 0 12px;
 }
 

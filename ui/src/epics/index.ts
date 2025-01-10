@@ -5,6 +5,7 @@ import { epics } from '@cxbox-ui/core'
 import { screenEpics } from './screen'
 import { RootEpic } from '@store'
 import { dataEpics } from './data'
+import { routerEpics } from './router'
 
 const coreEpics = { ...epics } as unknown as Record<string, RootEpic>
 
@@ -13,6 +14,7 @@ const mergedEpics = {
     ...sessionEpics,
     ...viewEpics,
     ...screenEpics,
-    ...dataEpics
+    ...dataEpics,
+    ...routerEpics
 }
 export const rootEpic = combineEpics(...Object.values(mergedEpics))

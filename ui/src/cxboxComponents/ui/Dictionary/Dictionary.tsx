@@ -55,9 +55,9 @@ const Dictionary: React.FunctionComponent<DictionaryProps> = props => {
         value: resultValue as string | string[],
         allowClear: !!value,
         showSearch: true,
+        getPopupContainer: trigger => trigger.parentElement as HTMLElement,
         onChange: handleChange,
         dropdownMatchSelectWidth: false,
-        getPopupContainer: trigger => trigger.parentElement as HTMLElement,
         forwardedRef: selectRef,
         suffixIcon: <Icon type="down" data-test-field-dictionary-popup={true} />,
         clearIcon: <Icon type="close-circle" theme="filled" data-test-field-dictionary-item-clear={true} />
@@ -113,6 +113,7 @@ const Dictionary: React.FunctionComponent<DictionaryProps> = props => {
                 meta={meta}
                 className={className}
                 backgroundColor={backgroundColor}
+                cursor={props.cursor}
                 onDrillDown={onDrillDown}
             >
                 {readOnlyValue}

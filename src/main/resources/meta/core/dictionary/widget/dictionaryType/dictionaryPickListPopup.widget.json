@@ -1,0 +1,33 @@
+{
+  "title": "Dictionary Type",
+  "name": "dictionaryPickListPopup",
+  "type": "PickListPopup",
+  "bc": "dictionaryType",
+  "fields": [
+    {
+      "title": "Type",
+      "key": "type",
+      "type": "input"
+    },
+    {
+      "title": "id",
+      "key": "id",
+      "type": "text"
+    }
+  ],
+  "options": {
+    "create": {
+      "widget": "dictionaryTypeForm"
+    },
+    "edit": {
+      "widget": "dictionaryTypeForm"
+    },
+    "actionGroups": {
+      "include": [
+        "create",
+        "cancel-create",
+        "save"
+      ]
+    }
+  }
+}

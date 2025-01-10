@@ -129,7 +129,7 @@ const getButtonType = ({ widgetType, index, defaultType }: { widgetType?: string
     }
 
     if (isFormWidget && index === 0) {
-        return customTypes.formOperationYellow
+        return customTypes.formOperationRed
     }
 
     return defaultType

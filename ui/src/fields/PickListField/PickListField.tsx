@@ -73,6 +73,7 @@ const PickListField: React.FunctionComponent<Props> = ({
                 meta={meta}
                 className={className}
                 backgroundColor={backgroundColor}
+                cursor={cursor}
                 onDrillDown={onDrillDown}
             >
                 {value}

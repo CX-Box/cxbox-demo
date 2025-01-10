@@ -107,7 +107,7 @@
             border-bottom: none;
         }
 
-        .ant-table-row > td > div > span > a {
+        .ant-table-row > td > div > span a {
             color: #1890FF;
         }
         /* fixed menu column before */
@@ -131,6 +131,7 @@
         }
 
         .ant-form-item {
+            height: 100%;
             margin-bottom: 0;
         }
 
@@ -174,6 +175,16 @@
 
         .ant-table-row div[class*='_fileUpload_'] {
             line-height: 20px;
+
+            [class*='_downloadLink_'] {
+                padding-top: 2px;
+                padding-bottom: 2px;
+
+                .ant-btn {
+                    height: 26px;
+                    line-height: inherit;
+                }
+            }
         }
     }
 
@@ -273,7 +284,7 @@
 }
 
 .expandRow {
-    margin: 16px;
+    margin: 16px 4px;
 }
 
 .tableWithRowMenu :global .ant-table-tbody > tr.ant-table-expanded-row > td:last-child,

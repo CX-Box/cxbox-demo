@@ -28,6 +28,8 @@ cxbox:
     dev-panel-enabled: ${DEV_PANEL_ENABLED:true}
     directory: ${META_DIRECTORY:file:./src/main/resources/meta}
     view-allowed-roles-enabled: true
+    widget-action-groups-enabled: true
+    widget-action-groups-compact: true
     bc-default-page-limit: 5
   widget:
     fields:
@@ -36,9 +38,10 @@ cxbox:
       filter-by-range-enabled-default: true
   api:
     path: /api/v1
-    use-servlet-context-path: false
   ui:
     path: /ui
+    multi-role-enabled: true
+    drill-down-tooltip: newAndCopy
     use-servlet-context-path: false
     side-bar-word-break: none
 
@@ -102,7 +105,10 @@ spring:
           batch_size: 100
         hbm2ddl:
           auto: ${HIBERNATE_DDL_AUTO:none}
-    hibernate:
+      org:
+        cxbox:
+          dictionary:
+            enable_types_contributor: true
       naming:
         physical-strategy: org.cxbox.model.core.hbn.ImprovedPhysicalNamingStrategy
 

@@ -1,6 +1,5 @@
 package org.demo.service.cxbox.inner;
 
-import static org.demo.dto.cxbox.RegionDictionaryType.REGIONS;
 import static org.demo.dto.cxbox.inner.MeetingDTO_.address;
 import static org.demo.dto.cxbox.inner.MeetingDTO_.agenda;
 import static org.demo.dto.cxbox.inner.MeetingDTO_.clientId;
@@ -18,7 +17,6 @@ import java.util.Objects;
 import java.util.Optional;
 import lombok.NonNull;
 import lombok.val;
-import org.apache.commons.lang3.StringUtils;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.DrillDownType;
@@ -65,9 +63,10 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 
 	private final EntityManager entityManager;
 
-	private final  MailSendingService mailSendingService;
+	private final MailSendingService mailSendingService;
 
 	private final SessionService sessionService;
+
 	private static final String MESSAGE_TEMPLATE = "Status: %s; \nMeeting Result: %s";
 
 	public MeetingWriteService(MeetingRepository meetingRepository, ClientRepository clientRepository,
@@ -100,20 +99,17 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 					.filter(Objects::nonNull)
 					.map(Long::parseLong)
 					.map(e -> entityManager.getReference(Contact.class, e))
-					.	toList());
+					.toList());
 			val primary = data.getAdditionalContacts().getValues().stream()
 					.filter(e -> e.getOptions().get(MultivalueExt.PRIMARY) != null && e.getOptions().get(MultivalueExt.PRIMARY)
 							.equalsIgnoreCase(Boolean.TRUE.toString())).findAny();
 			primary.ifPresent(s -> entity.setAdditionalContactPrimaryId(Long.parseLong(s.getId())));
 		}
+
 		setIfChanged(data, agenda, entity::setAgenda);
 		setIfChanged(data, startDateTime, entity::setStartDateTime);
 		setIfChanged(data, endDateTime, entity::setEndDateTime);
-		setMappedIfChanged(data, region, entity::setRegion, val ->
-			Optional.ofNullable(StringUtils.defaultIfBlank(val, null))
-					.map(e -> REGIONS.lookupName(val))
-					.orElse(null)
-		);
+		setIfChanged(data, region, entity::setRegion);
 		setIfChanged(data, address, entity::setAddress);
 		setIfChanged(data, notes, entity::setNotes);
 		setIfChanged(data, result, entity::setResult);
@@ -193,10 +189,10 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 
 	private void getSend(Meeting meeting) {
 		mailSendingService.send(
-				Optional.ofNullable(meeting).map(Meeting::getContact).map(Contact::getEmail),
+				Optional.ofNullable(meeting),
 				meeting.getAgenda(),
 				String.format(MESSAGE_TEMPLATE, meeting.getStatus().getValue(), meeting.getResult()),
-				userRepository.getReferenceById(sessionService.getSessionUser().getId())
+				sessionService.getSessionUser()
 		);
 	}
 

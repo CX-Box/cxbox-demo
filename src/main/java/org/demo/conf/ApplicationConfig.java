@@ -11,6 +11,7 @@ import org.cxbox.core.config.CoreApplicationConfig;
 import org.cxbox.core.config.JacksonConfig;
 import org.cxbox.core.config.LocalizationConfig;
 import org.cxbox.core.config.UIConfig;
+import org.cxbox.core.config.properties.WidgetFieldsIdResolverProperties;
 import org.cxbox.meta.MetaApplicationConfig;
 import org.cxbox.meta.metahotreload.conf.MetaHotReloadConfiguration;
 import org.cxbox.model.core.config.PersistenceJPAConfig;
@@ -47,7 +48,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableJpaRepositories(basePackages = "org.demo")
 @EnableAsync
 @EntityScan({"org.cxbox", "org.demo"})
-@EnableConfigurationProperties(IntegrationConfiguration.class)
+@EnableConfigurationProperties({IntegrationConfiguration.class, WidgetFieldsIdResolverProperties.class})
 public class ApplicationConfig {
 
 	@Bean
@@ -58,7 +59,7 @@ public class ApplicationConfig {
 				registry
 						.addMapping("/**")
 						.allowedMethods("*")
-						.allowedOrigins("*")
+						.allowedOriginPatterns("*")
 						.allowedHeaders("*");
 			}
 

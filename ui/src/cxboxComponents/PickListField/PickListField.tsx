@@ -75,6 +75,7 @@ const PickListField: React.FunctionComponent<IPickListWidgetInputProps> = ({
                 meta={meta}
                 className={className}
                 backgroundColor={backgroundColor}
+                cursor={cursor}
                 onDrillDown={onDrillDown}
             >
                 {value}

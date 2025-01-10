@@ -10,10 +10,6 @@
 
 
 .formContainer {
-    :global(.ant-form-item) {
-        margin-bottom: 16px;
-    }
-
     :global {
         .ant-col.ant-form-item-label {
             padding-bottom: 2px;
@@ -141,13 +137,6 @@
         }
     }
 }
-
-/* TODO remove the fixes after moving components from the core */
-/* fix for grid form ant.d 3.x.x before */
-.formContainer > form {
-    margin: 0 12px;
-}
-/* fix for grid form ant.d 3.x.x after */
 
 .formContainer div[class^="CheckboxPicker__container"] :global(.ant-checkbox-wrapper) {
     min-height: 40px;

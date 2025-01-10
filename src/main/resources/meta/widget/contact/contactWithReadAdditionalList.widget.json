@@ -1,0 +1,16 @@
+{
+  "name": "contactWithReadAdditionalList",
+  "title": "E-mail contacts",
+  "type": "AdditionalList",
+  "bc": "contactEdit",
+  "fields": [
+  ],
+  "options": {
+    "read": {
+      "widget": "contactAdditionalInfo"
+    },
+    "actionGroups": {
+      "include": []
+    }
+  }
+}

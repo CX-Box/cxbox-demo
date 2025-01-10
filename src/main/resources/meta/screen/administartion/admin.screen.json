@@ -10,7 +10,7 @@
   "navigation": {
     "type": "standard",
     "menu": [
-      {
+     {
         "title": "Job Administration",
         "child": [
           {
@@ -50,12 +50,13 @@
         ]
       },
       {
-        "title": "Responsibilites Administration",
-        "child": [
-          {
-            "viewName": "resplist"
-          }
-        ]
+        "viewName": "responsibilitiesAdmin"
+      },
+      {
+        "viewName": "responsibilitiesActionAdmin"
+      },
+      {
+        "viewName": "dictionaryAdmin"
       }
     ]
   }

@@ -1,7 +1,7 @@
 package org.demo.entity;
 
 import lombok.EqualsAndHashCode;
-import org.demo.entity.enums.Product;
+import org.demo.entity.dictionary.Product;
 import org.demo.entity.enums.SaleStatus;
 import org.cxbox.model.core.entity.BaseEntity;
 import jakarta.persistence.Column;
@@ -28,7 +28,6 @@ public class Sale extends BaseEntity {
 	private Client client;
 
 	@Column
-	@Enumerated(EnumType.STRING)
 	private Product product;
 
 	@Column

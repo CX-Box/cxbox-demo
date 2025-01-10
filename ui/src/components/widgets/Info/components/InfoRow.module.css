@@ -1,8 +1,3 @@
-.extraWidth {
-    display: flex;
-    flex-flow: row wrap;
-}
-
 .rowWrapper:first-child [class*="InfoValueWrapper_rowDirection"] {
     border-top: 0;
 }

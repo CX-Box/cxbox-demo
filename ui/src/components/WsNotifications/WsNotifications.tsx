@@ -7,12 +7,13 @@ import styles from './WsNotifications.less'
 import { getDefaultModalBodyHeight } from './WsNotifications.utils'
 import markAsReadIcon from './img/markAsRead.svg'
 import { useToggle } from '@hooks/useToggle'
-import { columns, DEFAULT_MODAL_WIDTH } from './WsNotifications.constants'
+import { columns, columnsWithLinks, DEFAULT_MODAL_WIDTH } from './WsNotifications.constants'
 import { useTranslation } from 'react-i18next'
 import Pagination from './Pagination'
 import Button from '../ui/Button/Button'
 import { CxBoxApiInstance as instance } from '../../api'
 import { useStompNotification } from '@components/WsNotifications/hooks'
+import { lastValueFrom } from 'rxjs'
 
 interface NotificationProps {}
 
@@ -61,10 +62,9 @@ export function WsNotifications(props: NotificationProps) {
 
     const deleteSelectedRows = () => {
         if (selectedRowKeys.length > 0) {
-            return instance.deleteNotifications(selectedRowKeys).then(
+            return lastValueFrom(instance.deleteNotifications(selectedRowKeys)).then(
                 () => {
                     setSelectedRowKeys([])
-                    notification.getCount()
                     notification.getCurrentPage()
                 },
                 (e: AxiosError) => {
@@ -104,6 +104,8 @@ export function WsNotifications(props: NotificationProps) {
         </div>
     )
 
+    const isLinksEnabled = notification.state.data?.some(message => Array.isArray(message.links))
+
     return (
         <>
             <Button className={styles.notification} type="bar" onClick={() => toggleModalVisibility(true)}>
@@ -127,7 +129,7 @@ export function WsNotifications(props: NotificationProps) {
                                 <Table
                                     rowKey="id"
                                     rowClassName={record => (!record.isRead ? styles.notificationUnread : '')}
-                                    columns={columns}
+                                    columns={isLinksEnabled ? columnsWithLinks : columns}
                                     dataSource={notification.state.data}
                                     rowSelection={{
                                         selectedRowKeys,

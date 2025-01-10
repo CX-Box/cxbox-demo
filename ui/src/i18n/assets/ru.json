@@ -76,6 +76,10 @@
         "Click Here to Select Files": "Нажмите для выбора файлов",
         "Or drag files to this area": "Или перетащите файлы в область",
         "Add at least one file, support for a single or bulk upload": "Добавьте хотя бы один файл, поддерживается одиночная или массовая загрузка",
-        "Select all": "Выбрать все"
+        "Select all": "Выбрать все",
+        "Open link in new tab": "Открыть ссылку в новой вкладке",
+        "Copy link address": "Копировать адрес ссылки",
+        "Link copied successfully": "Ссылка успешно скопирована",
+        "Opening drill-downs with non-ID-based filtering in a new tab is currently not supported. Please contact your administrator": "Открытие дриллдаунов с фильтрацией не на основе идентификатора на новой вкладке в настоящее время не поддерживается. Пожалуйста, свяжитесь с вашим администратором"
     }
 }

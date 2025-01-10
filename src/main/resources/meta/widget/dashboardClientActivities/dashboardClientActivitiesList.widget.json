@@ -1,13 +1,14 @@
 {
   "name": "dashboardClientActivitiesList",
   "title": "List of Activities",
-  "type": "DashboardList",
+  "type": "List",
   "bc": "dashboardClientActivities",
   "fields": [
     {
       "title": "Client name",
       "key": "clientName",
-      "type": "input"
+      "type": "input",
+      "drillDown": true
     },
     {
       "title": "Number of open activities",

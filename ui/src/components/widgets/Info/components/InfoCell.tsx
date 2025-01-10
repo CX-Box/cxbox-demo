@@ -1,6 +1,7 @@
 import React from 'react'
 import styles from './InfoCell.less'
-import { ActionLink, Field, MultiValueListRecord } from '@cxboxComponents'
+import { Field, MultiValueListRecord } from '@cxboxComponents'
+import DrillDown from '@components/ui/DrillDown/DrillDown'
 import InfoValueWrapper from './InfoValueWrapper'
 import { EMPTY_ARRAY } from '@constants'
 import { useAppSelector } from '@store'
@@ -43,29 +44,37 @@ function InfoCell({ field, colSpan, row, meta, cursor, onDrillDown }: ValueCellP
                 readonly
             />
             {separateDrillDownTitle && (
-                <div>
-                    <ActionLink onClick={handleDrillDown}>{separateDrillDownTitle}</ActionLink>
-                </div>
+                <DrillDown
+                    displayedValue={separateDrillDownTitle}
+                    meta={field}
+                    widgetName={meta.name}
+                    cursor={cursor}
+                    onDrillDown={handleDrillDown}
+                />
             )}
         </>
     )
 
     return (
-        <div
+        <InfoValueWrapper
+            key={field.key}
+            row={row}
+            colSpan={colSpan}
+            titleMode={meta.options?.layout?.titleMode || ETitleMode.left}
             data-test="FIELD"
             data-test-field-type={field.type}
             data-test-field-title={field.label || field.title}
             data-test-field-key={field.key}
         >
-            <InfoValueWrapper key={field.key} row={row} colSpan={colSpan} titleMode={meta.options?.layout?.titleMode || ETitleMode.left}>
-                {field.label?.length !== 0 && (
-                    <div className={styles.labelArea}>
-                        <span className={styles.label}>{field.label}</span>
-                    </div>
-                )}
-                <div className={styles.fieldData}>{ResultField}</div>
-            </InfoValueWrapper>
-        </div>
+            {field.label?.length !== 0 && (
+                <div className={styles.labelArea}>
+                    <span className={styles.label}>{field.label}</span>
+                </div>
+            )}
+            <div className={styles.fieldData}>
+                <span>{ResultField}</span>
+            </div>
+        </InfoValueWrapper>
     )
 }
 

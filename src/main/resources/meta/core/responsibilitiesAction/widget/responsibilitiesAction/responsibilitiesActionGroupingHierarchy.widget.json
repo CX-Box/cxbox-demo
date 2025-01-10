@@ -1,0 +1,61 @@
+{
+  "name": "responsibilitiesActionGroupingHierarchy",
+  "title": "",
+  "type": "GroupingHierarchy",
+  "bc": "responsibilitiesAction",
+  "fields": [
+    {
+      "title": "Role (Security)",
+      "key": "internalRoleCD",
+      "type": "dictionary",
+      "width": 200
+    },
+    {
+      "title": "BC (Security)",
+      "key": "bc",
+      "type": "dictionary",
+      "width": 200
+    },
+    {
+      "title": "Action (Security)",
+      "key": "actionKey",
+      "type": "input",
+      "width": 200
+    },
+    {
+      "title": "View (UI)",
+      "key": "view",
+      "type": "dictionary",
+      "width": 200
+    },
+    {
+      "title": "widget (UI)",
+      "key": "widget",
+      "type": "dictionary",
+      "width": 200
+    }
+  ],
+  "options": {
+    "groupingHierarchy": {
+      "fields": [
+        "internalRoleCD",
+        "bc",
+        "actionKey"
+      ]
+    },
+    "create": {
+      "widget": "responsibilitiesActionForm"
+    },
+    "edit": {
+      "widget": "responsibilitiesActionForm"
+    },
+    "actionGroups": {
+      "include": [
+        "create",
+        "delete",
+        "clear_cache",
+        "export_liquibase"
+      ]
+    }
+  }
+}

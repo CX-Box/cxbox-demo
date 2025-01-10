@@ -8,6 +8,9 @@ import { Client } from '@stomp/stompjs'
 import { SocketNotification } from '@interfaces/notification'
 import { createUserSubscribeUrl } from '../utils'
 import { useAppSelector } from '@store'
+import { keycloak, KEYCLOAK_MIN_VALIDITY } from '../../../keycloak'
+import { EFeatureSettingKey } from '@interfaces/session'
+import { EDrillDownTooltipValue } from '@components/ui/DrillDown/constants'
 import { IFrame } from '@stomp/stompjs/src/i-frame'
 
 const { ApplicationErrorType } = interfaces
@@ -16,11 +19,23 @@ const notificationClient = new Client({
     brokerURL: brokerURL,
     reconnectDelay: reconnectDelay,
     heartbeatIncoming: heartbeatIncoming,
-    heartbeatOutgoing: heartbeatOutgoing
+    heartbeatOutgoing: heartbeatOutgoing,
+    beforeConnect: (): Promise<void> => {
+        return new Promise<void>(async (resolve, _) => {
+            await keycloak.updateToken(KEYCLOAK_MIN_VALIDITY).then(() => {
+                notificationClient.brokerURL = brokerURL + '?access_token=' + encodeURI(`${keycloak.token}`)
+            })
+            resolve()
+        })
+    }
 })
 
 export function useNotificationClient(subscribeCallback?: (messageBody: SocketNotification) => void) {
     const router = useAppSelector(state => state.router)
+    const drillDownTooltipEnabled =
+        useAppSelector(state =>
+            state?.session?.featureSettings?.find(featureSetting => featureSetting.key === EFeatureSettingKey.drillDownTooltip)
+        )?.value === EDrillDownTooltipValue.newAndCopy
 
     const dispatch = useDispatch()
 
@@ -57,7 +72,7 @@ export function useNotificationClient(subscribeCallback?: (messageBody: SocketNo
 
         notificationClient.subscribe(subscribeUrl, message => {
             const messageBody = JSON.parse(message.body) as SocketNotification
-            const { title, time, text, icon, iconColor, drillDownLink, drillDownType, drillDownLabel, errorType } = messageBody
+            const { title, time, text, icon, iconColor, links, errorType } = messageBody
 
             if (checkAndShowErrorMessage(errorType as number, text)) {
                 return
@@ -67,14 +82,13 @@ export function useNotificationClient(subscribeCallback?: (messageBody: SocketNo
                 route: router,
                 dispatch,
                 time,
-                drillDownLink,
-                drillDownType,
-                drillDownLabel,
+                links,
                 message: title,
                 description: text,
                 icon,
                 iconColor,
-                duration: 0
+                duration: 0,
+                drillDownTooltipEnabled
             })
 
             subscribeCallback?.(messageBody)

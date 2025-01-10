@@ -1,14 +1,22 @@
 {
   "name": "contactAdditionalList",
-  "title": "Contacts",
+  "title": "Phone contacts",
   "type": "AdditionalList",
   "bc": "contactEdit",
   "fields": [
+    {
+      "title": "Name",
+      "key": "fullNameWithoutFilter",
+      "type": "input",
+      "drillDown": "true"
+    },
+    {
+      "title": "Phone Number",
+      "key": "phoneNumberWithoutFilter",
+      "type": "input"
+    }
   ],
   "options": {
-    "read": {
-      "widget": "contactAdditionalInfo"
-    },
     "actionGroups": {
       "include": []
     }

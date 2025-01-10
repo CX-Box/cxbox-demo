@@ -2,18 +2,24 @@ package org.demo.service.mail;
 
 import static org.cxbox.api.service.session.InternalAuthorizationService.VANILLA;
 
-import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.cxbox.api.service.session.IUser;
 import org.cxbox.api.service.session.InternalAuthorizationService;
 import org.cxbox.core.dto.DrillDownType;
-import org.demo.conf.cxbox.extension.notification.NotificationService;
-import org.demo.conf.cxbox.extension.notification.SocketNotificationDTO;
-import org.demo.conf.cxbox.extension.notification.SocketNotificationErrorDTO;
-import org.demo.conf.cxbox.extension.notification.enums.SocketNotificationErrorType;
-import org.demo.entity.core.User;
+import org.demo.conf.cxbox.extension.notification.Notification;
+import org.demo.conf.cxbox.extension.notification.NotificationError;
+import org.demo.conf.cxbox.extension.notification.NotificationError.Type;
+import org.demo.conf.cxbox.extension.notification.NotificationLink;
+import org.demo.conf.cxbox.extension.notification.NotificationTemplate;
+import org.demo.entity.Contact;
+import org.demo.entity.Meeting;
 import org.jobrunr.jobs.annotations.Job;
 import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.mail.MailException;
@@ -29,15 +35,15 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MailSendingService {
 
+	private static final String HTTP = "http://";
+
 	private final Optional<JavaMailSender> javaMailSender;
 
 	private final Optional<MailProperties> mailProperties;
 
-	private final NotificationService notificationService;
+	private final NotificationTemplate notificationTemplate;
 
 	private final InternalAuthorizationService authzService;
-
-	private static final String HTTP = "http://";
 
 	@Job(name = "The sample job with variable %0", retries = 2)
 	public void stats(String variable) {
@@ -45,7 +51,8 @@ public class MailSendingService {
 	}
 
 	@Async
-	public void send(Optional<String> mailTo, String subject, String message, User currentUser) {
+	public void send(Optional<Meeting> meeting, String subject, String message, IUser<Long> currentUser) {
+		Optional<String> mailTo = meeting.map(Meeting::getContact).map(Contact::getEmail);
 		boolean mailSend = mailTo.isPresent() && mailSenderEnabled();
 		if (mailSend) {
 			try {
@@ -54,39 +61,43 @@ public class MailSendingService {
 				simpleMailMessage.setText(message);
 				simpleMailMessage.setTo(mailTo.get());
 				simpleMailMessage.setSubject(subject);
-
 				javaMailSender.get().send(simpleMailMessage);
-
 			} catch (MailParseException | MailPreparationException e) {
-				notificationService.sendAndSave(
-						getSocketNotificationDTOWithError(SocketNotificationErrorType.BusinessError, e.getMessage(),
-								mailTo.orElse("")
-						),
+				notificationTemplate.saveAndSend(
+						NotificationError.builder().errorType(Type.BUSINESS_ERROR).text(e.getMessage()).build(),
 						currentUser
 				);
-
 			} catch (MailException e) {
-				notificationService.sendAndSave(
-						getSocketNotificationDTOWithError(SocketNotificationErrorType.SystemError, e.getMessage(),
-								mailTo.orElse("")
-						),
+				notificationTemplate.saveAndSend(
+						NotificationError.builder().errorType(Type.SYSTEM_ERROR).text(e.getMessage()).build(),
 						currentUser
 				);
 			}
 		}
 		authzService.loginAs(authzService.createAuthentication(VANILLA));
-
 		String link = mailTo.map(mail -> mail.substring(mail.indexOf("@") + 1)).orElse("");
-
-		notificationService.sendAndSave(SocketNotificationDTO.builder()
-				.title(mailSend ? "Successful" : "Error")
-				.text(mailSend ? "Email sent to " + mailTo.orElse("") : "Email was not sent to " + mailTo.orElse(""))
-				.drillDownType(DrillDownType.EXTERNAL_NEW.getValue())
-				.drillDownLabel(link)
-				.drillDownLink(HTTP + link)
-				.time(LocalDateTime.now(ZoneOffset.UTC))
-				.build(), currentUser);
-
+		if (mailSend) {
+			notificationTemplate.saveAndSend(
+					Notification.builder()
+							.title("Successful")
+							.text(
+									String.format(
+											"%s from meeting №%s",
+											"Email sent to " + mailTo.orElse(""),
+											meeting.isPresent() ? meeting.get().getId() : ""
+									)
+							)
+							.links(getLinks(link, meeting))
+							.time(ZonedDateTime.now(ZoneOffset.UTC))
+							.build(),
+					currentUser
+			);
+		} else {
+			notificationTemplate.saveAndSend(
+					NotificationError.builder().errorType(Type.BUSINESS_ERROR).text("Email was not sent").build(),
+					currentUser
+			);
+		}
 	}
 
 	private boolean mailSenderEnabled() {
@@ -96,14 +107,14 @@ public class MailSendingService {
 				&& !mailProperties.get().getHost().isBlank();
 	}
 
-	private SocketNotificationDTO getSocketNotificationDTOWithError(SocketNotificationErrorType type,
-			String message, String mailTo) {
-		return SocketNotificationDTO.builder()
-				.title("Not Successful")
-				.text("Email not sent to " + mailTo)
-				.time(LocalDateTime.now(ZoneOffset.UTC))
-				.error(new SocketNotificationErrorDTO(type, message))
-				.build();
+	@NonNull
+	private List<NotificationLink> getLinks(String link, Optional<Meeting> meeting) {
+		var links = new ArrayList<NotificationLink>();
+		links.add(NotificationLink.of(link).setDrillDown(DrillDownType.EXTERNAL_NEW, HTTP + link));
+		meeting.ifPresent(value -> links.add(
+				NotificationLink.of("Meeting " + value.getId())
+						.setDrillDown(DrillDownType.INNER, "/screen/meeting/view/meetingview/meeting/" + value.getId())));
+		return links;
 	}
 
 }

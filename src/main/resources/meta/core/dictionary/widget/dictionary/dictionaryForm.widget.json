@@ -1,0 +1,88 @@
+{
+  "name": "dictionaryForm",
+  "title": "Dictionary",
+  "type": "Form",
+  "bc": "dictionary",
+  "fields": [
+    {
+      "label": "Type",
+      "key": "type",
+      "type": "inline-pickList",
+      "popupBcName": "dictionaryType",
+      "pickMap": {
+        "type": "type",
+        "dictionaryTypeId": "id"
+      }
+    },
+    {
+      "label": "Key",
+      "key": "key",
+      "type": "input"
+    },
+    {
+      "label": "Value",
+      "key": "value",
+      "type": "input"
+    },
+    {
+      "label": "Order",
+      "key": "displayOrder",
+      "type": "number"
+    },
+    {
+      "label": "Active",
+      "key": "active",
+      "type": "checkbox"
+    },
+    {
+      "label": "Description",
+      "key": "description",
+      "type": "input"
+    }
+  ],
+  "options": {
+    "actionGroups": {
+      "include": [
+        "cancel-create",
+        "save"
+      ]
+    },
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "type",
+              "span": 4
+            },
+            {
+              "fieldKey": "key",
+              "span": 4
+            },
+            {
+              "fieldKey": "value",
+              "span": 4
+            },
+            {
+              "fieldKey": "displayOrder",
+              "span": 2
+            },
+            {
+              "fieldKey": "active",
+              "span": 2
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "description",
+              "span": 8
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
+

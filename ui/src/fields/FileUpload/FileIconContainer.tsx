@@ -3,6 +3,7 @@ import { Tooltip } from 'antd'
 import { getExtension, isAvailableFileViewing } from '@utils/fileViewer'
 import FileIcon from '@components/FileViewer/FileIcon/FileIcon'
 import { useTranslation } from 'react-i18next'
+import styles from './FileUpload.less'
 
 interface FileIconContainerProps {
     fileName: string
@@ -17,7 +18,7 @@ function FileIconContainer({ fileName, onFileIconClick }: FileIconContainerProps
 
     return fileName?.length > 0 ? (
         <Tooltip title={isInteractive ? tooltipTitle : undefined} placement="bottomRight">
-            <span>
+            <span className={styles.fileIconContainer}>
                 <FileIcon
                     type={getExtension(fileName)}
                     eye={isAvailableViewing}

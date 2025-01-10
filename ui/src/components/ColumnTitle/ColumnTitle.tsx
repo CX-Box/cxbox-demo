@@ -1,15 +1,17 @@
 import React, { useCallback } from 'react'
-import ColumnFilter from './ColumnFilter'
+import { Icon } from 'antd'
 import cn from 'classnames'
 import ColumnSort from './ColumnSort'
-import styles from './ColumnTitle.less'
-import { CustomFieldTypes } from '@interfaces/widget'
-import { interfaces } from '@cxbox-ui/core'
 import { TemplatedTitle } from '@cxboxComponents'
-import { Icon } from 'antd'
+import ColumnFilter from './ColumnFilter'
 import Button from '../ui/Button/Button'
 import { useAppSelector } from '@store'
+import { rightAlignedFields } from '@constants/field'
+import { interfaces } from '@cxbox-ui/core'
+import { EFeatureSettingKey } from '@interfaces/session'
+import { CustomFieldTypes } from '@interfaces/widget'
 import { RowMetaField } from '@interfaces/rowMeta'
+import styles from './ColumnTitle.less'
 
 interface ColumnTitleProps {
     widgetName: string
@@ -30,10 +32,10 @@ export const notSortableFields: readonly (interfaces.FieldType | CustomFieldType
     FieldType.hint
 ]
 
-const rightAlignedFields: readonly (interfaces.FieldType | CustomFieldTypes)[] = [FieldType.number, FieldType.money, FieldType.percent]
-
 const ColumnTitle = ({ widgetName, widgetMeta, rowMeta, onClose, showCloseButton }: ColumnTitleProps) => {
-    const sortingSetting = useAppSelector(state => state.session.featureSettings?.find(feature => feature.key === 'sortEnabled'))
+    const sortingSetting = useAppSelector(state =>
+        state.session.featureSettings?.find(feature => feature.key === EFeatureSettingKey.sortEnabled)
+    )
     const isSortingEnabled = sortingSetting?.value === 'true' || rowMeta?.sortable === true
 
     const handleColumnClose = useCallback(() => {

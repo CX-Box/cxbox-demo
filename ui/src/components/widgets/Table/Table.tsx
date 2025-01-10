@@ -39,6 +39,7 @@ import {
     rowShowCondition,
     useGroupingHierarchy
 } from '@components/widgets/Table/groupingHierarchy'
+import { rightAlignedFields } from '@constants/field'
 
 const ROW_KEY = 'id'
 
@@ -181,7 +182,7 @@ function Table<T extends CustomDataItem>({
     const bcData = useAppSelector(state => state.data[meta.bcName] as T[] | undefined)
 
     const expandedRowKeys = useMemo(() => {
-        if (isGroupingHierarchy) {
+        if (enabledGrouping) {
             const expandedRowKey = getGroupingHierarchyRowKeyByRecordId(expandedRowId)
 
             return expandedRowKey && !expandedParentRowKeys.includes(expandedRowKey)
@@ -190,7 +191,7 @@ function Table<T extends CustomDataItem>({
         }
 
         return expandedRowId ? [expandedRowId, ...expandedParentRowKeys] : expandedParentRowKeys
-    }, [expandedParentRowKeys, expandedRowId, getGroupingHierarchyRowKeyByRecordId, isGroupingHierarchy])
+    }, [enabledGrouping, expandedParentRowKeys, expandedRowId, getGroupingHierarchyRowKeyByRecordId])
 
     const needHideActions = useCallback(
         (record: T) => {
@@ -400,6 +401,9 @@ function Table<T extends CustomDataItem>({
                                 !editMode &&
                                 (counterMode === 'always' || (counterMode === 'collapsed' && !expanded))
                             const showField = showReadonlyField || editMode
+                            const rightAlignment = rightAlignedFields.includes(item.type) && {
+                                justifyContent: 'flex-end'
+                            }
 
                             return (
                                 showField && (
@@ -408,7 +412,12 @@ function Table<T extends CustomDataItem>({
                                         data-test-field-type={item.type}
                                         data-test-field-title={item.label || item.title}
                                         data-test-field-key={item.key}
-                                        style={{ display: 'flex', alignItems: 'center', gap: 4 }}
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: 4,
+                                            ...rightAlignment
+                                        }}
                                     >
                                         {showExpandIcon && (
                                             <ExpandIcon

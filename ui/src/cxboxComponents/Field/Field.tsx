@@ -21,6 +21,7 @@ import styles from './Field.less'
 import { CustomizationContext } from '@cxboxComponents/View/View'
 import { InteractiveInput } from '@cxboxComponents/ui/InteractiveInput/InteractiveInput'
 import HistoryField from '@cxboxComponents/ui/HistoryField/HistoryField'
+import DrillDown from '@components/ui/DrillDown/DrillDown'
 import { TooltipPlacement } from 'antd/es/tooltip'
 import { interfaces, actions } from '@cxbox-ui/core'
 import { RootState } from '@store'
@@ -405,8 +406,22 @@ export const Field: FunctionComponent<FieldProps> = ({
                 <ReadOnlyField {...commonProps}>{value}</ReadOnlyField>
             ) : (
                 <InteractiveInput
-                    suffixClassName={suffixClassName}
-                    suffix={handleDrilldown && <Icon type="link" />}
+                    suffixClassName={cn(styles.inputSuffix, suffixClassName)}
+                    suffix={
+                        handleDrilldown && (
+                            <DrillDown
+                                meta={widgetFieldMeta}
+                                widgetName={widgetName}
+                                cursor={cursor}
+                                drillDownComponent={
+                                    <div className={styles.inputSuffixContent}>
+                                        <Icon type="link" />
+                                    </div>
+                                }
+                                onDrillDown={handleDrilldown}
+                            />
+                        )
+                    }
                     onSuffixClick={handleDrilldown}
                 >
                     <Input

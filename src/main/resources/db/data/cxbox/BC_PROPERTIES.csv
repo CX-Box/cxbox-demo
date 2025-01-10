@@ -1,0 +1,9 @@
+BC;PAGE_LIMIT;SORT;FILTER;ID
+meetingEdit;NULL;_sort.0.desc=agenda;'""';
+client;NULL;_sort.0.desc=fullName;'""';
+companySuggestionPickList;NULL;NULL;'""';
+meetingDocumentEdit;1000;NULL;'""';
+dictionary;1000;_sort.0.desc=displayOrder;'""';
+responsibilities;10000;NULL;'""';
+responsibilitiesAction;10000;NULL;'""';
+responsibilitiesActionSuggestion;100;NULL;'""';

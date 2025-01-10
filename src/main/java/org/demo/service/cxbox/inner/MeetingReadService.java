@@ -17,7 +17,6 @@ import org.cxbox.core.util.session.SessionService;
 import org.demo.conf.cxbox.customization.icon.ActionIcon;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.inner.MeetingDTO;
-import org.demo.entity.Contact;
 import org.demo.entity.Meeting;
 import org.demo.repository.MeetingRepository;
 import org.demo.repository.core.UserRepository;
@@ -110,10 +109,10 @@ public class MeetingReadService extends VersionAwareResponseService<MeetingDTO, 
 
 	private void getSend(Meeting meeting) {
 		mailSendingService.send(
-				Optional.ofNullable(meeting).map(Meeting::getContact).map(Contact::getEmail),
+				Optional.ofNullable(meeting),
 				meeting.getAgenda(),
 				String.format(MESSAGE_TEMPLATE, meeting.getStatus().getValue(), meeting.getResult()),
-				userRepository.getReferenceById(sessionService.getSessionUser().getId())
+				sessionService.getSessionUser()
 		);
 	}
 

@@ -1,12 +1,19 @@
 import { interfaces } from '@cxbox-ui/core'
 import { AppWidgetMeta } from '@interfaces/widget'
 
+export enum EFeatureSettingKey {
+    filterByRangeEnabled = 'filterByRangeEnabled',
+    sortEnabled = 'sortEnabled',
+    drillDownTooltip = 'drillDownTooltip',
+    multiRoleEnabled = 'multiRoleEnabled'
+}
+
 export type FeatureSetting = {
     active: boolean
     cacheLoaderName: string | null
     description: string | null
     displayOrder: string | null
-    key: 'filterByRangeEnabled' | 'sortEnabled' | string
+    key: EFeatureSettingKey
     language: string | null
     type: string | null
     value: string | null

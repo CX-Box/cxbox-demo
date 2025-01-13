@@ -2,8 +2,6 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useAppSelector } from '@store'
 import { AppWidgetGroupingHierarchyMeta } from '@interfaces/widget'
 import { useExpandableGroup } from '@components/widgets/Table/hooks/useExpandableGroup'
-import { usePrevious } from '@hooks/usePrevious'
-import { isFullVisibleElement } from '@components/widgets/Table/utils/elements'
 import Button from '@components/ui/Button/Button'
 import styles from '@components/widgets/Table/Table.less'
 import { Icon, Tooltip } from 'antd'
@@ -17,6 +15,8 @@ import { createTree } from '@components/widgets/Table/groupingHierarchy/utils/cr
 import { getGroupingHierarchyRowKey } from '@components/widgets/Table/groupingHierarchy/utils/getGroupingHierarchyRowKey'
 import { getGroupPaths } from '@components/widgets/Table/groupingHierarchy/utils/getGroupPaths'
 import { useGroupingHierarchyLevels } from '@components/widgets/Table/groupingHierarchy/hooks/useGroupingHierarchyLevels'
+import { useScrollToTopForTable } from '@components/widgets/Table/groupingHierarchy/hooks/useScrollToTopForTable'
+import { useAutoScrollToEditedRow } from '@components/widgets/Table/groupingHierarchy/hooks/useAutoScrollToEditedRow'
 
 export const useGroupingHierarchy = <T extends CustomDataItem>(
     meta: AppWidgetGroupingHierarchyMeta,
@@ -29,7 +29,6 @@ export const useGroupingHierarchy = <T extends CustomDataItem>(
         [groupingHierarchy?.fields, meta.fields]
     )
     const bcLoading = useAppSelector(state => state.screen.bo.bc[meta.bcName].loading)
-    const cursor = useAppSelector(state => state.screen.bo.bc[meta.bcName].cursor)
     const bcPageLimit = useAppSelector(state => state.screen.bo.bc[meta.bcName].limit)
     const sorters = useAppSelector(state => state.screen.sorters[meta.bcName])
     const filters = useAppSelector(state => state.screen.filters[meta.bcName])
@@ -137,103 +136,26 @@ export const useGroupingHierarchy = <T extends CustomDataItem>(
         },
         [changeExpand, getGroupingHierarchyNodeByRecordId, sortedGroupKeys]
     )
-
-    const scrollToLeaf = useCallback((rowKey: string) => {
-        setTimeout(() => {
-            const element = tableContainerRef.current?.querySelector(`[data-row-key="${rowKey}"]`)
-            element?.scrollIntoView({ block: 'center' })
-        }, 1)
-    }, [])
-
-    const previousCursor = usePrevious(cursor)
-    const currentIndex = bcData?.findIndex(item => item.id === cursor)
-    const previousIndex = usePrevious(currentIndex)
-    const currentItem = bcData?.[currentIndex as number] ?? null
-    const previousItem = usePrevious(currentItem)
-
-    useEffect(() => {
-        const rowKey = getGroupingHierarchyRowKeyByRecordId(cursor as string)
-
-        const rowElement = tableContainerRef.current?.querySelector(`[data-row-key="${rowKey}"]`)
-        const rowHasChangedPosition = previousIndex !== currentIndex
-        const groupingHasBeenChanged =
-            previousItem &&
-            currentItem &&
-            formGroupPathFromRecord(previousItem, sortedGroupKeys) !== formGroupPathFromRecord(currentItem, sortedGroupKeys)
-
-        if (enabledGrouping && (previousCursor !== cursor || (rowHasChangedPosition && groupingHasBeenChanged))) {
-            openTreeToLeaf(cursor)
-
-            if (currentIndex !== 0 && (!rowElement || !rowElement?.checkVisibility() || !isFullVisibleElement(rowElement))) {
-                rowKey && scrollToLeaf(rowKey)
-            }
-        }
-    }, [
-        currentIndex,
-        currentItem,
-        cursor,
-        enabledGrouping,
-        getGroupingHierarchyRowKeyByRecordId,
-        isGroupingHierarchy,
-        openTreeToLeaf,
-        previousCursor,
-        previousIndex,
-        previousItem,
-        scrollToLeaf,
-        sortedGroupKeys
-    ])
-
     const tableContainerRef = useRef<HTMLDivElement>(null)
 
-    const intersectionObserverRef = useRef<IntersectionObserver | undefined>()
+    const getRowElement = useCallback((rowKey: string | undefined): Element | null => {
+        return tableContainerRef.current?.querySelector(`[data-row-key="${rowKey}"]`) ?? null
+    }, [])
 
-    const [showUp, setShowUp] = useState(false)
+    const getFirstRowElement = useCallback(() => {
+        return getRowElement(getFirstRowKey())
+    }, [getFirstRowKey, getRowElement])
 
-    const scrollToTop = useCallback(() => {
-        const rowKey = getFirstRowKey()
-        const element = tableContainerRef.current?.querySelector(`[data-row-key="${rowKey}"]`)
+    const getRowElementByRowId = useCallback(
+        (rowId: string | null) => {
+            return getRowElement(getGroupingHierarchyRowKeyByRecordId(rowId as string))
+        },
+        [getGroupingHierarchyRowKeyByRecordId, getRowElement]
+    )
 
-        setTimeout(() => {
-            element?.scrollIntoView({ block: 'center' })
-        }, 0)
-    }, [getFirstRowKey])
+    const { showUp, scrollToTop } = useScrollToTopForTable(enabledGrouping, getFirstRowElement)
 
-    useEffect(() => {
-        intersectionObserverRef.current = enabledGrouping
-            ? new IntersectionObserver(entries => {
-                  const [entry] = entries
-
-                  setShowUp(!entry.isIntersecting)
-              })
-            : undefined
-
-        return () => {
-            intersectionObserverRef.current?.disconnect()
-        }
-    }, [enabledGrouping])
-
-    useEffect(() => {
-        if (!enabledGrouping) {
-            return
-        }
-
-        const rowKey = getFirstRowKey()
-        const element = tableContainerRef.current?.querySelector(`[data-row-key="${rowKey}"]`)
-
-        if (element) {
-            intersectionObserverRef.current?.observe(element)
-        }
-
-        return () => {
-            if (!enabledGrouping) {
-                return
-            }
-
-            if (element) {
-                intersectionObserverRef.current?.unobserve(element)
-            }
-        }
-    }, [enabledGrouping, getFirstRowKey])
+    useAutoScrollToEditedRow(meta, isGroupingHierarchy, getRowElementByRowId, openTreeToLeaf)
 
     const { t } = useTranslation()
 

@@ -83,7 +83,9 @@ export function FormPopup(props: FormPopupProps) {
                     defaultCancelText={preInvoke?.noText}
                 >
                     {bcLoading ? (
-                        <Skeleton loading paragraph={{ rows: 5 }} />
+                        <div data-test-loading={true}>
+                            <Skeleton loading paragraph={{ rows: 5 }} />
+                        </div>
                     ) : (
                         <div className={styles.formPopupModal}>
                             <Form

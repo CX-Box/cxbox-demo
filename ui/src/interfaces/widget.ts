@@ -16,7 +16,8 @@ import { TableSettingsItem } from '@interfaces/tableSettings'
 export enum CustomFieldTypes {
     MultipleSelect = 'multipleSelect',
     Time = 'time',
-    SuggestionPickList = 'suggestionPickList'
+    SuggestionPickList = 'suggestionPickList',
+    InfoField = 'info'
 }
 
 export enum CustomWidgetTypes {

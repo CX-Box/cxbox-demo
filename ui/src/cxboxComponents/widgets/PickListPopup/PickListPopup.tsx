@@ -143,7 +143,9 @@ export const PickListPopup: FunctionComponent<PickListPopupProps & PickListPopup
         </div>
     )
     const table = bcLoading ? (
-        <Skeleton loading paragraph={{ rows: 5 }} />
+        <div data-test-loading={true}>
+            <Skeleton loading paragraph={{ rows: 5 }} />
+        </div>
     ) : components?.table === undefined ? (
         defaultTable
     ) : (

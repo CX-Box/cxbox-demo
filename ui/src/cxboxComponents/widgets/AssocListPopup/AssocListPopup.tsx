@@ -221,7 +221,13 @@ export const AssocListPopup = ({
             }
             {...rest}
         >
-            {bcLoading ? <Skeleton loading paragraph={{ rows: 5 }} /> : { ...table }}
+            {bcLoading ? (
+                <div data-test-loading={true}>
+                    <Skeleton loading paragraph={{ rows: 5 }} />
+                </div>
+            ) : (
+                { ...table }
+            )}
         </Popup>
     )
 }

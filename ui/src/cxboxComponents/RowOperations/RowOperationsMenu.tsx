@@ -82,7 +82,17 @@ export const RowOperationsMenu = ({ meta, bcName: hierarchyBc, onSelect, ...rest
         .filter(item => !!item)
     const displayedItems = menuItemList.length ? menuItemList : <Menu.Item disabled>{t('No operations available')}</Menu.Item>
 
-    return <Menu {...rest}>{loading ? <Skeleton active className={styles.skeleton} /> : displayedItems}</Menu>
+    return (
+        <Menu {...rest}>
+            {loading ? (
+                <div data-test-loading={true}>
+                    <Skeleton active className={styles.skeleton} />
+                </div>
+            ) : (
+                displayedItems
+            )}
+        </Menu>
+    )
 }
 
 export default React.memo(RowOperationsMenu)

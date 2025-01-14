@@ -82,7 +82,11 @@ export const Widget: FunctionComponent<WidgetProps> = props => {
     // TODO 2.0.0 delete spinner and skeleton. Spinner and skeleton should be overridden by props.card component
     const WidgetParts = (
         <>
-            {showSkeleton && <Skeleton loading paragraph={skeletonParams} />}
+            {showSkeleton && (
+                <div data-test-loading={true}>
+                    <Skeleton loading paragraph={skeletonParams} />
+                </div>
+            )}
             {!showSkeleton && spinnerElement}
             {!props.disableDebugMode && props.debugMode && <DebugPanel widgetMeta={props.meta} />}
         </>

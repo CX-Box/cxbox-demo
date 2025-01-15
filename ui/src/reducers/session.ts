@@ -21,7 +21,14 @@ const initialState: Session = {
     logout: false,
     notifications: [],
     isMetaRefreshing: false,
-    tableSettings: null
+    tableSettings: null,
+    disableDeprecatedFeatures: {
+        popupCloseAfterChangeData: true,
+        /**
+         * solves the problem with adding a row to AssocPopup
+         */
+        secondDataChangeForAssocPopupWhenRemovingTagFromField: true
+    }
 }
 
 const sessionReducerBuilder = reducers

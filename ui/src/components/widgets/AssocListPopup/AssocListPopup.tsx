@@ -2,7 +2,7 @@ import React from 'react'
 import { AppWidgetTableMeta } from '@interfaces/widget'
 import { interfaces } from '@cxbox-ui/core'
 import PassiveAssocListPopup from './PassiveAssocListPopup/PassiveAssocListPopup'
-import DefaultAssocListPopup from './DefaultAssocListPopup'
+import DefaultAssocListPopup from './DefaultAssocListPopup/DefaultAssocListPopup'
 import { useAppSelector } from '@store'
 
 interface AssocListPopupProps {
@@ -10,10 +10,9 @@ interface AssocListPopupProps {
 }
 
 function AssocListPopup({ meta }: AssocListPopupProps) {
-    const { active } = useAppSelector(state => state.view.popupData as interfaces.PopupData)
-    const isFilter = useAppSelector(state => state.view.popupData?.isFilter)
+    const { active, isFilter } = useAppSelector(state => state.view.popupData as interfaces.PopupData) || {}
 
-    return isFilter || active ? <DefaultAssocListPopup meta={meta} /> : <PassiveAssocListPopup meta={meta} />
+    return isFilter || active ? <DefaultAssocListPopup meta={meta} isFilter={isFilter} /> : <PassiveAssocListPopup meta={meta} />
 }
 
 export default React.memo(AssocListPopup)

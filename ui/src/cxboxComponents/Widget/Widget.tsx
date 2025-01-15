@@ -1,11 +1,8 @@
 import React, { FunctionComponent } from 'react'
 import { connect } from 'react-redux'
 import { Skeleton, Spin } from 'antd'
-import TableWidget from '@cxboxComponents/widgets/TableWidget/TableWidget'
 import FormWidget from '@cxboxComponents/widgets/FormWidget/FormWidget'
 import InfoWidget from '@cxboxComponents/widgets/InfoWidget/InfoWidget'
-import AssocListPopup from '@cxboxComponents/widgets/AssocListPopup/AssocListPopup'
-import PickListPopup from '@cxboxComponents/widgets/PickListPopup/PickListPopup'
 import DebugPanel from '@cxboxComponents/DebugPanel/DebugPanel'
 import { useWidgetCollapse } from '@hooks/useWidgetCollapse'
 import { WidgetTypes, interfaces, utils } from '@cxbox-ui/core'
@@ -161,15 +158,8 @@ function chooseWidgetType(
     const knownWidgetMeta = widgetMeta as interfaces.WidgetMetaAny
 
     switch (knownWidgetMeta.type) {
-        case WidgetTypes.List:
-        case WidgetTypes.DataGrid:
-            return <TableWidget meta={knownWidgetMeta} showRowActions />
         case WidgetTypes.Form:
             return <FormWidget meta={knownWidgetMeta} />
-        case WidgetTypes.AssocListPopup:
-            return <AssocListPopup widget={knownWidgetMeta} />
-        case WidgetTypes.PickListPopup:
-            return <PickListPopup widget={knownWidgetMeta} />
         case WidgetTypes.Info:
             return <InfoWidget meta={knownWidgetMeta} />
         default:

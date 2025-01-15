@@ -86,7 +86,7 @@ const FilterPopup: React.FC<FilterPopupProps> = props => {
                     widgetName: widget?.name as string
                 })
             )
-        } else if (props.value === null || props.value === undefined) {
+        } else if (props.value === null || props.value === undefined || (Array.isArray(props.value) && !props.value?.length)) {
             dispatch(actions.bcRemoveFilter({ bcName: widget?.bcName as string, filter: filter as BcFilter }))
         } else {
             dispatch(actions.bcAddFilter({ bcName: widget?.bcName as string, filter: newFilter, widgetName: widget?.name as string }))

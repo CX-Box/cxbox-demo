@@ -88,12 +88,7 @@ export function FormPopup(props: FormPopupProps) {
                         </div>
                     ) : (
                         <div className={styles.formPopupModal}>
-                            <Form
-                                meta={{
-                                    ...props.meta,
-                                    type: interfaces.WidgetTypes.Form
-                                }}
-                            />
+                            <Form meta={props.meta} />
                         </div>
                     )}
                 </Popup>

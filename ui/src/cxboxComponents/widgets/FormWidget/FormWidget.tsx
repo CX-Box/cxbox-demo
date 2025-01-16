@@ -13,7 +13,7 @@ import styles from './FormWidget.less'
 const { FieldType, PendingValidationFailsFormat } = interfaces
 
 interface FormWidgetOwnProps {
-    meta: interfaces.WidgetFormMeta
+    meta: Omit<interfaces.WidgetFormMeta, 'type'>
 }
 
 interface FormWidgetProps extends FormWidgetOwnProps {

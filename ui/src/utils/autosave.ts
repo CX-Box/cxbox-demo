@@ -93,8 +93,8 @@ export function autosaveRoutine(
 export function bcHasPendingAutosaveChanges(store: RootState, bcName: string, cursor: string) {
     const pendingChanges = store.view.pendingDataChanges
     const cursorChanges = pendingChanges[bcName]?.[cursor as string]
-    const result = cursorChanges && !Object.keys(cursorChanges).includes('_associate') && Object.values(cursorChanges).length > 0
-    return result
+
+    return cursorChanges && !Object.keys(cursorChanges).includes('_associate') && Object.values(cursorChanges).length > 0
 }
 
 /**

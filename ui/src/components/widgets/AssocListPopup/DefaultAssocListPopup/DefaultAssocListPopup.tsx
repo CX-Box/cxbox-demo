@@ -1,6 +1,6 @@
 import React, { memo, useCallback, useMemo } from 'react'
 import Popup from '@components/Popup/Popup'
-import { actions, AssociatedItem, BcFilter, WidgetTableMeta } from '@cxbox-ui/core'
+import { actions, AssociatedItem, BcFilter, interfaces, PendingValidationFailsFormat, WidgetTableMeta } from '@cxbox-ui/core'
 import SelectionTable from './SelectionTable'
 import Title from '@components/widgets/AssocListPopup/DefaultAssocListPopup/Title'
 import { useAppDispatch, useAppSelector } from '@store'
@@ -37,7 +37,8 @@ function DefaultAssocListPopup({ meta, isFilter }: DefaultAssocListPopupProps) {
         viewName,
         calleeFieldKey,
         filterDataItems,
-        bcData
+        bcData,
+        missingFields
     } = useAppSelector(state => {
         const isFilter = state.view.popupData?.isFilter
         const calleeBCName = state.view.popupData?.calleeBCName
@@ -46,6 +47,11 @@ function DefaultAssocListPopup({ meta, isFilter }: DefaultAssocListPopupProps) {
         const calleeFieldKey = state.view.popupData?.options?.calleeFieldKey
         const bcFilters = state.screen.filters?.[calleeBCName!] ?? EMPTY_ARRAY
         const filterDataItems = bcFilters.find(filterItem => filterItem.fieldName === associateFieldKey)?.value as DataItem[]
+        const cursor = state.screen.bo.bc[bcName]?.cursor as string
+        const missingFields =
+            state.view.pendingValidationFailsFormat === PendingValidationFailsFormat.target
+                ? (state.view.pendingValidationFails as interfaces.PendingValidationFails)?.[bcName]?.[cursor]
+                : (state.view.pendingValidationFails as Record<string, string>)
 
         return {
             associateFieldKey: associateFieldKey,
@@ -57,7 +63,8 @@ function DefaultAssocListPopup({ meta, isFilter }: DefaultAssocListPopupProps) {
             viewName: state.view.name,
             calleeFieldKey,
             filterDataItems,
-            bcData: state.data[bcName] || emptyData
+            bcData: state.data[bcName] || emptyData,
+            missingFields
         }
     }, shallowEqual)
 
@@ -84,18 +91,10 @@ function DefaultAssocListPopup({ meta, isFilter }: DefaultAssocListPopupProps) {
 
     const onClose = useCallback(() => {
         dispatch(actions.closeViewPopup({ bcName }))
-        if (isFullHierarchy) {
+        if (isFullHierarchy || (missingFields && Object.keys(missingFields).length)) {
             dispatch(actions.bcCancelPendingChanges({ bcNames: [bcName] }))
         }
-    }, [bcName, dispatch, isFullHierarchy])
-
-    const onCancel = useCallback(() => {
-        dispatch(actions.closeViewPopup({ bcName }))
-        if (isFullHierarchy) {
-            dispatch(actions.bcCancelPendingChanges({ bcNames: [bcName] }))
-        }
-        onClose()
-    }, [bcName, dispatch, isFullHierarchy, onClose])
+    }, [bcName, dispatch, isFullHierarchy, missingFields])
 
     const onFilter = useCallback(
         (bcName: string, filter: BcFilter) => {
@@ -178,7 +177,7 @@ function DefaultAssocListPopup({ meta, isFilter }: DefaultAssocListPopupProps) {
             title={<Title title={meta.title} widgetName={meta.name} assocValueKey={assocValueKey} bcName={meta.bcName} />}
             showed
             size="large"
-            onCancelHandler={onCancel}
+            onCancelHandler={onClose}
             bcName={meta.bcName}
             widgetName={meta.name}
             footer={
@@ -188,7 +187,7 @@ function DefaultAssocListPopup({ meta, isFilter }: DefaultAssocListPopupProps) {
                         <Button data-test-widget-list-save={true} onClick={isFilter ? filterData : saveData}>
                             {t('Save')}
                         </Button>
-                        <Button data-test-widget-list-cancel={true} onClick={onCancel}>
+                        <Button data-test-widget-list-cancel={true} onClick={onClose}>
                             {t('Cancel')}
                         </Button>
                     </div>

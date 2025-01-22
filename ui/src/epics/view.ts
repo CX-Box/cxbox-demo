@@ -1,5 +1,6 @@
 import { RootEpic } from '@store'
-import { catchError, concat, EMPTY, filter, mergeMap, of } from 'rxjs'
+import { catchError, concat, EMPTY, filter, mergeMap, of, switchMap } from 'rxjs'
+import { isAnyOf } from '@reduxjs/toolkit'
 import {
     OperationError,
     OperationErrorEntity,
@@ -12,11 +13,11 @@ import {
     utils
 } from '@cxbox-ui/core'
 import { EMPTY_ARRAY } from '@constants'
-import { actions, setBcCount } from '@actions'
+import { actions, sendOperationSuccess, setBcCount } from '@actions'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import { AxiosError } from 'axios'
 import { postOperationRoutine } from './utils/postOperationRoutine'
-import { AppWidgetGroupingHierarchyMeta } from '@interfaces/widget'
+import { AppWidgetGroupingHierarchyMeta, CustomWidgetTypes } from '@interfaces/widget'
 import { getGroupingHierarchyWidget } from '@utils/groupingHierarchy'
 import { DataItem } from '@cxbox-ui/schema'
 
@@ -327,10 +328,30 @@ export const forceUpdateRowMeta: RootEpic = (action$, state$, { api }) =>
         })
     )
 
+const closeFormPopup: RootEpic = (action$, state$) =>
+    action$.pipe(
+        filter(isAnyOf(sendOperationSuccess, actions.bcSaveDataSuccess)),
+        switchMap(action => {
+            const state = state$.value
+            const popupWidgetName = state.view.popupData?.widgetName
+
+            const formPopupWidget =
+                popupWidgetName &&
+                state.view.widgets.find(item => item.name === popupWidgetName && item.type === CustomWidgetTypes.FormPopup)
+
+            if (formPopupWidget) {
+                return of(actions.closeViewPopup({ bcName: formPopupWidget.bcName }))
+            }
+
+            return EMPTY
+        })
+    )
+
 export const viewEpics = {
     bcFetchCountEpic,
     sendOperationEpic,
     fileUploadConfirmEpic,
     bcDeleteDataEpic,
-    forceUpdateRowMeta
+    forceUpdateRowMeta,
+    closeFormPopup
 }

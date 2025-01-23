@@ -119,3 +119,7 @@ export const drillDownInNewTab = createAction<{
     fieldKey: string
     copyLink?: boolean
 }>('drillDownInNewTab')
+
+export const callDefaultSave = createAction<{ onSuccessActions?: AnyAction[] } | undefined>('callDefaultSave')
+
+export const sendOperation = createAction<ReturnType<typeof actions.sendOperation>['payload'] & { autosave?: boolean }>('sendOperation')

@@ -83,14 +83,17 @@ export const sendOperationEpic: RootEpic = (action$, state$, { api }) =>
             const defaultSaveOperation =
                 state.view.widgets?.find(item => item.name === widgetName)?.options?.actionGroups?.defaultSave ===
                     action.payload.operationType && actions.changeLocation.match(action.payload?.onSuccessAction?.type)
+
             const params: Record<string, string> = {
                 _action: operationType,
                 ...utils.getFilters(filters),
                 ...utils.getSorters(sorters)
             }
+
             if (confirm) {
                 params._confirm = confirm
             }
+
             const context = { widgetName: action.payload.widgetName }
             return api.customAction(screenName, bcUrl, data, context, params).pipe(
                 mergeMap(response => {

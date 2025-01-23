@@ -452,9 +452,9 @@ export const Field: FunctionComponent<FieldProps> = ({
     return (
         <CustomizationContext.Consumer>
             {context => {
-                const customFields = context.customFields
-                if (customFields?.[widgetFieldMeta.type] || customFields?.[widgetFieldMeta.key]) {
-                    const CustomComponent = customFields?.[widgetFieldMeta.type] || customFields?.[widgetFieldMeta.key]
+                const CustomComponent = context.customFields?.[widgetFieldMeta.type]
+
+                if (CustomComponent) {
                     return (
                         <CustomComponent
                             {...commonProps}
@@ -465,6 +465,7 @@ export const Field: FunctionComponent<FieldProps> = ({
                         />
                     )
                 }
+
                 return resultField
             }}
         </CustomizationContext.Consumer>

@@ -77,3 +77,16 @@
 .disabledButton {
     cursor: not-allowed;
 }
+
+.withoutPopupOpenButton {
+    :global {
+        .ant-select {
+            .ant-select-selection.ant-select-selection--single {
+                padding-right: 16px;
+            }
+            .ant-select-selection__clear {
+                right: 11px;
+            }
+        }
+    }
+}

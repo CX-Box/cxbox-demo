@@ -1,0 +1,21 @@
+{
+  "name": "myexample1212form",
+  "title": "MyExample1212 Form",
+  "template": "DashboardView",
+  "url": "/screen/myexample1212/view/myexample1212form",
+  "widgets": [
+    {
+      "widgetName": "SecondLevelMenu",
+      "position": 10,
+      "gridWidth": 12
+    },
+    {
+      "widgetName": "MyExample1212Form",
+      "position": 20,
+      "gridWidth": 24
+    }
+  ],
+  "rolesAllowed": [
+    "CXBOX_USER"
+  ]
+}

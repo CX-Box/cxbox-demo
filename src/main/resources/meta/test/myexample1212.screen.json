@@ -1,0 +1,28 @@
+{
+  "name": "myexample1212",
+  "icon": "calendar",
+  "order": 1,
+  "title": "Test",
+  "navigation": {
+    "type": "standard",
+    "menu": [
+      {
+        "title": "List",
+        "child": [
+          {
+            "viewName": "myexample1212list"
+          }
+        ]
+      },
+      {
+        "title": "Form",
+        "child": [
+          {
+            "viewName": "myexample1212form",
+            "hidden": true
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "name": "MyExample1212List",
+  "title": "List",
+  "type": "List",
+  "bc": "myexample1212",
+  "fields": [
+    {
+      "title": "Custom Field Drilldown",
+      "key": "customFieldDrilldown",
+      "type": "input",
+      "drillDown": "true"
+    },
+    {
+      "title": "Custom Field Number",
+      "key": "customFieldNumber",
+      "type": "number"
+    },
+    {
+      "title": "customField",
+      "key": "customField",
+      "type": "input"
+    }
+  ],
+  "options": {
+    "actionGroups": {
+      "include": [
+        "create",
+        "delete",
+        "save"
+      ]
+    }
+  }
+}
+

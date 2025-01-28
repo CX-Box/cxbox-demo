@@ -1,0 +1,58 @@
+{
+  "name": "MyExample1212Form",
+  "title": "Form",
+  "type": "Form",
+  "bc": "myexample1212",
+  "fields": [
+    {
+      "label": "Custom Field Drilldown",
+      "key": "customFieldDrilldown",
+      "type": "input"
+    },
+    {
+      "label": "Custom Field Number",
+      "key": "customFieldNumber",
+      "type": "number"
+    },
+    {
+      "label": "customField",
+      "key": "customField",
+      "type": "input"
+    }
+  ],
+  "options": {
+    "actionGroups": {
+      "include": [
+        "finish"
+      ]
+    },
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "customFieldDrilldown",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "customFieldNumber",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "customField",
+              "span": 12
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

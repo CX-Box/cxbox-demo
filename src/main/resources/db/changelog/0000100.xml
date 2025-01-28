@@ -421,6 +421,35 @@
       </column>
     </createTable>
   </changeSet>
-
+  <changeSet author="cxbox" id="my_entity1212 TABLE">
+    <createTable remarks="test" tableName="my_entity1212">
+      <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" remarks="Дата создания"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" remarks="Дата изменения"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="custom_field" remarks="custom_field" type="VARCHAR2(255)">
+      </column>
+      <column name="custom_field_drilldown" remarks="custom_field" type="VARCHAR2(255 BYTE)">
+      </column>
+      <column defaultValueNumeric="1" name="custom_field_number" type="NUMBER(19, 0)">
+      </column>
+    </createTable>
+  </changeSet>
 
 </databaseChangeLog>

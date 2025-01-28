@@ -1,0 +1,21 @@
+{
+  "name": "myexample1212list",
+  "title": "MyExample1212 List",
+  "template": "DashboardView",
+  "url": "/screen/myexample1212/view/myexample1212list",
+  "widgets": [
+    {
+      "widgetName": "SecondLevelMenu",
+      "position": 10,
+      "gridWidth": 12
+    },
+    {
+      "widgetName": "MyExample1212List",
+      "position": 20,
+      "gridWidth": 24
+    }
+  ],
+  "rolesAllowed": [
+    "CXBOX_USER"
+  ]
+}

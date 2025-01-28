@@ -2,6 +2,8 @@ package org.demo.service.cxbox.inner;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.DrillDownType;
@@ -13,6 +15,7 @@ import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
 import org.cxbox.core.service.action.ActionsBuilder;
 import org.cxbox.core.service.action.CxboxActionIconSpecifier;
+import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
 import org.cxbox.core.util.session.SessionService;
 import org.demo.conf.cxbox.customization.icon.ActionIcon;
 import org.demo.controller.CxboxRestController;
@@ -27,6 +30,7 @@ import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S3252", "java:S1186"})
 @Service
+@RequiredArgsConstructor
 public class MeetingReadService extends VersionAwareResponseService<MeetingDTO, Meeting> {
 
 	private final MeetingRepository meetingRepository;
@@ -41,15 +45,11 @@ public class MeetingReadService extends VersionAwareResponseService<MeetingDTO, 
 
 	private static final String MESSAGE_TEMPLATE = "Status: %s; \nMeeting Result: %s";
 
-	public MeetingReadService(MeetingRepository meetingRepository, UserRepository userRepository,
-			SessionService sessionService,
-			MeetingStatusModelActionProvider statusModelActionProvider, MailSendingService mailSendingService) {
-		super(MeetingDTO.class, Meeting.class, null, MeetingReadMeta.class);
-		this.meetingRepository = meetingRepository;
-		this.userRepository = userRepository;
-		this.sessionService = sessionService;
-		this.statusModelActionProvider = statusModelActionProvider;
-		this.mailSendingService = mailSendingService;
+	@Getter
+	private final Class<? extends FieldMetaBuilder<MeetingDTO>> fieldMetaBuilder = MeetingReadMeta.class;
+
+	public final Class<? extends FieldMetaBuilder<MeetingDTO>> getFieldMetaBuilder() {
+		return MeetingReadMeta.class;
 	}
 
 	@Override

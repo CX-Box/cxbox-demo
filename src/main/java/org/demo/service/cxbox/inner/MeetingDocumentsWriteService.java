@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.cxbox.api.data.dto.AssociateDTO;
 import org.cxbox.core.crudma.bc.BusinessComponent;
@@ -21,6 +23,7 @@ import org.cxbox.core.file.service.CxboxFileService;
 import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
 import org.cxbox.core.service.action.ActionsBuilder;
+import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
 import org.cxbox.model.core.entity.BaseEntity_;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.inner.MeetingDocumentsDTO;
@@ -30,27 +33,23 @@ import org.demo.entity.MeetingDocuments;
 import org.demo.entity.MeetingDocuments_;
 import org.demo.repository.MeetingDocumentsRepository;
 import org.demo.repository.MeetingRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 
 @SuppressWarnings({"java:S3252", "java:S1186"})
 @Service
+@RequiredArgsConstructor
 public class MeetingDocumentsWriteService extends VersionAwareResponseService<MeetingDocumentsDTO, MeetingDocuments> {
 
-	@Autowired
-	private MeetingDocumentsRepository meetingDocumentsRepository;
+	private final MeetingDocumentsRepository meetingDocumentsRepository;
 
-	@Autowired
-	private MeetingRepository meetingRepository;
+	private final MeetingRepository meetingRepository;
 
-	@Autowired
-	private CxboxFileService cxboxFileService;
+	private final CxboxFileService cxboxFileService;
 
-	public MeetingDocumentsWriteService() {
-		super(MeetingDocumentsDTO.class, MeetingDocuments.class, null, MeetingDocumentsWriteMeta.class);
-	}
+	@Getter
+	private final Class<? extends FieldMetaBuilder<MeetingDocumentsDTO>> fieldMetaBuilder = MeetingDocumentsWriteMeta.class;
 
 	@Override
 	protected Specification<MeetingDocuments> getParentSpecification(BusinessComponent bc) {

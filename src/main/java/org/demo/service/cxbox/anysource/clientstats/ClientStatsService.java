@@ -1,17 +1,28 @@
 package org.demo.service.cxbox.anysource.clientstats;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.AnySourceVersionAwareResponseService;
+import org.cxbox.core.dao.AnySourceBaseDAO;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
+import org.cxbox.core.service.rowmeta.AnySourceFieldMetaBuilder;
 import org.demo.dto.cxbox.anysource.ClientStatsDTO;
 import org.springframework.stereotype.Service;
 
+@RequiredArgsConstructor
+@Getter
 @Service
 public class ClientStatsService extends AnySourceVersionAwareResponseService<ClientStatsDTO, ClientStatsDTO> {
 
-	public ClientStatsService() {
-		super(ClientStatsDTO.class, ClientStatsDTO.class, ClientStatsMeta.class, ClientStatsDao.class);
+	private final Class<? extends AnySourceFieldMetaBuilder<ClientStatsDTO>> metaBuilder = ClientStatsMeta.class;
+
+	private final Class<? extends AnySourceBaseDAO<ClientStatsDTO>> anySourceBaseDAOClass = ClientStatsDao.class;
+
+	@Override
+	public Class<? extends AnySourceFieldMetaBuilder<ClientStatsDTO>> getAnySourceFieldMetaBuilder() {
+		return super.getAnySourceFieldMetaBuilder();
 	}
 
 	@Override
@@ -20,7 +31,8 @@ public class ClientStatsService extends AnySourceVersionAwareResponseService<Cli
 	}
 
 	@Override
-	protected ActionResultDTO<ClientStatsDTO> doUpdateEntity(ClientStatsDTO entity, ClientStatsDTO data, BusinessComponent bc) {
+	protected ActionResultDTO<ClientStatsDTO> doUpdateEntity(ClientStatsDTO entity, ClientStatsDTO data,
+			BusinessComponent bc) {
 		throw new IllegalStateException();
 	}
 

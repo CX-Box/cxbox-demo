@@ -5,10 +5,13 @@ package org.demo.service.cxbox.inner;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import java.util.Set;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
+import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
 import org.demo.dto.cxbox.inner.DashboardClientActivitiesDTO;
 import org.demo.entity.Client;
 import org.demo.entity.Client_;
@@ -16,21 +19,19 @@ import org.demo.entity.DashboardFilter;
 import org.demo.entity.DashboardFilter_;
 import org.demo.entity.enums.FieldOfActivity;
 import org.demo.repository.DashboardFilterRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-@SuppressWarnings({"java:S3252","java:S1186"})
+@SuppressWarnings({"java:S3252", "java:S1186"})
 @Service
-public class DashboardClientActivitiesService extends VersionAwareResponseService<DashboardClientActivitiesDTO, Client> {
+@RequiredArgsConstructor
+public class DashboardClientActivitiesService extends
+		VersionAwareResponseService<DashboardClientActivitiesDTO, Client> {
 
-	@Autowired
-	private DashboardFilterRepository dashboardFilterRepository;
+	private final DashboardFilterRepository dashboardFilterRepository;
 
-	public DashboardClientActivitiesService() {
-		super(DashboardClientActivitiesDTO.class, Client.class, null, DashboardClientActivitiesMeta.class);
-	}
-
+	@Getter
+	private final Class<? extends FieldMetaBuilder<DashboardClientActivitiesDTO>> fieldMetaBuilder = DashboardClientActivitiesMeta.class;
 
 	@Override
 	protected Specification<Client> getSpecification(BusinessComponent bc) {
@@ -39,8 +40,10 @@ public class DashboardClientActivitiesService extends VersionAwareResponseServic
 
 	private Specification<Client> getFilterSpecification(BusinessComponent bc) {
 		DashboardFilter dashboardFilter = dashboardFilterRepository.findOne(
-				(root, cq, cb) -> cb.equal(root.get(
-						DashboardFilter_.userId), bc.getParentIdAsLong())
+				(root, cq, cb) -> cb.equal(
+						root.get(
+								DashboardFilter_.userId), bc.getParentIdAsLong()
+				)
 		).orElse(null);
 		if (dashboardFilter == null) {
 			return (root, cq, cb) -> cb.and();
@@ -61,7 +64,8 @@ public class DashboardClientActivitiesService extends VersionAwareResponseServic
 	}
 
 	@Override
-	protected ActionResultDTO<DashboardClientActivitiesDTO> doUpdateEntity(Client entity, DashboardClientActivitiesDTO data,
+	protected ActionResultDTO<DashboardClientActivitiesDTO> doUpdateEntity(Client entity,
+			DashboardClientActivitiesDTO data,
 			BusinessComponent bc) {
 		throw new UnsupportedOperationException();
 	}

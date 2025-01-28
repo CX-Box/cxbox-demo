@@ -6,16 +6,18 @@ import static org.demo.dto.cxbox.inner.MeetingDTO_.clientId;
 import static org.demo.dto.cxbox.inner.MeetingDTO_.contactId;
 import static org.demo.dto.cxbox.inner.MeetingDTO_.endDateTime;
 import static org.demo.dto.cxbox.inner.MeetingDTO_.notes;
+import static org.demo.dto.cxbox.inner.MeetingDTO_.region;
 import static org.demo.dto.cxbox.inner.MeetingDTO_.responsibleId;
 import static org.demo.dto.cxbox.inner.MeetingDTO_.result;
 import static org.demo.dto.cxbox.inner.MeetingDTO_.startDateTime;
-import static org.demo.dto.cxbox.inner.MeetingDTO_.region;
 
 import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
@@ -29,6 +31,7 @@ import org.cxbox.core.dto.rowmeta.PreAction;
 import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
 import org.cxbox.core.service.action.ActionsBuilder;
+import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
 import org.cxbox.core.util.session.SessionService;
 import org.demo.conf.cxbox.customization.icon.ActionIcon;
 import org.demo.conf.cxbox.extension.action.ActionsExt;
@@ -49,6 +52,7 @@ import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S3252", "java:S1186"})
 @Service
+@RequiredArgsConstructor
 public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO, Meeting> {
 
 	private final MeetingRepository meetingRepository;
@@ -69,20 +73,8 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 
 	private static final String MESSAGE_TEMPLATE = "Status: %s; \nMeeting Result: %s";
 
-	public MeetingWriteService(MeetingRepository meetingRepository, ClientRepository clientRepository,
-			ContactRepository contactRepository, UserRepository userRepository,
-			MeetingStatusModelActionProvider statusModelActionProvider, EntityManager entityManager,
-			MailSendingService mailSendingService, SessionService sessionService) {
-		super(MeetingDTO.class, Meeting.class, null, MeetingWriteMeta.class);
-		this.meetingRepository = meetingRepository;
-		this.clientRepository = clientRepository;
-		this.contactRepository = contactRepository;
-		this.userRepository = userRepository;
-		this.statusModelActionProvider = statusModelActionProvider;
-		this.entityManager = entityManager;
-		this.mailSendingService = mailSendingService;
-		this.sessionService = sessionService;
-	}
+	@Getter
+	private final Class<? extends FieldMetaBuilder<MeetingDTO>> fieldMetaBuilder = MeetingWriteMeta.class;
 
 	@Override
 	protected CreateResult<MeetingDTO> doCreateEntity(Meeting entity, BusinessComponent bc) {
@@ -113,7 +105,8 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 		setIfChanged(data, address, entity::setAddress);
 		setIfChanged(data, notes, entity::setNotes);
 		setIfChanged(data, result, entity::setResult);
-		setMappedIfChanged(data, responsibleId, entity::setResponsible,
+		setMappedIfChanged(
+				data, responsibleId, entity::setResponsible,
 				id -> id != null ? userRepository.getReferenceById(id) : null
 		);
 		if (data.isFieldChanged(clientId)) {
@@ -124,7 +117,8 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 			}
 			entity.setContact(null);
 		}
-		setMappedIfChanged(data, contactId, entity::setContact,
+		setMappedIfChanged(
+				data, contactId, entity::setContact,
 				id -> id != null ? contactRepository.getReferenceById(id) : null
 		);
 		meetingRepository.save(entity);

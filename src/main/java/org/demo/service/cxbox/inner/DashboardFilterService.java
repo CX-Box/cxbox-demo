@@ -3,12 +3,15 @@
 package org.demo.service.cxbox.inner;
 
 import java.util.stream.Collectors;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.multivalue.MultivalueField;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.cxbox.core.service.action.Actions;
+import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
 import org.cxbox.core.util.session.SessionService;
 import org.demo.dto.cxbox.inner.DashboardFilterDTO;
 import org.demo.dto.cxbox.inner.DashboardFilterDTO_;
@@ -18,24 +21,20 @@ import org.demo.entity.core.User;
 import org.demo.entity.core.User_;
 import org.demo.entity.enums.FieldOfActivity;
 import org.demo.repository.DashboardFilterRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S3252", "java:S1186", "java:S6813"})
 @Service
-public class
-DashboardFilterService extends VersionAwareResponseService<DashboardFilterDTO, User> {
+@RequiredArgsConstructor
+public class DashboardFilterService extends VersionAwareResponseService<DashboardFilterDTO, User> {
 
-	@Autowired
-	private SessionService sessionService;
+	private final SessionService sessionService;
 
-	@Autowired
-	private DashboardFilterRepository dashboardFilterRepository;
+	private final DashboardFilterRepository dashboardFilterRepository;
 
-	public DashboardFilterService() {
-		super(DashboardFilterDTO.class, User.class, null, DashboardFilterMeta.class);
-	}
+	@Getter
+	private final Class<? extends FieldMetaBuilder<DashboardFilterDTO>> fieldMetaBuilder = DashboardFilterMeta.class;
 
 	@Override
 	public long count(BusinessComponent bc) {

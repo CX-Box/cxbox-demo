@@ -1,5 +1,7 @@
 package org.demo.service.cxbox.inner;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.DrillDownType;
@@ -8,23 +10,22 @@ import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.cxbox.core.dto.rowmeta.PostAction;
 import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
+import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.inner.SaleDTO;
 import org.demo.entity.Sale;
 import org.demo.repository.SaleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@SuppressWarnings({"java:S3252","java:S1186"})
+@SuppressWarnings({"java:S3252", "java:S1186"})
 @Service
+@RequiredArgsConstructor
 public class SaleReadService extends VersionAwareResponseService<SaleDTO, Sale> {
 
-	@Autowired
-	private SaleRepository saleRepository;
+	private final SaleRepository saleRepository;
 
-	public SaleReadService() {
-		super(SaleDTO.class, Sale.class, null, SaleReadMeta.class);
-	}
+	@Getter
+	private final Class<? extends FieldMetaBuilder<SaleDTO>> fieldMetaBuilder = SaleReadMeta.class;
 
 	@Override
 	protected CreateResult<SaleDTO> doCreateEntity(Sale entity, BusinessComponent bc) {

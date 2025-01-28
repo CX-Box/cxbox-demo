@@ -2,12 +2,15 @@ package org.demo.service.cxbox.inner;
 
 import static org.cxbox.api.data.dao.SpecificationUtils.and;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.cxbox.core.exception.BusinessException;
 import org.cxbox.core.service.action.Actions;
+import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
 import org.demo.conf.cxbox.extension.fulltextsearch.FullTextSearchExt;
 import org.demo.dto.cxbox.inner.ContactDTO;
 import org.demo.dto.cxbox.inner.ContactDTO_;
@@ -15,24 +18,21 @@ import org.demo.dto.cxbox.inner.MeetingDTO_;
 import org.demo.entity.Contact;
 import org.demo.repository.ClientRepository;
 import org.demo.repository.ContactRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S3252", "java:S1186"})
 @Service
+@RequiredArgsConstructor
 public class ContactPickListService extends VersionAwareResponseService<ContactDTO, Contact> {
 
-	@Autowired
-	private ClientRepository clientRepository;
+	private final ClientRepository clientRepository;
 
-	@Autowired
-	private ContactRepository contactRepository;
+	private final ContactRepository contactRepository;
 
-	public ContactPickListService() {
-		super(ContactDTO.class, Contact.class, null, ContactPickListMeta.class);
-	}
+	@Getter
+	private final Class<? extends FieldMetaBuilder<ContactDTO>> fieldMetaBuilder = ContactPickListMeta.class;
 
 	@Override
 	protected Specification<Contact> getParentSpecification(BusinessComponent bc) {
@@ -70,7 +70,8 @@ public class ContactPickListService extends VersionAwareResponseService<ContactD
 			contactDTOActionResultDTO = super.deleteEntity(bc);
 			contactRepository.flush();
 		} catch (DataIntegrityViolationException e) {
-			throw new BusinessException(e).addPopup("You are trying to delete row, that is referenced from other place in system. Deletion is not available");
+			throw new BusinessException(e).addPopup(
+					"You are trying to delete row, that is referenced from other place in system. Deletion is not available");
 		}
 		return contactDTOActionResultDTO;
 	}

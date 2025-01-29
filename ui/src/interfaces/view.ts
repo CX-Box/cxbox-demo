@@ -12,5 +12,5 @@ export interface CustomPopupOptions {
 }
 
 export interface PopupData extends CorePopupData {
-    options?: CustomPopupOptions & Partial<FileViewerPopupOptions>
+    options?: CorePopupData['options'] & CustomPopupOptions & Partial<FileViewerPopupOptions>
 }

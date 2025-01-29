@@ -37,6 +37,7 @@ import { StatsBlock } from '@components/widgets/StatsBlock/StatsBlock'
 import FileViewerPopup from '@components/FileViewerPopup/FileViewerPopup'
 import GroupingHierarchy from '@components/widgets/GroupingHierarchy/GroupingHierarchy'
 import { AdditionalListWidget } from '@components/widgets/AdditionalListWidget/AdditionalListWidget'
+import WaitUntilPopup from '@components/WaitUntilPopup/WaitUntilPopup'
 
 // TODO We need to remove PopupWidgetTypes from the core and replace imports throughout the entire project
 const { PopupWidgetTypes, FieldType } = interfaces
@@ -88,6 +89,7 @@ function View() {
         <div className={styles.container}>
             {debugMode && <ViewInfoLabel />}
             <FileViewerPopup />
+            <WaitUntilPopup />
             <CxboxView
                 customWidgets={customWidgets as Record<string, interfaces.CustomWidgetDescriptor>}
                 customFields={customFields}

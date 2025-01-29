@@ -80,6 +80,9 @@
         "Open link in new tab": "Открыть ссылку в новой вкладке",
         "Copy link address": "Копировать адрес ссылки",
         "Link copied successfully": "Ссылка успешно скопирована",
-        "Opening drill-downs with non-ID-based filtering in a new tab is currently not supported. Please contact your administrator": "Открытие дриллдаунов с фильтрацией не на основе идентификатора на новой вкладке в настоящее время не поддерживается. Пожалуйста, свяжитесь с вашим администратором"
+        "Opening drill-downs with non-ID-based filtering in a new tab is currently not supported. Please contact your administrator": "Открытие дриллдаунов с фильтрацией не на основе идентификатора на новой вкладке в настоящее время не поддерживается. Пожалуйста, свяжитесь с вашим администратором",
+        "Please, wait": "Пожалуйста, подождите",
+        "Operation in progress": "Операция в процессе"
+
     }
 }

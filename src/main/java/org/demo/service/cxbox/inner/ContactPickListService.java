@@ -10,7 +10,6 @@ import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.cxbox.core.exception.BusinessException;
 import org.cxbox.core.service.action.Actions;
-import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
 import org.demo.conf.cxbox.extension.fulltextsearch.FullTextSearchExt;
 import org.demo.dto.cxbox.inner.ContactDTO;
 import org.demo.dto.cxbox.inner.ContactDTO_;
@@ -32,7 +31,7 @@ public class ContactPickListService extends VersionAwareResponseService<ContactD
 	private final ContactRepository contactRepository;
 
 	@Getter
-	private final Class<? extends FieldMetaBuilder<ContactDTO>> fieldMetaBuilder = ContactPickListMeta.class;
+	private final Class<ContactPickListMeta> fieldMetaBuilder = ContactPickListMeta.class;
 
 	@Override
 	protected Specification<Contact> getParentSpecification(BusinessComponent bc) {

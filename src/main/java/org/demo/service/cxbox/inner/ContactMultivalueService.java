@@ -6,7 +6,6 @@ import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
-import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
 import org.demo.dto.cxbox.inner.ContactMultivalueDTO;
 import org.demo.entity.Contact;
 import org.springframework.stereotype.Service;
@@ -16,8 +15,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ContactMultivalueService extends VersionAwareResponseService<ContactMultivalueDTO, Contact> {
 
-	@Getter
-	private final Class<? extends FieldMetaBuilder<ContactMultivalueDTO>> fieldMetaBuilder = ContactMultivalueMeta.class;
+	private final Class<ContactMultivalueMeta> fieldMetaBuilder = ContactMultivalueMeta.class;
 
 	@Override
 	protected CreateResult<ContactMultivalueDTO> doCreateEntity(org.demo.entity.Contact entity, BusinessComponent bc) {

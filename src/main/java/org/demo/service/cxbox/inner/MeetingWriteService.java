@@ -31,7 +31,6 @@ import org.cxbox.core.dto.rowmeta.PreAction;
 import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
 import org.cxbox.core.service.action.ActionsBuilder;
-import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
 import org.cxbox.core.util.session.SessionService;
 import org.demo.conf.cxbox.customization.icon.ActionIcon;
 import org.demo.conf.cxbox.extension.action.ActionsExt;
@@ -74,7 +73,7 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 	private static final String MESSAGE_TEMPLATE = "Status: %s; \nMeeting Result: %s";
 
 	@Getter
-	private final Class<? extends FieldMetaBuilder<MeetingDTO>> fieldMetaBuilder = MeetingWriteMeta.class;
+	private final Class<MeetingWriteMeta> fieldMetaBuilder = MeetingWriteMeta.class;
 
 	@Override
 	protected CreateResult<MeetingDTO> doCreateEntity(Meeting entity, BusinessComponent bc) {

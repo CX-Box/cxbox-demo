@@ -46,7 +46,7 @@ public class MeetingReadService extends VersionAwareResponseService<MeetingDTO, 
 	private static final String MESSAGE_TEMPLATE = "Status: %s; \nMeeting Result: %s";
 
 	@Getter
-	private final Class<? extends FieldMetaBuilder<MeetingDTO>> fieldMetaBuilder = MeetingReadMeta.class;
+	private final Class<MeetingReadMeta> fieldMetaBuilder = MeetingReadMeta.class;
 
 	public final Class<? extends FieldMetaBuilder<MeetingDTO>> getFieldMetaBuilder() {
 		return MeetingReadMeta.class;

@@ -16,7 +16,6 @@ import org.cxbox.core.dto.rowmeta.AssociateResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.cxbox.core.dto.rowmeta.PostAction;
 import org.cxbox.core.service.action.Actions;
-import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.inner.ContactDTO;
 import org.demo.dto.cxbox.inner.ContactDTO_;
@@ -37,7 +36,7 @@ public class ClientContactService extends VersionAwareResponseService<ContactDTO
 	private final ClientRepository clientRepository;
 
 	@Getter
-	private final Class<? extends FieldMetaBuilder<ContactDTO>> fieldMetaBuilder = ClientContactMeta.class;
+	private final Class<ClientContactMeta> fieldMetaBuilder = ClientContactMeta.class;
 
 	@Override
 	protected Specification<Contact> getParentSpecification(BusinessComponent bc) {

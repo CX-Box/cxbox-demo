@@ -4,10 +4,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.AnySourceVersionAwareResponseService;
-import org.cxbox.core.dao.AnySourceBaseDAO;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
-import org.cxbox.core.service.rowmeta.AnySourceFieldMetaBuilder;
 import org.demo.dto.cxbox.anysource.SalesProgressStatsDTO;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +15,9 @@ import org.springframework.stereotype.Service;
 public class SaleProgressStatsService extends
 		AnySourceVersionAwareResponseService<SalesProgressStatsDTO, SalesProgressStatsDTO> {
 
-	private final Class<? extends AnySourceFieldMetaBuilder<SalesProgressStatsDTO>> metaBuilder = SaleProgressStatsMeta.class;
+	private final Class<SaleProgressStatsMeta> fieldMetaBuilder = SaleProgressStatsMeta.class;
 
-	private final Class<? extends AnySourceBaseDAO<SalesProgressStatsDTO>> anySourceBaseDAOClass = SaleProgressStatsDao.class;
+	private final Class<SaleProgressStatsDao> anySourceBaseDAOClass = SaleProgressStatsDao.class;
 
 	@Override
 	protected CreateResult<SalesProgressStatsDTO> doCreateEntity(SalesProgressStatsDTO entity, BusinessComponent bc) {

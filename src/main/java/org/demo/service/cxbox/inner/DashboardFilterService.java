@@ -11,7 +11,6 @@ import org.cxbox.core.dto.multivalue.MultivalueField;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.cxbox.core.service.action.Actions;
-import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
 import org.cxbox.core.util.session.SessionService;
 import org.demo.dto.cxbox.inner.DashboardFilterDTO;
 import org.demo.dto.cxbox.inner.DashboardFilterDTO_;
@@ -34,7 +33,7 @@ public class DashboardFilterService extends VersionAwareResponseService<Dashboar
 	private final DashboardFilterRepository dashboardFilterRepository;
 
 	@Getter
-	private final Class<? extends FieldMetaBuilder<DashboardFilterDTO>> fieldMetaBuilder = DashboardFilterMeta.class;
+	private final Class<DashboardFilterMeta> fieldMetaBuilder = DashboardFilterMeta.class;
 
 	@Override
 	public long count(BusinessComponent bc) {

@@ -23,7 +23,6 @@ import org.cxbox.core.file.service.CxboxFileService;
 import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
 import org.cxbox.core.service.action.ActionsBuilder;
-import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
 import org.cxbox.model.core.entity.BaseEntity_;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.inner.MeetingDocumentsDTO;
@@ -49,7 +48,7 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 	private final CxboxFileService cxboxFileService;
 
 	@Getter
-	private final Class<? extends FieldMetaBuilder<MeetingDocumentsDTO>> fieldMetaBuilder = MeetingDocumentsWriteMeta.class;
+	private final Class<MeetingDocumentsWriteMeta> fieldMetaBuilder = MeetingDocumentsWriteMeta.class;
 
 	@Override
 	protected Specification<MeetingDocuments> getParentSpecification(BusinessComponent bc) {

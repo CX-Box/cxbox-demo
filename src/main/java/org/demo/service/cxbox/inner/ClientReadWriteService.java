@@ -19,7 +19,6 @@ import org.cxbox.core.dto.rowmeta.PreAction;
 import org.cxbox.core.service.action.ActionAvailableChecker;
 import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
-import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
 import org.cxbox.core.util.session.SessionService;
 import org.demo.conf.cxbox.customization.icon.ActionIcon;
 import org.demo.conf.cxbox.extension.fulltextsearch.FullTextSearchExt;
@@ -53,7 +52,7 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 	private final SessionService sessionService;
 
 	@Getter
-	private final Class<? extends FieldMetaBuilder<ClientWriteDTO>> fieldMetaBuilder = ClientReadWriteMeta.class;
+	private final Class<ClientReadWriteMeta> fieldMetaBuilder = ClientReadWriteMeta.class;
 
 	@Override
 	protected Specification<Client> getSpecification(BusinessComponent bc) {

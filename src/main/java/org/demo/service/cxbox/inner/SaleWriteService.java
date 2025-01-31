@@ -11,7 +11,6 @@ import org.cxbox.core.dto.rowmeta.PostAction;
 import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
 import org.cxbox.core.service.action.CxboxActionIconSpecifier;
-import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.inner.SaleDTO;
 import org.demo.dto.cxbox.inner.SaleDTO_;
@@ -30,7 +29,7 @@ public class SaleWriteService extends VersionAwareResponseService<SaleDTO, Sale>
 	private final ClientRepository clientRepository;
 
 	@Getter
-	private final Class<? extends FieldMetaBuilder<SaleDTO>> fieldMetaBuilder = SaleWriteMeta.class;
+	private final Class<SaleWriteMeta> fieldMetaBuilder = SaleWriteMeta.class;
 
 	@Override
 	protected CreateResult<SaleDTO> doCreateEntity(Sale entity, BusinessComponent bc) {

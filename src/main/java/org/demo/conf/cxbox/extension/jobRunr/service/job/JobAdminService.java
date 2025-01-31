@@ -5,12 +5,10 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.AnySourceVersionAwareResponseService;
-import org.cxbox.core.dao.AnySourceBaseDAO;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.cxbox.core.dto.rowmeta.PostAction;
 import org.cxbox.core.service.action.Actions;
-import org.cxbox.core.service.rowmeta.AnySourceFieldMetaBuilder;
 import org.demo.conf.cxbox.extension.jobRunr.dto.JobAdminDTO;
 import org.demo.controller.CxboxRestController;
 import org.springframework.stereotype.Service;
@@ -22,10 +20,10 @@ public class JobAdminService extends AnySourceVersionAwareResponseService<JobAdm
 	private final JobAdminDao jobAdminDao;
 
 	@Getter
-	private final Class<? extends AnySourceFieldMetaBuilder<JobAdminDTO>> metaBuilder = JobAdminMeta.class;
+	private final Class<JobAdminMeta> fieldMetaBuilder = JobAdminMeta.class;
 
 	@Getter
-	private final Class<? extends AnySourceBaseDAO<JobAdminDTO>> anySourceBaseDAOClass = JobAdminDao.class;
+	private final Class<JobAdminDao> anySourceBaseDAOClass = JobAdminDao.class;
 
 	@Override
 	protected CreateResult<JobAdminDTO> doCreateEntity(JobAdminDTO entity, BusinessComponent bc) {

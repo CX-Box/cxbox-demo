@@ -11,7 +11,6 @@ import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
-import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
 import org.demo.dto.cxbox.inner.DashboardClientActivitiesDTO;
 import org.demo.entity.Client;
 import org.demo.entity.Client_;
@@ -31,7 +30,7 @@ public class DashboardClientActivitiesService extends
 	private final DashboardFilterRepository dashboardFilterRepository;
 
 	@Getter
-	private final Class<? extends FieldMetaBuilder<DashboardClientActivitiesDTO>> fieldMetaBuilder = DashboardClientActivitiesMeta.class;
+	private final Class<DashboardClientActivitiesMeta> fieldMetaBuilder = DashboardClientActivitiesMeta.class;
 
 	@Override
 	protected Specification<Client> getSpecification(BusinessComponent bc) {

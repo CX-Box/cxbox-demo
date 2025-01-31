@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.AnySourceVersionAwareResponseService;
-import org.cxbox.core.dao.AnySourceBaseDAO;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.cxbox.core.service.rowmeta.AnySourceFieldMetaBuilder;
@@ -16,9 +15,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class ClientStatsService extends AnySourceVersionAwareResponseService<ClientStatsDTO, ClientStatsDTO> {
 
-	private final Class<? extends AnySourceFieldMetaBuilder<ClientStatsDTO>> metaBuilder = ClientStatsMeta.class;
+	private final Class<ClientStatsMeta> fieldMetaBuilder = ClientStatsMeta.class;
 
-	private final Class<? extends AnySourceBaseDAO<ClientStatsDTO>> anySourceBaseDAOClass = ClientStatsDao.class;
+	private final Class<ClientStatsDao> anySourceBaseDAOClass = ClientStatsDao.class;
 
 	@Override
 	public Class<? extends AnySourceFieldMetaBuilder<ClientStatsDTO>> getAnySourceFieldMetaBuilder() {

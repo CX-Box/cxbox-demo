@@ -6,18 +6,17 @@ import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
-import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
 import org.demo.dto.cxbox.inner.ResponsibleDTO;
 import org.demo.entity.core.User;
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S3252", "java:S1186"})
 @Service
+@Getter
 @RequiredArgsConstructor
 public class ResponsiblePickListService extends VersionAwareResponseService<ResponsibleDTO, User> {
 
-	@Getter
-	private final Class<? extends FieldMetaBuilder<ResponsibleDTO>> fieldMetaBuilder = ResponsiblePickListMeta.class;
+	private final Class<ResponsiblePickListMeta> fieldMetaBuilder = ResponsiblePickListMeta.class;
 
 	@Override
 	protected CreateResult<ResponsibleDTO> doCreateEntity(User entity, BusinessComponent bc) {

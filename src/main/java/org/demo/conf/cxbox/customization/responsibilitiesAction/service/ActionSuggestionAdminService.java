@@ -4,10 +4,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.AnySourceVersionAwareResponseService;
-import org.cxbox.core.dao.AnySourceBaseDAO;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
-import org.cxbox.core.service.rowmeta.AnySourceFieldMetaBuilder;
 import org.demo.conf.cxbox.customization.responsibilitiesAction.dto.ActionSuggestionAdminDTO;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +15,9 @@ import org.springframework.stereotype.Service;
 public class ActionSuggestionAdminService extends
 		AnySourceVersionAwareResponseService<ActionSuggestionAdminDTO, ActionSuggestionAdminDTO> {
 
-	private final Class<? extends AnySourceFieldMetaBuilder<ActionSuggestionAdminDTO>> metaBuilder = ActionSuggestionAdminMeta.class;
+	private final Class<ActionSuggestionAdminMeta> fieldMetaBuilder = ActionSuggestionAdminMeta.class;
 
-	private final Class<? extends AnySourceBaseDAO<ActionSuggestionAdminDTO>> anySourceBaseDAOClass = ActionSuggestionAdminDao.class;
+	private final Class<ActionSuggestionAdminDao> anySourceBaseDAOClass = ActionSuggestionAdminDao.class;
 
 	@Override
 	protected CreateResult<ActionSuggestionAdminDTO> doCreateEntity(ActionSuggestionAdminDTO entity,

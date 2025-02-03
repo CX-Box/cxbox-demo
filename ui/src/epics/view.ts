@@ -1,15 +1,15 @@
 import { RootEpic } from '@store'
-import { catchError, concat, EMPTY, filter, mergeMap, Observable, of } from 'rxjs'
+import { catchError, concat, EMPTY, filter, mergeMap, of } from 'rxjs'
 import {
     OperationError,
     OperationErrorEntity,
     OperationPostInvokeAny,
+    OperationPostInvokeRefreshBc,
     OperationPostInvokeType,
     OperationPreInvoke,
     OperationTypeCrud,
     PendingValidationFailsFormat,
-    utils,
-    WidgetTypes
+    utils
 } from '@cxbox-ui/core'
 import { EMPTY_ARRAY } from '@constants'
 import { actions, setBcCount } from '@actions'
@@ -18,7 +18,6 @@ import { AxiosError } from 'axios'
 import { postOperationRoutine } from './utils/postOperationRoutine'
 import { AppWidgetGroupingHierarchyMeta } from '@interfaces/widget'
 import { getGroupingHierarchyWidget } from '@utils/groupingHierarchy'
-import { AnyAction, nanoid } from '@reduxjs/toolkit'
 import { DataItem } from '@cxbox-ui/schema'
 
 const bcFetchCountEpic: RootEpic = (action$, state$, { api }) =>
@@ -98,17 +97,23 @@ export const sendOperationEpic: RootEpic = (action$, state$, { api }) =>
                     const dataItem = response.record
                     // TODO: Remove in 2.0.0 in favor of postInvokeConfirm (is this todo needed?)
                     const preInvoke = response.preInvoke as OperationPreInvoke
+                    const postInvokeType = postInvoke?.type || ''
+                    const postInvokeRefreshCurrentBc =
+                        OperationPostInvokeType.refreshBC === postInvokeType && (postInvoke as OperationPostInvokeRefreshBc)?.bc === bcName
+                    const postInvokeTypesWithRefreshBc = (
+                        [OperationPostInvokeType.waitUntil, OperationPostInvokeType.drillDownAndWaitUntil] as string[]
+                    ).includes(postInvokeType)
+                    const withoutBcForceUpdate = postInvokeRefreshCurrentBc || postInvokeTypesWithRefreshBc
+
                     // defaultSaveOperation mean that executed custom autosave and postAction will be ignored
                     // drop pendingChanges and onSuccessAction execute instead
-                    const isRefreshCurrentBc = postInvoke?.type === OperationPostInvokeType.refreshBC
-                    const needBcForceUpdate = !isRefreshCurrentBc
                     return defaultSaveOperation
                         ? action?.payload?.onSuccessAction
                             ? concat(of(actions.bcCancelPendingChanges({ bcNames: [bcName] })), of(action.payload.onSuccessAction))
                             : EMPTY
                         : concat(
                               of(actions.sendOperationSuccess({ bcName, cursor: cursor as string, dataItem })),
-                              needBcForceUpdate ? of(actions.bcForceUpdate({ bcName })) : EMPTY,
+                              withoutBcForceUpdate ? EMPTY : of(actions.bcForceUpdate({ bcName })),
                               ...postOperationRoutine(widgetName, postInvoke, preInvoke, operationType, bcName)
                           )
                 }),

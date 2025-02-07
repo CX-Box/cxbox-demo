@@ -12,6 +12,7 @@ import {
 } from '@cxbox-ui/core'
 import { FileUploadFieldMeta as CoreFileUploadFieldMeta, WidgetField as CoreWidgetField } from '@cxbox-ui/schema'
 import { TableSettingsItem } from '@interfaces/tableSettings'
+import { IAggField, IAggLevel } from '@interfaces/groupingHierarchy'
 
 export enum CustomFieldTypes {
     MultipleSelect = 'multipleSelect',
@@ -129,6 +130,8 @@ export interface AppWidgetMeta extends WidgetMeta {
         groupingHierarchy?: {
             counterMode?: 'none' | 'always' | 'collapsed'
             fields: string[]
+            aggFields?: IAggField[]
+            aggLevels?: IAggLevel[]
         }
         read?: {
             widget: string

@@ -82,6 +82,7 @@
         "Opening drill-downs with non-ID-based filtering in a new tab is currently not supported. Please contact your administrator": "Opening drill-downs with non-ID-based filtering in a new tab is currently not supported. Please contact your administrator",
         "Please, wait": "Please, wait",
         "Operation in progress": "Operation in progress",
-        "Log out": "Log out"
+        "Log out": "Log out",
+        "Total": "Total"
     }
 }

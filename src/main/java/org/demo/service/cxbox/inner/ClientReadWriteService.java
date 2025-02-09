@@ -58,8 +58,7 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 	protected Specification<Client> getSpecification(BusinessComponent bc) {
 		var fullTextSearchFilterParam = FullTextSearchExt.getFullTextSearchFilterParam(bc);
 		var specification = super.getSpecification(bc);
-		return fullTextSearchFilterParam.map(e -> and(clientRepository.getFullTextSearchSpecification(e), specification))
-				.orElse(specification);
+		return fullTextSearchFilterParam.map(e -> and(clientRepository.getFullTextSearchSpecification(e), specification)).orElse(specification);
 	}
 
 	@Override
@@ -104,31 +103,29 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 		return Actions.<ClientWriteDTO>builder()
 				.save(sv -> sv)
 				.action(act -> act
-						.scope(ActionScope.RECORD)
-						.action("next", "Save and Continue")
-						.invoker((bc, dto) -> {
-							Client client = clientRepository.getById(bc.getIdAsLong());
-							ClientEditStep nextStep = ClientEditStep.getNextEditStep(client).get();
-							client.setEditStep(nextStep);
-							clientRepository.save(client);
+								.scope(ActionScope.RECORD)
+								.action("next", "Save and Continue")
+								.invoker((bc, dto) -> {
+									Client client = clientRepository.getById(bc.getIdAsLong());
+									ClientEditStep nextStep = ClientEditStep.getNextEditStep(client).get();
+									client.setEditStep(nextStep);
+									clientRepository.save(client);
 
-							BackgroundJob.<MailSendingService>schedule(
-									LocalDateTime.now().plusHours(5),
-									x -> x.stats("save pressed job")
-							);
+									BackgroundJob.<MailSendingService>schedule(
+											LocalDateTime.now().plusHours(5),
+											x -> x.stats("save pressed job")
+									);
 
-							return new ActionResultDTO<ClientWriteDTO>().setAction(
-									PostAction.drillDown(
-											DrillDownType.INNER,
-											nextStep.getEditView() + CxboxRestController.clientEdit + "/" + bc.getId()
-									));
-						})
-						.available(ActionAvailableChecker.and(
-								ActionAvailableChecker.NOT_NULL_ID, bc -> {
+									return new ActionResultDTO<ClientWriteDTO>().setAction(
+											PostAction.drillDown(
+													DrillDownType.INNER,
+													nextStep.getEditView() + CxboxRestController.clientEdit + "/" + bc.getId()
+											));
+								})
+								.available(ActionAvailableChecker.and(ActionAvailableChecker.NOT_NULL_ID, bc -> {
 									Client client = clientRepository.getById(bc.getIdAsLong());
 									return ClientEditStep.getNextEditStep(client).isPresent();
-								}
-						))
+								}))
 				)
 				.action(act -> act
 						.scope(ActionScope.RECORD)
@@ -144,12 +141,10 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 											"/screen/client"
 									));
 						})
-						.available(ActionAvailableChecker.and(
-								ActionAvailableChecker.NOT_NULL_ID, bc -> {
-									Client client = clientRepository.getById(bc.getIdAsLong());
-									return !ClientEditStep.getNextEditStep(client).isPresent();
-								}
-						))
+						.available(ActionAvailableChecker.and(ActionAvailableChecker.NOT_NULL_ID, bc -> {
+							Client client = clientRepository.getById(bc.getIdAsLong());
+							return !ClientEditStep.getNextEditStep(client).isPresent();
+						}))
 				)
 				.action(act -> act
 						.action("previous", "Back")
@@ -165,12 +160,10 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 											previousStep.getEditView() + CxboxRestController.clientEdit + "/" + bc.getId()
 									));
 						})
-						.available(ActionAvailableChecker.and(
-								ActionAvailableChecker.NOT_NULL_ID, bc -> {
-									Client client = clientRepository.getById(bc.getIdAsLong());
-									return ClientEditStep.getPreviousEditStep(client).isPresent();
-								}
-						))
+						.available(ActionAvailableChecker.and(ActionAvailableChecker.NOT_NULL_ID, bc -> {
+							Client client = clientRepository.getById(bc.getIdAsLong());
+							return ClientEditStep.getPreviousEditStep(client).isPresent();
+						}))
 				)
 				.cancelCreate(ccr -> ccr.text("Cancel").available(bc -> true))
 				.create(crt -> crt.text("Add"))
@@ -228,6 +221,7 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 				).withIcon(ActionIcon.MENU, false)
 				.build();
 	}
+
 
 
 }

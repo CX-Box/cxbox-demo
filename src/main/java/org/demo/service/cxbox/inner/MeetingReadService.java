@@ -48,10 +48,6 @@ public class MeetingReadService extends VersionAwareResponseService<MeetingDTO, 
 	@Getter
 	private final Class<MeetingReadMeta> fieldMetaBuilder = MeetingReadMeta.class;
 
-	public final Class<? extends FieldMetaBuilder<MeetingDTO>> getFieldMetaBuilder() {
-		return MeetingReadMeta.class;
-	}
-
 	@Override
 	protected CreateResult<MeetingDTO> doCreateEntity(Meeting entity, BusinessComponent bc) {
 		entity.setResponsible(userRepository.getReferenceById(sessionService.getSessionUser().getId()));

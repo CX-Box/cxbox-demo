@@ -24,8 +24,7 @@ import org.springframework.stereotype.Service;
 @SuppressWarnings({"java:S3252", "java:S1186"})
 @Service
 @RequiredArgsConstructor
-public class DashboardClientActivitiesService extends
-		VersionAwareResponseService<DashboardClientActivitiesDTO, Client> {
+public class DashboardClientActivitiesService extends VersionAwareResponseService<DashboardClientActivitiesDTO, Client> {
 
 	private final DashboardFilterRepository dashboardFilterRepository;
 
@@ -39,10 +38,8 @@ public class DashboardClientActivitiesService extends
 
 	private Specification<Client> getFilterSpecification(BusinessComponent bc) {
 		DashboardFilter dashboardFilter = dashboardFilterRepository.findOne(
-				(root, cq, cb) -> cb.equal(
-						root.get(
-								DashboardFilter_.userId), bc.getParentIdAsLong()
-				)
+				(root, cq, cb) -> cb.equal(root.get(
+						DashboardFilter_.userId), bc.getParentIdAsLong())
 		).orElse(null);
 		if (dashboardFilter == null) {
 			return (root, cq, cb) -> cb.and();
@@ -63,8 +60,7 @@ public class DashboardClientActivitiesService extends
 	}
 
 	@Override
-	protected ActionResultDTO<DashboardClientActivitiesDTO> doUpdateEntity(Client entity,
-			DashboardClientActivitiesDTO data,
+	protected ActionResultDTO<DashboardClientActivitiesDTO> doUpdateEntity(Client entity, DashboardClientActivitiesDTO data,
 			BusinessComponent bc) {
 		throw new UnsupportedOperationException();
 	}

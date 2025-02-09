@@ -69,8 +69,7 @@ public class ContactPickListService extends VersionAwareResponseService<ContactD
 			contactDTOActionResultDTO = super.deleteEntity(bc);
 			contactRepository.flush();
 		} catch (DataIntegrityViolationException e) {
-			throw new BusinessException(e).addPopup(
-					"You are trying to delete row, that is referenced from other place in system. Deletion is not available");
+			throw new BusinessException(e).addPopup("You are trying to delete row, that is referenced from other place in system. Deletion is not available");
 		}
 		return contactDTOActionResultDTO;
 	}

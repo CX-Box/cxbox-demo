@@ -43,5 +43,4 @@ public class JobStatsService extends AnySourceVersionAwareResponseService<JobSta
 				)
 				.build();
 	}
-
 }

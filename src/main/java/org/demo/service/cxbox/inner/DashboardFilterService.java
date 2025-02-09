@@ -26,7 +26,8 @@ import org.springframework.stereotype.Service;
 @SuppressWarnings({"java:S3252", "java:S1186", "java:S6813"})
 @Service
 @RequiredArgsConstructor
-public class DashboardFilterService extends VersionAwareResponseService<DashboardFilterDTO, User> {
+public class
+DashboardFilterService extends VersionAwareResponseService<DashboardFilterDTO, User> {
 
 	private final SessionService sessionService;
 

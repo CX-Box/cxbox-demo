@@ -12,8 +12,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Getter
 @Service
-public class SaleProgressStatsService extends
-		AnySourceVersionAwareResponseService<SalesProgressStatsDTO, SalesProgressStatsDTO> {
+public class SaleProgressStatsService extends AnySourceVersionAwareResponseService<SalesProgressStatsDTO, SalesProgressStatsDTO> {
 
 	private final Class<SaleProgressStatsMeta> fieldMetaBuilder = SaleProgressStatsMeta.class;
 

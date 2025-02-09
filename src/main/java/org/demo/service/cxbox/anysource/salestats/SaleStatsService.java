@@ -12,8 +12,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Getter
 @Service
-public class SaleStatsService extends
-		AnySourceVersionAwareResponseService<DashboardSalesFunnelDTO, DashboardSalesFunnelDTO> {
+public class SaleStatsService extends AnySourceVersionAwareResponseService<DashboardSalesFunnelDTO, DashboardSalesFunnelDTO> {
 
 	private final Class<SaleStatsMeta> fieldMetaBuilder = SaleStatsMeta.class;
 
@@ -25,8 +24,7 @@ public class SaleStatsService extends
 	}
 
 	@Override
-	protected ActionResultDTO<DashboardSalesFunnelDTO> doUpdateEntity(DashboardSalesFunnelDTO entity,
-			DashboardSalesFunnelDTO data, BusinessComponent bc) {
+	protected ActionResultDTO<DashboardSalesFunnelDTO> doUpdateEntity(DashboardSalesFunnelDTO entity, DashboardSalesFunnelDTO data, BusinessComponent bc) {
 		throw new IllegalStateException();
 	}
 

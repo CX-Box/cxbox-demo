@@ -10,25 +10,22 @@ import org.demo.conf.cxbox.customization.responsibilitiesAction.dto.ActionSugges
 import org.springframework.stereotype.Service;
 
 @Getter
-@Service
 @RequiredArgsConstructor
-public class ActionSuggestionAdminService extends
-		AnySourceVersionAwareResponseService<ActionSuggestionAdminDTO, ActionSuggestionAdminDTO> {
+@Service
+public class ActionSuggestionAdminService extends AnySourceVersionAwareResponseService<ActionSuggestionAdminDTO, ActionSuggestionAdminDTO> {
 
 	private final Class<ActionSuggestionAdminMeta> fieldMetaBuilder = ActionSuggestionAdminMeta.class;
 
 	private final Class<ActionSuggestionAdminDao> anySourceBaseDAOClass = ActionSuggestionAdminDao.class;
 
 	@Override
-	protected CreateResult<ActionSuggestionAdminDTO> doCreateEntity(ActionSuggestionAdminDTO entity,
-			BusinessComponent bc) {
+	protected CreateResult<ActionSuggestionAdminDTO> doCreateEntity(ActionSuggestionAdminDTO entity, BusinessComponent bc) {
 
 		throw new IllegalStateException();
 	}
 
 	@Override
-	protected ActionResultDTO<ActionSuggestionAdminDTO> doUpdateEntity(ActionSuggestionAdminDTO entity,
-			ActionSuggestionAdminDTO data, BusinessComponent bc) {
+	protected ActionResultDTO<ActionSuggestionAdminDTO> doUpdateEntity(ActionSuggestionAdminDTO entity, ActionSuggestionAdminDTO data, BusinessComponent bc) {
 		throw new IllegalStateException();
 	}
 

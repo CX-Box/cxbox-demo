@@ -24,8 +24,7 @@ public class CompanyService extends AnySourceVersionAwareResponseService<Company
 	}
 
 	@Override
-	protected ActionResultDTO<CompanySuggestionDTO> doUpdateEntity(CompanySuggestionDTO entity, CompanySuggestionDTO data,
-			BusinessComponent bc) {
+	protected ActionResultDTO<CompanySuggestionDTO> doUpdateEntity(CompanySuggestionDTO entity, CompanySuggestionDTO data, BusinessComponent bc) {
 		throw new IllegalStateException();
 	}
 

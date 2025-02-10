@@ -6,7 +6,7 @@ import { TemplatedTitle } from '@cxboxComponents'
 import ColumnFilter from './ColumnFilter'
 import Button from '../ui/Button/Button'
 import { useAppSelector } from '@store'
-import { rightAlignedFields } from '@constants/field'
+import { numberFieldTypes } from '@constants/field'
 import { interfaces } from '@cxbox-ui/core'
 import { EFeatureSettingKey } from '@interfaces/session'
 import { CustomFieldTypes } from '@interfaces/widget'
@@ -63,7 +63,7 @@ const ColumnTitle = ({ widgetName, widgetMeta, rowMeta, onClose, showCloseButton
         return (
             <div
                 className={cn({
-                    [styles.rightAlignment]: rightAlignedFields.includes(widgetMeta.type)
+                    [styles.rightAlignment]: numberFieldTypes.includes(widgetMeta.type)
                 })}
             >
                 {title}
@@ -78,7 +78,7 @@ const ColumnTitle = ({ widgetName, widgetMeta, rowMeta, onClose, showCloseButton
     const filter = rowMeta.filterable && <ColumnFilter widgetName={widgetName} widgetMeta={widgetMeta} rowMeta={rowMeta} />
 
     return (
-        <div className={cn(styles.container, { [styles.rightAlignment]: rightAlignedFields.includes(widgetMeta.type) })}>
+        <div className={cn(styles.container, { [styles.rightAlignment]: numberFieldTypes.includes(widgetMeta.type) })}>
             {title}
             {filter}
             {sort}

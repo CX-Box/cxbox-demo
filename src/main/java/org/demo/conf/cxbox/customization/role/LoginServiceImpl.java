@@ -35,6 +35,7 @@ import org.cxbox.core.util.session.SessionService;
 import org.cxbox.meta.metahotreload.conf.properties.MetaConfigurationProperties;
 import org.demo.entity.core.User;
 import org.demo.repository.core.UserRepository;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -63,6 +64,8 @@ public class LoginServiceImpl implements LoginService {
 
 	private final UIProperties uiProperties;
 
+	private final ApplicationEventPublisher eventPublisher;
+
 	/**
 	 * Build info for active session user for specific role
 	 *
@@ -72,38 +75,46 @@ public class LoginServiceImpl implements LoginService {
 	@Override
 	@SneakyThrows
 	public LoggedUser getLoggedUser(@Nullable String role) {
-		IUser<Long> user = sessionService.getSessionUser();
-		if (role != null) {
-			setSessionUserInternalRole(Set.of(role));
-		} else if (uiProperties.isMultiRoleEnabled()) {
-			setSessionUserInternalRole(userRoleService.getUserRoles(userRepository.getReferenceById(user.getId()))
-					.stream()
-					.map(SimpleDictionary::getKey)
-					.collect(Collectors.toSet()));
-		} else {
-			setSessionUserInternalRole(Set.of());
+		LoggedUser result = null;
+		Exception exception = null;
+		try {
+			IUser<Long> user = sessionService.getSessionUser();
+			if (role != null) {
+				setSessionUserInternalRole(Set.of(role));
+			} else if (uiProperties.isMultiRoleEnabled()) {
+				setSessionUserInternalRole(userRoleService.getUserRoles(userRepository.getReferenceById(user.getId()))
+						.stream()
+						.map(SimpleDictionary::getKey)
+						.collect(Collectors.toSet()));
+			} else {
+				setSessionUserInternalRole(Set.of());
+			}
+
+			User userEntity = userRepository.findById(user.getId()).orElseThrow();
+			var activeUserRole = sessionService.getSessionUserRoles();
+			result = LoggedUser.builder()
+					.sessionId(sessionService.getSessionId())
+					.userId(userEntity.getId())
+					.activeRole(activeUserRole.size() == 1 ? activeUserRole.stream().findFirst().orElse(null) : null)
+					.roles(userRoleService.getUserRoles(userEntity))
+					.screens(screenResponsibilityService.getScreens(user, activeUserRole))
+					.userSettingsVersion(null)
+					.lastName(userEntity.getLastName())
+					.firstName(userEntity.getFirstName())
+					.fullName(userEntity.getFullName())
+					.featureSettings(this.getFeatureSettings())
+					.systemUrl(uiProperties.getSystemUrl())
+					.language(LocaleContextHolder.getLocale().getLanguage())
+					.timezone(LocaleContextHolder.getTimeZone().getID())
+					.devPanelEnabled(metaConfigurationProperties.isDevPanelEnabled())
+					.build();
+			return result;
+		} catch (Exception ex) {
+			exception = ex;
+			throw ex;
+		} finally {
+			eventPublisher.publishEvent(new LoginEvent<>(this, result, exception));
 		}
-
-		User userEntity = userRepository.findById(user.getId()).orElseThrow();
-		var activeUserRole = sessionService.getSessionUserRoles();
-
-		return LoggedUser.builder()
-				.sessionId(sessionService.getSessionId())
-				.userId(userEntity.getId())
-				.activeRole(activeUserRole.size() == 1 ? activeUserRole.stream().findFirst().orElse(null) : null)
-				.roles(userRoleService.getUserRoles(userEntity))
-				.screens(screenResponsibilityService.getScreens(user, activeUserRole))
-				.userSettingsVersion(null)
-				.lastName(userEntity.getLastName())
-				.firstName(userEntity.getFirstName())
-				.fullName(userEntity.getFullName())
-				.featureSettings(this.getFeatureSettings())
-				.systemUrl(uiProperties.getSystemUrl())
-				.language(LocaleContextHolder.getLocale().getLanguage())
-				.timezone(LocaleContextHolder.getTimeZone().getID())
-				.devPanelEnabled(metaConfigurationProperties.isDevPanelEnabled())
-				.build();
-
 	}
 
 	public void setSessionUserInternalRole(Set<String> roles) {

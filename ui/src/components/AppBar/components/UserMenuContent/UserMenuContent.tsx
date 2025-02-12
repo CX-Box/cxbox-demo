@@ -7,6 +7,7 @@ import Button from '../../../ui/Button/Button'
 import { actions, interfaces } from '@cxbox-ui/core'
 import { EFeatureSettingKey } from '@interfaces/session'
 import styles from './UserMenuContent.less'
+import { useTranslation } from 'react-i18next'
 
 export const UserMenuContent: React.FC = () => {
     const { firstName, lastName, login, activeRole, roles, multiroleEnabled } = useAppSelector(state => {
@@ -28,6 +29,7 @@ export const UserMenuContent: React.FC = () => {
     const handleLogout = React.useCallback(() => dispatch(actions.logout(null)), [dispatch])
     const fullName = `${lastName} ${firstName}`
     const sortedRoles = React.useMemo(() => [...(roles || [])]?.sort(roleComparator), [roles])
+    const { t } = useTranslation()
 
     return (
         <div className={cn(styles.root, { [styles.multirole]: multiroleEnabled })} data-test-menu-user={true}>
@@ -62,7 +64,7 @@ export const UserMenuContent: React.FC = () => {
             </div>
             <Divider className={styles.divider} />
             <Button className={cn(styles.signOut)} data-test-menu-user-logout={true} type="default" onClick={handleLogout} icon="logout">
-                Log out
+                {t('Log out')}
             </Button>
         </div>
     )

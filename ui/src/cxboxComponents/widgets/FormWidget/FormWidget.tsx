@@ -13,7 +13,7 @@ import styles from './FormWidget.less'
 const { FieldType, PendingValidationFailsFormat } = interfaces
 
 interface FormWidgetOwnProps {
-    meta: interfaces.WidgetFormMeta
+    meta: Omit<interfaces.WidgetFormMeta, 'type'>
 }
 
 interface FormWidgetProps extends FormWidgetOwnProps {
@@ -73,7 +73,7 @@ export const FormWidget: FunctionComponent<FormWidgetProps> = ({ meta, fields, m
                                                     cursor={cursor}
                                                     widgetName={name}
                                                     widgetFieldMeta={field as interfaces.WidgetField}
-                                                    disableHoverError={meta.options?.disableHoverError}
+                                                    disableHoverError={true}
                                                 />
                                             </Form.Item>
                                         </Col>

@@ -11,7 +11,7 @@ import org.demo.entity.Client;
 import org.springframework.stereotype.Service;
 
 @Getter
-@SuppressWarnings({"java:S3252", "java:S1186"})
+@SuppressWarnings({"java:S3252", "java:S1186", "java:S1170"})
 @Service
 @RequiredArgsConstructor
 public class ClientPickListService extends VersionAwareResponseService<ClientReadDTO, Client> {

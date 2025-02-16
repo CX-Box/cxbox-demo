@@ -27,6 +27,7 @@ import org.demo.dto.cxbox.anysource.LovDTO;
 import org.demo.microservice.dto.DictDTO;
 import org.springframework.stereotype.Service;
 
+@SuppressWarnings({"java:S1170", "java:S2387"})
 @RequiredArgsConstructor
 @Getter
 @Service

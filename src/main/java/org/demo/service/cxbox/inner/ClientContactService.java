@@ -26,7 +26,7 @@ import org.demo.repository.ContactRepository;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-@SuppressWarnings({"java:S3252", "java:S1186"})
+@SuppressWarnings({"java:S3252", "java:S1186", "java:S1170"})
 @Service
 @RequiredArgsConstructor
 public class ClientContactService extends VersionAwareResponseService<ContactDTO, Contact> {

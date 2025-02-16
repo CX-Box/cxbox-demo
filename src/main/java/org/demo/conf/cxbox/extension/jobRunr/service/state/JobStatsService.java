@@ -12,6 +12,7 @@ import org.demo.conf.cxbox.extension.jobRunr.dto.JobStatsDTO;
 import org.demo.controller.CxboxRestController;
 import org.springframework.stereotype.Service;
 
+@SuppressWarnings({"java:S1170", "java:S2387"})
 @Getter
 @RequiredArgsConstructor
 @Service

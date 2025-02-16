@@ -13,6 +13,7 @@ import org.demo.conf.cxbox.extension.jobRunr.dto.JobAdminDTO;
 import org.demo.controller.CxboxRestController;
 import org.springframework.stereotype.Service;
 
+@SuppressWarnings({"java:S1170", "java:S2387"})
 @RequiredArgsConstructor
 @Service
 public class JobAdminService extends AnySourceVersionAwareResponseService<JobAdminDTO, JobAdminDTO> {

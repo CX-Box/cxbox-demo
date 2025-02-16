@@ -10,6 +10,7 @@ import org.demo.dto.cxbox.inner.ContactMultivalueDTO;
 import org.demo.entity.Contact;
 import org.springframework.stereotype.Service;
 
+@SuppressWarnings("java:S1170")
 @Getter
 @Service
 @RequiredArgsConstructor

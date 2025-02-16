@@ -10,7 +10,7 @@ import org.demo.dto.cxbox.inner.ResponsibleDTO;
 import org.demo.entity.core.User;
 import org.springframework.stereotype.Service;
 
-@SuppressWarnings({"java:S3252","java:S1186"})
+@SuppressWarnings({"java:S3252","java:S1186", "java:S1170"})
 @Service
 @Getter
 @RequiredArgsConstructor

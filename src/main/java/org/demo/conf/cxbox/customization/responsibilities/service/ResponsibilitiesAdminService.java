@@ -1,6 +1,6 @@
 package org.demo.conf.cxbox.customization.responsibilities.service;
 
-import static org.demo.conf.cxbox.customization.responsibilities.dto.ResponsibilitiesAdminDTO_.*;
+import static org.demo.conf.cxbox.customization.responsibilities.dto.ResponsibilitiesAdminDTO_.viewWidgets;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -9,52 +9,46 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.cxbox.core.controller.param.FilterParameter;
 import org.cxbox.core.controller.param.QueryParameters;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
-
 import org.cxbox.core.dto.multivalue.MultivalueField;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
-
 import org.cxbox.core.dto.rowmeta.PostAction;
 import org.cxbox.core.file.dto.FileDownloadDto;
 import org.cxbox.core.file.service.CxboxFileService;
 import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
 import org.cxbox.meta.entity.Responsibilities;
-
 import org.cxbox.meta.entity.Responsibilities.ResponsibilityType;
 import org.cxbox.meta.entity.Responsibilities_;
 import org.cxbox.model.core.dao.JpaDao;
-import org.demo.conf.cxbox.customization.responsibilities.dto.ResponsibilitiesAdminDTO;
 import org.demo.conf.cxbox.customization.metaAdmin.MetaAdminServiceExt;
-
+import org.demo.conf.cxbox.customization.responsibilities.dto.ResponsibilitiesAdminDTO;
 import org.demo.conf.cxbox.customization.responsibilities.dto.ResponsibilitiesAdminDTO_;
 import org.demo.util.CSVUtils;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-@SuppressWarnings({"java:S3252", "java:S1186", "java:S6813"})
+@SuppressWarnings({"java:S3252", "java:S1186", "java:S6813", "java:S1170"})
 @Service
+@RequiredArgsConstructor
 public class ResponsibilitiesAdminService extends VersionAwareResponseService<ResponsibilitiesAdminDTO, Responsibilities> {
 
-	@Autowired
-	private MetaAdminServiceExt metaAdminServiceExt;
+	private final MetaAdminServiceExt metaAdminServiceExt;
 
-	@Autowired
-	private JpaDao jpaDao;
+	private final JpaDao jpaDao;
 
-	@Autowired
-	private CxboxFileService cxboxFileService;
+	private final CxboxFileService cxboxFileService;
 
-	public ResponsibilitiesAdminService() {
-		super(ResponsibilitiesAdminDTO.class, Responsibilities.class, null, ResponsibilitiesAdminMeta.class);
-	}
+	@Getter
+	private final Class<ResponsibilitiesAdminMeta> fieldMetaBuilder = ResponsibilitiesAdminMeta.class;
 
 	@Override
 	public Specification<Responsibilities> getSpecification(BusinessComponent bc) {

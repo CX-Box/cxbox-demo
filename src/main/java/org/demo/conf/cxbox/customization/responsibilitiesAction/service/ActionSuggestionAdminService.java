@@ -9,6 +9,7 @@ import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.demo.conf.cxbox.customization.responsibilitiesAction.dto.ActionSuggestionAdminDTO;
 import org.springframework.stereotype.Service;
 
+@SuppressWarnings({"java:S1170", "java:S2387"})
 @Getter
 @RequiredArgsConstructor
 @Service

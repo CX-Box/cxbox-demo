@@ -27,7 +27,7 @@ import org.demo.service.statemodel.MeetingStatusModelActionProvider;
 import org.jobrunr.scheduling.BackgroundJob;
 import org.springframework.stereotype.Service;
 
-@SuppressWarnings({"java:S3252", "java:S1186"})
+@SuppressWarnings({"java:S3252", "java:S1186", "java:S1170"})
 @Service
 @RequiredArgsConstructor
 public class MeetingReadService extends VersionAwareResponseService<MeetingDTO, Meeting> {

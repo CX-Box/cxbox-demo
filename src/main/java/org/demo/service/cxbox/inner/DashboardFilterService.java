@@ -23,7 +23,7 @@ import org.demo.repository.DashboardFilterRepository;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-@SuppressWarnings({"java:S3252", "java:S1186", "java:S6813"})
+@SuppressWarnings({"java:S3252", "java:S1186", "java:S6813", "java:S1170"})
 @Service
 @RequiredArgsConstructor
 public class

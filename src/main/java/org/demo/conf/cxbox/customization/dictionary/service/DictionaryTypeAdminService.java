@@ -1,30 +1,29 @@
 package org.demo.conf.cxbox.customization.dictionary.service;
 
-import static org.demo.conf.cxbox.customization.dictionary.dto.DictionaryTypeAdminDTO_.*;
+import static org.demo.conf.cxbox.customization.dictionary.dto.DictionaryTypeAdminDTO_.type;
 
 import lombok.Getter;
-import org.cxbox.core.service.action.Actions;
-import org.cxbox.model.core.dao.JpaDao;
-import org.cxbox.model.dictionary.entity.DictionaryTypeDesc;
-import org.demo.conf.cxbox.customization.dictionary.dto.DictionaryTypeAdminDTO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
+import org.cxbox.core.service.action.Actions;
+import org.cxbox.model.core.dao.JpaDao;
+import org.cxbox.model.dictionary.entity.DictionaryTypeDesc;
+import org.demo.conf.cxbox.customization.dictionary.dto.DictionaryTypeAdminDTO;
+import org.springframework.stereotype.Service;
 
 @Getter
 @Service
-@SuppressWarnings({"java:S6813"})
+@RequiredArgsConstructor
+@SuppressWarnings({"java:S6813", "java:S1170"})
 public class DictionaryTypeAdminService extends VersionAwareResponseService<DictionaryTypeAdminDTO, DictionaryTypeDesc> {
 
-	@Autowired
-	private JpaDao jpaDao;
+	private final JpaDao jpaDao;
 
-	public DictionaryTypeAdminService() {
-		super(DictionaryTypeAdminDTO.class, DictionaryTypeDesc.class, null, DictionaryTypeAdminMeta.class);
-	}
+	@Getter
+	private final Class<DictionaryTypeAdminMeta> fieldMetaBuilder = DictionaryTypeAdminMeta.class;
 
 	@Override
 	protected CreateResult<DictionaryTypeAdminDTO> doCreateEntity(DictionaryTypeDesc entity, BusinessComponent bc) {

@@ -39,7 +39,9 @@ public class ExtendedFieldExtractor extends BaseFieldExtractor {
 				"FormPopup",
 				"GroupingHierarchy",
 				"Pie1D",
-				"Column2D"
+				"Column2D",
+				"Line2D",
+				"DualAxes2D"
 		);
 	}
 

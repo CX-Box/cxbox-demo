@@ -1,7 +1,6 @@
 import { BcMeta, BcSorter, utils } from '@cxbox-ui/core'
 import { AppWidgetMeta } from '@interfaces/widget'
 import { WidgetFieldBase } from '@cxbox-ui/schema'
-import { SessionScreen } from '@interfaces/session'
 
 /**
  * String representation of default bc sorters
@@ -12,7 +11,7 @@ import { SessionScreen } from '@interfaces/session'
  * @param widget
  * @param bc
  */
-const createDefaultSort = (widget: AppWidgetMeta, bc: BcMeta) => {
+export const createDefaultSort = (widget: AppWidgetMeta, bc: BcMeta) => {
     const groupingHierarchyOption = widget.options?.groupingHierarchy
 
     if (groupingHierarchyOption?.fields.length) {
@@ -46,35 +45,6 @@ const createDefaultSort = (widget: AppWidgetMeta, bc: BcMeta) => {
     }
 
     return bc.defaultSort
-}
-
-export const addSortForGroupHierarchiesMutate = (screens: SessionScreen[]) => {
-    screens.forEach(newScreen => {
-        const dictionary: { [bcName: string]: { widget?: AppWidgetMeta; bc?: BcMeta } | undefined } = {}
-
-        newScreen?.meta?.views?.forEach(view => {
-            view.widgets.forEach(widget => {
-                const dictionaryItem = dictionary[widget.bcName]
-
-                if (!dictionaryItem && widget.options?.groupingHierarchy?.fields?.length) {
-                    dictionary[widget.bcName] = { widget }
-                }
-            })
-        })
-
-        Object.keys(dictionary).forEach(bcNameWithGrouping => {
-            const screenBcList = newScreen?.meta?.bo.bc
-            const bcIndexWithGrouping = screenBcList?.findIndex(bc => bc.name === bcNameWithGrouping)
-            const bcWithGrouping = screenBcList && typeof bcIndexWithGrouping === 'number' ? screenBcList[bcIndexWithGrouping] : undefined
-            const widgetWithGrouping = dictionary[bcNameWithGrouping]?.widget
-
-            if (bcWithGrouping && screenBcList && widgetWithGrouping) {
-                bcWithGrouping.defaultSort = createDefaultSort(widgetWithGrouping, bcWithGrouping) ?? bcWithGrouping.defaultSort
-            }
-        })
-    })
-
-    return screens
 }
 
 export const getGroupingHierarchyWidget = <T extends AppWidgetMeta>(widgets: T[], bcName: string) =>

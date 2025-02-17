@@ -12,6 +12,7 @@ import { buildBcUrl } from '@utils/buildBcUrl'
 import { WidgetFormMeta, FieldType } from '@cxbox-ui/core'
 import { ControlColumn, CustomDataItem } from '@components/widgets/Table/Table.interfaces'
 import { RowSelectionType } from 'antd/es/table'
+import { getRowSelectionOffset } from '@components/widgets/Table/utils/rowSelection'
 
 type WidgetMetaField = { type: string; hidden?: boolean }
 
@@ -75,8 +76,6 @@ Fallback behavior: options.edit.style = "none" has higher priority than option.e
 function isExpandColumn<T>(item: ControlColumn<T>) {
     return item.column.key === EXPAND_ICON_COLUMN.key
 }
-
-const ROW_SELECTION_TYPES: RowSelectionType[] = ['checkbox', 'radio']
 
 export function useExpandableForm<R extends CustomDataItem>(currentWidgetMeta: AppWidgetMeta) {
     const { internalWidget, internalWidgetOperations, internalWidgetActiveCursor, isCreateStyle, isEditStyle } =
@@ -165,7 +164,7 @@ export function useExpandableForm<R extends CustomDataItem>(currentWidgetMeta: A
 
         const widgetFields = currentWidgetMeta.fields as WidgetMetaField[]
         const visibleWidgetFields = externalVisibleFields ?? widgetFields?.filter(item => item.type !== FieldType.hidden && !item.hidden)
-        const rowSelectionCount = ROW_SELECTION_TYPES.includes(rowSelectionType as RowSelectionType) ? 1 : 0
+        const rowSelectionCount = getRowSelectionOffset(rowSelectionType)
 
         return leftControlColumns.length + visibleWidgetFields?.length + rightControlColumns.findIndex(isExpandColumn) + rowSelectionCount
     }

@@ -103,8 +103,40 @@ function Table<T extends CustomDataItem>({
     const { onExpand, expandable, expandIcon, expandIconColumn, getExpandIconColumnIndex, expandedRowRender, expandedRowId } =
         useExpandableForm<T>(meta)
 
+    const controlColumns = useMemo(() => {
+        const resultColumns: Array<ControlColumn<T>> = []
+
+        if (meta.options?.primary?.enabled && primaryColumn) {
+            resultColumns.push(primaryColumn as any)
+        }
+
+        if (expandIconColumn) {
+            resultColumns.push({
+                column: !isGroupingHierarchy
+                    ? expandIconColumn
+                    : {
+                          ...expandIconColumn,
+                          title: renderTopButton
+                      },
+                position: 'right'
+            })
+        }
+
+        if (isGroupingHierarchy && !expandIconColumn) {
+            resultColumns.push({
+                column: {
+                    width: '62px',
+                    title: renderTopButton
+                },
+                position: 'right'
+            })
+        }
+
+        return [...resultColumns]
+    }, [expandIconColumn, isGroupingHierarchy, meta.options?.primary?.enabled, primaryColumn, renderTopButton])
+
     const { showColumnSettings, allFields, resultedFields, currentAdditionalFields, changeOrder, changeColumnsVisibility, resetSetting } =
-        useTableSetting(meta.name, sortedFieldsByGroupKeys, meta.options, sortedGroupKeys)
+        useTableSetting(meta.name, sortedFieldsByGroupKeys, meta.options, sortedGroupKeys, rest.rowSelection?.type, controlColumns)
 
     const processedTransferFields = useMemo(() => {
         const transferFields: (WidgetListField & { disabled?: boolean })[] = [...allFields]
@@ -286,38 +318,6 @@ function Table<T extends CustomDataItem>({
     const dataSource = useMemo(() => {
         return enabledGrouping ? (tree as T[]) : bcData
     }, [enabledGrouping, tree, bcData])
-
-    const controlColumns = useMemo(() => {
-        const resultColumns: Array<ControlColumn<T>> = []
-
-        if (meta.options?.primary?.enabled && primaryColumn) {
-            resultColumns.push(primaryColumn as any)
-        }
-
-        if (expandIconColumn) {
-            resultColumns.push({
-                column: !isGroupingHierarchy
-                    ? expandIconColumn
-                    : {
-                          ...expandIconColumn,
-                          title: renderTopButton
-                      },
-                position: 'right'
-            })
-        }
-
-        if (isGroupingHierarchy && !expandIconColumn) {
-            resultColumns.push({
-                column: {
-                    width: '62px',
-                    title: renderTopButton
-                },
-                position: 'right'
-            })
-        }
-
-        return [...resultColumns]
-    }, [expandIconColumn, isGroupingHierarchy, meta.options?.primary?.enabled, primaryColumn, renderTopButton])
 
     const resultExpandIcon = useCallback(
         (expandIconProps: ExpandIconProps<T>) => {

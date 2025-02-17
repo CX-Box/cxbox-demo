@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.cxbox.core.dto.DrillDownType;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.PostAction;
 import org.cxbox.core.dto.rowmeta.PreAction;
@@ -15,6 +14,7 @@ import org.cxbox.core.service.action.ActionsBuilder;
 import org.cxbox.core.util.session.SessionService;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.inner.MeetingDTO;
+import org.demo.dto.cxbox.inner.MeetingDTO_;
 import org.demo.entity.Meeting;
 import org.demo.entity.enums.MeetingStatus;
 import org.demo.repository.MeetingRepository;
@@ -53,12 +53,15 @@ public class MeetingStatusModelActionProvider {
 							}
 
 							if (meeting.getStatus().equals(MeetingStatus.IN_COMPLETION)) {
-								return new ActionResultDTO<MeetingDTO>().setAction(PostAction.drillDown(
-										DrillDownType.INNER,
+								return new ActionResultDTO<MeetingDTO>().setAction(PostAction.drillDownAndWaitUntil(
 										"/screen/meeting/view/meetingedit/"
 												+ CxboxRestController.meetingEdit + "/"
-												+ meeting.getId()
-								));
+												+ meeting.getId(),
+										CxboxRestController.meetingEdit, MeetingDTO_.status, MeetingStatus.IN_COMPLETION)
+										.successMessage("status changed to IN_COMPLETION successfully")
+										.timeoutMessage("status was not changed to IN_COMPLETION till timeout. Refresh screen manually")
+										.build()
+								);
 							}
 							return new ActionResultDTO<MeetingDTO>().setAction(PostAction.refreshBc(bc.getDescription()));
 						})

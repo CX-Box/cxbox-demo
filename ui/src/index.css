@@ -23,3 +23,8 @@ body {
 .ant-notification {
     z-index: 1060 !important;
 }
+
+.ant-select-dropdown, .ant-dropdown, .ant-message {
+    /* for correct display of selectors in popup */
+    z-index: 1058 !important;
+}

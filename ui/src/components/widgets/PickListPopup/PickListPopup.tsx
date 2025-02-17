@@ -38,11 +38,12 @@ function PickListPopup({ meta }: PickListPopupProps) {
 
     const dispatch = useDispatch()
 
-    const onClose = () => {
+    const onClose = React.useCallback(() => {
         dispatch?.(actions.closeViewPopup(null))
         dispatch?.(actions.viewClearPickMap(null))
         dispatch?.(actions.bcRemoveAllFilters({ bcName: bcName }))
-    }
+        dispatch?.(actions.bcCancelPendingChanges({ bcNames: [bcName] }))
+    }, [bcName, dispatch])
 
     const onRow = React.useCallback(
         (rowData: DataItem): TableEventListeners => {
@@ -59,15 +60,13 @@ function PickListPopup({ meta }: PickListPopupProps) {
                         dispatch?.(
                             actions.changeDataItem({ bcName: parentBCName, cursor, dataItem, bcUrl: buildBcUrl(parentBCName, true) })
                         )
-                        dispatch(actions.closeViewPopup(null))
-                        dispatch(actions.viewClearPickMap(null))
-                        dispatch(actions.bcRemoveAllFilters({ bcName }))
                         dispatch(actions.deselectTableRow())
+                        onClose()
                     }
                 }
             }
         },
-        [selectedRowId, cursor, pickMap, dispatch, parentBCName, bcName]
+        [selectedRowId, cursor, pickMap, dispatch, parentBCName, onClose]
     )
 
     if (showAssocFilter) {

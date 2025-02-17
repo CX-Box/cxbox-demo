@@ -51,9 +51,8 @@ export function FormPopup(props: FormPopupProps) {
                     confirm: 'ok'
                 })
             )
-            dispatch(actions.closeViewPopup({ bcName }))
         }
-    }, [bcLoading, popupData?.options?.operation, dispatch, bcName])
+    }, [bcLoading, popupData?.options?.operation, dispatch])
 
     const popupTitle = (
         <WidgetTitle className={styles.title} level={1} widgetName={props.meta.name} text={preInvoke?.message ?? props.meta.title} />
@@ -61,9 +60,9 @@ export function FormPopup(props: FormPopupProps) {
 
     useEffect(() => {
         if (forceUpdateSetting && showed) {
-            dispatch(actions.bcForceUpdate({ bcName }))
+            dispatch(actions.bcFetchRowMeta({ widgetName, bcName }))
         }
-    }, [bcName, dispatch, showed])
+    }, [bcName, dispatch, showed, widgetName])
 
     return (
         <div ref={formPopupRef}>
@@ -88,12 +87,7 @@ export function FormPopup(props: FormPopupProps) {
                         </div>
                     ) : (
                         <div className={styles.formPopupModal}>
-                            <Form
-                                meta={{
-                                    ...props.meta,
-                                    type: interfaces.WidgetTypes.Form
-                                }}
-                            />
+                            <Form meta={props.meta} />
                         </div>
                     )}
                 </Popup>

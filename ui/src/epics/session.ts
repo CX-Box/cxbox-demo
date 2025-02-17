@@ -2,9 +2,9 @@ import { loginDone, SSO_AUTH } from '@actions'
 import { AxiosError } from 'axios'
 import { keycloak, keycloakOptions } from '../keycloak'
 import { catchError, concat, EMPTY, filter, from, mergeMap, of, switchMap } from 'rxjs'
+import { processScreensOnLogin } from './utils/processScreensOnLogin'
 import { actions, utils } from '@cxbox-ui/core'
 import { RootEpic } from '@store'
-import { addSortForGroupHierarchiesMutate } from '@utils/groupingHierarchy'
 import { LoginResponse } from '@interfaces/session'
 
 const responseStatusMessages: Record<number, string> = {
@@ -43,7 +43,7 @@ const loginEpic: RootEpic = (action$, state$, { api }) =>
                             firstName: data.firstName,
                             lastName: data.lastName,
                             login: data.login,
-                            screens: addSortForGroupHierarchiesMutate([...data.screens]),
+                            screens: processScreensOnLogin(data.screens),
                             userId: data.userId,
                             featureSettings: data.featureSettings
                         })
@@ -106,7 +106,7 @@ export const loginByAnotherRoleEpic: RootEpic = (action$, state$, { api }) =>
                             firstName: data.firstName,
                             lastName: data.lastName,
                             login: data.login,
-                            screens: addSortForGroupHierarchiesMutate([...data.screens]),
+                            screens: processScreensOnLogin(data.screens),
                             userId: data.userId,
                             featureSettings: data.featureSettings
                         })

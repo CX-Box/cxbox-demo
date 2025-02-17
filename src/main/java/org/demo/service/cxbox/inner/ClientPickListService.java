@@ -15,8 +15,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ClientPickListService extends VersionAwareResponseService<ClientReadDTO, Client> {
 
-	@Getter
-	private final Class<ClientPickListMeta> fieldMetaBuilder = ClientPickListMeta.class;
+	@Getter(onMethod_ = {@Override})
+	private final Class<ClientPickListMeta> meta = ClientPickListMeta.class;
 
 	@Override
 	protected CreateResult<ClientReadDTO> doCreateEntity(Client entity, BusinessComponent bc) {

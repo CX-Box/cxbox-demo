@@ -35,8 +35,8 @@ public class ClientContactService extends VersionAwareResponseService<ContactDTO
 
 	private final ClientRepository clientRepository;
 
-	@Getter
-	private final Class<ClientContactMeta> fieldMetaBuilder = ClientContactMeta.class;
+	@Getter(onMethod_ = {@Override})
+	private final Class<ClientContactMeta> meta = ClientContactMeta.class;
 
 	@Override
 	protected Specification<Contact> getParentSpecification(BusinessComponent bc) {

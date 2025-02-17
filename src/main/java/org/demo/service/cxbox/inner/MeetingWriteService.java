@@ -72,8 +72,8 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 
 	private static final String MESSAGE_TEMPLATE = "Status: %s; \nMeeting Result: %s";
 
-	@Getter
-	private final Class<MeetingWriteMeta> fieldMetaBuilder = MeetingWriteMeta.class;
+	@Getter(onMethod_ = {@Override})
+	private final Class<MeetingWriteMeta> meta = MeetingWriteMeta.class;
 
 	@Override
 	protected CreateResult<MeetingDTO> doCreateEntity(Meeting entity, BusinessComponent bc) {

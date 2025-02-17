@@ -17,11 +17,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class JobStatsService extends AnySourceVersionAwareResponseService<JobStatsDTO, JobStatsDTO> {
 
-	@Getter
-	private final Class<JobStatsMeta> metaBuilder = JobStatsMeta.class;
+	@Getter(onMethod_ = {@Override})
+	private final Class<JobStatsMeta> meta = JobStatsMeta.class;
 
-	@Getter
-	private final Class<JobStatsDao> anySourceBaseDAOClass = JobStatsDao.class;
+	@Getter(onMethod_ = {@Override})
+	private final Class<JobStatsDao> dao = JobStatsDao.class;
 
 	@Override
 	protected CreateResult<JobStatsDTO> doCreateEntity(JobStatsDTO entity, BusinessComponent bc) {

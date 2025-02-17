@@ -44,8 +44,8 @@ public class MeetingReadService extends VersionAwareResponseService<MeetingDTO, 
 
 	private static final String MESSAGE_TEMPLATE = "Status: %s; \nMeeting Result: %s";
 
-	@Getter
-	private final Class<MeetingReadMeta> fieldMetaBuilder = MeetingReadMeta.class;
+	@Getter(onMethod_ = {@Override})
+	private final Class<MeetingReadMeta> meta = MeetingReadMeta.class;
 
 	@Override
 	protected CreateResult<MeetingDTO> doCreateEntity(Meeting entity, BusinessComponent bc) {

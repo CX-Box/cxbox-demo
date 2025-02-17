@@ -14,11 +14,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class SaleProgressStatsService extends AnySourceVersionAwareResponseService<SalesProgressStatsDTO, SalesProgressStatsDTO> {
 
-	@Getter
-	private final Class<SaleProgressStatsMeta> metaBuilder = SaleProgressStatsMeta.class;
+	@Getter(onMethod_ = {@Override})
+	private final Class<SaleProgressStatsMeta> meta = SaleProgressStatsMeta.class;
 
-	@Getter
-	private final Class<SaleProgressStatsDao> anySourceBaseDAOClass = SaleProgressStatsDao.class;
+	@Getter(onMethod_ = {@Override})
+	private final Class<SaleProgressStatsDao> dao = SaleProgressStatsDao.class;
 
 	@Override
 	protected CreateResult<SalesProgressStatsDTO> doCreateEntity(SalesProgressStatsDTO entity, BusinessComponent bc) {

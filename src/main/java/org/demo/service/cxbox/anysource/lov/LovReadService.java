@@ -29,13 +29,14 @@ import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S1170", "java:S2387"})
 @RequiredArgsConstructor
-@Getter
 @Service
 public class LovReadService extends AnySourceVersionAwareResponseService<LovDTO, DictDTO> {
 
-	private final Class<LovReadMeta> metaBuilder = LovReadMeta.class;
+	@Getter(onMethod_ = {@Override})
+	private final Class<LovReadMeta> meta = LovReadMeta.class;
 
-	private final Class<LovDao> anySourceBaseDAOClass = LovDao.class;
+	@Getter(onMethod_ = {@Override})
+	private final Class<LovDao> dao = LovDao.class;
 
 	@Override
 	protected CreateResult<LovDTO> doCreateEntity(DictDTO entity, BusinessComponent bc) {

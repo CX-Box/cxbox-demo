@@ -15,8 +15,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ResponsiblePickListService extends VersionAwareResponseService<ResponsibleDTO, User> {
 
-	@Getter
-	private final Class<ResponsiblePickListMeta> fieldMetaBuilder = ResponsiblePickListMeta.class;
+	@Getter(onMethod_ = {@Override})
+	private final Class<ResponsiblePickListMeta> meta = ResponsiblePickListMeta.class;
 
 	@Override
 	protected CreateResult<ResponsibleDTO> doCreateEntity(User entity, BusinessComponent bc) {

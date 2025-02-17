@@ -1,5 +1,7 @@
 package org.demo.conf.cxbox.customization.responsibilitiesAction.service;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.AnySourceVersionAwareResponseService;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
@@ -7,12 +9,15 @@ import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.demo.conf.cxbox.customization.responsibilitiesAction.dto.ActionSuggestionAdminDTO;
 import org.springframework.stereotype.Service;
 
+@SuppressWarnings({"java:S1170", "java:S2387"})
+@Getter
+@RequiredArgsConstructor
 @Service
 public class ActionSuggestionAdminService extends AnySourceVersionAwareResponseService<ActionSuggestionAdminDTO, ActionSuggestionAdminDTO> {
 
-	public ActionSuggestionAdminService() {
-		super(ActionSuggestionAdminDTO.class, ActionSuggestionAdminDTO.class, ActionSuggestionAdminMeta.class, ActionSuggestionAdminDao.class);
-	}
+	private final Class<ActionSuggestionAdminMeta> fieldMetaBuilder = ActionSuggestionAdminMeta.class;
+
+	private final Class<ActionSuggestionAdminDao> anySourceBaseDAOClass = ActionSuggestionAdminDao.class;
 
 	@Override
 	protected CreateResult<ActionSuggestionAdminDTO> doCreateEntity(ActionSuggestionAdminDTO entity, BusinessComponent bc) {

@@ -16,13 +16,21 @@
 
 package org.demo.conf.cxbox.customization.dictionary.service;
 
-import static org.demo.conf.cxbox.customization.dictionary.dto.DictionaryAdminDTO_.*;
+import static org.demo.conf.cxbox.customization.dictionary.dto.DictionaryAdminDTO_.active;
+import static org.demo.conf.cxbox.customization.dictionary.dto.DictionaryAdminDTO_.description;
+import static org.demo.conf.cxbox.customization.dictionary.dto.DictionaryAdminDTO_.dictionaryTypeId;
+import static org.demo.conf.cxbox.customization.dictionary.dto.DictionaryAdminDTO_.displayOrder;
+import static org.demo.conf.cxbox.customization.dictionary.dto.DictionaryAdminDTO_.key;
+import static org.demo.conf.cxbox.customization.dictionary.dto.DictionaryAdminDTO_.type;
+import static org.demo.conf.cxbox.customization.dictionary.dto.DictionaryAdminDTO_.value;
 
 import jakarta.persistence.EntityManager;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.cxbox.api.data.dictionary.DictionaryCache;
 import org.cxbox.api.data.dto.DataResponseDTO;
@@ -48,32 +56,26 @@ import org.demo.conf.cxbox.customization.dictionary.dto.DictionaryAdminDTO;
 import org.demo.util.CSVUtils;
 import org.hibernate.exception.ConstraintViolationException;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-@SuppressWarnings({"java:S6813"})
+@SuppressWarnings({"java:S6813", "java:S1170"})
 @Service
+@RequiredArgsConstructor
 public class DictionaryAdminService extends VersionAwareResponseService<DictionaryAdminDTO, DictionaryItem> {
 
-	@Autowired
-	private DictionaryCache dictionaryCache;
+	private final DictionaryCache dictionaryCache;
 
-	@Autowired
-	private JpaDao jpaDao;
+	private final JpaDao jpaDao;
 
-	@Autowired
-	private EntityManager entityManager;
+	private final EntityManager entityManager;
 
-	@Autowired
-	private LocaleService localeService;
+	private final LocaleService localeService;
 
-	@Autowired
-	private CxboxFileService cxboxFileService;
+	private final CxboxFileService cxboxFileService;
 
-	public DictionaryAdminService() {
-		super(DictionaryAdminDTO.class, DictionaryItem.class, null, DictionaryAdminMeta.class);
-	}
+	@Getter
+	private final Class<DictionaryAdminMeta> fieldMetaBuilder = DictionaryAdminMeta.class;
 
 	@Override
 	protected ActionResultDTO<DictionaryAdminDTO> doUpdateEntity(DictionaryItem entity, DictionaryAdminDTO data,

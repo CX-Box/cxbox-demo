@@ -6,6 +6,8 @@ import static org.cxbox.api.data.dao.SpecificationUtils.and;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.stream.Collectors;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.DrillDownType;
@@ -33,29 +35,24 @@ import org.demo.repository.MeetingRepository;
 import org.demo.repository.core.UserRepository;
 import org.demo.service.mail.MailSendingService;
 import org.jobrunr.scheduling.BackgroundJob;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-@SuppressWarnings({"java:S3252","java:S1186"})
+@SuppressWarnings({"java:S3252", "java:S1186", "java:S1170"})
 @Service
+@RequiredArgsConstructor
 public class ClientReadWriteService extends VersionAwareResponseService<ClientWriteDTO, Client> {
 
-	@Autowired
-	private ClientRepository clientRepository;
+	private final ClientRepository clientRepository;
 
-	@Autowired
-	private MeetingRepository meetingRepository;
+	private final MeetingRepository meetingRepository;
 
-	@Autowired
-	private UserRepository userRepository;
+	private final UserRepository userRepository;
 
-	@Autowired
-	private SessionService sessionService;
+	private final SessionService sessionService;
 
-	public ClientReadWriteService() {
-		super(ClientWriteDTO.class, Client.class, null, ClientReadWriteMeta.class);
-	}
+	@Getter
+	private final Class<ClientReadWriteMeta> fieldMetaBuilder = ClientReadWriteMeta.class;
 
 	@Override
 	protected Specification<Client> getSpecification(BusinessComponent bc) {

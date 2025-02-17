@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.cxbox.api.data.dto.AssociateDTO;
 import org.cxbox.core.crudma.bc.BusinessComponent;
@@ -30,27 +32,23 @@ import org.demo.entity.MeetingDocuments;
 import org.demo.entity.MeetingDocuments_;
 import org.demo.repository.MeetingDocumentsRepository;
 import org.demo.repository.MeetingRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 
-@SuppressWarnings({"java:S3252", "java:S1186"})
+@SuppressWarnings({"java:S3252", "java:S1186", "java:S1170"})
 @Service
+@RequiredArgsConstructor
 public class MeetingDocumentsWriteService extends VersionAwareResponseService<MeetingDocumentsDTO, MeetingDocuments> {
 
-	@Autowired
-	private MeetingDocumentsRepository meetingDocumentsRepository;
+	private final MeetingDocumentsRepository meetingDocumentsRepository;
 
-	@Autowired
-	private MeetingRepository meetingRepository;
+	private final MeetingRepository meetingRepository;
 
-	@Autowired
-	private CxboxFileService cxboxFileService;
+	private final CxboxFileService cxboxFileService;
 
-	public MeetingDocumentsWriteService() {
-		super(MeetingDocumentsDTO.class, MeetingDocuments.class, null, MeetingDocumentsWriteMeta.class);
-	}
+	@Getter
+	private final Class<MeetingDocumentsWriteMeta> fieldMetaBuilder = MeetingDocumentsWriteMeta.class;
 
 	@Override
 	protected Specification<MeetingDocuments> getParentSpecification(BusinessComponent bc) {

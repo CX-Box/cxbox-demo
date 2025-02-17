@@ -1,5 +1,7 @@
 package org.demo.service.cxbox.inner;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.DrillDownType;
@@ -15,22 +17,19 @@ import org.demo.dto.cxbox.inner.SaleDTO_;
 import org.demo.entity.Sale;
 import org.demo.repository.ClientRepository;
 import org.demo.repository.SaleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@SuppressWarnings({"java:S3252","java:S1186"})
+@SuppressWarnings({"java:S3252","java:S1186", "java:S1170"})
 @Service
+@RequiredArgsConstructor
 public class SaleWriteService extends VersionAwareResponseService<SaleDTO, Sale> {
 
-	@Autowired
-	private SaleRepository saleRepository;
+	private final SaleRepository saleRepository;
 
-	@Autowired
-	private ClientRepository clientRepository;
+	private final ClientRepository clientRepository;
 
-	public SaleWriteService() {
-		super(SaleDTO.class, Sale.class, null, SaleWriteMeta.class);
-	}
+	@Getter
+	private final Class<SaleWriteMeta> fieldMetaBuilder = SaleWriteMeta.class;
 
 	@Override
 	protected CreateResult<SaleDTO> doCreateEntity(Sale entity, BusinessComponent bc) {

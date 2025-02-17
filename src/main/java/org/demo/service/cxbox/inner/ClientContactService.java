@@ -5,6 +5,8 @@ import static org.demo.controller.CxboxRestController.contactEditAssoc;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.cxbox.api.data.dto.AssociateDTO;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
@@ -21,23 +23,20 @@ import org.demo.entity.Client;
 import org.demo.entity.Contact;
 import org.demo.repository.ClientRepository;
 import org.demo.repository.ContactRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-@SuppressWarnings({"java:S3252", "java:S1186"})
+@SuppressWarnings({"java:S3252", "java:S1186", "java:S1170"})
 @Service
+@RequiredArgsConstructor
 public class ClientContactService extends VersionAwareResponseService<ContactDTO, Contact> {
 
-	@Autowired
-	private ContactRepository contactRepository;
+	private final ContactRepository contactRepository;
 
-	@Autowired
-	private ClientRepository clientRepository;
+	private final ClientRepository clientRepository;
 
-	public ClientContactService() {
-		super(ContactDTO.class, Contact.class, null, ClientContactMeta.class);
-	}
+	@Getter
+	private final Class<ClientContactMeta> fieldMetaBuilder = ClientContactMeta.class;
 
 	@Override
 	protected Specification<Contact> getParentSpecification(BusinessComponent bc) {

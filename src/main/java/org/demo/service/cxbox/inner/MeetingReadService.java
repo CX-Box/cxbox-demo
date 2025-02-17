@@ -2,6 +2,8 @@ package org.demo.service.cxbox.inner;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.DrillDownType;
@@ -25,8 +27,9 @@ import org.demo.service.statemodel.MeetingStatusModelActionProvider;
 import org.jobrunr.scheduling.BackgroundJob;
 import org.springframework.stereotype.Service;
 
-@SuppressWarnings({"java:S3252", "java:S1186"})
+@SuppressWarnings({"java:S3252", "java:S1186", "java:S1170"})
 @Service
+@RequiredArgsConstructor
 public class MeetingReadService extends VersionAwareResponseService<MeetingDTO, Meeting> {
 
 	private final MeetingRepository meetingRepository;
@@ -41,16 +44,8 @@ public class MeetingReadService extends VersionAwareResponseService<MeetingDTO, 
 
 	private static final String MESSAGE_TEMPLATE = "Status: %s; \nMeeting Result: %s";
 
-	public MeetingReadService(MeetingRepository meetingRepository, UserRepository userRepository,
-			SessionService sessionService,
-			MeetingStatusModelActionProvider statusModelActionProvider, MailSendingService mailSendingService) {
-		super(MeetingDTO.class, Meeting.class, null, MeetingReadMeta.class);
-		this.meetingRepository = meetingRepository;
-		this.userRepository = userRepository;
-		this.sessionService = sessionService;
-		this.statusModelActionProvider = statusModelActionProvider;
-		this.mailSendingService = mailSendingService;
-	}
+	@Getter
+	private final Class<MeetingReadMeta> fieldMetaBuilder = MeetingReadMeta.class;
 
 	@Override
 	protected CreateResult<MeetingDTO> doCreateEntity(Meeting entity, BusinessComponent bc) {

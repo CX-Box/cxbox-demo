@@ -1,5 +1,7 @@
 package org.demo.service.cxbox.inner;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
@@ -8,13 +10,13 @@ import org.demo.dto.cxbox.inner.ClientReadDTO;
 import org.demo.entity.Client;
 import org.springframework.stereotype.Service;
 
-@SuppressWarnings({"java:S3252","java:S1186"})
+@Getter
+@SuppressWarnings({"java:S3252", "java:S1186", "java:S1170"})
 @Service
+@RequiredArgsConstructor
 public class ClientPickListService extends VersionAwareResponseService<ClientReadDTO, Client> {
 
-	public ClientPickListService() {
-		super(ClientReadDTO.class, Client.class, null, ClientPickListMeta.class);
-	}
+	private final Class<ClientPickListMeta> fieldMetaBuilder = ClientPickListMeta.class;
 
 	@Override
 	protected CreateResult<ClientReadDTO> doCreateEntity(Client entity, BusinessComponent bc) {

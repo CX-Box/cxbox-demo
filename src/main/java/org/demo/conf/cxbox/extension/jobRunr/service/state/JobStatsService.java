@@ -1,5 +1,7 @@
 package org.demo.conf.cxbox.extension.jobRunr.service.state;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.AnySourceVersionAwareResponseService;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
@@ -10,12 +12,15 @@ import org.demo.conf.cxbox.extension.jobRunr.dto.JobStatsDTO;
 import org.demo.controller.CxboxRestController;
 import org.springframework.stereotype.Service;
 
+@SuppressWarnings({"java:S1170", "java:S2387"})
+@Getter
+@RequiredArgsConstructor
 @Service
 public class JobStatsService extends AnySourceVersionAwareResponseService<JobStatsDTO, JobStatsDTO> {
 
-	public JobStatsService() {
-		super(JobStatsDTO.class, JobStatsDTO.class, JobStatsMeta.class, JobStatsDao.class);
-	}
+	private final Class<JobStatsMeta> fieldMetaBuilder = JobStatsMeta.class;
+
+	private final Class<JobStatsDao> anySourceBaseDAOClass = JobStatsDao.class;
 
 	@Override
 	protected CreateResult<JobStatsDTO> doCreateEntity(JobStatsDTO entity, BusinessComponent bc) {

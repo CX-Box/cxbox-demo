@@ -5,6 +5,8 @@ package org.demo.service.cxbox.inner;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import java.util.Set;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
@@ -16,21 +18,18 @@ import org.demo.entity.DashboardFilter;
 import org.demo.entity.DashboardFilter_;
 import org.demo.entity.enums.FieldOfActivity;
 import org.demo.repository.DashboardFilterRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-@SuppressWarnings({"java:S3252","java:S1186"})
+@SuppressWarnings({"java:S3252", "java:S1186", "java:S1170"})
 @Service
+@RequiredArgsConstructor
 public class DashboardClientActivitiesService extends VersionAwareResponseService<DashboardClientActivitiesDTO, Client> {
 
-	@Autowired
-	private DashboardFilterRepository dashboardFilterRepository;
+	private final DashboardFilterRepository dashboardFilterRepository;
 
-	public DashboardClientActivitiesService() {
-		super(DashboardClientActivitiesDTO.class, Client.class, null, DashboardClientActivitiesMeta.class);
-	}
-
+	@Getter
+	private final Class<DashboardClientActivitiesMeta> fieldMetaBuilder = DashboardClientActivitiesMeta.class;
 
 	@Override
 	protected Specification<Client> getSpecification(BusinessComponent bc) {

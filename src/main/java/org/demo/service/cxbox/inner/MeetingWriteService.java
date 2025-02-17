@@ -6,16 +6,18 @@ import static org.demo.dto.cxbox.inner.MeetingDTO_.clientId;
 import static org.demo.dto.cxbox.inner.MeetingDTO_.contactId;
 import static org.demo.dto.cxbox.inner.MeetingDTO_.endDateTime;
 import static org.demo.dto.cxbox.inner.MeetingDTO_.notes;
+import static org.demo.dto.cxbox.inner.MeetingDTO_.region;
 import static org.demo.dto.cxbox.inner.MeetingDTO_.responsibleId;
 import static org.demo.dto.cxbox.inner.MeetingDTO_.result;
 import static org.demo.dto.cxbox.inner.MeetingDTO_.startDateTime;
-import static org.demo.dto.cxbox.inner.MeetingDTO_.region;
 
 import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
@@ -47,8 +49,9 @@ import org.demo.service.statemodel.MeetingStatusModelActionProvider;
 import org.jobrunr.scheduling.BackgroundJob;
 import org.springframework.stereotype.Service;
 
-@SuppressWarnings({"java:S3252", "java:S1186"})
+@SuppressWarnings({"java:S3252", "java:S1186", "java:S1170"})
 @Service
+@RequiredArgsConstructor
 public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO, Meeting> {
 
 	private final MeetingRepository meetingRepository;
@@ -69,20 +72,8 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 
 	private static final String MESSAGE_TEMPLATE = "Status: %s; \nMeeting Result: %s";
 
-	public MeetingWriteService(MeetingRepository meetingRepository, ClientRepository clientRepository,
-			ContactRepository contactRepository, UserRepository userRepository,
-			MeetingStatusModelActionProvider statusModelActionProvider, EntityManager entityManager,
-			MailSendingService mailSendingService, SessionService sessionService) {
-		super(MeetingDTO.class, Meeting.class, null, MeetingWriteMeta.class);
-		this.meetingRepository = meetingRepository;
-		this.clientRepository = clientRepository;
-		this.contactRepository = contactRepository;
-		this.userRepository = userRepository;
-		this.statusModelActionProvider = statusModelActionProvider;
-		this.entityManager = entityManager;
-		this.mailSendingService = mailSendingService;
-		this.sessionService = sessionService;
-	}
+	@Getter
+	private final Class<MeetingWriteMeta> fieldMetaBuilder = MeetingWriteMeta.class;
 
 	@Override
 	protected CreateResult<MeetingDTO> doCreateEntity(Meeting entity, BusinessComponent bc) {

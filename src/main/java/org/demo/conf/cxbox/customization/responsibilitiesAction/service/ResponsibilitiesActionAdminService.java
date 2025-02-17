@@ -1,12 +1,17 @@
 package org.demo.conf.cxbox.customization.responsibilitiesAction.service;
 
-import static org.demo.conf.cxbox.customization.responsibilitiesAction.dto.ResponsibilitiesActionAdminDTO_.*;
+import static org.demo.conf.cxbox.customization.responsibilitiesAction.dto.ResponsibilitiesActionAdminDTO_.actionKey;
+import static org.demo.conf.cxbox.customization.responsibilitiesAction.dto.ResponsibilitiesActionAdminDTO_.view;
+import static org.demo.conf.cxbox.customization.responsibilitiesAction.dto.ResponsibilitiesActionAdminDTO_.widget;
 
+import jakarta.annotation.PostConstruct;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
@@ -17,41 +22,32 @@ import org.cxbox.core.file.dto.FileDownloadDto;
 import org.cxbox.core.file.service.CxboxFileService;
 import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
+import org.cxbox.meta.entity.ResponsibilitiesAction;
 import org.cxbox.meta.metahotreload.dto.WidgetSourceDTO;
 import org.cxbox.model.core.dao.JpaDao;
 import org.demo.conf.cxbox.customization.metaAdmin.MetaAdminServiceExt;
 import org.demo.conf.cxbox.customization.responsibilitiesAction.dto.ResponsibilitiesActionAdminDTO;
-import org.cxbox.meta.entity.ResponsibilitiesAction;
 import org.demo.util.CSVUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
-@SuppressWarnings({"java:S3252", "java:S1186", "java:S6813"})
+@SuppressWarnings({"java:S3252", "java:S1186", "java:S6813", "java:S1170"})
 @Service
+@RequiredArgsConstructor
 public class ResponsibilitiesActionAdminService extends
 		VersionAwareResponseService<ResponsibilitiesActionAdminDTO, ResponsibilitiesAction> {
 
-	private final Map<String, WidgetSourceDTO> nameToWidget;
-
+	@Getter
 	private final MetaAdminServiceExt metaAdminServiceExt;
+
+	private Map<String, WidgetSourceDTO> nameToWidget;
 
 	private final JpaDao jpaDao;
 
 	private final CxboxFileService cxboxFileService;
 
-	public ResponsibilitiesActionAdminService(MetaAdminServiceExt metaAdminServiceExt, JpaDao jpaDao,
-			CxboxFileService cxboxFileService) {
-		super(
-				ResponsibilitiesActionAdminDTO.class,
-				ResponsibilitiesAction.class,
-				null,
-				ResponsibilitiesActionAdminMeta.class
-		);
-		this.nameToWidget = Collections.unmodifiableMap(metaAdminServiceExt.getAllWidgets());
-		this.metaAdminServiceExt = metaAdminServiceExt;
-		this.jpaDao = jpaDao;
-		this.cxboxFileService = cxboxFileService;
-	}
+	@Getter
+	private final Class<ResponsibilitiesActionAdminMeta> fieldMetaBuilder = ResponsibilitiesActionAdminMeta.class;
 
 	@Override
 	protected CreateResult<ResponsibilitiesActionAdminDTO> doCreateEntity(ResponsibilitiesAction entity,
@@ -137,6 +133,11 @@ public class ResponsibilitiesActionAdminService extends
 				.map(e -> List.of(e.getInternalRoleCD(), e.getAction(), e.getView(), e.getWidget(), ""));
 
 		return CSVUtils.toCsv(header, body, name, ";");
+	}
+
+	@PostConstruct
+	public void init() {
+		this.nameToWidget = Collections.unmodifiableMap(metaAdminServiceExt.getAllWidgets());
 	}
 
 }

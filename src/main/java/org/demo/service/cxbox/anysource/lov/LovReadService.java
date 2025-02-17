@@ -12,6 +12,8 @@ import static org.demo.dto.cxbox.anysource.LovDTO_.orderBy;
 import static org.demo.dto.cxbox.anysource.LovDTO_.typeName;
 import static org.demo.dto.cxbox.anysource.LovDTO_.value;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.AnySourceVersionAwareResponseService;
 import org.cxbox.core.dto.DrillDownType;
@@ -25,12 +27,15 @@ import org.demo.dto.cxbox.anysource.LovDTO;
 import org.demo.microservice.dto.DictDTO;
 import org.springframework.stereotype.Service;
 
+@SuppressWarnings({"java:S1170", "java:S2387"})
+@RequiredArgsConstructor
+@Getter
 @Service
 public class LovReadService extends AnySourceVersionAwareResponseService<LovDTO, DictDTO> {
 
-	public LovReadService() {
-		super(LovDTO.class, DictDTO.class, LovReadMeta.class, LovDao.class);
-	}
+	private final Class<LovReadMeta> metaBuilder = LovReadMeta.class;
+
+	private final Class<LovDao> anySourceBaseDAOClass = LovDao.class;
 
 	@Override
 	protected CreateResult<LovDTO> doCreateEntity(DictDTO entity, BusinessComponent bc) {

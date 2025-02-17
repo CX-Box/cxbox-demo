@@ -1,6 +1,7 @@
 package org.demo.service.cxbox.inner;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
@@ -9,13 +10,13 @@ import org.demo.dto.cxbox.inner.ContactMultivalueDTO;
 import org.demo.entity.Contact;
 import org.springframework.stereotype.Service;
 
+@SuppressWarnings("java:S1170")
 @Getter
 @Service
+@RequiredArgsConstructor
 public class ContactMultivalueService extends VersionAwareResponseService<ContactMultivalueDTO, Contact> {
 
-	public ContactMultivalueService() {
-		super(ContactMultivalueDTO.class, Contact.class, null, ContactMultivalueMeta.class);
-	}
+	private final Class<ContactMultivalueMeta> fieldMetaBuilder = ContactMultivalueMeta.class;
 
 	@Override
 	protected CreateResult<ContactMultivalueDTO> doCreateEntity(org.demo.entity.Contact entity, BusinessComponent bc) {

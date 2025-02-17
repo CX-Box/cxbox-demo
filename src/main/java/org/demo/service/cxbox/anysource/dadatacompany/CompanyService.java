@@ -1,5 +1,7 @@
 package org.demo.service.cxbox.anysource.dadatacompany;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.AnySourceVersionAwareResponseService;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
@@ -7,12 +9,15 @@ import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.demo.dto.cxbox.anysource.CompanySuggestionDTO;
 import org.springframework.stereotype.Service;
 
+@SuppressWarnings({"java:S1170", "java:S2387"})
+@RequiredArgsConstructor
+@Getter
 @Service
 public class CompanyService extends AnySourceVersionAwareResponseService<CompanySuggestionDTO, CompanySuggestionDTO> {
 
-	public CompanyService() {
-		super(CompanySuggestionDTO.class, CompanySuggestionDTO.class, CompanyMeta.class, CompanyDao.class);
-	}
+	private final Class<CompanyMeta> fieldMetaBuilder = CompanyMeta.class;
+
+	private final Class<CompanyDao> anySourceBaseDAOClass = CompanyDao.class;
 
 	@Override
 	protected CreateResult<CompanySuggestionDTO> doCreateEntity(CompanySuggestionDTO entity, BusinessComponent bc) {

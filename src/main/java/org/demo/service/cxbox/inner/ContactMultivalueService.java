@@ -11,11 +11,11 @@ import org.demo.entity.Contact;
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings("java:S1170")
-@Getter
 @Service
 @RequiredArgsConstructor
 public class ContactMultivalueService extends VersionAwareResponseService<ContactMultivalueDTO, Contact> {
 
+	@Getter
 	private final Class<ContactMultivalueMeta> fieldMetaBuilder = ContactMultivalueMeta.class;
 
 	@Override

@@ -21,7 +21,7 @@ public class JobAdminService extends AnySourceVersionAwareResponseService<JobAdm
 	private final JobAdminDao jobAdminDao;
 
 	@Getter
-	private final Class<JobAdminMeta> fieldMetaBuilder = JobAdminMeta.class;
+	private final Class<JobAdminMeta> metaBuilder = JobAdminMeta.class;
 
 	@Getter
 	private final Class<JobAdminDao> anySourceBaseDAOClass = JobAdminDao.class;

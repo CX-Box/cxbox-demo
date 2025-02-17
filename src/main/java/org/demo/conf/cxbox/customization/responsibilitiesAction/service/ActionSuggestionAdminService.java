@@ -10,13 +10,14 @@ import org.demo.conf.cxbox.customization.responsibilitiesAction.dto.ActionSugges
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S1170", "java:S2387"})
-@Getter
 @RequiredArgsConstructor
 @Service
 public class ActionSuggestionAdminService extends AnySourceVersionAwareResponseService<ActionSuggestionAdminDTO, ActionSuggestionAdminDTO> {
 
-	private final Class<ActionSuggestionAdminMeta> fieldMetaBuilder = ActionSuggestionAdminMeta.class;
+	@Getter
+	private final Class<ActionSuggestionAdminMeta> metaBuilder = ActionSuggestionAdminMeta.class;
 
+	@Getter
 	private final Class<ActionSuggestionAdminDao> anySourceBaseDAOClass = ActionSuggestionAdminDao.class;
 
 	@Override

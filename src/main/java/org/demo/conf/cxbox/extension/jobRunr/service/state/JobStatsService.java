@@ -13,13 +13,14 @@ import org.demo.controller.CxboxRestController;
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S1170", "java:S2387"})
-@Getter
 @RequiredArgsConstructor
 @Service
 public class JobStatsService extends AnySourceVersionAwareResponseService<JobStatsDTO, JobStatsDTO> {
 
-	private final Class<JobStatsMeta> fieldMetaBuilder = JobStatsMeta.class;
+	@Getter
+	private final Class<JobStatsMeta> metaBuilder = JobStatsMeta.class;
 
+	@Getter
 	private final Class<JobStatsDao> anySourceBaseDAOClass = JobStatsDao.class;
 
 	@Override

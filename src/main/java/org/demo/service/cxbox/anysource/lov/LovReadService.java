@@ -33,7 +33,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class LovReadService extends AnySourceVersionAwareResponseService<LovDTO, DictDTO> {
 
-	private final Class<LovReadMeta> fieldMetaBuilder = LovReadMeta.class;
+	private final Class<LovReadMeta> metaBuilder = LovReadMeta.class;
 
 	private final Class<LovDao> anySourceBaseDAOClass = LovDao.class;
 

@@ -13,6 +13,7 @@ export interface GroupingHierarchyGroupNode extends CustomDataItem {
     _countOfGroupsAndRecordsPerLevel: Record<number, number>
     _groupLevel: number
     children: (GroupingHierarchyGroupNode | GroupingHierarchyItemNode)[]
+    _aggFunctions?: Record<string, string>
 }
 
 export interface GroupingHierarchyEmptyGroupNode extends GroupingHierarchyGroupNode {

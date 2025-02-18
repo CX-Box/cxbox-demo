@@ -36,13 +36,15 @@ export const useGroupingHierarchy = <T extends CustomDataItem>(
     const correctGroupingCount = bcPageLimit != null && bcCount != null && bcPageLimit >= bcCount
     const bcData = useAppSelector(state => state.data[meta.bcName] as T[] | undefined)
     const groupingHierarchyEmptyNodes = useGroupingHierarchyLevels(meta, sortedGroupKeys)
+    const aggFields = meta.options?.groupingHierarchy?.aggFields
+    const aggLevels = meta.options?.groupingHierarchy?.aggLevels
 
     const { tree, nodeDictionary, groupsDictionary, defaultExtendedDictionary } = useMemo(
         () =>
             isGroupingHierarchy
-                ? createTree(bcData, sortedGroupKeys, groupingHierarchyEmptyNodes, sorters, filters)
+                ? createTree(bcData, sortedGroupKeys, meta.fields, groupingHierarchyEmptyNodes, sorters, filters, aggFields, aggLevels)
                 : { tree: undefined, nodeDictionary: undefined, groupsDictionary: undefined, defaultExtendedDictionary: undefined },
-        [bcData, filters, groupingHierarchyEmptyNodes, isGroupingHierarchy, sortedGroupKeys, sorters]
+        [aggFields, aggLevels, bcData, filters, groupingHierarchyEmptyNodes, isGroupingHierarchy, meta.fields, sortedGroupKeys, sorters]
     )
     const { expandedParentRowKeys, changeExpand, clearExpand } = useExpandableGroup()
 

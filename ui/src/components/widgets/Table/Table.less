@@ -124,6 +124,11 @@
         .ant-table-row > td {
             line-height: 1.43;
             padding: 20px 4px;
+
+            &:has(> [class*="aggCell"]) {
+                height: 1px;
+                padding: 10px 4px;
+            }
         }
 
         .has-error {
@@ -289,5 +294,13 @@
 
 .tableWithRowMenu :global .ant-table-tbody > tr.ant-table-expanded-row > td:last-child,
 :global .ant-table-tbody > tr.ant-table-expanded-row > td {
-    padding: 0
+    padding: 0;
+}
+
+.aggCell {
+    display: grid;
+    height: 100%;
+    min-height: 48px;
+    margin: 0 -4px;
+    padding: 0 4px;
 }

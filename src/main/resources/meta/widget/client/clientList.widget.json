@@ -4,7 +4,13 @@
   "type": "List",
   "bc": "client",
   "fields": [
-
+    {
+      "title": "Client",
+      "key": "fullName",
+      "type": "input",
+      "drillDown": "true",
+      "width": 300
+    },
     {
       "title": "Field Of Activity",
       "key": "fieldOfActivity",
@@ -16,8 +22,20 @@
       "key": "address",
       "type": "input",
       "width": 300
+    },
+    {
+      "title": "Importance",
+      "key": "importance",
+      "type": "dictionary",
+      "bgColorKey": "color",
+      "width": 300
+    },
+    {
+      "title": "Status",
+      "key": "status",
+      "type": "dictionary",
+      "width": 300
     }
-
   ],
   "options": {
     "export": {

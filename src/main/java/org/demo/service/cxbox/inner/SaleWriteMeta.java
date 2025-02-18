@@ -47,7 +47,7 @@ public class SaleWriteMeta extends FieldMetaBuilder<SaleDTO> {
 						+ "?filters={\""
 						+ CxboxRestController.sale
 						+ "\":\""
-						+ SaleDTO_.id.getName() + "." + SearchOperation.EQUALS.getOperationName()
+						+ SaleDTO_.id.getName() + "." + SearchOperation.EQUALS_ONE_OF.getOperationName()
 						+ "=[\\\""
 						+ id
 						+ "\\\"]"

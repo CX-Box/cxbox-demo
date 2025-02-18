@@ -73,17 +73,16 @@ public class SaleStatsProductDao extends AbstractAnySourceBaseDAO<DashboardSales
 								Collectors.groupingBy(Sale::getProduct, Collectors.summarizingLong(Sale::getSum))
 						));
 
-		salesSummary.forEach((client, productStats) -> {
+		salesSummary.forEach((client, productStats) ->
 			productStats.forEach((product, stats) -> {
 				DashboardSalesProductDTO prod = new DashboardSalesProductDTO();
 				prod.setClientName(client.getFullName());
 				prod.setId(String.valueOf(client.getId()));
-				prod.setProductName(product.key().toString());
+				prod.setProductName(product.key());
 				prod.setSum(stats.getSum());
-				prod.setColor(stats.getSum() > 30 ? "#00cc99" : "#b3d9ff");
+				prod.setColor(Objects.equals(product.key(), Product.EXPERTISE.key()) ? "#4D83E7" : "#779FE9");
 				result.add(prod);
-			});
-		});
+			}));
 		return result;
 	}
 

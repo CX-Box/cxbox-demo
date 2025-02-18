@@ -10,11 +10,27 @@
       "type": "number",
       "bgColorKey": "color",
       "drillDown": true
+    },
+    {
+      "title": "title",
+      "key": "title",
+      "type": "input"
+    },
+    {
+      "title": "description",
+      "key": "description",
+      "type": "hint"
     }
   ],
   "options": {
     "chart1D": {
-      "valueFieldKey": "value"
+      "valueFieldKey": "value",
+      "titleFieldKey": "title",
+      "descriptionFieldKey": ["description"],
+      "total": {
+        "func": "sum",
+        "description": "Sum"
+      }
     }
   }
 }

@@ -7,15 +7,14 @@
     {
       "title": "productName",
       "key": "productName",
-      "type": "input",
-      "bgColorKey": "color",
-      "drillDown": true
+      "type": "input"
     },
     {
       "title": "clientName",
       "key": "clientName",
       "type": "input",
-      "drillDown": true
+      "drillDown": true,
+      "bgColorKey": "color"
     },
     {
       "title": "sum",

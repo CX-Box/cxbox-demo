@@ -53,13 +53,13 @@ const Column2D: React.FC<Column2DProps> = ({ meta }) => {
 
     useEffect(() => {
         if (!isXValueFieldTypeNumber && (xMin || xMax || xStep)) {
-            console.info('Column2D widget: field type for xValueFieldKey is not numeric; xMin, xMax, xStep are ignored')
+            console.info(`${name} widget: field type for xValueFieldKey is not numeric; xMin, xMax, xStep are ignored`)
         }
 
         if (!isYValueFieldTypeNumber && (yMin || yMax || yStep)) {
-            console.info('Column2D widget: field type for yValueFieldKey is not numeric; yMin, yMax, yStep are ignored')
+            console.info(`${name} widget: field type for yValueFieldKey is not numeric; yMin, yMax, yStep are ignored`)
         }
-    }, [isXValueFieldTypeNumber, isYValueFieldTypeNumber, xMax, xMin, xStep, yMax, yMin, yStep])
+    }, [isXValueFieldTypeNumber, isYValueFieldTypeNumber, name, xMax, xMin, xStep, yMax, yMin, yStep])
 
     if (!data?.length || !options?.chart2D) {
         return null

@@ -52,9 +52,9 @@ const Pie1D: React.FC<Pie1DProps> = ({ meta }) => {
 
     useEffect(() => {
         if (total?.value && total?.func) {
-            console.info('Pie1D widget: you have set chart1D.total.value and chart1D.total.func, you need to set only one')
+            console.info(`${name} widget: you have set chart1D.total.value and chart1D.total.func, you need to set only one`)
         }
-    }, [total?.func, total?.value])
+    }, [name, total?.func, total?.value])
 
     if (!processedData?.length || !options?.chart1D) {
         return null
@@ -79,7 +79,7 @@ const Pie1D: React.FC<Pie1DProps> = ({ meta }) => {
             autoRotate: false,
             offset: '-50%'
         },
-        innerRadius: total?.innerSpace || 0.5,
+        innerRadius: total?.innerSpace ?? 0.5,
         interactions: [
             {
                 type: 'element-selected'

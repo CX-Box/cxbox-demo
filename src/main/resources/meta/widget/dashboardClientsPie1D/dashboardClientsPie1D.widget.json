@@ -1,0 +1,20 @@
+{
+  "name": "dashboardClientsPie1D",
+  "title": "Clients Pie1D",
+  "type": "Pie1D",
+  "bc": "clientStats",
+  "fields": [
+    {
+      "title": "value",
+      "key": "value",
+      "type": "number",
+      "bgColorKey": "color",
+      "drillDown": true
+    }
+  ],
+  "options": {
+    "chart1D": {
+      "valueFieldKey": "value"
+    }
+  }
+}

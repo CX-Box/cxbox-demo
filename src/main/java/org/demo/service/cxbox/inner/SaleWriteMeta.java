@@ -1,9 +1,13 @@
 package org.demo.service.cxbox.inner;
 
+
+import org.cxbox.core.controller.param.SearchOperation;
 import org.cxbox.core.crudma.bc.impl.InnerBcDescription;
+import org.cxbox.core.dto.DrillDownType;
 import org.cxbox.core.dto.rowmeta.FieldsMeta;
 import org.cxbox.core.dto.rowmeta.RowDependentFieldsMeta;
 import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
+import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.inner.SaleDTO;
 import org.demo.dto.cxbox.inner.SaleDTO_;
 import org.demo.entity.enums.SaleStatus;
@@ -35,8 +39,22 @@ public class SaleWriteMeta extends FieldMetaBuilder<SaleDTO> {
 		fields.setDictionaryValues(SaleDTO_.product);
 		fields.setEnumValues(SaleDTO_.status, SaleStatus.values());
 
-	}
+		fields.setDrilldown(
+				SaleDTO_.clientName,
+				DrillDownType.INNER,
+				"/screen/sale"
+						+ "/" + CxboxRestController.sale
+						+ "?filters={\""
+						+ CxboxRestController.sale
+						+ "\":\""
+						+ SaleDTO_.id.getName() + "." + SearchOperation.EQUALS.getOperationName()
+						+ "=[\\\""
+						+ id
+						+ "\\\"]"
+						+ "\"}"
+		);
 
+	}
 
 	@Override
 	public void buildIndependentMeta(FieldsMeta<SaleDTO> fields, InnerBcDescription bcDescription, Long parentId) {

@@ -29,12 +29,15 @@ public class SaleDTO extends DataResponseDTO {
 
 	private Long sum;
 
+	private String color;
+
 	public SaleDTO(Sale sale) {
 		this.id = sale.getId().toString();
 		this.clientName = sale.getClient() == null ? null : sale.getClient().getFullName();
 		this.product = sale.getProduct();
 		this.status = sale.getStatus();
 		this.sum = sale.getSum();
+		this.color = "#edaa";
 	}
 
 }

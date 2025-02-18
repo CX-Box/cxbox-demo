@@ -4,6 +4,7 @@
   "template": "DashboardView",
   "url": "/screen/dashboard/view/dashboard",
   "widgets": [
+
     {
       "widgetName": "dashboardFilter",
       "position": 0,
@@ -15,14 +16,9 @@
       "gridWidth": 13
     },
     {
-      "widgetName": "dashboardSalesRingProgress",
+      "widgetName": "dashboardClientsPie1D",
       "position": 20,
       "gridWidth": 9
-    },
-    {
-      "widgetName": "dashboardSalesFunnel",
-      "position": 30,
-      "gridWidth": 13
     }
   ],
   "rolesAllowed": [

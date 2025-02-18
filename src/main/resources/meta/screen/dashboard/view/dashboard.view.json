@@ -19,6 +19,11 @@
       "widgetName": "dashboardClientsPie1D",
       "position": 20,
       "gridWidth": 9
+    },
+    {
+      "widgetName": "clientStats",
+      "position": 30,
+      "gridWidth": 24
     }
   ],
   "rolesAllowed": [

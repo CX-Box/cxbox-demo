@@ -20,11 +20,11 @@ public class JobAdminService extends AnySourceVersionAwareResponseService<JobAdm
 
 	private final JobAdminDao jobAdminDao;
 
-	@Getter
-	private final Class<JobAdminMeta> fieldMetaBuilder = JobAdminMeta.class;
+	@Getter(onMethod_ = {@Override})
+	private final Class<JobAdminMeta> meta = JobAdminMeta.class;
 
-	@Getter
-	private final Class<JobAdminDao> anySourceBaseDAOClass = JobAdminDao.class;
+	@Getter(onMethod_ = {@Override})
+	private final Class<JobAdminDao> dao = JobAdminDao.class;
 
 	@Override
 	protected CreateResult<JobAdminDTO> doCreateEntity(JobAdminDTO entity, BusinessComponent bc) {

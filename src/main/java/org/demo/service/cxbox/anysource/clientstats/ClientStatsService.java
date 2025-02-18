@@ -11,13 +11,14 @@ import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S1170", "java:S2387"})
 @RequiredArgsConstructor
-@Getter
 @Service
 public class ClientStatsService extends AnySourceVersionAwareResponseService<ClientStatsDTO, ClientStatsDTO> {
 
-	private final Class<ClientStatsMeta> fieldMetaBuilder = ClientStatsMeta.class;
+	@Getter(onMethod_ = {@Override})
+	private final Class<ClientStatsMeta> meta = ClientStatsMeta.class;
 
-	private final Class<ClientStatsDao> anySourceBaseDAOClass = ClientStatsDao.class;
+	@Getter(onMethod_ = {@Override})
+	private final Class<ClientStatsDao> dao = ClientStatsDao.class;
 
 	@Override
 	protected CreateResult<ClientStatsDTO> doCreateEntity(ClientStatsDTO entity, BusinessComponent bc) {

@@ -51,8 +51,8 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 
 	private final SessionService sessionService;
 
-	@Getter
-	private final Class<ClientReadWriteMeta> fieldMetaBuilder = ClientReadWriteMeta.class;
+	@Getter(onMethod_ = {@Override})
+	private final Class<ClientReadWriteMeta> meta = ClientReadWriteMeta.class;
 
 	@Override
 	protected Specification<Client> getSpecification(BusinessComponent bc) {

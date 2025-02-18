@@ -30,8 +30,8 @@ public class ContactPickListService extends VersionAwareResponseService<ContactD
 
 	private final ContactRepository contactRepository;
 
-	@Getter
-	private final Class<ContactPickListMeta> fieldMetaBuilder = ContactPickListMeta.class;
+	@Getter(onMethod_ = {@Override})
+	private final Class<ContactPickListMeta> meta = ContactPickListMeta.class;
 
 	@Override
 	protected Specification<Contact> getParentSpecification(BusinessComponent bc) {

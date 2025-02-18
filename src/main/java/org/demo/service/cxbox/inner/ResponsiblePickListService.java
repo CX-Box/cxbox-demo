@@ -12,11 +12,11 @@ import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S3252","java:S1186", "java:S1170"})
 @Service
-@Getter
 @RequiredArgsConstructor
 public class ResponsiblePickListService extends VersionAwareResponseService<ResponsibleDTO, User> {
 
-	private final Class<ResponsiblePickListMeta> fieldMetaBuilder = ResponsiblePickListMeta.class;
+	@Getter(onMethod_ = {@Override})
+	private final Class<ResponsiblePickListMeta> meta = ResponsiblePickListMeta.class;
 
 	@Override
 	protected CreateResult<ResponsibleDTO> doCreateEntity(User entity, BusinessComponent bc) {

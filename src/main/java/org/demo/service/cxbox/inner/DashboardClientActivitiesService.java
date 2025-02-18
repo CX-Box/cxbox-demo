@@ -28,8 +28,8 @@ public class DashboardClientActivitiesService extends VersionAwareResponseServic
 
 	private final DashboardFilterRepository dashboardFilterRepository;
 
-	@Getter
-	private final Class<DashboardClientActivitiesMeta> fieldMetaBuilder = DashboardClientActivitiesMeta.class;
+	@Getter(onMethod_ = {@Override})
+	private final Class<DashboardClientActivitiesMeta> meta = DashboardClientActivitiesMeta.class;
 
 	@Override
 	protected Specification<Client> getSpecification(BusinessComponent bc) {

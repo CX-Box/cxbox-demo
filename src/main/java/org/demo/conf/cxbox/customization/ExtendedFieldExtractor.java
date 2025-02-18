@@ -37,7 +37,9 @@ public class ExtendedFieldExtractor extends BaseFieldExtractor {
 				"RingProgress",
 				"DashboardList",
 				"FormPopup",
-				"GroupingHierarchy"
+				"GroupingHierarchy",
+				"Pie1D",
+				"Column2D"
 		);
 	}
 

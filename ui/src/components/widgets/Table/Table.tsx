@@ -39,7 +39,7 @@ import {
     rowShowCondition,
     useGroupingHierarchy
 } from '@components/widgets/Table/groupingHierarchy'
-import { rightAlignedFields } from '@constants/field'
+import { numberFieldTypes } from '@constants/field'
 import { aggCellBgColorRgba, totalRowKey } from './groupingHierarchy/constants'
 import { getAggCellBgOpacity } from './groupingHierarchy/utils/aggregation'
 
@@ -417,7 +417,7 @@ function Table<T extends CustomDataItem>({
                                 !editMode &&
                                 (counterMode === 'always' || (counterMode === 'collapsed' && !expanded))
                             const showField = !!showReadonlyField || editMode
-                            const rightAlignment = rightAlignedFields.includes(item.type) && {
+                            const rightAlignment = numberFieldTypes.includes(item.type) && {
                                 justifyContent: 'flex-end'
                             }
 

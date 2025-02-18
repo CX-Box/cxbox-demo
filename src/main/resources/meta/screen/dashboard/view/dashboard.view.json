@@ -15,14 +15,14 @@
       "gridWidth": 13
     },
     {
-      "widgetName": "dashboardSalesRingProgress",
+      "widgetName": "dashboardClientsPie1D",
       "position": 20,
-      "gridWidth": 9
+      "gridWidth": 10
     },
     {
-      "widgetName": "dashboardSalesFunnel",
+      "widgetName": "dashboardSalesColumn2D",
       "position": 30,
-      "gridWidth": 13
+      "gridWidth": 24
     }
   ],
   "rolesAllowed": [

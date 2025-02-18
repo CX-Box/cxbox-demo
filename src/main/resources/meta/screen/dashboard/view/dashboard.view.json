@@ -4,11 +4,7 @@
   "template": "DashboardView",
   "url": "/screen/dashboard/view/dashboard",
   "widgets": [
-    {
-      "widgetName": "clientList",
-      "position": 0,
-      "gridWidth": 24
-    },
+
     {
       "widgetName": "dashboardFilter",
       "position": 0,
@@ -25,7 +21,7 @@
       "gridWidth": 9
     },
     {
-      "widgetName": "clientStats",
+      "widgetName": "dashboardSalesColumn2D",
       "position": 30,
       "gridWidth": 24
     }

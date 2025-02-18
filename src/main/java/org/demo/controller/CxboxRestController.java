@@ -13,6 +13,7 @@ import org.demo.service.cxbox.anysource.dadatacompany.CompanyService;
 import org.demo.service.cxbox.anysource.lov.LovReadService;
 import org.demo.service.cxbox.anysource.saleprogress.SaleProgressStatsService;
 import org.demo.service.cxbox.anysource.salestats.SaleStatsService;
+import org.demo.service.cxbox.anysource.salestatsproduct.SaleStatsProductService;
 import org.demo.service.cxbox.inner.ClientContactService;
 import org.demo.service.cxbox.inner.ClientPickListService;
 import org.demo.service.cxbox.inner.ClientReadWriteService;
@@ -60,6 +61,7 @@ public enum CxboxRestController implements EnumBcIdentifier {
 		responsiblePickListPopup(meetingEdit, ResponsiblePickListService.class),
 		clientPickListPopup(meetingEdit, ClientPickListService.class),
 		contactPickListPopup(meetingEdit, ContactPickListService.class),
+	saleStatsProduct(SaleStatsProductService.class),
 	sale(SaleReadService.class),
 	saleEdit(SaleWriteService.class),
 		clientSalePickListPopup(saleEdit, ClientPickListService.class),

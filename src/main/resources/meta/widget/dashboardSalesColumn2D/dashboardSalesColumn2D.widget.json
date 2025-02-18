@@ -2,30 +2,30 @@
   "name": "dashboardSalesColumn2D",
   "title": "Sales Column2D",
   "type": "Column2D",
-  "bc": "sale",
+  "bc": "saleStatsProduct",
   "fields": [
     {
-      "title": "Sum, $",
-      "key": "sum",
-      "type": "number",
-      "bgColorKey": "color"
-    },
+      "title": "productName",
+      "key": "productName",
+      "type": "input",
+      "bgColorKey": "color"},
     {
-      "title": "Client",
+      "title": "clientName",
       "key": "clientName",
-      "drillDown": true
+      "type": "input"
     },
     {
-      "title": "Product",
-      "key": "product",
-      "type": "input"
+      "title": "sum",
+      "key": "sum",
+      "type": "number"
     }
   ],
   "options": {
     "chart2D": {
       "xValueFieldKey": "clientName",
       "yValueFieldKey": "sum",
-      "groupFieldKey": "product"
+      "groupFieldKey": "productName"
+
     }
   }
 }

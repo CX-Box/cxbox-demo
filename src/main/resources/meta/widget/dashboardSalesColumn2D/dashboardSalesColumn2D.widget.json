@@ -8,11 +8,14 @@
       "title": "productName",
       "key": "productName",
       "type": "input",
-      "bgColorKey": "color"},
+      "bgColorKey": "color",
+      "drillDown": true
+    },
     {
       "title": "clientName",
       "key": "clientName",
-      "type": "input"
+      "type": "input",
+      "drillDown": true
     },
     {
       "title": "sum",
@@ -25,7 +28,6 @@
       "xValueFieldKey": "clientName",
       "yValueFieldKey": "sum",
       "groupFieldKey": "productName"
-
     }
   }
 }

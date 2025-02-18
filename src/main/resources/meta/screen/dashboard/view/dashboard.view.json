@@ -4,7 +4,11 @@
   "template": "DashboardView",
   "url": "/screen/dashboard/view/dashboard",
   "widgets": [
-
+    {
+      "widgetName": "saleList",
+      "position": 0,
+      "gridWidth": 24
+    },
     {
       "widgetName": "dashboardFilter",
       "position": 0,

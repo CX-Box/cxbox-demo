@@ -22,8 +22,8 @@ public class DictionaryTypeAdminService extends VersionAwareResponseService<Dict
 
 	private final JpaDao jpaDao;
 
-	@Getter
-	private final Class<DictionaryTypeAdminMeta> fieldMetaBuilder = DictionaryTypeAdminMeta.class;
+	@Getter(onMethod_ = {@Override})
+	private final Class<DictionaryTypeAdminMeta> meta = DictionaryTypeAdminMeta.class;
 
 	@Override
 	protected CreateResult<DictionaryTypeAdminDTO> doCreateEntity(DictionaryTypeDesc entity, BusinessComponent bc) {

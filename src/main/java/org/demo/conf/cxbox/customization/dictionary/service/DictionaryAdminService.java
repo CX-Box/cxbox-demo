@@ -74,8 +74,8 @@ public class DictionaryAdminService extends VersionAwareResponseService<Dictiona
 
 	private final CxboxFileService cxboxFileService;
 
-	@Getter
-	private final Class<DictionaryAdminMeta> fieldMetaBuilder = DictionaryAdminMeta.class;
+	@Getter(onMethod_ = {@Override})
+	private final Class<DictionaryAdminMeta> meta = DictionaryAdminMeta.class;
 
 	@Override
 	protected ActionResultDTO<DictionaryAdminDTO> doUpdateEntity(DictionaryItem entity, DictionaryAdminDTO data,

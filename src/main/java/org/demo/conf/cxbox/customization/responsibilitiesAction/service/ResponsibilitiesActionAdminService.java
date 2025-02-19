@@ -46,8 +46,8 @@ public class ResponsibilitiesActionAdminService extends
 
 	private final CxboxFileService cxboxFileService;
 
-	@Getter
-	private final Class<ResponsibilitiesActionAdminMeta> fieldMetaBuilder = ResponsibilitiesActionAdminMeta.class;
+	@Getter(onMethod_ = {@Override})
+	private final Class<ResponsibilitiesActionAdminMeta> meta = ResponsibilitiesActionAdminMeta.class;
 
 	@Override
 	protected CreateResult<ResponsibilitiesActionAdminDTO> doCreateEntity(ResponsibilitiesAction entity,

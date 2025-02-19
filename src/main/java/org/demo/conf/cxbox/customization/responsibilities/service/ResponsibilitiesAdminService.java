@@ -47,8 +47,8 @@ public class ResponsibilitiesAdminService extends VersionAwareResponseService<Re
 
 	private final CxboxFileService cxboxFileService;
 
-	@Getter
-	private final Class<ResponsibilitiesAdminMeta> fieldMetaBuilder = ResponsibilitiesAdminMeta.class;
+	@Getter(onMethod_ = {@Override})
+	private final Class<ResponsibilitiesAdminMeta> meta = ResponsibilitiesAdminMeta.class;
 
 	@Override
 	public Specification<Responsibilities> getSpecification(BusinessComponent bc) {

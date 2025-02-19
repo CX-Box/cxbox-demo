@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.cxbox.model.dictionary.entity.DictionaryTypeDesc;
-import org.demo.microservice.core.querylang.common.SearchParameter;
+import org.cxbox.core.util.filter.SearchParameter;
 
 @Getter
 @Setter

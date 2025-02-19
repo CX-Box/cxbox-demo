@@ -32,10 +32,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class LovReadService extends AnySourceVersionAwareResponseService<LovDTO, DictDTO> {
 
-	@Getter(onMethod_ = {@Override})
+	@Getter(onMethod_ = @Override)
 	private final Class<LovReadMeta> meta = LovReadMeta.class;
 
-	@Getter(onMethod_ = {@Override})
+	@Getter(onMethod_ = @Override)
 	private final Class<LovDao> dao = LovDao.class;
 
 	@Override

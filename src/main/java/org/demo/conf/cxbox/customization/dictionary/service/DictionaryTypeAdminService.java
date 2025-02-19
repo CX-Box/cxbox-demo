@@ -22,7 +22,7 @@ public class DictionaryTypeAdminService extends VersionAwareResponseService<Dict
 
 	private final JpaDao jpaDao;
 
-	@Getter(onMethod_ = {@Override})
+	@Getter(onMethod_ = @Override)
 	private final Class<DictionaryTypeAdminMeta> meta = DictionaryTypeAdminMeta.class;
 
 	@Override

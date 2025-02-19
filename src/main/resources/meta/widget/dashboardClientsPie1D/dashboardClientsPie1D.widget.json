@@ -1,8 +1,8 @@
 {
   "name": "dashboardClientsPie1D",
-  "title": "Clients Pie1D",
+  "title": "Clients Status",
   "type": "Pie1D",
-  "bc": "clientStats",
+  "bc": "clientStatsPie",
   "fields": [
     {
       "title": "value",

@@ -20,10 +20,10 @@ public class JobAdminService extends AnySourceVersionAwareResponseService<JobAdm
 
 	private final JobAdminDao jobAdminDao;
 
-	@Getter(onMethod_ = {@Override})
+	@Getter(onMethod_ = @Override)
 	private final Class<JobAdminMeta> meta = JobAdminMeta.class;
 
-	@Getter(onMethod_ = {@Override})
+	@Getter(onMethod_ = @Override)
 	private final Class<JobAdminDao> dao = JobAdminDao.class;
 
 	@Override

@@ -45,7 +45,7 @@ public class ResponsibilitiesActionAdminService extends
 
 	private final CxboxFileService cxboxFileService;
 
-	@Getter(onMethod_ = {@Override})
+	@Getter(onMethod_ = @Override)
 	private final Class<ResponsibilitiesActionAdminMeta> meta = ResponsibilitiesActionAdminMeta.class;
 
 	@Override

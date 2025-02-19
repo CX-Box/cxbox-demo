@@ -14,10 +14,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class CompanyService extends AnySourceVersionAwareResponseService<CompanySuggestionDTO, CompanySuggestionDTO> {
 
-	@Getter(onMethod_ = {@Override})
+	@Getter(onMethod_ = @Override)
 	private final Class<CompanyMeta> meta = CompanyMeta.class;
 
-	@Getter(onMethod_ = {@Override})
+	@Getter(onMethod_ = @Override)
 	private final Class<CompanyDao> dao = CompanyDao.class;
 
 	@Override

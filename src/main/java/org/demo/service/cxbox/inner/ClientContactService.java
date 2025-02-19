@@ -35,7 +35,7 @@ public class ClientContactService extends VersionAwareResponseService<ContactDTO
 
 	private final ClientRepository clientRepository;
 
-	@Getter(onMethod_ = {@Override})
+	@Getter(onMethod_ = @Override)
 	private final Class<ClientContactMeta> meta = ClientContactMeta.class;
 
 	@Override

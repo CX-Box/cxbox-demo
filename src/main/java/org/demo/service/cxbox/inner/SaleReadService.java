@@ -23,7 +23,7 @@ public class SaleReadService extends VersionAwareResponseService<SaleDTO, Sale> 
 
 	private final SaleRepository saleRepository;
 
-	@Getter(onMethod_ = {@Override})
+	@Getter(onMethod_ = @Override)
 	private final Class<SaleReadMeta> meta = SaleReadMeta.class;
 
 	@Override

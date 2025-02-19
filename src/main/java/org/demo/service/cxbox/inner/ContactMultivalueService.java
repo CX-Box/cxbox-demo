@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ContactMultivalueService extends VersionAwareResponseService<ContactMultivalueDTO, Contact> {
 
-	@Getter(onMethod_ = {@Override})
+	@Getter(onMethod_ = @Override)
 	private final Class<ContactMultivalueMeta> meta = ContactMultivalueMeta.class;
 
 	@Override

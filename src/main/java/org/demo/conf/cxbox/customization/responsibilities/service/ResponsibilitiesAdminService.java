@@ -47,7 +47,7 @@ public class ResponsibilitiesAdminService extends VersionAwareResponseService<Re
 
 	private final CxboxFileService cxboxFileService;
 
-	@Getter(onMethod_ = {@Override})
+	@Getter(onMethod_ = @Override)
 	private final Class<ResponsibilitiesAdminMeta> meta = ResponsibilitiesAdminMeta.class;
 
 	@Override

@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ClientPickListService extends VersionAwareResponseService<ClientReadDTO, Client> {
 
-	@Getter(onMethod_ = {@Override})
+	@Getter(onMethod_ = @Override)
 	private final Class<ClientPickListMeta> meta = ClientPickListMeta.class;
 
 	@Override

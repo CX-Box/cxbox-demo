@@ -14,10 +14,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class SaleStatsProductService extends AnySourceVersionAwareResponseService<DashboardSalesProductDTO, DashboardSalesProductDTO> {
 
-	@Getter(onMethod_ = {@Override})
+	@Getter(onMethod_ = @Override)
 	private final Class<SaleStatsProductMeta> meta = SaleStatsProductMeta.class;
 
-	@Getter(onMethod_ = {@Override})
+	@Getter(onMethod_ = @Override)
 	private final Class<SaleStatsProductDao> dao = SaleStatsProductDao.class;
 
 	@Override

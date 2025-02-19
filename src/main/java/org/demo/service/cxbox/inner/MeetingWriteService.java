@@ -72,7 +72,7 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 
 	private static final String MESSAGE_TEMPLATE = "Status: %s; \nMeeting Result: %s";
 
-	@Getter(onMethod_ = {@Override})
+	@Getter(onMethod_ = @Override)
 	private final Class<MeetingWriteMeta> meta = MeetingWriteMeta.class;
 
 	@Override

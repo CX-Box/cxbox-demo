@@ -5,7 +5,6 @@
 import React, { FormEvent } from 'react'
 import { Button, Form } from 'antd'
 import styles from './FilterPopup.less'
-import { CustomFieldTypes } from '@interfaces/widget'
 import { useAppSelector } from '@store'
 import { useTranslation } from 'react-i18next'
 import { FieldType, WidgetField, WidgetTypes } from '@cxbox-ui/schema'
@@ -14,6 +13,7 @@ import { useDispatch } from 'react-redux'
 import { actions } from '@actions'
 import { FilterType } from '@interfaces/filters'
 import { PickListFieldMeta, BcFilter, DataValue, FilterType as CoreFilterType } from '@cxbox-ui/core'
+import { getFilterType } from '@utils/filters'
 
 interface FilterPopupProps {
     widgetName: string
@@ -124,40 +124,4 @@ const FilterPopup: React.FC<FilterPopupProps> = props => {
     )
 }
 
-/**
- * @category Components
- */
 export default React.memo(FilterPopup)
-
-/**
- * Returns appropriate filtration type for specified field type.
- *
- * - Text-based fields use `contains`
- * - Checkbox fields use `specified` (boolean)
- * - Dictionary fiels use `equalsOneOf`
- *
- * All other field types use strict `equals`
- *
- * @param fieldType Field type
- */
-export function getFilterType(fieldType: FieldType | CustomFieldTypes) {
-    switch (fieldType) {
-        case CustomFieldTypes.MultipleSelect:
-        case FieldType.radio:
-        case FieldType.dictionary: {
-            return FilterType.equalsOneOf
-        }
-        case FieldType.checkbox: {
-            return FilterType.specified
-        }
-        case FieldType.inlinePickList:
-        case FieldType.pickList:
-        case FieldType.input:
-        case FieldType.fileUpload:
-        case FieldType.text: {
-            return FilterType.contains
-        }
-        default:
-            return FilterType.equals
-    }
-}

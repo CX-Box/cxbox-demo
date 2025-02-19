@@ -37,7 +37,6 @@ import org.springframework.stereotype.Service;
 public class ResponsibilitiesActionAdminService extends
 		VersionAwareResponseService<ResponsibilitiesActionAdminDTO, ResponsibilitiesAction> {
 
-	@Getter
 	private final MetaAdminServiceExt metaAdminServiceExt;
 
 	private Map<String, WidgetSourceDTO> nameToWidget;

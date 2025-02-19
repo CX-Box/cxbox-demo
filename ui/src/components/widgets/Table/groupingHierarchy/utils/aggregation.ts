@@ -1,7 +1,8 @@
 import { t } from 'i18next'
 import { decreaseOpacityPerLevelPercent, totalRowKey } from '../constants'
+import getAggFunctionResult from '@utils/getAggFunctionResult'
 import { GroupingHierarchyCommonNode } from '@components/widgets/Table/groupingHierarchy'
-import { EAggFunction, IAggField, IAggLevel } from '@interfaces/groupingHierarchy'
+import { IAggField, IAggLevel } from '@interfaces/groupingHierarchy'
 import { WidgetListField } from '@cxbox-ui/core'
 
 export const getAggCellBgOpacity = (dataItemId: string, groupLevel: number) => {
@@ -70,21 +71,6 @@ export const updateAggFieldValuesPerLevel = (
             const currentValue = Array.isArray(currentGroup[aggField]) ? currentGroup[aggField] : [currentGroup[aggField]]
             currentGroup[aggField] = [...currentValue, ...newValue]
         })
-    }
-}
-
-const getAggFunctionResult = (aggFunc: EAggFunction, values: number[]) => {
-    switch (aggFunc) {
-        case EAggFunction.sum:
-            return values.reduce((acc, number) => acc + Number(number), 0)
-        case EAggFunction.min:
-            return Math.min(...values)
-        case EAggFunction.max:
-            return Math.max(...values)
-        case EAggFunction.avg:
-            return values.reduce((acc, number) => acc + Number(number), 0) / values.length
-        default:
-            return null
     }
 }
 

@@ -1,9 +1,4 @@
-export const enum EAggFunction {
-    sum = 'sum',
-    min = 'min',
-    max = 'max',
-    avg = 'avg'
-}
+import { EAggFunction } from '@constants/aggregation'
 
 export interface IAggField {
     fieldKey: string

@@ -1,3 +1,4 @@
+import { EAggFunction } from '@constants/aggregation'
 import {
     DictionaryFieldMeta,
     NumberFieldMeta,
@@ -226,13 +227,6 @@ export interface AdditionalInfoWidgetMeta extends Omit<WidgetInfoMeta, 'type'> {
 }
 
 export interface AdditionalListWidgetMeta extends AppWidgetMeta {}
-
-export const enum EAggFunction {
-    sum = 'sum',
-    min = 'min',
-    max = 'max',
-    avg = 'avg'
-}
 
 export interface Chart1DConfig {
     valueFieldKey: string

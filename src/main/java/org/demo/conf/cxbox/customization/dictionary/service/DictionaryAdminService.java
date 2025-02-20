@@ -74,7 +74,7 @@ public class DictionaryAdminService extends VersionAwareResponseService<Dictiona
 
 	private final CxboxFileService cxboxFileService;
 
-	@Getter(onMethod_ = {@Override})
+	@Getter(onMethod_ = @Override)
 	private final Class<DictionaryAdminMeta> meta = DictionaryAdminMeta.class;
 
 	@Override

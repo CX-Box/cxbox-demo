@@ -1,10 +1,12 @@
 package org.demo.repository;
 
 import java.util.List;
+import java.util.Set;
 import org.demo.entity.Client;
 import org.demo.entity.Client_;
 import org.demo.entity.enums.ClientStatus;
 import org.demo.conf.cxbox.extension.fulltextsearch.FullTextSearchExt;
+import org.demo.entity.enums.FieldOfActivity;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -31,6 +33,7 @@ public interface ClientRepository extends JpaRepository<Client, Long>, JpaSpecif
 		return (root, query, cb) -> root.get(Client_.status).in(clientStatusList);
 	}
 
+	List<Client> findAllByFieldOfActivitiesInAndStatusIn(Set<FieldOfActivity> fieldOfActivities, List<ClientStatus> status);
 
 
 }

@@ -14,10 +14,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class ActionSuggestionAdminService extends AnySourceVersionAwareResponseService<ActionSuggestionAdminDTO, ActionSuggestionAdminDTO> {
 
-	@Getter(onMethod_ = {@Override})
+	@Getter(onMethod_ = @Override)
 	private final Class<ActionSuggestionAdminMeta> meta = ActionSuggestionAdminMeta.class;
 
-	@Getter(onMethod_ = {@Override})
+	@Getter(onMethod_ = @Override)
 	private final Class<ActionSuggestionAdminDao> dao = ActionSuggestionAdminDao.class;
 
 	@Override

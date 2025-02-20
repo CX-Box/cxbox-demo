@@ -28,7 +28,7 @@ public class DashboardClientActivitiesService extends VersionAwareResponseServic
 
 	private final DashboardFilterRepository dashboardFilterRepository;
 
-	@Getter(onMethod_ = {@Override})
+	@Getter(onMethod_ = @Override)
 	private final Class<DashboardClientActivitiesMeta> meta = DashboardClientActivitiesMeta.class;
 
 	@Override

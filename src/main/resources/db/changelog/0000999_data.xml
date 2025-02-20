@@ -54,6 +54,14 @@
       <column header="last_upd_by_user_id" name="last_upd_by_user_id" type="STRING"/>
       <column header="region" name="region" type="STRING"/>
     </loadUpdateData>
+    <loadUpdateData tableName="SALE" primaryKey="ID" encoding="UTF-8" separator="," quotchar="&quot;"
+      file="db/data/SALES.csv">
+      <column header="ID" name="ID" type="STRING"/>
+       <column header="client_id" name="client_id" type="STRING"/>
+      <column header="product" name="product" type="STRING"/>
+      <column header="status" name="status" type="STRING"/>
+      <column header="sum" name="sum" type="STRING"/>
+    </loadUpdateData>
   </changeSet>
 
 

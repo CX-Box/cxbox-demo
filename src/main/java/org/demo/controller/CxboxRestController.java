@@ -9,6 +9,7 @@ import org.demo.conf.cxbox.customization.responsibilitiesAction.service.Responsi
 import org.demo.conf.cxbox.extension.jobRunr.service.state.JobStatsService;
 import org.demo.service.cxbox.anysource.clientstats.ClientStatsService;
 import org.demo.conf.cxbox.extension.jobRunr.service.job.JobAdminService;
+import org.demo.service.cxbox.anysource.clientstatspie.ClientStatsPieService;
 import org.demo.service.cxbox.anysource.dadatacompany.CompanyService;
 import org.demo.service.cxbox.anysource.lov.LovReadService;
 import org.demo.service.cxbox.anysource.saleprogress.SaleProgressStatsService;
@@ -61,12 +62,14 @@ public enum CxboxRestController implements EnumBcIdentifier {
 		responsiblePickListPopup(meetingEdit, ResponsiblePickListService.class),
 		clientPickListPopup(meetingEdit, ClientPickListService.class),
 		contactPickListPopup(meetingEdit, ContactPickListService.class),
-	saleStatsProduct(SaleStatsProductService.class),
+
 	sale(SaleReadService.class),
 	saleEdit(SaleWriteService.class),
 		clientSalePickListPopup(saleEdit, ClientPickListService.class),
 	dashboardFilter(DashboardFilterService.class),
 		dashboardClientActivities(dashboardFilter, DashboardClientActivitiesService.class),
+		clientStatsPie(dashboardFilter, ClientStatsPieService.class),
+		saleStatsProduct(dashboardFilter, SaleStatsProductService.class),
 	dashboardSalesFunnel(dashboardFilter, SaleStatsService.class),
 	dashboardSalesRingProgress(dashboardFilter, SaleProgressStatsService.class),
 

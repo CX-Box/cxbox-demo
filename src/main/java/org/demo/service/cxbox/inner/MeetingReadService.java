@@ -44,7 +44,7 @@ public class MeetingReadService extends VersionAwareResponseService<MeetingDTO, 
 
 	private static final String MESSAGE_TEMPLATE = "Status: %s; \nMeeting Result: %s";
 
-	@Getter(onMethod_ = {@Override})
+	@Getter(onMethod_ = @Override)
 	private final Class<MeetingReadMeta> meta = MeetingReadMeta.class;
 
 	@Override

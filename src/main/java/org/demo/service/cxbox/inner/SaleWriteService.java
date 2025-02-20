@@ -28,7 +28,7 @@ public class SaleWriteService extends VersionAwareResponseService<SaleDTO, Sale>
 
 	private final ClientRepository clientRepository;
 
-	@Getter(onMethod_ = {@Override})
+	@Getter(onMethod_ = @Override)
 	private final Class<SaleWriteMeta> meta = SaleWriteMeta.class;
 
 	@Override

@@ -1,6 +1,6 @@
 {
   "name": "dashboardSalesColumn2D",
-  "title": "Sales Column2D",
+  "title": "Sales Clients",
   "type": "Column2D",
   "bc": "saleStatsProduct",
   "fields": [

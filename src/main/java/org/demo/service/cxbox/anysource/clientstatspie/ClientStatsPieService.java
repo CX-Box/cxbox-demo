@@ -1,4 +1,4 @@
-package org.demo.service.cxbox.anysource.clientstats;
+package org.demo.service.cxbox.anysource.clientstatspie;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -12,13 +12,13 @@ import org.springframework.stereotype.Service;
 @SuppressWarnings({"java:S1170", "java:S2387"})
 @RequiredArgsConstructor
 @Service
-public class ClientStatsService extends AnySourceVersionAwareResponseService<ClientStatsDTO, ClientStatsDTO> {
+public class ClientStatsPieService extends AnySourceVersionAwareResponseService<ClientStatsDTO, ClientStatsDTO> {
 
 	@Getter(onMethod_ = @Override)
-	private final Class<ClientStatsMeta> meta = ClientStatsMeta.class;
+	private final Class<ClientStatsPieMeta> meta = ClientStatsPieMeta.class;
 
 	@Getter(onMethod_ = @Override)
-	private final Class<ClientStatsDao> dao = ClientStatsDao.class;
+	private final Class<ClientStatsPieDao> dao = ClientStatsPieDao.class;
 
 	@Override
 	protected CreateResult<ClientStatsDTO> doCreateEntity(ClientStatsDTO entity, BusinessComponent bc) {

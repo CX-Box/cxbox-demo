@@ -51,7 +51,7 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 
 	private final SessionService sessionService;
 
-	@Getter(onMethod_ = {@Override})
+	@Getter(onMethod_ = @Override)
 	private final Class<ClientReadWriteMeta> meta = ClientReadWriteMeta.class;
 
 	@Override

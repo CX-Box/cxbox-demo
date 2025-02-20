@@ -30,7 +30,7 @@ public class ContactPickListService extends VersionAwareResponseService<ContactD
 
 	private final ContactRepository contactRepository;
 
-	@Getter(onMethod_ = {@Override})
+	@Getter(onMethod_ = @Override)
 	private final Class<ContactPickListMeta> meta = ContactPickListMeta.class;
 
 	@Override

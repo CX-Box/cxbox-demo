@@ -12,17 +12,17 @@
     {
       "widgetName": "dashboardClientActivitiesList",
       "position": 10,
-      "gridWidth": 13
+      "gridWidth": 12
     },
     {
       "widgetName": "dashboardClientsPie1D",
       "position": 20,
-      "gridWidth": 10
+      "gridWidth": 12
     },
     {
       "widgetName": "dashboardSalesColumn2D",
-      "position": 30,
-      "gridWidth": 24
+      "position": 20,
+      "gridWidth": 12
     }
   ],
   "rolesAllowed": [

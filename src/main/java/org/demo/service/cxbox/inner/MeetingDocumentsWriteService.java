@@ -47,7 +47,7 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 
 	private final CxboxFileService cxboxFileService;
 
-	@Getter(onMethod_ = {@Override})
+	@Getter(onMethod_ = @Override)
 	private final Class<MeetingDocumentsWriteMeta> meta = MeetingDocumentsWriteMeta.class;
 
 	@Override

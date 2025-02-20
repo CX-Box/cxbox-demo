@@ -33,7 +33,7 @@ DashboardFilterService extends VersionAwareResponseService<DashboardFilterDTO, U
 
 	private final DashboardFilterRepository dashboardFilterRepository;
 
-	@Getter(onMethod_ = {@Override})
+	@Getter(onMethod_ = @Override)
 	private final Class<DashboardFilterMeta> meta = DashboardFilterMeta.class;
 
 	@Override

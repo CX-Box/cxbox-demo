@@ -10,6 +10,12 @@
       "type": "input"
     },
     {
+      "title": "Field Of Activity",
+      "key": "fieldOfActivity",
+      "type": "multipleSelect",
+      "width": 300
+    },
+    {
       "title": "Product",
       "key": "product",
       "type": "dictionary"

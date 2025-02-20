@@ -1,6 +1,7 @@
 package org.demo.service.cxbox.inner;
 
 import java.util.Arrays;
+import java.util.stream.Collectors;
 import org.cxbox.api.data.dictionary.SimpleDictionary;
 import org.cxbox.core.crudma.bc.impl.InnerBcDescription;
 import org.cxbox.core.dto.DrillDownType;
@@ -64,12 +65,12 @@ public class ClientReadWriteMeta extends FieldMetaBuilder<ClientWriteDTO> {
 	@Override
 	public void buildIndependentMeta(FieldsMeta<ClientWriteDTO> fields, InnerBcDescription bcDescription,
 			Long parentId) {
-		/*fields.enableFilter(ClientWriteDTO_.fieldOfActivity);
+		fields.enableFilter(ClientWriteDTO_.fieldOfActivity);
 		fields.setConcreteFilterValues(ClientWriteDTO_.fieldOfActivity, Arrays
 				.stream(FieldOfActivity.values())
 				.map(en -> new SimpleDictionary(en.name(), en.getValue()))
 				.collect(Collectors.toList())
-		);*/
+		);
 		fields.enableFilter(ClientWriteDTO_.fullName);
 		fields.enableSort(ClientWriteDTO_.fullName);
 		fields.enableFilter(ClientWriteDTO_.address);

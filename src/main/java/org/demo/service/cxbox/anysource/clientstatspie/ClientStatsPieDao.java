@@ -93,31 +93,36 @@ public class ClientStatsPieDao extends AbstractAnySourceBaseDAO<ClientStatsDTO> 
 
 	private List<ClientStatsDTO> createClientStatsList(long newCount, long inactiveCount, long inProgressCount) {
 		List<ClientStatsDTO> result = new ArrayList<>(ROWS_TOTAL);
-
-		result.add(createClientStatsDTO(
-				"New Clients",
-				newCount,
-				"#779FE9",
-				"team",
-				NEW_CLIENTS_ID,
-				"New Clients. Press to filter List below"
-		));
-		result.add(createClientStatsDTO(
-				"Inactive Clients",
-				inactiveCount,
-				"#5F90EA",
-				"calendar",
-				INACTIVE_CLIENTS_ID,
-				"Inactive Clients. Press to filter List below"
-		));
-		result.add(createClientStatsDTO(
-				"In Progress Clients",
-				inProgressCount,
-				"#4D83E7",
-				"pie-chart",
-				IN_PROGRESS_CLIENTS,
-				"In Progress Clients. Press to filter List below"
-		));
+		if (newCount != 0) {
+			result.add(createClientStatsDTO(
+					"New Clients",
+					newCount,
+					"#779FE9",
+					"team",
+					NEW_CLIENTS_ID,
+					"New Clients. Press to filter List below"
+			));
+		}
+		if (inactiveCount != 0) {
+			result.add(createClientStatsDTO(
+					"Inactive Clients",
+					inactiveCount,
+					"#5F90EA",
+					"calendar",
+					INACTIVE_CLIENTS_ID,
+					"Inactive Clients. Press to filter List below"
+			));
+		}
+		if (inProgressCount != 0) {
+			result.add(createClientStatsDTO(
+					"In Progress Clients",
+					inProgressCount,
+					"#4D83E7",
+					"pie-chart",
+					IN_PROGRESS_CLIENTS,
+					"In Progress Clients. Press to filter List below"
+			));
+		}
 
 		return result;
 	}
@@ -153,4 +158,5 @@ public class ClientStatsPieDao extends AbstractAnySourceBaseDAO<ClientStatsDTO> 
 	private long countClientsByStatus(ClientStatus status) {
 		return clientRepository.count(clientRepository.statusIn(List.of(status)));
 	}
+
 }

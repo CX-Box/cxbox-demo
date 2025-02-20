@@ -38,6 +38,7 @@ public class SaleStatsProductDao extends AbstractAnySourceBaseDAO<DashboardSales
 
 	private final ParentDtoFirstLevelCache parentDtoFirstLevelCache;
 
+
 	@Override
 	public String getId(final DashboardSalesProductDTO entity) {
 		return entity.getId();
@@ -80,8 +81,10 @@ public class SaleStatsProductDao extends AbstractAnySourceBaseDAO<DashboardSales
 
 		if (parentDtoFirstLevelCache.getParentField(DashboardFilterDTO_.fieldOfActivity, bc) != null &&
 				!parentDtoFirstLevelCache.getParentField(DashboardFilterDTO_.fieldOfActivity, bc).getValues().isEmpty()) {
-			Set<FieldOfActivity> filteredActivities = parentDtoFirstLevelCache.getParentField(DashboardFilterDTO_.fieldOfActivity,
-							bc)
+			Set<FieldOfActivity> filteredActivities = parentDtoFirstLevelCache.getParentField(
+							DashboardFilterDTO_.fieldOfActivity,
+							bc
+					)
 					.getValues().stream().map(v -> FieldOfActivity.getByValue(v.getValue())).collect(Collectors.toSet());
 			sales = saleRepository.findAllByClientFieldOfActivitiesIn(filteredActivities);
 		} else {
@@ -97,7 +100,7 @@ public class SaleStatsProductDao extends AbstractAnySourceBaseDAO<DashboardSales
 		salesSummary.forEach((client, productStats) -> productStats.forEach((product, stats) -> {
 			DashboardSalesProductDTO prod = new DashboardSalesProductDTO();
 			prod.setClientName(client.getFullName());
-			prod.setId(String.valueOf(client.getId()));
+			prod.setId(client.getId() + product.key());
 			prod.setProductName(product.key());
 			prod.setSum(stats.getSum());
 			prod.setColor(Objects.equals(product.key(), Product.EXPERTISE.key()) ? "#4D83E7" : "#30BA8F");
@@ -105,5 +108,6 @@ public class SaleStatsProductDao extends AbstractAnySourceBaseDAO<DashboardSales
 		}));
 		return result;
 	}
+
 
 }

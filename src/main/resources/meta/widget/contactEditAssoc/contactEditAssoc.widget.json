@@ -20,5 +20,11 @@
       "key": "email",
       "type": "input"
     }
-  ]
+  ],
+  "options": {
+    "actionGroups": {
+      "include": [
+      ]
+    }
+  }
 }

@@ -12,7 +12,7 @@
     {
       "title": "Product",
       "key": "product",
-      "type": "input"
+      "type": "dictionary"
     },
     {
       "title": "Status",

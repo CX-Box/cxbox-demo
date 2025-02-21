@@ -1,6 +1,5 @@
 package org.demo.dto.cxbox.inner;
 
-import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

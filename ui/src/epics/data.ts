@@ -1,10 +1,11 @@
 import { RootEpic } from '@store'
-import { catchError, concat, EMPTY, filter, mergeMap, Observable, of } from 'rxjs'
-import { OperationError, OperationErrorEntity, OperationTypeCrud, utils } from '@cxbox-ui/core'
+import { catchError, concat, EMPTY, filter, map, mergeMap, Observable, of } from 'rxjs'
+import { DataItem, OperationError, OperationErrorEntity, OperationTypeCrud, utils } from '@cxbox-ui/core'
 import { actions } from '@actions'
 import { AxiosError } from 'axios'
 import { AnyAction } from '@reduxjs/toolkit'
 import { buildBcUrl } from '@utils/buildBcUrl'
+import { selectBc, selectBcData } from '@selectors/selectors'
 
 // TODO update this epic in the kernel to the current implementation
 /**

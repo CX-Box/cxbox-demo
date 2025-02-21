@@ -51,3 +51,19 @@ export const openNotification = ({ message, description, okText, cancelText, onO
         })
     }, 100)
 }
+
+const TEXTS_FOR_UNSAVED_NOTIFICATION: Omit<OpenNotificationType, 'onOk' | 'onCancel'> = {
+    key: 'unsaved notification',
+    okText: 'Save',
+    cancelText: 'Cancel',
+    message: 'There is unsaved data, save it ?',
+    description: ''
+}
+
+export const showUnsavedNotification = (onOk?: () => void, onCancel?: () => void) => {
+    return openNotification({
+        ...TEXTS_FOR_UNSAVED_NOTIFICATION,
+        onOk,
+        onCancel
+    })
+}

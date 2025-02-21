@@ -26,7 +26,8 @@ public class ClientStatsPieService extends AnySourceVersionAwareResponseService<
 	}
 
 	@Override
-	protected ActionResultDTO<ClientStatsDTO> doUpdateEntity(ClientStatsDTO entity, ClientStatsDTO data, BusinessComponent bc) {
+	protected ActionResultDTO<ClientStatsDTO> doUpdateEntity(ClientStatsDTO entity, ClientStatsDTO data,
+			BusinessComponent bc) {
 		throw new IllegalStateException();
 	}
 

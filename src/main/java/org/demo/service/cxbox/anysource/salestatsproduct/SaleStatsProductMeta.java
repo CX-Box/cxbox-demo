@@ -77,7 +77,7 @@ public class SaleStatsProductMeta extends AnySourceFieldMetaBuilder<DashboardSal
 			urlFilterBuilder.append(URLEncoder.encode(
 					"&" + SaleDTO_.fieldOfActivity.getName() + "." + SearchOperation.EQUALS_ONE_OF.getOperationName() + "=[\\\"" +
 							fieldOfActivitySet.stream()
-									.map(FieldOfActivity::getValue)
+									.map(v -> "\\\"" + v.getValue() + "\\\"")
 									.collect(Collectors.joining(", ")) +
 							"\\\"]", StandardCharsets.UTF_8));
 		}

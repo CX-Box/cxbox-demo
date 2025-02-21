@@ -73,7 +73,7 @@ public class ClientStatsPieMeta extends AnySourceFieldMetaBuilder<ClientStatsDTO
 				.append("\":\"");
 
 		urlFilterBuilder.append(URLEncoder.encode(
-					ClientAbstractDTO_.status.getName() + "." + SearchOperation.EQUALS_ONE_OF.getOperationName()
+				ClientAbstractDTO_.status.getName() + "." + SearchOperation.EQUALS_ONE_OF.getOperationName()
 						+ "=[\\\""
 						+ getStatusFilterValues(id)
 						+ "\\\"]", StandardCharsets.UTF_8));
@@ -89,11 +89,12 @@ public class ClientStatsPieMeta extends AnySourceFieldMetaBuilder<ClientStatsDTO
 					.collect(Collectors.toSet());
 
 			urlFilterBuilder.append(URLEncoder.encode(
-					"&" + ClientReadDTO_.fieldOfActivity.getName() + "." + SearchOperation.EQUALS_ONE_OF.getOperationName() + "=[\\\"" +
+					"&" + ClientReadDTO_.fieldOfActivity.getName() + "." + SearchOperation.EQUALS_ONE_OF.getOperationName() + "=["
+							+
 							fieldOfActivitySet.stream()
-									.map(FieldOfActivity::getValue)
+									.map(v -> "\\\"" + v.getValue() + "\\\"")
 									.collect(Collectors.joining(", ")) +
-							"\\\"]", StandardCharsets.UTF_8));
+							"]", StandardCharsets.UTF_8));
 		}
 
 		urlFilterBuilder.append("\"}");
@@ -105,4 +106,5 @@ public class ClientStatsPieMeta extends AnySourceFieldMetaBuilder<ClientStatsDTO
 	private BusinessComponent getBc() {
 		return this.platformRequest.getBc();
 	}
+
 }

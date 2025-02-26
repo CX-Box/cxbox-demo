@@ -1,0 +1,76 @@
+import React, { useCallback, useMemo, useState } from 'react'
+import { Empty } from 'antd'
+import Table from '@components/widgets/Table/Table'
+import ChartToggleButton from './components/ChartToggleButton/ChartToggleButton'
+import Pie1D from './components/Pie1D/Pie1D'
+import Chart2D from './components/Chart2D/Chart2D'
+import DualAxes2D from './components/DualAxes2D/DualAxes2D'
+import { useAppSelector } from '@store'
+import { getChartIconByWidgetType } from './utils'
+import { EMPTY_ARRAY } from '@constants'
+import { AppWidgetTableMeta, Chart2DWidgetMeta, CustomWidgetTypes, DualAxes2DWidgetMeta, Pie1DWidgetMeta } from '@interfaces/widget'
+import { WidgetListField } from '@cxbox-ui/schema'
+
+interface ChartProps {
+    meta: Chart2DWidgetMeta | Pie1DWidgetMeta | DualAxes2DWidgetMeta
+}
+
+const Chart: React.FC<ChartProps> = ({ meta }) => {
+    const [isTableView, setIsTableView] = useState(false)
+
+    const data = useAppSelector(state => state.data[meta.bcName])
+    const viewWidgets = useAppSelector(state => state.view.widgets)
+
+    const tableMeta = useMemo(() => {
+        if (meta.type === CustomWidgetTypes.DualAxes2D) {
+            const dual2DWidgets = meta.options?.dual2D?.widgets
+
+            if (dual2DWidgets) {
+                const [firstWidgetName, secondWidgetName] = dual2DWidgets
+                const firstChartFields = viewWidgets.find(item => item.name === firstWidgetName)?.fields || EMPTY_ARRAY
+                const firstChartFieldsKeys = (firstChartFields as WidgetListField[]).map(item => item.key)
+
+                const secondChartFields = viewWidgets.find(item => item.name === secondWidgetName)?.fields || EMPTY_ARRAY
+                const filteredSecondChartFields = (secondChartFields as WidgetListField[]).filter(
+                    item => !firstChartFieldsKeys.includes(item.key)
+                )
+
+                return { ...meta, fields: [...firstChartFields, ...filteredSecondChartFields] }
+            }
+        }
+
+        return meta
+    }, [meta, viewWidgets])
+
+    const toggleTableView = useCallback(() => {
+        setIsTableView(prevState => !prevState)
+    }, [])
+
+    if (!data?.length) {
+        return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+    }
+
+    const getChartByWidgetType = () => {
+        switch (meta.type) {
+            case CustomWidgetTypes.Pie1D:
+                return <Pie1D meta={meta} />
+            case CustomWidgetTypes.Column2D:
+            case CustomWidgetTypes.Line2D:
+                return <Chart2D meta={meta} />
+            case CustomWidgetTypes.DualAxes2D:
+                return <DualAxes2D meta={meta} />
+            default:
+                return null
+        }
+    }
+
+    return (
+        <div>
+            <ChartToggleButton chartIcon={getChartIconByWidgetType(meta.type)} isTableView={isTableView} onClick={toggleTableView} />
+
+            {isTableView ? <Table meta={tableMeta as unknown as AppWidgetTableMeta} /> : getChartByWidgetType()}
+        </div>
+    )
+}
+
+export default Chart

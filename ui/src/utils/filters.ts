@@ -1,4 +1,5 @@
-import { BcFilter, FilterType } from '@cxbox-ui/core'
+import { BcFilter, FieldType, FilterType } from '@cxbox-ui/core'
+import { CustomFieldTypes } from '@interfaces/widget'
 
 const EMPTY_OBJECT = {}
 const normalizeFilterValue = (value: unknown) => {
@@ -21,4 +22,38 @@ export const convertFiltersIntoObject = (filters?: BcFilter[]) => {
             return filtersObj
         }, {}) || EMPTY_OBJECT
     )
+}
+
+/**
+ * Returns appropriate filtration type for specified field type.
+ *
+ * - Text-based fields use `contains`
+ * - Checkbox fields use `specified` (boolean)
+ * - Dictionary fiels use `equalsOneOf`
+ *
+ * All other field types use strict `equals`
+ *
+ * @param fieldType Field type
+ */
+export function getFilterType(fieldType: FieldType | CustomFieldTypes) {
+    switch (fieldType) {
+        case CustomFieldTypes.MultipleSelect:
+        case FieldType.radio:
+        case FieldType.dictionary: {
+            return FilterType.equalsOneOf
+        }
+        case FieldType.checkbox: {
+            return FilterType.specified
+        }
+        case CustomFieldTypes.SuggestionPickList:
+        case FieldType.inlinePickList:
+        case FieldType.pickList:
+        case FieldType.input:
+        case FieldType.fileUpload:
+        case FieldType.text: {
+            return FilterType.contains
+        }
+        default:
+            return FilterType.equals
+    }
 }

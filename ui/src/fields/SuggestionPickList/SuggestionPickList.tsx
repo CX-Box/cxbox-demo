@@ -1,21 +1,21 @@
 import React, { useCallback, useState, useEffect, useRef } from 'react'
-import { Empty, Icon, Input } from 'antd'
-import { SuggestionPickListDataItem } from '@interfaces/data'
-import { SuggestionPickListField, SuggestionPickListWidgetMeta } from '@interfaces/widget'
-import { shallowEqual, useDispatch } from 'react-redux'
-import { createContentList, createDataItemFrom } from './SuggestionPickList.utils'
 import Select, { Option } from 'rc-select'
+import { Empty, Icon, Input, Spin } from 'antd'
+import { shallowEqual, useDispatch } from 'react-redux'
+import { firstValueFrom } from 'rxjs'
 import debounce from 'lodash.debounce'
 import cn from 'classnames'
-import 'rc-select/assets/index.less'
-import styles from './SuggestionPickList.less'
+import { createContentList, createDataItemFrom } from './utils'
 import { BaseFieldProps } from '@cxboxComponents/Field/Field'
 import { useAppSelector } from '@store'
 import { actions } from '@actions'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import { CxBoxApiInstance } from '../../api'
-import { firstValueFrom } from 'rxjs'
 import { PendingDataItem } from '@cxbox-ui/core'
+import { SuggestionPickListDataItem } from '@interfaces/data'
+import { SuggestionPickListField, SuggestionPickListWidgetMeta } from '@interfaces/widget'
+import 'rc-select/assets/index.less'
+import styles from './SuggestionPickList.less'
 
 type DebounceFunc = ReturnType<typeof debounce>
 
@@ -42,7 +42,7 @@ export function SuggestionPickList({ meta: fieldMeta, widgetName, cursor, value,
         }
     }, shallowEqual)
 
-    const { elements: optionElements, fetchData: fetchOptions, options } = useOptions({ widget })
+    const { elements: optionElements, fetchData: fetchOptions, options, isLoading } = useOptions({ widget })
 
     const dispatch = useDispatch()
 
@@ -103,7 +103,7 @@ export function SuggestionPickList({ meta: fieldMeta, widgetName, cursor, value,
                 _limit: widget.limit || fieldBc?.limit
             })
         },
-        [fetchOptions, fieldBc, fieldBc?.limit, fieldBc?.page, fieldBcUrl, screenName, widget.limit]
+        [fetchOptions, fieldBc, fieldBcUrl, screenName, widget.limit]
     )
 
     const handleInputChange = useCallback(
@@ -144,6 +144,7 @@ export function SuggestionPickList({ meta: fieldMeta, widgetName, cursor, value,
             style={{ width: '100%' }}
             dropdownClassName={styles.dropdown}
             mode="combobox"
+            virtual={false}
             defaultActiveFirstOption={false}
             value={value}
             getInputElement={() => (
@@ -158,6 +159,7 @@ export function SuggestionPickList({ meta: fieldMeta, widgetName, cursor, value,
                 </div>
             )}
             notFoundContent={<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
+            dropdownRender={menu => (isLoading ? <Spin className={styles.spinner} /> : menu)}
             onSelect={handleSelect}
             onFocus={handleFocus}
             filterOption={false}
@@ -173,6 +175,7 @@ export default SuggestionPickList
 const MIN_SEARCH_VALUE_LENGTH = 0
 
 function useOptions({ widget }: { widget: SuggestionPickListWidgetMeta }) {
+    const [isLoading, setIsLoading] = useState(false)
     const [options, setOptions] = useState<SuggestionPickListDataItem[] | undefined>()
 
     const elements = options?.map(option => {
@@ -195,11 +198,17 @@ function useOptions({ widget }: { widget: SuggestionPickListWidgetMeta }) {
         fetchDataDebouncedRef.current = debounce(
             (screenName: string, fieldBcUrl: string, params: { query: string; _page: number; _limit: number }) => {
                 if (params.query?.length >= MIN_SEARCH_VALUE_LENGTH) {
-                    firstValueFrom(CxBoxApiInstance.fetchBcData(screenName, fieldBcUrl, params)).then(response => {
-                        const data = response.data as unknown as SuggestionPickListDataItem[]
+                    setIsLoading(true)
+                    firstValueFrom(CxBoxApiInstance.fetchBcData(screenName, fieldBcUrl, params))
+                        .then(response => {
+                            const data = response.data as unknown as SuggestionPickListDataItem[]
 
-                        setOptions(data)
-                    })
+                            setOptions(data)
+                        })
+                        .catch(error => {
+                            console.error(error)
+                        })
+                        .finally(() => setIsLoading(false))
                 }
             },
             500
@@ -207,6 +216,7 @@ function useOptions({ widget }: { widget: SuggestionPickListWidgetMeta }) {
     }, [])
 
     return {
+        isLoading,
         options,
         elements,
         fetchData: fetchDataDebouncedRef

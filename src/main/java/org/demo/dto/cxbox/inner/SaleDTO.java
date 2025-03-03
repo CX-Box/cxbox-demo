@@ -46,7 +46,7 @@ public class SaleDTO extends DataResponseDTO {
 		this.status = sale.getStatus();
 		this.sum = sale.getSum();
 		this.color = "#edaa";
-		this.fieldOfActivity =  sale.getClient().getFieldOfActivities()
+		this.fieldOfActivity = sale.getClient() == null ? null : sale.getClient().getFieldOfActivities()
 				.stream()
 				.collect(MultivalueField.toMultivalueField(
 						Enum::name,

@@ -1,6 +1,6 @@
 {
   "name": "dashboardSalesColumn2D",
- "title": "Sales.Sum by Client Statuses",
+ "title": "Sales.Sum by Product Type",
   "type": "Column2D",
   "bc": "saleStatsProduct",
   "fields": [

@@ -21,7 +21,9 @@
       "@imports": ["./imports"],
       "@store": ["./store"],
       "@router": ["./router"],
-      "@i18n": ["./i18n"]
+      "@i18n": ["./i18n"],
+      "@selectors/*": ["./selectors/*"],
+      "@selectors": ["./selectors"]
     }
   }
 }

@@ -1,65 +1,125 @@
 import { AnyAction, Dispatch, MiddlewareAPI } from 'redux'
 import { RootState } from '@store'
-import { actions, interfaces } from '@cxbox-ui/core'
 import { AppWidgetMeta } from '@interfaces/widget'
-import { openNotification, OpenNotificationType } from './internalFormWidgetMiddleware.utils'
-import { partialUpdateRecordForm, resetRecordForm, setRecordForm } from '@actions'
-import { Middleware } from '@reduxjs/toolkit'
+import { actions, partialUpdateRecordForm, resetRecordForm, setRecordForm } from '@actions'
+import { isAnyOf, Middleware } from '@reduxjs/toolkit'
+import { OperationTypeCrud, PendingDataItem } from '@cxbox-ui/core'
+import { selectors } from '@selectors'
+import { showUnsavedNotification } from './internalFormWidgetMiddleware.utils'
 
-const { OperationTypeCrud } = interfaces
-
-const TEXTS_FOR_UNSAVED_NOTIFICATION: Omit<OpenNotificationType, 'onOk' | 'onCancel'> = {
-    key: 'unsaved notification',
-    okText: 'Save',
-    cancelText: 'Cancel',
-    message: 'There is unsaved data, save it ?',
-    description: ''
-}
+const { selectBcRecordPendingDataChanges, selectBcRecordForm, selectBc } = selectors
 
 export const internalFormWidgetMiddleware: Middleware =
     ({ getState, dispatch }: MiddlewareAPI<Dispatch<AnyAction>, RootState>) =>
     (next: Dispatch) =>
     (action: AnyAction) => {
+        const EMPTY_ACTION = actions.emptyAction()
         const state = getState()
-        const recordForm = state.view.recordForm
 
-        const selectBcRecordAfter = (action: AnyAction) => {
-            next(action)
+        const bcRecordForm = selectBcRecordForm(state, action.payload?.bcName)
+        const previousCursor = selectBc(state, action.payload?.bcName)?.cursor
 
-            const actionPayload = action.payload as { bcName: string; cursor: string }
+        const previousPendingDataChanges = selectBcRecordPendingDataChanges(state, action.payload?.bcName, previousCursor)
+        const previousRecordHasPendingDataChanges = hasPendingDataChanges(previousPendingDataChanges)
+        const actionIsRelatedToRecordForm = action.payload?.bcName === bcRecordForm?.bcName
+        const isSelectRecordWithOpenedForm =
+            actions.bcSelectRecord.match(action) &&
+            actionIsRelatedToRecordForm &&
+            bcRecordForm?.cursor !== action.payload?.cursor &&
+            bcRecordForm?.active
+        const isChangeActiveRecordForm = setRecordForm.match(action) && action.payload?.cursor !== bcRecordForm?.cursor
 
+        const saveCallback = () => {
             dispatch(
-                actions.bcSelectRecord({
-                    bcName: actionPayload.bcName,
-                    cursor: actionPayload.cursor
+                actions.sendOperation({
+                    bcName: action.payload?.bcName,
+                    operationType: OperationTypeCrud.save,
+                    widgetName: bcRecordForm?.widgetName ?? '',
+                    onSuccessAction: action
                 })
             )
-
-            return next(actions.emptyAction())
         }
 
-        const cancelCreate = (action: AnyAction) => {
+        const cancelPendingChanges = (bcName: string | undefined) => {
+            if (bcName) {
+                dispatch(actions.bcCancelPendingChanges({ bcNames: [bcName] }))
+                dispatch(actions.clearValidationFails(null))
+            }
+        }
+
+        const cancelCreate = () => {
             return next(
                 actions.sendOperation({
                     bcName: action.payload?.bcName,
                     operationType: OperationTypeCrud.cancelCreate,
-                    widgetName: recordForm[action.payload?.bcName]?.widgetName
+                    widgetName: bcRecordForm?.widgetName ?? ''
                 })
             )
         }
 
-        const resetRecordFormAfter = (action: AnyAction) => {
-            next(action)
+        if (isSelectRecordWithOpenedForm || isChangeActiveRecordForm) {
+            const cancelCallback = () => {
+                if (bcRecordForm?.create) {
+                    cancelCreate()
+                } else {
+                    previousRecordHasPendingDataChanges && cancelPendingChanges(action.payload?.bcName)
 
-            return next(resetRecordForm({ bcName: action.payload?.bcName }))
+                    isSelectRecordWithOpenedForm && next(resetRecordForm({ bcName: action.payload?.bcName }))
+                    next(action)
+                    isChangeActiveRecordForm &&
+                        dispatch(
+                            actions.bcSelectRecord({
+                                bcName: action.payload?.bcName,
+                                cursor: action.payload?.cursor
+                            })
+                        )
+                }
+            }
+
+            if (previousRecordHasPendingDataChanges) {
+                showUnsavedNotification(saveCallback, cancelCallback)
+            } else {
+                cancelCallback()
+            }
+
+            return next(EMPTY_ACTION)
         }
 
-        const setRecordFormAfterCreateSuccess = (action: AnyAction) => {
-            next(action)
+        const isCreateOperation = actions.sendOperation.match(action) && action.payload.operationType === OperationTypeCrud.create
+        const widgetWithInternalWidgetCreate = isCreateOperation
+            ? getWidgetWithInternalWidgetCreateForAction(state.view.widgets as AppWidgetMeta[], action)
+            : undefined
 
+        if (isCreateOperation && widgetWithInternalWidgetCreate) {
+            const cancelCallback = () => {
+                previousRecordHasPendingDataChanges && cancelPendingChanges(action.payload?.bcName)
+                // add data to track the completion of the creation action
+                dispatch(
+                    partialUpdateRecordForm({
+                        widgetName: (widgetWithInternalWidgetCreate as AppWidgetMeta).options?.create?.widget,
+                        bcName: widgetWithInternalWidgetCreate.bcName // the bcName of the external widget and the internal form widget should be the same
+                    })
+                )
+
+                return next(action)
+            }
+            if (previousRecordHasPendingDataChanges) {
+                showUnsavedNotification(saveCallback, cancelCallback)
+
+                return next(EMPTY_ACTION)
+            } else {
+                return cancelCallback()
+            }
+        }
+
+        const isSuccessfulCreateForInternalWidget = actions.bcNewDataSuccess.match(action) && actionIsRelatedToRecordForm
+
+        if (isSuccessfulCreateForInternalWidget) {
+            next(action)
+            // set record form after successful create operation
             dispatch(
                 setRecordForm({
-                    widgetName: recordForm[action.payload?.bcName]?.widgetName,
+                    widgetName: bcRecordForm?.widgetName ?? '',
                     bcName: action.payload?.bcName,
                     cursor: action.payload.dataItem.id,
                     active: true,
@@ -67,251 +127,41 @@ export const internalFormWidgetMiddleware: Middleware =
                 })
             )
 
-            return next(actions.emptyAction())
+            return next(EMPTY_ACTION)
         }
 
-        const partialUpdateRecordFormForActionSuccessfullyCreate = (
-            action: AnyAction,
-            internalBcName: string,
-            internalWidgetName?: string
-        ) => {
-            dispatch(
-                partialUpdateRecordForm({
-                    widgetName: internalWidgetName,
-                    bcName: internalBcName
-                })
-            )
+        const operationOnRecordFormIsComplete =
+            isAnyOf(actions.bcSaveDataSuccess, actions.bcNewDataFail, actions.sendOperationSuccess)(action) && actionIsRelatedToRecordForm
+        // reset record form after a form-related operation is complete
+        if (operationOnRecordFormIsComplete) {
+            next(action)
 
-            return next(action)
+            return next(resetRecordForm({ bcName: action.payload?.bcName }))
         }
 
-        const showNotificationBeforeCreatingWhenThereIsAnActiveEdit = (action: AnyAction) => {
-            openNotification({
-                ...TEXTS_FOR_UNSAVED_NOTIFICATION,
-                onOk: () => {
-                    dispatch(
-                        actions.sendOperation({
-                            bcName: action.payload?.bcName,
-                            operationType: OperationTypeCrud.save,
-                            widgetName: recordForm[action.payload?.bcName]?.widgetName,
-                            onSuccessAction: action
-                        })
-                    )
-                },
-                onCancel: () => {
-                    dispatch(actions.bcCancelPendingChanges(null as any))
-                    dispatch(actions.clearValidationFails(null))
+        const currentPendingDataChanges = selectBcRecordPendingDataChanges(state, action.payload?.bcName, bcRecordForm?.cursor)
+        const currentRecordHasPendingDataChanges = hasPendingDataChanges(currentPendingDataChanges)
+
+        if (resetRecordForm.match(action) && currentRecordHasPendingDataChanges) {
+            showUnsavedNotification(saveCallback, () => {
+                if (bcRecordForm?.create) {
+                    cancelCreate()
+                } else {
+                    cancelPendingChanges(action.payload?.bcName)
                     next(action)
                 }
             })
 
-            return next(actions.emptyAction())
+            return next(EMPTY_ACTION)
         }
-
-        const showNotificationAtChangeActiveForm = (action: AnyAction) => {
-            openNotification({
-                ...TEXTS_FOR_UNSAVED_NOTIFICATION,
-                onOk: () => {
-                    dispatch(
-                        actions.sendOperation({
-                            bcName: action.payload?.bcName,
-                            operationType: OperationTypeCrud.save,
-                            widgetName: recordForm[action.payload?.bcName]?.widgetName,
-                            onSuccessAction: action
-                        })
-                    )
-                },
-                onCancel: () => {
-                    dispatch(actions.bcCancelPendingChanges(null as any))
-                    dispatch(actions.clearValidationFails(null))
-                    next(action)
-                    dispatch(
-                        actions.bcSelectRecord({
-                            bcName: action.payload?.bcName,
-                            cursor: action.payload?.cursor
-                        })
-                    )
-                }
-            })
-
-            return next(actions.emptyAction())
-        }
-
-        const showNotificationAtSimpleRecordChange = (action: AnyAction) => {
-            openNotification({
-                ...TEXTS_FOR_UNSAVED_NOTIFICATION,
-                onOk: () => {
-                    dispatch(
-                        actions.sendOperation({
-                            bcName: action.payload?.bcName,
-                            operationType: OperationTypeCrud.save,
-                            widgetName: recordForm[action.payload?.bcName]?.widgetName,
-                            onSuccessAction: action
-                        })
-                    )
-                },
-                onCancel: () => {
-                    dispatch(actions.bcCancelPendingChanges(null as any))
-                    dispatch(actions.clearValidationFails(null))
-                    next(resetRecordForm({ bcName: action.payload?.bcName }))
-                    next(action)
-                }
-            })
-
-            return next(actions.emptyAction())
-        }
-
-        const showNotificationAtChangeRecordAfterCreate = (action: AnyAction) => {
-            openNotification({
-                ...TEXTS_FOR_UNSAVED_NOTIFICATION,
-                onOk: () => {
-                    dispatch(
-                        actions.sendOperation({
-                            bcName: action.payload?.bcName,
-                            operationType: OperationTypeCrud.save,
-                            widgetName: recordForm[action.payload?.bcName]?.widgetName,
-                            onSuccessAction: action
-                        })
-                    )
-                },
-                onCancel: () => {
-                    next(
-                        actions.sendOperation({
-                            bcName: action.payload?.bcName,
-                            operationType: OperationTypeCrud.cancelCreate,
-                            widgetName: recordForm[action.payload?.bcName]?.widgetName
-                        })
-                    )
-                }
-            })
-
-            return next(actions.emptyAction())
-        }
-
-        const previousCursor = state.screen.bo.bc[action.payload?.bcName]?.cursor
-        const previousPendingDataChanges = previousCursor
-            ? state.view.pendingDataChanges?.[action.payload?.bcName]?.[previousCursor]
-            : undefined
-        const isPreviousPendingDataChanges = previousPendingDataChanges ? !!Object.keys(previousPendingDataChanges).length : false
-        const actionIsDependsOnRecordForm = action.payload?.bcName === recordForm[action.payload?.bcName]?.bcName
-        const isSimpleChangeRecordForActiveRecordForm =
-            action.type === actions.bcSelectRecord.toString() &&
-            actionIsDependsOnRecordForm &&
-            recordForm[action.payload?.bcName]?.cursor !== action.payload?.cursor &&
-            recordForm[action.payload?.bcName]?.active
-        const isChangeActiveRecordForm =
-            action.type === setRecordForm.toString() && action.payload?.cursor !== recordForm[action.payload?.bcName]?.cursor
-        const actionListForRecordFormReset = [
-            actions.bcSaveDataSuccess.toString(),
-            actions.sendOperationSuccess.toString(),
-            actions.bcNewDataFail.toString()
-        ]
-
-        // Logic for change cursor before
-        if (
-            (isSimpleChangeRecordForActiveRecordForm || isChangeActiveRecordForm) &&
-            recordForm[action.payload?.bcName]?.create &&
-            isPreviousPendingDataChanges
-        ) {
-            return showNotificationAtChangeRecordAfterCreate(action)
-        }
-
-        if (
-            (isSimpleChangeRecordForActiveRecordForm || isChangeActiveRecordForm) &&
-            recordForm[action.payload?.bcName]?.create &&
-            !isPreviousPendingDataChanges
-        ) {
-            return cancelCreate(action)
-        }
-
-        if (isSimpleChangeRecordForActiveRecordForm && isPreviousPendingDataChanges) {
-            return showNotificationAtSimpleRecordChange(action)
-        }
-
-        if (isSimpleChangeRecordForActiveRecordForm && !isPreviousPendingDataChanges) {
-            return resetRecordFormAfter(action)
-        }
-
-        if (isChangeActiveRecordForm && isPreviousPendingDataChanges) {
-            return showNotificationAtChangeActiveForm(action)
-        }
-
-        if (isChangeActiveRecordForm && !isPreviousPendingDataChanges) {
-            return selectBcRecordAfter(action)
-        }
-        // Logic for change cursor after
-
-        // Logic for create operation before
-        const isCreateOperation =
-            action.type === actions.sendOperation.toString() && action.payload.operationType === OperationTypeCrud.create
-        const widgetWithInternalWidgetCreate = isCreateOperation
-            ? getWidgetWithInternalWidgetCreateForAction(state.view.widgets as AppWidgetMeta[], action)
-            : undefined
-
-        if (isCreateOperation && widgetWithInternalWidgetCreate && isPreviousPendingDataChanges) {
-            return showNotificationBeforeCreatingWhenThereIsAnActiveEdit(action)
-        }
-
-        if (isCreateOperation && widgetWithInternalWidgetCreate && !isPreviousPendingDataChanges) {
-            return partialUpdateRecordFormForActionSuccessfullyCreate(
-                action,
-                widgetWithInternalWidgetCreate.bcName, // the bcName of the external widget and the internal form widget should be the same
-                (widgetWithInternalWidgetCreate as AppWidgetMeta).options?.create?.widget
-            )
-        }
-
-        const isSuccessfulCreateForInternalWidget =
-            action.type === actions.bcNewDataSuccess.toString() &&
-            recordForm[action.payload?.bcName]?.widgetName &&
-            actionIsDependsOnRecordForm
-
-        if (isSuccessfulCreateForInternalWidget) {
-            return setRecordFormAfterCreateSuccess(action)
-        }
-
-        if (actionListForRecordFormReset.includes(action.type) && actionIsDependsOnRecordForm) {
-            return resetRecordFormAfter(action)
-        }
-        // Logic for create operation after
-
-        // Logic for closing the current record form before
-        const currentCursor = recordForm[action.payload?.bcname]?.cursor
-        const currentPendingDataChanges = currentCursor
-            ? state.view.pendingDataChanges?.[action.payload?.bcName]?.[currentCursor]
-            : undefined
-        const isCurrentPendingDataChanges = currentPendingDataChanges ? !!Object.keys(currentPendingDataChanges).length : false
-
-        const showNotificationAtRecordClose = (action: AnyAction) => {
-            openNotification({
-                ...TEXTS_FOR_UNSAVED_NOTIFICATION,
-                onOk: () => {
-                    dispatch(
-                        actions.sendOperation({
-                            bcName: recordForm[action.payload?.bcname]?.bcName,
-                            operationType: OperationTypeCrud.save,
-                            widgetName: recordForm[action.payload?.bcName]?.widgetName,
-                            onSuccessAction: action
-                        })
-                    )
-                },
-                onCancel: () => {
-                    dispatch(actions.bcCancelPendingChanges(null as any))
-                    dispatch(actions.clearValidationFails(null))
-                    next(action)
-                }
-            })
-
-            return next(actions.emptyAction())
-        }
-
-        if (action.type === resetRecordForm.toString() && isCurrentPendingDataChanges) {
-            return showNotificationAtRecordClose(action)
-        }
-        // Logic for closing the current record form after
 
         return next(action)
     }
 
 function getWidgetWithInternalWidgetCreateForAction(widgets: AppWidgetMeta[], action: AnyAction) {
     return widgets.find(item => item.name === action.payload.widgetName && item.options?.create?.widget)
+}
+
+function hasPendingDataChanges(pendingDataChanges: PendingDataItem | undefined) {
+    return pendingDataChanges ? !!Object.keys(pendingDataChanges).length : false
 }

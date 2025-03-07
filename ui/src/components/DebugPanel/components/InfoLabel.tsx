@@ -10,7 +10,6 @@ interface InfoLabelProps {
 }
 const InfoLabel: React.FunctionComponent<InfoLabelProps> = props => {
     const { label, info, noContainer } = props
-    console.log({ props })
     const content = (
         <>
             <span className={styles.label}>{label}</span>

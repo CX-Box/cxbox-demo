@@ -1,5 +1,6 @@
 import { Button, notification } from 'antd'
 import React from 'react'
+import { openNotification as openNotificationDefault } from '@components/NotificationsContainer/utils'
 
 export interface OpenNotificationType {
     key?: string
@@ -42,7 +43,7 @@ export const openNotification = ({ message, description, okText, cancelText, onO
     )
 
     setTimeout(() => {
-        notification.open({
+        openNotificationDefault({
             duration: null,
             message,
             description,

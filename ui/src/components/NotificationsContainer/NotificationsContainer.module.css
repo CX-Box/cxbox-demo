@@ -1,0 +1,41 @@
+.container {
+    position: fixed;
+    top: 32px;
+    right: 42px;
+    z-index: 1058;
+}
+
+.businessNotice {
+    transition: 0.1s ease;
+    order: 1;
+
+    &.downward {
+        order: -1;
+    }
+}
+
+.container :global(.ant-notification) {
+    > span {
+        display: flex;
+        flex-direction: column;
+
+        &:has(.downward) {
+            flex-flow: column-reverse;
+        }
+    }
+
+    &:hover {
+        .stack {
+            display: initial !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+        }
+    }
+}
+
+.closeAllButton {
+    display: none;
+}
+
+.closeAllButton:has(+ div :global(.ant-notification-notice)) {
+    display: initial;
+}

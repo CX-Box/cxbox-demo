@@ -1,5 +1,6 @@
-import { SuggestionPickListDataItem } from '../../interfaces/data'
-import { SuggestionPickListWidgetMeta } from '../../interfaces/widget'
+import { suggestionOptionEmptyValue } from './constants'
+import { SuggestionPickListDataItem } from '@interfaces/data'
+import { SuggestionPickListWidgetMeta } from '@interfaces/widget'
 
 export function createDataItemFrom(pickMap: Record<string, string>, data: SuggestionPickListDataItem) {
     return Object.entries(pickMap).reduce((acc: Record<string, any>, [proposalNewKey, proposalOldKey]) => {
@@ -12,7 +13,7 @@ export function createDataItemFrom(pickMap: Record<string, string>, data: Sugges
 export function createContentList(fieldWidget: SuggestionPickListWidgetMeta, option: SuggestionPickListDataItem) {
     return fieldWidget?.fields?.map(field => {
         const label = field.title ? `${field.title}: ` : ''
-        const value = option[field.key]
+        const value = option[field.key] ?? suggestionOptionEmptyValue
 
         return `${label}${value}`
     })

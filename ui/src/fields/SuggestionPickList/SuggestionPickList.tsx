@@ -1,23 +1,21 @@
-import React, { useCallback, useState, useEffect, useRef } from 'react'
-import { Empty, Icon, Input } from 'antd'
-import { SuggestionPickListDataItem } from '@interfaces/data'
-import { SuggestionPickListField, SuggestionPickListWidgetMeta } from '@interfaces/widget'
+import React, { useCallback } from 'react'
+import Select from 'rc-select'
+import { Empty, Icon, Input, Spin } from 'antd'
 import { shallowEqual, useDispatch } from 'react-redux'
-import { createContentList, createDataItemFrom } from './SuggestionPickList.utils'
-import Select, { Option } from 'rc-select'
-import debounce from 'lodash.debounce'
 import cn from 'classnames'
-import 'rc-select/assets/index.less'
-import styles from './SuggestionPickList.less'
+import ReadOnlyField from '../../components/ui/ReadOnlyField/ReadOnlyField'
+import { useOptions } from './hooks/useOptions'
+import { createDataItemFrom } from './utils'
 import { BaseFieldProps } from '@cxboxComponents/Field/Field'
 import { useAppSelector } from '@store'
 import { actions } from '@actions'
 import { buildBcUrl } from '@utils/buildBcUrl'
-import { CxBoxApiInstance } from '../../api'
-import { firstValueFrom } from 'rxjs'
 import { PendingDataItem } from '@cxbox-ui/core'
-
-type DebounceFunc = ReturnType<typeof debounce>
+import { SuggestionPickListDataItem } from '@interfaces/data'
+import { SuggestionPickListField, SuggestionPickListWidgetMeta } from '@interfaces/widget'
+import { WidgetFieldBase } from '@cxbox-ui/schema'
+import 'rc-select/assets/index.less'
+import styles from './SuggestionPickList.less'
 
 export interface SuggestionPickListProps extends Omit<BaseFieldProps, 'meta'> {
     meta: SuggestionPickListField
@@ -26,7 +24,20 @@ export interface SuggestionPickListProps extends Omit<BaseFieldProps, 'meta'> {
     value: string
 }
 
-export function SuggestionPickList({ meta: fieldMeta, widgetName, cursor, value, disabled, placeholder }: SuggestionPickListProps) {
+export function SuggestionPickList({
+    meta: fieldMeta,
+    widgetName,
+    cursor,
+    value,
+    disabled,
+    placeholder,
+    readOnly,
+    onDrillDown,
+    className,
+    backgroundColor
+}: SuggestionPickListProps) {
+    const dispatch = useDispatch()
+
     const fieldBc = useAppSelector(state => (fieldMeta.popupBcName ? state.screen.bo.bc[fieldMeta.popupBcName] : undefined))
     const { fieldBcUrl, screenName, widget, widgetBcName } = useAppSelector(state => {
         const fieldBcName = fieldMeta.popupBcName
@@ -42,9 +53,7 @@ export function SuggestionPickList({ meta: fieldMeta, widgetName, cursor, value,
         }
     }, shallowEqual)
 
-    const { elements: optionElements, fetchData: fetchOptions, options } = useOptions({ widget })
-
-    const dispatch = useDispatch()
+    const { elements: optionElements, fetchData: fetchOptions, options, isLoading } = useOptions({ widget })
 
     const changeDataAction = useCallback(
         (item: PendingDataItem) => {
@@ -103,7 +112,7 @@ export function SuggestionPickList({ meta: fieldMeta, widgetName, cursor, value,
                 _limit: widget.limit || fieldBc?.limit
             })
         },
-        [fetchOptions, fieldBc, fieldBc?.limit, fieldBc?.page, fieldBcUrl, screenName, widget.limit]
+        [fetchOptions, fieldBc, fieldBcUrl, screenName, widget.limit]
     )
 
     const handleInputChange = useCallback(
@@ -139,25 +148,45 @@ export function SuggestionPickList({ meta: fieldMeta, widgetName, cursor, value,
 
     const handleFocus = useCallback(() => handleSearch(''), [handleSearch])
 
+    if (readOnly) {
+        return (
+            <ReadOnlyField
+                widgetName={widgetName}
+                meta={fieldMeta as unknown as WidgetFieldBase}
+                className={className}
+                backgroundColor={backgroundColor}
+                cursor={cursor}
+                onDrillDown={onDrillDown}
+            >
+                {value}
+            </ReadOnlyField>
+        )
+    }
+
     return (
         <Select
-            style={{ width: '100%' }}
+            className={styles.container}
             dropdownClassName={styles.dropdown}
+            style={{ width: '100%' }}
             mode="combobox"
+            virtual={false}
             defaultActiveFirstOption={false}
             value={value}
             getInputElement={() => (
-                <div className={cn(styles.inputWrapper, { [styles.filled]: value?.length })}>
+                <div className={cn(styles.inputWrapper, { [styles.filled]: !disabled && value?.length })}>
                     <Input value={value} onChange={handleInputChange} placeholder={placeholder} disabled={disabled} />
+
                     <span className={styles.clear} onClick={handleClear}>
                         <Icon type="close-circle" theme="filled" />
                     </span>
+
                     <span className={styles.arrow}>
                         <Icon type="down" />
                     </span>
                 </div>
             )}
             notFoundContent={<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
+            dropdownRender={menu => (isLoading ? <Spin className={styles.spinner} /> : menu)}
             onSelect={handleSelect}
             onFocus={handleFocus}
             filterOption={false}
@@ -169,46 +198,3 @@ export function SuggestionPickList({ meta: fieldMeta, widgetName, cursor, value,
 }
 
 export default SuggestionPickList
-
-const MIN_SEARCH_VALUE_LENGTH = 0
-
-function useOptions({ widget }: { widget: SuggestionPickListWidgetMeta }) {
-    const [options, setOptions] = useState<SuggestionPickListDataItem[] | undefined>()
-
-    const elements = options?.map(option => {
-        const contentList = createContentList(widget, option)
-
-        return (
-            <Option key={option.id}>
-                <div className={styles.option}>
-                    {contentList?.map(text => (
-                        <span key={text}>{text}</span>
-                    ))}
-                </div>
-            </Option>
-        )
-    })
-
-    const fetchDataDebouncedRef = useRef<DebounceFunc>()
-
-    useEffect(() => {
-        fetchDataDebouncedRef.current = debounce(
-            (screenName: string, fieldBcUrl: string, params: { query: string; _page: number; _limit: number }) => {
-                if (params.query?.length >= MIN_SEARCH_VALUE_LENGTH) {
-                    firstValueFrom(CxBoxApiInstance.fetchBcData(screenName, fieldBcUrl, params)).then(response => {
-                        const data = response.data as unknown as SuggestionPickListDataItem[]
-
-                        setOptions(data)
-                    })
-                }
-            },
-            500
-        )
-    }, [])
-
-    return {
-        options,
-        elements,
-        fetchData: fetchDataDebouncedRef
-    }
-}

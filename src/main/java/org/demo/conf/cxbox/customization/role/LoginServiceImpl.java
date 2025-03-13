@@ -156,6 +156,10 @@ public class LoginServiceImpl implements LoginService {
 				UIProperties.SIDE_BAR_WORD_BREAK,
 				String.valueOf(uiProperties.getSideBarWordBreak())
 		));
+		featureSettings.add(new SimpleDictionary(
+				UIProperties.SIDE_BAR_SEARCH_ENABLE,
+				String.valueOf(uiProperties.getSideBarSearchEnabled())
+		));
 		return featureSettings;
 	}
 

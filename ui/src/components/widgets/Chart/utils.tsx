@@ -1,6 +1,19 @@
 import { G2PlotDatum } from '@ant-design/plots'
 import { DataItem } from '@cxbox-ui/core'
 import { WidgetListField } from '@cxbox-ui/schema'
+import { CustomWidgetTypes } from '@interfaces/widget'
+
+export const getChartIconByWidgetType = (widgetType: CustomWidgetTypes) => {
+    switch (widgetType) {
+        case CustomWidgetTypes.Pie1D:
+            return 'pie-chart'
+        case CustomWidgetTypes.Column2D:
+            return 'bar-chart'
+        case CustomWidgetTypes.Line2D:
+        default:
+            return 'line-chart'
+    }
+}
 
 export const getItemDescriptionValue = (item: G2PlotDatum, descriptionFieldKey?: string[]) => {
     const result: string[] = []

@@ -10,7 +10,7 @@
   <parent>
     <groupId>org.cxbox</groupId>
     <artifactId>cxbox-starter-parent</artifactId>
-    <version>4.0.0-M15</version><!-- based on spring-boot-starter-parent 3.3.4-->
+    <version>4.0.0-M16-CXBOX-765-SNAPSHOT</version><!-- based on spring-boot-starter-parent 3.3.8-->
     <relativePath/><!-- lookup parent from repository -->
   </parent>
 
@@ -29,20 +29,15 @@
 
     <!-- override org.springframework.boot/spring-boot-dependencies properties here-->
     <hibernate.version>6.4.10.Final</hibernate.version> <!--Do not change. BaseEntity redesign needed due to 6.5.* annotation checks changes -->
-    <tomcat.version>10.1.31</tomcat.version> <!--Oct 09, 2024. due to CVE-2024-52317 in 10.1.30 from spring-boot-starter-parent 3.3.4 -->
-    <xmlunit2.version>2.10.0</xmlunit2.version> <!--Apr 28, 2024. due to GHSA-chfm-68vv-pvw5 in 2.9.1 from spring-boot-starter-parent 3.3.4 -->
-    <netty.version>4.1.114.Final</netty.version><!--Oct 01, 2024. due to CVE-2024-47535 in 4.1.113.Final from spring-boot-starter-parent 3.3.4 -->
 
-    <!--
-    <spring-framework.version>6.1.14</spring-framework.version> Oct 17, 2024. due to CVE-2024-38820 in 6.1.14 from spring-boot-starter-parent 3.3.4
-    <spring-security.version>6.3.4</spring-security.version> Oct 21, 2024. due to GHSA-c4q5-6c82-3qpw in 6.3.3 from spring-boot-starter-parent 3.3.4
-    -->
+    <xmlunit2.version>2.10.0</xmlunit2.version> <!--Apr 28, 2024. due to GHSA-chfm-68vv-pvw5 in 2.9.1 from spring-boot-starter-parent 3.3.8 -->
+
     <springdoc-openapi-starter-webmvc-ui.version>2.6.0</springdoc-openapi-starter-webmvc-ui.version>
 
     <!-- dependencies versions -->
-    <jobrunr-spring-boot-3-starter.version>7.3.0</jobrunr-spring-boot-3-starter.version> <!--based on spring-boot 3.3.4, e.g. synced to cxbox-starter-parent-->
-    <minio.version>8.5.12</minio.version>
-    <postgresql.version>42.7.4</postgresql.version>
+    <jobrunr-spring-boot-3-starter.version>7.3.2</jobrunr-spring-boot-3-starter.version> <!--based on spring-boot 3.3.8, e.g. synced to cxbox-starter-parent-->
+    <minio.version>8.5.17</minio.version>
+    <postgresql.version>42.7.5</postgresql.version>
   </properties>
 
   <dependencies>

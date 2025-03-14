@@ -5,10 +5,10 @@ import Popup from '../../Popup/Popup'
 import WidgetTitle from '@components/WidgetTitle/WidgetTitle'
 import { useAppDispatch, useAppSelector } from '@store'
 import useFormPopupWidth from './hooks/useFormPopupWidth'
-import { actions, interfaces } from '@cxbox-ui/core'
 import { WidgetFormPopupMeta } from '@interfaces/widget'
 import { OperationPreInvokeCustom } from '@interfaces/operation'
 import styles from './FormPopup.less'
+import { actions } from '@actions'
 
 export interface FormPopupProps {
     meta: WidgetFormPopupMeta
@@ -24,6 +24,9 @@ export function FormPopup(props: FormPopupProps) {
 
     const popupData = useAppSelector(state => state.view.popupData)
     const bc = useAppSelector(state => (bcName ? state.screen.bo.bc[bcName] : undefined))
+    const forceUpdateRowMetaPending =
+        useAppSelector(state => state.session.pendingRequests?.filter(item => item.type === 'force-active')?.length ?? 0) > 0
+
     // todo get from featureSettings or from options
     // const forceUpdateSetting = useAppSelector(
     //     state => state.session.featureSettings?.find(featureSetting => featureSetting.key === 'formPopupForceUpdate')?.value === 'true'
@@ -39,9 +42,13 @@ export function FormPopup(props: FormPopupProps) {
     const popupWidth = useFormPopupWidth(formPopupRef)
 
     const onClose = useCallback(() => {
-        dispatch(actions.bcCancelPendingChanges({ bcNames: [bcName] }))
+        // to prevent data clearing on the main widget
+        const needClearPendingDataForPopup = bcName !== popupData?.calleeBCName
+
+        needClearPendingDataForPopup && dispatch(actions.bcCancelPendingChanges({ bcNames: [bcName] }))
+
         dispatch(actions.closeViewPopup({ bcName }))
-    }, [bcName, dispatch])
+    }, [bcName, dispatch, popupData?.calleeBCName])
 
     const onSave = useCallback(() => {
         if (!bcLoading && popupData?.options?.operation) {
@@ -60,7 +67,7 @@ export function FormPopup(props: FormPopupProps) {
 
     useEffect(() => {
         if (forceUpdateSetting && showed) {
-            dispatch(actions.bcFetchRowMeta({ widgetName, bcName }))
+            dispatch(actions.forceUpdateRowMeta({ bcName }))
         }
     }, [bcName, dispatch, showed, widgetName])
 
@@ -81,7 +88,7 @@ export function FormPopup(props: FormPopupProps) {
                     defaultOkText={preInvoke?.yesText}
                     defaultCancelText={preInvoke?.noText}
                 >
-                    {bcLoading ? (
+                    {bcLoading || forceUpdateRowMetaPending ? (
                         <div data-test-loading={true}>
                             <Skeleton loading paragraph={{ rows: 5 }} />
                         </div>

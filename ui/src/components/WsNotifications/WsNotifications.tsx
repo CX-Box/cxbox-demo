@@ -6,7 +6,6 @@ import { AxiosError } from 'axios'
 import styles from './WsNotifications.less'
 import { getDefaultModalBodyHeight } from './WsNotifications.utils'
 import markAsReadIcon from './img/markAsRead.svg'
-import { useToggle } from '@hooks/useToggle'
 import { columns, columnsWithLinks, DEFAULT_MODAL_WIDTH } from './WsNotifications.constants'
 import { useTranslation } from 'react-i18next'
 import Pagination from './Pagination'
@@ -14,6 +13,7 @@ import Button from '../ui/Button/Button'
 import { CxBoxApiInstance as instance } from '../../api'
 import { useStompNotification } from '@components/WsNotifications/hooks'
 import { lastValueFrom } from 'rxjs'
+import { useViewPopupVisibility } from '@components/WsNotifications/hooks/useViewPopupVisibility'
 
 interface NotificationProps {}
 
@@ -23,7 +23,7 @@ interface NotificationProps {}
 export function WsNotifications(props: NotificationProps) {
     const { t } = useTranslation()
     const [selectedRowKeys, setSelectedRowKeys] = useState([])
-    const [visible, toggleVisible] = useToggle(false)
+    const { visibility, toggleVisibility } = useViewPopupVisibility()
     const notification = useStompNotification({ check: true })
     const { setRead, getList } = notification
 
@@ -32,16 +32,16 @@ export function WsNotifications(props: NotificationProps) {
 
     const toggleModalVisibility = useCallback(
         (value: boolean) => {
-            toggleVisible(value)
+            toggleVisibility(value)
 
             value && getList()
         },
-        [getList, toggleVisible]
+        [getList, toggleVisibility]
     )
 
     useEffect(() => {
         const handlePopState = () => {
-            if (visible) {
+            if (visibility) {
                 toggleModalVisibility(false)
             }
         }
@@ -51,7 +51,7 @@ export function WsNotifications(props: NotificationProps) {
         return () => {
             window.removeEventListener('popstate', handlePopState)
         }
-    }, [toggleModalVisibility, visible])
+    }, [toggleModalVisibility, visibility])
 
     const handleMarkAsReadClick = useCallback(() => {
         if (selectedRowKeys.length > 0) {
@@ -112,12 +112,12 @@ export function WsNotifications(props: NotificationProps) {
                 {(notification.state.unreadCount as number) > 0 && <span className={styles.dot}>{notification.state.unreadCount}</span>}
                 <Icon type="bell" style={{ marginBottom: '-4px' }} />
             </Button>
-            {visible && (
+            {visibility && (
                 <div ref={containerRef} className={cn(styles.popupContainer, styles.closeIcon)}>
                     <Modal
                         closable={true}
                         getContainer={false}
-                        visible={visible}
+                        visible={visibility}
                         onCancel={() => toggleModalVisibility(false)}
                         bodyStyle={{ height: getDefaultModalBodyHeight(containerRef) }}
                         width={DEFAULT_MODAL_WIDTH}

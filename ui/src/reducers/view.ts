@@ -1,6 +1,6 @@
 import { PendingValidationFailsFormat, reducers, ViewState as CoreViewState } from '@cxbox-ui/core'
 import { AnyAction, createReducer, isAnyOf } from '@reduxjs/toolkit'
-import { actions, partialUpdateRecordForm, resetRecordForm, setBcCount, setRecordForm, showViewPopup } from '@actions'
+import { actions, partialUpdateRecordForm, resetRecordForm, setBcCount, setRecordForm } from '@actions'
 import { PopupData } from '@interfaces/view'
 import { RowMeta } from '@interfaces/rowMeta'
 
@@ -61,7 +61,7 @@ const viewReducerBuilder = reducers
     .addCase(partialUpdateRecordForm, (state, action) => {
         state.recordForm[action.payload.bcName] = { ...state.recordForm[action.payload.bcName], ...action.payload }
     })
-    .addMatcher(isAnyOf(showViewPopup, actions.showFileViewerPopup), (state, action) => {
+    .addMatcher(isAnyOf(actions.showViewPopup, actions.showFileViewerPopup, actions.showWsNotificationPopup), (state, action) => {
         const { options, ...fileViewerPopupData } = action.payload
         state.popupData = { ...fileViewerPopupData, ...state.popupData, options }
     })

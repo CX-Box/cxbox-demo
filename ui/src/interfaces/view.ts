@@ -11,6 +11,10 @@ export interface CustomPopupOptions {
     calleeFieldKey?: string
 }
 
+export interface WsNotificationPopupOptions {
+    type: 'ws-notification'
+}
+
 export interface PopupData extends CorePopupData {
-    options?: CorePopupData['options'] & CustomPopupOptions & Partial<FileViewerPopupOptions>
+    options?: CorePopupData['options'] & CustomPopupOptions & Partial<FileViewerPopupOptions | WsNotificationPopupOptions>
 }

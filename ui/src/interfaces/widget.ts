@@ -39,7 +39,8 @@ export enum CustomWidgetTypes {
 export const removeRecordOperationWidgets: Array<WidgetTypes | string> = [
     WidgetTypes.List,
     CustomWidgetTypes.GroupingHierarchy,
-    WidgetTypes.PickListPopup
+    WidgetTypes.PickListPopup,
+    WidgetTypes.AssocListPopup
 ]
 
 export interface StepsWidgetMeta extends WidgetMeta {

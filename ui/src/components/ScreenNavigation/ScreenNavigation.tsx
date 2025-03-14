@@ -53,7 +53,6 @@ function ScreenNavigation() {
                             data-test="MAIN_MENU_ITEM"
                             title={item.text}
                         >
-                            {+wordWrapEnabled}
                             <span className={styles.menuItemLink}>
                                 <Icon type={item.icon ? item.icon : 'coffee'} />
                                 <span>{item.text}</span>

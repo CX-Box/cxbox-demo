@@ -64,6 +64,9 @@ const screenReducerBuilder = reducers
     })
     .addCase(actions.updateBcData, (state, action) => {
         const { bcName } = action.payload
+        if (!bcName) {
+            console.warn('bcName is not set')
+        }
 
         state.bo.bc[bcName] = state.bo.bc[bcName] ?? {}
         state.bo.bc[bcName].loading = false

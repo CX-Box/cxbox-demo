@@ -5,7 +5,9 @@ export enum EFeatureSettingKey {
     filterByRangeEnabled = 'filterByRangeEnabled',
     sortEnabled = 'sortEnabled',
     drillDownTooltip = 'drillDownTooltip',
-    multiRoleEnabled = 'multiRoleEnabled'
+    multiRoleEnabled = 'multiRoleEnabled',
+    sideBarWordBreak = 'sideBarWordBreak',
+    sideBarSearchEnabled = 'sideBarSearchEnabled'
 }
 
 export type FeatureSetting = {

@@ -7,3 +7,5 @@ dictionary;1000;_sort.0.desc=displayOrder;'""';
 responsibilities;10000;NULL;'""';
 responsibilitiesAction;10000;NULL;'""';
 responsibilitiesActionSuggestion;100;NULL;'""';
+clientStatsPie;1000;NULL;'""';
+saleStatsProduct;1000;NULL;'""';

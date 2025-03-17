@@ -13,7 +13,10 @@ const emptyData: interfaces.DataItem[] = []
 const dataReducerBuilder = reducers
     .createDataReducerBuilderManager(initialState)
     .replaceCase(actions.bcNewDataSuccess, (state, action) => {
-        state[action.payload.bcName] = [action.payload.dataItem, ...(state[action.payload.bcName] || emptyData)]
+        state[action.payload.bcName] = [
+            action.payload.dataItem,
+            ...(state[action.payload.bcName]?.filter(dataItem => dataItem.id !== action.payload.dataItem?.id) || emptyData)
+        ]
     })
     .addCase(actions.updateBcData, (state, action) => {
         const { bcName, data } = action.payload

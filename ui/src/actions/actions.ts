@@ -119,3 +119,5 @@ export const drillDownInNewTab = createAction<{
     fieldKey: string
     copyLink?: boolean
 }>('drillDownInNewTab')
+
+export const emptyAction = createAction<undefined | AnyAction>('emptyAction')

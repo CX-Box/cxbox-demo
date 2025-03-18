@@ -4,18 +4,17 @@ import { ArgsProps } from 'antd/lib/notification'
 import {
     notifications,
     maxItems,
-    notificationMode,
     directionItems,
     timeout,
     ENotificationMode,
     EDirection,
     notificationsContainerId
 } from '@components/NotificationsContainer/constants'
+import { store } from '@store'
+import { EFeatureSettingKey } from '@interfaces/session'
 import styles from './NotificationsContainer.module.css'
 
-const max = notificationMode === ENotificationMode.single ? 1 : maxItems
 const isDirectionDownward = directionItems === EDirection.downward
-const isStack = notificationMode === ENotificationMode.stack
 
 interface ICustomNotification extends Omit<ArgsProps, 'getContainer'> {}
 
@@ -31,7 +30,14 @@ export const openNotification = (props: ICustomNotification) => {
 }
 
 export const openBusinessNotification = (props: ICustomNotification) => {
-    const key = props.key || `notification-${Date.now()}`
+    const state = store.getState()
+    const notificationMode = state.session.featureSettings?.find(
+        featureSetting => featureSetting.key === EFeatureSettingKey.notificationMode
+    )?.value
+
+    const isStack = notificationMode === ENotificationMode.stack
+    const max = notificationMode === ENotificationMode.single ? 1 : maxItems
+    const key = props.key ?? `notification-${Date.now()}`
 
     if (notifications.size >= max) {
         const firstKey = notifications.values().next().value

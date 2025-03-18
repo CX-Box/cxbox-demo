@@ -15,26 +15,35 @@ function Steps({ meta }: StepsProps) {
     const { Step } = AntSteps
     const { bcName, options } = meta
     const { stepsOptions } = options
-    const { stepsDictionaryKey } = stepsOptions
+    const { stepsDictionaryKey, descriptionFieldKey } = stepsOptions
     const bcUrl = buildBcUrl(bcName, true)
-    const { stepsValues, stepCurrentValue } = useAppSelector(state => {
+    const { stepsValues, stepsDescriptions, stepCurrentValue } = useAppSelector(state => {
         const rowMeta = state.view.rowMeta[bcName]?.[bcUrl]
+        console.log({ fields: rowMeta })
         const stepsField = rowMeta?.fields.find(i => i.key === stepsDictionaryKey)
+        const stepsDescriptions = rowMeta?.fields.find(i => i.key === descriptionFieldKey || 'description')
         return {
             stepsValues: stepsField?.values,
+            stepsDescriptions: stepsDescriptions?.values,
             stepCurrentValue: stepsField?.currentValue
         }
     })
     const { isMainWidget, isCollapsed } = useWidgetCollapse(meta.name)
-    const values = stepsValues?.map(i => i.value)
-    const currentIndex = values?.findIndex(i => i === stepCurrentValue)
+    const values = stepsValues?.map((i, index) => {
+        return {
+            step: i.value,
+            description: stepsDescriptions && stepsDescriptions.length ? stepsDescriptions[index].value : ''
+        }
+    })
+    console.log({ stepsValues, stepsDescriptions })
+    const currentIndex = values?.findIndex(i => i.step === stepCurrentValue)
     return (
         <>
             {isMainWidget && <WidgetTitle level={2} widgetName={meta.name} text={meta.title} />}
             {!(isMainWidget && isCollapsed) && (
                 <AntSteps className={styles.container} current={currentIndex}>
                     {values?.map(i => {
-                        return <Step key={i} title={i} />
+                        return <Step key={i.step} title={i.step} description={i.description} />
                     })}
                 </AntSteps>
             )}

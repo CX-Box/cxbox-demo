@@ -26,6 +26,7 @@
   <properties>
     <!-- change 1 commit-->
     <!-- change 2 commit-->
+    <!-- change 3 commit-->
    <checktyle.config>src/main/resources/checkstyle-checker.xml</checktyle.config>
    <java.version>17</java.version>
 

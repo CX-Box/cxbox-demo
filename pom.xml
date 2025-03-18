@@ -24,10 +24,12 @@
   </repositories>
 
   <properties>
-    <checktyle.config>src/main/resources/checkstyle-checker.xml</checktyle.config>
-    <java.version>17</java.version>
+    <!-- change 1 commit-->
+    <!-- change 2 commit-->
+   <checktyle.config>src/main/resources/checkstyle-checker.xml</checktyle.config>
+   <java.version>17</java.version>
 
-    <!-- override org.springframework.boot/spring-boot-dependencies properties here-->
+   <!-- override org.springframework.boot/spring-boot-dependencies properties here-->
     <hibernate.version>6.4.10.Final</hibernate.version> <!--Do not change. BaseEntity redesign needed due to 6.5.* annotation checks changes -->
     <tomcat.version>10.1.31</tomcat.version> <!--Oct 09, 2024. due to CVE-2024-52317 in 10.1.30 from spring-boot-starter-parent 3.3.4 -->
     <xmlunit2.version>2.10.0</xmlunit2.version> <!--Apr 28, 2024. due to GHSA-chfm-68vv-pvw5 in 2.9.1 from spring-boot-starter-parent 3.3.4 -->

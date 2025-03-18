@@ -72,9 +72,16 @@
 }
 
 .item:global(.ant-menu-item) {
-    height: 40px;
+    min-height: 40px;
+    height: auto;
     font-size: 14px;
     line-height: 20px;
+}
+
+.breakRow {
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    white-space: normal;
 }
 
 .container:global(.ant-menu-inline-collapsed) {

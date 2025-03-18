@@ -43,7 +43,7 @@ public class MeetingStatusModelActionProvider {
 						.invoker((bc, dto) -> {
 							Meeting meeting = meetingRepository.getById(Long.parseLong(bc.getId()));
 							status.transition(status, meeting);
-							if (meeting.getStatus().equals(MeetingStatus.COMPLETED)) {
+							if (meeting.getStatus().equals(MeetingStatus.WAIT_SEND_MAIL)) {
 								mailSendingService.send(
 										Optional.ofNullable(meeting),
 										meeting.getAgenda(),

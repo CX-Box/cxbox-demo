@@ -24,6 +24,11 @@
       "key": "file",
       "type": "fileUpload",
       "fileIdKey": "fileId"
+    },
+    {
+      "label": "Priority",
+      "key": "priority",
+      "type": "number"
     }
   ],
   "options": {
@@ -47,6 +52,14 @@
           "cols": [
             {
               "fieldKey": "briefing",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "priority",
               "span": 12
             }
           ]

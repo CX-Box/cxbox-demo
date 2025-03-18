@@ -24,7 +24,19 @@ public enum MeetingStatus {
 		}
 	},
 
-	COMPLETED("Completed", "Finish") {
+	COMPLETED("Completed", "Send Mail") {
+		@Override
+		public List<MeetingStatus> available(@NonNull Meeting meeting) {
+			return Collections.singletonList(WAIT_SEND_MAIL);
+		}
+
+		@Override
+		public void transition(@NonNull MeetingStatus meetingStatus, @NonNull Meeting meeting) {
+			meeting.setStatus(meetingStatus);
+		}
+	},
+
+	WAIT_SEND_MAIL("Wait Send Mail", "Finish") {
 		@Override
 		public List<MeetingStatus> available(@NonNull Meeting meeting) {
 			return Collections.singletonList(IN_PROGRESS);
@@ -35,7 +47,6 @@ public enum MeetingStatus {
 			meeting.setStatus(meetingStatus);
 		}
 	},
-
 	IN_PROGRESS("In progress", "Start Meeting") {
 		@Override
 		public List<MeetingStatus> available(@NonNull Meeting meeting) {

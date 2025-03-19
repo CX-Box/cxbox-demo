@@ -27,7 +27,7 @@
     {
       "label": "Sum",
       "key": "sum",
-      "type": "input"
+      "type": "number"
     }
   ],
   "options": {

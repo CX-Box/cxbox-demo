@@ -14,11 +14,11 @@
 }
 
 td .root:not(.coloredValue):not(.onlyIcon) {
-    padding: 0 8px;
+    padding: 0 12px;
 }
 
 td .root.onlyIcon {
-    padding: 0 0 0 8px;
+    padding: 0 0 0 12px;
 }
 
 

@@ -33,7 +33,9 @@ export enum CustomWidgetTypes {
     StatsBlock = 'StatsBlock',
     GroupingHierarchy = 'GroupingHierarchy',
     Pie1D = 'Pie1D',
-    Column2D = 'Column2D'
+    Column2D = 'Column2D',
+    Line2D = 'Line2D',
+    DualAxes2D = 'DualAxes2D'
 }
 
 export const removeRecordOperationWidgets: Array<WidgetTypes | string> = [
@@ -265,9 +267,20 @@ export interface Chart2DConfig {
     descriptionFieldKey?: string[]
 }
 
-export interface Column2DWidgetMeta extends Omit<AppWidgetTableMeta, 'type'> {
-    type: CustomWidgetTypes.Column2D
+export interface Chart2DWidgetMeta extends Omit<AppWidgetTableMeta, 'type'> {
+    type: CustomWidgetTypes.Column2D | CustomWidgetTypes.Line2D
     options: AppWidgetMeta['options'] & {
         chart2D: Chart2DConfig
+    }
+}
+
+export interface Dual2DConfig {
+    widgets: string[]
+}
+
+export interface DualAxes2DWidgetMeta extends Omit<AppWidgetTableMeta, 'type'> {
+    type: CustomWidgetTypes.DualAxes2D
+    options: AppWidgetMeta['options'] & {
+        dual2D: Dual2DConfig
     }
 }

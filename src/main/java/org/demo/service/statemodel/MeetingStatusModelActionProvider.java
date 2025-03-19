@@ -1,9 +1,11 @@
 package org.demo.service.statemodel;
 
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.cxbox.core.dto.DrillDownType;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.PostAction;
 import org.cxbox.core.dto.rowmeta.PreAction;
@@ -42,26 +44,33 @@ public class MeetingStatusModelActionProvider {
 				.forEach(status -> builder.action(act -> act.action(status.getValue(), status.getButton())
 						.invoker((bc, dto) -> {
 							Meeting meeting = meetingRepository.getById(Long.parseLong(bc.getId()));
-							status.transition(status, meeting);
-							if (meeting.getStatus().equals(MeetingStatus.WAIT_SEND_MAIL)) {
+							if (!meeting.getStatus().equals(MeetingStatus.COMPLETED)) {
+								status.transition(status, meeting);
+							}
+							if (meeting.getStatus().equals(MeetingStatus.COMPLETED)) {
 								mailSendingService.send(
 										Optional.ofNullable(meeting),
 										meeting.getAgenda(),
 										String.format(messageTemplate, MeetingStatus.COMPLETED.getValue(), meeting.getResult()),
 										sessionService.getSessionUser()
 								);
+								return new ActionResultDTO<MeetingDTO>().setAction(PostAction.waitUntil(
+														MeetingDTO_.status, MeetingStatus.COMPLETED
+												)
+												.timeout(Duration.ofSeconds(5))
+												.successMessage("status changed to COMPLETION successfully")
+												.timeoutMessage("status was not changed to COMPLETION till timeout. Refresh screen manually")
+												.build()
+								);
 							}
 
 							if (meeting.getStatus().equals(MeetingStatus.IN_COMPLETION)) {
-								return new ActionResultDTO<MeetingDTO>().setAction(PostAction.drillDownAndWaitUntil(
+								return new ActionResultDTO<MeetingDTO>().setAction(PostAction.drillDown(
+										DrillDownType.INNER,
 										"/screen/meeting/view/meetingedit/"
 												+ CxboxRestController.meetingEdit + "/"
-												+ meeting.getId(),
-										CxboxRestController.meetingEdit, MeetingDTO_.status, MeetingStatus.IN_COMPLETION)
-										.successMessage("status changed to IN_COMPLETION successfully")
-										.timeoutMessage("status was not changed to IN_COMPLETION till timeout. Refresh screen manually")
-										.build()
-								);
+												+ meeting.getId()
+								));
 							}
 							return new ActionResultDTO<MeetingDTO>().setAction(PostAction.refreshBc(bc.getDescription()));
 						})

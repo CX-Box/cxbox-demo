@@ -85,6 +85,8 @@
         "Please, wait": "Пожалуйста, подождите",
         "Operation in progress": "Операция в процессе",
         "Log out": "Выйти",
-        "Total": "Итого"
+        "Total": "Итого",
+        "Close all": "Закрыть все",
+        "and more": "и {{count}} ещё..."
     }
 }

@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button, notification } from 'antd'
+import { openNotification } from '@components/NotificationsContainer/utils'
 
 /**
  * Shows antd notification with button
@@ -35,7 +36,8 @@ export const openButtonWarningNotification = (
         </Button>
     )
 
-    notification.warning({
+    openNotification({
+        type: 'warning',
         description,
         duration,
         message,

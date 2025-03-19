@@ -1,11 +1,12 @@
 import React, { forwardRef, ReactElement, useEffect, useRef, useState } from 'react'
 import { notification, Typography } from 'antd'
-import styles from './FileUpload.less'
 import { useTranslation } from 'react-i18next'
+import { createPortal } from 'react-dom'
 import { UploadList } from '@components/Operations/components/FileUpload/UploadList'
 import { AddedFileInfo } from '@components/Operations/components/FileUpload/FileUpload.interfaces'
-import { createPortal } from 'react-dom'
 import { isFileUploadSuccess } from '@components/Operations/components/FileUpload/FileUpload.utils'
+import { openNotification } from '@components/NotificationsContainer/utils'
+import styles from './FileUpload.less'
 
 interface UploadListContainerProps {
     addedFileList: AddedFileInfo[]
@@ -42,7 +43,7 @@ export const UploadListContainer = forwardRef(
         useEffect(() => {
             if (addedFileList.length > 0 && addedFileList.some(file => file.status === 'init') && !visibleProgress) {
                 setVisibleProgress(true)
-                notification.open({
+                openNotification({
                     key: progressKey.current,
                     message,
                     description: <div id={progressKey.current}></div>,

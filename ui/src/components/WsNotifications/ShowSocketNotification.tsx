@@ -1,10 +1,12 @@
 import React from 'react'
-import { Button, Icon, notification } from 'antd'
+import { Button, Icon } from 'antd'
+import { t } from 'i18next'
 import { ArgsProps } from 'antd/lib/notification'
 import cn from 'classnames'
 import { ButtonProps } from 'antd/lib/button'
 import { Dispatch } from 'redux'
 import SocketNotificationDrillDown from './SocketNotificationDrillDown'
+import { closeNotification, openBusinessNotification } from '@components/NotificationsContainer/utils'
 import { actions, interfaces } from '@cxbox-ui/core'
 import { CxBoxApiInstance } from '../../api'
 import { SocketNotification } from '@interfaces/notification'
@@ -37,24 +39,22 @@ function showSocketNotification(props: NotificationProps) {
             target: '_blank',
             href: CxBoxApiInstance.getMessageDownloadFileEndpoint(drilldown.drillDownLink),
             onClick: () => {
-                notification.destroy()
+                closeNotification(key)
             }
         }
-        notification.close('infoNotification')
     } else {
-        key = 'infoNotification'
         btnOptions = {
             ...btnOptions,
             onClick: () => {
                 handleClickDrillDownButton()
-                // notification.close(key) // uncomment if needed
+                // closeNotification(key) // uncomment if needed
             }
         }
     }
 
     const drillDownButton = <Button {...btnOptions}>{drilldown?.drillDownLabel}</Button>
 
-    return notification.open({
+    return openBusinessNotification({
         key,
         className: cn(styles.notification, className),
         duration: 0,
@@ -70,7 +70,7 @@ function showSocketNotification(props: NotificationProps) {
                         drillDownTooltipEnabled={drillDownTooltipEnabled}
                     />
                 )}
-                {links?.length > 1 ? `and ${links.length - 1} more...` : null}
+                {links?.length > 1 ? t('and more', { count: links.length - 1 }) : null}
             </span>
         ) : null,
         icon: icon ? <Icon type={icon} style={{ color: iconColor }} /> : null,

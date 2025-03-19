@@ -1,8 +1,8 @@
-import { notification } from 'antd'
 import { t } from 'i18next'
 import copyTextToClipboard from '@utils/copyTextToClipboard'
 import getFullUrl from '@utils/getFullUrl'
 import openInNewTab from '@utils/openInNewTab'
+import { openNotification } from '@components/NotificationsContainer/utils'
 import { RootState } from '@store'
 import { DrillDownType, RowMeta } from '@cxbox-ui/core'
 import { WidgetFieldBase } from '@cxbox-ui/schema'
@@ -26,7 +26,8 @@ const processDrillDownInNewTab = (
         const urlObject = new URL(drillDownUrl, window.location.origin)
 
         if (urlObject.searchParams?.size) {
-            notification.warn({
+            openNotification({
+                type: 'warning',
                 message: t(
                     'Opening drill-downs with non-ID-based filtering in a new tab is currently not supported. Please contact your administrator'
                 )

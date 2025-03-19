@@ -4,6 +4,7 @@ package org.demo.service.cxbox.anysource.salesstatsproducttypedate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.LongSummaryStatistics;
 import java.util.Map;
 import java.util.Objects;
@@ -58,7 +59,8 @@ public class SaleStatsProductTypeDateDao extends AbstractAnySourceBaseDAO<Dashbo
 	}
 
 	@Override
-	public Page<DashboardSalesProductTypeDateDTO> getList(final BusinessComponent bc, final QueryParameters queryParameters) {
+	public Page<DashboardSalesProductTypeDateDTO> getList(final BusinessComponent bc,
+			final QueryParameters queryParameters) {
 		return new PageImpl<>(getStats(bc));
 	}
 
@@ -68,27 +70,29 @@ public class SaleStatsProductTypeDateDao extends AbstractAnySourceBaseDAO<Dashbo
 	}
 
 	@Override
-	public DashboardSalesProductTypeDateDTO create(final BusinessComponent bbc, final DashboardSalesProductTypeDateDTO entity) {
+	public DashboardSalesProductTypeDateDTO create(final BusinessComponent bbc,
+			final DashboardSalesProductTypeDateDTO entity) {
 		throw new IllegalStateException();
 	}
 
 	@NonNull
 	private List<DashboardSalesProductTypeDateDTO> getStats(BusinessComponent bc) {
 		List<DashboardSalesProductTypeDateDTO> result = new ArrayList<>();
-		List<Sale> sales = saleRepository.findAllByStatusIn(List.of(SaleStatus.OPEN,SaleStatus.CLOSED));
+		List<Sale> sales = saleRepository.findAllByStatusIn(List.of(SaleStatus.OPEN, SaleStatus.CLOSED));
 
-
-		Map<String ,Map<Product, LongSummaryStatistics>> salesSummary = sales.stream().filter(f -> f.getDateCreatedSales() != null)
+		Map<String, Map<Product, LongSummaryStatistics>> salesSummary = sales.stream()
+				.filter(f -> f.getDateCreatedSales() != null)
 				.collect(Collectors.groupingBy(
-						s-> DateTimeFormatter.ofPattern("MMMM/yyyy").format(s.getDateCreatedSales()),
-						Collectors.groupingBy(Sale::getProduct, Collectors.summarizingLong(Sale::getSum))));
+						s -> DateTimeFormatter.ofPattern("MMMM/yyyy", Locale.ENGLISH).format(s.getDateCreatedSales()),
+						Collectors.groupingBy(Sale::getProduct, Collectors.summarizingLong(Sale::getSum))
+				));
 
 		final int[] nextId = {0};
 		salesSummary.forEach((dateCreated, productStats) -> productStats.forEach((product, stats) -> {
 			DashboardSalesProductTypeDateDTO prod = new DashboardSalesProductTypeDateDTO();
 			prod.setProductType(product.key());
-			prod.setId(String.valueOf(nextId[0] +1));
-			nextId[0] = nextId[0] +1;
+			prod.setId(String.valueOf(nextId[0] + 1));
+			nextId[0] = nextId[0] + 1;
 			prod.setDateCreatedSales(dateCreated);
 			prod.setSum(stats.getSum());
 			result.add(prod);

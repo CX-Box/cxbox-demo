@@ -12,7 +12,7 @@
     {
       "title": "Date",
       "key": "dateCreatedSales",
-      "type": "date",
+      "type": "input",
       "drillDown": true
     },
     {

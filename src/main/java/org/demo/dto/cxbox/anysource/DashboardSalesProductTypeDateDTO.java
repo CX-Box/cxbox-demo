@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.cxbox.api.data.dto.DataResponseDTO;
-import org.demo.entity.enums.SaleStatus;
 
 @Getter
 @Setter

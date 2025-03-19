@@ -9,3 +9,5 @@ responsibilitiesAction;10000;NULL;'""';
 responsibilitiesActionSuggestion;100;NULL;'""';
 clientStatsPie;1000;NULL;'""';
 saleStatsProduct;1000;NULL;'""';
+saleStatsProductDate;1000;NULL;'""';
+saleStatsProductTypeDate;1000;NULL;'""';

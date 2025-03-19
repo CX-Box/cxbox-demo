@@ -16,11 +16,9 @@ import org.cxbox.core.service.action.ActionsBuilder;
 import org.cxbox.core.util.session.SessionService;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.inner.MeetingDTO;
-import org.demo.dto.cxbox.inner.MeetingDTO_;
 import org.demo.entity.Meeting;
 import org.demo.entity.enums.MeetingStatus;
 import org.demo.repository.MeetingRepository;
-import org.demo.repository.core.UserRepository;
 import org.demo.service.mail.MailSendingService;
 import org.springframework.stereotype.Service;
 
@@ -33,8 +31,6 @@ public class MeetingStatusModelActionProvider {
 	private final MailSendingService mailSendingService;
 
 	private final SessionService sessionService;
-
-	private final UserRepository userRepository;
 
 	private final String messageTemplate = "Status: %s; \nMeeting Result: %s";
 

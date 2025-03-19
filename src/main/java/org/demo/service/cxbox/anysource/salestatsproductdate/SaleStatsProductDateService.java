@@ -7,8 +7,6 @@ import org.cxbox.core.crudma.impl.AnySourceVersionAwareResponseService;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.demo.dto.cxbox.anysource.DashboardSalesProductDateDTO;
-import org.demo.service.cxbox.anysource.salestatsproduct.SaleStatsProductDao;
-import org.demo.service.cxbox.anysource.salestatsproduct.SaleStatsProductMeta;
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S1170", "java:S2387"})

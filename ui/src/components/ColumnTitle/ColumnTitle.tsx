@@ -42,10 +42,15 @@ const ColumnTitle = ({ widgetName, widgetMeta, rowMeta, onClose, showCloseButton
         onClose?.(widgetMeta.key)
     }, [onClose, widgetMeta.key])
 
+    const fullyHideCloseButton = !widgetMeta.title && !showCloseButton
+
     const close = (
         <Button
             type="empty"
-            style={{ visibility: showCloseButton ? 'visible' : 'hidden' }}
+            style={{
+                visibility: showCloseButton ? 'visible' : 'hidden',
+                width: fullyHideCloseButton ? 0 : undefined // reduces the size of the header cell if title is missing
+            }}
             className={styles.closeButton}
             onClick={handleColumnClose}
         >

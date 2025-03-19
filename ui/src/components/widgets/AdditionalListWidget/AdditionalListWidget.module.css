@@ -15,7 +15,7 @@
 }
 
 .container :global(.ant-table .ant-table-row > td) {
-    padding: 9px 8px;
+    padding: 9px 4px;
 }
 
 .container :global(.ant-table .ant-table-row:hover td) {

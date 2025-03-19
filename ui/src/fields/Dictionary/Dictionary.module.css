@@ -6,8 +6,19 @@
     padding: 6px 10px;
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
 .iconTooltip {
     cursor: pointer;
 }
+
+td .root:not(.coloredValue):not(.onlyIcon) {
+    padding: 0 8px;
+}
+
+td .root.onlyIcon {
+    padding: 0 0 0 8px;
+}
+
+

@@ -1,6 +1,6 @@
 import { RootEpic } from '@store'
 import { catchError, concat, EMPTY, filter, mergeMap, of, switchMap } from 'rxjs'
-import { isAnyOf } from '@reduxjs/toolkit'
+import { isAnyOf, nanoid } from '@reduxjs/toolkit'
 import {
     OperationError,
     OperationErrorEntity,
@@ -288,8 +288,10 @@ export const forceUpdateRowMeta: RootEpic = (action$, state$, { api }) =>
             const bcUrl = buildBcUrl(bcName, true, state)
             const pendingChanges = state.view.pendingDataChanges[bcName]?.[cursor]
             const currentRecordData = state.data[bcName]?.find(record => record.id === cursor)
+            const requestId = nanoid()
 
             return concat(
+                of(actions.addPendingRequest({ request: { requestId, type: 'force-active' } })),
                 api
                     .getRmByForceActive(state.screen.screenName, bcUrl, {
                         ...pendingChanges,
@@ -298,6 +300,7 @@ export const forceUpdateRowMeta: RootEpic = (action$, state$, { api }) =>
                     .pipe(
                         mergeMap(data => {
                             return concat(
+                                of(actions.removePendingRequest({ requestId })),
                                 of(
                                     actions.forceActiveRmUpdate({
                                         rowMeta: data,
@@ -321,7 +324,7 @@ export const forceUpdateRowMeta: RootEpic = (action$, state$, { api }) =>
                         catchError((e: AxiosError) => {
                             console.error(e)
 
-                            return concat(utils.createApiErrorObservable(e))
+                            return concat(of(actions.removePendingRequest({ requestId })), utils.createApiErrorObservable(e))
                         })
                     )
             )

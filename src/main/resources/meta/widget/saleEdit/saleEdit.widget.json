@@ -5,6 +5,11 @@
   "bc": "saleEdit",
   "fields": [
     {
+      "label": "Open Date",
+      "key": "dateOpen",
+      "type": "date"
+    },
+    {
       "label": "Client Name",
       "key": "clientName",
       "type": "pickList",
@@ -43,6 +48,14 @@
         {
           "cols": [
             {
+              "fieldKey": "dateOpen",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
               "fieldKey": "clientName",
               "span": 12
             }
@@ -64,14 +77,14 @@
             }
           ]
         },
-       {
-         "cols": [
-           {
-             "fieldKey": "sum",
-             "span": 12
-           }
-         ]
-       }
+        {
+          "cols": [
+            {
+              "fieldKey": "sum",
+              "span": 12
+            }
+          ]
+        }
       ]
     }
   }

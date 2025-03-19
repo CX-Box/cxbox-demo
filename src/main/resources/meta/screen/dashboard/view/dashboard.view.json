@@ -5,6 +5,16 @@
   "url": "/screen/dashboard/view/dashboard",
   "widgets": [
     {
+      "widgetName": "dashboardSalesLine2D",
+      "position": 0,
+      "gridWidth": 12
+    },
+    {
+      "widgetName": "dashboardSalesLineColumn2D",
+      "position": 0,
+      "gridWidth": 12
+    },
+    {
       "widgetName": "dashboardFilter",
       "position": 0,
       "gridWidth": 24

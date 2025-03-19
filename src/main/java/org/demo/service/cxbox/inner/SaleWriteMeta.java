@@ -26,7 +26,8 @@ public class SaleWriteMeta extends FieldMetaBuilder<SaleDTO> {
 				SaleDTO_.clientId,
 				SaleDTO_.product,
 				SaleDTO_.status,
-				SaleDTO_.sum
+				SaleDTO_.sum,
+				SaleDTO_.dateCreatedSales
 		);
 
 		fields.setRequired(

@@ -1,5 +1,6 @@
 package org.demo.entity;
 
+import java.time.LocalDateTime;
 import lombok.EqualsAndHashCode;
 import org.demo.entity.dictionary.Product;
 import org.demo.entity.enums.SaleStatus;
@@ -37,5 +38,8 @@ public class Sale extends BaseEntity {
 
 	private Long sum;
 
+
+	@Column
+	private LocalDateTime dateCreatedSales;
 
 }

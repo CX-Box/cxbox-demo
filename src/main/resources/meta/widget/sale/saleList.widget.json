@@ -5,6 +5,11 @@
   "bc": "sale",
   "fields": [
     {
+      "title": "Open Date",
+      "key": "dateOpen",
+      "type": "date"
+    },
+    {
       "title": "Client",
       "key": "clientName",
       "type": "input"

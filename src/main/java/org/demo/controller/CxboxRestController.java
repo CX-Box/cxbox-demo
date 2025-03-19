@@ -13,8 +13,10 @@ import org.demo.service.cxbox.anysource.clientstatspie.ClientStatsPieService;
 import org.demo.service.cxbox.anysource.dadatacompany.CompanyService;
 import org.demo.service.cxbox.anysource.lov.LovReadService;
 import org.demo.service.cxbox.anysource.saleprogress.SaleProgressStatsService;
+import org.demo.service.cxbox.anysource.salesstatsproducttypedate.SaleStatsProductTypeDateService;
 import org.demo.service.cxbox.anysource.salestats.SaleStatsService;
 import org.demo.service.cxbox.anysource.salestatsproduct.SaleStatsProductService;
+import org.demo.service.cxbox.anysource.salestatsproductdate.SaleStatsProductDateService;
 import org.demo.service.cxbox.inner.ClientContactService;
 import org.demo.service.cxbox.inner.ClientPickListService;
 import org.demo.service.cxbox.inner.ClientReadWriteService;
@@ -72,6 +74,8 @@ public enum CxboxRestController implements EnumBcIdentifier {
 		saleStatsProduct(dashboardFilter, SaleStatsProductService.class),
 	dashboardSalesFunnel(dashboardFilter, SaleStatsService.class),
 	dashboardSalesRingProgress(dashboardFilter, SaleProgressStatsService.class),
+	saleStatsProductDate(SaleStatsProductDateService.class),
+	saleStatsProductTypeDate(SaleStatsProductTypeDateService.class),
 
 	//core administration
 	dictionary(DictionaryAdminService.class),

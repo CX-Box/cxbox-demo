@@ -1,0 +1,31 @@
+{
+  "name": "dashboardSalesLine2D",
+  "title": "Sales by Product Type",
+  "type": "Line2D",
+  "bc": "saleStatsProductTypeDate",
+  "fields": [
+    {
+      "title": "productType",
+      "key": "productType",
+      "type": "input"
+    },
+    {
+      "title": "Date",
+      "key": "dateCreatedSales",
+      "type": "date",
+      "drillDown": true
+    },
+    {
+      "title": "Sum, $",
+      "key": "sum",
+      "type": "number"
+    }
+  ],
+  "options": {
+    "chart2D": {
+      "xValueFieldKey": "dateCreatedSales",
+      "yValueFieldKey": "sum",
+      "groupFieldKey": "productType"
+    }
+  }
+}

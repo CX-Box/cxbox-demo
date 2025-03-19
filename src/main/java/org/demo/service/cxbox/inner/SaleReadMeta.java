@@ -12,7 +12,7 @@ import org.demo.dto.cxbox.inner.SaleDTO_;
 import org.demo.entity.enums.FieldOfActivity;
 import org.springframework.stereotype.Service;
 
-@SuppressWarnings({"java:S3252","java:S1186"})
+@SuppressWarnings({"java:S3252", "java:S1186"})
 @Service
 public class SaleReadMeta extends FieldMetaBuilder<SaleDTO> {
 
@@ -25,6 +25,7 @@ public class SaleReadMeta extends FieldMetaBuilder<SaleDTO> {
 	@Override
 	public void buildIndependentMeta(FieldsMeta<SaleDTO> fields, InnerBcDescription bcDescription,
 			Long parentId) {
+		fields.enableFilter(SaleDTO_.dateCreatedSales);
 		fields.enableSort(
 				SaleDTO_.clientName,
 				SaleDTO_.product,

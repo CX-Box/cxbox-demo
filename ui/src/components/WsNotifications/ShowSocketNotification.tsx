@@ -59,7 +59,7 @@ function showSocketNotification(props: NotificationProps) {
         className: cn(styles.notification, className),
         duration: 0,
         btn: drilldown ? (
-            <span>
+            <span className={styles.buttonContainer}>
                 {isDownloadFileDrillDownType ? (
                     drillDownButton
                 ) : (

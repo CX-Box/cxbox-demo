@@ -76,6 +76,7 @@ export const updateAggFieldValuesPerLevel = (
 
 export const setAggFieldResult = (currentGroup: GroupingHierarchyCommonNode, aggField: IAggField) => {
     let fieldValues
+    let isSomeValueNaN
 
     if (aggField?.argFieldKeys) {
         fieldValues = []
@@ -86,18 +87,20 @@ export const setAggFieldResult = (currentGroup: GroupingHierarchyCommonNode, agg
         fieldValues = currentGroup[aggField.fieldKey]
     }
 
-    const isSomeValueNaN = Array.isArray(fieldValues) ? fieldValues.some(item => isNaN(Number(item))) : isNaN(Number(fieldValues))
+    if (Array.isArray(fieldValues)) {
+        fieldValues = fieldValues.filter(item => item !== null && item !== '' && item !== undefined)
+        isSomeValueNaN = fieldValues.some(item => isNaN(Number(item)))
+
+        currentGroup[aggField.fieldKey] = !!fieldValues.length && !isSomeValueNaN ? getAggFunctionResult(aggField.func, fieldValues) : null
+    } else {
+        isSomeValueNaN = isNaN(Number(fieldValues))
+        if (isSomeValueNaN) {
+            currentGroup[aggField.fieldKey] = null
+        }
+    }
 
     if (isSomeValueNaN) {
-        currentGroup[aggField.fieldKey] = 'NaN'
         console.info(`Error: Some field value for aggregate ${aggField.fieldKey} contains NaN`)
-    } else {
-        if (Array.isArray(fieldValues)) {
-            currentGroup[aggField.fieldKey] = getAggFunctionResult(
-                aggField.func,
-                fieldValues.filter(item => item !== null && item !== '')
-            )
-        }
     }
 
     currentGroup._aggFunctions = {

@@ -7,6 +7,10 @@ import styles from './AppSide.less'
 import cn from 'classnames'
 import { useAppDispatch, useAppSelector } from '@store'
 import { changeMenuCollapsed } from '@actions'
+import InfoSpace from '@components/AppSide/InfoSpace/InfoSpace'
+import { useAppInfo } from '@components/AppSide/hooks'
+
+export const SIDE_BAR_BG_COLOR = '#262626'
 
 function AppSide() {
     const dispatch = useAppDispatch()
@@ -14,6 +18,7 @@ function AppSide() {
     const handleMenuCollapse = React.useCallback(() => {
         dispatch(changeMenuCollapsed(!menuCollapsed))
     }, [dispatch, menuCollapsed])
+    const { data, backgroundColor, smallContent } = useAppInfo(SIDE_BAR_BG_COLOR)
 
     return (
         <Layout.Sider
@@ -30,6 +35,7 @@ function AppSide() {
             <div className={cn(styles.navigationWrapper)}>
                 <ScreenNavigation />
             </div>
+            <InfoSpace collapsed={menuCollapsed} smallContent={smallContent} backgroundColor={backgroundColor} data={data} />
         </Layout.Sider>
     )
 }

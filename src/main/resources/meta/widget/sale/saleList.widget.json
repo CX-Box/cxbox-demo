@@ -5,8 +5,8 @@
   "bc": "sale",
   "fields": [
     {
-      "title": "Open Date",
-      "key": "dateOpen",
+      "title": "Date Created Sales",
+      "key": "dateCreatedSales",
       "type": "date"
     },
     {
@@ -28,7 +28,7 @@
     {
       "title": "Status",
       "key": "status",
-      "type": "input"
+      "type": "dictionary"
     },
     {
       "title": "Sum, $",

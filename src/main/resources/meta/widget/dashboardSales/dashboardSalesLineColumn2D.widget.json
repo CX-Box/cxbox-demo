@@ -2,7 +2,7 @@
   "name": "dashboardSalesLineColumn2D",
   "title": "Sales by Status",
   "type": "Column2D",
-  "bc": "saleStatsProductDate",
+  "bc": "saleStatsProductDual",
   "fields": [
     {
       "title": "Sale Status",
@@ -13,7 +13,8 @@
       "title": "Date",
       "key": "dateCreatedSales",
       "type": "input",
-      "drillDown": true
+      "drillDown": true,
+      "bgColorKey": "color"
     },
     {
       "title": "Number of Sales",

@@ -16,4 +16,7 @@ public interface SaleRepository extends JpaRepository<Sale, Long>, JpaSpecificat
 	List<Sale> findAllByClientFieldOfActivitiesIn(Set<FieldOfActivity> fieldOfActivities);
 
 	List<Sale> findAllByStatusIn(List<SaleStatus> status);
+
+	List<Sale> findAllByClientFieldOfActivitiesInAndStatusIn(Set<FieldOfActivity> fieldOfActivities,List<SaleStatus> status);
+
 }

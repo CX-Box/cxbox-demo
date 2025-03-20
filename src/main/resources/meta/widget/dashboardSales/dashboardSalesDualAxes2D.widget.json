@@ -1,0 +1,13 @@
+{
+  "name": "dashboardSalesDualAxes2D",
+  "title": "Sales by Product Type and Status",
+  "type": "DualAxes2D",
+  "bc": "saleStatsProductDual",
+  "fields": [
+  ],
+  "options": {
+    "dual2D": {
+      "widgets": ["dashboardSalesLine2D", "dashboardSalesLineColumn2D"]
+    }
+  }
+}

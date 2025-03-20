@@ -32,8 +32,6 @@ import org.springframework.stereotype.Service;
 public class SaleStatsProductDao extends AbstractAnySourceBaseDAO<DashboardSalesProductDTO> implements
 		AnySourceBaseDAO<DashboardSalesProductDTO> {
 
-	private final DashboardFilterRepository dashboardFilterRepository;
-
 	private final SaleRepository saleRepository;
 
 	private final ParentDtoFirstLevelCache parentDtoFirstLevelCache;
@@ -96,11 +94,12 @@ public class SaleStatsProductDao extends AbstractAnySourceBaseDAO<DashboardSales
 						Sale::getClient,
 						Collectors.groupingBy(Sale::getProduct, Collectors.summarizingLong(Sale::getSum))
 				));
-
+		final int[] nextId = {0};
 		salesSummary.forEach((client, productStats) -> productStats.forEach((product, stats) -> {
 			DashboardSalesProductDTO prod = new DashboardSalesProductDTO();
 			prod.setClientName(client.getFullName());
-			prod.setId(client.getId() + product.key());
+			prod.setId(String.valueOf(nextId[0] + 1));
+			nextId[0] = nextId[0] + 1;
 			prod.setProductName(product.key());
 			prod.setSum(stats.getSum());
 			prod.setColor(Objects.equals(product.key(), Product.EXPERTISE.key()) ? "#4D83E7" : "#30BA8F");

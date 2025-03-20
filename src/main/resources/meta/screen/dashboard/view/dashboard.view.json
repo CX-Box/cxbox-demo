@@ -15,8 +15,13 @@
       "gridWidth": 12
     },
     {
+      "widgetName": "dashboardSalesDualAxes2D",
+      "position": 1,
+      "gridWidth": 12
+    },
+    {
       "widgetName": "dashboardFilter",
-      "position": 0,
+      "position": 4,
       "gridWidth": 24
     },
     {

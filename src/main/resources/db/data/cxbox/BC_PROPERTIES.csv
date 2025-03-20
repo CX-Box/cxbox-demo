@@ -10,3 +10,5 @@ responsibilitiesActionSuggestion;100;NULL;'""';
 clientStatsPie;1000;NULL;'""';
 saleStatsProduct;1000;NULL;'""';
 saleStatsProductDual;1000;NULL;'""';
+saleStatsProductDualLines;1000;NULL;'""';
+saleStatsProductDualColumn;1000;NULL;'""';

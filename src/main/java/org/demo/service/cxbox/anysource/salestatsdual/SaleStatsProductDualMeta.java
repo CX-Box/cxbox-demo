@@ -2,9 +2,7 @@ package org.demo.service.cxbox.anysource.salestatsdual;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -22,8 +20,6 @@ import org.cxbox.core.dto.rowmeta.RowDependentFieldsMeta;
 import org.cxbox.core.external.core.ParentDtoFirstLevelCache;
 import org.cxbox.core.service.rowmeta.AnySourceFieldMetaBuilder;
 import org.demo.controller.CxboxRestController;
-import org.demo.dto.cxbox.anysource.DashboardSalesProductDTO;
-import org.demo.dto.cxbox.anysource.DashboardSalesProductDTO_;
 import org.demo.dto.cxbox.anysource.DashboardSalesProductDualDTO;
 import org.demo.dto.cxbox.anysource.DashboardSalesProductDualDTO_;
 import org.demo.dto.cxbox.inner.DashboardFilterDTO_;

@@ -1,8 +1,8 @@
 {
-  "name": "dashboardSalesLineColumn2D",
-  "title": "Sales by Status: saleStatsProductDual",
+  "name": "dashboardSalesLineColumnTest2D",
+  "title": "Sales by Status: saleStatsProductDualColumn",
   "type": "Column2D",
-  "bc": "saleStatsProductDual",
+  "bc": "saleStatsProductDualColumn",
   "fields": [
     {
       "title": "Sale Status",

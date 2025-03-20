@@ -21,7 +21,6 @@ import org.demo.entity.Client;
 import org.demo.entity.Sale;
 import org.demo.entity.dictionary.Product;
 import org.demo.entity.enums.FieldOfActivity;
-import org.demo.repository.DashboardFilterRepository;
 import org.demo.repository.SaleRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;

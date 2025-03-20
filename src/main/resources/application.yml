@@ -44,7 +44,7 @@ cxbox:
     drill-down-tooltip: newAndCopy
     use-servlet-context-path: false
     side-bar-word-break: none
-    notification-mode: single
+    notification-mode: stack
 
 server:
   port: 8080

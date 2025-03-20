@@ -14,4 +14,4 @@ export const notifications = new Set()
 
 export const directionItems: EDirection = EDirection.downward
 export const maxItems = 3
-export const timeout = 4.5
+export const timeout = 10

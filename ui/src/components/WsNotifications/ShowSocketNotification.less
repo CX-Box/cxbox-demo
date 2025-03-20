@@ -3,9 +3,20 @@
 .notification {
     :global {
         .ant-btn-link {
+            height: auto;
+            padding: 0;
             color: @cerulean;
             font-size: 16px;
             line-height: 1.5;
+            text-align: left;
+            white-space: normal;
         }
     }
+}
+
+.buttonContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: center;
 }

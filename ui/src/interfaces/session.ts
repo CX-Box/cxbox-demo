@@ -6,7 +6,10 @@ export enum EFeatureSettingKey {
     sortEnabled = 'sortEnabled',
     drillDownTooltip = 'drillDownTooltip',
     multiRoleEnabled = 'multiRoleEnabled',
-    notificationMode = 'notificationMode'
+    notificationMode = 'notificationMode',
+    infoEnv = 'infoEnv',
+    infoColor = 'infoColor',
+    infoDescription = 'infoDescription'
 }
 
 export type FeatureSetting = {

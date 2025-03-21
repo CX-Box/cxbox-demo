@@ -35,9 +35,10 @@ export const useChart2D = (meta: Chart2DWidgetMeta, needToChangeGroupFieldData?:
     const isYValueFieldTypeNumber = useMemo(() => numberFieldTypes.includes(yValueFieldMeta?.type as FieldType), [yValueFieldMeta?.type])
 
     const processedData = useMemo(() => {
+        const filteredData = data.filter(item => item[yValueFieldKey] !== null)
         // DualAxes2D legend fix
         if (needToChangeGroupFieldData) {
-            return data?.map(item => ({
+            return filteredData?.map(item => ({
                 ...item,
                 ...(groupFieldKey
                     ? {
@@ -50,13 +51,13 @@ export const useChart2D = (meta: Chart2DWidgetMeta, needToChangeGroupFieldData?:
         }
 
         if (!groupFieldKey) {
-            return data?.map(item => ({
+            return filteredData?.map(item => ({
                 ...item,
                 [defaultGroupFieldKey]: yValueFieldMeta?.title || yValueFieldKey
             }))
         }
 
-        return data
+        return filteredData
     }, [data, groupFieldKey, needToChangeGroupFieldData, yValueFieldKey, yValueFieldMeta?.title])
 
     const onDrillDown = useCallback(

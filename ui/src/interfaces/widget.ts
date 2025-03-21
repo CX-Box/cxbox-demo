@@ -142,6 +142,7 @@ export interface AppWidgetMeta extends WidgetMeta {
         read?: {
             widget: string
         }
+        dual2D?: Dual2DConfig
     }
 }
 
@@ -280,7 +281,4 @@ export interface Dual2DConfig {
 
 export interface DualAxes2DWidgetMeta extends Omit<AppWidgetTableMeta, 'type'> {
     type: CustomWidgetTypes.DualAxes2D
-    options: AppWidgetMeta['options'] & {
-        dual2D: Dual2DConfig
-    }
 }

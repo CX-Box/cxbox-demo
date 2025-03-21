@@ -3,6 +3,7 @@ import styles from './InfoSpace.module.css'
 import cn from 'classnames'
 import { Icon, Tooltip } from 'antd'
 import { getContrastColor } from '@utils/color'
+import { useHeightLimiter } from '@components/AppSide/hooks'
 
 interface InfoSpaceProps {
     collapsed: boolean
@@ -11,6 +12,8 @@ interface InfoSpaceProps {
 }
 
 function InfoSpace({ data, backgroundColor, collapsed }: InfoSpaceProps) {
+    const { rootRef, maxHeight } = useHeightLimiter(collapsed)
+
     if (!data?.length) {
         return null
     }
@@ -32,8 +35,13 @@ function InfoSpace({ data, backgroundColor, collapsed }: InfoSpaceProps) {
     return (
         <Tooltip placement="rightTop" title={collapsed ? <div className={styles.tooltip}>{content}</div> : null}>
             <div
+                ref={rootRef}
                 className={cn(styles.root, { [styles.collapsed]: collapsed })}
-                style={{ backgroundColor, color: backgroundColor ? getContrastColor(backgroundColor as string) : undefined }}
+                style={{
+                    backgroundColor,
+                    color: getContrastColor(backgroundColor as string),
+                    maxHeight
+                }}
             >
                 {collapsed ? smallContent.length ? smallContent : <Icon className={styles.icon} type="exclamation-circle" /> : content}
             </div>

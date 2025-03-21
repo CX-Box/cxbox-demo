@@ -34,9 +34,8 @@
 
 .mainContent .label, .mainContent  .value {
   display: block;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 .tooltipContent {

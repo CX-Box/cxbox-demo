@@ -13,7 +13,8 @@ export const useAppInfo = (defaultBcColor: string) => {
     ) as InfoItem[] | undefined
 
     const backgroundColor =
-        featureSettings?.find(feature => EFeatureSettingKey.infoColor === feature.key && feature.value)?.value ?? defaultBcColor
+        featureSettings?.find(feature => EFeatureSettingKey.infoColor === feature.key && feature.value && feature.value !== 'null')
+            ?.value ?? defaultBcColor
 
     return {
         smallContent: data?.find(item => item.key === EFeatureSettingKey.infoEnv)?.value,

@@ -12,11 +12,12 @@ import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.inner.SaleDTO;
+import org.demo.dto.cxbox.inner.SaleDTO_;
 import org.demo.entity.Sale;
 import org.demo.repository.SaleRepository;
 import org.springframework.stereotype.Service;
 
-@SuppressWarnings({"java:S3252","java:S1186", "java:S1170"})
+@SuppressWarnings({"java:S3252", "java:S1186", "java:S1170"})
 @Service
 @RequiredArgsConstructor
 public class SaleReadService extends VersionAwareResponseService<SaleDTO, Sale> {
@@ -38,6 +39,7 @@ public class SaleReadService extends VersionAwareResponseService<SaleDTO, Sale> 
 
 	@Override
 	protected ActionResultDTO<SaleDTO> doUpdateEntity(Sale entity, SaleDTO data, BusinessComponent bc) {
+		setIfChanged(data, SaleDTO_.dateCreatedSales, entity::setDateCreatedSales);
 		throw new UnsupportedOperationException();
 	}
 

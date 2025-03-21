@@ -1,0 +1,32 @@
+{
+  "name": "dashboardSalesLineColumn2D",
+  "title": "Sales by Status: saleStatsProductDual",
+  "type": "Column2D",
+  "bc": "saleStatsProductDual",
+  "fields": [
+    {
+      "title": "Sale Status",
+      "key": "saleStatus",
+      "type": "input"
+    },
+    {
+      "title": "Date",
+      "key": "dateCreatedSales",
+      "type": "input",
+      "drillDown": true,
+      "bgColorKey": "color"
+    },
+    {
+      "title": "Number of Sales",
+      "key": "count",
+      "type": "number"
+    }
+  ],
+  "options": {
+    "chart2D": {
+      "xValueFieldKey": "dateCreatedSales",
+      "yValueFieldKey": "count",
+      "groupFieldKey": "saleStatus"
+    }
+  }
+}

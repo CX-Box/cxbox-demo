@@ -13,8 +13,11 @@ import org.demo.service.cxbox.anysource.clientstatspie.ClientStatsPieService;
 import org.demo.service.cxbox.anysource.dadatacompany.CompanyService;
 import org.demo.service.cxbox.anysource.lov.LovReadService;
 import org.demo.service.cxbox.anysource.saleprogress.SaleProgressStatsService;
+import org.demo.service.cxbox.anysource.salestatsfordashboard.salesproducttypestats.SaleStatsProductTypeLinesService;
 import org.demo.service.cxbox.anysource.salestats.SaleStatsService;
-import org.demo.service.cxbox.anysource.salestatsproduct.SaleStatsProductService;
+import org.demo.service.cxbox.anysource.salestatsfordashboard.salestatsdual.SaleStatsProductDualService;
+import org.demo.service.cxbox.anysource.salestatsfordashboard.saleproductstatusstats.SaleStatsProductColumn2DService;
+import org.demo.service.cxbox.anysource.salestatsfordashboard.salestatsproduct.SaleStatsProductService;
 import org.demo.service.cxbox.inner.ClientContactService;
 import org.demo.service.cxbox.inner.ClientPickListService;
 import org.demo.service.cxbox.inner.ClientReadWriteService;
@@ -70,8 +73,11 @@ public enum CxboxRestController implements EnumBcIdentifier {
 		dashboardClientActivities(dashboardFilter, DashboardClientActivitiesService.class),
 		clientStatsPie(dashboardFilter, ClientStatsPieService.class),
 		saleStatsProduct(dashboardFilter, SaleStatsProductService.class),
-	dashboardSalesFunnel(dashboardFilter, SaleStatsService.class),
-	dashboardSalesRingProgress(dashboardFilter, SaleProgressStatsService.class),
+		dashboardSalesFunnel(dashboardFilter, SaleStatsService.class),
+		dashboardSalesRingProgress(dashboardFilter, SaleProgressStatsService.class),
+		saleStatsProductDual(dashboardFilter,SaleStatsProductDualService.class),
+		saleStatsProductTypeLines(dashboardFilter,SaleStatsProductTypeLinesService.class),
+		saleStatsProductStatusColumn(dashboardFilter,SaleStatsProductColumn2DService.class),
 
 	//core administration
 	dictionary(DictionaryAdminService.class),

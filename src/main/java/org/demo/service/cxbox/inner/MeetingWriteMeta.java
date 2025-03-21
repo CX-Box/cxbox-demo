@@ -51,8 +51,7 @@ public class MeetingWriteMeta extends FieldMetaBuilder<MeetingDTO> {
 		fields.setRequired(
 				MeetingDTO_.agenda,
 				MeetingDTO_.startDateTime,
-				MeetingDTO_.endDateTime,
-				MeetingDTO_.address
+				MeetingDTO_.endDateTime
 		);
 
 		fields.setDrilldown(

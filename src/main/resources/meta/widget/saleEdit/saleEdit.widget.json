@@ -5,6 +5,11 @@
   "bc": "saleEdit",
   "fields": [
     {
+      "label": "Date Created Sales",
+      "key": "dateCreatedSales",
+      "type": "date"
+    },
+    {
       "label": "Client Name",
       "key": "clientName",
       "type": "pickList",
@@ -64,14 +69,22 @@
             }
           ]
         },
-       {
-         "cols": [
-           {
-             "fieldKey": "sum",
-             "span": 12
-           }
-         ]
-       }
+        {
+          "cols": [
+            {
+              "fieldKey": "sum",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "dateCreatedSales",
+              "span": 12
+            }
+          ]
+        }
       ]
     }
   }

@@ -34,6 +34,11 @@
       "title": "Notes",
       "key": "notes",
       "type": "input"
+    },
+    {
+      "title": "Priority",
+      "key": "priority",
+      "type": "number"
     }
   ],
   "options": {
@@ -41,7 +46,14 @@
       "counterMode": "always",
       "fields": [
         "document",
-        "briefing"
+        "briefing",
+        "priority"
+      ],
+      "aggFields": [
+        {
+          "fieldKey": "priority",
+          "func": "min"
+        }
       ]
     },
     "buttons": [

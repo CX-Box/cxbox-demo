@@ -89,7 +89,8 @@ public class SaleStatsProductColumn2DMeta extends AnySourceFieldMetaBuilder<Dash
 	private String formatDate(RowDependentFieldsMeta<DashboardSalesProductDualDTO> fields, int monthOffset)
 			throws ParseException {
 		SimpleDateFormat formatIn = new SimpleDateFormat("MMMM/yyyy", Locale.ENGLISH);
-		Date dateCreatedSales = formatIn.parse(fields.getCurrentValue(DashboardSalesProductDualDTO_.dateCreatedSales).get());
+		Date dateCreatedSales = formatIn.parse(fields.getCurrentValue(DashboardSalesProductDualDTO_.dateCreatedSales)
+				.get());
 		dateCreatedSales.setMonth(dateCreatedSales.getMonth() + monthOffset);
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");

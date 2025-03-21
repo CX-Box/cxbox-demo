@@ -24,7 +24,7 @@ function InfoSpace({ data, backgroundColor, collapsed, smallContent }: InfoSpace
     ))
 
     return (
-        <Tooltip placement="rightTop" title={<div className={styles.tooltipContent}>{content}</div>}>
+        <Tooltip placement="rightTop" title={collapsed ? <div className={styles.tooltipContent}>{content}</div> : null}>
             <div
                 className={cn(styles.root, { [styles.collapsed]: collapsed })}
                 style={{ backgroundColor, color: backgroundColor ? getContrastColor(backgroundColor as string) : undefined }}

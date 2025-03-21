@@ -1,4 +1,4 @@
-package org.demo.service.cxbox.anysource.salestatsdualww;
+package org.demo.service.cxbox.anysource.salestatsfordashboard.saleproductstatusstats;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -7,8 +7,6 @@ import org.cxbox.core.crudma.impl.AnySourceVersionAwareResponseService;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.demo.dto.cxbox.anysource.DashboardSalesProductDualDTO;
-import org.demo.service.cxbox.anysource.salestatsdual.SaleStatsProductDualDao;
-import org.demo.service.cxbox.anysource.salestatsdual.SaleStatsProductDualMeta;
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S1170", "java:S2387"})

@@ -1,4 +1,4 @@
-package org.demo.service.cxbox.anysource.salestatsdual;
+package org.demo.service.cxbox.anysource.salestatsfordashboard.salesproducttypestats;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -12,13 +12,13 @@ import org.springframework.stereotype.Service;
 @SuppressWarnings({"java:S1170", "java:S2387"})
 @RequiredArgsConstructor
 @Service
-public class SaleStatsProductDualService extends AnySourceVersionAwareResponseService<DashboardSalesProductDualDTO, DashboardSalesProductDualDTO> {
+public class SaleStatsProductTypeLinesService extends AnySourceVersionAwareResponseService<DashboardSalesProductDualDTO, DashboardSalesProductDualDTO> {
 
 	@Getter(onMethod_ = @Override)
-	private final Class<SaleStatsProductDualMeta> meta = SaleStatsProductDualMeta.class;
+	private final Class<SaleStatsProductTypeLinesMeta> meta = SaleStatsProductTypeLinesMeta.class;
 
 	@Getter(onMethod_ = @Override)
-	private final Class<SaleStatsProductDualDao> dao = SaleStatsProductDualDao.class;
+	private final Class<SaleStatsProductTypeLinesDao> dao = SaleStatsProductTypeLinesDao.class;
 
 	@Override
 	protected CreateResult<DashboardSalesProductDualDTO> doCreateEntity(DashboardSalesProductDualDTO entity, BusinessComponent bc) {

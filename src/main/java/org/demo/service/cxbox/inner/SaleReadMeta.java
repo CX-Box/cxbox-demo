@@ -10,6 +10,7 @@ import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
 import org.demo.dto.cxbox.inner.SaleDTO;
 import org.demo.dto.cxbox.inner.SaleDTO_;
 import org.demo.entity.enums.FieldOfActivity;
+import org.demo.entity.enums.SaleStatus;
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S3252", "java:S1186"})
@@ -20,6 +21,7 @@ public class SaleReadMeta extends FieldMetaBuilder<SaleDTO> {
 	public void buildRowDependentMeta(RowDependentFieldsMeta<SaleDTO> fields, InnerBcDescription bcDescription,
 			Long id, Long parentId) {
 		fields.setDictionaryValues(SaleDTO_.product);
+		fields.setEnumValues(SaleDTO_.status);
 	}
 
 	@Override
@@ -33,7 +35,7 @@ public class SaleReadMeta extends FieldMetaBuilder<SaleDTO> {
 				SaleDTO_.sum
 		);
 		fields.enableFilter(SaleDTO_.status);
-		fields.setEnumValues(SaleDTO_.status);
+		fields.setEnumFilterValues(fields,SaleDTO_.status, SaleStatus.values());
 		fields.enableFilter(SaleDTO_.clientName);
 		fields.enableFilter(SaleDTO_.product);
 		fields.setDictionaryFilterValues(SaleDTO_.product);

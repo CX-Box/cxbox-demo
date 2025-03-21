@@ -1,4 +1,4 @@
-package org.demo.service.cxbox.anysource.sales2lines;
+package org.demo.service.cxbox.anysource.salestatsfordashboard.salestatsdual;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -7,20 +7,18 @@ import org.cxbox.core.crudma.impl.AnySourceVersionAwareResponseService;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.demo.dto.cxbox.anysource.DashboardSalesProductDualDTO;
-import org.demo.service.cxbox.anysource.salestatsdual.SaleStatsProductDualDao;
-import org.demo.service.cxbox.anysource.salestatsdual.SaleStatsProductDualMeta;
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S1170", "java:S2387"})
 @RequiredArgsConstructor
 @Service
-public class SaleStatsProductLinesService extends AnySourceVersionAwareResponseService<DashboardSalesProductDualDTO, DashboardSalesProductDualDTO> {
+public class SaleStatsProductDualService extends AnySourceVersionAwareResponseService<DashboardSalesProductDualDTO, DashboardSalesProductDualDTO> {
 
 	@Getter(onMethod_ = @Override)
-	private final Class<SaleStatsProductLines2DMeta> meta = SaleStatsProductLines2DMeta.class;
+	private final Class<SaleStatsProductDualMeta> meta = SaleStatsProductDualMeta.class;
 
 	@Getter(onMethod_ = @Override)
-	private final Class<SaleStatsProductLines2Dao> dao = SaleStatsProductLines2Dao.class;
+	private final Class<SaleStatsProductDualDao> dao = SaleStatsProductDualDao.class;
 
 	@Override
 	protected CreateResult<DashboardSalesProductDualDTO> doCreateEntity(DashboardSalesProductDualDTO entity, BusinessComponent bc) {

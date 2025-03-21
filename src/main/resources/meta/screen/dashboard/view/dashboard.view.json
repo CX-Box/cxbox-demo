@@ -5,35 +5,34 @@
   "url": "/screen/dashboard/view/dashboard",
   "widgets": [
     {
-      "widgetName": "dashboardSalesColumnDualLines2D",
-      "position": 0,
+      "widgetName": "dashboardFilter",
+      "position": 4,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "dashboardSalesProductTypeLine2D",
+      "position": 5,
       "gridWidth": 12
     },
     {
-      "widgetName": "dashboardSalesLineColumnTest2D",
-      "position": 0,
+      "widgetName": "dashboardSalesProductStatusColumn2D",
+      "position": 5,
       "gridWidth": 12
     },
-
     {
       "widgetName": "dashboardSalesLine2D",
-      "position": 1,
+      "position": 6,
       "gridWidth": 12
     },
     {
       "widgetName": "dashboardSalesLineColumn2D",
-      "position": 1,
+      "position": 6,
       "gridWidth": 12
     },
     {
       "widgetName": "dashboardSalesDualAxes2D",
-      "position": 2,
+      "position": 6,
       "gridWidth": 12
-    },
-    {
-      "widgetName": "dashboardFilter",
-      "position": 4,
-      "gridWidth": 24
     },
     {
       "widgetName": "dashboardClientActivitiesList",

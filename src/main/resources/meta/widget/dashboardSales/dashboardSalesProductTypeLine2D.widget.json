@@ -1,8 +1,8 @@
 {
-  "name": "dashboardSalesColumnDualLines2D",
-  "title": "Sales by Product Type: saleStatsProductDualLines",
+  "name": "dashboardSalesProductTypeLine2D",
+  "title": "Sales by Product Type",
   "type": "Line2D",
-  "bc": "saleStatsProductDualLines",
+  "bc": "saleStatsProductTypeLines",
   "fields": [
     {
       "title": "productType",
@@ -13,7 +13,8 @@
       "title": "Date",
       "key": "dateCreatedSales",
       "type": "input",
-      "drillDown": true
+      "drillDown": true,
+      "bgColorKey": "color"
     },
     {
       "title": "Sum, $",

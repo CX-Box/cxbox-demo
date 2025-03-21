@@ -1,37 +1,27 @@
-package org.demo.service.cxbox.anysource.salestatsproduct;
+package org.demo.service.cxbox.anysource.salestatsfordashboard.salestatsproduct;
 
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.cxbox.core.controller.param.SearchOperation;
-import org.cxbox.core.crudma.PlatformRequest;
-import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.bc.impl.BcDescription;
 import org.cxbox.core.dto.DrillDownType;
 import org.cxbox.core.dto.rowmeta.FieldsMeta;
 import org.cxbox.core.dto.rowmeta.RowDependentFieldsMeta;
-import org.cxbox.core.external.core.ParentDtoFirstLevelCache;
 import org.cxbox.core.service.rowmeta.AnySourceFieldMetaBuilder;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.anysource.DashboardSalesProductDTO;
 import org.demo.dto.cxbox.anysource.DashboardSalesProductDTO_;
-import org.demo.dto.cxbox.inner.DashboardFilterDTO_;
 import org.demo.dto.cxbox.inner.SaleDTO_;
-import org.demo.entity.enums.FieldOfActivity;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.demo.service.cxbox.anysource.salestatsfordashboard.SaleStatsFilterAndFindService;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class SaleStatsProductMeta extends AnySourceFieldMetaBuilder<DashboardSalesProductDTO> {
 
-	@Autowired
-	private PlatformRequest platformRequest;
-
-	private final ParentDtoFirstLevelCache parentDtoFirstLevelCache;
+	private final SaleStatsFilterAndFindService saleStatsProductFilterService;
 
 	public void buildRowDependentMeta(RowDependentFieldsMeta<DashboardSalesProductDTO> fields, BcDescription bc,
 			String id, String parentId) {
@@ -64,23 +54,8 @@ public class SaleStatsProductMeta extends AnySourceFieldMetaBuilder<DashboardSal
 						SaleDTO_.product.getName() + "." + SearchOperation.EQUALS_ONE_OF.getOperationName() + "=[\\\"" +
 								fields.get(DashboardSalesProductDTO_.productName).getCurrentValue() + "\\\"]", StandardCharsets.UTF_8));
 
-		if (parentDtoFirstLevelCache.getParentField(DashboardFilterDTO_.fieldOfActivity, getBc()) != null &&
-				!parentDtoFirstLevelCache.getParentField(DashboardFilterDTO_.fieldOfActivity, getBc()).getValues().isEmpty()) {
-			Set<FieldOfActivity> fieldOfActivitySet = parentDtoFirstLevelCache.getParentField(
-							DashboardFilterDTO_.fieldOfActivity,
-							getBc()
-					)
-					.getValues().stream()
-					.map(v -> FieldOfActivity.getByValue(v.getValue()))
-					.collect(Collectors.toSet());
-
-			urlFilterBuilder.append(URLEncoder.encode(
-					"&" + SaleDTO_.fieldOfActivity.getName() + "." + SearchOperation.EQUALS_ONE_OF.getOperationName() + "=[\\\"" +
-							fieldOfActivitySet.stream()
-									.map(v -> "\\\"" + v.getValue() + "\\\"")
-									.collect(Collectors.joining(", ")) +
-							"\\\"]", StandardCharsets.UTF_8));
-		}
+		//add FieldOfActivity filter
+		saleStatsProductFilterService.appendFieldOfActivityFilter(urlFilterBuilder);
 
 		urlFilterBuilder.append("\"}");
 
@@ -88,8 +63,5 @@ public class SaleStatsProductMeta extends AnySourceFieldMetaBuilder<DashboardSal
 		return urlBC + urlFilterBuilder;
 	}
 
-	private BusinessComponent getBc() {
-		return this.platformRequest.getBc();
-	}
 
 }

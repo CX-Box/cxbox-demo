@@ -9,6 +9,7 @@ import org.cxbox.core.crudma.bc.impl.BcDescription;
 import org.cxbox.core.dto.DrillDownType;
 import org.cxbox.core.dto.rowmeta.FieldsMeta;
 import org.cxbox.core.dto.rowmeta.RowDependentFieldsMeta;
+import org.cxbox.core.external.core.ParentDtoFirstLevelCache;
 import org.cxbox.core.service.rowmeta.AnySourceFieldMetaBuilder;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.anysource.DashboardSalesProductDTO;
@@ -22,6 +23,8 @@ import org.springframework.stereotype.Service;
 public class SaleStatsProductMeta extends AnySourceFieldMetaBuilder<DashboardSalesProductDTO> {
 
 	private final SaleStatsFilterAndFindService saleStatsProductFilterService;
+
+	private final ParentDtoFirstLevelCache parentDtoFirstLevelCache;
 
 	public void buildRowDependentMeta(RowDependentFieldsMeta<DashboardSalesProductDTO> fields, BcDescription bc,
 			String id, String parentId) {

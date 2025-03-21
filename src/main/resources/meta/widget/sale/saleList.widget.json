@@ -5,11 +5,6 @@
   "bc": "sale",
   "fields": [
     {
-      "title": "Date Created Sales",
-      "key": "dateCreatedSales",
-      "type": "date"
-    },
-    {
       "title": "Client",
       "key": "clientName",
       "type": "input"
@@ -34,6 +29,11 @@
       "title": "Sum, $",
       "key": "sum",
       "type": "number"
+    },
+    {
+      "title": "Date Created Sales",
+      "key": "dateCreatedSales",
+      "type": "date"
     }
   ],
   "options": {

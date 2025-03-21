@@ -1,6 +1,6 @@
 {
   "name": "dashboardSalesProductStatusColumn2D",
-  "title": "Sales by Status",
+  "title": "Sales. Date by Product Status",
   "type": "Column2D",
   "bc": "saleStatsProductStatusColumn",
   "fields": [

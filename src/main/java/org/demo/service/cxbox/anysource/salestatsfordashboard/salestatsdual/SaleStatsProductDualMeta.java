@@ -33,6 +33,7 @@ public class SaleStatsProductDualMeta extends AnySourceFieldMetaBuilder<Dashboar
 			String id, String parentId) {
 
 	}
+
 	@Override
 	public void buildIndependentMeta(FieldsMeta<DashboardSalesProductDualDTO> fields, BcDescription bcDescription,
 			String parentId) {
@@ -49,10 +50,9 @@ public class SaleStatsProductDualMeta extends AnySourceFieldMetaBuilder<Dashboar
 					.append(CxboxRestController.sale)
 					.append("\":\"");
 			//add Date filter
-			if(!fields.getCurrentValue(DashboardSalesProductDualDTO_.dateCreatedSales).isEmpty()) {
+			if (!fields.getCurrentValue(DashboardSalesProductDualDTO_.dateCreatedSales).isEmpty()) {
 				String dateTimeStartString = formatDate(fields, 0);
 				String dateTimeEndString = formatDate(fields, 1);
-
 
 				urlFilterBuilder.append(URLEncoder.encode(
 						SaleDTO_.dateCreatedSales.getName() + "." + SearchOperation.GREATER_OR_EQUAL_THAN.getOperationName() + "=" +
@@ -61,7 +61,7 @@ public class SaleStatsProductDualMeta extends AnySourceFieldMetaBuilder<Dashboar
 								dateTimeEndString, StandardCharsets.UTF_8));
 			}
 
-			if(!fields.getCurrentValue(DashboardSalesProductDualDTO_.saleStatus).isEmpty()) {
+			if (!fields.getCurrentValue(DashboardSalesProductDualDTO_.saleStatus).isEmpty()) {
 				//add Status filter
 				urlFilterBuilder.append(URLEncoder.encode("&", StandardCharsets.UTF_8))
 						.append(URLEncoder.encode(

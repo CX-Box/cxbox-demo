@@ -1,6 +1,6 @@
 {
   "name": "dashboardSalesProductTypeLine2D",
-  "title": "Sales by Product Type",
+  "title": "Sales. Date by Product Type",
   "type": "Line2D",
   "bc": "saleStatsProductTypeLines",
   "fields": [

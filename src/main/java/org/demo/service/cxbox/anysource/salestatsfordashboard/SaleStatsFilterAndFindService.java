@@ -8,6 +8,7 @@ import java.util.Locale;
 import java.util.LongSummaryStatistics;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -24,84 +25,70 @@ import org.demo.entity.dictionary.Product;
 import org.demo.entity.enums.FieldOfActivity;
 import org.demo.entity.enums.SaleStatus;
 import org.demo.repository.SaleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class SaleStatsFilterAndFindService {
-
-	@Autowired
-	private PlatformRequest platformRequest;
-
+	private final PlatformRequest platformRequest;
 	private final SaleRepository saleRepository;
-
 	private final ParentDtoFirstLevelCache parentDtoFirstLevelCache;
 
 	public StringBuilder appendFieldOfActivityFilter(StringBuilder urlFilterBuilder) {
-		if (parentDtoFirstLevelCache.getParentField(DashboardFilterDTO_.fieldOfActivity, getBc()) != null &&
-				!parentDtoFirstLevelCache.getParentField(DashboardFilterDTO_.fieldOfActivity, getBc()).getValues().isEmpty()) {
-			Set<FieldOfActivity> fieldOfActivitySet = parentDtoFirstLevelCache.getParentField(
-							DashboardFilterDTO_.fieldOfActivity,
-							getBc()
-					)
-					.getValues().stream()
-					.map(v -> FieldOfActivity.getByValue(v.getValue()))
-					.collect(Collectors.toSet());
+		Optional.ofNullable(parentDtoFirstLevelCache.getParentField(DashboardFilterDTO_.fieldOfActivity, getBc()))
+				.filter(field -> !field.getValues().isEmpty())
+				.ifPresent(field -> {
+					Set<FieldOfActivity> fieldOfActivitySet = field.getValues().stream()
+							.map(value -> FieldOfActivity.getByValue(value.getValue()))
+							.collect(Collectors.toSet());
 
-			urlFilterBuilder.append(URLEncoder.encode(
-					"&" + SaleDTO_.fieldOfActivity.getName() + "." + SearchOperation.EQUALS_ONE_OF.getOperationName() + "=[\\\""
-							+
-							fieldOfActivitySet.stream()
-									.map(v -> "\\\"" + v.getValue() + "\\\"")
-									.collect(Collectors.joining(", ")) +
-							"\\\"]", StandardCharsets.UTF_8));
-		}
+					String encodedFilter = URLEncoder.encode(
+							"&" + SaleDTO_.fieldOfActivity.getName() + "." + SearchOperation.EQUALS_ONE_OF.getOperationName() + "=[\\\"" +
+									fieldOfActivitySet.stream()
+											.map(v -> "\\\"" + v.getValue() + "\\\"")
+											.collect(Collectors.joining(", ")) +
+									"\\\"]", StandardCharsets.UTF_8);
+
+					urlFilterBuilder.append(encodedFilter);
+				});
+
 		return urlFilterBuilder;
 	}
 
 	private BusinessComponent getBc() {
-		return this.platformRequest.getBc();
+		return platformRequest.getBc();
 	}
 
 	public List<Sale> getFilteredSalesByStatusAndFieldOfActivity(BusinessComponent bc) {
-		if (parentDtoFirstLevelCache.getParentField(DashboardFilterDTO_.fieldOfActivity, bc) != null &&
-				!parentDtoFirstLevelCache.getParentField(DashboardFilterDTO_.fieldOfActivity, bc).getValues().isEmpty()) {
-			Set<FieldOfActivity> filteredActivities = parentDtoFirstLevelCache.getParentField(
-							DashboardFilterDTO_.fieldOfActivity,
-							bc
-					)
-					.getValues().stream().map(v -> FieldOfActivity.getByValue(v.getValue())).collect(Collectors.toSet());
-			return saleRepository.findAllByClientFieldOfActivitiesInAndStatusIn(
-					filteredActivities,
-					List.of(SaleStatus.OPEN, SaleStatus.CLOSED)
-			);
-		} else {
-			return saleRepository.findAllByStatusIn(List.of(SaleStatus.OPEN, SaleStatus.CLOSED));
-		}
+		return Optional.ofNullable(parentDtoFirstLevelCache.getParentField(DashboardFilterDTO_.fieldOfActivity, bc))
+				.filter(field -> !field.getValues().isEmpty())
+				.map(field -> field.getValues().stream()
+						.map(value -> FieldOfActivity.getByValue(value.getValue()))
+						.collect(Collectors.toSet()))
+				.map(filteredActivities -> saleRepository.findAllByClientFieldOfActivitiesInAndStatusIn(
+						filteredActivities,
+						List.of(SaleStatus.OPEN, SaleStatus.CLOSED)
+				))
+				.orElseGet(() -> saleRepository.findAllByStatusIn(List.of(SaleStatus.OPEN, SaleStatus.CLOSED)));
 	}
 
 	public List<Sale> getFilteredSalesByFieldOfActivity(BusinessComponent bc) {
-		if (parentDtoFirstLevelCache.getParentField(DashboardFilterDTO_.fieldOfActivity, bc) != null &&
-				!parentDtoFirstLevelCache.getParentField(DashboardFilterDTO_.fieldOfActivity, bc).getValues().isEmpty()) {
-			Set<FieldOfActivity> filteredActivities = parentDtoFirstLevelCache.getParentField(
-							DashboardFilterDTO_.fieldOfActivity,
-							bc
-					)
-					.getValues().stream().map(v -> FieldOfActivity.getByValue(v.getValue())).collect(Collectors.toSet());
-			return saleRepository.findAllByClientFieldOfActivitiesIn(filteredActivities);
-		} else {
-			return saleRepository.findAll();
-		}
+		return Optional.ofNullable(parentDtoFirstLevelCache.getParentField(DashboardFilterDTO_.fieldOfActivity, bc))
+				.filter(field -> !field.getValues().isEmpty())
+				.map(field -> field.getValues().stream()
+						.map(value -> FieldOfActivity.getByValue(value.getValue()))
+						.collect(Collectors.toSet()))
+				.map(saleRepository::findAllByClientFieldOfActivitiesIn)
+				.orElseGet(saleRepository::findAll);
 	}
 
 	public List<DashboardSalesProductDualDTO> processSalesByStatusGroupByDateColumnData(List<Sale> sales,
 			List<DashboardSalesProductDualDTO> result) {
 		Map<String, Map<SaleStatus, Long>> salesColumnSummary = sales.stream()
-				.filter(f -> f.getDateCreatedSales() != null)
+				.filter(sale -> sale.getDateCreatedSales() != null)
 				.collect(Collectors.groupingBy(
-						s -> DateTimeFormatter.ofPattern("MMMM/yyyy", Locale.ENGLISH).format(s.getDateCreatedSales()),
+						sale -> DateTimeFormatter.ofPattern("MMMM/yyyy", Locale.ENGLISH).format(sale.getDateCreatedSales()),
 						Collectors.groupingBy(Sale::getStatus, Collectors.counting())
 				));
 
@@ -109,22 +96,22 @@ public class SaleStatsFilterAndFindService {
 		salesColumnSummary.forEach((dateCreated, productStats) -> productStats.forEach((saleStatus, stats) -> {
 			DashboardSalesProductDualDTO prod = new DashboardSalesProductDualDTO();
 			prod.setCount(stats);
-			prod.setId(String.valueOf(nextId[0] + 1));
-			nextId[0] = nextId[0] + 1;
+			prod.setId(String.valueOf(++nextId[0]));
 			prod.setDateCreatedSales(dateCreated);
 			prod.setSaleStatus(saleStatus);
-			prod.setColor(Objects.equals(saleStatus, SaleStatus.CLOSED) ? "#4D83E7" : "#30BA8F");
+			prod.setColor(saleStatus == SaleStatus.CLOSED ? "#4D83E7" : "#30BA8F");
 			result.add(prod);
 		}));
+
 		return result;
 	}
 
 	public List<DashboardSalesProductDualDTO> processSalesByProductTypeGroupByDateLineData(List<Sale> sales,
 			List<DashboardSalesProductDualDTO> result) {
 		Map<String, Map<Product, LongSummaryStatistics>> salesLineSummary = sales.stream()
-				.filter(f -> f.getDateCreatedSales() != null)
+				.filter(sale -> sale.getDateCreatedSales() != null)
 				.collect(Collectors.groupingBy(
-						s -> DateTimeFormatter.ofPattern("MMMM/yyyy", Locale.ENGLISH).format(s.getDateCreatedSales()),
+						sale -> DateTimeFormatter.ofPattern("MMMM/yyyy", Locale.ENGLISH).format(sale.getDateCreatedSales()),
 						Collectors.groupingBy(Sale::getProduct, Collectors.summarizingLong(Sale::getSum))
 				));
 
@@ -132,13 +119,13 @@ public class SaleStatsFilterAndFindService {
 		salesLineSummary.forEach((dateCreated, productStats) -> productStats.forEach((product, stats) -> {
 			DashboardSalesProductDualDTO prod = new DashboardSalesProductDualDTO();
 			prod.setProductType(product.key());
-			prod.setId(String.valueOf(nextId[0] + 1));
-			nextId[0] = nextId[0] + 1;
+			prod.setId(String.valueOf(++nextId[0]));
 			prod.setDateCreatedSales(dateCreated);
 			prod.setSum(stats.getSum());
 			prod.setColor(Objects.equals(product.key(), Product.EXPERTISE.key()) ? "#5D7092" : "#70925d");
 			result.add(prod);
 		}));
+
 		return result;
 	}
 

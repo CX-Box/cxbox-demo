@@ -66,7 +66,7 @@ public class SaleStatsProductColumn2Dao extends AbstractAnySourceBaseDAO<Dashboa
 		List<Sale> sales = saleStatsProductFilterService.getFilteredSalesByStatusAndFieldOfActivity(bc);
 
 		// Data for dashboardSalesColumn2D
-		return	saleStatsProductFilterService.processSalesByStatusGroupByDateColumnData(sales, result);
+		return saleStatsProductFilterService.processSalesByStatusGroupByDateColumnData(sales, result);
 	}
 
 

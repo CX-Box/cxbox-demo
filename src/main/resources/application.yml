@@ -45,6 +45,10 @@ cxbox:
     use-servlet-context-path: false
     side-bar-word-break: none
     notification-mode: stack
+  app:
+    info-color: '#dd0a34'
+    info-description: v2.0.11
+    info-env: DEMO
 
 server:
   port: 8080

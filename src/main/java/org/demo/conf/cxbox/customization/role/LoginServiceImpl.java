@@ -27,6 +27,7 @@ import org.cxbox.api.ScreenResponsibilityService;
 import org.cxbox.api.data.dictionary.SimpleDictionary;
 import org.cxbox.api.service.session.CoreSessionService;
 import org.cxbox.api.service.session.IUser;
+import org.cxbox.core.config.properties.APPProperties;
 import org.cxbox.core.config.properties.UIProperties;
 import org.cxbox.core.config.properties.WidgetFieldsIdResolverProperties;
 import org.cxbox.core.dto.LoggedUser;
@@ -63,6 +64,8 @@ public class LoginServiceImpl implements LoginService {
 	private final WidgetFieldsIdResolverProperties widgetFieldsIdResolverProperties;
 
 	private final UIProperties uiProperties;
+
+	private final APPProperties appProperties;
 
 	private final ApplicationEventPublisher eventPublisher;
 
@@ -159,6 +162,18 @@ public class LoginServiceImpl implements LoginService {
 		featureSettings.add(new SimpleDictionary(
 				UIProperties.NOTIFICATION_MODE,
 				String.valueOf(uiProperties.getNotificationMode())
+		));
+		featureSettings.add(new SimpleDictionary(
+				APPProperties.INFO_ENV,
+				String.valueOf(appProperties.getInfoEnv())
+		));
+		featureSettings.add(new SimpleDictionary(
+				APPProperties.INFO_COLOR,
+				String.valueOf(appProperties.getInfoColor())
+		));
+		featureSettings.add(new SimpleDictionary(
+				APPProperties.INFO_DESCRIPTION,
+				String.valueOf(appProperties.getInfoDescription())
 		));
 		return featureSettings;
 	}

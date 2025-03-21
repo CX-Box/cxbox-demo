@@ -160,6 +160,18 @@ public class LoginServiceImpl implements LoginService {
 				UIProperties.NOTIFICATION_MODE,
 				String.valueOf(uiProperties.getNotificationMode())
 		));
+		featureSettings.add(new SimpleDictionary(
+				UIProperties.APP_INFO_ENV,
+				String.valueOf(uiProperties.getAppInfoEnv())
+		));
+		featureSettings.add(new SimpleDictionary(
+				UIProperties.APP_INFO_COLOR,
+				String.valueOf(uiProperties.getAppInfoColor())
+		));
+		featureSettings.add(new SimpleDictionary(
+				UIProperties.APP_INFO_DESCRIPTION,
+				String.valueOf(uiProperties.getAppInfoDescription())
+		));
 		return featureSettings;
 	}
 

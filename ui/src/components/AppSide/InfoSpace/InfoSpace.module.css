@@ -25,6 +25,10 @@
   align-items: flex-start;
 }
 
+.mainContent .item {
+  max-width: calc(100% - 50px);
+}
+
 .label {
   position: relative;
   font-weight: bold;

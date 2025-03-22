@@ -1,4 +1,4 @@
-package org.demo.service.cxbox.anysource.salestatsfordashboard.salestatsproduct;
+package org.demo.service.cxbox.anysource.salestatsfordashboard.saleproductstats;
 
 
 import java.util.ArrayList;

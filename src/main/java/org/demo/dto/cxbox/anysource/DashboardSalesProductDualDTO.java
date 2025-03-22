@@ -1,5 +1,6 @@
 package org.demo.dto.cxbox.anysource;
 
+import java.time.Month;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,8 @@ import org.demo.entity.enums.SaleStatus;
 @SuperBuilder(toBuilder = true)
 public class DashboardSalesProductDualDTO extends DataResponseDTO {
 
+	private Month monthCreatedSales;
+
 	private String dateCreatedSales;
 
 	private String productType;
@@ -26,4 +29,5 @@ public class DashboardSalesProductDualDTO extends DataResponseDTO {
 	private Long count;
 
 	private String color;
+
 }

@@ -7,9 +7,9 @@ export enum EFeatureSettingKey {
     drillDownTooltip = 'drillDownTooltip',
     multiRoleEnabled = 'multiRoleEnabled',
     notificationMode = 'notificationMode',
-    infoEnv = 'infoEnv',
-    infoColor = 'infoColor',
-    infoDescription = 'infoDescription'
+    appInfoEnv = 'appInfoEnv',
+    appInfoColor = 'appInfoColor',
+    apInfoDescription = 'appInfoDescription'
 }
 
 export type FeatureSetting = {

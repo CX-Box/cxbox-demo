@@ -140,7 +140,7 @@ export const useGroupingHierarchy = <T extends CustomDataItem>(
     const tableContainerRef = useRef<HTMLDivElement>(null)
 
     const getRowElement = useCallback((rowKey: string | undefined): Element | null => {
-        return tableContainerRef.current?.querySelector(`[data-row-key="${rowKey}"]`) ?? null
+        return tableContainerRef.current?.querySelector(`[data-row-key="${CSS.escape(rowKey ?? '')}"]`) ?? null
     }, [])
 
     const getFirstRowElement = useCallback(() => {

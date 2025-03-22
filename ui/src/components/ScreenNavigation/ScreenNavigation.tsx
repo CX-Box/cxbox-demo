@@ -24,7 +24,7 @@ function ScreenNavigation() {
 
     useEffect(() => {
         // can't use .ant-menu-item-selected because dom nodes changes it too slowly
-        const selectedItem = document.querySelector(`.${styles.item}.${selectedItemClass}`)
+        const selectedItem = document.querySelector(`.${CSS.escape(styles.item)}.${selectedItemClass}`)
         selectedItem?.scrollIntoView()
     }, [screenUrl])
 

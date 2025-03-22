@@ -17,7 +17,7 @@ export const NotificationsContainer = () => {
             if (!containerRef?.current) {
                 return
             }
-            const stackNotifications = Array.from(containerRef.current.querySelectorAll(`.${styles.stack}`)) as HTMLElement[]
+            const stackNotifications = Array.from(containerRef.current.querySelectorAll(`.${CSS.escape(styles.stack)}`)) as HTMLElement[]
             const notificationsLength = stackNotifications.length
 
             if (!!notificationsLength) {

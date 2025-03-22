@@ -9,7 +9,7 @@ export enum EFeatureSettingKey {
     notificationMode = 'notificationMode',
     appInfoEnv = 'appInfoEnv',
     appInfoColor = 'appInfoColor',
-    apInfoDescription = 'appInfoDescription'
+    appInfoDescription = 'appInfoDescription'
 }
 
 export type FeatureSetting = {

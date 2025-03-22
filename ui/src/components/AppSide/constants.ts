@@ -1,0 +1,4 @@
+export const SIDE_BAR_BG_COLOR = '#262626'
+export const SIDE_BAR_WIDTH = 256
+export const SIDE_BAR_COLLAPSED_WIDTH = 48
+export const APP_INFO_COLOR_BOX_WIDTH = SIDE_BAR_WIDTH - 48

@@ -1,4 +1,4 @@
-package org.demo.service.cxbox.anysource.salestatsfordashboard.salestatsproduct;
+package org.demo.service.cxbox.anysource.salestatsfordashboard.saleproductstats;
 
 
 import java.net.URLEncoder;
@@ -9,22 +9,19 @@ import org.cxbox.core.crudma.bc.impl.BcDescription;
 import org.cxbox.core.dto.DrillDownType;
 import org.cxbox.core.dto.rowmeta.FieldsMeta;
 import org.cxbox.core.dto.rowmeta.RowDependentFieldsMeta;
-import org.cxbox.core.external.core.ParentDtoFirstLevelCache;
 import org.cxbox.core.service.rowmeta.AnySourceFieldMetaBuilder;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.anysource.DashboardSalesProductDTO;
 import org.demo.dto.cxbox.anysource.DashboardSalesProductDTO_;
 import org.demo.dto.cxbox.inner.SaleDTO_;
-import org.demo.service.cxbox.anysource.salestatsfordashboard.SaleStatsFilterAndFindService;
+import org.demo.service.cxbox.anysource.salestatsfordashboard.SaleStatsDrilldownFilterService;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class SaleStatsProductMeta extends AnySourceFieldMetaBuilder<DashboardSalesProductDTO> {
 
-	private final SaleStatsFilterAndFindService saleStatsProductFilterService;
-
-	private final ParentDtoFirstLevelCache parentDtoFirstLevelCache;
+	private final SaleStatsDrilldownFilterService saleStatsDrilldownFilterService;
 
 	public void buildRowDependentMeta(RowDependentFieldsMeta<DashboardSalesProductDTO> fields, BcDescription bc,
 			String id, String parentId) {
@@ -58,7 +55,7 @@ public class SaleStatsProductMeta extends AnySourceFieldMetaBuilder<DashboardSal
 								fields.get(DashboardSalesProductDTO_.productName).getCurrentValue() + "\\\"]", StandardCharsets.UTF_8));
 
 		//add FieldOfActivity filter
-		saleStatsProductFilterService.appendFieldOfActivityFilter(urlFilterBuilder);
+		urlFilterBuilder.append(saleStatsDrilldownFilterService.appendDrilldownFilterByFieldOfActivityFilter());
 
 		urlFilterBuilder.append("\"}");
 

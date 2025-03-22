@@ -1,4 +1,4 @@
-package org.demo.service.cxbox.anysource.salestatsfordashboard.salesproducttypestats;
+package org.demo.service.cxbox.anysource.salestatsfordashboard.saledualstats;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -18,23 +18,24 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class SaleStatsProductTypeLinesMeta extends AnySourceFieldMetaBuilder<DashboardSalesProductDualDTO> {
+public class SaleStatsProductDualMeta extends AnySourceFieldMetaBuilder<DashboardSalesProductDualDTO> {
+
 
 	private final SaleStatsDrilldownFilterService saleStatsDrilldownFilterService;
 
 	public void buildRowDependentMeta(RowDependentFieldsMeta<DashboardSalesProductDualDTO> fields, BcDescription bc,
 			String id, String parentId) {
-		fields.setDrilldown(
-				DashboardSalesProductDualDTO_.dateCreatedSales,
-				DrillDownType.INNER,
-				urlFilterBuilder(fields)
-		);
+
 	}
 
 	@Override
 	public void buildIndependentMeta(FieldsMeta<DashboardSalesProductDualDTO> fields, BcDescription bcDescription,
 			String parentId) {
-
+		fields.setDrilldown(
+				DashboardSalesProductDualDTO_.dateCreatedSales,
+				DrillDownType.INNER,
+				urlFilterBuilder(fields)
+		);
 	}
 
 	private String urlFilterBuilder(RowDependentFieldsMeta<DashboardSalesProductDualDTO> fields) {
@@ -44,12 +45,18 @@ public class SaleStatsProductTypeLinesMeta extends AnySourceFieldMetaBuilder<Das
 					+ CxboxRestController.sale
 					+ "\":\""
 
-					+ URLEncoder.encode(
-					SaleDTO_.product.getName() + "." + SearchOperation.EQUALS_ONE_OF.getOperationName() + "=[\\\"" +
-							fields.getCurrentValue(DashboardSalesProductDualDTO_.productType) + "\\\"]", StandardCharsets.UTF_8)
+					+ (fields.getCurrentValue(DashboardSalesProductDualDTO_.productType).isPresent() ?
+					URLEncoder.encode(
+							SaleDTO_.product.getName() + "." + SearchOperation.EQUALS_ONE_OF.getOperationName() + "=[\\\"" +
+									fields.getCurrentValue(DashboardSalesProductDualDTO_.productType) + "\\\"]",
+							StandardCharsets.UTF_8
+					) : "")
 
 					//add Date filter
 					+ saleStatsDrilldownFilterService.appendDrilldownFilterSalesByDate(fields)
+
+					//add Status filter
+					+ saleStatsDrilldownFilterService.appendDrilldownFilterSalesByStatus(fields)
 
 					//add FieldOfActivity filter
 					+ saleStatsDrilldownFilterService.appendDrilldownFilterByFieldOfActivityFilter()

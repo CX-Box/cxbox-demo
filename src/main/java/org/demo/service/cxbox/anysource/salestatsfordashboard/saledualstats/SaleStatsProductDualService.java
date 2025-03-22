@@ -1,4 +1,4 @@
-package org.demo.service.cxbox.anysource.salestatsfordashboard.salestatsdual;
+package org.demo.service.cxbox.anysource.salestatsfordashboard.saledualstats;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

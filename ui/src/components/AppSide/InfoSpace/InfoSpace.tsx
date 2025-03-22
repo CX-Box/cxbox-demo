@@ -5,26 +5,26 @@ import { Icon, Tooltip } from 'antd'
 import { getContrastColor } from '@utils/color'
 import { useHeightLimiter } from '@components/AppSide/hooks'
 
-interface InfoSpaceProps {
+interface AppInfoProps {
     collapsed: boolean
     backgroundColor: CSSProperties['backgroundColor']
     data?: { key: string; value: string; isPinned?: boolean }[]
 }
 
-function InfoSpace({ data, backgroundColor, collapsed }: InfoSpaceProps) {
-    const { rootRef, maxHeight } = useHeightLimiter(collapsed)
+function AppInfo({ data, backgroundColor, collapsed }: AppInfoProps) {
+    const { contentRef, contentMaxHeight } = useHeightLimiter(collapsed)
 
     if (!data?.length) {
         return null
     }
 
-    const content = data.map((item, i) => (
+    const items = data.map((item, i) => (
         <div className={styles.item} key={i}>
             {item.value}
         </div>
     ))
 
-    const smallContent = data
+    const smallItems = data
         .filter(item => (collapsed ? item.isPinned : true))
         .map((item, i) => (
             <div className={styles.item} key={i}>
@@ -32,21 +32,18 @@ function InfoSpace({ data, backgroundColor, collapsed }: InfoSpaceProps) {
             </div>
         ))
 
+    let contrastColor = getContrastColor(backgroundColor as string)
     return (
-        <Tooltip placement="rightTop" title={collapsed ? <div className={styles.tooltip}>{content}</div> : null}>
-            <div
-                ref={rootRef}
-                className={cn(styles.root, { [styles.collapsed]: collapsed })}
-                style={{
-                    backgroundColor,
-                    color: getContrastColor(backgroundColor as string),
-                    maxHeight
-                }}
-            >
-                {collapsed ? smallContent.length ? smallContent : <Icon className={styles.icon} type="exclamation-circle" /> : content}
+        <Tooltip placement="rightTop" title={collapsed ? <div className={styles.tooltip}>{items}</div> : null}>
+            <div className={cn(styles.root, { [styles.collapsed]: collapsed })}>
+                <div className={styles.colorBox} style={{ backgroundColor, color: contrastColor }}>
+                    <div ref={contentRef} className={styles.content} style={{ maxHeight: contentMaxHeight }}>
+                        {collapsed ? smallItems.length ? smallItems : <Icon className={styles.icon} type="exclamation-circle" /> : items}
+                    </div>
+                </div>
             </div>
         </Tooltip>
     )
 }
 
-export default React.memo(InfoSpace)
+export default React.memo(AppInfo)

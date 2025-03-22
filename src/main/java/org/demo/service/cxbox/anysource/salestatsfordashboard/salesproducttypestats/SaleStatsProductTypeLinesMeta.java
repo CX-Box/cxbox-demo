@@ -44,14 +44,9 @@ public class SaleStatsProductTypeLinesMeta extends AnySourceFieldMetaBuilder<Das
 					+ CxboxRestController.sale
 					+ "\":\""
 
-					+
-					(fields.getCurrentValue(DashboardSalesProductDualDTO_.productType).isPresent() ?
-							URLEncoder.encode(
-									SaleDTO_.product.getName() + "." + SearchOperation.EQUALS_ONE_OF.getOperationName() + "=[\\\"" +
-											fields.getCurrentValue(DashboardSalesProductDualDTO_.productType).get() + "\\\"]",
-									StandardCharsets.UTF_8
-							)
-							: "")
+					+ URLEncoder.encode(
+					SaleDTO_.product.getName() + "." + SearchOperation.EQUALS_ONE_OF.getOperationName() + "=[\\\"" +
+							fields.getCurrentValue(DashboardSalesProductDualDTO_.productType) + "\\\"]", StandardCharsets.UTF_8)
 
 					//add Date filter
 					+ saleStatsDrilldownFilterService.appendDrilldownFilterSalesByDate(fields)

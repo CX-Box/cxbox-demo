@@ -13,7 +13,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.time.DateUtils;
 import org.cxbox.core.controller.param.SearchOperation;
 import org.cxbox.core.crudma.PlatformRequest;
 import org.cxbox.core.crudma.bc.BusinessComponent;
@@ -83,32 +82,31 @@ public class SaleStatsDrilldownFilterService {
 
 	public StringBuilder appendDrilldownFilterSalesByStatus(RowDependentFieldsMeta<DashboardSalesProductDualDTO> fields) {
 		StringBuilder urlFilterBuilder = new StringBuilder();
-		Optional<SaleStatus> value = fields.getCurrentValue(DashboardSalesProductDualDTO_.saleStatus);
-		value.ifPresent(saleStatus -> urlFilterBuilder.append(URLEncoder.encode("&", StandardCharsets.UTF_8))
-				.append(URLEncoder.encode(
-						SaleDTO_.status.getName() + "." + SearchOperation.EQUALS_ONE_OF.getOperationName() + "=[\\\"" +
-								SaleStatus.valueOf(saleStatus
-												.toString())
-										.getValue() + "\\\"]",
-						StandardCharsets.UTF_8
-				)));
+		if (fields.getCurrentValue(DashboardSalesProductDualDTO_.saleStatus).isPresent()) {
+			urlFilterBuilder.append(URLEncoder.encode("&", StandardCharsets.UTF_8))
+					.append(URLEncoder.encode(
+							SaleDTO_.status.getName() + "." + SearchOperation.EQUALS_ONE_OF.getOperationName() + "=[\\\"" +
+									SaleStatus.valueOf(fields.getCurrentValue(DashboardSalesProductDualDTO_.saleStatus).get()
+													.toString())
+											.getValue() + "\\\"]",
+							StandardCharsets.UTF_8
+					));
+		}
 		return urlFilterBuilder;
 	}
 
 	private String formatDate(RowDependentFieldsMeta<DashboardSalesProductDualDTO> fields, int monthOffset)
 			throws ParseException {
 		SimpleDateFormat formatIn = new SimpleDateFormat("MMMM/yyyy", Locale.ENGLISH);
-		Optional<String> value = fields.getCurrentValue(DashboardSalesProductDualDTO_.dateCreatedSales);
-		if (value.isPresent()) {
-			Date dateCreatedSales = formatIn.parse(value.get());
+		Date dateCreatedSales = formatIn.parse(fields.getCurrentValue(DashboardSalesProductDualDTO_.dateCreatedSales)
+				.get());
+		dateCreatedSales.setMonth(dateCreatedSales.getMonth() + monthOffset);
 
-			dateCreatedSales = DateUtils.addMonths(dateCreatedSales, monthOffset);
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-			return dateCreatedSales.toInstant()
-					.atZone(ZoneId.systemDefault())
-					.toLocalDateTime().format(formatter);
-		}
-		return "";
-		}
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+		return dateCreatedSales.toInstant()
+				.atZone(ZoneId.systemDefault())
+				.toLocalDateTime().format(formatter);
+	}
+
 
 }

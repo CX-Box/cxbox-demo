@@ -1,9 +1,6 @@
 package org.demo.service.cxbox.anysource.salestatsfordashboard;
 
-import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.LongSummaryStatistics;
@@ -13,6 +10,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.cxbox.core.crudma.PlatformRequest;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.external.core.ParentDtoFirstLevelCache;
 import org.demo.dto.cxbox.anysource.DashboardSalesProductDualDTO;
@@ -28,6 +26,8 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class SaleStatsFilterAndFindService {
+
+	private final PlatformRequest platformRequest;
 
 	private final SaleRepository saleRepository;
 
@@ -57,61 +57,49 @@ public class SaleStatsFilterAndFindService {
 	}
 
 
-	public List<DashboardSalesProductDualDTO> processSalesByStatusGroupByDateColumnData(List<Sale> sales) {
-
-		List<DashboardSalesProductDualDTO> result = new ArrayList<>();
-		Map<String, Map<YearMonth, Map<SaleStatus, Long>>> salesColumnSummary = sales.stream()
+	public List<DashboardSalesProductDualDTO> processSalesByStatusGroupByDateColumnData(List<Sale> sales,
+			List<DashboardSalesProductDualDTO> result) {
+		Map<String, Map<SaleStatus, Long>> salesColumnSummary = sales.stream()
 				.filter(sale -> sale.getDateCreatedSales() != null)
 				.collect(Collectors.groupingBy(
 						sale -> DateTimeFormatter.ofPattern("MMMM/yyyy", Locale.ENGLISH).format(sale.getDateCreatedSales()),
-						Collectors.groupingBy(
-								sale -> YearMonth.of(sale.getDateCreatedSales().getYear(), sale.getDateCreatedSales().getMonth()),
-								Collectors.groupingBy(Sale::getStatus, Collectors.counting())
-						)
+						Collectors.groupingBy(Sale::getStatus, Collectors.counting())
 				));
 
 		final int[] nextId = {0};
-		salesColumnSummary.forEach((dateCreated, productStats) -> productStats.forEach((yearMonth, productMap) -> productMap.forEach(
-				(saleStatus, stats) -> {
-					DashboardSalesProductDualDTO prod = new DashboardSalesProductDualDTO();
-					prod.setCount(stats);
-					prod.setId(String.valueOf(++nextId[0]));
-					prod.setDateCreatedSales(dateCreated);
-					prod.setSaleStatus(saleStatus);
-					prod.setYearMonthCreatedSales(yearMonth);
-					prod.setColor(saleStatus == SaleStatus.CLOSED ? "#4D83E7" : "#30BA8F");
-					result.add(prod);
-				})));
-		result.sort(Comparator.comparing(DashboardSalesProductDualDTO::getYearMonthCreatedSales));
+		salesColumnSummary.forEach((dateCreated, productStats) -> productStats.forEach((saleStatus, stats) -> {
+			DashboardSalesProductDualDTO prod = new DashboardSalesProductDualDTO();
+			prod.setCount(stats);
+			prod.setId(String.valueOf(++nextId[0]));
+			prod.setDateCreatedSales(dateCreated);
+			prod.setSaleStatus(saleStatus);
+			prod.setColor(saleStatus == SaleStatus.CLOSED ? "#4D83E7" : "#30BA8F");
+			result.add(prod);
+		}));
+
 		return result;
 	}
 
-	public List<DashboardSalesProductDualDTO> processSalesByProductTypeGroupByDateLineData(List<Sale> sales) {
-		List<DashboardSalesProductDualDTO> result = new ArrayList<>();
-		Map<String, Map<YearMonth, Map<Product, LongSummaryStatistics>>> salesLineSummary =
-				sales.stream()
-						.filter(sale -> sale.getDateCreatedSales() != null)
-						.collect(Collectors.groupingBy(
-								sale -> DateTimeFormatter.ofPattern("MMMM/yyyy", Locale.ENGLISH).format(sale.getDateCreatedSales()),
-								Collectors.groupingBy(
-										sale -> YearMonth.of(sale.getDateCreatedSales().getYear(), sale.getDateCreatedSales().getMonth()),
-										Collectors.groupingBy(Sale::getProduct, Collectors.summarizingLong(Sale::getSum))
-								)
-						));
+	public List<DashboardSalesProductDualDTO> processSalesByProductTypeGroupByDateLineData(List<Sale> sales,
+			List<DashboardSalesProductDualDTO> result) {
+		Map<String, Map<Product, LongSummaryStatistics>> salesLineSummary = sales.stream()
+				.filter(sale -> sale.getDateCreatedSales() != null)
+				.collect(Collectors.groupingBy(
+						sale -> DateTimeFormatter.ofPattern("MMMM/yyyy", Locale.ENGLISH).format(sale.getDateCreatedSales()),
+						Collectors.groupingBy(Sale::getProduct, Collectors.summarizingLong(Sale::getSum))
+				));
 
 		final int[] nextId = {0};
-		salesLineSummary.forEach((dateCreated, productStats) -> productStats.forEach((month, productMap) -> productMap.forEach(
-				(product, stats) -> {
-					DashboardSalesProductDualDTO prod = new DashboardSalesProductDualDTO();
-					prod.setProductType(product.key());
-					prod.setId(String.valueOf(++nextId[0]));
-					prod.setDateCreatedSales(dateCreated);
-					prod.setSum(stats.getSum());
-					prod.setYearMonthCreatedSales(month);
-					prod.setColor(Objects.equals(product.key(), Product.EXPERTISE.key()) ? "#5D7092" : "#70925d");
-					result.add(prod);
-				})));
-		result.sort(Comparator.comparing(DashboardSalesProductDualDTO::getYearMonthCreatedSales));
+		salesLineSummary.forEach((dateCreated, productStats) -> productStats.forEach((product, stats) -> {
+			DashboardSalesProductDualDTO prod = new DashboardSalesProductDualDTO();
+			prod.setProductType(product.key());
+			prod.setId(String.valueOf(++nextId[0]));
+			prod.setDateCreatedSales(dateCreated);
+			prod.setSum(stats.getSum());
+			prod.setColor(Objects.equals(product.key(), Product.EXPERTISE.key()) ? "#5D7092" : "#70925d");
+			result.add(prod);
+		}));
+
 		return result;
 	}
 

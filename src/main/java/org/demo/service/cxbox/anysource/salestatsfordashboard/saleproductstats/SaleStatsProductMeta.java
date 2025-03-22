@@ -41,21 +41,23 @@ public class SaleStatsProductMeta extends AnySourceFieldMetaBuilder<DashboardSal
 	}
 
 	private String urlFilterBuilder(RowDependentFieldsMeta<DashboardSalesProductDTO> fields) {
+		StringBuilder urlFilterBuilder = new StringBuilder("?filters={\"")
+				.append(CxboxRestController.sale)
+				.append("\":\"");
 
-		String urlFilterBuilder = "?filters={\""
-				+ CxboxRestController.sale
-				+ "\":\""
-				+ URLEncoder.encode(
+		urlFilterBuilder.append(URLEncoder.encode(
 				SaleDTO_.clientName.getName() + "." + SearchOperation.CONTAINS.getOperationName() + "=" +
-						fields.get(DashboardSalesProductDTO_.clientName).getCurrentValue(), StandardCharsets.UTF_8)
-				+ URLEncoder.encode("&", StandardCharsets.UTF_8)
-				+ URLEncoder.encode(
-				SaleDTO_.product.getName() + "." + SearchOperation.EQUALS_ONE_OF.getOperationName() + "=[\\\"" +
-						fields.get(DashboardSalesProductDTO_.productName).getCurrentValue() + "\\\"]", StandardCharsets.UTF_8)
+						fields.get(DashboardSalesProductDTO_.clientName).getCurrentValue(), StandardCharsets.UTF_8));
 
-				//add FieldOfActivity filter
-				+ saleStatsDrilldownFilterService.appendDrilldownFilterByFieldOfActivityFilter()
-				+ "\"}";
+		urlFilterBuilder.append(URLEncoder.encode("&", StandardCharsets.UTF_8))
+				.append(URLEncoder.encode(
+						SaleDTO_.product.getName() + "." + SearchOperation.EQUALS_ONE_OF.getOperationName() + "=[\\\"" +
+								fields.get(DashboardSalesProductDTO_.productName).getCurrentValue() + "\\\"]", StandardCharsets.UTF_8));
+
+		//add FieldOfActivity filter
+		urlFilterBuilder.append(saleStatsDrilldownFilterService.appendDrilldownFilterByFieldOfActivityFilter());
+
+		urlFilterBuilder.append("\"}");
 
 		String urlBC = "screen/sale" + "/" + CxboxRestController.sale;
 		return urlBC + urlFilterBuilder;

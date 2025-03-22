@@ -48,10 +48,9 @@ public class SaleStatsProductDualMeta extends AnySourceFieldMetaBuilder<Dashboar
 					+ (fields.getCurrentValue(DashboardSalesProductDualDTO_.productType).isPresent() ?
 					URLEncoder.encode(
 							SaleDTO_.product.getName() + "." + SearchOperation.EQUALS_ONE_OF.getOperationName() + "=[\\\"" +
-									fields.getCurrentValue(DashboardSalesProductDualDTO_.productType).get() + "\\\"]",
+									fields.getCurrentValue(DashboardSalesProductDualDTO_.productType) + "\\\"]",
 							StandardCharsets.UTF_8
-					)
-					: "")
+					) : "")
 
 					//add Date filter
 					+ saleStatsDrilldownFilterService.appendDrilldownFilterSalesByDate(fields)

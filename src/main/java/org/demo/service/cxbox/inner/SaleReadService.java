@@ -12,7 +12,6 @@ import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.inner.SaleDTO;
-import org.demo.dto.cxbox.inner.SaleDTO_;
 import org.demo.entity.Sale;
 import org.demo.repository.SaleRepository;
 import org.springframework.stereotype.Service;

@@ -45,9 +45,9 @@ cxbox:
     use-servlet-context-path: false
     side-bar-word-break: none
     notification-mode: stack
-    app-info-env: DEMO
-    app-info-description: v2.0.2
-    app-info-color: '#4C4C4C'
+    app-info-env: ${APP_INFO_ENV:Local}
+    app-info-description: ${APP_INFO_DESCRIPTION:v2.0.12}
+    app-info-color: ${APP_INFO_COLOR:#3a6e49}
 
 server:
   port: 8080

@@ -1,4 +1,4 @@
-package org.demo.service.cxbox.anysource.salestatsfordashboard.salestatsproduct;
+package org.demo.service.cxbox.anysource.salestatsfordashboard.saleproductstats;
 
 
 import java.net.URLEncoder;
@@ -9,22 +9,19 @@ import org.cxbox.core.crudma.bc.impl.BcDescription;
 import org.cxbox.core.dto.DrillDownType;
 import org.cxbox.core.dto.rowmeta.FieldsMeta;
 import org.cxbox.core.dto.rowmeta.RowDependentFieldsMeta;
-import org.cxbox.core.external.core.ParentDtoFirstLevelCache;
 import org.cxbox.core.service.rowmeta.AnySourceFieldMetaBuilder;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.anysource.DashboardSalesProductDTO;
 import org.demo.dto.cxbox.anysource.DashboardSalesProductDTO_;
 import org.demo.dto.cxbox.inner.SaleDTO_;
-import org.demo.service.cxbox.anysource.salestatsfordashboard.SaleStatsFilterAndFindService;
+import org.demo.service.cxbox.anysource.salestatsfordashboard.SaleStatsDrilldownFilterService;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class SaleStatsProductMeta extends AnySourceFieldMetaBuilder<DashboardSalesProductDTO> {
 
-	private final SaleStatsFilterAndFindService saleStatsProductFilterService;
-
-	private final ParentDtoFirstLevelCache parentDtoFirstLevelCache;
+	private final SaleStatsDrilldownFilterService saleStatsDrilldownFilterService;
 
 	public void buildRowDependentMeta(RowDependentFieldsMeta<DashboardSalesProductDTO> fields, BcDescription bc,
 			String id, String parentId) {
@@ -44,23 +41,21 @@ public class SaleStatsProductMeta extends AnySourceFieldMetaBuilder<DashboardSal
 	}
 
 	private String urlFilterBuilder(RowDependentFieldsMeta<DashboardSalesProductDTO> fields) {
-		StringBuilder urlFilterBuilder = new StringBuilder("?filters={\"")
-				.append(CxboxRestController.sale)
-				.append("\":\"");
 
-		urlFilterBuilder.append(URLEncoder.encode(
+		String urlFilterBuilder = "?filters={\""
+				+ CxboxRestController.sale
+				+ "\":\""
+				+ URLEncoder.encode(
 				SaleDTO_.clientName.getName() + "." + SearchOperation.CONTAINS.getOperationName() + "=" +
-						fields.get(DashboardSalesProductDTO_.clientName).getCurrentValue(), StandardCharsets.UTF_8));
+						fields.get(DashboardSalesProductDTO_.clientName).getCurrentValue(), StandardCharsets.UTF_8)
+				+ URLEncoder.encode("&", StandardCharsets.UTF_8)
+				+ URLEncoder.encode(
+				SaleDTO_.product.getName() + "." + SearchOperation.EQUALS_ONE_OF.getOperationName() + "=[\\\"" +
+						fields.get(DashboardSalesProductDTO_.productName).getCurrentValue() + "\\\"]", StandardCharsets.UTF_8)
 
-		urlFilterBuilder.append(URLEncoder.encode("&", StandardCharsets.UTF_8))
-				.append(URLEncoder.encode(
-						SaleDTO_.product.getName() + "." + SearchOperation.EQUALS_ONE_OF.getOperationName() + "=[\\\"" +
-								fields.get(DashboardSalesProductDTO_.productName).getCurrentValue() + "\\\"]", StandardCharsets.UTF_8));
-
-		//add FieldOfActivity filter
-		saleStatsProductFilterService.appendFieldOfActivityFilter(urlFilterBuilder);
-
-		urlFilterBuilder.append("\"}");
+				//add FieldOfActivity filter
+				+ saleStatsDrilldownFilterService.appendDrilldownFilterByFieldOfActivityFilter()
+				+ "\"}";
 
 		String urlBC = "screen/sale" + "/" + CxboxRestController.sale;
 		return urlBC + urlFilterBuilder;

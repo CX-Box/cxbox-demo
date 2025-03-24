@@ -1,7 +1,5 @@
 package org.demo.service.cxbox.anysource.salestatsfordashboard.salesproducttypestats;
 
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import lombok.NonNull;
@@ -59,16 +57,12 @@ public class SaleStatsProductTypeLinesDao extends AbstractAnySourceBaseDAO<Dashb
 		throw new IllegalStateException();
 	}
 
+
 	@NonNull
 	private List<DashboardSalesProductDualDTO> getStats(BusinessComponent bc) {
 
-		List<DashboardSalesProductDualDTO> result = new ArrayList<>();
-
 		List<Sale> sales = saleStatsProductFilterService.getFilteredSalesByStatusAndFieldOfActivity(bc);
-
 		// Data for dashboardSalesLine2D
-		return saleStatsProductFilterService.processSalesByProductTypeGroupByDateLineData(sales, result);
+		return saleStatsProductFilterService.processSalesByProductTypeGroupByDateLineData(sales);
 	}
-
-
 }

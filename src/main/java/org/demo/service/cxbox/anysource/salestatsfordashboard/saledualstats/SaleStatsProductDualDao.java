@@ -1,6 +1,7 @@
-package org.demo.service.cxbox.anysource.salestatsfordashboard.salestatsdual;
+package org.demo.service.cxbox.anysource.salestatsfordashboard.saledualstats;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import lombok.NonNull;
@@ -62,24 +63,17 @@ public class SaleStatsProductDualDao extends AbstractAnySourceBaseDAO<DashboardS
 	private List<DashboardSalesProductDualDTO> getStats(BusinessComponent bc) {
 
 		List<DashboardSalesProductDualDTO> result = new ArrayList<>();
-		List<DashboardSalesProductDualDTO> resultColumnData;
-		List<DashboardSalesProductDualDTO> resultAll;
 
 		List<Sale> sales = saleStatsProductFilterService.getFilteredSalesByStatusAndFieldOfActivity(bc);
+		List<Sale> salesSortDate = sales.stream().sorted(Comparator.comparing(Sale::getDateCreatedSales)).toList();
 
 		// Data for dashboardSalesColumn2D
-		resultColumnData = saleStatsProductFilterService.processSalesByStatusGroupByDateColumnData(
-				sales,
-				result
-		);
+		result.addAll(saleStatsProductFilterService.processSalesByStatusGroupByDateColumnData(salesSortDate));
 
 		// Data for dashboardSalesLine2D
-		resultAll = saleStatsProductFilterService.processSalesByProductTypeGroupByDateLineData(
-				sales,
-				resultColumnData
-		);
+		result.addAll(saleStatsProductFilterService.processSalesByProductTypeGroupByDateLineData(salesSortDate));
 
-		return resultAll;
+		return result;
 	}
 
 }

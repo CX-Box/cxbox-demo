@@ -1,47 +1,35 @@
 package org.demo.conf.cxbox.extension.action;
 
-import java.util.HashMap;
-import java.util.Map;
+import lombok.experimental.UtilityClass;
 import org.cxbox.core.dto.rowmeta.PreAction;
-import org.cxbox.core.dto.rowmeta.PreAction.PreActionBuilder;
-import org.cxbox.core.dto.rowmeta.PreActionType;
 
+@UtilityClass
 public class ActionsExt {
 
+	/**
+	 * Please just inline this method with right-click -> refactor -> inline in IntelliJ IDEA
+	 * to move your whole code base to new PreAction.confirmWithWidgetBuilder from cxbox core
+	 */
+	@Deprecated(since = "4.0.0-M16-SNAPSHOT", forRemoval = true)
 	public static PreAction confirmWithCustomWidget(String message, String widget, String yesButton, String noButton) {
-		Map<String, String> customParameters = new HashMap<>();
-		customParameters.put("subtype", "confirmWithCustomWidget");
-		if (widget != null) {
-			customParameters.put("widget", widget);
-		}
-		if (yesButton != null) {
-			customParameters.put("yesText", yesButton);
-		}
-		if (noButton != null) {
-			customParameters.put("noText", noButton);
-		}
-		return PreAction.custom(message, customParameters);
+		//WARN!
+		// if you want to hide the title - use cf.withoutTitle().
+		// DO NOT use non-null black String in title for this purpose!
+		// E.g., title(String) is supposed to be null or non-blank
+		return PreAction.confirmWithWidget(widget, cfw -> cfw.title(message).yesText(yesButton).noText(noButton));
 	}
 
+	/**
+	 * Please just inline this method with right-click -> refactor -> inline in IntelliJ IDEA
+	 * to move your whole code base to new PreAction.confirmBuilder from cxbox core
+	 */
+	@Deprecated(since = "4.0.0-M16-SNAPSHOT", forRemoval = true)
 	public static PreAction confirm(String message, String title, String yesButton, String noButton) {
-		PreActionBuilder preActionBuilder = PreAction.builder()
-				.preActionType(PreActionType.CONFIRMATION);
-		Map<String, String> customParameters = new HashMap<>();
-		if (message != null) {
-			preActionBuilder.message(message);
-		}
-		if (title != null) {
-			customParameters.put("messageContent", title);
-		}
-		if (yesButton != null) {
-			customParameters.put("okText", yesButton);
-		}
-		if (noButton != null) {
-			customParameters.put("cancelText", noButton);
-		}
-		return preActionBuilder
-				.customParameters(customParameters)
-				.build();
+		//WARN!
+		// if you want to hide the title/text - use cf.withoutTitle()/cf.withoutText().
+		// DO NOT use no-null black String in title/text for this purpose!
+		// E.g., title(String)/text(String) are supposed to be null or non-blank
+		return PreAction.confirm(cf -> cf.text(message).title(title).yesText(yesButton).noText(noButton));
 	}
 
 }

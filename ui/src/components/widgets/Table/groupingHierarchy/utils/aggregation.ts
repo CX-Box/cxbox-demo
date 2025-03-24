@@ -9,6 +9,33 @@ export const getAggCellBgOpacity = (dataItemId: string, groupLevel: number) => {
     return (100 - (dataItemId === totalRowKey ? 0 : groupLevel) * decreaseOpacityPerLevelPercent) / 100
 }
 
+const getFilteredAggFields = (sortedGroupKeys: string[], aggFields?: IAggField[]) => {
+    return aggFields?.filter(aggField => {
+        const shouldRemove = sortedGroupKeys.includes(aggField.fieldKey)
+
+        if (shouldRemove) {
+            console.info(`Error: The '${aggField.fieldKey}' field cannot be both a grouping field and an aggregate field`)
+        }
+
+        return !shouldRemove
+    })
+}
+
+export const getProcessedAggFields = (sortedGroupKeys: string[], aggFields?: IAggField[], aggLevels?: IAggLevel[]) => {
+    const processedAggFields = getFilteredAggFields(sortedGroupKeys, aggFields)
+    const processedAggLevels = aggLevels?.map(aggLevel => {
+        const filteredLevelAggFields = getFilteredAggFields(sortedGroupKeys, aggLevel.aggFields)
+
+        if (filteredLevelAggFields && filteredLevelAggFields?.length !== aggLevel.aggFields.length) {
+            return { ...aggLevel, aggFields: filteredLevelAggFields }
+        }
+
+        return aggLevel
+    })
+
+    return { aggFields: processedAggFields, aggLevels: processedAggLevels }
+}
+
 export const checkArgFieldsTypeMatching = (aggField: IAggField, fieldsMeta: WidgetListField[]) => {
     aggField.argFieldKeys?.forEach(argField => {
         const aggFieldType = fieldsMeta.find(item => item.key === aggField.fieldKey)?.type
@@ -99,7 +126,7 @@ export const setAggFieldResult = (currentGroup: GroupingHierarchyCommonNode, agg
         }
     }
 
-    if (isSomeValueNaN) {
+    if (isSomeValueNaN && fieldValues !== undefined) {
         console.info(`Error: Some field value for aggregate ${aggField.fieldKey} contains NaN`)
     }
 

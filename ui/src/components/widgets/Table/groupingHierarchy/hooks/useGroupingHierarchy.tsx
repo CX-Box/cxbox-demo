@@ -18,6 +18,7 @@ import { useGroupingHierarchyLevels } from '@components/widgets/Table/groupingHi
 import { useScrollToTopForTable } from '@components/widgets/Table/groupingHierarchy/hooks/useScrollToTopForTable'
 import { useAutoScrollToEditedRow } from '@components/widgets/Table/groupingHierarchy/hooks/useAutoScrollToEditedRow'
 import { useCheckLimit } from '@hooks/useCheckLimit'
+import { getProcessedAggFields } from '@components/widgets/Table/groupingHierarchy/utils/aggregation'
 
 export const useGroupingHierarchy = <T extends CustomDataItem>(
     meta: AppWidgetGroupingHierarchyMeta,
@@ -34,9 +35,13 @@ export const useGroupingHierarchy = <T extends CustomDataItem>(
     const filters = useAppSelector(state => state.screen.filters[meta.bcName])
     const bcData = useAppSelector(state => state.data[meta.bcName] as T[] | undefined)
     const groupingHierarchyEmptyNodes = useGroupingHierarchyLevels(meta, sortedGroupKeys)
-    const aggFields = meta.options?.groupingHierarchy?.aggFields
-    const aggLevels = meta.options?.groupingHierarchy?.aggLevels
     const { bcCount, bcPageLimit, isIncorrectLimit } = useCheckLimit(meta.bcName)
+
+    const { aggFields, aggLevels } = useMemo(
+        () =>
+            getProcessedAggFields(sortedGroupKeys, meta.options?.groupingHierarchy?.aggFields, meta.options?.groupingHierarchy?.aggLevels),
+        [meta.options?.groupingHierarchy?.aggFields, meta.options?.groupingHierarchy?.aggLevels, sortedGroupKeys]
+    )
 
     const { tree, nodeDictionary, groupsDictionary, defaultExtendedDictionary } = useMemo(
         () =>

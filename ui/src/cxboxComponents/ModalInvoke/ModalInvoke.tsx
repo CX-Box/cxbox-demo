@@ -112,7 +112,7 @@ const ModalInvoke: React.FunctionComponent<ModalInvokeProps> = props => {
                 <Modal
                     className={cn(styles.modal, props.className)}
                     visible={true}
-                    title={props.confirmOperation?.messageContent || t('Are you sure?')}
+                    title={props.confirmOperation?.messageContent ?? t('Are you sure?')}
                     okText={okLabel}
                     cancelText={cancelLabel}
                     wrapProps={{

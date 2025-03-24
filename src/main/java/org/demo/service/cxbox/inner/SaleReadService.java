@@ -39,7 +39,6 @@ public class SaleReadService extends VersionAwareResponseService<SaleDTO, Sale> 
 
 	@Override
 	protected ActionResultDTO<SaleDTO> doUpdateEntity(Sale entity, SaleDTO data, BusinessComponent bc) {
-		setIfChanged(data, SaleDTO_.dateCreatedSales, entity::setDateCreatedSales);
 		throw new UnsupportedOperationException();
 	}
 

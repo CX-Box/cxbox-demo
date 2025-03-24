@@ -54,6 +54,7 @@ public class SaleWriteService extends VersionAwareResponseService<SaleDTO, Sale>
 		setIfChanged(data, SaleDTO_.product, entity::setProduct);
 		setIfChanged(data, SaleDTO_.status, entity::setStatus);
 		setIfChanged(data, SaleDTO_.sum, entity::setSum);
+		setIfChanged(data, SaleDTO_.dateCreatedSales, entity::setDateCreatedSales);
 		return new ActionResultDTO<>(entityToDto(bc, entity));
 	}
 

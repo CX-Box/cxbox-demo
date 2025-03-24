@@ -13,7 +13,7 @@ import org.demo.dto.cxbox.inner.SaleDTO_;
 import org.demo.entity.enums.SaleStatus;
 import org.springframework.stereotype.Service;
 
-@SuppressWarnings({"java:S3252","java:S1186"})
+@SuppressWarnings({"java:S3252", "java:S1186"})
 @Service
 public class SaleWriteMeta extends FieldMetaBuilder<SaleDTO> {
 
@@ -35,7 +35,8 @@ public class SaleWriteMeta extends FieldMetaBuilder<SaleDTO> {
 				SaleDTO_.clientId,
 				SaleDTO_.product,
 				SaleDTO_.status,
-				SaleDTO_.sum
+				SaleDTO_.sum,
+				SaleDTO_.dateCreatedSales
 		);
 		fields.setDictionaryValues(SaleDTO_.product);
 		fields.setEnumValues(SaleDTO_.status, SaleStatus.values());

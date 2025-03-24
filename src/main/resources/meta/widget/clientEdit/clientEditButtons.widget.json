@@ -10,7 +10,7 @@
         "next",
         "previous",
         "finish",
-        "cancel"
+        "cancel-create"
       ]
     }
   }

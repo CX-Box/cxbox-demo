@@ -1,6 +1,6 @@
 {
   "name": "dashboardClientsPie1D",
-  "title": "Clients Status",
+  "title": "Clients count per status",
   "type": "Pie1D",
   "bc": "clientStatsPie",
   "fields": [
@@ -29,7 +29,7 @@
       "descriptionFieldKey": ["description"],
       "total": {
         "func": "sum",
-        "description": "Sum"
+        "description": "Total "
       }
     }
   }

@@ -5,8 +5,8 @@
   "bc": "saleEdit",
   "fields": [
     {
-      "label": "Date Created Sales",
-      "key": "dateCreatedSales",
+      "label": "Created",
+      "key": "createdDate",
       "type": "date"
     },
     {
@@ -80,7 +80,7 @@
         {
           "cols": [
             {
-              "fieldKey": "dateCreatedSales",
+              "fieldKey": "createdDate",
               "span": 12
             }
           ]

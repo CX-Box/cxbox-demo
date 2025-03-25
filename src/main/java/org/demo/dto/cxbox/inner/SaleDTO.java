@@ -41,8 +41,8 @@ public class SaleDTO extends DataResponseDTO {
 
 	private String color;
 
-	@SearchParameter(name = "dateCreatedSales", provider = DateTimeValueProvider.class)
-	private LocalDateTime dateCreatedSales;
+	@SearchParameter(name = "createdDate", provider = DateTimeValueProvider.class)
+	private LocalDateTime createdDate;
 
 	public SaleDTO(Sale sale) {
 		this.id = sale.getId().toString();
@@ -57,7 +57,7 @@ public class SaleDTO extends DataResponseDTO {
 						Enum::name,
 						FieldOfActivity::getValue
 				));
-		this.dateCreatedSales = sale.getDateCreatedSales();
+		this.createdDate = sale.getCreatedDate();
 	}
 
 }

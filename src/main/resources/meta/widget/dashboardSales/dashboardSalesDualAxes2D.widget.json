@@ -1,6 +1,6 @@
 {
   "name": "dashboardSalesDualAxes2D",
-  "title": "Sales by Product Type and Status",
+  "title": "Line - sales sum per Product  & Bar - sales count per Status",
   "type": "DualAxes2D",
   "bc": "saleStatsProductDual",
   "fields": [

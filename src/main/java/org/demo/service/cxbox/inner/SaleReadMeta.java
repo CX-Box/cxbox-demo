@@ -27,8 +27,9 @@ public class SaleReadMeta extends FieldMetaBuilder<SaleDTO> {
 	@Override
 	public void buildIndependentMeta(FieldsMeta<SaleDTO> fields, InnerBcDescription bcDescription,
 			Long parentId) {
-		fields.enableFilter(SaleDTO_.dateCreatedSales);
+		fields.enableFilter(SaleDTO_.createdDate);
 		fields.enableSort(
+				SaleDTO_.createdDate,
 				SaleDTO_.clientName,
 				SaleDTO_.product,
 				SaleDTO_.status,

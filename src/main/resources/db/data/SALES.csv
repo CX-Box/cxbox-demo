@@ -1,4 +1,4 @@
-id,client_id,product,status,sum,date_created_sales
+id,client_id,product,status,sum,created_date
 1,1000045,EQUIPMENT,CLOSED,12,2024-01-30 23:00:00.000000
 2,1000045,EQUIPMENT,OPEN,18,2024-01-30 23:00:00.000000
 3,1000045,EXPERTISE,OPEN,10,2024-02-30 23:00:00.000000

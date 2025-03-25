@@ -46,7 +46,7 @@ public class SaleWriteService extends VersionAwareResponseService<SaleDTO, Sale>
 	protected ActionResultDTO<SaleDTO> doUpdateEntity(Sale entity, SaleDTO data, BusinessComponent bc) {
 		if (data.isFieldChanged(SaleDTO_.clientId)) {
 			if (data.getClientId() != null) {
-				entity.setClient(clientRepository.getById(data.getClientId()));
+				entity.setClient(clientRepository.getReferenceById(data.getClientId()));
 			} else {
 				entity.setClient(null);
 			}
@@ -54,7 +54,6 @@ public class SaleWriteService extends VersionAwareResponseService<SaleDTO, Sale>
 		setIfChanged(data, SaleDTO_.product, entity::setProduct);
 		setIfChanged(data, SaleDTO_.status, entity::setStatus);
 		setIfChanged(data, SaleDTO_.sum, entity::setSum);
-		setIfChanged(data, SaleDTO_.dateCreatedSales, entity::setDateCreatedSales);
 		return new ActionResultDTO<>(entityToDto(bc, entity));
 	}
 

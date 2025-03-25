@@ -17,6 +17,16 @@
       "bgColorKey": "color"
     },
     {
+      "label": "Month",
+      "key": "month",
+      "type": "hidden"
+    },
+    {
+      "label": "Year",
+      "key": "year",
+      "type": "hidden"
+    },
+    {
       "title": "Sum, $",
       "key": "sum",
       "type": "number"

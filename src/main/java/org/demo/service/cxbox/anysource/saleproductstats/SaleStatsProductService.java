@@ -1,4 +1,4 @@
-package org.demo.service.cxbox.anysource.salestatsfordashboard.saleproductstats;
+package org.demo.service.cxbox.anysource.saleproductstats;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

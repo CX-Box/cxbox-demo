@@ -31,8 +31,8 @@
       "type": "number"
     },
     {
-      "title": "Date Created Sales",
-      "key": "dateCreatedSales",
+      "title": "Created",
+      "key": "createdDate",
       "type": "date"
     }
   ],

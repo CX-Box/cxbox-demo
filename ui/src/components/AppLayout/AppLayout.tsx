@@ -28,7 +28,7 @@ export const AppLayout: React.FC = () => {
         if (!sessionActive && !logoutRequested && !noSSO) {
             dispatch(SSO_AUTH())
         }
-    }, [sessionActive, logoutRequested, dispatch])
+    }, [sessionActive, logoutRequested, dispatch, noSSO])
 
     return sessionActive ? (
         <Layout className={styles.root}>

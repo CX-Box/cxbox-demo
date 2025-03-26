@@ -186,7 +186,11 @@ export function SuggestionPickList({
                 </div>
             )}
             notFoundContent={<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
-            dropdownRender={menu => (isLoading ? <Spin className={styles.spinner} /> : menu)}
+            dropdownRender={menu => (
+                <Spin className={styles.spinner} spinning={isLoading}>
+                    {menu}
+                </Spin>
+            )}
             onSelect={handleSelect}
             onFocus={handleFocus}
             filterOption={false}

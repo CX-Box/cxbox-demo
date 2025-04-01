@@ -21,7 +21,7 @@ import { AppWidgetGroupingHierarchyMeta, AppWidgetMeta, CustomWidgetTypes } from
 import { getGroupingHierarchyWidget } from '@utils/groupingHierarchy'
 import { DataItem } from '@cxbox-ui/schema'
 
-const getBcListForRowMetaUpdate = (state: RootState, activeBcName: string) => {
+const getWidgetsForRowMetaUpdate = (state: RootState, activeBcName: string) => {
     const { widgets, pendingDataChanges } = state.view
     const bcDictionary: { [bcName: string]: AppWidgetMeta } = {}
 
@@ -50,7 +50,7 @@ export const updateRowMetaForRelatedBcEpic: RootEpic = (action$, state$) =>
         switchMap(action => {
             const { bcName } = action.payload
             const state = state$.value
-            const widgetsForRowMetaUpdate = getBcListForRowMetaUpdate(state, bcName)
+            const widgetsForRowMetaUpdate = getWidgetsForRowMetaUpdate(state, bcName)
 
             if (widgetsForRowMetaUpdate.length) {
                 return concat(

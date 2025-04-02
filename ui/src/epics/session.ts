@@ -79,7 +79,8 @@ export const loginByAnotherRoleEpic: RootEpic = (action$, state$, { api }) =>
             const isSwitchRole = role && role !== state$.value.session.activeRole
             return api.loginByRoleRequest(role).pipe(
                 mergeMap(data => {
-                    const result = []
+                    let defaultUrl
+
                     if (isSwitchRole) {
                         const defaultScreen = data.screens.find(screen => screen.defaultScreen) || data.screens[0]
                         const views = defaultScreen.meta?.views ?? []
@@ -89,16 +90,11 @@ export const loginByAnotherRoleEpic: RootEpic = (action$, state$, { api }) =>
                             views[0]
 
                         if (defaultView) {
-                            result.push(
-                                actions.changeLocation({
-                                    location: utils.defaultParseURL(new URL(defaultView.url, window.location.origin))
-                                })
-                            )
+                            defaultUrl = defaultView.url
                         }
                     }
 
                     return concat([
-                        ...result,
                         actions.loginDone({
                             devPanelEnabled: data.devPanelEnabled,
                             activeRole: data.activeRole,
@@ -108,7 +104,8 @@ export const loginByAnotherRoleEpic: RootEpic = (action$, state$, { api }) =>
                             login: data.login,
                             screens: processScreensOnLogin(data.screens),
                             userId: data.userId,
-                            featureSettings: data.featureSettings
+                            featureSettings: data.featureSettings,
+                            defaultUrl
                         })
                     ])
                 }),

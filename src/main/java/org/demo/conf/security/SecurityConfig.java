@@ -6,6 +6,7 @@ import static org.demo.conf.security.basic.AuthBasicConfigProperties.APP_AUTH_BA
 
 import org.cxbox.core.config.properties.UIProperties;
 import org.cxbox.meta.metahotreload.conf.properties.MetaConfigurationProperties;
+import org.demo.conf.cxbox.customization.role.UserRoleService;
 import org.demo.conf.security.basic.AuthBasicConfigProperties;
 import org.demo.conf.security.basic.CustomBasicAuthenticationEntryPoint;
 import org.demo.conf.security.oidc.CxboxAuthUserRepository;
@@ -39,12 +40,12 @@ public class SecurityConfig {
 	private final AuthBasicConfigProperties authBasicConfigProperties;
 
 	public SecurityConfig(UserService userService, UIProperties uiProperties, MetaConfigurationProperties metaConfigurationProperties, @Qualifier("tokenConverterProperties") TokenConverterProperties properties, CxboxAuthUserRepository cxboxAuthUserRepository,
-			AuthBasicConfigProperties authBasicConfigProperties) {
+			AuthBasicConfigProperties authBasicConfigProperties, UserRoleService userRoleService) {
 		this.uiProperties = uiProperties;
 		this.metaConfigurationProperties = metaConfigurationProperties;
 		this.authBasicConfigProperties = authBasicConfigProperties;
 		this.oidcJwtTokenConverter = new OidcJwtTokenConverter(new JwtGrantedAuthoritiesConverter(), properties,
-				userService, cxboxAuthUserRepository, uiProperties
+				userService, userRoleService, cxboxAuthUserRepository, uiProperties
 		);
 	}
 

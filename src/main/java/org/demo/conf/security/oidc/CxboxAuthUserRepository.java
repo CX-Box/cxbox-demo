@@ -4,6 +4,8 @@ package org.demo.conf.security.oidc;
 import static org.cxbox.api.service.session.InternalAuthorizationService.SystemUsers.VANILLA;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -53,8 +55,10 @@ public class CxboxAuthUserRepository {
 				upsert(login);
 			}
 			user = userService.getUserByLogin(login.toUpperCase());
-			Set<String> currentRoles = user.getUserRoleList().stream().map(UserRole::getInternalRoleCd)
-					.collect(Collectors.toSet());
+			List<UserRole> userRoleList = user.getUserRoleList();
+			Set<String> currentRoles = userRoleList != null
+					? userRoleList.stream().map(UserRole::getInternalRoleCd).collect(Collectors.toSet())
+					: new HashSet<>();
 			if (!(currentRoles.containsAll(roles) && roles.containsAll(currentRoles))) {
 				authService.loginAs(authService.createAuthentication(VANILLA));
 				userRoleService.upsertUserRoles(user.getId(), new ArrayList<>(roles));

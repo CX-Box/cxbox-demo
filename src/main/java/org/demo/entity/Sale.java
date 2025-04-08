@@ -37,5 +37,4 @@ public class Sale extends BaseEntity {
 
 	private Long sum;
 
-
 }

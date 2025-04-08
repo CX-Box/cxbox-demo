@@ -59,7 +59,6 @@ public class MeetingDTO extends DataResponseDTO {
 
 	private Long responsibleId;
 
-	@SearchParameter(name = "responsible.fullName")
 	private String responsibleName;
 
 	@SearchParameter(name = "client.fullName")

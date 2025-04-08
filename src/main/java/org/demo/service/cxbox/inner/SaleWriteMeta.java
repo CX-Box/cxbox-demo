@@ -13,7 +13,7 @@ import org.demo.dto.cxbox.inner.SaleDTO_;
 import org.demo.entity.enums.SaleStatus;
 import org.springframework.stereotype.Service;
 
-@SuppressWarnings({"java:S3252","java:S1186"})
+@SuppressWarnings({"java:S3252", "java:S1186"})
 @Service
 public class SaleWriteMeta extends FieldMetaBuilder<SaleDTO> {
 

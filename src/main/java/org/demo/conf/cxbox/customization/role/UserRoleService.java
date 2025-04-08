@@ -22,6 +22,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -66,11 +67,13 @@ public class UserRoleService {
 		if (uiProperties.isMultiRoleEnabled()) {
 			return roles;
 		} else {
-			return Set.of(userRoleList.stream()
-					.filter(UserRole::getMain)
-					.map(UserRole::getInternalRoleCd)
-					.findFirst()
-					.orElse(roles.stream().findFirst().orElse(null)));
+			return Optional.ofNullable(userRoleList.stream()
+							.filter(UserRole::getMain)
+							.map(UserRole::getInternalRoleCd)
+							.findFirst()
+							.orElse(roles.stream().findFirst().orElse(null)))
+					.map(Set::of)
+					.orElse(new HashSet<>());
 		}
 	}
 

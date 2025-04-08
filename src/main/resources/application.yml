@@ -45,6 +45,10 @@ cxbox:
     use-servlet-context-path: false
     side-bar-word-break: none
     side-bar-search-enabled: true
+    notification-mode: stack
+    app-info-env: ${APP_INFO_ENV:Local}
+    app-info-description: ${APP_INFO_DESCRIPTION:v2.0.12}
+    app-info-color: ${APP_INFO_COLOR:#3a6e49}
 
 server:
   port: 8080

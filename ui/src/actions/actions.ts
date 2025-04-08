@@ -5,7 +5,7 @@ import { NotificationState } from '@interfaces/notification'
 import { LoginResponse } from '@interfaces/session'
 import { TableSettingsItem, TableSettingsList, TableSettingsMap } from '@interfaces/tableSettings'
 import { FilterGroup } from '@interfaces/filters'
-import { FileViewerPopupOptions } from '@interfaces/view'
+import { FileViewerPopupOptions, WsNotificationPopupOptions } from '@interfaces/view'
 import { DataItem } from '@cxbox-ui/core'
 
 export const SSO_AUTH = createAction('SSO_AUTH')
@@ -35,6 +35,10 @@ export const showFileViewerPopup = createAction<{
     calleeWidgetName: string
     options: FileViewerPopupOptions
 }>('showFileViewerPopup')
+
+export const showWsNotificationPopup = createAction<{
+    options: WsNotificationPopupOptions
+}>('showWsNotificationPopup')
 
 /**
  * Set the number of records for BC
@@ -119,3 +123,5 @@ export const drillDownInNewTab = createAction<{
     fieldKey: string
     copyLink?: boolean
 }>('drillDownInNewTab')
+
+export const emptyAction = createAction<undefined | AnyAction>('emptyAction')

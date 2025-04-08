@@ -23,12 +23,17 @@
     {
       "title": "Status",
       "key": "status",
-      "type": "input"
+      "type": "dictionary"
     },
     {
       "title": "Sum, $",
       "key": "sum",
       "type": "number"
+    },
+    {
+      "title": "Created",
+      "key": "createdDate",
+      "type": "date"
     }
   ],
   "options": {

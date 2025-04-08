@@ -70,6 +70,7 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 	@Override
 	protected ActionResultDTO<MeetingDocumentsDTO> doUpdateEntity(MeetingDocuments entity, MeetingDocumentsDTO data,
 			BusinessComponent bc) {
+		setIfChanged(data, MeetingDocumentsDTO_.priority, entity::setPriority);
 		if (data.isFieldChanged(MeetingDocumentsDTO_.fileId)) {
 			entity.setFileId(data.getFileId());
 		}

@@ -17,6 +17,8 @@ import { getGroupPaths } from '@components/widgets/Table/groupingHierarchy/utils
 import { useGroupingHierarchyLevels } from '@components/widgets/Table/groupingHierarchy/hooks/useGroupingHierarchyLevels'
 import { useScrollToTopForTable } from '@components/widgets/Table/groupingHierarchy/hooks/useScrollToTopForTable'
 import { useAutoScrollToEditedRow } from '@components/widgets/Table/groupingHierarchy/hooks/useAutoScrollToEditedRow'
+import { useCheckLimit } from '@hooks/useCheckLimit'
+import { getProcessedAggFields } from '@components/widgets/Table/groupingHierarchy/utils/aggregation'
 
 export const useGroupingHierarchy = <T extends CustomDataItem>(
     meta: AppWidgetGroupingHierarchyMeta,
@@ -29,15 +31,17 @@ export const useGroupingHierarchy = <T extends CustomDataItem>(
         [groupingHierarchy?.fields, meta.fields]
     )
     const bcLoading = useAppSelector(state => state.screen.bo.bc[meta.bcName].loading)
-    const bcPageLimit = useAppSelector(state => state.screen.bo.bc[meta.bcName].limit)
     const sorters = useAppSelector(state => state.screen.sorters[meta.bcName])
     const filters = useAppSelector(state => state.screen.filters[meta.bcName])
-    const bcCount = useAppSelector(state => state.view.bcRecordsCount[meta.bcName]?.count)
-    const correctGroupingCount = bcPageLimit != null && bcCount != null && bcPageLimit >= bcCount
     const bcData = useAppSelector(state => state.data[meta.bcName] as T[] | undefined)
     const groupingHierarchyEmptyNodes = useGroupingHierarchyLevels(meta, sortedGroupKeys)
-    const aggFields = meta.options?.groupingHierarchy?.aggFields
-    const aggLevels = meta.options?.groupingHierarchy?.aggLevels
+    const { bcCount, bcPageLimit, isIncorrectLimit } = useCheckLimit(meta.bcName)
+
+    const { aggFields, aggLevels } = useMemo(
+        () =>
+            getProcessedAggFields(sortedGroupKeys, meta.options?.groupingHierarchy?.aggFields, meta.options?.groupingHierarchy?.aggLevels),
+        [meta.options?.groupingHierarchy?.aggFields, meta.options?.groupingHierarchy?.aggLevels, sortedGroupKeys]
+    )
 
     const { tree, nodeDictionary, groupsDictionary, defaultExtendedDictionary } = useMemo(
         () =>
@@ -50,9 +54,9 @@ export const useGroupingHierarchy = <T extends CustomDataItem>(
 
     useEffect(() => {
         if (isGroupingHierarchy) {
-            setEnabledGrouping(correctGroupingCount)
+            setEnabledGrouping(!isIncorrectLimit)
         }
-    }, [correctGroupingCount, isGroupingHierarchy])
+    }, [isIncorrectLimit, isGroupingHierarchy])
 
     const getFlatTree = useCallback(() => {
         return nodeDictionary ? Object.values(nodeDictionary) : undefined
@@ -141,7 +145,7 @@ export const useGroupingHierarchy = <T extends CustomDataItem>(
     const tableContainerRef = useRef<HTMLDivElement>(null)
 
     const getRowElement = useCallback((rowKey: string | undefined): Element | null => {
-        return tableContainerRef.current?.querySelector(`[data-row-key="${rowKey}"]`) ?? null
+        return tableContainerRef.current?.querySelector(`[data-row-key="${CSS.escape(rowKey ?? '')}"]`) ?? null
     }, [])
 
     const getFirstRowElement = useCallback(() => {
@@ -180,7 +184,7 @@ export const useGroupingHierarchy = <T extends CustomDataItem>(
         return isGroupingHierarchy ? (
             <Tooltip
                 title={
-                    !correctGroupingCount
+                    isIncorrectLimit
                         ? t(
                               `Warning! {{count}} rows were fetched from backend - limit for "Grouping Hierarchy" mode is {{limit}}. Only "List" mode is available`,
                               { limit: bcPageLimit, count: bcCount }
@@ -193,7 +197,7 @@ export const useGroupingHierarchy = <T extends CustomDataItem>(
                     <Button
                         type="empty"
                         className={cn(styles.treeButton, { [styles.active]: enabledGrouping })}
-                        disabled={!correctGroupingCount}
+                        disabled={isIncorrectLimit}
                         onClick={toggleEnabledGrouping}
                     >
                         <Icon type="apartment" />
@@ -201,7 +205,7 @@ export const useGroupingHierarchy = <T extends CustomDataItem>(
                 </div>
             </Tooltip>
         ) : null
-    }, [bcCount, bcPageLimit, correctGroupingCount, enabledGrouping, isGroupingHierarchy, t, toggleEnabledGrouping])
+    }, [bcCount, bcPageLimit, isIncorrectLimit, enabledGrouping, isGroupingHierarchy, t, toggleEnabledGrouping])
 
     return {
         enabledGrouping,

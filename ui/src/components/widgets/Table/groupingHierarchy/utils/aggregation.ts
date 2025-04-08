@@ -9,6 +9,33 @@ export const getAggCellBgOpacity = (dataItemId: string, groupLevel: number) => {
     return (100 - (dataItemId === totalRowKey ? 0 : groupLevel) * decreaseOpacityPerLevelPercent) / 100
 }
 
+const getFilteredAggFields = (sortedGroupKeys: string[], aggFields?: IAggField[]) => {
+    return aggFields?.filter(aggField => {
+        const shouldRemove = sortedGroupKeys.includes(aggField.fieldKey)
+
+        if (shouldRemove) {
+            console.info(`Error: The '${aggField.fieldKey}' field cannot be both a grouping field and an aggregate field`)
+        }
+
+        return !shouldRemove
+    })
+}
+
+export const getProcessedAggFields = (sortedGroupKeys: string[], aggFields?: IAggField[], aggLevels?: IAggLevel[]) => {
+    const processedAggFields = getFilteredAggFields(sortedGroupKeys, aggFields)
+    const processedAggLevels = aggLevels?.map(aggLevel => {
+        const filteredLevelAggFields = getFilteredAggFields(sortedGroupKeys, aggLevel.aggFields)
+
+        if (filteredLevelAggFields && filteredLevelAggFields?.length !== aggLevel.aggFields.length) {
+            return { ...aggLevel, aggFields: filteredLevelAggFields }
+        }
+
+        return aggLevel
+    })
+
+    return { aggFields: processedAggFields, aggLevels: processedAggLevels }
+}
+
 export const checkArgFieldsTypeMatching = (aggField: IAggField, fieldsMeta: WidgetListField[]) => {
     aggField.argFieldKeys?.forEach(argField => {
         const aggFieldType = fieldsMeta.find(item => item.key === aggField.fieldKey)?.type
@@ -76,6 +103,7 @@ export const updateAggFieldValuesPerLevel = (
 
 export const setAggFieldResult = (currentGroup: GroupingHierarchyCommonNode, aggField: IAggField) => {
     let fieldValues
+    let isSomeValueNaN
 
     if (aggField?.argFieldKeys) {
         fieldValues = []
@@ -86,18 +114,20 @@ export const setAggFieldResult = (currentGroup: GroupingHierarchyCommonNode, agg
         fieldValues = currentGroup[aggField.fieldKey]
     }
 
-    const isSomeValueNaN = Array.isArray(fieldValues) ? fieldValues.some(item => isNaN(Number(item))) : isNaN(Number(fieldValues))
+    if (Array.isArray(fieldValues)) {
+        fieldValues = fieldValues.filter(item => item !== null && item !== '' && item !== undefined)
+        isSomeValueNaN = fieldValues.some(item => isNaN(Number(item)))
 
-    if (isSomeValueNaN) {
-        currentGroup[aggField.fieldKey] = 'NaN'
-        console.info(`Error: Some field value for aggregate ${aggField.fieldKey} contains NaN`)
+        currentGroup[aggField.fieldKey] = !!fieldValues.length && !isSomeValueNaN ? getAggFunctionResult(aggField.func, fieldValues) : null
     } else {
-        if (Array.isArray(fieldValues)) {
-            currentGroup[aggField.fieldKey] = getAggFunctionResult(
-                aggField.func,
-                fieldValues.filter(item => item !== null && item !== '')
-            )
+        isSomeValueNaN = isNaN(Number(fieldValues))
+        if (isSomeValueNaN) {
+            currentGroup[aggField.fieldKey] = null
         }
+    }
+
+    if (isSomeValueNaN && fieldValues !== undefined) {
+        console.info(`Error: Some field value for aggregate ${aggField.fieldKey} contains NaN`)
     }
 
     currentGroup._aggFunctions = {

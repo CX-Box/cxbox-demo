@@ -10,14 +10,13 @@ interface InfoLabelProps {
 }
 const InfoLabel: React.FunctionComponent<InfoLabelProps> = props => {
     const { label, info, noContainer } = props
-
     const content = (
         <>
             <span className={styles.label}>{label}</span>
             {info.map((item, index) => (
                 <CopyableText
                     className={cn(styles.element, {
-                        [styles.halfElement]: index > 0
+                        [styles.halfElement]: index > 0 && !item.includes('bc')
                     })}
                     text={item}
                     key={item}

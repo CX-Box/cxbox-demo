@@ -1,6 +1,7 @@
 package org.demo.service.cxbox.anysource.dadatacompany;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -12,7 +13,6 @@ import org.cxbox.core.controller.param.QueryParameters;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.dao.AnySourceBaseDAO;
 import org.cxbox.core.dao.impl.AbstractAnySourceBaseDAO;
-import org.cxbox.core.exception.ClientException;
 import org.demo.conf.dadata.DadataClient;
 import org.demo.conf.dadata.dto.request.PartySuggestionRq;
 import org.demo.conf.dadata.dto.response.PartySuggestionRs;
@@ -29,8 +29,6 @@ public class CompanyDao extends AbstractAnySourceBaseDAO<CompanySuggestionDTO> i
 	private static final String SEARCH_QUERY_PARAMETER = "query";
 
 	private static final String SEARCH_COUNT_PARAMETER = "_limit";
-
-	private static final String MISSING_QUERY_PARAMETER_EXCEPTION_MESSAGE = "No query parameter provided";
 
 	private final DadataClient dadataClient;
 
@@ -70,9 +68,15 @@ public class CompanyDao extends AbstractAnySourceBaseDAO<CompanySuggestionDTO> i
 	}
 
 	private List<CompanySuggestionDTO> getSuggestions(BusinessComponent bc) {
+
 		String query = Optional.ofNullable(bc.getParameters())
 				.map(e -> e.getParameter(SEARCH_QUERY_PARAMETER))
-				.orElseThrow(() -> new ClientException(MISSING_QUERY_PARAMETER_EXCEPTION_MESSAGE));
+				.orElse(null);
+
+		if (StringUtils.isEmpty(query)) {
+			return Collections.emptyList();
+		}
+
 		Integer countParameter = Optional.ofNullable(bc.getParameters())
 				.map(busComp -> busComp.getParameter(SEARCH_COUNT_PARAMETER))
 				.filter(StringUtils::isNumeric)

@@ -40,11 +40,13 @@ const ModalInvoke: React.FunctionComponent<ModalInvokeProps> = props => {
     const getContent = () => {
         switch (props.confirmOperation?.type) {
             case OperationPostInvokeConfirmType.confirm: {
-                return (
+                const message = props.confirmOperation?.message ?? t('Perform an additional action?')
+
+                return message ? (
                     <div>
-                        <p className={styles.multiline}>{props.confirmOperation?.message || t('Perform an additional action?')}</p>
+                        <p className={styles.multiline}>{message}</p>
                     </div>
-                )
+                ) : null
             }
             case OperationPostInvokeConfirmType.confirmText: {
                 return (
@@ -110,7 +112,7 @@ const ModalInvoke: React.FunctionComponent<ModalInvokeProps> = props => {
                 <Modal
                     className={cn(styles.modal, props.className)}
                     visible={true}
-                    title={props.confirmOperation?.messageContent || t('Are you sure?')}
+                    title={props.confirmOperation?.messageContent ?? t('Are you sure?')}
                     okText={okLabel}
                     cancelText={cancelLabel}
                     wrapProps={{
@@ -126,6 +128,7 @@ const ModalInvoke: React.FunctionComponent<ModalInvokeProps> = props => {
                             'data-test-confirm-popup-button-cancel': true
                         } as any
                     }
+                    bodyStyle={getContent() ? undefined : { padding: 0 }}
                     onOk={() => {
                         props.onOk(props.bcName, props.operationType, props.widgetName, value || 'ok')
                     }}

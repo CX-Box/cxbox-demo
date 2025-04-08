@@ -34,6 +34,11 @@
       "title": "Notes",
       "key": "notes",
       "type": "input"
+    },
+    {
+      "title": "Priority",
+      "key": "priority",
+      "type": "number"
     }
   ],
   "options": {
@@ -42,6 +47,12 @@
       "fields": [
         "document",
         "briefing"
+      ],
+      "aggFields": [
+        {
+          "fieldKey": "priority",
+          "func": "min"
+        }
       ]
     },
     "buttons": [

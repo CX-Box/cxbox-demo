@@ -42,4 +42,7 @@ public class MeetingDocuments extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private Documents document;
 
+	@Column
+	private Long priority;
+
 }

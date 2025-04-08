@@ -20,9 +20,9 @@ import org.cxbox.core.dto.DrillDownType;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.cxbox.core.dto.rowmeta.PostAction;
+import org.cxbox.core.dto.rowmeta.PreAction;
 import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
-import org.demo.conf.cxbox.extension.action.ActionsExt;
 import org.demo.dto.cxbox.anysource.LovDTO;
 import org.demo.microservice.dto.DictDTO;
 import org.springframework.stereotype.Service;
@@ -77,12 +77,11 @@ public class LovReadService extends AnySourceVersionAwareResponseService<LovDTO,
 						))))
 				.action(act -> act
 						.action("deleteLov", "Delete")
-						.withPreAction(ActionsExt.confirm(
-								"Make sure the entry is deactivated. \\n\\nAre you sure you want to delete this directory entry?",
-								"Ops!",
-								"yes",
-								"no"
-						))
+						.withPreAction(PreAction.confirm(cf -> cf
+								.title("Ops!")
+								.text("Make sure the entry is deactivated. \\n\\nAre you sure you want to delete this directory entry?")
+								.yesText("yes")
+								.noText("no")))
 						.scope(ActionScope.RECORD)
 						.invoker((bc, data) -> {
 							getBaseDao().delete(bc);
@@ -108,10 +107,10 @@ public class LovReadService extends AnySourceVersionAwareResponseService<LovDTO,
 	}
 
 	//TODO>>if a custom action completes its creation by saving it in a microservice that changes the id from temporary to permanent,
-// then be sure to inform the front of the new id by returning new ActionResultDTO<>(entityToDto(bc, dto)).
-// in other cases new ActionResultDTO<>() is enough
-// i.e. a simple rule is getBaseDao().flush(bc); => there is saving to a microservice -> you need new ActionResultDTO<>(entityToDto(bc, dto)).
-// Otherwise, new ActionResultDTO<>() is enough
+	// then be sure to inform the front of the new id by returning new ActionResultDTO<>(entityToDto(bc, dto)).
+	// in other cases new ActionResultDTO<>() is enough
+	// i.e. a simple rule is getBaseDao().flush(bc); => there is saving to a microservice -> you need new ActionResultDTO<>(entityToDto(bc, dto)).
+	// Otherwise, new ActionResultDTO<>() is enough
 	private ActionResultDTO<LovDTO> save(BusinessComponent bc, LovDTO data) {
 		getBaseDao().flush(bc);
 		DictDTO dto = getBaseDao().getById(bc);

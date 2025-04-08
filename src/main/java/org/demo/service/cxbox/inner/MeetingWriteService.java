@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.cxbox.core.crudma.bc.BusinessComponent;
@@ -33,7 +32,6 @@ import org.cxbox.core.service.action.Actions;
 import org.cxbox.core.service.action.ActionsBuilder;
 import org.cxbox.core.util.session.SessionService;
 import org.demo.conf.cxbox.customization.icon.ActionIcon;
-import org.demo.conf.cxbox.extension.action.ActionsExt;
 import org.demo.conf.cxbox.extension.multivaluePrimary.MultivalueExt;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.inner.MeetingDTO;
@@ -54,6 +52,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO, Meeting> {
 
+	private static final String MESSAGE_TEMPLATE = "Status: %s; \nMeeting Result: %s";
+
 	private final MeetingRepository meetingRepository;
 
 	private final ClientRepository clientRepository;
@@ -69,8 +69,6 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 	private final MailSendingService mailSendingService;
 
 	private final SessionService sessionService;
-
-	private static final String MESSAGE_TEMPLATE = "Status: %s; \nMeeting Result: %s";
 
 	@Getter(onMethod_ = @Override)
 	private final Class<MeetingWriteMeta> meta = MeetingWriteMeta.class;
@@ -146,7 +144,12 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 						.scope(ActionScope.RECORD)
 						.withAutoSaveBefore()
 						.action("saveAndContinue", "Save")
-						.withPreAction(confirmWithComment("Approval"))
+						.withPreAction(PreAction.confirmWithWidget(
+								"meetingResultFormPopup", cfw -> cfw
+										.title("Approvale?")
+										.yesText("Approve and Save")
+										.noText("Cancel")
+						))
 						.invoker((bc, dto) -> new ActionResultDTO<MeetingDTO>().setAction(
 								PostAction.drillDown(
 										DrillDownType.INNER,
@@ -185,10 +188,6 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 				String.format(MESSAGE_TEMPLATE, meeting.getStatus().getValue(), meeting.getResult()),
 				sessionService.getSessionUser()
 		);
-	}
-
-	private static PreAction confirmWithComment(@NonNull String actionText) {
-		return ActionsExt.confirmWithCustomWidget(actionText + "?", "meetingResultFormPopup", "Approve and Save", "Cancel");
 	}
 
 	private ActionsBuilder<MeetingDTO> addEditAction(ActionsBuilder<MeetingDTO> builder) {

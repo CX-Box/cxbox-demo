@@ -1,4 +1,4 @@
-import { notification } from 'antd'
+import { openNotification } from '@components/NotificationsContainer/utils'
 
 async function writeClipboardText(text: string) {
     let success = false
@@ -43,7 +43,12 @@ const copyText = (text: string) => {
 
 const copyTextToClipboard = (text: string, successMessage?: string) => {
     copyText(text).then(success => {
-        success && successMessage && notification.success({ message: successMessage })
+        success &&
+            successMessage &&
+            openNotification({
+                type: 'success',
+                message: successMessage
+            })
     })
 }
 

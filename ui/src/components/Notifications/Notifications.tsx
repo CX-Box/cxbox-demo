@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { notification } from 'antd'
 import { interfaces } from '@cxbox-ui/core'
 import { IconType } from 'antd/es/notification'
 import { useTranslation } from 'react-i18next'
 import { openButtonWarningNotification } from './Notifications.utils'
 import { useNotifications } from './Notifications.hooks'
+import { openNotification } from '@components/NotificationsContainer/utils'
 
 export function Notifications() {
     const { currentNotifications } = useNotifications()
@@ -22,7 +22,8 @@ export function Notifications() {
                 const message = t(currentNotification.message, currentNotification.options?.messageOptions)
                 const description = typeof currentNotification.description === 'string' ? t(currentNotification.description) : undefined
 
-                notification[currentNotification.type as IconType]({
+                openNotification({
+                    type: currentNotification.type as IconType,
                     key: currentNotification.key,
                     message,
                     description,

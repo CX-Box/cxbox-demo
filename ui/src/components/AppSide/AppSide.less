@@ -29,8 +29,10 @@
 .navigationWrapper {
     width: 100%;
     overflow-y: auto;
+    flex-grow: 1;
     /* for scrolling because of the border radius */
     margin-bottom: 5px;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
 .collapsed .navigationWrapper {

@@ -16,10 +16,13 @@
 
 package org.demo.conf.cxbox.customization.role;
 
-import java.util.ArrayList;
+import static org.cxbox.core.dto.LoggedUser.feature;
+
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -128,39 +131,53 @@ public class LoginServiceImpl implements LoginService {
 	}
 
 	/**
-	 * Get available application features, e.g. comments/notification polling or supression of system errors
-	 * No implementation is provided by Cxbox UI by default so for now it is considered as a customization joint.
+	 * Get available application features, e.g., comments/notification polling or suppression of system errors
+	 * Cxbox UI provides No implementation by default, so for now it is considered as a customization joint.
 	 *
 	 * @return Dictionary of string key and value (boolean)
 	 * Following keys were supported historically: FEATURE_COMMENTS, FEATURE_NOTIFICATIONS, FEATURE_HIDE_SYSTEM_ERRORS
 	 */
 	public Collection<SimpleDictionary> getFeatureSettings() {
-		ArrayList<SimpleDictionary> featureSettings = new ArrayList<>();
-		featureSettings.add(new SimpleDictionary(
-				WidgetFieldsIdResolverProperties.SORT_ENABLED_DEFAULT_PARAM_NAME,
-				String.valueOf(widgetFieldsIdResolverProperties.isSortEnabledDefault())
-		));
-		featureSettings.add(new SimpleDictionary(
-				WidgetFieldsIdResolverProperties.FILTER_BY_RANGE_ENABLED_DEFAULT_PARAM_NAME,
-				String.valueOf(widgetFieldsIdResolverProperties.isFilterByRangeEnabledDefault())
-		));
-		featureSettings.add(new SimpleDictionary(
-				UIProperties.MULTI_ROLE_ENABLED,
-				String.valueOf(uiProperties.isMultiRoleEnabled())
-		));
-		featureSettings.add(new SimpleDictionary(
-				UIProperties.DRILL_DOWN_TOOLTIP_NAME,
-				String.valueOf(uiProperties.getDrillDownTooltip())
-		));
-		featureSettings.add(new SimpleDictionary(
-				UIProperties.SIDE_BAR_WORD_BREAK,
-				String.valueOf(uiProperties.getSideBarWordBreak())
-		));
-		featureSettings.add(new SimpleDictionary(
-				UIProperties.SIDE_BAR_SEARCH_ENABLE,
-				String.valueOf(uiProperties.getSideBarSearchEnabled())
-		));
-		return featureSettings;
+		return Stream.of(
+						feature(
+								WidgetFieldsIdResolverProperties.SORT_ENABLED_DEFAULT_PARAM_NAME,
+								widgetFieldsIdResolverProperties.isSortEnabledDefault()
+						),
+						feature(
+								WidgetFieldsIdResolverProperties.FILTER_BY_RANGE_ENABLED_DEFAULT_PARAM_NAME,
+								widgetFieldsIdResolverProperties.isFilterByRangeEnabledDefault()
+						),
+						feature(
+								UIProperties.MULTI_ROLE_ENABLED,
+								uiProperties.isMultiRoleEnabled()
+						),
+						feature(
+								UIProperties.DRILL_DOWN_TOOLTIP_NAME,
+								uiProperties.getDrillDownTooltip()
+						),
+						feature(
+								UIProperties.SIDE_BAR_WORD_BREAK,
+								uiProperties.getSideBarWordBreak()
+						),
+						feature(
+								UIProperties.NOTIFICATION_MODE,
+								uiProperties.getNotificationMode()
+						),
+						feature(
+								UIProperties.APP_INFO_ENV,
+								uiProperties.getAppInfoEnv()
+						),
+						feature(
+								UIProperties.APP_INFO_COLOR,
+								uiProperties.getAppInfoColor()
+						),
+						feature(
+								UIProperties.APP_INFO_DESCRIPTION,
+								uiProperties.getAppInfoDescription()
+						)
+				)
+				.filter(Objects::nonNull)
+				.toList();
 	}
 
 }

@@ -20,6 +20,7 @@ import org.demo.conf.cxbox.extension.notification.NotificationLink;
 import org.demo.conf.cxbox.extension.notification.NotificationTemplate;
 import org.demo.entity.Contact;
 import org.demo.entity.Meeting;
+import org.demo.entity.enums.MeetingStatus;
 import org.jobrunr.jobs.annotations.Job;
 import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.mail.MailException;
@@ -92,6 +93,7 @@ public class MailSendingService {
 							.build(),
 					currentUser
 			);
+			meeting.get().setStatus(MeetingStatus.COMPLETED);
 		} else {
 			notificationTemplate.saveAndSend(
 					NotificationError.builder().errorType(Type.BUSINESS_ERROR).text("Email was not sent").build(),

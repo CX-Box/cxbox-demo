@@ -6,8 +6,13 @@ export enum EFeatureSettingKey {
     sortEnabled = 'sortEnabled',
     drillDownTooltip = 'drillDownTooltip',
     multiRoleEnabled = 'multiRoleEnabled',
+    notificationMode = 'notificationMode',
+    appInfoEnv = 'appInfoEnv',
+    appInfoColor = 'appInfoColor',
+    appInfoDescription = 'appInfoDescription',
     sideBarWordBreak = 'sideBarWordBreak',
     sideBarSearchEnabled = 'sideBarSearchEnabled'
+
 }
 
 export type FeatureSetting = {

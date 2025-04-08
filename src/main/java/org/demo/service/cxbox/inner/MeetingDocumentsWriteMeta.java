@@ -19,6 +19,7 @@ public class MeetingDocumentsWriteMeta extends FieldMetaBuilder<MeetingDocuments
 	@Override
 	public void buildRowDependentMeta(RowDependentFieldsMeta<MeetingDocumentsDTO> fields,
 			InnerBcDescription bcDescription, Long id, Long parentId) {
+		fields.setEnabled(MeetingDocumentsDTO_.priority);
 		fields.setEnabled(MeetingDocumentsDTO_.fileId);
 		fields.setEnabled(MeetingDocumentsDTO_.file);
 		fields.setEnabled(MeetingDocumentsDTO_.notes);
@@ -26,11 +27,13 @@ public class MeetingDocumentsWriteMeta extends FieldMetaBuilder<MeetingDocuments
 		fields.setEnabled(MeetingDocumentsDTO_.document);
 		fields.setDictionaryValues(MeetingDocumentsDTO_.briefing);
 		fields.setEnumValues(MeetingDocumentsDTO_.document, Documents.values());
+		fields.setPlaceholder(MeetingDocumentsDTO_.priority, "Enter a number from 1 (max priority) to 5 (min priority)");
 	}
 
 	@Override
 	public void buildIndependentMeta(FieldsMeta<MeetingDocumentsDTO> fields, InnerBcDescription bcDescription,
 			Long parentId) {
+		fields.enableFilter(MeetingDocumentsDTO_.priority);
 		fields.enableFilter(MeetingDocumentsDTO_.file);
 		fields.enableSort(MeetingDocumentsDTO_.file);
 		fields.setFileAccept(MeetingDocumentsDTO_.file, List.of(".png", ".pdf", ".jpg", ".jpeg"));

@@ -28,20 +28,24 @@ function Dictionary(props: DictionaryProps) {
     if (readOnly) {
         const iconParams = rowFieldMetaValues?.find(item => item.value === value)?.icon
         const icon = getIconByParams(iconParams)
-        const valueComponent =
-            meta.mode === EDictionaryMode.icon ? (
-                <Tooltip className={styles.iconTooltip} title={value} placement="top">
-                    {icon}
-                </Tooltip>
-            ) : (
-                <span>
-                    {icon} {value}
-                </span>
-            )
+        const isIconMode = meta.mode === EDictionaryMode.icon
+
+        const valueComponent = isIconMode ? (
+            <Tooltip className={styles.iconTooltip} title={value} placement="top">
+                {icon}
+            </Tooltip>
+        ) : (
+            <span>
+                {icon} {value}
+            </span>
+        )
 
         return (
             <div
-                className={cn(styles.coloredValue, props.className)}
+                className={cn(props.className, styles.root, {
+                    [styles.coloredValue]: !!backgroundColor,
+                    [styles.onlyIcon]: isIconMode
+                })}
                 style={backgroundColor ? { color: backgroundColor, backgroundColor: `${backgroundColor}${opacitySuffix}` } : undefined}
             >
                 {onDrillDown ? (

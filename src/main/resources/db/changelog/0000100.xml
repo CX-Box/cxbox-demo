@@ -139,7 +139,7 @@
       <column name="BRIEFING" type="VARCHAR(50)"/>
       <column name="DOCUMENT" type="VARCHAR(50)"/>
       <column name="MEETING_ID" type="NUMBER(19, 0)"/>
-
+      <column name="PRIORITY" type="NUMBER(19, 0)"/>
       <column defaultValueComputed="${now}" name="CREATED_DATE" remarks="Creation date"
         type="TIMESTAMP(6)">
         <constraints nullable="false"/>
@@ -253,7 +253,6 @@
       </column>
       <column name="SUM" type="NUMBER(19, 0)">
       </column>
-
       <column defaultValueComputed="${now}" name="CREATED_DATE" remarks="Creation date"
         type="TIMESTAMP(6)">
         <constraints nullable="false"/>

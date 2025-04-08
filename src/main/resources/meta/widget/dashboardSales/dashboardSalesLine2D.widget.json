@@ -1,0 +1,42 @@
+{
+  "name": "dashboardSalesLine2D",
+  "title": "Sales by Product Type: saleStatsProductDual",
+  "type": "Line2D",
+  "bc": "saleStatsProductDual",
+  "fields": [
+    {
+      "title": "productType",
+      "key": "productType",
+      "type": "input"
+    },
+    {
+      "title": "Date",
+      "key": "dateCreatedSales",
+      "type": "input",
+      "drillDown": true,
+      "bgColorKey": "color"
+    },
+    {
+      "label": "Month",
+      "key": "month",
+      "type": "hidden"
+    },
+    {
+      "label": "Year",
+      "key": "year",
+      "type": "hidden"
+    },
+    {
+      "title": "Sum, $",
+      "key": "sum",
+      "type": "number"
+    }
+  ],
+  "options": {
+    "chart2D": {
+      "xValueFieldKey": "dateCreatedSales",
+      "yValueFieldKey": "sum",
+      "groupFieldKey": "productType"
+    }
+  }
+}

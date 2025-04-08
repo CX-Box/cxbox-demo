@@ -6,11 +6,16 @@
   "widgets": [
     {
       "widgetName": "dashboardFilter",
-      "position": 0,
+      "position": 4,
       "gridWidth": 24
     },
     {
       "widgetName": "dashboardClientActivitiesList",
+      "position": 10,
+      "gridWidth": 12
+    },
+    {
+      "widgetName": "dashboardSalesDualAxes2D",
       "position": 10,
       "gridWidth": 12
     },
@@ -22,6 +27,16 @@
     {
       "widgetName": "dashboardSalesColumn2D",
       "position": 20,
+      "gridWidth": 12
+    },
+    {
+      "widgetName": "dashboardSalesLine2D",
+      "position": 36,
+      "gridWidth": 12
+    },
+    {
+      "widgetName": "dashboardSalesLineColumn2D",
+      "position": 36,
       "gridWidth": 12
     }
   ],

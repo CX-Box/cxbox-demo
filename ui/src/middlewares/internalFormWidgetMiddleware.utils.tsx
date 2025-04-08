@@ -1,5 +1,6 @@
 import { Button, notification } from 'antd'
 import React from 'react'
+import { openNotification as openNotificationDefault } from '@components/NotificationsContainer/utils'
 
 export interface OpenNotificationType {
     key?: string
@@ -42,7 +43,7 @@ export const openNotification = ({ message, description, okText, cancelText, onO
     )
 
     setTimeout(() => {
-        notification.open({
+        openNotificationDefault({
             duration: null,
             message,
             description,
@@ -50,4 +51,20 @@ export const openNotification = ({ message, description, okText, cancelText, onO
             key: notificationKey
         })
     }, 100)
+}
+
+const TEXTS_FOR_UNSAVED_NOTIFICATION: Omit<OpenNotificationType, 'onOk' | 'onCancel'> = {
+    key: 'unsaved notification',
+    okText: 'Save',
+    cancelText: 'Cancel',
+    message: 'There is unsaved data, save it ?',
+    description: ''
+}
+
+export const showUnsavedNotification = (onOk?: () => void, onCancel?: () => void) => {
+    return openNotification({
+        ...TEXTS_FOR_UNSAVED_NOTIFICATION,
+        onOk,
+        onCancel
+    })
 }

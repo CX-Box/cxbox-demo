@@ -12,7 +12,6 @@ export enum EFeatureSettingKey {
     appInfoDescription = 'appInfoDescription',
     sideBarWordBreak = 'sideBarWordBreak',
     sideBarSearchEnabled = 'sideBarSearchEnabled'
-
 }
 
 export type FeatureSetting = {

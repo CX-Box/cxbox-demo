@@ -21,7 +21,7 @@ function ScreenNavigation() {
     }
 
     const featureSettings = useAppSelector(state => state.session.featureSettings)
-    const wordWrapEnabled = !!featureSettings?.find(setting => setting?.key === 'sideBarWordBreak')
+    const wordWrapEnabled = featureSettings?.find(setting => setting?.key === 'sideBarWordBreak')?.value === 'auto'
     const sideBarSearchEnabled = !!featureSettings?.find(setting => setting?.key === 'sideBarSearchEnabled')
 
     const { filteredValues: filteredScreens, handleSearch } = useLocalSearch({ values: screens, comparisonField: 'text' })
@@ -55,7 +55,10 @@ function ScreenNavigation() {
                         >
                             <span className={styles.menuItemLink}>
                                 <Icon type={item.icon ? item.icon : 'coffee'} />
-                                <span>{item.text}</span>
+                                <span>
+                                    {'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras eu bibendum metus. Vestibulum aliquet odio nec quam tristique, id luctus lacus ullamcorper. Proin elementum lacus vitae ipsum viverra dictum. Fusce tempus eu dui id vehicula. Aliquam erat volutpat. Sed a nulla vitae nisl consequat sollicitudin. Donec nec tristique massa, non pharetra elit.\n' +
+                                        '\n'}
+                                </span>
                             </span>
                         </Menu.Item>
                     )

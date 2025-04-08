@@ -20,6 +20,10 @@ function ScreenNavigation() {
         changeLocation(e.key)
     }
 
+    const featureSettings = useAppSelector(state => state.session.featureSettings)
+    const wordWrapEnabled = featureSettings?.find(setting => setting?.key === 'sideBarWordBreak')?.value === 'auto'
+    const sideBarSearchEnabled = featureSettings?.find(setting => setting?.key === 'sideBarSearchEnabled')?.value !== 'false'
+
     const { filteredValues: filteredScreens, handleSearch } = useLocalSearch({ values: screens, comparisonField: 'text' })
 
     useEffect(() => {
@@ -36,14 +40,15 @@ function ScreenNavigation() {
 
     return (
         <div className={styles.menuContainer}>
-            {menuSearch}
+            {sideBarSearchEnabled && menuSearch}
             <Menu className={styles.container} data-test="MAIN_MENU" selectedKeys={[screenUrl]} onClick={handleScreen} theme="dark">
                 {filteredScreens.map(item => {
                     return (
                         <Menu.Item
                             key={item.url}
                             className={cn(styles.item, {
-                                [selectedItemClass]: screenUrl === item.url
+                                [selectedItemClass]: screenUrl === item.url,
+                                [styles.breakRow]: wordWrapEnabled
                             })}
                             data-test="MAIN_MENU_ITEM"
                             title={item.text}

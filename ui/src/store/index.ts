@@ -7,12 +7,14 @@ import { rootEpic } from '../epics'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import { middlewares as ourMiddlewares } from '../middlewares'
 import { catchError } from 'rxjs'
+import { getInternalWidgets } from '@utils/getInternalWidgets'
 
 const middlewares = Object.values({ ...coreMiddlewares, ...ourMiddlewares })
 
 const epicMiddleware = createEpicMiddleware<AnyAction, AnyAction, RootState>({
     dependencies: {
-        api: CxBoxApiInstance
+        api: CxBoxApiInstance,
+        utils: { getInternalWidgets }
     }
 })
 

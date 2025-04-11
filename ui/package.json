@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@ant-design/plots": "1.2.6",
-    "@cxbox-ui/core": "2.5.3-beta.1",
+    "@cxbox-ui/core": "2.5.3-CXBOX-896-alpha.0",
     "@reduxjs/toolkit": "1.7.2",
     "@stomp/stompjs": "7.0.0",
     "antd": "3.26.20",

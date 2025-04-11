@@ -20,30 +20,34 @@ export const ColumnSort: FunctionComponent<ColumnSortProps> = ({ widgetName, fie
         return null
     }
 
-    const icon = sorter?.direction === 'asc' ? 'caret-up' : 'caret-down'
-
     return (
-        <Icon
-            className={cn(styles.icon, className, { [styles.forceShow]: sorter })}
-            type={icon}
-            data-test-widget-list-header-column-sort={true}
+        <div
+            className={cn(styles.container, className, {
+                [styles.forceShow]: sorter,
+                [styles.desc]: sorter?.direction === 'desc',
+                [styles.asc]: sorter?.direction === 'asc'
+            })}
             onClick={toggleSort}
-        />
+            data-test-widget-list-header-column-sort={true}
+        >
+            <Icon type={'caret-up'} />
+            <Icon type={'caret-down'} />
+        </div>
     )
 }
 
 export default ColumnSort
 
 export function useSorter(widgetName: string, fieldKey: string) {
-    const { bcName, sorters, page, infinitePagination, permanentSorterFields } = useAppSelector(state => {
+    const { bcName, sorters, page, infinitePagination, permanentSorterFields, defaultSort } = useAppSelector(state => {
         const widget = state.view.widgets.find(item => item.name === widgetName) as AppWidgetTableMeta | undefined
         const bcName = widget?.bcName as string
         const sorters = state.screen.sorters[bcName] as BcSorter[] | undefined
         const page = state.screen.bo.bc[bcName]?.page
         const infinitePagination = !!state.view.infiniteWidgets?.includes(widgetName)
         const permanentSorterFields = widget?.options?.groupingHierarchy?.fields
-
-        return { bcName, infinitePagination, sorters, page, permanentSorterFields }
+        const defaultSort = state.screen.bo.bc[bcName]?.defaultSort
+        return { bcName, infinitePagination, sorters, page, permanentSorterFields, defaultSort }
     }, shallowEqual)
 
     const fieldSorter = sorters?.find(item => item.fieldName === fieldKey)
@@ -75,13 +79,31 @@ export function useSorter(widgetName: string, fieldKey: string) {
 
     const toggleSort = useCallback(() => {
         const newSorters = sorters?.filter(sorter => sorter.fieldName === fieldKey || permanentSorterFields?.includes(sorter.fieldName))
-
         if (!permanentSorterFields || !newSorters) {
+            let direction: 'desc' | 'asc' = 'desc'
+            if (fieldSorter?.direction === 'desc') {
+                direction = 'asc'
+            }
+            if (fieldSorter?.direction === 'asc') {
+                if (defaultSort) {
+                    const sortParams = Array.from(new URLSearchParams(defaultSort))
+                    const [sorter, fieldName] = sortParams[0]
+                    if (sorter.includes('asc')) {
+                        direction = 'desc'
+                    }
+                    setSort({
+                        fieldName: fieldName,
+                        direction: direction
+                    })
+                } else {
+                    setSort([])
+                }
+                return
+            }
             setSort({
                 fieldName: fieldKey,
-                direction: !fieldSorter ? 'desc' : fieldSorter.direction === 'asc' ? 'desc' : 'asc'
+                direction: direction
             })
-
             return
         }
 
@@ -90,10 +112,24 @@ export function useSorter(widgetName: string, fieldKey: string) {
 
             if (currentFieldSorterIndex !== -1) {
                 const oldFieldSorter = newSorters?.[currentFieldSorterIndex]
-
-                newSorters[currentFieldSorterIndex] = {
-                    ...oldFieldSorter,
-                    direction: oldFieldSorter?.direction === 'asc' ? 'desc' : 'asc'
+                if (oldFieldSorter.direction === 'desc') {
+                    newSorters[currentFieldSorterIndex] = {
+                        ...oldFieldSorter,
+                        direction: 'asc'
+                    }
+                }
+                if (oldFieldSorter.direction === 'asc') {
+                    const disableRemoveSorter = Array.from(new URLSearchParams(defaultSort)).findIndex(
+                        ([_, fieldName]) => fieldName === fieldKey
+                    )
+                    if (disableRemoveSorter !== -1) {
+                        newSorters[currentFieldSorterIndex] = {
+                            ...oldFieldSorter,
+                            direction: 'desc'
+                        }
+                    } else {
+                        newSorters.splice(currentFieldSorterIndex, 1)
+                    }
                 }
             } else {
                 newSorters?.push({
@@ -106,7 +142,7 @@ export function useSorter(widgetName: string, fieldKey: string) {
 
             return
         }
-    }, [sorters, permanentSorterFields, fieldKey, setSort, fieldSorter])
+    }, [sorters, permanentSorterFields, fieldKey, fieldSorter, setSort, defaultSort])
 
     return {
         sorter: fieldSorter,

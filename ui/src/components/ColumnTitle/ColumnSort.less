@@ -1,18 +1,31 @@
-:global(.anticon).icon {
-    width: 16px;
-    height: 16px;
-    align-self: center;
-    cursor: pointer;
-    margin-left: 8px;
-    color: rgb(187, 187, 187);
-
-    :hover {
-        color: rgb(128, 128, 128);
-    }
-}
-
 .active {
     color: rgb(85, 85, 85);
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    margin-left: 2px;
+    &>i:last-child {
+        margin-top: -6px;
+    }
+    &>:global(.anticon){
+        width: 16px;
+        height: 16px;
+        align-self: center;
+        cursor: pointer;
+        color: rgb(187, 187, 187);
+    }
+    &.desc {
+        &>:global(.anticon):last-child {
+            color: rgb(128, 128, 128);
+        }
+    }
+    &.asc {
+        &>:global(.anticon):first-child {
+            color: rgb(128, 128, 128);
+        }
+    }
 }
 
 .forceShow {

@@ -19,7 +19,6 @@ export function Notifications() {
 
         currentNotifications.forEach(currentNotification => {
             const duration = currentNotification.duration || notificationsDuration
-            console.log({ duration })
             if (isDefaultNotification(currentNotification)) {
                 const message = t(currentNotification.message, currentNotification.options?.messageOptions)
                 const description = typeof currentNotification.description === 'string' ? t(currentNotification.description) : undefined
@@ -33,7 +32,6 @@ export function Notifications() {
             }
 
             if (isButtonWarningNotification(currentNotification)) {
-                console.log({ duration: currentNotification.duration })
                 const buttonText = currentNotification.options?.buttonWarningNotificationOptions?.buttonText ?? ''
                 const actionsForClick = currentNotification.options?.buttonWarningNotificationOptions?.actionsForClick ?? []
                 const handleButtonClick =

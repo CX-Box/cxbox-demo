@@ -43,7 +43,8 @@ cxbox:
     multi-role-enabled: true
     drill-down-tooltip: newAndCopy
     use-servlet-context-path: false
-    side-bar-word-break: none
+    side-bar-word-break: auto
+    side-bar-search-enabled: true
     notification-mode: stack
     app-info-env: ${APP_INFO_ENV:Local}
     app-info-description: ${APP_INFO_DESCRIPTION:v2.0.12}

@@ -50,6 +50,7 @@ export interface StepsWidgetMeta extends WidgetMeta {
     options: WidgetOptions & {
         stepsOptions: {
             stepsDictionaryKey: string
+            descriptionFieldKey?: string
         }
     }
 }

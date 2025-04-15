@@ -47,6 +47,7 @@ function Dictionary(props: DictionaryProps) {
                     [styles.onlyIcon]: isIconMode
                 })}
                 style={backgroundColor ? { color: backgroundColor, backgroundColor: `${backgroundColor}${opacitySuffix}` } : undefined}
+                data-test-field-value={true}
             >
                 {onDrillDown ? (
                     <DrillDown

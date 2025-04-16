@@ -11,7 +11,8 @@ export enum EFeatureSettingKey {
     appInfoColor = 'appInfoColor',
     appInfoDescription = 'appInfoDescription',
     sideBarWordBreak = 'sideBarWordBreak',
-    sideBarSearchEnabled = 'sideBarSearchEnabled'
+    sideBarSearchEnabled = 'sideBarSearchEnabled',
+    timeoutShowMessage = 'timeoutShowMessage'
 }
 
 export type FeatureSetting = {

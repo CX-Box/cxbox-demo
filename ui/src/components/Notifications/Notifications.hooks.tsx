@@ -17,6 +17,9 @@ import { actions, interfaces } from '@cxbox-ui/core'
  */
 export function useNotifications() {
     const notifications = useAppSelector(state => state.session.notifications)
+    const featureSettings = useAppSelector(state => state.session.featureSettings)
+    const timeoutSetting = featureSettings?.find(setting => setting?.key === 'timeoutShowMessage')
+    const notificationsDuration = timeoutSetting ? Math.floor(Number(timeoutSetting.value) / 1000) : 0
     const [currentNotifications, setCurrentNotifications] = useState<typeof notifications>([])
 
     useEffect(() => {
@@ -42,7 +45,8 @@ export function useNotifications() {
     }, [currentNotifications, removeNotifications])
 
     return {
-        currentNotifications
+        currentNotifications,
+        notificationsDuration
     }
 }
 

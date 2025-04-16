@@ -8,7 +8,7 @@ import { useNotifications } from './Notifications.hooks'
 import { openNotification } from '@components/NotificationsContainer/utils'
 
 export function Notifications() {
-    const { currentNotifications } = useNotifications()
+    const { currentNotifications, notificationsDuration } = useNotifications()
     const { t } = useTranslation()
     const dispatch = useDispatch()
 
@@ -18,16 +18,16 @@ export function Notifications() {
         }
 
         currentNotifications.forEach(currentNotification => {
+            const duration = currentNotification.duration || notificationsDuration
             if (isDefaultNotification(currentNotification)) {
                 const message = t(currentNotification.message, currentNotification.options?.messageOptions)
                 const description = typeof currentNotification.description === 'string' ? t(currentNotification.description) : undefined
-
                 openNotification({
                     type: currentNotification.type as IconType,
                     key: currentNotification.key,
                     message,
                     description,
-                    duration: currentNotification.duration
+                    duration
                 })
             }
 
@@ -45,7 +45,7 @@ export function Notifications() {
                     t('Attention'),
                     t(currentNotification.message, currentNotification.options?.messageOptions),
                     t(buttonText),
-                    currentNotification.duration,
+                    duration,
                     handleButtonClick,
                     currentNotification.key
                 )

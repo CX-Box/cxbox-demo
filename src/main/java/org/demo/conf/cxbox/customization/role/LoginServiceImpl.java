@@ -174,6 +174,10 @@ public class LoginServiceImpl implements LoginService {
 						feature(
 								UIProperties.APP_INFO_DESCRIPTION,
 								uiProperties.getAppInfoDescription()
+						),
+						feature(
+								UIProperties.TIMEOUT_SHOW_MESSAGE,
+								uiProperties.getTimeoutShowMessage()
 						)
 				)
 				.filter(Objects::nonNull)

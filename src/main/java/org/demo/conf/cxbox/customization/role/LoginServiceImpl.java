@@ -174,6 +174,10 @@ public class LoginServiceImpl implements LoginService {
 						feature(
 								UIProperties.APP_INFO_DESCRIPTION,
 								uiProperties.getAppInfoDescription()
+						),
+						feature(
+								UIProperties.SIDE_BAR_SEARCH_ENABLE,
+								uiProperties.getSideBarSearchEnabled()
 						)
 				)
 				.filter(Objects::nonNull)

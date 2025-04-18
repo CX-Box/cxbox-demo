@@ -6,7 +6,7 @@ import { AxiosError } from 'axios'
 import styles from './WsNotifications.less'
 import { getDefaultModalBodyHeight } from './WsNotifications.utils'
 import markAsReadIcon from './img/markAsRead.svg'
-import { columns, columnsWithLinks, DEFAULT_MODAL_WIDTH } from './WsNotifications.constants'
+import { DEFAULT_MODAL_WIDTH } from './WsNotifications.constants'
 import { useTranslation } from 'react-i18next'
 import Pagination from './Pagination'
 import Button from '../ui/Button/Button'
@@ -14,6 +14,7 @@ import { CxBoxApiInstance as instance } from '../../api'
 import { useStompNotification } from '@components/WsNotifications/hooks'
 import { lastValueFrom } from 'rxjs'
 import { useViewPopupVisibility } from '@components/WsNotifications/hooks/useViewPopupVisibility'
+import { useColumns } from '@components/WsNotifications/hooks/useColumns'
 
 interface NotificationProps {}
 
@@ -86,7 +87,7 @@ export function WsNotifications(props: NotificationProps) {
                             return <img src={markAsReadIcon} alt="markAsReadIcon" />
                         }}
                     />
-                    <span className={cn(styles.filterLabel)}>{t('Mark as Read')}</span>
+                    <span className={cn(styles.filterLabel)}>{t('Mark as read')}</span>
                 </Button>
                 <Button onClick={deleteSelectedRows} type="formOperation" size="small">
                     <Icon type="delete" className={styles.notificationOperationIcon} />
@@ -104,7 +105,7 @@ export function WsNotifications(props: NotificationProps) {
         </div>
     )
 
-    const isLinksEnabled = notification.state.data?.some(message => Array.isArray(message.links))
+    const columns = useColumns({ linksEnabled: notification.state.data?.some(message => Array.isArray(message.links)) })
 
     return (
         <>
@@ -129,7 +130,7 @@ export function WsNotifications(props: NotificationProps) {
                                 <Table
                                     rowKey="id"
                                     rowClassName={record => (!record.isRead ? styles.notificationUnread : '')}
-                                    columns={isLinksEnabled ? columnsWithLinks : columns}
+                                    columns={columns}
                                     dataSource={notification.state.data}
                                     rowSelection={{
                                         selectedRowKeys,

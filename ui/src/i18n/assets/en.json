@@ -97,6 +97,7 @@
         "Notifications": "Notifications",
         "Collapse columns": "Collapse columns",
         "No expanded columns": "No expanded columns",
-        "Warning! Only List mode available for Grouping Hierarchy": "Warning! {{count}} rows were fetched from backend - limit for \"Grouping Hierarchy\" mode is {{limit}}. Only \"List\" mode is available"
+        "Warning! Only List mode available for Grouping Hierarchy": "Warning! {{count}} rows were fetched from backend - limit for \"Grouping Hierarchy\" mode is {{limit}}. Only \"List\" mode is available",
+        "Search in filters": "Search in filters"
     }
 }

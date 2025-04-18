@@ -19,6 +19,7 @@ export interface ColumnFilterControlProps {
     rowFieldMeta: interfaces.RowMetaField
     value: interfaces.DataValue | interfaces.DataValue[]
     onChange: (value: interfaces.DataValue | interfaces.DataValue[]) => void
+    visible?: boolean
     widgetOptions?: interfaces.WidgetMeta['options']
 }
 
@@ -42,6 +43,7 @@ export const ColumnFilterControl: React.FC<ColumnFilterControlProps> = props => 
                     title={props.widgetFieldMeta.title}
                     value={props.value as interfaces.DataValue[]}
                     filterValues={rowFieldMetaFilterValues}
+                    visible={props.visible}
                     onChange={props.onChange}
                 />
             )
@@ -52,6 +54,7 @@ export const ColumnFilterControl: React.FC<ColumnFilterControlProps> = props => 
                     title={props.widgetFieldMeta.title}
                     value={props.value as interfaces.DataValue[]}
                     filterValues={props.rowFieldMeta.filterValues}
+                    visible={props.visible}
                     onChange={props.onChange}
                 />
             )

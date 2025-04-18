@@ -87,6 +87,7 @@
         "Log out": "Выйти",
         "Total": "Итого",
         "Close all": "Закрыть все",
-        "and more": "и {{count}} ещё..."
+        "and more": "и {{count}} ещё...",
+        "Search in filters": "Поиск по фильтрам"
     }
 }

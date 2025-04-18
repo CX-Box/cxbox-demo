@@ -15,21 +15,27 @@
  * limitations under the License.
  */
 
+.container {
+    width: 100%;
+}
+
+.search {
+    margin-bottom: 8px;
+}
+
 .header {
     font-weight: bold;
 }
 
 .list {
-    padding: 0;
-    padding-top: 2px;
-    padding-bottom: 2px;
+    padding: 2px 0;
+    margin-bottom: 0;
     list-style: none;
-    max-height: 200px;
     overflow: auto;
 }
 
 .listItem:not(:last-child) {
-    margin-bottom: 5px;
+    padding-bottom: 5px;
 }
 
 .listItemIcon {
@@ -42,4 +48,12 @@
     :global(.ant-checkbox-inner) {
         border-color: #9c9c9c;
     }
+}
+
+.noData {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    margin: 0;
 }

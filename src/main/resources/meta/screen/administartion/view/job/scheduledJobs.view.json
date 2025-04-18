@@ -5,7 +5,7 @@
   "url": "/screen/admin/view/scheduledJobs",
   "widgets": [
     {
-      "widgetName": "SecondLevelMenu",
+      "widgetName": "secondLevelMenu",
       "position": 0,
       "gridWidth": 24
     },
@@ -25,7 +25,7 @@
       "gridWidth": 24
     },
     {
-      "widgetName": "ThirdLevelMenu",
+      "widgetName": "thirdLevelMenu",
       "position": 31,
       "gridWidth": 24
     },

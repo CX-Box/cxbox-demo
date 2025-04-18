@@ -185,10 +185,7 @@ export const useGroupingHierarchy = <T extends CustomDataItem>(
             <Tooltip
                 title={
                     isIncorrectLimit
-                        ? t(
-                              `Warning! {{count}} rows were fetched from backend - limit for "Grouping Hierarchy" mode is {{limit}}. Only "List" mode is available`,
-                              { limit: bcPageLimit, count: bcCount }
-                          )
+                        ? t('Warning! Only List mode available for Grouping Hierarchy', { limit: bcPageLimit, count: bcCount })
                         : undefined
                 }
                 trigger="hover"

@@ -115,6 +115,7 @@ function ColumnFilter({ widgetName, widgetMeta, rowMeta, components }: ColumnFil
             widgetName={widgetName}
             fieldKey={effectiveFieldMeta.key}
             value={value}
+            rowFieldMeta={rowMeta}
             onApply={handleApply}
             onCancel={handleClose}
             fieldType={effectiveFieldMeta.type}

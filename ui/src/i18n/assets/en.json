@@ -85,6 +85,7 @@
         "Log out": "Log out",
         "Total": "Total",
         "Close all": "Close all",
-        "and more": "and {{count}} more..."
+        "and more": "and {{count}} more...",
+        "Search in filters": "Search in filters"
     }
 }

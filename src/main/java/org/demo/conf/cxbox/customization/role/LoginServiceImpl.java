@@ -178,6 +178,10 @@ public class LoginServiceImpl implements LoginService {
 						feature(
 								UIProperties.SIDE_BAR_SEARCH_ENABLE,
 								uiProperties.getSideBarSearchEnabled()
+						),
+						feature(
+								UIProperties.DEFAULT_DATE,
+								uiProperties.getDefaultDate()
 						)
 				)
 				.filter(Objects::nonNull)

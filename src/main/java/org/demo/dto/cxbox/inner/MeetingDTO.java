@@ -3,7 +3,10 @@ package org.demo.dto.cxbox.inner;
 import static java.util.Optional.ofNullable;
 import static org.demo.conf.cxbox.extension.multivaluePrimary.MultivalueExt.PRIMARY;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Objects;
@@ -13,6 +16,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.cxbox.api.data.dto.DataResponseDTO;
+import org.cxbox.core.dto.jackson.LocalTimeWithDateDeserializer;
+import org.cxbox.core.dto.jackson.LocalTimeWithDateSerializer;
 import org.cxbox.core.dto.multivalue.MultivalueField;
 import org.cxbox.core.util.filter.SearchParameter;
 import org.cxbox.core.util.filter.provider.impl.DateTimeValueProvider;
@@ -20,6 +25,7 @@ import org.cxbox.core.util.filter.provider.impl.DictionaryValueProvider;
 import org.cxbox.core.util.filter.provider.impl.EnumValueProvider;
 import org.cxbox.core.util.filter.provider.impl.LongValueProvider;
 import org.cxbox.core.util.filter.provider.impl.MultiFieldValueProvider;
+import org.cxbox.core.util.filter.provider.impl.TimeValueProvider;
 import org.cxbox.model.core.entity.BaseEntity;
 import org.demo.conf.cxbox.extension.multivaluePrimary.MultivalueExt;
 import org.demo.entity.Client;
@@ -77,6 +83,11 @@ public class MeetingDTO extends DataResponseDTO {
 
 	private String additionalContactsDisplayedKey;
 
+	@SearchParameter(name = "dffdgdfg", provider = TimeValueProvider.class)
+	@JsonSerialize(using = LocalTimeWithDateSerializer.class)
+	@JsonDeserialize(using = LocalTimeWithDateDeserializer.class)
+	private LocalTime dffdgdfg;
+
 	public MeetingDTO(Meeting meeting) {
 		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy hh:mm");
 
@@ -107,9 +118,12 @@ public class MeetingDTO extends DataResponseDTO {
 								: null
 				)
 		));
-		this.additionalContactsDisplayedKey = StringUtils.abbreviate(meeting.getAdditionalContacts().stream()
-				.map(Contact::getFullName
-				).collect(Collectors.joining(",")), 12);
+		this.additionalContactsDisplayedKey = StringUtils.abbreviate(
+				meeting.getAdditionalContacts().stream()
+						.map(Contact::getFullName
+						).collect(Collectors.joining(",")), 12
+		);
+		this.dffdgdfg = meeting.getDffdgdfg();
 	}
 
 

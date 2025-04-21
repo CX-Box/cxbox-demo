@@ -33,7 +33,7 @@ import org.springframework.stereotype.Service;
 /**
  * @deprecated ATTENTION! This is just a draft. It Will be seriously changed in "4.0.0-M17" release - do not use it in your production code for now. Marked deprecated for this reason
  */
-@Deprecated(since = "4.0.0-M16-SNAPSHOT")
+@Deprecated(since = "4.0.0-M16-CXBOX-302-1-SNAPSHOT")
 @Service
 @RequiredArgsConstructor
 public final class DrillDownExt {

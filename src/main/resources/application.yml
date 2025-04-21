@@ -109,7 +109,7 @@ spring:
         jdbc:
           batch_size: 100
         hbm2ddl:
-          auto: ${HIBERNATE_DDL_AUTO:none}
+          auto: ${HIBERNATE_DDL_AUTO:update}
       org:
         cxbox:
           dictionary:

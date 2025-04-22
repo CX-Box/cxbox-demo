@@ -3,6 +3,7 @@
     justify-content: flex-start;
     align-items: center;
     color: #000000;
+    min-height: 16px;
 }
 
 .icon {

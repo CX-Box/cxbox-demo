@@ -3,10 +3,12 @@ import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { DataValue, WidgetTypes } from '@cxbox-ui/schema'
 import { RootState, useAppSelector } from '@store'
-import { actions, interfaces } from '@cxbox-ui/core'
+import { actions, DataItem, interfaces } from '@cxbox-ui/core'
 import MultivalueTag from './MultivalueTag'
+import MultivalueHover from '@cxboxComponents/ui/Multivalue/MultivalueHover'
+import { BaseFieldProps } from '@cxboxComponents/Field/Field'
 
-export interface MultivalueFieldOwnProps {
+export interface MultivalueFieldOwnProps extends BaseFieldProps {
     disabled?: boolean
     metaError?: string
     placeholder?: string
@@ -32,6 +34,7 @@ export interface MultivalueFieldProps extends MultivalueFieldOwnProps {
     widgetFieldMeta: interfaces.MultivalueFieldMeta
     bcName: string
     defaultValue: interfaces.MultivalueSingleValue[]
+    dataItem?: DataItem
 }
 
 /**
@@ -49,6 +52,16 @@ const MultivalueField: FunctionComponent<MultivalueFieldProps> = props => {
 
     const onRemove = (newValue: interfaces.MultivalueSingleValue[], removedItem: interfaces.MultivalueSingleValue) => {
         props.onRemove(props.bcName, props.popupBcName, props.cursor, props.fieldKey, newValue, removedItem)
+    }
+
+    if (props.readOnly) {
+        return (
+            <MultivalueHover
+                {...props}
+                data={(props.value || emptyMultivalue) as interfaces.MultivalueSingleValue[]}
+                displayedValue={props.meta.displayedKey ? props.dataItem?.[props.meta.displayedKey] : undefined}
+            />
+        )
     }
 
     return (
@@ -73,11 +86,13 @@ function mapStateToProps(state: RootState, { value, ...ownProps }: MultivalueFie
     const widgetFieldMeta = ownProps.meta
     const widget = state.view.widgets.find(widget => widget.name === ownProps.widgetName)
     const bcName = widget?.bcName as string
+    const cursor = state.screen.bo.bc[bcName]?.cursor as string
 
     const popupBcName = widgetFieldMeta?.popupBcName
     return {
+        dataItem: state.data[bcName]?.find(item => item.id === cursor) as interfaces.DataItem,
         defaultValue: Array.isArray(value) && value.length > 0 ? (value as interfaces.MultivalueSingleValue[]) : emptyMultivalue,
-        cursor: state.screen.bo.bc[bcName]?.cursor as string,
+        cursor,
         page: 0,
         popupBcName: popupBcName as string,
         assocValueKey: widgetFieldMeta.assocValueKey as string,

@@ -16,7 +16,7 @@
     opacity: 0.5;
 }
 
-.fieldData :global([class^='ReadOnlyField']) {
+.fieldData :global([class^='ReadOnlyField']), .fieldData :global([class*='_readOnly']) {
     line-height: 20px;
     color: @main-light-mode;
 }

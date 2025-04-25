@@ -1,19 +1,35 @@
 import moment from 'moment'
+import { lastValueFrom, map } from 'rxjs'
+import { t } from 'i18next'
 import { exportXlsx } from './exportExcel'
 import { convertFiltersIntoObject } from './filters'
 import { getCurrentDate, getFormattedDateString } from './date'
+import { CxBoxApiInstance } from '../api'
+import { buildBcUrl } from '@utils/buildBcUrl'
+import { openNotification } from '@components/NotificationsContainer/utils'
+import { defaultExcelLimit, maxExcelLimit } from '@constants/export'
 import { TableWidgetField } from '@interfaces/widget'
 import { interfaces } from '@cxbox-ui/core'
-import { CxBoxApiInstance } from '../api'
-import { lastValueFrom, map } from 'rxjs'
-import { buildBcUrl } from '@utils/buildBcUrl'
 
 const { FieldType } = interfaces
 
 export type ExportOptions = { page?: number; limit?: number }
 
-export function getPaginationParamsForExportTable(pageLimit: number, currentPage: number) {
-    const maxTableLimit = 500 + pageLimit
+export function getPaginationParamsForExportTable(appExportExcelLimit: string, pageLimit: number, currentPage: number) {
+    let excelLimit
+
+    if (appExportExcelLimit) {
+        excelLimit = Number(appExportExcelLimit)
+
+        if (excelLimit > maxExcelLimit) {
+            excelLimit = maxExcelLimit
+            console.error(
+                `appExportExcelLimit: ${appExportExcelLimit} exceeds the maximum limit of ${maxExcelLimit}, the limit is set to ${maxExcelLimit}`
+            )
+        }
+    }
+
+    const maxTableLimit = (excelLimit ?? defaultExcelLimit) + pageLimit
     const currentPositionForFirstRecordOnPage = (currentPage - 1) * pageLimit + 1
 
     return {
@@ -29,6 +45,8 @@ export async function exportTable(
     fileName: string,
     withDate: boolean,
     hasData: boolean,
+    appExportExcelLimit: string,
+    total: number,
     filters?: interfaces.BcFilter[],
     sorters?: interfaces.BcSorter[],
     { page = 1, limit = 5 }: ExportOptions = {},
@@ -52,7 +70,7 @@ export async function exportTable(
                 ...filtersObj,
                 ...sortersObj,
                 _export: 'Excel',
-                ...getPaginationParamsForExportTable(limit, page)
+                ...getPaginationParamsForExportTable(appExportExcelLimit, limit, page)
             }).pipe(map(response => response.data))
         )
         if (resultData) {
@@ -60,6 +78,16 @@ export async function exportTable(
         }
     }
     const parsedData = fullData
+
+    if (parsedData?.length < total) {
+        openNotification({
+            type: 'warning',
+            message: t('The table contains a large amount of data - only the first rows are presented in the report', {
+                limit: parsedData.length
+            })
+        })
+    }
+
     const filteredFieldsMeta = filterFieldsMeta(fieldsMeta)
     const keys: string[] = getKeyArray(filteredFieldsMeta)
     const dateFileName = fileName + ' ' + getCurrentDate()

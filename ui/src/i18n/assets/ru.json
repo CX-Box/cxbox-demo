@@ -100,6 +100,7 @@
         "Collapse columns": "Свернуть столбцы",
         "No expanded columns": "Нет развернутых столбцов",
         "Warning! Only List mode available for Grouping Hierarchy": "Внимание! С сервера было получено {{count}} строк — лимит для режима \"Групповая иерархия\" составляет {{limit}}. Доступен только режим \"Список\"",
-        "Search in filters": "Поиск по фильтрам"
+        "Search in filters": "Поиск по фильтрам",
+        "Operation not available": "Операция \"{{operationType}}\" не доступна"
     }
 }

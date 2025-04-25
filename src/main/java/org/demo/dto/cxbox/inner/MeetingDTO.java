@@ -20,6 +20,7 @@ import org.cxbox.core.util.filter.provider.impl.DictionaryValueProvider;
 import org.cxbox.core.util.filter.provider.impl.EnumValueProvider;
 import org.cxbox.core.util.filter.provider.impl.LongValueProvider;
 import org.cxbox.core.util.filter.provider.impl.MultiFieldValueProvider;
+import org.cxbox.core.util.filter.provider.impl.TimeValueProvider;
 import org.cxbox.model.core.entity.BaseEntity;
 import org.demo.conf.cxbox.extension.multivaluePrimary.MultivalueExt;
 import org.demo.entity.Client;
@@ -77,6 +78,9 @@ public class MeetingDTO extends DataResponseDTO {
 
 	private String additionalContactsDisplayedKey;
 
+	@SearchParameter(name = "testTimeField", provider = TimeValueProvider.class)
+	private LocalDateTime testTimeField;
+
 	public MeetingDTO(Meeting meeting) {
 		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy hh:mm");
 
@@ -107,9 +111,12 @@ public class MeetingDTO extends DataResponseDTO {
 								: null
 				)
 		));
-		this.additionalContactsDisplayedKey = StringUtils.abbreviate(meeting.getAdditionalContacts().stream()
-				.map(Contact::getFullName
-				).collect(Collectors.joining(",")), 12);
+		this.additionalContactsDisplayedKey = StringUtils.abbreviate(
+				meeting.getAdditionalContacts().stream()
+						.map(Contact::getFullName
+						).collect(Collectors.joining(",")), 12
+		);
+		this.testTimeField = meeting.getTestTimeField();
 	}
 
 

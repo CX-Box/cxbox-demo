@@ -12,14 +12,13 @@ import { ColumnFilterControlProps } from '@cxboxComponents/ui/FilterField/Filter
 import { NumberInput, FilterField as CoreFilterField } from '@cxboxComponents'
 
 interface FilterFieldProps extends ColumnFilterControlProps {
-    visible?: boolean
     filterByRangeEnabled?: boolean
 }
 
 const { FieldType } = interfaces
 
-function FilterField({ visible, filterByRangeEnabled, ...props }: FilterFieldProps) {
-    const { widgetFieldMeta, value, onChange, rowFieldMeta } = props
+function FilterField({ filterByRangeEnabled, ...props }: FilterFieldProps) {
+    const { widgetFieldMeta, value, onChange, rowFieldMeta, visible } = props
     const fieldType = widgetFieldMeta.type as string
 
     switch (fieldType) {
@@ -58,6 +57,7 @@ function FilterField({ visible, filterByRangeEnabled, ...props }: FilterFieldPro
                 <CheckboxFilter
                     title={widgetFieldMeta.title}
                     value={value as interfaces.DataValue[]}
+                    visible={visible}
                     filterValues={rowFieldMeta.filterValues ? rowFieldMeta.filterValues : []}
                     onChange={onChange}
                 />

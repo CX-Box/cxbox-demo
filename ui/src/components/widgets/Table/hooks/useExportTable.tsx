@@ -3,6 +3,7 @@ import { shallowEqual } from 'react-redux'
 import { ExportOptions, exportTable } from '@utils/export'
 import { useAppSelector } from '@store'
 import { WidgetListField } from '@cxbox-ui/schema'
+import { EFeatureSettingKey } from '@interfaces/session'
 
 interface UseExportButtonProps {
     bcName: string
@@ -16,6 +17,10 @@ export const useExportTable = ({ bcName, fields, title, exportWithDate = false }
     const tableFilters = useAppSelector(state => state.screen.filters[bcName])
     const tableSorters = useAppSelector(state => state.screen.sorters[bcName])
     const widgetData = useAppSelector(state => state.data[bcName])
+    const total = useAppSelector(state => state.view.bcRecordsCount[bcName]?.count)
+    const appExportExcelLimit = useAppSelector(state =>
+        state.session.featureSettings?.find(featureSetting => featureSetting.key === EFeatureSettingKey.appExportExcelLimit)
+    )?.value as string
 
     const filteredFields = useMemo(() => {
         return (fields as WidgetListField[])?.filter(field => !field?.hidden)
@@ -39,6 +44,8 @@ export const useExportTable = ({ bcName, fields, title, exportWithDate = false }
                 title,
                 exportWithDate,
                 !!widgetData?.length,
+                appExportExcelLimit,
+                total,
                 tableFilters,
                 tableSorters,
                 exportOptions

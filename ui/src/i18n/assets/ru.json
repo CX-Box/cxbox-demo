@@ -103,6 +103,7 @@
         "Search in filters": "Поиск по фильтрам",
         "Operation not available": "Операция \"{{operationType}}\" не доступна",
         "From": "От",
-        "To": "До"
+        "To": "До",
+        "The table contains a large amount of data - only the first rows are presented in the report": "В таблице большое количество данных — в отчете представлены только первые {{limit}} строк"
     }
 }

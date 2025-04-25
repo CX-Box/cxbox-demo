@@ -101,6 +101,7 @@
         "Search in filters": "Search in filters",
         "Operation not available": "Operation \"{{operationType}}\" not available",
         "From": "From",
-        "To": "To"
+        "To": "To",
+        "The table contains a large amount of data - only the first rows are presented in the report": "The table contains a large amount of data - only the first {{limit}} rows are presented in the report"
     }
 }

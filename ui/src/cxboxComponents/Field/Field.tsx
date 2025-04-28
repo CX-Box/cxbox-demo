@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
-import { Form, Icon, Input, Tooltip } from 'antd'
+import { Icon, Input } from 'antd'
 import DatePickerField from '@cxboxComponents/ui/DatePickerField/DatePickerField'
 import NumberInput from '@cxboxComponents/ui/NumberInput/NumberInput'
 import { NumberTypes } from '@cxboxComponents/ui/NumberInput/formaters'
@@ -28,6 +28,7 @@ import { RootState } from '@store'
 import { useDrillDownUrl } from '@hooks/useDrillDownUrl'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import { useTranslation } from 'react-i18next'
+import FieldErrorPopupWrapper from '@components/FieldErrorPopupWrapper/FieldErrorPopupWrapper'
 
 interface FieldOwnProps {
     widgetFieldMeta: interfaces.WidgetField
@@ -140,7 +141,7 @@ export const Field: FunctionComponent<FieldProps> = ({
 }) => {
     const { t } = useTranslation()
     const [localValue, setLocalValue] = React.useState<string | null>(null)
-    let resultField: React.ReactChild | null = null
+    let standardField: React.ReactChild | null = null
     const drillDownUrl = useDrillDownUrl(bcName, widgetFieldMeta, cursor)
 
     const value = forcedValue ? forcedValue : pendingValue !== undefined ? pendingValue : data?.[widgetFieldMeta.key]
@@ -222,7 +223,7 @@ export const Field: FunctionComponent<FieldProps> = ({
         case FieldType.date:
         case FieldType.dateTime:
         case FieldType.dateTimeWithSeconds:
-            resultField = (
+            standardField = (
                 <DatePickerField
                     {...commonProps}
                     onChange={handleChange}
@@ -233,7 +234,7 @@ export const Field: FunctionComponent<FieldProps> = ({
             )
             break
         case FieldType.number:
-            resultField = (
+            standardField = (
                 <NumberInput
                     {...commonProps}
                     value={value as number}
@@ -246,7 +247,7 @@ export const Field: FunctionComponent<FieldProps> = ({
             )
             break
         case FieldType.money:
-            resultField = (
+            standardField = (
                 <NumberInput
                     {...commonProps}
                     value={value as number}
@@ -259,7 +260,7 @@ export const Field: FunctionComponent<FieldProps> = ({
             )
             break
         case FieldType.percent:
-            resultField = (
+            standardField = (
                 <NumberInput
                     {...commonProps}
                     value={value as number}
@@ -272,7 +273,7 @@ export const Field: FunctionComponent<FieldProps> = ({
             )
             break
         case FieldType.dictionary:
-            resultField = (
+            standardField = (
                 <Dictionary
                     {...commonProps}
                     value={value as any}
@@ -284,7 +285,7 @@ export const Field: FunctionComponent<FieldProps> = ({
             )
             break
         case FieldType.text:
-            resultField = (
+            standardField = (
                 <TextArea
                     {...commonProps}
                     maxInput={widgetFieldMeta.maxInput}
@@ -295,7 +296,7 @@ export const Field: FunctionComponent<FieldProps> = ({
             )
             break
         case FieldType.multifield:
-            resultField = (
+            standardField = (
                 <MultiField
                     {...commonProps}
                     fields={widgetFieldMeta.fields}
@@ -308,7 +309,7 @@ export const Field: FunctionComponent<FieldProps> = ({
             )
             break
         case FieldType.multivalue:
-            resultField = (
+            standardField = (
                 <MultivalueField
                     {...commonProps}
                     widgetName={widgetName}
@@ -331,7 +332,7 @@ export const Field: FunctionComponent<FieldProps> = ({
                     pickMap={widgetFieldMeta.pickMap}
                 />
             )
-            resultField = readOnly ? (
+            standardField = readOnly ? (
                 pickListField
             ) : (
                 <InteractiveInput suffix={handleDrilldown && <Icon type="link" />} onSuffixClick={handleDrilldown}>
@@ -353,7 +354,7 @@ export const Field: FunctionComponent<FieldProps> = ({
                     pickMap={widgetFieldMeta.pickMap}
                 />
             )
-            resultField = readOnly ? (
+            standardField = readOnly ? (
                 pickListField
             ) : (
                 <InteractiveInput suffix={handleDrilldown && <Icon type="link" />} onSuffixClick={handleDrilldown}>
@@ -363,7 +364,7 @@ export const Field: FunctionComponent<FieldProps> = ({
             break
         }
         case FieldType.checkbox:
-            resultField = (
+            standardField = (
                 <CheckboxPicker
                     {...commonProps}
                     fieldName={widgetFieldMeta.key}
@@ -376,7 +377,7 @@ export const Field: FunctionComponent<FieldProps> = ({
             )
             break
         case FieldType.multivalueHover:
-            resultField = (
+            standardField = (
                 <MultivalueHover
                     {...commonProps}
                     data={(value || emptyMultivalue) as interfaces.MultivalueSingleValue[]}
@@ -385,14 +386,14 @@ export const Field: FunctionComponent<FieldProps> = ({
             )
             break
         case FieldType.hint:
-            resultField = (
+            standardField = (
                 <ReadOnlyField {...commonProps} className={cn(className, readOnlyFieldStyles.hint)}>
                     {value}
                 </ReadOnlyField>
             )
             break
         case FieldType.radio:
-            resultField = (
+            standardField = (
                 <RadioButton
                     {...commonProps}
                     value={value as any}
@@ -402,7 +403,7 @@ export const Field: FunctionComponent<FieldProps> = ({
             )
             break
         default:
-            resultField = readOnly ? (
+            standardField = readOnly ? (
                 <ReadOnlyField {...commonProps}>{value}</ReadOnlyField>
             ) : (
                 <InteractiveInput
@@ -435,21 +436,8 @@ export const Field: FunctionComponent<FieldProps> = ({
                 </InteractiveInput>
             )
     }
-    if (metaError && showErrorPopup) {
-        return (
-            <Tooltip
-                placement={tooltipPlacement}
-                overlayClassName={styles.error}
-                title={t(metaError)}
-                getPopupContainer={trigger => trigger.parentElement as HTMLElement}
-            >
-                <div>
-                    <Form.Item validateStatus="error">{resultField}</Form.Item>
-                </div>
-            </Tooltip>
-        )
-    }
-    return (
+
+    const resultField = (
         <CustomizationContext.Consumer>
             {context => {
                 const CustomComponent = context.customFields?.[widgetFieldMeta.type]
@@ -466,10 +454,26 @@ export const Field: FunctionComponent<FieldProps> = ({
                     )
                 }
 
-                return resultField
+                return standardField
             }}
         </CustomizationContext.Consumer>
     )
+
+    if (metaError && showErrorPopup) {
+        return (
+            <FieldErrorPopupWrapper
+                bcName={bcName}
+                placement={tooltipPlacement}
+                fieldKey={widgetFieldMeta.key}
+                cursor={cursor}
+                readOnly={readOnly}
+            >
+                {resultField}
+            </FieldErrorPopupWrapper>
+        )
+    }
+
+    return resultField
 }
 
 function mapStateToProps(state: RootState, ownProps: FieldOwnProps) {
@@ -505,11 +509,5 @@ function mapDispatchToProps(dispatch: Dispatch) {
         }
     }
 }
-Field.displayName = 'Field'
 
-/**
- * @category Components
- */
-const ConnectedField = connect(mapStateToProps, mapDispatchToProps)(Field)
-
-export default ConnectedField
+export default connect(mapStateToProps, mapDispatchToProps)(Field)

@@ -14,6 +14,7 @@ export interface NumberInputProps extends BaseFieldProps {
     maxInput?: number
     forceFocus?: boolean
     currency?: string
+    onChangeInputValue?: (value: number) => void
 }
 
 /**
@@ -22,7 +23,7 @@ export interface NumberInputProps extends BaseFieldProps {
  * @category Components
  */
 const NumberInput: React.FunctionComponent<NumberInputProps> = props => {
-    const { type, value, digits = 0, nullable, maxInput, onChange } = props
+    const { type, value, digits = 0, nullable, maxInput, forceFocus, onChange, onChangeInputValue, ...rest } = props
     const inputRef = React.useRef<InputRef>(null)
 
     const currency = type === NumberTypes.money && props.currency
@@ -106,8 +107,12 @@ const NumberInput: React.FunctionComponent<NumberInputProps> = props => {
                     : event.currentTarget.value
 
             setValueText(newValue)
+
+            if (onChangeInputValue) {
+                onChangeInputValue(parseEditedValueText(event.currentTarget.value) as number)
+            }
         },
-        [maxInput]
+        [maxInput, onChangeInputValue, parseEditedValueText]
     )
 
     // Filters out incorrect symbols from keyboard
@@ -123,7 +128,7 @@ const NumberInput: React.FunctionComponent<NumberInputProps> = props => {
     )
 
     const extendedProps: InputProps & RefAttributes<InputRef> = {
-        ...props,
+        ...rest,
         style: {
             backgroundColor: props.backgroundColor || '#fff'
         },
@@ -135,7 +140,7 @@ const NumberInput: React.FunctionComponent<NumberInputProps> = props => {
         type: 'text',
         ref: inputRef,
         onKeyPress: onKeyPress,
-        autoFocus: props.forceFocus
+        autoFocus: forceFocus
     }
 
     if (props.readOnly) {
@@ -148,7 +153,7 @@ const NumberInput: React.FunctionComponent<NumberInputProps> = props => {
                 cursor={props.cursor}
                 onDrillDown={props.onDrillDown}
             >
-                {NumberInputFormat.number(props.value, props.digits, props.nullable)} {currency}
+                {`${NumberInputFormat[type](props.value, props.digits, props.nullable)}${currency ? ` ${currency}` : ''}`}
             </ReadOnlyField>
         )
     }

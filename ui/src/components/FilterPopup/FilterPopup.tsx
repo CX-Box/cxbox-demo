@@ -87,6 +87,7 @@ const FilterPopup: React.FC<FilterPopupProps> = props => {
                 FieldType.date,
                 FieldType.dateTime,
                 FieldType.dateTimeWithSeconds,
+                CustomFieldTypes.Time,
                 ...(props.filterByRangeEnabled ? numberFieldTypes : [])
             ].includes(props?.fieldType as FieldType | CustomFieldTypes)
                 ? FilterType.range

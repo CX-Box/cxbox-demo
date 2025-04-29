@@ -12,6 +12,7 @@ export enum EFeatureSettingKey {
     appInfoDescription = 'appInfoDescription',
     sideBarWordBreak = 'sideBarWordBreak',
     sideBarSearchEnabled = 'sideBarSearchEnabled',
+    defaultDate = 'defaultDate',
     appExportExcelLimit = 'appExportExcelLimit'
 }
 

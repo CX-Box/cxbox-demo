@@ -16,6 +16,7 @@ import { checkboxFilterCounterLimit, checkboxFilterMaxVisibleItems } from '@cons
 import { checkboxFilterFieldTypes } from '@components/FilterPopup/constants'
 import { FilterType } from '@interfaces/filters'
 import styles from './FilterPopup.less'
+import { CustomFieldTypes } from '@interfaces/widget'
 
 interface FilterPopupProps {
     widgetName: string
@@ -80,7 +81,9 @@ const FilterPopup: React.FC<FilterPopupProps> = props => {
     const handleApply = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         const newFilter: BcFilter = {
-            type: ([FieldType.date, FieldType.dateTime, FieldType.dateTimeWithSeconds].includes(props?.fieldType as FieldType)
+            type: ([FieldType.date, FieldType.dateTime, FieldType.dateTimeWithSeconds, CustomFieldTypes.Time].includes(
+                props?.fieldType as FieldType
+            )
                 ? FilterType.range
                 : getFilterType(widgetMeta.type)) as CoreFilterType,
             value: props.value,

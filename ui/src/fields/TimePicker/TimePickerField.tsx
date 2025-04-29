@@ -1,5 +1,5 @@
 import moment from 'moment'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { TimePicker } from 'antd'
 import { TimePickerProps } from 'antd/lib/time-picker'
 import ReadOnlyField from '../../components/ui/ReadOnlyField/ReadOnlyField'
@@ -9,23 +9,12 @@ import { useVisibility } from '@components/widgets/Table/hooks/useVisibility'
 import Button from '@components/ui/Button/Button'
 import { useTranslation } from 'react-i18next'
 
-export const enum TimeFormat {
-    outputHourFormat = 'HH',
-    outputMinuteFormat = 'mm',
-    outputSecondFormat = 'ss',
-    outputMinuteSecondsFormat = 'mm:ss',
-    outputHourMinuteFormat = 'HH:mm',
-    outputHourMinuteAFormat = 'hh:mm A',
-    outputFullTimeFormat = 'HH:mm:ss',
-    outputFullTimeAFormat = 'hh:mm:ss A'
-}
-
-export const aDateFormats = [TimeFormat.outputHourMinuteAFormat, TimeFormat.outputFullTimeAFormat]
-
 export const isoLocalFormatter = (date: moment.Moment) => date.format('YYYY-MM-DD[T]HH:mm:ss')
 
+const unsupportedFormats = ['mm:ss', 'mm', 'ss']
+
 export interface ITimePickerFieldMeta extends WidgetFieldBase {
-    format: TimeFormat
+    format: string
     hourStep?: number
     minuteStep?: number
     secondStep?: number
@@ -66,7 +55,17 @@ const TimePickerField: React.FunctionComponent<ITimePickerProps> = ({
 
     const handleClose = () => changeVisibility(false)
 
-    const { secondStep = 1, hourStep = 1, minuteStep = 1, format = TimeFormat.outputFullTimeAFormat } = meta
+    const { secondStep = 1, hourStep = 1, minuteStep = 1, format = 'HH:mm:ss' } = meta
+
+    useEffect(() => {
+        if (unsupportedFormats.includes(format)) {
+            console.warn(`Unsupported format "${format}" for ${widgetName}.${meta.key}`)
+        }
+        if ((format.includes('A') || format.includes('a')) && (!format.includes('hh') || !format.includes('h'))) {
+            console.warn(`Wrong format "${format}" for ${widgetName}.${meta.key}
+            Conflict between 12 and 24 hour format`)
+        }
+    }, [format, meta.key, widgetName])
 
     const handleChange = React.useCallback(
         (date: moment.Moment | null) => {
@@ -100,7 +99,7 @@ const TimePickerField: React.FunctionComponent<ITimePickerProps> = ({
         hourStep,
         minuteStep,
         placeholder,
-        use12Hours: aDateFormats.includes(format),
+        use12Hours: format.includes('A') || format.includes('a'),
         getPopupContainer: props.popupContainer && getPopupContainer
     }
 

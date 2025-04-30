@@ -42,7 +42,7 @@ function Dictionary(props: DictionaryProps) {
 
         return (
             <div
-                className={cn(props.className, styles.root, {
+                className={cn(props.className, styles.root, styles.readOnly, {
                     [styles.coloredValue]: !!backgroundColor,
                     [styles.onlyIcon]: isIconMode
                 })}

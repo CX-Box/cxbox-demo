@@ -235,9 +235,6 @@ function Table<T extends CustomDataItem>({
                 (!(
                     fieldShowCondition(
                         resultedFields
-                            ?.map(item => {
-                                return item.type === FieldType.multivalue ? { ...item, type: FieldType.multivalueHover } : item
-                            })
                             ?.filter(item => item.type !== FieldType.hidden && !item.hidden)
                             .find(field => !sortedGroupKeys.includes(field.key))?.key as string,
                         record,
@@ -356,9 +353,6 @@ function Table<T extends CustomDataItem>({
     const columns: Array<ColumnProps<T>> = React.useMemo(() => {
         return (
             resultedFields
-                ?.map(item => {
-                    return item.type === FieldType.multivalue ? { ...item, type: FieldType.multivalueHover } : item
-                })
                 ?.filter(item => item.type !== FieldType.hidden && !item.hidden)
                 ?.map(item => {
                     const fieldRowMeta = bcRowMeta?.fields?.find(field => field.key === item.key)

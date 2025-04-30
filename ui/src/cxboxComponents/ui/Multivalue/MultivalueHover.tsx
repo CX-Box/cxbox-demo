@@ -26,7 +26,7 @@ const Multivalue: React.FunctionComponent<MultivalueHoverProps> = props => {
     const displayedItem =
         props.displayedValue !== undefined && props.displayedValue !== null ? (
             <p
-                className={cn(styles.displayedValue, { [styles.coloredField]: props.backgroundColor }, props.className)}
+                className={cn(styles.displayedValue, styles.readOnly, { [styles.coloredField]: props.backgroundColor }, props.className)}
                 onClick={props.onDrillDown}
                 style={props.backgroundColor ? { backgroundColor: props.backgroundColor } : undefined}
             >

@@ -95,7 +95,7 @@ function FilterField({ filterByRangeEnabled, ...props }: FilterFieldProps) {
         }
         case CustomFieldTypes.Time: {
             const widgetFieldMeta = props.widgetFieldMeta as ITimePickerFieldMeta
-            const use12Hours = widgetFieldMeta.format.includes('A') || widgetFieldMeta.format.includes('a')
+            const use12Hours = widgetFieldMeta.format?.includes('A') || widgetFieldMeta.format?.includes('a')
             return (
                 <TimeRangePicker
                     value={value as interfaces.DataValue[]}

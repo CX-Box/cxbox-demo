@@ -24,6 +24,7 @@ cxbox:
   bean:
     multipart-resolver:
       enabled: false
+    default-date: 2002.01.01
   meta:
     dev-panel-enabled: ${DEV_PANEL_ENABLED:true}
     directory: ${META_DIRECTORY:file:./src/main/resources/meta}
@@ -109,7 +110,7 @@ spring:
         jdbc:
           batch_size: 100
         hbm2ddl:
-          auto: ${HIBERNATE_DDL_AUTO:none}
+          auto: ${HIBERNATE_DDL_AUTO:update}
       org:
         cxbox:
           dictionary:

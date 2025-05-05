@@ -539,7 +539,6 @@
       </column>
     </addColumn>
   </changeSet>
-
   <changeSet author="cxbox" id="BC_FILTER_GROUPS INDEXES">
     <addUniqueConstraint columnNames="NAME, BC" constraintName="BC_FILTER_GROUPS_UNIQUE"
       tableName="BC_FILTER_GROUPS"/>
@@ -566,7 +565,6 @@
       <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"/>
     </createIndex>
   </changeSet>
-
   <changeSet author="cxbox" id="DICTIONARY_ITEM INDEXES">
     <addUniqueConstraint columnNames="TYPE, KEY" constraintName="DIC_SELECT_UNIQUE_TYPE_KEY"
       tableName="DICTIONARY_ITEM"/>
@@ -682,7 +680,23 @@
         name="(CASE 'TYPE' WHEN 'BC' THEN 'BC_NAME' || 'NAME' || 'SERVICE_NAME' WHEN 'LINK' THEN 'BC_NAME' || 'NAME' || 'SERVICE_NAME' WHEN 'SECURITY' THEN 'ROLE_CD' || 'NAME' || 'SERVICE_NAME' ELSE NULL END)"/>
     </createIndex>
   </changeSet>
-
+  <changeSet author="developer" id="2025-04-15-01">
+    <preConditions onFail="MARK_RAN">
+      <dbms type="postgres"/>
+    </preConditions>
+    <comment>Create functional index on created_date. Always add it if you use TIMESTAMP field as filterable/sortable 'time' widget field with TimeValueProvider, because it will generate 'where cast(created_date as time) > ?' condition using this index</comment>
+    <sql>
+      CREATE INDEX idx_apple_created_date_time2 ON apple ((created_date::time));
+    </sql>
+  </changeSet>
+  <changeSet author="oracle" id="2025-04-15-01">
+    <preConditions onFail="MARK_RAN">
+      <dbms type="oracle"/>
+    </preConditions>
+    <sql>
+      CREATE INDEX idx_apple_created_date_time ON apple (TO_CHAR(created_date, 'HH24:MI:SS'));
+    </sql>
+  </changeSet>
   <changeSet author="cxbox" id="DICTIONARY_ITEM CONSTRAINTS">
     <addForeignKeyConstraint baseColumnNames="DICTIONARY_TYPE_ID" baseTableName="DICTIONARY_ITEM"
       constraintName="CONS_DICTIONARY_TYPE_ID" deferrable="true" initiallyDeferred="true"

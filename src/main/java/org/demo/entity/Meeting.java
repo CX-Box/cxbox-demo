@@ -1,5 +1,6 @@
 package org.demo.entity;
 
+import jakarta.persistence.Column;
 import java.util.HashSet;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.JoinTable;
@@ -67,5 +68,8 @@ public class Meeting extends BaseEntity {
 	)
 	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	private Set<Contact> additionalContacts = new HashSet<>();
+
+	@Column
+	private LocalDateTime testTimeField;
 
 }

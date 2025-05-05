@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Icon, TimePicker } from 'antd'
+import { Button, TimePicker } from 'antd'
 import { DataValue } from '@cxbox-ui/schema'
 import moment from 'moment'
 import { useTranslation } from 'react-i18next'
@@ -15,10 +15,16 @@ interface TimeRangePickerProps extends Omit<TimePickerProps, 'onChange' | 'value
 
 function TimeRangePicker({ value, onChange, ...rest }: TimeRangePickerProps) {
     const defaultDate = useAppSelector(state => state.session.featureSettings?.find(setting => setting.key === 'defaultDate'))
-    const startTime = Array.isArray(value) && value?.[0] ? moment(value[0] as string) : moment(`${defaultDate?.value}T00:00:00`)
-    const endTime = Array.isArray(value) && value?.[1] ? moment(value[1] as string) : moment(`${defaultDate?.value}T23:59:59`)
+    const startTime = Array.isArray(value) && value?.[0] ? moment(value[0] as string) : undefined
+    const endTime = Array.isArray(value) && value?.[1] ? moment(value[1] as string) : undefined
     const [endOpen, setEndOpen] = useState(false)
     const [startOpen, setStartOpen] = useState(false)
+
+    useEffect(() => {
+        setTimeout(() => {
+            setStartOpen(true)
+        }, 100)
+    }, [])
 
     const { t } = useTranslation()
 
@@ -51,9 +57,10 @@ function TimeRangePicker({ value, onChange, ...rest }: TimeRangePickerProps) {
             <TimePicker
                 {...rest}
                 data-test-filter-popup-start-value={true}
-                placeholder={t('Start date')}
+                placeholder={t('Start time')}
                 onChange={handleChange('start')}
                 value={startTime}
+                defaultOpenValue={moment(`${defaultDate?.value}T00:00:00`)}
                 open={startOpen}
                 onOpenChange={open => setStartOpen(open)}
                 popupClassName={styles.popupContainer}
@@ -63,10 +70,9 @@ function TimeRangePicker({ value, onChange, ...rest }: TimeRangePickerProps) {
                     </Button>
                 )}
             />
-            <div className={styles.arrowContainer}>
-                {/*TODO: пофиксить стили в рамках 903 тикета*/}
-                {/*<Icon style={{ color: '#c5c5c5' }} type="right-square" onClick={() => handleSetValue('toStart')} />*/}
-                {/*<Icon style={{ color: '#c5c5c5' }} type="left-square" onClick={() => handleSetValue('toEnd')} />*/}
+            <div className={styles.transferButtons}>
+                <Button disabled={!startTime} onClick={() => handleSetValue('toStart')} icon="right" />
+                <Button disabled={!endTime} onClick={() => handleSetValue('toEnd')} icon="left" />
             </div>
             <TimePicker
                 {...rest}
@@ -74,6 +80,7 @@ function TimeRangePicker({ value, onChange, ...rest }: TimeRangePickerProps) {
                 placeholder={t('End time')}
                 onChange={handleChange('end')}
                 value={endTime}
+                defaultOpenValue={moment(`${defaultDate?.value}T23:59:59`)}
                 open={endOpen}
                 onOpenChange={open => setEndOpen(open)}
                 popupClassName={styles.popupContainer}

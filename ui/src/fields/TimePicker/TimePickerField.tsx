@@ -14,7 +14,7 @@ export const isoLocalFormatter = (date: moment.Moment) => date.format('YYYY-MM-D
 const unsupportedFormats = ['mm:ss', 'mm', 'ss']
 
 export interface ITimePickerFieldMeta extends WidgetFieldBase {
-    format: string
+    format?: string
     hourStep?: number
     minuteStep?: number
     secondStep?: number

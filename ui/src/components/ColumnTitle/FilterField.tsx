@@ -12,11 +12,6 @@ import { NumberTypes } from '@cxboxComponents/ui/NumberInput/formaters'
 import { interfaces } from '@cxbox-ui/core'
 import { DateFieldTypes } from '@interfaces/date'
 import { AppNumberFieldMeta, CustomFieldTypes } from '@interfaces/widget'
-import { CheckboxChangeEvent } from 'antd/lib/checkbox'
-import { Checkbox } from 'antd'
-import { interfaces } from '@cxbox-ui/core'
-import { ColumnFilterControlProps } from '@cxboxComponents/ui/FilterField/FilterField'
-import { NumberInput, FilterField as CoreFilterField } from '@cxboxComponents'
 import TimeRangePicker from '@components/ColumnTitle/TimeRangePicker'
 import { ITimePickerFieldMeta } from '../../fields/TimePicker/TimePickerField'
 
@@ -116,7 +111,7 @@ function FilterField({ filterByRangeEnabled, ...props }: FilterFieldProps) {
         }
         case CustomFieldTypes.Time: {
             const widgetFieldMeta = props.widgetFieldMeta as ITimePickerFieldMeta
-            const use12Hours = widgetFieldMeta.format.includes('A') || widgetFieldMeta.format.includes('a')
+            const use12Hours = widgetFieldMeta.format?.includes('A') || widgetFieldMeta.format?.includes('a')
             return (
                 <TimeRangePicker
                     value={value as interfaces.DataValue[]}

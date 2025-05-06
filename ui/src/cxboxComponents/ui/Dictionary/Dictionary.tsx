@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useCallback, useMemo, useRef } from 'react'
 import { Icon, Select as AntdSelect, Tooltip } from 'antd'
 import { BaseFieldProps } from '@cxboxComponents/Field/Field'
 import Select, { SelectProps } from '@cxboxComponents/ui/Select/Select'
 import ReadOnlyField from '@cxboxComponents/ui/ReadOnlyField/ReadOnlyField'
+import useFixSelectDropdownForTableScroll from '@hooks/useFixSelectDropdownForTableScroll'
 import * as dictionaryCustomIcons from '@assets/icons/dictionaryCustomIcons'
 import { interfaces } from '@cxbox-ui/core'
 import { AppDictionaryFieldMeta, EDictionaryMode } from '@interfaces/widget'
@@ -25,12 +26,12 @@ export interface DictionaryProps extends BaseFieldProps {
  * @param props
  * @category Components
  */
-const Dictionary: React.FunctionComponent<DictionaryProps> = props => {
+const Dictionary: React.FC<DictionaryProps> = props => {
     const { multiple, onChange, values, value, valueIcon, metaIcon, readOnly, className, backgroundColor, onDrillDown, widgetName } = props
     const meta = props.meta as AppDictionaryFieldMeta
-    const selectRef = React.useRef<AntdSelect<string | string[]>>(null)
+    const selectRef = useRef<AntdSelect<string | string[]>>(null)
 
-    const handleChange = React.useCallback(
+    const handleChange = useCallback(
         (v: string | string[]) => {
             if (multiple) {
                 onChange?.((v as string[]).map(item => ({ id: item, value: item })))
@@ -41,7 +42,7 @@ const Dictionary: React.FunctionComponent<DictionaryProps> = props => {
         [multiple, onChange]
     )
 
-    const resultValue = React.useMemo(() => {
+    const resultValue = useMemo(() => {
         if (multiple) {
             return (value as interfaces.MultivalueSingleValue[])?.map(i => i.value) ?? []
         } else {
@@ -56,6 +57,7 @@ const Dictionary: React.FunctionComponent<DictionaryProps> = props => {
         allowClear: !!value,
         showSearch: true,
         getPopupContainer: trigger => trigger.parentElement as HTMLElement,
+        onDropdownVisibleChange: useFixSelectDropdownForTableScroll(selectRef),
         onChange: handleChange,
         dropdownMatchSelectWidth: false,
         forwardedRef: selectRef,
@@ -63,7 +65,7 @@ const Dictionary: React.FunctionComponent<DictionaryProps> = props => {
         clearIcon: <Icon type="close-circle" theme="filled" data-test-field-dictionary-item-clear={true} />
     }
 
-    const options = React.useMemo(() => {
+    const options = useMemo(() => {
         const noValues = !values?.length
         const hasMultipleValue = noValues && multiple && value?.length
         const hasSingleValue = noValues && !multiple && value

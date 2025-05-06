@@ -1,11 +1,10 @@
-import React from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import ReadOnlyField from '@cxboxComponents/ui/ReadOnlyField/ReadOnlyField'
 import { ChangeDataItemPayload, BaseFieldProps } from '@cxboxComponents/Field/Field'
 import Select from '@cxboxComponents/ui/Select/Select'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
-import { Icon } from 'antd'
-import styles from './InlinePickList.less'
+import { Icon, Select as AntdSelect } from 'antd'
 import cn from 'classnames'
 import { RootState } from '@store'
 import { actions, interfaces } from '@cxbox-ui/core'
@@ -13,6 +12,8 @@ import { useTranslation } from 'react-i18next'
 import { useDebounce } from '@hooks/useDebounce'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import { isPopupWidgetFamily } from '@utils/isPopupWidgetFamily'
+import useFixSelectDropdownForTableScroll from '@hooks/useFixSelectDropdownForTableScroll'
+import styles from './InlinePickList.less'
 
 const { changeDataItem, inlinePickListFetchDataRequest, showViewPopup, viewPutPickMap } = actions
 
@@ -63,7 +64,9 @@ const InlinePickList: React.FunctionComponent<InlinePickListProps> = ({
 }) => {
     const { t } = useTranslation()
 
-    const [searchTerm, setSearchTerm] = React.useState('')
+    const selectRef = useRef<AntdSelect<string>>(null)
+
+    const [searchTerm, setSearchTerm] = useState('')
     const debouncedSearchTerm = useDebounce(searchTerm, 500)
     const disabledPopup = isPopupWidgetFamily(widgetMeta?.type)
 
@@ -73,13 +76,13 @@ const InlinePickList: React.FunctionComponent<InlinePickListProps> = ({
         }
     }, [debouncedSearchTerm, onSearch, popupBcName, searchSpec, searchTerm])
 
-    const handleClick = React.useCallback(() => {
+    const handleClick = useCallback(() => {
         if (!disabled) {
             onClick(popupBcName, pickMap, widgetName)
         }
     }, [disabled, popupBcName, pickMap, onClick, widgetName])
 
-    const handleChange = React.useCallback(
+    const handleChange = useCallback(
         (valueKey: string) => {
             const row = data.find(item => item.id === valueKey)
             Object.keys(pickMap).forEach(field => {
@@ -92,6 +95,8 @@ const InlinePickList: React.FunctionComponent<InlinePickListProps> = ({
         },
         [onChange, pickMap, bcName, cursor, data]
     )
+
+    const handleDropdownVisibleChange = useFixSelectDropdownForTableScroll(selectRef)
 
     if (readOnly) {
         return (
@@ -130,6 +135,9 @@ const InlinePickList: React.FunctionComponent<InlinePickListProps> = ({
                 onChange={handleChange as any}
                 notFoundContent={null}
                 className={className}
+                getPopupContainer={trigger => trigger.parentElement?.parentElement as HTMLElement}
+                forwardedRef={selectRef}
+                onDropdownVisibleChange={handleDropdownVisibleChange}
             >
                 {data.map(item => {
                     const title = item[pickMap[fieldName]] as string

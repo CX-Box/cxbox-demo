@@ -1,17 +1,19 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { Icon, Select } from 'antd'
+import { Icon, Select as AntdSelect } from 'antd'
 import cn from 'classnames'
+import Select from '@cxboxComponents/ui/Select/Select'
 import { DataValue, WidgetTypes } from '@cxbox-ui/schema'
 import { actions, InlinePickListFieldMeta, interfaces } from '@cxbox-ui/core'
 import { useDebounce } from '@hooks/useDebounce'
 import ReadOnlyField from '../../components/ui/ReadOnlyField/ReadOnlyField'
 import { useAppSelector } from '@store'
-import styles from './InlinePickList.less'
+import useFixSelectDropdownForTableScroll from '@hooks/useFixSelectDropdownForTableScroll'
 import { BaseFieldProps } from '@cxboxComponents/Field/Field'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import { isPopupWidgetFamily } from '@utils/isPopupWidgetFamily'
+import styles from './InlinePickList.less'
 
 interface Props extends Omit<BaseFieldProps, 'meta'> {
     meta: InlinePickListFieldMeta
@@ -35,6 +37,9 @@ const InlinePickList: React.FunctionComponent<Props> = ({
 }) => {
     const dispatch = useDispatch()
     const { t } = useTranslation()
+
+    const selectRef = useRef<AntdSelect<string>>(null)
+
     const widgetMeta = useAppSelector(state => state.view.widgets?.find(i => i.name === widgetName))
     const disabledPopup = isPopupWidgetFamily(widgetMeta?.type)
     const bcName = widgetMeta?.bcName
@@ -69,7 +74,7 @@ const InlinePickList: React.FunctionComponent<Props> = ({
         [dispatch]
     )
 
-    const [searchTerm, setSearchTerm] = React.useState('')
+    const [searchTerm, setSearchTerm] = useState('')
     const debouncedSearchTerm = useDebounce(searchTerm, 500)
 
     const handleFocus = useCallback(() => onSearch(popupBcName, processedSearchSpec, ''), [onSearch, popupBcName, processedSearchSpec])
@@ -80,13 +85,13 @@ const InlinePickList: React.FunctionComponent<Props> = ({
         }
     }, [debouncedSearchTerm, onSearch, popupBcName, processedSearchSpec])
 
-    const handleClick = React.useCallback(() => {
+    const handleClick = useCallback(() => {
         if (!disabled) {
             onClick(popupBcName, pickMap, popupWidget?.name)
         }
     }, [disabled, popupBcName, pickMap, onClick, popupWidget])
 
-    const onChange = React.useCallback(
+    const onChange = useCallback(
         (valueKey: string) => {
             const row = data.find(item => item.id === valueKey)
             const bcNameChanges: Record<string, DataValue> = {}
@@ -106,6 +111,8 @@ const InlinePickList: React.FunctionComponent<Props> = ({
         },
         [pickMap, bcName, cursor, data, dispatch]
     )
+
+    const handleDropdownVisibleChange = useFixSelectDropdownForTableScroll(selectRef)
 
     if (readOnly) {
         return (
@@ -145,6 +152,9 @@ const InlinePickList: React.FunctionComponent<Props> = ({
                 onFocus={handleFocus}
                 onChange={onChange}
                 notFoundContent={null}
+                getPopupContainer={trigger => trigger.parentElement?.parentElement as HTMLElement}
+                forwardedRef={selectRef}
+                onDropdownVisibleChange={handleDropdownVisibleChange}
             >
                 {data.map(item => {
                     const title = item[pickMap[fieldName]] as string

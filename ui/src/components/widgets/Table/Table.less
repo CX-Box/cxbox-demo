@@ -33,8 +33,11 @@
 }
 
 .table {
-    overflow-x: auto;
     :global {
+        .ant-table .ant-table-body {
+            overflow-x: auto;
+        }
+
         .ant-table .ant-table-thead > tr > th {
             padding: 11px 16px;
             font-weight: 500;

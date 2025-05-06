@@ -178,6 +178,10 @@ public class LoginServiceImpl implements LoginService {
 						feature(
 								UIProperties.SIDE_BAR_SEARCH_ENABLE,
 								uiProperties.getSideBarSearchEnabled()
+						),
+						feature(
+								UIProperties.APP_EXPORT_EXCEL_LIMIT,
+								uiProperties.getAppExportExcelLimit()
 						)
 				)
 				.filter(Objects::nonNull)

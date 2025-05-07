@@ -2,6 +2,7 @@ import React from 'react'
 import { Input, Icon } from 'antd'
 import { useTranslation } from 'react-i18next'
 import styles from './PickInput.less'
+import cn from 'classnames'
 
 export interface PickInputProps {
     disabled?: boolean
@@ -32,7 +33,7 @@ const PickInput: React.FunctionComponent<PickInputProps> = ({ disabled, value, p
             placeholder={placeholder ?? t('Select value')}
             value={value || ''}
             suffix={clearButton}
-            className={className}
+            className={cn(styles.root, className)}
             addonAfter={
                 loading ? (
                     <Icon type="loading" spin />

@@ -1,14 +1,15 @@
-import React from 'react'
-import { Icon, Select } from 'antd'
+import React, { useCallback, useMemo, useRef } from 'react'
+import { Icon, Select as AntdSelect } from 'antd'
 import { connect } from 'react-redux'
-import { SelectProps } from 'antd/lib/select'
-import styles from './MultipleSelectField.less'
+import cn from 'classnames'
+import useFixSelectDropdownForTableScroll from '@hooks/useFixSelectDropdownForTableScroll'
+import Select, { SelectProps } from '@cxboxComponents/ui/Select/Select'
+import { buildBcUrl } from '@utils/buildBcUrl'
 import checkbox from '../../assets/icons/checkbox.svg'
 import checkboxEmpty from '../../assets/icons/checkboxEmpty.svg'
 import { RootState } from '@store'
-import cn from 'classnames'
 import { interfaces } from '@cxbox-ui/core'
-import { buildBcUrl } from '@utils/buildBcUrl'
+import styles from './MultipleSelectField.less'
 
 interface MultipleSelectFieldProps {
     value: interfaces.MultivalueSingleValue[]
@@ -20,10 +21,12 @@ interface MultipleSelectFieldProps {
 }
 
 const MultipleSelectField: React.FunctionComponent<MultipleSelectFieldProps> = props => {
+    const selectRef = useRef<AntdSelect<string[]>>(null)
+
     const { value, values, onChange, readOnly } = props
     const { Option } = Select
 
-    const currentValues = React.useMemo(() => {
+    const currentValues = useMemo(() => {
         return values?.map(item => {
             const valueIndex = value?.findIndex(v => v.value === item.value)
             return (
@@ -37,7 +40,7 @@ const MultipleSelectField: React.FunctionComponent<MultipleSelectFieldProps> = p
         })
     }, [values, value, Option])
 
-    const handleOnChange = React.useCallback(
+    const handleOnChange = useCallback(
         (v: string[]) => {
             const result: interfaces.MultivalueSingleValue[] = []
             v.map(item => result.push({ id: item, value: item }))
@@ -48,8 +51,10 @@ const MultipleSelectField: React.FunctionComponent<MultipleSelectFieldProps> = p
 
     const extendedProps: SelectProps<string[]> = {
         ...props,
+        forwardedRef: selectRef,
         dropdownClassName: styles.dropDownMenu,
         getPopupContainer: trigger => trigger.parentElement as HTMLElement,
+        onDropdownVisibleChange: useFixSelectDropdownForTableScroll(selectRef),
         mode: 'multiple',
         optionLabelProp: 'label',
         value: value?.map(i => i.value),

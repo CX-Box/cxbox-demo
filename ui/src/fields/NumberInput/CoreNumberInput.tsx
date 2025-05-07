@@ -150,7 +150,7 @@ const CoreNumberInput: React.FunctionComponent<CoreNumberInputProps> = props => 
                 cursor={props.cursor}
                 onDrillDown={props.onDrillDown}
             >
-                {NumberInputFormat[type](props.value, props.digits, props.nullable)} {currency}
+                {`${NumberInputFormat[type](props.value, props.digits, props.nullable)}${currency ? ` ${currency}` : ''}`}
             </ReadOnlyField>
         )
     }

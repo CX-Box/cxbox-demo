@@ -1,15 +1,17 @@
 import React from 'react'
+import { Checkbox } from 'antd'
+import { CheckboxChangeEvent } from 'antd/lib/checkbox'
+import { NumberInput, FilterField as CoreFilterField } from '@cxboxComponents'
 import { CheckboxFilter } from './CheckboxFilter/CheckboxFilter'
-import { AppNumberFieldMeta, CustomFieldTypes } from '@interfaces/widget'
-import { getFormat } from '@utils/date'
 import RangePicker from './RangePicker'
 import DatePicker from './DatePicker'
-import { DateFieldTypes } from '@interfaces/date'
-import { CheckboxChangeEvent } from 'antd/lib/checkbox'
-import { Checkbox } from 'antd'
-import { interfaces } from '@cxbox-ui/core'
+import NumberRangeFilter from './components/NumberRangeFilter/NumberRangeFilter'
+import { getFormat } from '@utils/date'
 import { ColumnFilterControlProps } from '@cxboxComponents/ui/FilterField/FilterField'
-import { NumberInput, FilterField as CoreFilterField } from '@cxboxComponents'
+import { NumberTypes } from '@cxboxComponents/ui/NumberInput/formaters'
+import { interfaces } from '@cxbox-ui/core'
+import { DateFieldTypes } from '@interfaces/date'
+import { AppNumberFieldMeta, CustomFieldTypes } from '@interfaces/widget'
 
 interface FilterFieldProps extends ColumnFilterControlProps {
     filterByRangeEnabled?: boolean
@@ -39,6 +41,20 @@ function FilterField({ filterByRangeEnabled, ...props }: FilterFieldProps) {
         case FieldType.money:
         case FieldType.percent:
             const fieldMeta = widgetFieldMeta as AppNumberFieldMeta
+
+            if (filterByRangeEnabled) {
+                return (
+                    <NumberRangeFilter
+                        value={value as interfaces.DataValue[]}
+                        type={widgetFieldMeta.type as unknown as NumberTypes}
+                        onChange={onChange}
+                        digits={fieldMeta.digits}
+                        currency={fieldMeta.currency}
+                        nullable={true}
+                    />
+                )
+            }
+
             return (
                 <NumberInput
                     data-test-filter-popup-value={true}

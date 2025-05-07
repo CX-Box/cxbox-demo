@@ -119,6 +119,7 @@ function ColumnFilter({ widgetName, widgetMeta, rowMeta, components }: ColumnFil
             onApply={handleApply}
             onCancel={handleClose}
             fieldType={effectiveFieldMeta.type}
+            filterByRangeEnabled={filterByRangeEnabled}
         >
             <div className={styles.filterContainer}>
                 <FilterField

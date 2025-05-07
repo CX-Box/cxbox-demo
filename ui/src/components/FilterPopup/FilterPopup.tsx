@@ -13,8 +13,10 @@ import { actions } from '@actions'
 import { PickListFieldMeta, BcFilter, DataValue, FilterType as CoreFilterType, RowMetaField } from '@cxbox-ui/core'
 import { getFilterType } from '@utils/filters'
 import { checkboxFilterCounterLimit, checkboxFilterMaxVisibleItems } from '@constants/filter'
-import { checkboxFilterFieldTypes } from '@components/FilterPopup/constants'
+import { numberFieldTypes } from '@constants/field'
+import { checkboxFilterFieldTypes } from './constants'
 import { FilterType } from '@interfaces/filters'
+import { CustomFieldTypes } from '@interfaces/widget'
 import styles from './FilterPopup.less'
 
 interface FilterPopupProps {
@@ -24,6 +26,7 @@ interface FilterPopupProps {
     children: React.ReactNode
     rowFieldMeta: RowMetaField
     fieldType?: FieldType
+    filterByRangeEnabled?: boolean
     onApply?: () => void
     onCancel?: () => void
 }
@@ -80,7 +83,12 @@ const FilterPopup: React.FC<FilterPopupProps> = props => {
     const handleApply = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         const newFilter: BcFilter = {
-            type: ([FieldType.date, FieldType.dateTime, FieldType.dateTimeWithSeconds].includes(props?.fieldType as FieldType)
+            type: ([
+                FieldType.date,
+                FieldType.dateTime,
+                FieldType.dateTimeWithSeconds,
+                ...(props.filterByRangeEnabled ? numberFieldTypes : [])
+            ].includes(props?.fieldType as FieldType | CustomFieldTypes)
                 ? FilterType.range
                 : getFilterType(widgetMeta.type)) as CoreFilterType,
             value: props.value,

@@ -13,7 +13,7 @@ interface TimeRangePickerProps extends Omit<TimePickerProps, 'onChange' | 'value
     value: DataValue[]
 }
 
-function TimeRangePicker({ value, onChange, ...rest }: TimeRangePickerProps) {
+function TimeRangePicker({ value, onChange, format, ...rest }: TimeRangePickerProps) {
     const defaultDate = useAppSelector(state => state.session.featureSettings?.find(setting => setting.key === 'defaultDate'))
     const startTime = Array.isArray(value) && value?.[0] ? moment(value[0] as string) : undefined
     const endTime = Array.isArray(value) && value?.[1] ? moment(value[1] as string) : undefined
@@ -43,11 +43,25 @@ function TimeRangePicker({ value, onChange, ...rest }: TimeRangePickerProps) {
 
     const handleSetValue = (setter: 'toStart' | 'toEnd') => {
         if (setter === 'toStart') {
-            onChange([isoLocalFormatter(startTime), isoLocalFormatter(startTime)])
+            const newStartTime = moment(startTime)
+            if (!format?.includes('s')) {
+                newStartTime.seconds(59)
+            }
+            if (!format?.includes('m')) {
+                newStartTime.minutes(59)
+            }
+            onChange([isoLocalFormatter(startTime), isoLocalFormatter(newStartTime)])
             return
         }
         if (setter === 'toEnd') {
-            onChange([isoLocalFormatter(endTime), isoLocalFormatter(endTime)])
+            const newEndTime = moment(endTime)
+            if (!format?.includes('s')) {
+                newEndTime.seconds(0)
+            }
+            if (!format?.includes('m')) {
+                newEndTime.minutes(0)
+            }
+            onChange([isoLocalFormatter(newEndTime), isoLocalFormatter(endTime)])
             return
         }
     }
@@ -57,6 +71,7 @@ function TimeRangePicker({ value, onChange, ...rest }: TimeRangePickerProps) {
             <TimePicker
                 {...rest}
                 data-test-filter-popup-start-value={true}
+                format={format}
                 placeholder={t('Start time')}
                 onChange={handleChange('start')}
                 value={startTime}
@@ -77,6 +92,7 @@ function TimeRangePicker({ value, onChange, ...rest }: TimeRangePickerProps) {
             <TimePicker
                 {...rest}
                 data-test-filter-popup-end-value={true}
+                format={format}
                 placeholder={t('End time')}
                 onChange={handleChange('end')}
                 value={endTime}

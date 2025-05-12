@@ -661,6 +661,25 @@
       <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"/>
     </createIndex>
   </changeSet>
+<!--  Example of indexes for time-->
+<!--  <changeSet author="developer" id="2025-04-15-01">-->
+<!--    <preConditions onFail="MARK_RAN">-->
+<!--      <dbms type="postgres"/>-->
+<!--    </preConditions>-->
+<!--    <comment>Create functional index on created_date. Always add it if you use TIMESTAMP field as filterable/sortable 'time' widget field with TimeValueProvider, because it will generate 'where cast(created_date as time) > ?' condition using this index</comment>-->
+<!--    <sql>-->
+<!--      CREATE INDEX idx_apple_created_date_time2 ON example ((created_date::time));-->
+<!--    </sql>-->
+<!--  </changeSet>-->
+
+<!--  <changeSet author="oracle" id="2025-04-15-01">-->
+<!--    <preConditions onFail="MARK_RAN">-->
+<!--      <dbms type="oracle"/>-->
+<!--    </preConditions>-->
+<!--    <sql>-->
+<!--      CREATE INDEX idx_apple_created_date_time ON example (TO_CHAR(created_date, 'HH24:MI:SS'));-->
+<!--    </sql>-->
+<!--  </changeSet>-->
 
   <changeSet author="cxbox" id="RESPONSIBILITIES INDEXES">
     <createIndex indexName="RESPONSIBILITIES_IND1" tableName="RESPONSIBILITIES">

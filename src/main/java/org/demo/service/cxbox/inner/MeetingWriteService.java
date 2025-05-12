@@ -81,7 +81,6 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 
 	@Override
 	protected ActionResultDTO<MeetingDTO> doUpdateEntity(Meeting entity, MeetingDTO data, BusinessComponent bc) {
-		setIfChanged(data, MeetingDTO_.testTimeField, entity::setTestTimeField);
 		if (data.isFieldChanged(MeetingDTO_.additionalContacts)) {
 			entity.getAdditionalContacts().clear();
 			entity.getAdditionalContacts().addAll(data.getAdditionalContacts().getValues().stream()

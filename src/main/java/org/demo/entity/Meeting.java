@@ -1,6 +1,5 @@
 package org.demo.entity;
 
-import jakarta.persistence.Column;
 import java.util.HashSet;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.JoinTable;

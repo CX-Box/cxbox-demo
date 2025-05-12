@@ -5,11 +5,6 @@
   "bc": "meetingEdit",
   "fields": [
     {
-      "label": "Test Time Field",
-      "key": "testTimeField",
-      "type": "time"
-    },
-    {
       "label": "Meeting Region",
       "key": "region",
       "type": "dictionary"
@@ -54,14 +49,6 @@
     },
     "layout": {
       "rows": [
-        {
-          "cols": [
-            {
-              "fieldKey": "testTimeField",
-              "span": 12
-            }
-          ]
-        },
         {
           "cols": [
             {

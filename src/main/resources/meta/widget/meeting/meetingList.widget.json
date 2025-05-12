@@ -5,11 +5,6 @@
   "bc": "meetingEdit",
   "fields": [
     {
-      "title": "Test Time Field",
-      "key": "testTimeField",
-      "type": "time"
-    },
-    {
       "title": "Meeting Region",
       "key": "region",
       "type": "dictionary"

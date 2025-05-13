@@ -29,13 +29,26 @@ function TimeRangePicker({ value, onChange, format, ...rest }: TimeRangePickerPr
     const { t } = useTranslation()
 
     const handleChange = (pickerType: 'start' | 'end'): TimePickerProps['onChange'] => {
-        return date => {
+        return time => {
+            const newTime = moment(time)
             if (pickerType === 'start') {
-                onChange([isoLocalFormatter(date), isoLocalFormatter(endTime)])
+                if (!format?.includes('s')) {
+                    newTime.seconds(0)
+                }
+                if (!format?.includes('m')) {
+                    newTime.minutes(0)
+                }
+                onChange([isoLocalFormatter(newTime), isoLocalFormatter(endTime)])
                 return
             }
             if (pickerType === 'end') {
-                onChange([isoLocalFormatter(startTime), isoLocalFormatter(date)])
+                if (!format?.includes('s')) {
+                    newTime.seconds(59)
+                }
+                if (!format?.includes('m')) {
+                    newTime.minutes(59)
+                }
+                onChange([isoLocalFormatter(startTime), isoLocalFormatter(newTime)])
                 return
             }
         }

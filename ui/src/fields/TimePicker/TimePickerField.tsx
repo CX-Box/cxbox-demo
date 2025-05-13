@@ -8,6 +8,7 @@ import { BaseFieldProps } from '@cxboxComponents/Field/Field'
 import { useVisibility } from '@components/widgets/Table/hooks/useVisibility'
 import Button from '@components/ui/Button/Button'
 import { useTranslation } from 'react-i18next'
+import { useAppSelector } from '@store'
 
 export const isoLocalFormatter = (date: moment.Moment) => date.format('YYYY-MM-DD[T]HH:mm:ss')
 
@@ -57,6 +58,8 @@ const TimePickerField: React.FunctionComponent<ITimePickerProps> = ({
 
     const { secondStep = 1, hourStep = 1, minuteStep = 1, format = 'HH:mm:ss' } = meta
 
+    const defaultDate = useAppSelector(state => state.session.featureSettings?.find(setting => setting.key === 'defaultDate'))
+
     useEffect(() => {
         if (unsupportedFormats.includes(format)) {
             console.warn(`Unsupported format "${format}" for ${widgetName}.${meta.key}`)
@@ -70,10 +73,18 @@ const TimePickerField: React.FunctionComponent<ITimePickerProps> = ({
     const handleChange = React.useCallback(
         (date: moment.Moment | null) => {
             if (onChange) {
+                if (!value && defaultDate && date) {
+                    const emptyDate = moment(`${defaultDate.value}T00:00:00`)
+                    emptyDate.hours(date.hours())
+                    emptyDate.minutes(date.minutes())
+                    emptyDate.seconds(date.seconds())
+                    onChange(isoLocalFormatter(emptyDate))
+                    return
+                }
                 onChange(date ? isoLocalFormatter(date) : null)
             }
         },
-        [onChange]
+        [defaultDate, onChange, value]
     )
 
     let momentObject

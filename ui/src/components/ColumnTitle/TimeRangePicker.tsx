@@ -30,26 +30,35 @@ function TimeRangePicker({ value, onChange, format, ...rest }: TimeRangePickerPr
 
     const handleChange = (pickerType: 'start' | 'end'): TimePickerProps['onChange'] => {
         return time => {
-            const newTime = moment(time)
-            if (pickerType === 'start') {
-                if (!format?.includes('s')) {
-                    newTime.seconds(0)
+            if (time) {
+                const newTime = moment(time)
+                if (pickerType === 'start') {
+                    if (!format?.includes('s')) {
+                        newTime.seconds(0)
+                    }
+                    if (!format?.includes('m')) {
+                        newTime.minutes(0)
+                    }
+                    onChange([isoLocalFormatter(newTime), isoLocalFormatter(endTime)])
+                    return
                 }
-                if (!format?.includes('m')) {
-                    newTime.minutes(0)
+                if (pickerType === 'end') {
+                    if (!format?.includes('s')) {
+                        newTime.seconds(59)
+                    }
+                    if (!format?.includes('m')) {
+                        newTime.minutes(59)
+                    }
+                    onChange([isoLocalFormatter(startTime), isoLocalFormatter(newTime)])
+                    return
                 }
-                onChange([isoLocalFormatter(newTime), isoLocalFormatter(endTime)])
-                return
-            }
-            if (pickerType === 'end') {
-                if (!format?.includes('s')) {
-                    newTime.seconds(59)
+            } else {
+                if (pickerType === 'start') {
+                    onChange([undefined, isoLocalFormatter(endTime)])
                 }
-                if (!format?.includes('m')) {
-                    newTime.minutes(59)
+                if (pickerType === 'end') {
+                    onChange([isoLocalFormatter(startTime), undefined])
                 }
-                onChange([isoLocalFormatter(startTime), isoLocalFormatter(newTime)])
-                return
             }
         }
     }

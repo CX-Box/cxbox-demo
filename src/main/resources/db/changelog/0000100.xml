@@ -85,6 +85,7 @@
       <column name="STATUS" type="VARCHAR(200)"/>
       <column name="START_DATE_TIME" type="TIMESTAMP(6)"/>
       <column name="END_DATE_TIME" type="TIMESTAMP(6)"/>
+      <column name="MEETING_TIME" type="TIMESTAMP(6)"/>
       <column name="ADDRESS" type="VARCHAR(200)"/>
       <column name="NOTES" type="VARCHAR(200)"/>
       <column name="RESULT" type="VARCHAR(200)"/>
@@ -419,7 +420,31 @@
         <constraints nullable="false"/>
       </column>
     </createTable>
-  </changeSet>
 
+  </changeSet>
+  <changeSet author="cxbox" id="FIRST_SORT_TIME INDEX">
+    <preConditions onFail="MARK_RAN">
+      <dbms type="postgresql"/>
+    </preConditions>
+    <sql>
+      CREATE INDEX idx_sort_date_time4 ON meeting (cast(meeting_time as time(6)) desc, id desc)
+    </sql>
+  </changeSet>
+  <changeSet author="cxbox" dbms="postgresql" id="SECOND_SORT_TIME INDEX">
+    <preConditions onFail="MARK_RAN">
+      <dbms type="postgresql"/>
+    </preConditions>
+    <sql>
+      CREATE INDEX idx_sort_date_time6 ON meeting (cast(meeting_time as time(6)) asc, id desc)
+    </sql>
+  </changeSet>
+  <changeSet author="cxbox" id="FILTER_TIME INDEX">
+    <preConditions onFail="MARK_RAN">
+      <dbms type="postgresql"/>
+    </preConditions>
+    <sql>
+      CREATE INDEX idx_filtration_date_time4 ON meeting (cast(meeting_time as time(6)))
+    </sql>
+  </changeSet>
 
 </databaseChangeLog>

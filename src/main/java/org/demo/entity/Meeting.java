@@ -1,5 +1,10 @@
 package org.demo.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import java.time.LocalTime;
 import java.util.HashSet;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.JoinTable;
@@ -42,6 +47,8 @@ public class Meeting extends BaseEntity {
 	private MeetingStatus status = MeetingStatus.NOT_STARTED;
 
 	private String address;
+
+	private LocalDateTime meetingTime;
 
 	private String notes;
 

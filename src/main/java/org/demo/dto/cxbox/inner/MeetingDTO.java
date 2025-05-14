@@ -20,6 +20,7 @@ import org.cxbox.core.util.filter.provider.impl.DictionaryValueProvider;
 import org.cxbox.core.util.filter.provider.impl.EnumValueProvider;
 import org.cxbox.core.util.filter.provider.impl.LongValueProvider;
 import org.cxbox.core.util.filter.provider.impl.MultiFieldValueProvider;
+import org.cxbox.core.util.filter.provider.impl.TimeValueProvider;
 import org.cxbox.model.core.entity.BaseEntity;
 import org.demo.conf.cxbox.extension.multivaluePrimary.MultivalueExt;
 import org.demo.entity.Client;
@@ -61,6 +62,9 @@ public class MeetingDTO extends DataResponseDTO {
 
 	private String responsibleName;
 
+	@SearchParameter(provider = TimeValueProvider.class)
+	private LocalDateTime meetingTime;
+
 	@SearchParameter(name = "client.fullName")
 	private String clientName;
 
@@ -97,6 +101,7 @@ public class MeetingDTO extends DataResponseDTO {
 		this.clientId = ofNullable(meeting.getClient()).map(BaseEntity::getId).orElse(null);
 		this.contactId = ofNullable(meeting.getContact()).map(BaseEntity::getId).orElse(null);
 		this.contactName = ofNullable(meeting.getContact()).map(Contact::getFullName).orElse(null);
+		this.meetingTime = meeting.getMeetingTime();
 
 		this.additionalContacts = meeting.getAdditionalContacts().stream().collect(MultivalueExt.toMultivalueField(
 				e -> String.valueOf(e.getId()),
@@ -107,9 +112,11 @@ public class MeetingDTO extends DataResponseDTO {
 								: null
 				)
 		));
-		this.additionalContactsDisplayedKey = StringUtils.abbreviate(meeting.getAdditionalContacts().stream()
-				.map(Contact::getFullName
-				).collect(Collectors.joining(",")), 12);
+		this.additionalContactsDisplayedKey = StringUtils.abbreviate(
+				meeting.getAdditionalContacts().stream()
+						.map(Contact::getFullName
+						).collect(Collectors.joining(",")), 12
+		);
 	}
 
 

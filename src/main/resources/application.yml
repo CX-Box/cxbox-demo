@@ -24,6 +24,7 @@ cxbox:
   bean:
     multipart-resolver:
       enabled: false
+    default-date: 1970.01.01
   meta:
     dev-panel-enabled: ${DEV_PANEL_ENABLED:true}
     directory: ${META_DIRECTORY:file:./src/main/resources/meta}

@@ -27,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.cxbox.api.ScreenResponsibilityService;
+import org.cxbox.api.config.CxboxBeanProperties;
 import org.cxbox.api.data.dictionary.SimpleDictionary;
 import org.cxbox.api.service.session.CoreSessionService;
 import org.cxbox.api.service.session.IUser;
@@ -66,6 +67,8 @@ public class LoginServiceImpl implements LoginService {
 	private final WidgetFieldsIdResolverProperties widgetFieldsIdResolverProperties;
 
 	private final UIProperties uiProperties;
+
+	private final CxboxBeanProperties cxboxBeanProperties;
 
 	private final ApplicationEventPublisher eventPublisher;
 
@@ -178,6 +181,10 @@ public class LoginServiceImpl implements LoginService {
 						feature(
 								UIProperties.SIDE_BAR_SEARCH_ENABLE,
 								uiProperties.getSideBarSearchEnabled()
+						),
+						feature(
+								CxboxBeanProperties.DEFAULT_DATE,
+								cxboxBeanProperties.getDefaultDate()
 						),
 						feature(
 								UIProperties.APP_EXPORT_EXCEL_LIMIT,

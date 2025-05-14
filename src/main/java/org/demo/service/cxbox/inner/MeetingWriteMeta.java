@@ -30,6 +30,7 @@ public class MeetingWriteMeta extends FieldMetaBuilder<MeetingDTO> {
 			);
 		} else {
 			fields.setEnabled(
+					MeetingDTO_.meetingTime,
 					MeetingDTO_.agenda,
 					MeetingDTO_.startDateTime,
 					MeetingDTO_.endDateTime,
@@ -49,6 +50,7 @@ public class MeetingWriteMeta extends FieldMetaBuilder<MeetingDTO> {
 		}
 
 		fields.setRequired(
+				MeetingDTO_.meetingTime,
 				MeetingDTO_.agenda,
 				MeetingDTO_.startDateTime,
 				MeetingDTO_.endDateTime
@@ -71,6 +73,8 @@ public class MeetingWriteMeta extends FieldMetaBuilder<MeetingDTO> {
 
 	@Override
 	public void buildIndependentMeta(FieldsMeta<MeetingDTO> fields, InnerBcDescription bcDescription, Long parentId) {
+		fields.enableFilter(MeetingDTO_.meetingTime);
+		fields.enableSort(MeetingDTO_.meetingTime);
 		fields.enableFilter(MeetingDTO_.additionalContacts);
 		fields.enableFilter(MeetingDTO_.clientName);
 		fields.enableFilter(MeetingDTO_.region);

@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+  gap: 8px;
+}
+
+.transferButtons {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  :global {
+    .ant-btn-icon-only {
+      width: 16px;
+      height: 15px;
+      font-size: 8px;
+    }
+  }
+}
+
+.popupContainer {
+  z-index: 1100;
+}

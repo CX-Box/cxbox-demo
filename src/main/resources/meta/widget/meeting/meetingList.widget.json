@@ -26,6 +26,11 @@
       "type": "dateTime"
     },
     {
+      "title": "Meeting Time",
+      "key": "meetingTime",
+      "type": "time"
+    },
+    {
       "title": "Status",
       "key": "status",
       "type": "input"

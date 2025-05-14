@@ -40,6 +40,7 @@ public class MeetingReadMeta extends FieldMetaBuilder<MeetingDTO> {
 	public void buildIndependentMeta(FieldsMeta<MeetingDTO> fields, InnerBcDescription bcDescription,
 			Long parentId) {
 		fields.enableFilter(MeetingDTO_.id);
+		fields.enableFilter(MeetingDTO_.meetingTime);
 		fields.enableFilter(MeetingDTO_.agenda);
 		fields.enableFilter(MeetingDTO_.startDateTime);
 		fields.enableFilter(MeetingDTO_.status);

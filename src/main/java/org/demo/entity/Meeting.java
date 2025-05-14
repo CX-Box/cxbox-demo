@@ -1,31 +1,25 @@
 package org.demo.entity;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import java.time.LocalTime;
-import java.util.HashSet;
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import java.util.Set;
-import lombok.EqualsAndHashCode;
-import org.demo.entity.core.User;
-import org.demo.entity.dictionary.Regions;
-import org.demo.entity.enums.MeetingStatus;
-import org.cxbox.model.core.entity.BaseEntity;
-
-import java.time.LocalDateTime;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.cxbox.model.core.entity.BaseEntity;
+import org.demo.entity.core.User;
+import org.demo.entity.dictionary.Regions;
+import org.demo.entity.enums.MeetingStatus;
 
 @Entity
 @Table(name = "MEETING")

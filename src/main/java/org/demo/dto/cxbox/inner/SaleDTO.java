@@ -11,6 +11,7 @@ import org.cxbox.core.util.filter.provider.impl.DateTimeValueProvider;
 import org.cxbox.core.util.filter.provider.impl.DictionaryValueProvider;
 import org.cxbox.core.util.filter.provider.impl.EnumValueProvider;
 import org.cxbox.core.util.filter.provider.impl.EnumValueProvider.BaseEnum;
+import org.cxbox.core.util.filter.provider.impl.LongValueProvider;
 import org.cxbox.core.util.filter.provider.impl.MultiFieldValueProvider;
 import org.demo.entity.Sale;
 import org.demo.entity.dictionary.Product;
@@ -37,6 +38,7 @@ public class SaleDTO extends DataResponseDTO {
 	@SearchParameter(name = "client.fieldOfActivities", provider = MultiFieldValueProvider.class, multiFieldKey = EnumValueProvider.class)
 	private MultivalueField fieldOfActivity;
 
+	@SearchParameter(name = "sum", provider = LongValueProvider.class)
 	private Long sum;
 
 	private String color;

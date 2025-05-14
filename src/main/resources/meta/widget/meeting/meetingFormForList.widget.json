@@ -57,15 +57,11 @@
         {
           "cols": [
             {
-              "fieldKey": "meetingTime",
-              "span": 12
-            }
-          ]
-        },
-        {
-          "cols": [
-            {
               "fieldKey": "region",
+              "span": 12
+            },
+            {
+              "fieldKey": "meetingTime",
               "span": 12
             }
           ]

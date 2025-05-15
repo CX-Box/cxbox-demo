@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { DatePicker } from 'antd'
+import moment, { Moment } from 'moment'
+import { useTranslation } from 'react-i18next'
+import RangeTransferButtons from './components/RangeTransferButtons/RangeTransferButtons'
+import { isoLocalFormatter } from '@utils/date'
 import { DatePickerProps, SinglePickerProps } from 'antd/lib/date-picker/interface'
 import { DataValue } from '@cxbox-ui/schema'
-import moment, { Moment } from 'moment'
 import styles from './RangePicker.less'
-import { useTranslation } from 'react-i18next'
-import { isoLocalFormatter } from '@utils/date'
 
 interface RangePickerProps extends Omit<DatePickerProps, 'onChange' | 'value'> {
     onChange: (v: DataValue[]) => void
@@ -74,6 +75,9 @@ function RangePicker({ value, onChange, open, ...rest }: RangePickerProps) {
                 onOpenChange={handleStartOpenChange}
                 open={startOpen}
             />
+
+            <RangeTransferButtons startValue={isoLocalFormatter(startDate)} endValue={isoLocalFormatter(endDate)} onChange={onChange} />
+
             <DatePicker
                 {...rest}
                 data-test-filter-popup-end-value={true}

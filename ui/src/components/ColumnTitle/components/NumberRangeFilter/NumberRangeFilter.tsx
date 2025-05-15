@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button } from 'antd'
 import { NumberInput } from '@cxboxComponents'
-import { isEmptyValue } from './utils'
+import RangeTransferButtons from '../RangeTransferButtons/RangeTransferButtons'
+import { isEmptyValue } from '../utils'
 import { initialFilterValues } from './constants'
 import { DataValue } from '@cxbox-ui/schema'
 import { NumberInputProps } from '@cxboxComponents/ui/NumberInput/NumberInput'
@@ -71,11 +71,7 @@ export const NumberRangeFilter: React.FC<NumberRangeFilterProps> = ({ value, onC
                 forceFocus={true}
             />
 
-            <div className={styles.transferButtons}>
-                <Button disabled={isEmptyValue(localValues[0])} onClick={() => onChange([startValue, startValue])} icon="right" />
-
-                <Button disabled={isEmptyValue(localValues[1])} onClick={() => onChange([endValue, endValue])} icon="left" />
-            </div>
+            <RangeTransferButtons startValue={startValue} endValue={endValue} localValues={localValues} onChange={onChange} />
 
             <NumberInput
                 {...rest}

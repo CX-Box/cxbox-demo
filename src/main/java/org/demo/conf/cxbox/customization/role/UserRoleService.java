@@ -170,13 +170,14 @@ public class UserRoleService {
 			} else {
 				userRole.setActive(false);
 				userRole.setMain(false);
-				deleteUserRole(user, userRole.getInternalRoleCd());
+				deactivateUserRole(user, userRole.getInternalRoleCd());
 			}
 		}
 
 		List<String> userRoleKeyList = userRoleList.stream()
-				.map(userRole -> userRole.getInternalRoleCd())
-				.collect(Collectors.toList());
+				.filter(UserRole::getActive)
+				.map(UserRole::getInternalRoleCd)
+				.toList();
 
 		for (String userRoleKey : intUserRoleKeyList) {
 			if (!userRoleKeyList.contains(userRoleKey)) {
@@ -194,14 +195,15 @@ public class UserRoleService {
 		return activeUserRoleList;
 	}
 
-	private void deleteUserRole(User user, final String internalRoleCd) {
+	private void deactivateUserRole(User user, final String internalRoleCd) {
 		jpaDao.lockAndRefresh(user, LockOptions.WAIT_FOREVER);
 		UserRole userRole = jpaDao.getSingleResultOrNull(UserRole.class, (root, query, cb) -> cb.and(
 				cb.equal(root.get(UserRole_.user), user),
 				cb.equal(root.get(UserRole_.internalRoleCd), internalRoleCd)
 		));
 		if (userRole != null) {
-			jpaDao.delete(userRole);
+			userRole.setActive(false);
+			userRole.setMain(false);
 		}
 	}
 

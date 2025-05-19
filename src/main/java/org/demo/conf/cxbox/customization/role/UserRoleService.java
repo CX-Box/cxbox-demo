@@ -170,6 +170,7 @@ public class UserRoleService {
 			} else {
 				userRole.setActive(false);
 				userRole.setMain(false);
+				deleteUserRole(user, userRole.getInternalRoleCd());
 			}
 		}
 
@@ -190,8 +191,18 @@ public class UserRoleService {
 					.findFirst()
 					.ifPresent(userRole -> userRole.setMain(true));
 		}
-
 		return activeUserRoleList;
+	}
+
+	private void deleteUserRole(User user, final String internalRoleCd) {
+		jpaDao.lockAndRefresh(user, LockOptions.WAIT_FOREVER);
+		UserRole userRole = jpaDao.getSingleResultOrNull(UserRole.class, (root, query, cb) -> cb.and(
+				cb.equal(root.get(UserRole_.user), user),
+				cb.equal(root.get(UserRole_.internalRoleCd), internalRoleCd)
+		));
+		if (userRole != null) {
+			jpaDao.delete(userRole);
+		}
 	}
 
 	private UserRole createUserRole(User user, final String internalRoleCd) {

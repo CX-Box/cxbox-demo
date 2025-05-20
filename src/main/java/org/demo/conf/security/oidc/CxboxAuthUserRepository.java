@@ -43,7 +43,9 @@ public class CxboxAuthUserRepository {
 	private final UserService userService;
 
 	public User getUserIdOrElseCreate(String login, Set<String> roles) throws AuthenticationException {
-		return txService.invokeInNewTx(() -> upsertUserAndRoles(login, roles));
+		User user = txService.invokeInNewTx(() -> upsertUserAndRoles(login, roles));
+		SecurityContextHolder.getContext().setAuthentication(null);
+		return user;
 	}
 
 	//TODO>>taken "as is" from real project - refactor
@@ -62,8 +64,6 @@ public class CxboxAuthUserRepository {
 			if (!(currentRoles.containsAll(roles) && roles.containsAll(currentRoles))) {
 				authService.loginAs(authService.createAuthentication(VANILLA));
 				userRoleService.upsertUserRoles(user.getId(), new ArrayList<>(roles));
-				authService.loginAs(authService.createAuthentication(user.getLogin(),
-						user.getUserRoleList().stream().map(UserRole::getInternalRoleCd).collect(Collectors.toSet())));
 			}
 		} catch (Exception e) {
 			log.error(e.getLocalizedMessage(), e);
@@ -72,7 +72,7 @@ public class CxboxAuthUserRepository {
 		if (user == null) {
 			throw new UsernameNotFoundException(null);
 		}
-		SecurityContextHolder.getContext().setAuthentication(null);
+
 		return user;
 	}
 

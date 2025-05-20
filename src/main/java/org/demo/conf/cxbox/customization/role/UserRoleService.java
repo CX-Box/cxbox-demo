@@ -160,7 +160,7 @@ public class UserRoleService {
 	 * @param intUserRoleKeyList list of role codes from ESK
 	 * @return List
 	 */
-	private List<UserRole> updateUserRoles(User user, List<String> intUserRoleKeyList) {
+	public List<UserRole> updateUserRoles(User user, List<String> intUserRoleKeyList) {
 		List<UserRole> userRoleList = getListByUser(user);
 		List<UserRole> activeUserRoleList = new ArrayList<>();
 		for (UserRole userRole : userRoleList) {
@@ -217,7 +217,7 @@ public class UserRoleService {
 	 * @param user user
 	 * @return List
 	 */
-	private List<UserRole> getListByUser(User user) {
+	public List<UserRole> getListByUser(User user) {
 		return jpaDao.getList(
 				UserRole.class,
 				(root, query, cb) -> cb.equal(root.get(UserRole_.user).get(User_.ID), user.getId())

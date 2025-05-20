@@ -55,14 +55,15 @@ public class CxboxAuthUserRepository {
 				upsert(login);
 			}
 			user = userService.getUserByLogin(login.toUpperCase());
-			List<UserRole> userRoleList = userRoleService.getListByUser(user);
+			List<UserRole> userRoleList = user.getUserRoleList();
 			Set<String> currentRoles = userRoleList != null
 					? userRoleList.stream().map(UserRole::getInternalRoleCd).collect(Collectors.toSet())
 					: new HashSet<>();
 			if (!(currentRoles.containsAll(roles) && roles.containsAll(currentRoles))) {
 				authService.loginAs(authService.createAuthentication(VANILLA));
 				userRoleService.upsertUserRoles(user.getId(), new ArrayList<>(roles));
-				authService.loginAs(authService.createAuthentication(user.getLogin(),user.getUserRoleList().stream().map(UserRole::getInternalRoleCd).collect(Collectors.toSet())));
+				authService.loginAs(authService.createAuthentication(user.getLogin(),
+						user.getUserRoleList().stream().map(UserRole::getInternalRoleCd).collect(Collectors.toSet())));
 			}
 		} catch (Exception e) {
 			log.error(e.getLocalizedMessage(), e);

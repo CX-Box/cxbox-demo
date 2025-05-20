@@ -43,7 +43,7 @@ public class CxboxAuthUserRepository {
 	private final UserService userService;
 
 	public User getUserIdOrElseCreate(String login, Set<String> roles) throws AuthenticationException {
-		return upsertUserAndRoles(login, roles);
+		return txService.invokeInNewTx(() -> upsertUserAndRoles(login, roles));
 	}
 
 	//TODO>>taken "as is" from real project - refactor
@@ -61,13 +61,8 @@ public class CxboxAuthUserRepository {
 					: new HashSet<>();
 			if (!(currentRoles.containsAll(roles) && roles.containsAll(currentRoles))) {
 				authService.loginAs(authService.createAuthentication(VANILLA));
-				Long userId = user.getId();
-				txService.invokeInNewTx(() -> userRoleService.updateUserRoles(
-								jpaDao.findById(User.class, userId),
-								new ArrayList<>(roles)
-						)
-				);
-				jpaDao.refresh(user);
+				userRoleService.upsertUserRoles(user.getId(), new ArrayList<>(roles));
+				authService.loginAs(authService.createAuthentication(user.getLogin(),user.getUserRoleList().stream().map(UserRole::getInternalRoleCd).collect(Collectors.toSet())));
 			}
 		} catch (Exception e) {
 			log.error(e.getLocalizedMessage(), e);

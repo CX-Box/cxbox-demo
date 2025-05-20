@@ -140,7 +140,7 @@ public class UserRoleService {
 	 * @param mainUserRole main role
 	 */
 	public void updateMainUserRole(User user, String mainUserRole) {
-		List<UserRole> userRoleList = getListByUser(user);
+		List<UserRole> userRoleList = user.getUserRoleList();
 		if (userRoleList != null && mainUserRole != null) {
 			userRoleList.stream()
 					.filter(UserRole::getMain)
@@ -160,7 +160,7 @@ public class UserRoleService {
 	 * @param intUserRoleKeyList list of role codes from ESK
 	 * @return List
 	 */
-	private List<UserRole> updateUserRoles(User user, List<String> intUserRoleKeyList) {
+	public List<UserRole> updateUserRoles(User user, List<String> intUserRoleKeyList) {
 		List<UserRole> userRoleList = getListByUser(user);
 		List<UserRole> activeUserRoleList = new ArrayList<>();
 		for (UserRole userRole : userRoleList) {
@@ -170,7 +170,6 @@ public class UserRoleService {
 			} else {
 				userRole.setActive(false);
 				userRole.setMain(false);
-				deactivateUserRole(user, userRole.getInternalRoleCd());
 			}
 		}
 
@@ -193,18 +192,6 @@ public class UserRoleService {
 					.ifPresent(userRole -> userRole.setMain(true));
 		}
 		return activeUserRoleList;
-	}
-
-	private void deactivateUserRole(User user, final String internalRoleCd) {
-		jpaDao.lockAndRefresh(user, LockOptions.WAIT_FOREVER);
-		UserRole userRole = jpaDao.getSingleResultOrNull(UserRole.class, (root, query, cb) -> cb.and(
-				cb.equal(root.get(UserRole_.user), user),
-				cb.equal(root.get(UserRole_.internalRoleCd), internalRoleCd)
-		));
-		if (userRole != null) {
-			userRole.setActive(false);
-			userRole.setMain(false);
-		}
 	}
 
 	private UserRole createUserRole(User user, final String internalRoleCd) {
@@ -230,7 +217,7 @@ public class UserRoleService {
 	 * @param user user
 	 * @return List
 	 */
-	private List<UserRole> getListByUser(User user) {
+	public List<UserRole> getListByUser(User user) {
 		return jpaDao.getList(
 				UserRole.class,
 				(root, query, cb) -> cb.equal(root.get(UserRole_.user).get(User_.ID), user.getId())

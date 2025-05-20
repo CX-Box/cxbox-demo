@@ -43,25 +43,31 @@ public class CxboxAuthUserRepository {
 	private final UserService userService;
 
 	public User getUserIdOrElseCreate(String login, Set<String> roles) throws AuthenticationException {
-		return txService.invokeInNewTx(() -> upsertUserAndRoles(login, roles));
+		return upsertUserAndRoles(login, roles);
 	}
 
 	//TODO>>taken "as is" from real project - refactor
 	private User upsertUserAndRoles(String login, Set<String> roles) {
 		User user = null;
+		List<UserRole> userRoleList = new ArrayList<>();
 		try {
 			user = userService.getUserByLogin(login.toUpperCase());
 			if (user == null) {
 				upsert(login);
 			}
 			user = userService.getUserByLogin(login.toUpperCase());
-			List<UserRole> userRoleList = user.getUserRoleList();
+			userRoleList = userRoleService.getListByUser(user);
 			Set<String> currentRoles = userRoleList != null
 					? userRoleList.stream().map(UserRole::getInternalRoleCd).collect(Collectors.toSet())
 					: new HashSet<>();
 			if (!(currentRoles.containsAll(roles) && roles.containsAll(currentRoles))) {
 				authService.loginAs(authService.createAuthentication(VANILLA));
-				userRoleService.upsertUserRoles(user.getId(), new ArrayList<>(roles));
+				Long userId = user.getId();
+				txService.invokeInNewTx(() -> userRoleService.updateUserRoles(
+								jpaDao.findById(User.class, userId),
+								new ArrayList<>(roles)
+						)
+				);
 			}
 		} catch (Exception e) {
 			log.error(e.getLocalizedMessage(), e);
@@ -71,6 +77,7 @@ public class CxboxAuthUserRepository {
 			throw new UsernameNotFoundException(null);
 		}
 		SecurityContextHolder.getContext().setAuthentication(null);
+		user.setUserRoleList(userRoleList);
 		return user;
 	}
 

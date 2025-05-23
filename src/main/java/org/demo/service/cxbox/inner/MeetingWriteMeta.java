@@ -30,7 +30,6 @@ public class MeetingWriteMeta extends FieldMetaBuilder<MeetingDTO> {
 			);
 		} else {
 			fields.setEnabled(
-					MeetingDTO_.meetingTime,
 					MeetingDTO_.agenda,
 					MeetingDTO_.startDateTime,
 					MeetingDTO_.endDateTime,
@@ -50,7 +49,6 @@ public class MeetingWriteMeta extends FieldMetaBuilder<MeetingDTO> {
 		}
 
 		fields.setRequired(
-				MeetingDTO_.meetingTime,
 				MeetingDTO_.agenda,
 				MeetingDTO_.startDateTime,
 				MeetingDTO_.endDateTime

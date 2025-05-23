@@ -101,7 +101,7 @@ public class MeetingDTO extends DataResponseDTO {
 		this.clientId = ofNullable(meeting.getClient()).map(BaseEntity::getId).orElse(null);
 		this.contactId = ofNullable(meeting.getContact()).map(BaseEntity::getId).orElse(null);
 		this.contactName = ofNullable(meeting.getContact()).map(Contact::getFullName).orElse(null);
-		this.meetingTime = meeting.getMeetingTime();
+		this.meetingTime = meeting.getStartDateTime();
 
 		this.additionalContacts = meeting.getAdditionalContacts().stream().collect(MultivalueExt.toMultivalueField(
 				e -> String.valueOf(e.getId()),

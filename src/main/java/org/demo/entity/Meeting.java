@@ -42,8 +42,6 @@ public class Meeting extends BaseEntity {
 
 	private String address;
 
-	private LocalDateTime meetingTime;
-
 	private String notes;
 
 	private String result;

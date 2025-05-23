@@ -28,7 +28,8 @@
     {
       "title": "Meeting Time",
       "key": "meetingTime",
-      "type": "time"
+      "type": "time",
+      "format": "HH:mm"
     },
     {
       "title": "Status",

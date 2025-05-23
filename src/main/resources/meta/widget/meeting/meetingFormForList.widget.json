@@ -20,11 +20,6 @@
       "type": "dateTime"
     },
     {
-      "label": "MeetingT ime",
-      "key": "meetingTime",
-      "type": "time"
-    },
-    {
       "label": "Client Name",
       "key": "clientName",
       "type": "pickList",
@@ -58,10 +53,6 @@
           "cols": [
             {
               "fieldKey": "region",
-              "span": 12
-            },
-            {
-              "fieldKey": "meetingTime",
               "span": 12
             }
           ]

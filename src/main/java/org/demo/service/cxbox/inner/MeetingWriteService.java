@@ -5,7 +5,6 @@ import static org.demo.dto.cxbox.inner.MeetingDTO_.agenda;
 import static org.demo.dto.cxbox.inner.MeetingDTO_.clientId;
 import static org.demo.dto.cxbox.inner.MeetingDTO_.contactId;
 import static org.demo.dto.cxbox.inner.MeetingDTO_.endDateTime;
-import static org.demo.dto.cxbox.inner.MeetingDTO_.meetingTime;
 import static org.demo.dto.cxbox.inner.MeetingDTO_.notes;
 import static org.demo.dto.cxbox.inner.MeetingDTO_.region;
 import static org.demo.dto.cxbox.inner.MeetingDTO_.responsibleId;
@@ -103,7 +102,6 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 		setIfChanged(data, address, entity::setAddress);
 		setIfChanged(data, notes, entity::setNotes);
 		setIfChanged(data, result, entity::setResult);
-		setIfChanged(data, meetingTime, entity::setMeetingTime);
 		setMappedIfChanged(
 				data, responsibleId, entity::setResponsible,
 				id -> id != null ? userRepository.getReferenceById(id) : null

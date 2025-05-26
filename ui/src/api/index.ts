@@ -11,8 +11,13 @@ import { TableSettingsItem } from '@interfaces/tableSettings'
 import { FilterGroup } from '@interfaces/filters'
 import { saveAs } from 'file-saver'
 import { getFileNameFromDisposition } from '@utils/getFileNameFromDisposition'
+import { Observable } from 'rxjs'
 
 class Api extends CXBoxApi {
+    loginByRoleRequest(role: string) {
+        return super.loginByRoleRequest(role) as Observable<LoginResponse>
+    }
+
     fetchBcCount(screenName: string, bcName: string, params: BcCountParamsMap = {}) {
         const url = utils.buildUrl`count/${screenName}/` + bcName
         const stringParams = new URLSearchParams()

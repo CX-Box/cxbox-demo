@@ -3,7 +3,7 @@ import { Input, Input as InputRef } from 'antd'
 import { fractionsRound, NumberInputFormat, NumberTypes } from '@cxboxComponents/ui/NumberInput/formaters'
 import { InputProps } from 'antd/es/input'
 import { BaseFieldProps } from '@components/Field/Field'
-import ReadOnlyField from '@cxboxComponents/ui/ReadOnlyField/ReadOnlyField'
+import ReadOnlyField from '@components/ui/ReadOnlyField/ReadOnlyField'
 
 export interface NumberInputProps extends BaseFieldProps {
     onChange?: (value: number) => void

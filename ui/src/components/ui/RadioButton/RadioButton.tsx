@@ -2,7 +2,7 @@ import React from 'react'
 import { Radio } from 'antd'
 import { RadioChangeEvent } from 'antd/es/radio'
 import { BaseFieldProps } from '@components/Field/Field'
-import ReadOnlyField from '@cxboxComponents/ui/ReadOnlyField/ReadOnlyField'
+import ReadOnlyField from '@components/ui/ReadOnlyField/ReadOnlyField'
 import { getIconByParams } from '@components/ui/Dictionary/Dictionary'
 
 export interface RadioButtonProps extends BaseFieldProps {

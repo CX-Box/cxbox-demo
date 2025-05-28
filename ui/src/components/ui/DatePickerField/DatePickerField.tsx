@@ -4,7 +4,7 @@ import { DatePicker } from 'antd'
 import styles from './DatePickerField.less'
 import cn from 'classnames'
 import { BaseFieldProps } from '@components/Field/Field'
-import ReadOnlyField from '@cxboxComponents/ui/ReadOnlyField/ReadOnlyField'
+import ReadOnlyField from '@components/ui/ReadOnlyField/ReadOnlyField'
 import { DatePickerProps } from 'antd/lib/date-picker/interface'
 
 export interface IDatePickerFieldProps extends BaseFieldProps {

@@ -3,7 +3,7 @@ import { Input, Popover, Button, Input as InputRef } from 'antd'
 import AntdTextArea, { TextAreaProps as AntdTextAreaProps } from 'antd/lib/input/TextArea'
 import styles from './TextArea.less'
 import { BaseFieldProps } from '@components/Field/Field'
-import ReadOnlyField from '@cxboxComponents/ui/ReadOnlyField/ReadOnlyField'
+import ReadOnlyField from '@components/ui/ReadOnlyField/ReadOnlyField'
 
 type AdditionalAntdTextAreaProps = Partial<Omit<AntdTextAreaProps, 'onChange'>>
 

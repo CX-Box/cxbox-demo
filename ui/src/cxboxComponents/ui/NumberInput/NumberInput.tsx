@@ -2,7 +2,7 @@ import React, { RefAttributes } from 'react'
 import { Input, Input as InputRef } from 'antd'
 import { fractionsRound, NumberInputFormat, NumberTypes } from '@cxboxComponents/ui/NumberInput/formaters'
 import { InputProps } from 'antd/es/input'
-import { BaseFieldProps } from '@cxboxComponents/Field/Field'
+import { BaseFieldProps } from '@components/Field/Field'
 import ReadOnlyField from '@cxboxComponents/ui/ReadOnlyField/ReadOnlyField'
 
 export interface NumberInputProps extends BaseFieldProps {

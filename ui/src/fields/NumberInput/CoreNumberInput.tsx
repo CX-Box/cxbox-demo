@@ -3,7 +3,7 @@ import { Input } from 'antd'
 import { InputProps } from 'antd/es/input'
 import { fractionsRound, NumberInputFormat, NumberTypes } from './formaters'
 import ReadOnlyField from '../../components/ui/ReadOnlyField/ReadOnlyField'
-import { BaseFieldProps } from '@cxboxComponents/Field/Field'
+import { BaseFieldProps } from '@components/Field/Field'
 import styles from './CoreNumberInput.less'
 
 export interface CoreNumberInputProps extends BaseFieldProps {

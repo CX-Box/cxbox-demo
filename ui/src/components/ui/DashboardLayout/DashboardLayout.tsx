@@ -3,7 +3,7 @@ import { Row, Col } from 'antd'
 import { AppWidgetMeta, CustomWidgetTypes } from '@interfaces/widget'
 import { createSkipWidgetList } from '@utils/createSkipWidgetList'
 import { interfaces } from '@cxbox-ui/core'
-import Widget from '@cxboxComponents/Widget/Widget'
+import Widget from '@components/Widget/Widget'
 import styles from './DashboardLayout.less'
 
 export interface DashboardLayoutProps {

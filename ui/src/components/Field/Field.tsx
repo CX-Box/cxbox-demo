@@ -12,7 +12,7 @@ import readOnlyFieldStyles from '@components/ui/ReadOnlyField/ReadOnlyField.less
 import CheckboxPicker from '@components/ui/CheckboxPicker/CheckboxPicker'
 import RadioButton from '@components/ui/RadioButton/RadioButton'
 import styles from './Field.less'
-import { CustomizationContext } from '@cxboxComponents/View/View'
+import { CustomizationContext } from '@components/View/SimpleView'
 import InteractiveInput from '@components/ui/InteractiveInput/InteractiveInput'
 import HistoryField from '@components/ui/HistoryField/HistoryField'
 import DrillDown from '@components/ui/DrillDown/DrillDown'

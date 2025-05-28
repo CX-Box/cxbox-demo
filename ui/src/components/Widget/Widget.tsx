@@ -2,25 +2,26 @@ import React, { FunctionComponent } from 'react'
 import { connect } from 'react-redux'
 import { Skeleton, Spin } from 'antd'
 import { useWidgetCollapse } from '@hooks/useWidgetCollapse'
-import { interfaces, utils } from '@cxbox-ui/core'
+import { CustomWidgetDescriptor, isCustomWidget, PopupWidgetTypes, utils, WidgetMeta, WidgetMetaAny } from '@cxbox-ui/core'
 import { RootState } from '@store'
 import { WidgetShowCondition } from '@cxbox-ui/schema'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import { ScreenState } from '../../reducers/screen'
 import styles from './Widget.less'
+import DebugWidgetWrapper from '@components/DebugWidgetWrapper/DebugWidgetWrapper'
 
 interface WidgetOwnProps {
-    meta: interfaces.WidgetMeta | interfaces.WidgetMetaAny
+    meta: WidgetMeta | WidgetMetaAny
     card?: (props: any) => React.ReactElement<any>
     customSpinner?: (props: any) => React.ReactElement<any>
     children?: React.ReactNode
 }
 
 interface WidgetProps extends WidgetOwnProps {
-    debugMode?: boolean
+    debugMode: boolean
     loading?: boolean
     parentCursor?: string
-    customWidgets?: Record<string, interfaces.CustomWidgetDescriptor>
+    customWidgets?: Record<string, CustomWidgetDescriptor>
     showWidget: boolean
     rowMetaExists: boolean
     dataExists: boolean
@@ -38,12 +39,12 @@ export const Widget: FunctionComponent<WidgetProps> = props => {
     const { isMainWidget, isCollapsed } = useWidgetCollapse(props.meta.name)
 
     if (!props.showWidget || (!isMainWidget && isCollapsed)) {
-        return null
+        return <DebugWidgetWrapper meta={props.meta} />
     }
 
     const customWidget = props.customWidgets?.[props.meta.type]
-
-    const skipCardWrapping = interfaces.PopupWidgetTypes.includes(props.meta.type)
+    // TODO We need to remove PopupWidgetTypes from the core and replace imports throughout the entire project
+    const skipCardWrapping = PopupWidgetTypes.includes(props.meta.type)
 
     const widgetHasBc = props.meta.bcName !== null && props.meta.bcName !== ''
 
@@ -51,15 +52,17 @@ export const Widget: FunctionComponent<WidgetProps> = props => {
 
     if (skipCardWrapping) {
         return (
-            <div
-                data-test="WIDGET"
-                data-test-widget-type={props.meta.type}
-                data-test-widget-position={props.meta.position}
-                data-test-widget-title={props.meta.title}
-                data-test-widget-name={props.meta.name}
-            >
-                {widgetElement}
-            </div>
+            <DebugWidgetWrapper meta={props.meta}>
+                <div
+                    data-test="WIDGET"
+                    data-test-widget-type={props.meta.type}
+                    data-test-widget-position={props.meta.position}
+                    data-test-widget-title={props.meta.title}
+                    data-test-widget-name={props.meta.name}
+                >
+                    {widgetElement}
+                </div>
+            </DebugWidgetWrapper>
         )
     }
 
@@ -84,43 +87,56 @@ export const Widget: FunctionComponent<WidgetProps> = props => {
         </>
     )
 
-    if (customWidget && !interfaces.isCustomWidget(customWidget)) {
+    if (customWidget && !isCustomWidget(customWidget)) {
         if (customWidget.card === null) {
             return (
-                <div
-                    data-test="WIDGET"
-                    data-test-widget-type={props.meta.type}
-                    data-test-widget-position={props.meta.position}
-                    data-test-widget-title={props.meta.title}
-                    data-test-widget-name={props.meta.name}
-                >
-                    {WidgetParts}
-                </div>
+                <DebugWidgetWrapper meta={props.meta}>
+                    <div
+                        data-test="WIDGET"
+                        data-test-widget-type={props.meta.type}
+                        data-test-widget-position={props.meta.position}
+                        data-test-widget-title={props.meta.title}
+                        data-test-widget-name={props.meta.name}
+                    >
+                        {WidgetParts}
+                    </div>
+                </DebugWidgetWrapper>
             )
         }
 
         if (customWidget.card) {
             const CustomCard = customWidget.card
-            return <CustomCard meta={props.meta}>{WidgetParts}</CustomCard>
+            return (
+                <DebugWidgetWrapper meta={props.meta}>
+                    <CustomCard meta={props.meta}>{WidgetParts}</CustomCard>
+                </DebugWidgetWrapper>
+            )
         }
     }
 
     if (props.card) {
         const Card = props.card
-        return <Card meta={props.meta}>{WidgetParts}</Card>
+        return (
+            <DebugWidgetWrapper meta={props.meta}>
+                <Card meta={props.meta}>{WidgetParts}</Card>
+            </DebugWidgetWrapper>
+        )
     }
+
     return (
-        <div
-            className={styles.container}
-            data-test="WIDGET"
-            data-test-widget-type={props.meta.type}
-            data-test-widget-position={props.meta.position}
-            data-test-widget-title={props.meta.title}
-            data-test-widget-name={props.meta.name}
-        >
-            <h2 className={styles.title}>{props.meta.title}</h2>
-            {WidgetParts}
-        </div>
+        <DebugWidgetWrapper meta={props.meta}>
+            <div
+                className={styles.container}
+                data-test="WIDGET"
+                data-test-widget-type={props.meta.type}
+                data-test-widget-position={props.meta.position}
+                data-test-widget-title={props.meta.title}
+                data-test-widget-name={props.meta.name}
+            >
+                <h2 className={styles.title}>{props.meta.title}</h2>
+                {WidgetParts}
+            </div>
+        </DebugWidgetWrapper>
     )
 }
 
@@ -136,21 +152,21 @@ export const Widget: FunctionComponent<WidgetProps> = props => {
  * @param children Widgets children component, returned in case type is unknown
  */
 function chooseWidgetType(
-    widgetMeta: interfaces.WidgetMeta | interfaces.WidgetMetaAny,
-    customWidgets?: Record<string, interfaces.CustomWidgetDescriptor>,
+    widgetMeta: WidgetMeta | WidgetMetaAny,
+    customWidgets?: Record<string, CustomWidgetDescriptor>,
     children?: React.ReactNode
 ) {
     const customWidget = customWidgets?.[widgetMeta.type]
 
     if (customWidget) {
-        if (interfaces.isCustomWidget(customWidget)) {
+        if (isCustomWidget(customWidget)) {
             const CustomWidgetComponent = customWidget
             return <CustomWidgetComponent meta={widgetMeta} />
         }
         const DescriptorComponent = customWidget.component
         return <DescriptorComponent meta={widgetMeta} />
     }
-    const knownWidgetMeta = widgetMeta as interfaces.WidgetMetaAny
+    const knownWidgetMeta = widgetMeta as WidgetMetaAny
 
     switch (knownWidgetMeta.type) {
         default:
@@ -165,7 +181,7 @@ function mapStateToProps(state: RootState, ownProps: WidgetOwnProps) {
     const hasParent = !!parent
     const legacyPopupCheck = state.view.popupData?.bcName === bcName
     const newPopupCheck = state.view.popupData?.widgetName ? state.view.popupData.widgetName === ownProps.meta.name : legacyPopupCheck
-    let showWidget = interfaces.PopupWidgetTypes.includes(ownProps.meta.type) ? newPopupCheck : true
+    let showWidget = PopupWidgetTypes.includes(ownProps.meta.type) ? newPopupCheck : true
     if (
         !utils.checkShowCondition(
             ownProps.meta.showCondition as WidgetShowCondition,
@@ -180,7 +196,7 @@ function mapStateToProps(state: RootState, ownProps: WidgetOwnProps) {
     const bcUrl = buildBcUrl(bcName, true)
     const rowMeta = bcUrl && state.view.rowMeta[bcName]?.[bcUrl]
     return {
-        debugMode: state.session.debugMode,
+        debugMode: state.session.debugMode || false,
         loading: bc?.loading,
         parentCursor: hasParent && (parent.cursor as string),
         showWidget,

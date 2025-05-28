@@ -19,5 +19,4 @@ const ViewInfoLabel: React.FunctionComponent = () => {
     )
 }
 
-const MemoizedViewInfoLabel = React.memo(ViewInfoLabel)
-export default MemoizedViewInfoLabel
+export default React.memo(ViewInfoLabel)

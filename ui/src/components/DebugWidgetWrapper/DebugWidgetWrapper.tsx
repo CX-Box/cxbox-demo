@@ -1,16 +1,16 @@
 import React, { FC } from 'react'
 import DebugPanel from '../DebugPanel/DebugPanel'
 import styles from './DebugWidgetWrapper.less'
-import { interfaces } from '@cxbox-ui/core'
+import { WidgetMeta, WidgetMetaAny } from '@cxbox-ui/core'
+import { useAppSelector } from '@store'
 
 interface Props {
     children?: React.ReactNode
-    debugMode: boolean
-    meta: interfaces.WidgetMeta | interfaces.WidgetMetaAny
+    meta: WidgetMeta | WidgetMetaAny
 }
 
-const DebugWidgetWrapper: FC<Props> = props => {
-    const { children, debugMode, meta } = props
+const DebugWidgetWrapper: FC<Props> = ({ children, meta }) => {
+    const debugMode = useAppSelector(state => state.session.debugMode || false)
 
     return debugMode ? (
         <div className={styles.debugWidgetWrapper}>

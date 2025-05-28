@@ -1,7 +1,7 @@
 import React from 'react'
 import { Radio } from 'antd'
 import { RadioChangeEvent } from 'antd/es/radio'
-import { BaseFieldProps } from '@cxboxComponents/Field/Field'
+import { BaseFieldProps } from '@components/Field/Field'
 import ReadOnlyField from '@cxboxComponents/ui/ReadOnlyField/ReadOnlyField'
 import { getIconByParams } from '@cxboxComponents/ui/Dictionary/Dictionary'
 

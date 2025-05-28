@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useRef } from 'react'
 import { Icon, Select as AntdSelect, Tooltip } from 'antd'
-import { BaseFieldProps } from '@cxboxComponents/Field/Field'
+import { BaseFieldProps } from '@components/Field/Field'
 import Select, { SelectProps } from '@cxboxComponents/ui/Select/Select'
 import ReadOnlyField from '@cxboxComponents/ui/ReadOnlyField/ReadOnlyField'
 import useFixSelectDropdownForTableScroll from '@hooks/useFixSelectDropdownForTableScroll'

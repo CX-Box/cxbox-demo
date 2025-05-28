@@ -6,7 +6,7 @@ import { RootState, useAppSelector } from '@store'
 import { actions, DataItem, interfaces } from '@cxbox-ui/core'
 import MultivalueTag from './MultivalueTag'
 import MultivalueHover from '@cxboxComponents/ui/Multivalue/MultivalueHover'
-import { BaseFieldProps } from '@cxboxComponents/Field/Field'
+import { BaseFieldProps } from '@components/Field/Field'
 
 export interface MultivalueFieldOwnProps extends BaseFieldProps {
     disabled?: boolean

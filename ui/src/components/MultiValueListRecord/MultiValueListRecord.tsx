@@ -73,9 +73,4 @@ function mapDispatchToProps(dispatch: Dispatch) {
     }
 }
 
-/**
- * @category Components
- */
-const ConnectedMultiValueListRecord = connect(null, mapDispatchToProps)(MultiValueListRecord)
-
-export default ConnectedMultiValueListRecord
+export default connect(null, mapDispatchToProps)(MultiValueListRecord)

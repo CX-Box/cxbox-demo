@@ -58,9 +58,5 @@ const Multivalue: React.FunctionComponent<MultivalueHoverProps> = props => {
         </Popover>
     )
 }
-/**
- * @category Components
- */
-const MemoizedMultivalue = React.memo(Multivalue)
 
-export default MemoizedMultivalue
+export default React.memo(Multivalue)

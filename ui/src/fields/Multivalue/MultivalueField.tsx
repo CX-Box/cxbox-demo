@@ -5,7 +5,7 @@ import { DataValue, WidgetTypes } from '@cxbox-ui/schema'
 import { RootState, useAppSelector } from '@store'
 import { actions, DataItem, interfaces } from '@cxbox-ui/core'
 import MultivalueTag from './MultivalueTag'
-import MultivalueHover from '@cxboxComponents/ui/Multivalue/MultivalueHover'
+import MultivalueHover from '@components/ui/Multivalue/MultivalueHover'
 import { BaseFieldProps } from '@components/Field/Field'
 
 export interface MultivalueFieldOwnProps extends BaseFieldProps {

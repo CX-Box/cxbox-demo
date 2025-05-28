@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { Popover } from 'antd'
-import ActionLink from '@cxboxComponents/ui/ActionLink/ActionLink'
+import ActionLink from '@components/ui/ActionLink/ActionLink'
 import DrillDownTools from './components/DrillDownTools/DrillDownTools'
 import { useAppSelector } from '@store'
 import getFullUrl from '@utils/getFullUrl'

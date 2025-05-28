@@ -1,7 +1,6 @@
 /**
  * @category Components
  */
-export { default as ActionLink } from '@cxboxComponents/ui/ActionLink/ActionLink'
 export { default as NumberInput } from '@cxboxComponents/ui/NumberInput/NumberInput'
 export { default as Dictionary } from '@cxboxComponents/ui/Dictionary/Dictionary'
 export { default as MultiValueListRecord } from '@cxboxComponents/MultiValueListRecord/MultiValueListRecord'

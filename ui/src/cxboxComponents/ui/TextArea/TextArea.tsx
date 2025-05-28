@@ -140,9 +140,4 @@ export const TextArea: React.FunctionComponent<TextAreaProps> = ({
     }
 }
 
-/**
- * @category Components
- */
-const MemoizedTextArea = React.memo(TextArea)
-
-export default MemoizedTextArea
+export default React.memo(TextArea)

@@ -22,9 +22,4 @@ const RefreshMetaButton: React.FunctionComponent<RefreshMetaButtonProps> = props
     )
 }
 
-/**
- * @category Components
- */
-export const MemoizedRefreshMetaButton = React.memo(RefreshMetaButton)
-
-export default MemoizedRefreshMetaButton
+export default React.memo(RefreshMetaButton)

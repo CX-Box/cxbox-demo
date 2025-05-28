@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './MultivalueList.less'
 import cn from 'classnames'
-import MultiValueListRecord from '@cxboxComponents/Multivalue/MultiValueListRecord'
+import MultiValueListRecord from '@cxboxComponents/MultiValueListRecord/MultiValueListRecord'
 import { interfaces } from '@cxbox-ui/core'
 
 export interface MultivalueListProps {

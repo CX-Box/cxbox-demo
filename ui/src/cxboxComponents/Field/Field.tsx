@@ -3,15 +3,9 @@ import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { Icon, Input } from 'antd'
 import DatePickerField from '@cxboxComponents/ui/DatePickerField/DatePickerField'
-import NumberInput from '@cxboxComponents/ui/NumberInput/NumberInput'
-import { NumberTypes } from '@cxboxComponents/ui/NumberInput/formaters'
 import TextArea from '@cxboxComponents/ui/TextArea/TextArea'
-import Dictionary from '@cxboxComponents/ui/Dictionary/Dictionary'
-import MultivalueField from '@cxboxComponents/Multivalue/MultivalueField'
 import MultiField from '@cxboxComponents/ui/MultiField/MultiField'
 import ReadOnlyField from '@cxboxComponents/ui/ReadOnlyField/ReadOnlyField'
-import PickListField from '@cxboxComponents/PickListField/PickListField'
-import InlinePickList from '@cxboxComponents/InlinePickList/InlinePickList'
 import MultivalueHover from '@cxboxComponents/ui/Multivalue/MultivalueHover'
 import cn from 'classnames'
 import readOnlyFieldStyles from '@cxboxComponents/ui/ReadOnlyField/ReadOnlyField.less'
@@ -233,57 +227,6 @@ export const Field: FunctionComponent<FieldProps> = ({
                 />
             )
             break
-        case FieldType.number:
-            standardField = (
-                <NumberInput
-                    {...commonProps}
-                    value={value as number}
-                    type={NumberTypes.number}
-                    digits={widgetFieldMeta.digits}
-                    nullable={widgetFieldMeta.nullable}
-                    onChange={handleChange}
-                    forceFocus={forceFocus}
-                />
-            )
-            break
-        case FieldType.money:
-            standardField = (
-                <NumberInput
-                    {...commonProps}
-                    value={value as number}
-                    type={NumberTypes.money}
-                    digits={widgetFieldMeta.digits}
-                    nullable={widgetFieldMeta.nullable}
-                    onChange={handleChange}
-                    forceFocus={forceFocus}
-                />
-            )
-            break
-        case FieldType.percent:
-            standardField = (
-                <NumberInput
-                    {...commonProps}
-                    value={value as number}
-                    type={NumberTypes.percent}
-                    digits={widgetFieldMeta.digits}
-                    nullable={widgetFieldMeta.nullable}
-                    onChange={handleChange}
-                    forceFocus={forceFocus}
-                />
-            )
-            break
-        case FieldType.dictionary:
-            standardField = (
-                <Dictionary
-                    {...commonProps}
-                    value={value as any}
-                    values={rowFieldMeta ? (rowFieldMeta.values as Array<{ value: string; icon?: string }>) : []}
-                    fieldName={widgetFieldMeta.key}
-                    onChange={handleChange}
-                    multiple={widgetFieldMeta.multiple}
-                />
-            )
-            break
         case FieldType.text:
             standardField = (
                 <TextArea
@@ -308,61 +251,6 @@ export const Field: FunctionComponent<FieldProps> = ({
                 />
             )
             break
-        case FieldType.multivalue:
-            standardField = (
-                <MultivalueField
-                    {...commonProps}
-                    widgetName={widgetName}
-                    defaultValue={
-                        Array.isArray(value) && value.length > 0 ? (value as interfaces.MultivalueSingleValue[]) : emptyMultivalue
-                    }
-                    widgetFieldMeta={widgetFieldMeta}
-                    bcName={bcName}
-                />
-            )
-            break
-        case FieldType.pickList: {
-            const pickListField = (
-                <PickListField
-                    {...commonProps}
-                    parentBCName={bcName}
-                    bcName={widgetFieldMeta.popupBcName}
-                    cursor={cursor}
-                    value={value as any}
-                    pickMap={widgetFieldMeta.pickMap}
-                />
-            )
-            standardField = readOnly ? (
-                pickListField
-            ) : (
-                <InteractiveInput suffix={handleDrilldown && <Icon type="link" />} onSuffixClick={handleDrilldown}>
-                    {pickListField}
-                </InteractiveInput>
-            )
-            break
-        }
-        case FieldType.inlinePickList: {
-            const pickListField = (
-                <InlinePickList
-                    {...commonProps}
-                    fieldName={widgetFieldMeta.key}
-                    searchSpec={widgetFieldMeta.searchSpec}
-                    bcName={bcName}
-                    popupBcName={widgetFieldMeta.popupBcName}
-                    cursor={cursor}
-                    value={value as string}
-                    pickMap={widgetFieldMeta.pickMap}
-                />
-            )
-            standardField = readOnly ? (
-                pickListField
-            ) : (
-                <InteractiveInput suffix={handleDrilldown && <Icon type="link" />} onSuffixClick={handleDrilldown}>
-                    {pickListField}
-                </InteractiveInput>
-            )
-            break
-        }
         case FieldType.checkbox:
             standardField = (
                 <CheckboxPicker

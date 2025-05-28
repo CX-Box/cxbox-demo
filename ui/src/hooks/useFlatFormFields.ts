@@ -1,7 +1,5 @@
 import React from 'react'
-import { interfaces } from '@cxbox-ui/core'
-
-const { isWidgetFieldBlock } = interfaces
+import { isWidgetFieldBlock, WidgetFieldsOrBlocks } from '@cxbox-ui/core'
 /**
  * Receive flat list of fields from array containing fields or field blocks.
  *
@@ -9,7 +7,7 @@ const { isWidgetFieldBlock } = interfaces
  * @param fields Array of fields or field blocks
  * @category Hooks
  */
-export function useFlatFormFields<T>(fields: interfaces.WidgetFieldsOrBlocks<T>) {
+export function useFlatFormFields<T>(fields: WidgetFieldsOrBlocks<T>) {
     return React.useMemo(() => {
         const flatFields: T[] = []
 

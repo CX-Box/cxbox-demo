@@ -23,9 +23,4 @@ const DebugModeButton: React.FunctionComponent<DebugModeButtonProps> = props => 
     )
 }
 
-/**
- * @category Components
- */
-const MemoizedDebugModeButton = React.memo(DebugModeButton)
-
-export default MemoizedDebugModeButton
+export default React.memo(DebugModeButton)

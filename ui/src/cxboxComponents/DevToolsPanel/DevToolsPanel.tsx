@@ -26,9 +26,5 @@ const DevToolsPanel: React.FunctionComponent<DevToolsPanelProps> = ({ children, 
         </div>
     )
 }
-/**
- * @category Components
- */
-export const MemoizedDevToolsPanel = React.memo(DevToolsPanel)
 
-export default MemoizedDevToolsPanel
+export default React.memo(DevToolsPanel)

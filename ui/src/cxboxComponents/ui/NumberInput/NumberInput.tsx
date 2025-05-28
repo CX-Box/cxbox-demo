@@ -193,9 +193,4 @@ function getUnformatedValueSelection(formatedValue: string, start: number, end: 
     return [unformatValue(selectionStartStart).length, unformatValue(selectionEndStart).length]
 }
 
-/**
- * @category Components
- */
-const MemoizedNumberInput = React.memo(NumberInput)
-
-export default MemoizedNumberInput
+export default React.memo(NumberInput)

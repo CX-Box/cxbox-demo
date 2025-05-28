@@ -55,9 +55,4 @@ const MultiField: React.FunctionComponent<MultiFieldProps> = props => {
     )
 }
 
-/**
- * @category Components
- */
-const MemoizedMultiField = React.memo(MultiField)
-
-export default MemoizedMultiField
+export default React.memo(MultiField)

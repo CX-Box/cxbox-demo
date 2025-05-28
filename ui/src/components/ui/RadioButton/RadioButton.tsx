@@ -3,7 +3,7 @@ import { Radio } from 'antd'
 import { RadioChangeEvent } from 'antd/es/radio'
 import { BaseFieldProps } from '@components/Field/Field'
 import ReadOnlyField from '@cxboxComponents/ui/ReadOnlyField/ReadOnlyField'
-import { getIconByParams } from '@cxboxComponents/ui/Dictionary/Dictionary'
+import { getIconByParams } from '@components/ui/Dictionary/Dictionary'
 
 export interface RadioButtonProps extends BaseFieldProps {
     value?: string | null
@@ -86,9 +86,4 @@ const RadioButton: React.FunctionComponent<RadioButtonProps> = ({
     )
 }
 
-/**
- * @category Components
- */
-const MemoizedRadioButton = React.memo(RadioButton)
-
-export default MemoizedRadioButton
+export default React.memo(RadioButton)

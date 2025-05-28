@@ -84,9 +84,4 @@ function mapDispatchToProps(dispatch: Dispatch) {
     }
 }
 
-/**
- * @category Components
- */
-export const ConnectedCheckboxPicker = connect(mapStateToProps, mapDispatchToProps)(CheckboxPicker)
-
-export default ConnectedCheckboxPicker
+export default connect(mapStateToProps, mapDispatchToProps)(CheckboxPicker)

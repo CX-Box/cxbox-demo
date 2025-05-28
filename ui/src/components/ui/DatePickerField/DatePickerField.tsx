@@ -137,9 +137,4 @@ export const DatePickerFieldFormat = (date: string | null, withTime?: boolean, w
     return moment(date, dateFormat).format(getFormat(withTime, withSeconds, monthYear))
 }
 
-/**
- * @category Components
- */
-const MemoizedDatePickerField = React.memo(DatePickerField)
-
-export default MemoizedDatePickerField
+export default React.memo(DatePickerField)

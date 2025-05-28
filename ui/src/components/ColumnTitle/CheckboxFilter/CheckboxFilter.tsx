@@ -7,7 +7,7 @@ import { useListHeight, useListSearch } from '@hooks/checkboxFilter'
 import { checkboxFilterMaxVisibleItems } from '@constants/filter'
 import { interfaces } from '@cxbox-ui/core'
 import styles from './CheckboxFilter.less'
-import { getIconByParams } from '@cxboxComponents/ui/Dictionary/Dictionary'
+import { getIconByParams } from '@components/ui/Dictionary/Dictionary'
 
 export interface CheckboxFilterProps {
     title: string

@@ -1,6 +1,6 @@
 import React from 'react'
 import cn from 'classnames'
-import { SearchHighlight } from '@cxboxComponents'
+import SearchHighlight from '@components/ui/SearchHightlight/SearchHightlight'
 import DrillDown from '@components/ui/DrillDown/DrillDown'
 import { useWidgetHighlightFilter } from '@hooks/useWidgetFilter'
 import { escapedSrc } from '@utils/strings'

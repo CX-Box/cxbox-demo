@@ -6,7 +6,7 @@ import DatePickerField from '@cxboxComponents/ui/DatePickerField/DatePickerField
 import TextArea from '@cxboxComponents/ui/TextArea/TextArea'
 import MultiField from '@cxboxComponents/ui/MultiField/MultiField'
 import ReadOnlyField from '@cxboxComponents/ui/ReadOnlyField/ReadOnlyField'
-import MultivalueHover from '@cxboxComponents/ui/Multivalue/MultivalueHover'
+import MultivalueHover from '@components/ui/Multivalue/MultivalueHover'
 import cn from 'classnames'
 import readOnlyFieldStyles from '@cxboxComponents/ui/ReadOnlyField/ReadOnlyField.less'
 import CheckboxPicker from '@cxboxComponents/ui/CheckboxPicker/CheckboxPicker'

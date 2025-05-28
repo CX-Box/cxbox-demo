@@ -15,5 +15,3 @@ export { default as View } from './View/View'
 export { default as Widget } from './Widget/Widget'
 export { default as Field } from './Field/Field'
 export { default as ModalInvoke } from './ModalInvoke/ModalInvoke'
-// Developer
-export { default as DevToolsPanel } from './DevToolsPanel/DevToolsPanel'

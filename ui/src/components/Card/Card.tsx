@@ -3,7 +3,6 @@ import { Col, Row } from 'antd'
 import cn from 'classnames'
 import { interfaces } from '@cxbox-ui/core'
 import Operations from '../Operations/Operations'
-import DebugWidgetWrapper from '../DebugWidgetWrapper/DebugWidgetWrapper'
 import { useAppSelector } from '@store'
 import { useWidgetCollapse } from '@hooks/useWidgetCollapse'
 import { buildBcUrl } from '@utils/buildBcUrl'
@@ -33,34 +32,32 @@ function Card({ meta, children, className }: CardProps) {
     return (
         <Row justify="center">
             <Col span={24}>
-                <DebugWidgetWrapper debugMode={debugMode} meta={meta}>
-                    <div
-                        className={cn(styles.container, className)}
-                        data-test="WIDGET"
-                        data-test-widget-type={meta.type}
-                        data-test-widget-position={meta.position}
-                        data-test-widget-title={meta.title}
-                        data-test-widget-name={meta.name}
-                    >
-                        <WidgetTitle level={2} widgetName={meta.name} text={meta.title} bcColor={meta?.options?.title?.bgColor} />
-                        {!(isMainWidget && isCollapsed) && (
-                            <>
-                                {isForm && children}
-                                {showOperations.includes(type as interfaces.WidgetTypes) && (
-                                    <Operations
-                                        operations={operations}
-                                        bcName={bcName}
-                                        widgetMeta={meta}
-                                        className={cn({
-                                            [styles.operations]: !isForm
-                                        })}
-                                    />
-                                )}
-                                {!isForm && children}
-                            </>
-                        )}
-                    </div>
-                </DebugWidgetWrapper>
+                <div
+                    className={cn(styles.container, className)}
+                    data-test="WIDGET"
+                    data-test-widget-type={meta.type}
+                    data-test-widget-position={meta.position}
+                    data-test-widget-title={meta.title}
+                    data-test-widget-name={meta.name}
+                >
+                    <WidgetTitle level={2} widgetName={meta.name} text={meta.title} bcColor={meta?.options?.title?.bgColor} />
+                    {!(isMainWidget && isCollapsed) && (
+                        <>
+                            {isForm && children}
+                            {showOperations.includes(type as interfaces.WidgetTypes) && (
+                                <Operations
+                                    operations={operations}
+                                    bcName={bcName}
+                                    widgetMeta={meta}
+                                    className={cn({
+                                        [styles.operations]: !isForm
+                                    })}
+                                />
+                            )}
+                            {!isForm && children}
+                        </>
+                    )}
+                </div>
             </Col>
         </Row>
     )

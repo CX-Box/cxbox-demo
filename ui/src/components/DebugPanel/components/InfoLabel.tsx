@@ -28,5 +28,5 @@ const InfoLabel: React.FunctionComponent<InfoLabelProps> = props => {
 
     return noContainer ? content : <div className={styles.container}>{content}</div>
 }
-const MemoizedInfoLabel = React.memo(InfoLabel)
-export default MemoizedInfoLabel
+
+export default React.memo(InfoLabel)

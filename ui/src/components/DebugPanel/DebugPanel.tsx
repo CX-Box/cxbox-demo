@@ -96,5 +96,4 @@ const DebugPanel: React.FunctionComponent<DebugPanelProps> = props => {
     )
 }
 
-const MemoizedDebugPanel = React.memo(DebugPanel)
-export default MemoizedDebugPanel
+export default React.memo(DebugPanel)

@@ -27,7 +27,6 @@ export const AdditionalListWidget: React.FC<Props> = ({ meta }) => {
     const bcUrl = buildBcUrl(additionalInfoBcName, true)
     const rowMeta = useAppSelector(state => state.view.rowMeta[additionalInfoBcName]?.[bcUrl])
     const bcData = useAppSelector(state => state.data[additionalInfoBcName] as DataItem[] | undefined)
-    const debugMode = useAppSelector(state => state.session.debugMode || false)
     const showHeader = meta.fields?.some(item => (item as WidgetListField).title)
 
     const { isMainWidget, isCollapsed } = useWidgetCollapse(meta.name)
@@ -45,7 +44,7 @@ export const AdditionalListWidget: React.FC<Props> = ({ meta }) => {
                                 bcData.map(dataItem => {
                                     return (
                                         <React.Fragment key={dataItem.id}>
-                                            <DebugWidgetWrapper debugMode={debugMode} meta={additionalInfoMeta}>
+                                            <DebugWidgetWrapper meta={additionalInfoMeta}>
                                                 <AdditionalInfoItem meta={additionalInfoMeta} rowMeta={rowMeta} cursor={dataItem.id} />
                                             </DebugWidgetWrapper>
                                             <Divider className={styles.divider} />

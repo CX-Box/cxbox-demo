@@ -86,7 +86,6 @@ export function useExpandableForm<R extends CustomDataItem>(currentWidgetMeta: A
         (record: R) => recordForm?.cursor === record.id && currentWidgetMeta.bcName === recordForm?.bcName,
         [currentWidgetMeta.bcName, recordForm?.bcName, recordForm?.cursor]
     )
-    const debugMode = useAppSelector(state => state.session.debugMode || false)
 
     const dispatch = useDispatch()
 
@@ -136,13 +135,13 @@ export function useExpandableForm<R extends CustomDataItem>(currentWidgetMeta: A
     const expandedRowRender = useCallback(
         (record: R) =>
             isActiveRecord(record) && internalWidget !== undefined ? (
-                <DebugWidgetWrapper debugMode={debugMode} meta={internalWidget}>
+                <DebugWidgetWrapper meta={internalWidget}>
                     <Spin spinning={isLoading}>
                         <ExpandedRow widgetMeta={internalWidget} operations={internalWidgetOperations} record={record} />
                     </Spin>
                 </DebugWidgetWrapper>
             ) : null,
-        [isActiveRecord, internalWidget, debugMode, isLoading, internalWidgetOperations]
+        [isActiveRecord, internalWidget, isLoading, internalWidgetOperations]
     )
 
     const getExpandIconColumnIndex = (

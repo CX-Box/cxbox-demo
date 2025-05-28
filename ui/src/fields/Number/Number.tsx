@@ -1,6 +1,6 @@
 import React from 'react'
-import { NumberTypes } from './formaters'
-import CoreNumberInput from './CoreNumberInput'
+import { NumberTypes } from '@components/ui/NumberInput/formaters'
+import NumberInput from '@components/ui/NumberInput/NumberInput'
 import { AppNumberFieldMeta } from '@interfaces/widget'
 import styles from './Number.less'
 
@@ -17,7 +17,7 @@ export const Number = ({ value, readOnly, onChange, ...rest }: NumberProps) => {
     const type = meta.type as unknown as NumberTypes
     return (
         <div className={styles.number}>
-            <CoreNumberInput
+            <NumberInput
                 value={value}
                 type={type}
                 currency={meta.currency}

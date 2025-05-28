@@ -190,9 +190,4 @@ function mapStateToProps(state: RootState, ownProps: WidgetOwnProps) {
     }
 }
 
-/**
- * @category Components
- */
-const ConnectedWidget = connect(mapStateToProps)(Widget)
-
-export default ConnectedWidget
+export default connect(mapStateToProps)(Widget)

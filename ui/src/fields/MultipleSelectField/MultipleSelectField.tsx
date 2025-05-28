@@ -52,6 +52,7 @@ const MultipleSelectField: React.FunctionComponent<MultipleSelectFieldProps> = p
     const extendedProps: SelectProps<string[]> = {
         ...props,
         forwardedRef: selectRef,
+        className: styles.multipleSelect,
         dropdownClassName: styles.dropDownMenu,
         getPopupContainer: trigger => trigger.parentElement as HTMLElement,
         onDropdownVisibleChange: useFixSelectDropdownForTableScroll(selectRef),

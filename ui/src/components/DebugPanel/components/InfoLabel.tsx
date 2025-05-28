@@ -8,6 +8,7 @@ interface InfoLabelProps {
     info: string[]
     noContainer?: boolean
 }
+
 const InfoLabel: React.FunctionComponent<InfoLabelProps> = props => {
     const { label, info, noContainer } = props
     const content = (

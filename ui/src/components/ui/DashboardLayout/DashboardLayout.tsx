@@ -12,7 +12,6 @@ export interface DashboardLayoutProps {
     skipWidgetTypes?: string[]
     customSpinner?: (props: any) => React.ReactElement<any>
     card?: (props: any) => React.ReactElement<any>
-    disableDebugMode?: boolean
 }
 
 const sidebarWidgetsTypes: string[] = [CustomWidgetTypes.AdditionalInfo, CustomWidgetTypes.AdditionalList]
@@ -32,13 +31,7 @@ export function DashboardLayout(props: DashboardLayoutProps) {
         <Row key={rowIndex} gutter={[24, 0]}>
             {row.map((widget, colIndex) => (
                 <Col key={colIndex} span={getColWidth(widget)}>
-                    <Widget
-                        meta={widget}
-                        card={props.card}
-                        customWidgets={props.customWidgets}
-                        customSpinner={props.customSpinner}
-                        disableDebugMode={props.disableDebugMode}
-                    />
+                    <Widget meta={widget} card={props.card} customWidgets={props.customWidgets} customSpinner={props.customSpinner} />
                 </Col>
             ))}
         </Row>
@@ -52,12 +45,7 @@ export function DashboardLayout(props: DashboardLayoutProps) {
                     {additionalInfoWidgets.map(widget => (
                         <Row key={widget.name} gutter={[8, 8]}>
                             <Col span={24}>
-                                <Widget
-                                    meta={widget}
-                                    customWidgets={props.customWidgets}
-                                    customSpinner={props.customSpinner}
-                                    disableDebugMode={props.disableDebugMode}
-                                />
+                                <Widget meta={widget} customWidgets={props.customWidgets} customSpinner={props.customSpinner} />
                             </Col>
                         </Row>
                     ))}

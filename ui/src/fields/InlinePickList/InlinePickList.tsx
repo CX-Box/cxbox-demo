@@ -5,7 +5,7 @@ import { Icon, Select as AntdSelect } from 'antd'
 import cn from 'classnames'
 import Select from '@cxboxComponents/ui/Select/Select'
 import { DataValue, WidgetTypes } from '@cxbox-ui/schema'
-import { actions, InlinePickListFieldMeta, interfaces } from '@cxbox-ui/core'
+import { actions, FieldType, InlinePickListFieldMeta, interfaces } from '@cxbox-ui/core'
 import { useDebounce } from '@hooks/useDebounce'
 import ReadOnlyField from '../../components/ui/ReadOnlyField/ReadOnlyField'
 import { useAppSelector } from '@store'
@@ -40,6 +40,7 @@ const InlinePickList: React.FunctionComponent<Props> = ({
 
     const selectRef = useRef<AntdSelect<string>>(null)
 
+    const neededSearch = meta.type === FieldType.inlinePickList
     const widgetMeta = useAppSelector(state => state.view.widgets?.find(i => i.name === widgetName))
     const disabledPopup = isPopupWidgetFamily(widgetMeta?.type)
     const bcName = widgetMeta?.bcName
@@ -143,27 +144,28 @@ const InlinePickList: React.FunctionComponent<Props> = ({
                 value={value ?? undefined}
                 allowClear={!!value}
                 clearIcon={<Icon data-test-field-inlinepicklist-clear={true} type="close-circle" />}
-                showSearch
+                showSearch={neededSearch}
                 placeholder={placeholder ?? t('Enter value')}
                 defaultActiveFirstOption={false}
                 showArrow={false}
                 filterOption={false}
                 onSearch={setSearchTerm}
-                onFocus={handleFocus}
+                onFocus={neededSearch ? handleFocus : undefined}
                 onChange={onChange}
                 notFoundContent={null}
                 getPopupContainer={trigger => trigger.parentElement?.parentElement as HTMLElement}
                 forwardedRef={selectRef}
                 onDropdownVisibleChange={handleDropdownVisibleChange}
             >
-                {data.map(item => {
-                    const title = item[pickMap[fieldName]] as string
-                    return (
-                        <Select.Option title={title} key={item.id} value={item.id}>
-                            <span data-test-field-inlinepicklist-item={true}>{title}</span>
-                        </Select.Option>
-                    )
-                })}
+                {neededSearch &&
+                    data.map(item => {
+                        const title = item[pickMap[fieldName]] as string
+                        return (
+                            <Select.Option title={title} key={item.id} value={item.id}>
+                                <span data-test-field-inlinepicklist-item={true}>{title}</span>
+                            </Select.Option>
+                        )
+                    })}
             </Select>
             {popupOpenButton}
         </span>

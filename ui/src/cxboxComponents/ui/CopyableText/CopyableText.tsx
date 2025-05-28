@@ -6,6 +6,8 @@ interface CopyableTextProps {
     className?: string
 }
 
+const inputStyle: CSSProperties = { width: 300 }
+
 const CopyableText: React.FunctionComponent<CopyableTextProps> = props => {
     const { text, className } = props
     const textRef = useRef<Input>(null)
@@ -13,7 +15,7 @@ const CopyableText: React.FunctionComponent<CopyableTextProps> = props => {
         textRef.current?.select()
         document.execCommand('copy')
     }, [textRef])
-    const inputStyle: CSSProperties = { width: 300 }
+
     return (
         <Input
             className={className}

@@ -1,11 +1,8 @@
 import React, { FunctionComponent } from 'react'
 import { connect } from 'react-redux'
 import { Skeleton, Spin } from 'antd'
-import FormWidget from '@cxboxComponents/widgets/FormWidget/FormWidget'
-import InfoWidget from '@cxboxComponents/widgets/InfoWidget/InfoWidget'
-import DebugPanel from '@cxboxComponents/DebugPanel/DebugPanel'
 import { useWidgetCollapse } from '@hooks/useWidgetCollapse'
-import { WidgetTypes, interfaces, utils } from '@cxbox-ui/core'
+import { interfaces, utils } from '@cxbox-ui/core'
 import { RootState } from '@store'
 import { WidgetShowCondition } from '@cxbox-ui/schema'
 import { buildBcUrl } from '@utils/buildBcUrl'
@@ -17,7 +14,6 @@ interface WidgetOwnProps {
     card?: (props: any) => React.ReactElement<any>
     customSpinner?: (props: any) => React.ReactElement<any>
     children?: React.ReactNode
-    disableDebugMode?: boolean
 }
 
 interface WidgetProps extends WidgetOwnProps {
@@ -85,7 +81,6 @@ export const Widget: FunctionComponent<WidgetProps> = props => {
                 </div>
             )}
             {!showSkeleton && spinnerElement}
-            {!props.disableDebugMode && props.debugMode && <DebugPanel widgetMeta={props.meta} />}
         </>
     )
 
@@ -158,10 +153,6 @@ function chooseWidgetType(
     const knownWidgetMeta = widgetMeta as interfaces.WidgetMetaAny
 
     switch (knownWidgetMeta.type) {
-        case WidgetTypes.Form:
-            return <FormWidget meta={knownWidgetMeta} />
-        case WidgetTypes.Info:
-            return <InfoWidget meta={knownWidgetMeta} />
         default:
             return children
     }

@@ -1,4 +1,15 @@
-@import '@assets/styles/theme.less';
+.formItem {
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 16px);
+    margin-bottom: 16px;
+
+    :global {
+        .ant-form-item-control-wrapper {
+            margin-top: auto;
+        }
+    }
+}
 
 .div[class*="FormWidget__required"] {
     :global(.ant-form-item-label label.ant-form-item-no-colon::after) {
@@ -139,5 +150,5 @@
 
 .formContainer div[class^="CheckboxPicker__container"] :global(.ant-checkbox-wrapper) {
     min-height: 40px;
-    font-size: 16px;
+    font-size: 14px;
 }

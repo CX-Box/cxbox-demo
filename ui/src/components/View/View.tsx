@@ -23,7 +23,6 @@ import { Number } from '../../fields/NumberInput/NumberInput'
 import { FormPopup } from '../widgets/FormPopup/FormPopup'
 import MultivalueField from '../../fields/Multivalue/MultivalueField'
 import InlinePickList from '../../fields/InlinePickList/InlinePickList'
-import PickListField from '../../fields/PickListField/PickListField'
 import { useAppSelector } from '@store'
 import ViewInfoLabel from '../DebugPanel/components/ViewInfoLabel'
 import PopupWidgetInfoLabel from '../DebugPanel/components/PopupWidgetInfoLabel'
@@ -54,7 +53,7 @@ const customFields = {
     [FieldType.money]: Number,
     [FieldType.dictionary]: Dictionary,
     [FieldType.multivalue]: MultivalueField,
-    [FieldType.pickList]: PickListField,
+    [FieldType.pickList]: InlinePickList,
     [FieldType.inlinePickList]: InlinePickList,
     [CustomFieldTypes.MultipleSelect]: MultipleSelectField,
     [FieldType.fileUpload]: FileUpload,
@@ -102,7 +101,6 @@ function View() {
                 customFields={customFields}
                 card={Card as any}
                 customLayout={DashboardLayout}
-                disableDebugMode={true}
             />
             {debugMode &&
                 widgets.filter(i => allPopupWidgetTypes.includes(i.type)).map(i => <PopupWidgetInfoLabel key={i.name} meta={i} />)}

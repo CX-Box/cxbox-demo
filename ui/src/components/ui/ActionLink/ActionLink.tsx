@@ -31,9 +31,4 @@ const ActionLink: React.FC<IActionLinkProps> = ({ className, children, onClick }
     )
 }
 
-/**
- * @category Components
- */
-const MemoizedActionLink = React.memo(ActionLink)
-
-export default MemoizedActionLink
+export default React.memo(ActionLink)

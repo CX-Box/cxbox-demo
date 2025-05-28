@@ -20,7 +20,6 @@ import FilterSettingModal from './components/FilterSettingModal'
 import { usePresetFilterSettings } from './hooks/usePresetFilterSettings'
 import cn from 'classnames'
 import Header from '@components/widgets/Table/components/Header'
-import { Field, RowOperationsButton } from '@cxboxComponents'
 import { useRowMenu } from '@hooks/useRowMenu'
 import { DataItem, FieldType } from '@cxbox-ui/core'
 import { TableEventListeners } from 'antd/lib/table/interface'
@@ -42,6 +41,8 @@ import {
 import { numberFieldTypes } from '@constants/field'
 import { aggCellBgColorRgba, totalRowKey } from './groupingHierarchy/constants'
 import { getAggCellBgOpacity } from './groupingHierarchy/utils/aggregation'
+import Field from '@components/Field/Field'
+import RowOperationsButton from '@components/RowOperations/RowOperationsButton'
 
 const ROW_KEY = 'id'
 

@@ -46,10 +46,7 @@ export interface RowOperationsButtonInstance {
  * @param props - Component properties
  * @param ref - Assigned reference will receive component instance
  */
-export const RowOperationsButton = (
-    { meta, parent, ...props }: RowOperationsButtonProps,
-    ref: ForwardedRef<RowOperationsButtonInstance>
-) => {
+const RowOperationsButton = ({ meta, parent, ...props }: RowOperationsButtonProps, ref: ForwardedRef<RowOperationsButtonInstance>) => {
     const dispatch = useAppDispatch()
     /**
      * Nested hierarchies might pass bcName directly

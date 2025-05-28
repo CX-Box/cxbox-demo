@@ -111,7 +111,7 @@ const emptyFieldMeta = [] as any
  * @param props
  * @category Components
  */
-export const Field: FunctionComponent<FieldProps> = ({
+const Field: FunctionComponent<FieldProps> = ({
     bcName,
     widgetName,
     widgetFieldMeta,

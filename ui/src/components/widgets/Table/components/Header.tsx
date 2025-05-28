@@ -3,8 +3,8 @@ import styles from './Header.less'
 import { useTranslation } from 'react-i18next'
 import Select from '@cxboxComponents/ui/Select/Select'
 import { WidgetMeta } from '@cxbox-ui/core'
-import { ActionLink } from '@cxboxComponents'
 import { useTableShowAllRecords, useFilterGroups } from '../hooks/hooks'
+import ActionLink from '@components/ui/ActionLink/ActionLink'
 
 export interface HeaderProps {
     meta: WidgetMeta

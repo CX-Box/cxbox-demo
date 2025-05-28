@@ -3,7 +3,7 @@ import { Icon, Popover } from 'antd'
 import styles from './MultivalueHover.less'
 import cn from 'classnames'
 import { BaseFieldProps } from '@components/Field/Field'
-import { SearchHighlight } from '@cxboxComponents'
+import SearchHighlight from '@components/ui/SearchHightlight/SearchHightlight'
 import { interfaces, utils } from '@cxbox-ui/core'
 import { useWidgetHighlightFilter } from '@hooks/useWidgetFilter'
 

@@ -12,7 +12,7 @@ export type SelectProps<T = SelectValue> = AntdSelectProps<T> & {
  *
  * @category Components
  */
-export class Select<T = SelectValue> extends React.PureComponent<SelectProps<T>> {
+class Select<T = SelectValue> extends React.PureComponent<SelectProps<T>> {
     /**
      * STUB
      */
@@ -31,7 +31,4 @@ export class Select<T = SelectValue> extends React.PureComponent<SelectProps<T>>
     }
 }
 
-/**
- * @category Components
- */
 export default Select

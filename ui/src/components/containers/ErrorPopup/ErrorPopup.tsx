@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import { useAppDispatch, useAppSelector } from '@store'
 import { actions } from '@cxbox-ui/core'
-import { default as CoreErrorPopup } from '@cxboxComponents/ui/ErrorPopup/ErrorPopup'
+import { default as CoreErrorPopup } from '@components/ui/ErrorPopup/ErrorPopup'
 
 function ErrorPopup() {
     const { error, closeError } = useErrorPopup()

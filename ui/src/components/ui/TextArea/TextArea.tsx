@@ -17,12 +17,7 @@ export interface TextAreaProps extends BaseFieldProps, AdditionalAntdTextAreaPro
     maxRows?: number
 }
 
-/**
- *
- * @param props
- * @category Components
- */
-export const TextArea: React.FunctionComponent<TextAreaProps> = ({
+const TextArea: React.FunctionComponent<TextAreaProps> = ({
     defaultValue,
     maxInput,
     onChange,

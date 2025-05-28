@@ -39,9 +39,4 @@ const SearchHighlight: React.FC<SearchHighlightProps> = props => {
  */
 export const defaultHighlighter = (value: string) => <b>{value}</b>
 
-/**
- * @category Components
- */
-const MemoizedSearchHighlight = React.memo(SearchHighlight)
-
-export default MemoizedSearchHighlight
+export default React.memo(SearchHighlight)

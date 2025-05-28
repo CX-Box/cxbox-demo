@@ -25,7 +25,7 @@ export interface InteractiveInputProps {
  * @param props
  * @category Components
  */
-export const InteractiveInput: FunctionComponent<InteractiveInputProps> = props => {
+const InteractiveInput: FunctionComponent<InteractiveInputProps> = props => {
     return (
         <div className={styles.container}>
             {props.children}
@@ -38,9 +38,4 @@ export const InteractiveInput: FunctionComponent<InteractiveInputProps> = props 
     )
 }
 
-/**
- * @category Components
- */
-const MemoizedInteractiveInput = React.memo(InteractiveInput)
-
-export default MemoizedInteractiveInput
+export default React.memo(InteractiveInput)

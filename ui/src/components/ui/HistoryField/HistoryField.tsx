@@ -93,9 +93,4 @@ const HistoryField: React.FunctionComponent<HistoryFieldProps> = props => {
     )
 }
 
-/**
- * @category Components
- */
-const MemoizedHistoryField = React.memo(HistoryField)
-
-export default MemoizedHistoryField
+export default React.memo(HistoryField)

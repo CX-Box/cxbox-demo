@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useRef } from 'react'
 import { Icon, Select as AntdSelect, Tooltip } from 'antd'
 import { BaseFieldProps } from '@components/Field/Field'
-import Select, { SelectProps } from '@cxboxComponents/ui/Select/Select'
+import Select, { SelectProps } from '@components/ui/Select/Select'
 import ReadOnlyField from '@cxboxComponents/ui/ReadOnlyField/ReadOnlyField'
 import useFixSelectDropdownForTableScroll from '@hooks/useFixSelectDropdownForTableScroll'
 import * as dictionaryCustomIcons from '@assets/icons/dictionaryCustomIcons'
@@ -141,9 +141,4 @@ export function getIconByParams(params?: string, extraStyleClasses?: string) {
     return null
 }
 
-/**
- * @category Components
- */
-const MemoizedDictionary = React.memo(Dictionary)
-
-export default MemoizedDictionary
+export default React.memo(Dictionary)

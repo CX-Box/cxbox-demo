@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import { RootState } from '@store'
 import { actions, interfaces } from '@cxbox-ui/core'
 import { useTranslation } from 'react-i18next'
-import ErrorInfoForTests from '@cxboxComponents/ui/ErrorPopup/ErrorInfoForTests'
+import ErrorInfoForTests from '@components/ui/ErrorPopup/ErrorInfoForTests'
 
 const { ApplicationErrorType } = interfaces
 
@@ -23,7 +23,7 @@ interface ErrorPopupProps extends ErrorPopupOwnProps {
     exportStateEnabled: boolean
 }
 
-export const ErrorPopup: FunctionComponent<ErrorPopupProps> = props => {
+const ErrorPopup: FunctionComponent<ErrorPopupProps> = props => {
     const errorRef = React.useRef<HTMLTextAreaElement>(null)
     const systemError = props.error as interfaces.SystemError
     const businessError = props.error as interfaces.BusinessError
@@ -113,9 +113,4 @@ function mapDispatchToProps(dispatch: Dispatch) {
     }
 }
 
-/**
- * @category Components
- */
-const MemoizedErrorPopup = connect(mapStateToProps, mapDispatchToProps)(ErrorPopup)
-
-export default MemoizedErrorPopup
+export default connect(mapStateToProps, mapDispatchToProps)(ErrorPopup)

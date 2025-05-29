@@ -64,6 +64,7 @@ export const bcSaveDataEpic: RootEpic = (action$, state$, { api }) =>
             const cursor = state.screen.bo.bc[bcName].cursor as string
             const dataItem = state.data[bcName].find(item => item.id === cursor)
             const pendingChanges = { ...state.view.pendingDataChanges[bcName]?.[cursor] }
+            const pendingChangesNow = state.view.pendingDataChangesNow[bcName]?.[cursor]
             const rowMeta = bcUrl && state.view.rowMeta[bcName]?.[bcUrl]
             const options = state.view.widgets.find(widget => widget.name === widgetName)?.options
 
@@ -91,63 +92,71 @@ export const bcSaveDataEpic: RootEpic = (action$, state$, { api }) =>
                 })
 
             const context = { widgetName: action.payload.widgetName }
-            return api.saveBcData(state.screen.screenName, bcUrl, { ...pendingChanges, vstamp: dataItem?.vstamp as number }, context).pipe(
-                mergeMap(data => {
-                    const postInvoke = data.postActions?.[0]
-                    const responseDataItem = data.record
-                    return concat(
-                        of(actions.bcSaveDataSuccess({ bcName, cursor, dataItem: responseDataItem })),
-                        of(actions.bcFetchRowMeta({ widgetName, bcName })),
-                        of(actions.deselectTableRow()),
-                        of(...fetchChildrenBcData),
-                        postInvoke
-                            ? of(
-                                  actions.processPostInvoke({
-                                      bcName,
-                                      widgetName,
-                                      postInvoke,
-                                      cursor: responseDataItem.id
-                                  })
-                              )
-                            : EMPTY,
-                        action.payload.onSuccessAction ? of(action.payload.onSuccessAction) : EMPTY
-                    )
-                }),
-                catchError((e: AxiosError) => {
-                    console.error(e)
-                    let notification$: Observable<AnyAction> = EMPTY
-                    // Protection against widget blocking while autosaving
-                    if (action.payload.onSuccessAction && !options?.disableNotification) {
-                        notification$ = of(
-                            actions.addNotification({
-                                key: 'data_autosave_undo',
-                                type: 'buttonWarningNotification',
-                                message: 'There are pending changes. Please save them or cancel.',
-                                duration: 0,
-                                options: {
-                                    buttonWarningNotificationOptions: {
-                                        buttonText: 'Cancel changes',
-                                        actionsForClick: [actions.bcCancelPendingChanges({ bcNames: [bcName] })]
-                                    }
-                                }
-                            })
+            return api
+                .saveBcData(
+                    state.screen.screenName,
+                    bcUrl,
+                    { ...pendingChanges, vstamp: dataItem?.vstamp as number },
+                    pendingChangesNow,
+                    context
+                )
+                .pipe(
+                    mergeMap(data => {
+                        const postInvoke = data.postActions?.[0]
+                        const responseDataItem = data.record
+                        return concat(
+                            of(actions.bcSaveDataSuccess({ bcName, cursor, dataItem: responseDataItem })),
+                            of(actions.bcFetchRowMeta({ widgetName, bcName })),
+                            of(actions.deselectTableRow()),
+                            of(...fetchChildrenBcData),
+                            postInvoke
+                                ? of(
+                                      actions.processPostInvoke({
+                                          bcName,
+                                          widgetName,
+                                          postInvoke,
+                                          cursor: responseDataItem.id
+                                      })
+                                  )
+                                : EMPTY,
+                            action.payload.onSuccessAction ? of(action.payload.onSuccessAction) : EMPTY
                         )
-                    }
-                    let viewError: string = null as any
-                    let entityError: OperationErrorEntity = null as any
-                    const operationError = e.response?.data as OperationError
-                    if (e.response?.data === Object(e.response?.data)) {
-                        entityError = operationError?.error?.entity ?? entityError
-                        viewError = operationError?.error?.popup?.[0] ?? viewError
-                    }
+                    }),
+                    catchError((e: AxiosError) => {
+                        console.error(e)
+                        let notification$: Observable<AnyAction> = EMPTY
+                        // Protection against widget blocking while autosaving
+                        if (action.payload.onSuccessAction && !options?.disableNotification) {
+                            notification$ = of(
+                                actions.addNotification({
+                                    key: 'data_autosave_undo',
+                                    type: 'buttonWarningNotification',
+                                    message: 'There are pending changes. Please save them or cancel.',
+                                    duration: 0,
+                                    options: {
+                                        buttonWarningNotificationOptions: {
+                                            buttonText: 'Cancel changes',
+                                            actionsForClick: [actions.bcCancelPendingChanges({ bcNames: [bcName] })]
+                                        }
+                                    }
+                                })
+                            )
+                        }
+                        let viewError: string = null as any
+                        let entityError: OperationErrorEntity = null as any
+                        const operationError = e.response?.data as OperationError
+                        if (e.response?.data === Object(e.response?.data)) {
+                            entityError = operationError?.error?.entity ?? entityError
+                            viewError = operationError?.error?.popup?.[0] ?? viewError
+                        }
 
-                    return concat(
-                        of(actions.bcSaveDataFail({ bcName, bcUrl, viewError, entityError })),
-                        notification$,
-                        utils.createApiErrorObservable(e, context)
-                    )
-                })
-            )
+                        return concat(
+                            of(actions.bcSaveDataFail({ bcName, bcUrl, viewError, entityError })),
+                            notification$,
+                            utils.createApiErrorObservable(e, context)
+                        )
+                    })
+                )
         })
     )
 

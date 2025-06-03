@@ -3,14 +3,12 @@ import { connect } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Form, Row, Col } from 'antd'
 import Field from '@cxboxComponents/Field/Field'
-import TemplatedTitle from '@cxboxComponents/TemplatedTitle/TemplatedTitle'
-import { useFlatFormFields } from '@hooks/useFlatFormFields'
+import TemplatedTitle from '@components/TemplatedTitle/TemplatedTitle'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import { RootState } from '@store'
-import { interfaces } from '@cxbox-ui/core'
+import { interfaces, PendingValidationFailsFormat } from '@cxbox-ui/core'
 import styles from './FormWidget.less'
-
-const { FieldType, PendingValidationFailsFormat } = interfaces
+import { useProportionalWidgetGrid } from '@hooks/widgetGrid'
 
 interface FormWidgetOwnProps {
     meta: Omit<interfaces.WidgetFormMeta, 'type'>
@@ -30,32 +28,34 @@ interface FormWidgetProps extends FormWidgetOwnProps {
  */
 export const FormWidget: FunctionComponent<FormWidgetProps> = ({ meta, fields, missingFields, metaErrors, cursor }) => {
     const { t } = useTranslation()
-    const hiddenKeys: string[] = []
-    const flattenWidgetFields = useFlatFormFields<interfaces.WidgetFormField>(meta.fields).filter(item => {
-        const isHidden = item.type === FieldType.hidden || item.hidden
-        if (isHidden) {
-            hiddenKeys.push(item.key)
-        }
-        return !isHidden
-    })
     const { bcName, name } = meta
+    const { grid, visibleFlattenWidgetFields } = useProportionalWidgetGrid(meta)
 
     const memoizedFields = React.useMemo(() => {
         return (
             <Row>
-                {meta.options?.layout?.rows.map((row, index) => {
+                {grid?.map((row, index) => {
                     return (
-                        <Row gutter={24} key={index} type="flex" align="stretch">
-                            {row.cols
-                                .filter(field => {
-                                    const fieldMeta = fields?.find(item => item.key === field?.fieldKey)
-                                    return fieldMeta ? !fieldMeta.hidden : true
-                                })
-                                .filter(col => !hiddenKeys.includes(col.fieldKey))
-                                .map((col, colIndex) => {
-                                    const field = flattenWidgetFields.find(item => item.key === col.fieldKey)
+                        <>
+                            <Row gutter={24} key={index} type="flex" className={styles.nowrap}>
+                                {row.cols.map((col, colIndex) => {
+                                    const field = visibleFlattenWidgetFields.find(item => item.key === col.fieldKey)
+
+                                    return (
+                                        <Col key={colIndex} span={col.span}>
+                                            <div className={styles.formLabel}>
+                                                <TemplatedTitle widgetName={meta.name} title={field?.label as string} />
+                                            </div>
+                                        </Col>
+                                    )
+                                })}
+                            </Row>
+                            <Row gutter={24} key={index} type="flex" className={styles.nowrap}>
+                                {row.cols.map((col, colIndex) => {
+                                    const field = visibleFlattenWidgetFields.find(item => item.key === col.fieldKey)
                                     const disabled = fields?.find(item => item.key === field?.key && item.disabled)
                                     const error = (!disabled && missingFields?.[field?.key as string]) || metaErrors?.[field?.key as string]
+
                                     return (
                                         <Col key={colIndex} span={col.span}>
                                             <Form.Item
@@ -64,7 +64,6 @@ export const FormWidget: FunctionComponent<FormWidgetProps> = ({ meta, fields, m
                                                 data-test-field-type={field?.type}
                                                 data-test-field-title={field?.label || field?.title}
                                                 data-test-field-key={field?.key}
-                                                label={<TemplatedTitle widgetName={meta.name} title={field?.label as string} />}
                                                 validateStatus={error ? 'error' : undefined}
                                                 help={error ? <div data-test-error-text={true}>{t(error)}</div> : undefined}
                                             >
@@ -79,12 +78,13 @@ export const FormWidget: FunctionComponent<FormWidgetProps> = ({ meta, fields, m
                                         </Col>
                                     )
                                 })}
-                        </Row>
+                            </Row>
+                        </>
                     )
                 })}
             </Row>
         )
-    }, [bcName, name, cursor, flattenWidgetFields, missingFields, metaErrors, hiddenKeys, fields, meta, t])
+    }, [grid, visibleFlattenWidgetFields, fields, missingFields, metaErrors, meta.name, t, bcName, cursor, name])
 
     return (
         <Form colon={false} layout="vertical">

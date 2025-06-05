@@ -41,6 +41,9 @@ const InlinePickList: React.FunctionComponent<Props> = ({
     const selectRef = useRef<AntdSelect<string>>(null)
 
     const neededSearch = meta.type === FieldType.inlinePickList
+    const getUniqueDataTestAttr = (postfix: string) => {
+        return { [`data-test-field-${meta.type?.toLowerCase()?.replace(/-/g, '')}-${postfix}`]: true }
+    }
     const widgetMeta = useAppSelector(state => state.view.widgets?.find(i => i.name === widgetName))
     const disabledPopup = isPopupWidgetFamily(widgetMeta?.type)
     const bcName = widgetMeta?.bcName
@@ -132,18 +135,18 @@ const InlinePickList: React.FunctionComponent<Props> = ({
 
     const popupOpenButton = !disabledPopup && (
         <span className={cn(styles.buttonContainer, { [styles.disabledButton]: disabled })} onClick={!disabled ? handleClick : undefined}>
-            <Icon data-test-field-inlinepicklist-popup={true} type="paper-clip" />
+            <Icon {...getUniqueDataTestAttr('popup')} type="paper-clip" />
         </span>
     )
 
     return (
-        <span className={cn(styles.inlinePickList, { [styles.withoutPopupOpenButton]: disabledPopup })}>
+        <span className={cn(styles.container, { [styles.withoutPopupOpenButton]: disabledPopup })}>
             <Select
                 className={cn(className, styles.select)}
                 disabled={disabled}
                 value={value ?? undefined}
                 allowClear={!!value}
-                clearIcon={<Icon data-test-field-inlinepicklist-clear={true} type="close-circle" />}
+                clearIcon={<Icon {...getUniqueDataTestAttr('clear')} type="close-circle" />}
                 showSearch={neededSearch}
                 placeholder={placeholder ?? t('Enter value')}
                 defaultActiveFirstOption={false}
@@ -162,7 +165,7 @@ const InlinePickList: React.FunctionComponent<Props> = ({
                         const title = item[pickMap[fieldName]] as string
                         return (
                             <Select.Option title={title} key={item.id} value={item.id}>
-                                <span data-test-field-inlinepicklist-item={true}>{title}</span>
+                                <span {...getUniqueDataTestAttr('item')}>{title}</span>
                             </Select.Option>
                         )
                     })}

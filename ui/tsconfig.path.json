@@ -22,6 +22,8 @@
       "@store": ["./store"],
       "@router": ["./router"],
       "@i18n": ["./i18n"],
+      "@fields": ["./fields"],
+      "@fields/*": ["./fields/*"],
       "@selectors/*": ["./selectors/*"],
       "@selectors": ["./selectors"]
     }

@@ -1,5 +1,5 @@
-import { interfaces } from '@cxbox-ui/core'
 import moment from 'moment/moment'
+import { FieldType } from '@cxbox-ui/core'
 
 export const dateFormat = moment.ISO_8601
 export const enum DateFormat {
@@ -9,4 +9,4 @@ export const enum DateFormat {
     outputDateTimeWithSecondsFormat = 'DD.MM.YYYY HH:mm:ss'
 }
 
-export type DateFieldTypes = interfaces.FieldType.date | interfaces.FieldType.dateTime | interfaces.FieldType.dateTimeWithSeconds
+export type DateFieldTypes = FieldType.date | FieldType.dateTime | FieldType.dateTimeWithSeconds

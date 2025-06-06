@@ -1,4 +1,4 @@
-import { DrillDownType, interfaces } from '@cxbox-ui/core'
+import { ApplicationErrorType, DrillDownType } from '@cxbox-ui/core'
 
 export interface NotificationState {
     data?: Notification[]
@@ -38,7 +38,7 @@ export interface NotificationCheckNewResponse {
 }
 
 export interface SocketNotification {
-    errorType?: interfaces.ApplicationErrorType.BusinessError | interfaces.ApplicationErrorType.SystemError
+    errorType?: ApplicationErrorType.BusinessError | ApplicationErrorType.SystemError
     title?: string
     time?: string
     text?: string

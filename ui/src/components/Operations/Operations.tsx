@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect, useRef } from 'react'
-import { actions, interfaces, Operation, OperationGroup } from '@cxbox-ui/core'
+import { actions, isOperationGroup, WidgetTypes, Operation, OperationGroup } from '@cxbox-ui/core'
 import { Icon } from 'antd'
 import { useAppSelector } from '@store'
 import styles from './Operations.less'
@@ -13,13 +13,11 @@ import TextSearchInput from '@components/Operations/components/TextSearchInput/T
 import { FileUpload } from '@components/Operations/components/FileUpload/FileUpload'
 import { buildBcUrl } from '@utils/buildBcUrl'
 
-const { isOperationGroup, WidgetTypes } = interfaces
-
 export interface OperationsOwnProps {
     className?: string
     bcName: string
     widgetMeta: AppWidgetMeta
-    operations: Array<interfaces.Operation | interfaces.OperationGroup>
+    operations: Array<Operation | OperationGroup>
     additionalOperations?: ReactNode
 }
 
@@ -33,7 +31,7 @@ function Operations(props: OperationsOwnProps) {
     const dispatch = useDispatch()
 
     const handleOperationClick = React.useCallback(
-        (operation: interfaces.Operation) => {
+        (operation: Operation) => {
             dispatch(
                 actions.sendOperation({
                     bcName,
@@ -57,7 +55,7 @@ function Operations(props: OperationsOwnProps) {
                 return null
             })}
             <div className={cn(styles.operations, className, { [styles.empty]: !defaultOperations?.length })}>
-                {cachedOperations.map((item: interfaces.Operation | interfaces.OperationGroup, index) => {
+                {cachedOperations.map((item: Operation | OperationGroup, index) => {
                     if (isOperationGroup(item)) {
                         return (
                             <OperationsGroup
@@ -138,7 +136,7 @@ const getButtonType = ({ widgetType, index, defaultType }: { widgetType?: string
 const CUSTOM_COMBINED_WITH_DEFAULT_MODE: OperationCustomMode[] = ['default-and-file-upload-dnd']
 const FILE_UPLOAD_DND_MODE: OperationCustomMode[] = ['default-and-file-upload-dnd', 'file-upload-dnd']
 
-const useWidgetOperationsMode = (widget: AppWidgetMeta, operations: (interfaces.Operation | interfaces.OperationGroup)[]) => {
+const useWidgetOperationsMode = (widget: AppWidgetMeta, operations: (Operation | OperationGroup)[]) => {
     const customOperations = widget.options?.buttons?.filter(button => button.actionKey && button.mode?.length && button.mode !== 'default')
 
     const customOperationsWithoutDefaultMode = customOperations

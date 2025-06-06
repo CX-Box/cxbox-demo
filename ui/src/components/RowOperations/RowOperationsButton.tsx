@@ -3,7 +3,7 @@ import { Button, Dropdown } from 'antd'
 import styles from './RowOperationsButton.less'
 import RowOperationsMenu from './RowOperationsMenu'
 import { useAppDispatch } from '@store'
-import { actions, interfaces } from '@cxbox-ui/core'
+import { actions, DataItem, WidgetTableMeta } from '@cxbox-ui/core'
 import { useRowMenuInstance } from '@hooks/useRowMenu'
 
 /**
@@ -13,7 +13,7 @@ interface RowOperationsButtonProps {
     /**
      * Widget meta description
      */
-    meta: interfaces.WidgetTableMeta
+    meta: WidgetTableMeta
     /**
      * Use when business component differs from widget's (e.g. hierarchies nested level)
      */
@@ -28,7 +28,7 @@ interface RowOperationsButtonProps {
  * {@link RowOperationsButton | RowOperationsButton} instance
  */
 export interface RowOperationsButtonInstance {
-    setRow: (record: interfaces.DataItem, e: React.MouseEvent<HTMLElement>) => void
+    setRow: (record: DataItem, e: React.MouseEvent<HTMLElement>) => void
     containerRef: MutableRefObject<HTMLElement>
 }
 

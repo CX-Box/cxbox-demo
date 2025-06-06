@@ -2,12 +2,13 @@ import React from 'react'
 import styles from './MultiField.less'
 import Field from '@components/Field/Field'
 import cn from 'classnames'
-import { interfaces } from '@cxbox-ui/core'
+import { DataItem } from '@cxbox-ui/core'
+import { WidgetField } from '@interfaces/widget'
 
 export interface MultiFieldProps {
     bcName: string
-    fields: interfaces.WidgetField[]
-    data: interfaces.DataItem
+    fields: WidgetField[]
+    data: DataItem
     cursor: string
     widgetName: string
     style: 'inline' | 'list'

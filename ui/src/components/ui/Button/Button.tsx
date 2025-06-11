@@ -1,18 +1,21 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Button as AntdButton } from 'antd'
 import { ButtonProps as AntdButtonProps } from 'antd/lib/button'
 import cn from 'classnames'
 import styles from './Button.less'
+import ReactDOM from 'react-dom'
 
 export const customTypes = {
     formOperation: 'formOperation',
     formOperationRed: 'formOperationRed',
     customDefault: 'customDefault',
     bar: 'bar',
-    empty: 'empty'
+    empty: 'empty',
+    good: 'good',
+    bad: 'bad'
 }
 
-type CustomTypes = keyof typeof customTypes
+export type CustomTypes = keyof typeof customTypes
 type DefaultTypes = AntdButtonProps['type']
 type ButtonsTypes = DefaultTypes | CustomTypes
 
@@ -21,9 +24,10 @@ export interface ButtonProps extends Omit<AntdButtonProps, 'type'> {
     letterCase?: 'upper'
     strong?: boolean
     removeIndentation?: boolean
+    bgColor?: string
 }
 
-function Button({ type = 'customDefault', className, letterCase, strong, removeIndentation, ...restProps }: ButtonProps) {
+function Button({ type = 'customDefault', className, letterCase, strong, removeIndentation, bgColor, ...restProps }: ButtonProps) {
     const classNames = cn(
         styles.root,
         className,
@@ -34,7 +38,26 @@ function Button({ type = 'customDefault', className, letterCase, strong, removeI
     )
     const normalizedType = normalizeButtonType(type)
 
-    return <AntdButton className={classNames} type={normalizedType} {...restProps} />
+    const btnRef = useRef<AntdButton>(null)
+
+    useEffect(() => {
+        if (btnRef.current && bgColor) {
+            // TODO replace with useRef after upgrading to antd 4 or higher
+            const domNode = ReactDOM.findDOMNode(btnRef.current) as HTMLElement
+
+            domNode.style.setProperty('--antd-wave-shadow-color', bgColor)
+        }
+    }, [bgColor])
+
+    return (
+        <AntdButton
+            ref={btnRef}
+            className={classNames}
+            type={normalizedType}
+            {...restProps}
+            style={{ backgroundColor: bgColor, borderColor: bgColor, ...restProps.style }}
+        />
+    )
 }
 
 export default Button

@@ -43,6 +43,7 @@ import { aggCellBgColorRgba, totalRowKey } from './groupingHierarchy/constants'
 import { getAggCellBgOpacity } from './groupingHierarchy/utils/aggregation'
 import Field from '@components/Field/Field'
 import RowOperationsButton from '@components/RowOperations/RowOperationsButton'
+import { useRowMetaWithCache } from '@hooks/useRowMetaWithCache'
 
 const ROW_KEY = 'id'
 
@@ -204,7 +205,7 @@ function Table<T extends CustomDataItem>({
 
     const dragColumnProps: DragListViewProps | null = showColumnSettings ? { onDragEnd: changeOrder, nodeSelector: 'th' } : null
 
-    const isAllowEdit = !expandable && !meta.options?.readOnly && !disableCellEdit
+    const isAllowEdit = !expandable && !meta.options?.readOnly && !disableCellEdit && meta.options?.edit?.style !== 'popup'
 
     const [operationsRef, parentRef, handleRowMenu] = useRowMenu() // NOSONAR(S6440) hook is called conditionally, fix later
 
@@ -332,11 +333,7 @@ function Table<T extends CustomDataItem>({
 
     const { t } = useTranslation()
 
-    const bcRowMeta = useAppSelector(state => {
-        const bcUrl = buildBcUrl(bcName, true, state)
-
-        return bcUrl ? state.view.rowMeta[bcName]?.[bcUrl] : undefined
-    })
+    const bcRowMeta = useRowMetaWithCache(bcName, true)
 
     const isEditMode = useCallback(
         (record: T) => {

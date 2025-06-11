@@ -37,6 +37,8 @@ import WaitUntilPopup from '@components/WaitUntilPopup/WaitUntilPopup'
 import NotificationsContainer from '@components/NotificationsContainer/NotificationsContainer'
 import Chart from '../widgets/Chart/Chart'
 import DebugViewInfoLabel from '@components/DebugViewInfoLabel/DebugViewInfoLabel'
+import CardList from '@components/widgets/CardList/CardList'
+import CardCarouselList from '@components/widgets/CardCarouselList/CardCarouselList'
 
 const customFields = {
     [FieldType.number]: Number,
@@ -52,7 +54,7 @@ const customFields = {
     [CustomFieldTypes.SuggestionPickList]: SuggestionPickListField
 }
 
-const customWidgets: Partial<Record<CustomWidgetTypes | interfaces.WidgetTypes, interfaces.CustomWidgetDescriptor>> = {
+export const customWidgets: Partial<Record<CustomWidgetTypes | interfaces.WidgetTypes, interfaces.CustomWidgetDescriptor>> = {
     [WidgetTypes.Form]: { component: Form },
     [WidgetTypes.Info]: { component: Info },
     [WidgetTypes.List]: { component: Table },
@@ -74,7 +76,9 @@ const customWidgets: Partial<Record<CustomWidgetTypes | interfaces.WidgetTypes, 
     [CustomWidgetTypes.Pie1D]: { component: Chart, card: DashboardCard },
     [CustomWidgetTypes.Column2D]: { component: Chart, card: DashboardCard },
     [CustomWidgetTypes.Line2D]: { component: Chart, card: DashboardCard },
-    [CustomWidgetTypes.DualAxes2D]: { component: Chart, card: DashboardCard }
+    [CustomWidgetTypes.DualAxes2D]: { component: Chart, card: DashboardCard },
+    [CustomWidgetTypes.CardList]: { component: CardList },
+    [CustomWidgetTypes.CardCarouselList]: { component: CardCarouselList }
 }
 
 function View() {

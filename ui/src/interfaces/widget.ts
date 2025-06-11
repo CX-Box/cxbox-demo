@@ -14,6 +14,7 @@ import {
 import { FileUploadFieldMeta as CoreFileUploadFieldMeta, WidgetField as CoreWidgetField } from '@cxbox-ui/schema'
 import { TableSettingsItem } from '@interfaces/tableSettings'
 import { IAggField, IAggLevel } from '@interfaces/groupingHierarchy'
+import { PaginationMode } from '@constants/pagination'
 
 export enum CustomFieldTypes {
     MultipleSelect = 'multipleSelect',
@@ -35,7 +36,9 @@ export enum CustomWidgetTypes {
     Pie1D = 'Pie1D',
     Column2D = 'Column2D',
     Line2D = 'Line2D',
-    DualAxes2D = 'DualAxes2D'
+    DualAxes2D = 'DualAxes2D',
+    CardList = 'CardList',
+    CardCarouselList = 'CardCarouselList'
 }
 
 export const removeRecordOperationWidgets: Array<WidgetTypes | string> = [
@@ -74,7 +77,7 @@ export type TableWidgetField = WidgetListFieldBase & {
     excelWidth?: number
 }
 
-type InternalWidgetOption = {
+export type InternalWidgetOption = {
     widget: string
     style: 'inlineForm' | 'popup' | 'inline' | 'none'
 }
@@ -128,11 +131,13 @@ export interface AppWidgetMeta extends WidgetMeta {
             iconFieldKey?: string
             descriptionFieldKey?: string
         }
+        card?: { valueFieldKey?: string; titleFieldKey?: string }
         buttons?: OperationInfo[]
         pagination?: {
+            enabled?: boolean
             hideLimitOptions?: boolean
             availableLimitsList?: number[]
-            type?: 'nextAndPreviousWihHasNext' | 'nextAndPreviousSmart' | 'nextAndPreviousWithCount'
+            type?: PaginationMode
         }
         groupingHierarchy?: {
             counterMode?: 'none' | 'always' | 'collapsed'
@@ -168,11 +173,15 @@ export interface SuggestionPickListWidgetMeta extends WidgetMeta {
     }>
 }
 
+export type FilePreviewMode = 'popup' | 'inline'
+
 export interface SuggestionPickListField extends Omit<PickListFieldMeta, 'type'> {
     type: CustomFieldTypes.SuggestionPickList
 }
 
 export type FileUploadFieldMeta = CoreFileUploadFieldMeta & {
+    width?: number
+    minRows?: number
     preview?: {
         /**
          * Enables file previews. Default false.
@@ -189,7 +198,7 @@ export type FileUploadFieldMeta = CoreFileUploadFieldMeta & {
         /**
          * Preview display mode: popup (default), side-panel.
          */
-        mode?: 'popup' | 'side-panel'
+        mode?: FilePreviewMode
         /**
          * Includes display of mini-previews for file types for which we can, for the rest there are icons with an eye.
          * The default is false (icons with an eye are shown for all files).
@@ -232,6 +241,8 @@ export interface AdditionalInfoWidgetMeta extends Omit<WidgetInfoMeta, 'type'> {
 }
 
 export interface AdditionalListWidgetMeta extends AppWidgetMeta {}
+
+export interface CardCarouselListWidgetMeta extends AppWidgetMeta {}
 
 export interface Chart1DConfig {
     valueFieldKey: string

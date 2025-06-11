@@ -3,9 +3,7 @@ import { Select } from 'antd'
 import { useTranslation } from 'react-i18next'
 import styles from './Limit.less'
 import cn from 'classnames'
-
-const DEFAULT_PAGE_LIMIT = 5
-const AVAILABLE_LIMITS_LIST = [5, 10, 15, 20]
+import { AVAILABLE_LIMITS_LIST, DEFAULT_PAGE_LIMIT } from '@constants/pagination'
 
 interface LimitProps {
     className: string

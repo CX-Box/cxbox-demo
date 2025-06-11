@@ -1,43 +1,77 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { forwardRef, RefObject, useEffect, useImperativeHandle, useRef, useState } from 'react'
 import styles from '@components/FileViewer/Image/Image.less'
 import Empty from '@components/FileViewer/Empty/Empty'
+import { Spin } from 'antd'
+import { ImageControl, useImageControl } from '@hooks/image'
 
 interface ImageProps extends Omit<React.ImgHTMLAttributes<HTMLImageElement>, 'placeholder' | 'onClick'> {
     mode?: 'light' | 'dark'
+    spinning?: boolean
+    imageControlEnabled: boolean
+    onChangeFullScreen?: () => void
 }
 
-function Image({ alt, src, mode, ...restProps }: ImageProps) {
-    const [error, setError] = useState<boolean>(false)
-    const imageRef = useRef<HTMLImageElement>(null)
+const Image = forwardRef<ImageControl | undefined, ImageProps>(
+    ({ alt, src, mode, spinning, imageControlEnabled = false, onChangeFullScreen, ...restProps }, ref) => {
+        const imageRef = useRef<HTMLImageElement>(null)
 
-    useEffect(() => {
-        const handleError = () => {
-            setError(true)
-        }
+        const imageControl = useImageControl(imageRef, imageControlEnabled)
 
-        const imageElement = imageRef.current
+        useImperativeHandle(
+            ref,
+            () => {
+                return imageControl
+            },
+            [imageControl]
+        )
 
-        if (imageElement && !error) {
-            imageElement.addEventListener('error', handleError)
-        }
+        const { rollbackChanges } = imageControl ?? {}
 
-        return () => {
-            imageElement?.removeEventListener('error', handleError)
-        }
-    }, [error, src])
+        useEffect(() => {
+            return () => {
+                rollbackChanges?.()
+            }
+        }, [rollbackChanges, src])
 
-    useEffect(() => {
-        return () => {
-            setError(false)
-        }
-    }, [src])
+        const [error, setError] = useState<boolean>(false)
+        const divRef = useRef<HTMLDivElement>(null)
 
-    return (
-        <div className={styles.root}>
-            {!error && <img ref={imageRef} alt={alt} src={src} {...restProps} />}
-            {error && <Empty type="broken" mode={mode} size="big" text={'Oops, something went wrong'} />}
-        </div>
-    )
-}
+        useEffect(() => {
+            const handleError = () => {
+                setError(true)
+            }
+
+            const imageElement = (imageRef as RefObject<HTMLImageElement>).current
+
+            if (imageElement && !error) {
+                imageElement.addEventListener('error', handleError)
+            }
+
+            return () => {
+                imageElement?.removeEventListener('error', handleError)
+            }
+        }, [error, imageRef, src])
+
+        useEffect(() => {
+            return () => {
+                setError(false)
+            }
+        }, [src])
+
+        return (
+            <div className={styles.root} ref={divRef}>
+                {spinning && <Spin spinning={spinning} style={{ width: '100%', height: '100%' }} />}
+                <img
+                    ref={imageRef}
+                    alt={alt}
+                    src={src}
+                    {...restProps}
+                    style={{ ...restProps.style, display: !error && !spinning ? restProps.style?.display : 'none' }}
+                />
+                {error && !spinning && <Empty type="broken" mode={mode} size="big" text={'Oops, something went wrong'} />}
+            </div>
+        )
+    }
+)
 
 export default Image

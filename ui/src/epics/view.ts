@@ -20,6 +20,8 @@ import { postOperationRoutine } from './utils/postOperationRoutine'
 import { AppWidgetGroupingHierarchyMeta, AppWidgetMeta, CustomWidgetTypes } from '@interfaces/widget'
 import { getGroupingHierarchyWidget } from '@utils/groupingHierarchy'
 import { DataItem } from '@cxbox-ui/schema'
+import { findWidgetHasCount } from '@components/ui/Pagination/utils'
+// import { selectInternalWidgetsBcName } from '@selectors/selectors'
 
 const getWidgetsForRowMetaUpdate = (state: RootState, activeBcName: string) => {
     const { widgets, pendingDataChanges } = state.view
@@ -69,13 +71,13 @@ const bcFetchCountEpic: RootEpic = (action$, state$, { api }) =>
         filter(actions.bcFetchDataSuccess.match),
         mergeMap(action => {
             const state = state$.value
-            const sourceWidget = state.view.widgets?.find(i => i.bcName === action.payload.bcName)
+            const widgetWithCount = findWidgetHasCount(action.payload.bcName, state.view.widgets)
 
-            if (!sourceWidget) {
+            if (!widgetWithCount) {
                 return EMPTY
             }
 
-            const bcName = sourceWidget.bcName
+            const bcName = widgetWithCount.bcName
             const screenName = state.screen.screenName
             const filters = utils.getFilters(state.screen.filters[bcName] || EMPTY_ARRAY)
             const bcUrl = buildBcUrl(bcName)
@@ -388,6 +390,18 @@ const closeFormPopup: RootEpic = (action$, state$) =>
             if (formPopupWidget) {
                 return of(actions.closeViewPopup({ bcName: formPopupWidget.bcName }))
             }
+            //TODO Remove the code if you don't need to close the pop-up to view files after a successful operation
+            // const internalWidgetsBcName =
+            //     state.view.popupData?.calleeWidgetName &&
+            //     state.view.popupData.options?.type === 'file-viewer' &&
+            //     selectInternalWidgetsBcName(state, state.view.popupData?.calleeWidgetName)
+            //
+            // if (internalWidgetsBcName) {
+            //     return concat(
+            //         of(actions.closeViewPopup({ bcName: internalWidgetsBcName })),
+            //         of(actions.resetRecordForm({ bcName: internalWidgetsBcName }))
+            //     )
+            // }
 
             return EMPTY
         })

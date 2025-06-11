@@ -1,9 +1,7 @@
 import React, { useCallback, useEffect } from 'react'
 import Popup from '@components/ui/Popup/Popup'
 import Header from '@components/FileViewerPopup/Header'
-import PopupContent from '@components/FileViewerPopup/PopupContent'
-import PopupFooter from '@components/FileViewerPopup/PopupFooter'
-import FileViewer from '@components/FileViewer/FileViewer'
+import FileViewer, { FileViewerProps } from '@components/FileViewer/FileViewer'
 import styles from './FileViewerPopup.less'
 import ArrowPagination from '@components/ui/ArrowPagination/ArrowPagination'
 import { useAppSelector } from '@store'
@@ -17,9 +15,11 @@ import FullscreenFileViewer from '@components/FileViewerPopup/FullscreenFileView
 import { useWindowSize } from '@hooks/useWindowSize'
 import { useVisibility } from '@components/widgets/Table/hooks/useVisibility'
 import { trimString } from '@utils/fileViewer'
-import { FileUploadFieldMeta } from '@interfaces/widget'
+import { AppWidgetMeta, FileUploadFieldMeta } from '@interfaces/widget'
 import { useTranslation } from 'react-i18next'
 import { CxBoxApiInstance } from '../../api'
+import { useInternalForm } from '@components/FileViewerPopup/hooks/useInternalForm'
+import ImageControlButtons from '@components/FileViewer/ImageControlButtons/ImageControlButtons'
 
 const POPUP_WIDTH = 808
 const VIEWER_WIDTH = 760
@@ -29,7 +29,7 @@ function FileViewerPopup() {
     const { t } = useTranslation()
     const popupData = useAppSelector(state => state.view.popupData) as PopupData
     const { active: visible, calleeWidgetName, options } = popupData
-    const { type, calleeFieldKey } = (options as FileViewerPopupOptions) ?? {}
+    const { type, calleeFieldKey, mode } = (options as FileViewerPopupOptions) ?? {}
     const widget = useAppSelector(state => state.view.widgets?.find(item => item.name === calleeWidgetName))
     const widgetField = (widget?.fields as WidgetField[])?.find(field => field.key === calleeFieldKey) as FileUploadFieldMeta | undefined
     const { fileSource, fileIdKey = '', preview } = widgetField ?? {}
@@ -52,11 +52,13 @@ function FileViewerPopup() {
 
     const { visibility: fullscreen, changeVisibility: setFullscreen } = useVisibility(false)
 
+    const { formElement } = useInternalForm(widget as AppWidgetMeta)
+
     useEffect(() => {
         if (visible) {
-            setFullscreen(false)
+            setFullscreen(mode === 'onlyFullscreen')
         }
-    }, [setFullscreen, visible])
+    }, [mode, setFullscreen, visible])
 
     const dispatch = useDispatch()
 
@@ -98,7 +100,7 @@ function FileViewerPopup() {
                             </div>
                         }
                         hint={preview?.hintKey ? record?.[preview?.hintKey] : undefined}
-                        onClose={() => setFullscreen(false)}
+                        onClose={mode === 'onlyFullscreen' ? handleCancel : () => setFullscreen(false)}
                         onDownload={handleDownload}
                     />
                 }
@@ -110,6 +112,16 @@ function FileViewerPopup() {
                             view="full"
                             width={windowSize.width ?? 0}
                             height={windowSize.height ? windowSize.height - 80 : 0}
+                            imageControlEnabled={true}
+                            footer={({ displayType, imageControl }) =>
+                                displayType === 'image' && imageControl ? (
+                                    <ImageControlButtons
+                                        imageControl={imageControl}
+                                        fullScreen={true}
+                                        onChangeFullScreen={() => (mode === 'onlyFullscreen' ? handleCancel() : setFullscreen(false))}
+                                    />
+                                ) : null
+                            }
                         />
                     </ArrowPagination>
                 }
@@ -128,18 +140,34 @@ function FileViewerPopup() {
                         onFullscreen={() => setFullscreen(true)}
                     />
                 }
-                footer={
-                    <PopupFooter>
-                        <ArrowPagination {...paginationProps} />
-                    </PopupFooter>
-                }
+                footer={null}
                 onCancel={handleCancel}
                 width={POPUP_WIDTH}
                 className={styles.popup}
             >
-                <PopupContent>
-                    <FileViewer fileName={fileName} url={downloadUrl} view="compact" width={VIEWER_WIDTH} height={VIEWER_HEIGHT} />
-                </PopupContent>
+                <div style={{ width: VIEWER_WIDTH, height: VIEWER_HEIGHT }}>
+                    <FileViewer
+                        fileName={fileName}
+                        url={downloadUrl}
+                        view="compact"
+                        width={VIEWER_WIDTH}
+                        height={VIEWER_HEIGHT}
+                        imageControlEnabled={true}
+                        footer={({ displayType, imageControl }) =>
+                            displayType === 'image' && imageControl ? (
+                                <ImageControlButtons
+                                    imageControl={imageControl}
+                                    fullScreen={false}
+                                    onChangeFullScreen={() => setFullscreen(true)}
+                                />
+                            ) : null
+                        }
+                    />
+                </div>
+                <div className={styles.footer}>
+                    <ArrowPagination {...paginationProps} />
+                </div>
+                {formElement}
             </Popup>
         </>
     )

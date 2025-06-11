@@ -1,0 +1,65 @@
+.root {
+  [class*="Dictionary_readOnly"] {
+    min-height: 100%;
+    font-size: 16px;
+  }
+}
+
+.main {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+}
+
+.previewGroup {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 10px;
+  row-gap: 10px;
+}
+
+.previewGroup.carousel {
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+.card {
+  font-size: 14px;
+  line-height: 16px;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.card.active [class*='FileViewer__preview'] {
+  border-width: 8px;
+}
+
+.previewItemWrapper {
+  position: relative;
+
+}
+
+.status {
+  position: absolute;
+  top: 20%;
+  left: 2px;
+  right: 2px;
+  bottom: 20%;
+  z-index: 1;
+}
+
+.card.active .status {
+  left: 9px;
+  right: 9px;
+}
+
+
+
+
+.empty {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+

@@ -68,9 +68,9 @@ jobs:
           password: ${{ secrets.CXBOX_DEMO_SSH_PASSWORD }}
           port: 22
           script: |
-            sudo mkdir /home/cxbox/demo || true
-            sudo chmod -R 777 /home/cxbox/demo || true
-            cd /home/cxbox/demo
+            sudo mkdir /home/cxbox/rqdemo || true
+            sudo chmod -R 777 /home/cxbox/rqdemo || true
+            cd /home/cxbox/rqdemo
             sudo docker ps
             sudo docker compose -f docker-compose-rq.yml rm -svfa || true
             sudo docker system prune --force

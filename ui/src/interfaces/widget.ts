@@ -131,7 +131,7 @@ export interface AppWidgetMeta extends WidgetMeta {
         }
         buttons?: OperationInfo[]
         pagination?: {
-            enabled: boolean
+            enabled?: boolean
             hideLimitOptions?: boolean
             availableLimitsList?: number[]
             type?: PaginationMode

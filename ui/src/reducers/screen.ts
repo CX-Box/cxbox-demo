@@ -7,7 +7,7 @@ export interface ScreenState extends interfaces.ScreenState {
     menuCollapsed: boolean
     bo: {
         activeBcName: string
-        bc: Record<string, BcMetaState & { filterGroups?: FilterGroup[] }>
+        bc: Record<string, BcMetaState & { defaultLimit?: number; filterGroups?: FilterGroup[] }>
     }
     pagination: { [bcName: string]: { limit?: number } }
     collapsedWidgets: { [viewName: string]: string[] }
@@ -79,6 +79,7 @@ const screenReducerBuilder = reducers
         state.collapsedWidgets = initialState.collapsedWidgets
         // временное решение чтобы сохранялся лимит при сменен экранов
         Object.values(state.bo.bc).forEach(bc => {
+            bc.defaultLimit = bc.limit
             bc.limit = state.pagination[bc.name]?.limit ?? bc.limit
         })
     })

@@ -1,12 +1,10 @@
 import React from 'react'
-import { shallowEqual, useDispatch } from 'react-redux'
 import { Pagination as AntPagination } from 'antd'
 import styles from './DefaultPagination.less'
 import { interfaces } from '@cxbox-ui/core'
-import { useAppSelector } from '@store'
 import Limit from '@components/ui/Pagination/components/Limit'
-import { actions } from '@actions'
 import { useWidgetPaginationLimit } from '@components/ui/Pagination/hooks/useWidgetPaginationLimit'
+import { usePagination } from '@hooks/usePagination'
 
 export interface DefaultPaginationProps {
     meta: interfaces.WidgetMeta
@@ -14,25 +12,9 @@ export interface DefaultPaginationProps {
 }
 
 function DefaultPagination({ meta, disabledLimit }: DefaultPaginationProps) {
-    const dispatch = useDispatch()
+    const { changePage, page: bcPage, limit: bcLimit, total } = usePagination(meta.name)
 
-    const { bcName, limit: metaLimit } = meta
-    const { bcLimit, page } = useAppSelector(state => {
-        const bc = bcName ? state.screen.bo.bc[bcName] : undefined
-        return {
-            bcLimit: bc?.limit,
-            page: bc?.page
-        }
-    }, shallowEqual)
-    const total = useAppSelector(state => state.view.bcRecordsCount[bcName]?.count)
-    const limit = metaLimit || bcLimit
-
-    const handlePageChange = React.useCallback(
-        (p: number) => {
-            dispatch(actions.bcChangePage({ bcName, page: p }))
-        },
-        [dispatch, bcName]
-    )
+    const limit = meta.limit || bcLimit
 
     const { changePageLimit, hideLimitOptions, value: pageLimit, options } = useWidgetPaginationLimit(meta)
 
@@ -46,10 +28,10 @@ function DefaultPagination({ meta, disabledLimit }: DefaultPaginationProps) {
                 className={styles.pagination}
                 size="small"
                 pageSize={limit}
-                defaultCurrent={page}
-                current={page}
+                defaultCurrent={bcPage}
+                current={bcPage}
                 total={total}
-                onChange={handlePageChange}
+                onChange={changePage}
             />
             {!hideLimitOptions && (
                 <Limit

@@ -21,13 +21,13 @@ services:
       - rq-cxbox-demo-node-2
 
   rq-cxbox-demo-node-1:
-    image: 'cxbox/cxbox-demo:latest'
+    image: 'cxbox/cxbox-rqdemo:latest'
     environment:
       MAIL_HOST: 'smtp.gmail.com'
       MAIL_USER: 'cxbox.mail.test@gmail.com'
       MAIL_PASSWORD: ${MAIL_PASSWORD}
-      FRONTEND_AUTH_SERVER_URL: 'http://demo.cxbox.org/auth'
-      BACKEND_AUTH_SERVER_URL: 'http://demo.cxbox.org/auth'
+      FRONTEND_AUTH_SERVER_URL: 'http://rqdemo.cxbox.org/auth'
+      BACKEND_AUTH_SERVER_URL: 'http://rqdemo.cxbox.org/auth'
       HIBERNATE_DDL_AUTO: 'none'
       DEV_PANEL_ENABLED: 'true'
       META_DIRECTORY: 'classpath:meta'
@@ -40,7 +40,7 @@ services:
       DATABASE_PASSWORD: 'postgres'
       MINIO_ACCESS_KEY: '4eb6a7db8b58994ea61b'
       MINIO_SECRET_KEY: 'prCv8t9LGRH18FB5pLr5jqDZ/dixZkb9cFajueGW'
-      MINIO_URL: 'http://cxbox_minio:9000'
+      MINIO_URL: 'http://rq-cxbox_minio:9000'
       MINIO_DEFAULT_BUCKETS: 'edcs3gnsadevb'
       ACTIVEMQ_ADMIN_LOGIN: admin
       ACTIVEMQ_ADMIN_PASSWORD: admin
@@ -60,13 +60,13 @@ services:
       - rq-activemq
 
   rq-cxbox-demo-node-2:
-    image: 'cxbox/cxbox-demo:latest'
+    image: 'cxbox/cxbox-rqdemo:latest'
     environment:
       MAIL_HOST: 'smtp.gmail.com'
       MAIL_USER: 'cxbox.mail.test@gmail.com'
       MAIL_PASSWORD: ${MAIL_PASSWORD}
-      FRONTEND_AUTH_SERVER_URL: 'http://demo.cxbox.org/auth'
-      BACKEND_AUTH_SERVER_URL: 'http://demo.cxbox.org/auth'
+      FRONTEND_AUTH_SERVER_URL: 'http://rqdemo.cxbox.org/auth'
+      BACKEND_AUTH_SERVER_URL: 'http://rqdemo.cxbox.org/auth'
       HIBERNATE_DDL_AUTO: 'none'
       DEV_PANEL_ENABLED: 'true'
       META_DIRECTORY: 'classpath:meta'
@@ -79,7 +79,7 @@ services:
       DATABASE_PASSWORD: 'postgres'
       MINIO_ACCESS_KEY: '4eb6a7db8b58994ea61b'
       MINIO_SECRET_KEY: 'prCv8t9LGRH18FB5pLr5jqDZ/dixZkb9cFajueGW'
-      MINIO_URL: 'http://cxbox_minio:9000'
+      MINIO_URL: 'http://rq-cxbox_minio:9000'
       MINIO_DEFAULT_BUCKETS: 'edcs3gnsadevb'
       ACTIVEMQ_ADMIN_LOGIN: admin
       ACTIVEMQ_ADMIN_PASSWORD: admin

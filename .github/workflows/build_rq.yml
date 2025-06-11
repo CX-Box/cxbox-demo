@@ -59,7 +59,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/cxbox-demo:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/cxbox-rqdemo:latest
       - name: prepare - stop all containers from previous deploy
         uses: appleboy/ssh-action@v0.1.10
         with:

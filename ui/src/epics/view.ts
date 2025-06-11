@@ -20,6 +20,7 @@ import { postOperationRoutine } from './utils/postOperationRoutine'
 import { AppWidgetGroupingHierarchyMeta, AppWidgetMeta, CustomWidgetTypes } from '@interfaces/widget'
 import { getGroupingHierarchyWidget } from '@utils/groupingHierarchy'
 import { DataItem } from '@cxbox-ui/schema'
+import { selectInternalWidgetsBcName } from '@selectors/selectors'
 
 const getWidgetsForRowMetaUpdate = (state: RootState, activeBcName: string) => {
     const { widgets, pendingDataChanges } = state.view
@@ -388,6 +389,18 @@ const closeFormPopup: RootEpic = (action$, state$) =>
             if (formPopupWidget) {
                 return of(actions.closeViewPopup({ bcName: formPopupWidget.bcName }))
             }
+            //TODO Remove the code if you don't need to close the pop-up to view files after a successful operation
+            // const internalWidgetsBcName =
+            //     state.view.popupData?.calleeWidgetName &&
+            //     state.view.popupData.options?.type === 'file-viewer' &&
+            //     selectInternalWidgetsBcName(state, state.view.popupData?.calleeWidgetName)
+            //
+            // if (internalWidgetsBcName) {
+            //     return concat(
+            //         of(actions.closeViewPopup({ bcName: internalWidgetsBcName })),
+            //         of(actions.resetRecordForm({ bcName: internalWidgetsBcName }))
+            //     )
+            // }
 
             return EMPTY
         })

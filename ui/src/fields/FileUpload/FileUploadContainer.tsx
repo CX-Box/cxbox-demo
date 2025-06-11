@@ -12,12 +12,13 @@ import { RowMetaField } from '@interfaces/rowMeta'
 import { useSingleUploadRequest } from '@hooks/useSingleUploadRequest'
 import { AxiosError, CanceledError } from 'axios'
 import SingleFileUpload from './SingleFileUpload'
-import ReadOnlySingleFileUpload, { ReadOnlySingleFileUploadProps } from './ReadOnlySingleFileUpload'
+import ReadOnlySingleFileUpload from './ReadOnlySingleFileUpload'
 import { actions } from '@actions'
 import { FileUploadFieldMeta } from '@interfaces/widget'
 import { useDispatch } from 'react-redux'
 import { usePrevious } from '@hooks/usePrevious'
 import { DataValue } from '@cxbox-ui/core'
+import { useInternalWidgetSelector } from '@hooks/useInternalWidgetSelector'
 
 interface Props extends Omit<BaseFieldProps, 'meta'> {
     value: string
@@ -32,11 +33,11 @@ const FileUploadContainer: React.FunctionComponent<Props> = ({
     readOnly,
     metaError,
     placeholder,
-    meta,
+    meta: fieldMeta,
     value: fieldValue
 }) => {
     const { t } = useTranslation()
-    const { key: fieldName, fileIdKey, fileSource, snapshotKey, snapshotFileIdKey, preview } = meta
+    const { key: fieldName, fileIdKey, fileSource, snapshotKey, snapshotFileIdKey, preview } = fieldMeta
     const widgetMeta = useAppSelector(state => state.view.widgets?.find(i => i.name === widgetName))
     const bcName = widgetMeta?.bcName as string
     const fieldDataItem = useAppSelector(state => (bcName && state.data[bcName]?.find(item => item.id === cursor)) || undefined)
@@ -46,7 +47,7 @@ const FileUploadContainer: React.FunctionComponent<Props> = ({
     const uploadType = 'edit'
     const bcUrl = buildBcUrl(bcName, true)
     const rowMeta = useAppSelector(state => state.view.rowMeta[bcName]?.[bcUrl])
-    const rowMetaField = rowMeta?.fields.find(field => field.key === meta.key) as RowMetaField | undefined
+    const rowMetaField = rowMeta?.fields.find(field => field.key === fieldMeta.key) as RowMetaField | undefined
     const fileAccept = rowMetaField?.fileAccept
     const { getAddedFileList, clearAddedFiles, initializeNewAddedFile, initializeNotSupportedFile, updateAddedFile, callbackRef } =
         useUploadFilesInfoWithAutoRemove(fileAccept)
@@ -152,7 +153,7 @@ const FileUploadContainer: React.FunctionComponent<Props> = ({
             })
             const diffFileName = fieldDataItem?.[snapshotKey as keyof typeof fieldDataItem] as string
 
-            return { mode: 'snapshot' as ReadOnlySingleFileUploadProps['mode'], diffFileName, diffDownloadUrl }
+            return { diffFileName, diffDownloadUrl }
         }
 
         return
@@ -182,6 +183,8 @@ const FileUploadContainer: React.FunctionComponent<Props> = ({
                 fileName={fileName}
                 downloadUrl={downloadUrl}
                 {...diffProps}
+                width={fieldMeta.width}
+                mode={preview?.mode}
                 onFileIconClick={displayFileViewer ? handleFileIconClick : undefined}
             />
         )
@@ -213,7 +216,7 @@ const FileUploadContainer: React.FunctionComponent<Props> = ({
                 successHint={t('The file has been uploaded. Please save the changes')}
                 data-test-notification-inner-container={true}
                 data-test-notification-for-field={true}
-                data-test-field-key={meta.key}
+                data-test-field-key={fieldMeta.key}
                 data-test-widget-name={widgetName}
             />
         </>
@@ -230,10 +233,19 @@ export const useFileIconClick = (widgetName: string, bcName: string, recordId: s
 
     const handleFileIconClick = useCallback(() => {
         setWasClick(true)
-        dispatch(actions.bcSelectRecord({ bcName, cursor: recordId }))
-    }, [bcName, dispatch, recordId])
+    }, [])
 
     const currentCursorPrevious = usePrevious(currentCursor)
+
+    useEffect(() => {
+        if (currentCursor !== recordId && wasClick) {
+            dispatch(actions.bcSelectRecord({ bcName, cursor: recordId }))
+        }
+    }, [bcName, currentCursor, dispatch, recordId, wasClick])
+
+    const widget = useAppSelector(state => state.view.widgets.find(widget => widget.name === widgetName))
+
+    const { internalWidget } = useInternalWidgetSelector(widget, 'popup')
 
     useEffect(() => {
         if (currentCursor === recordId && wasClick) {
@@ -252,7 +264,17 @@ export const useFileIconClick = (widgetName: string, bcName: string, recordId: s
         } else if (currentCursor !== currentCursorPrevious && wasClick) {
             setWasClick(false)
         }
-    }, [currentCursor, currentCursorPrevious, dispatch, fieldName, recordId, wasClick, widgetName])
+    }, [
+        currentCursor,
+        currentCursorPrevious,
+        dispatch,
+        fieldName,
+        internalWidget?.bcName,
+        internalWidget?.name,
+        recordId,
+        wasClick,
+        widgetName
+    ])
 
     return handleFileIconClick
 }

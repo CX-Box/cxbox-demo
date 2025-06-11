@@ -37,6 +37,7 @@ import WaitUntilPopup from '@components/WaitUntilPopup/WaitUntilPopup'
 import NotificationsContainer from '@components/NotificationsContainer/NotificationsContainer'
 import Chart from '../widgets/Chart/Chart'
 import DebugViewInfoLabel from '@components/DebugViewInfoLabel/DebugViewInfoLabel'
+import CardList from '@components/widgets/DocumentList/CardList'
 
 const customFields = {
     [FieldType.number]: Number,
@@ -74,7 +75,8 @@ const customWidgets: Partial<Record<CustomWidgetTypes | interfaces.WidgetTypes, 
     [CustomWidgetTypes.Pie1D]: { component: Chart, card: DashboardCard },
     [CustomWidgetTypes.Column2D]: { component: Chart, card: DashboardCard },
     [CustomWidgetTypes.Line2D]: { component: Chart, card: DashboardCard },
-    [CustomWidgetTypes.DualAxes2D]: { component: Chart, card: DashboardCard }
+    [CustomWidgetTypes.DualAxes2D]: { component: Chart, card: DashboardCard },
+    [CustomWidgetTypes.CardList]: { component: CardList }
 }
 
 function View() {

@@ -1,8 +1,6 @@
 import React, { useCallback, useEffect } from 'react'
 import Popup from '@components/ui/Popup/Popup'
 import Header from '@components/FileViewerPopup/Header'
-import PopupContent from '@components/FileViewerPopup/PopupContent'
-import PopupFooter from '@components/FileViewerPopup/PopupFooter'
 import FileViewer from '@components/FileViewer/FileViewer'
 import styles from './FileViewerPopup.less'
 import ArrowPagination from '@components/ui/ArrowPagination/ArrowPagination'
@@ -17,9 +15,10 @@ import FullscreenFileViewer from '@components/FileViewerPopup/FullscreenFileView
 import { useWindowSize } from '@hooks/useWindowSize'
 import { useVisibility } from '@components/widgets/Table/hooks/useVisibility'
 import { trimString } from '@utils/fileViewer'
-import { FileUploadFieldMeta } from '@interfaces/widget'
+import { AppWidgetMeta, FileUploadFieldMeta } from '@interfaces/widget'
 import { useTranslation } from 'react-i18next'
 import { CxBoxApiInstance } from '../../api'
+import { useInternalForm } from '@components/FileViewerPopup/hooks/useInternalForm'
 
 const POPUP_WIDTH = 808
 const VIEWER_WIDTH = 760
@@ -51,6 +50,8 @@ function FileViewerPopup() {
     const windowSize = useWindowSize()
 
     const { visibility: fullscreen, changeVisibility: setFullscreen } = useVisibility(false)
+
+    const { formElement } = useInternalForm(widget as AppWidgetMeta)
 
     useEffect(() => {
         if (visible) {
@@ -128,18 +129,18 @@ function FileViewerPopup() {
                         onFullscreen={() => setFullscreen(true)}
                     />
                 }
-                footer={
-                    <PopupFooter>
-                        <ArrowPagination {...paginationProps} />
-                    </PopupFooter>
-                }
+                footer={null}
                 onCancel={handleCancel}
                 width={POPUP_WIDTH}
                 className={styles.popup}
             >
-                <PopupContent>
+                <div style={{ width: VIEWER_WIDTH, height: VIEWER_HEIGHT }}>
                     <FileViewer fileName={fileName} url={downloadUrl} view="compact" width={VIEWER_WIDTH} height={VIEWER_HEIGHT} />
-                </PopupContent>
+                </div>
+                <div className={styles.footer}>
+                    <ArrowPagination {...paginationProps} />
+                </div>
+                {formElement}
             </Popup>
         </>
     )

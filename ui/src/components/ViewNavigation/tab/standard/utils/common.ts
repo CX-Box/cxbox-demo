@@ -1,4 +1,4 @@
-const PATH_SEPARATOR = '/'
+import { PATH_SEPARATOR } from '@components/ViewNavigation/tab/standard/constants'
 
 export const getNodePath = (parentPath: string | undefined, uniqueValue: string) =>
     parentPath ? [parentPath, uniqueValue].join(PATH_SEPARATOR) : uniqueValue

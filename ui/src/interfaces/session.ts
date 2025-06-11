@@ -30,6 +30,7 @@ export type FeatureSetting = {
 export interface LoginResponse extends interfaces.LoginResponse {
     userId: string
     featureSettings?: FeatureSetting[]
+    screens: SessionScreen[]
 }
 
 export interface SessionScreen extends interfaces.SessionScreen {
@@ -38,8 +39,17 @@ export interface SessionScreen extends interfaces.SessionScreen {
 
 export type NavigationTypes = 'standard'
 
+export interface ViewNavigationGroup extends interfaces.ViewNavigationGroup {
+    uid: string | undefined
+    child: Array<ViewNavigationGroup | ViewNavigationItem>
+}
+
+export interface ViewNavigationItem extends interfaces.ViewNavigationItem {
+    uid: string | undefined
+}
+
 export interface ScreenMetaResponse extends interfaces.ScreenMetaResponse {
-    navigation?: interfaces.ScreenMetaResponse['navigation'] & { type?: NavigationTypes }
+    navigation?: { type?: NavigationTypes; menu: Array<ViewNavigationGroup | ViewNavigationItem> }
     views: ViewMetaResponse[]
 }
 

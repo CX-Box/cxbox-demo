@@ -4,7 +4,7 @@ services:
 
   rq-nginx:
     image: nginx:latest
-    container_name: nginx
+    container_name: rq-nginx
     volumes:
       - ./docker/nginx/conf/nginx.conf:/etc/nginx/nginx.conf
       - ./docker/nginx/templates/:/etc/nginx/templates/

@@ -1,0 +1,116 @@
+name: Build project
+
+on:
+  push:
+    branches:
+      - 'react_query'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: ['17']
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK ${{ matrix.java }}
+        uses: actions/setup-java@v3
+        with:
+          java-version: ${{ matrix.java }}
+          distribution: 'adopt'
+          cache: "maven"
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: "yarn"
+          cache-dependency-path: ui
+      - name: Java version
+        run: java -version
+      - name: Maven version
+        run: mvn -v
+      - name: Node version
+        run: node -v
+      - name: Npm version
+        run: npm -v
+      - name: Yarn version
+        run: yarn -v
+      - name: Yarn version /usr/local/bin/
+        run: /usr/local/bin/yarn -v
+      - name: Build with Maven
+        run: mvn clean install -U -PUI -Pcoverage sonar:sonar -Dsonar.organization=cx-box -Dsonar.projectKey=CX-Box_cxbox-demo -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: Exit early if java 8
+        run: '[ "${{ matrix.java }}" = "8" ] && exit 0 || echo "Skip deploy for java 8. Deploy will be processed for java 17"'
+      - name: Exit early if java 11
+        run: '[ "${{ matrix.java }}" = "11" ] && exit 0 || echo "Skip deploy for java 11. Deploy will be processed for java 17"'
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/cxbox-demo:latest
+      - name: prepare - stop all containers from previous deploy
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: 188.124.37.74
+          username: ${{ secrets.CXBOX_DEMO_SSH_USER }}
+          password: ${{ secrets.CXBOX_DEMO_SSH_PASSWORD }}
+          port: 22
+          script: |
+            sudo mkdir /home/cxbox/demo || true
+            sudo chmod -R 777 /home/cxbox/demo || true
+            cd /home/cxbox/demo
+            sudo docker ps
+            sudo docker compose -f docker-compose-rq.yml rm -svfa || true
+            sudo docker system prune --force
+            sudo docker volume prune --force
+            sudo docker image prune -a --force
+            sudo docker ps
+      - name: prepare - copy files from new release and delete old files
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: 188.124.37.74
+          username:  ${{ secrets.CXBOX_DEMO_SSH_USER }}
+          password: ${{ secrets.CXBOX_DEMO_SSH_PASSWORD }}
+          port: 22
+          source: "docker,docker-compose-rq.yml"
+          target: /home/cxbox/rqdemo
+          rm: true
+      - name: prepare - add docker env varialbes populated from secrets
+        uses: appleboy/ssh-action@v1.0.0
+        env:
+          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+        with:
+          host: 188.124.37.74
+          username: ${{ secrets.CXBOX_DEMO_SSH_USER }}
+          password: ${{ secrets.CXBOX_DEMO_SSH_PASSWORD }}
+          port: 22
+          envs: MAIL_PASSWORD
+          script: |
+            sudo mkdir /home/cxbox/rqdemo || true
+            sudo chmod -R 777 /home/cxbox/rqdemo || true
+            cd /home/cxbox/rqdemo
+            echo "MAIL_PASSWORD=$MAIL_PASSWORD" > '.env'
+      - name: start
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: 188.124.37.74
+          username: ${{ secrets.CXBOX_DEMO_SSH_USER }}
+          password: ${{ secrets.CXBOX_DEMO_SSH_PASSWORD }}
+          port: 22
+          script: |
+            sudo chmod -R 777 /home/cxbox/rqdemo || true
+            cd /home/cxbox/rqdemo
+            sudo docker compose -f docker-compose-rq.yml up -d --wait -t 60
+            docker ps

@@ -4,9 +4,11 @@ on:
   push:
     branches-ignore:
       - 'main'
+      - 'react_query'
   pull_request:
     branches-ignore:
       - 'main'
+      - 'react_query'
 jobs:
   build:
     runs-on: ubuntu-latest

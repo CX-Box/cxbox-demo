@@ -1,0 +1,145 @@
+version: '2.1'
+
+services:
+
+  rq-nginx:
+    image: nginx:latest
+    container_name: nginx
+    volumes:
+      - ./docker/nginx/conf/nginx.conf:/etc/nginx/nginx.conf
+      - ./docker/nginx/templates/:/etc/nginx/templates/
+    environment:
+      CXBOX_APP_1: 'rq-cxbox-demo-node-1:8080'
+      CXBOX_APP_2: 'rq-cxbox-demo-node-2:8080'
+      KEYCLOAK_1: 'rq-keycloak:9080'
+    ports:
+      - "83:80"
+      - "440:443"
+    restart: always
+    depends_on:
+      - rq-cxbox-demo-node-1
+      - rq-cxbox-demo-node-2
+
+  rq-cxbox-demo-node-1:
+    image: 'cxbox/cxbox-demo:latest'
+    environment:
+      MAIL_HOST: 'smtp.gmail.com'
+      MAIL_USER: 'cxbox.mail.test@gmail.com'
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+      FRONTEND_AUTH_SERVER_URL: 'http://demo.cxbox.org/auth'
+      BACKEND_AUTH_SERVER_URL: 'http://demo.cxbox.org/auth'
+      HIBERNATE_DDL_AUTO: 'none'
+      DEV_PANEL_ENABLED: 'true'
+      META_DIRECTORY: 'classpath:meta'
+      APP_INFO_ENV: 'DEMO'
+      APP_INFO_DESCRIPTION: 'v2.0.13'
+      APP_INFO_COLOR: '#4C4C4C'
+      DATABASE_DRIVER: 'org.postgresql.Driver'
+      DATABASE_URL: 'jdbc:postgresql://cxbox_postgres:5432/postgres'
+      DATABASE_USER: 'postgres'
+      DATABASE_PASSWORD: 'postgres'
+      MINIO_ACCESS_KEY: '4eb6a7db8b58994ea61b'
+      MINIO_SECRET_KEY: 'prCv8t9LGRH18FB5pLr5jqDZ/dixZkb9cFajueGW'
+      MINIO_URL: 'http://cxbox_minio:9000'
+      MINIO_DEFAULT_BUCKETS: 'edcs3gnsadevb'
+      ACTIVEMQ_ADMIN_LOGIN: admin
+      ACTIVEMQ_ADMIN_PASSWORD: admin
+      ACTIVEMQ_HOST: activemq
+      ACTIVEMQ_PORT: 61616
+      BROKER_TYPE: activemq
+      STOMP_PORT: 61613
+      JAVA_TOOL_OPTIONS: '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8989'
+    expose:
+      - 8080
+    ports:
+      - "127.0.0.1:8081:8080"
+      - "127.0.0.1:8981:8989"
+    restart: always
+    depends_on:
+      - rq-cxbox_postgres
+      - rq-activemq
+
+  rq-cxbox-demo-node-2:
+    image: 'cxbox/cxbox-demo:latest'
+    environment:
+      MAIL_HOST: 'smtp.gmail.com'
+      MAIL_USER: 'cxbox.mail.test@gmail.com'
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+      FRONTEND_AUTH_SERVER_URL: 'http://demo.cxbox.org/auth'
+      BACKEND_AUTH_SERVER_URL: 'http://demo.cxbox.org/auth'
+      HIBERNATE_DDL_AUTO: 'none'
+      DEV_PANEL_ENABLED: 'true'
+      META_DIRECTORY: 'classpath:meta'
+      APP_INFO_ENV: 'DEMO'
+      APP_INFO_DESCRIPTION: 'v2.0.13'
+      APP_INFO_COLOR: '#4C4C4C'
+      DATABASE_DRIVER: 'org.postgresql.Driver'
+      DATABASE_URL: 'jdbc:postgresql://cxbox_postgres:5432/postgres'
+      DATABASE_USER: 'postgres'
+      DATABASE_PASSWORD: 'postgres'
+      MINIO_ACCESS_KEY: '4eb6a7db8b58994ea61b'
+      MINIO_SECRET_KEY: 'prCv8t9LGRH18FB5pLr5jqDZ/dixZkb9cFajueGW'
+      MINIO_URL: 'http://cxbox_minio:9000'
+      MINIO_DEFAULT_BUCKETS: 'edcs3gnsadevb'
+      ACTIVEMQ_ADMIN_LOGIN: admin
+      ACTIVEMQ_ADMIN_PASSWORD: admin
+      ACTIVEMQ_HOST: activemq
+      ACTIVEMQ_PORT: 61616
+      BROKER_TYPE: activemq
+      STOMP_PORT: 61613
+      JAVA_TOOL_OPTIONS: '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8989'
+    expose:
+      - 8080
+    restart: always
+    depends_on:
+      - rq-cxbox_postgres
+      - rq-activemq
+
+  rq-keycloak:
+    image: maxird/keycloak:12.0.4
+    command:
+      [
+        '-b',
+        '0.0.0.0',
+        '-Dkeycloak.migration.action=import',
+        '-Dkeycloak.migration.provider=dir',
+        '-Dkeycloak.migration.dir=/opt/jboss/keycloak/realm-config',
+        '-Dkeycloak.migration.strategy=IGNORE_EXISTING',
+        '-Djboss.socket.binding.port-offset=1000',
+        '-Dkeycloak.profile.feature.upload_scripts=enabled'
+      ]
+    volumes:
+      - ./docker/keycloak-config:/opt/jboss/keycloak/realm-config
+    environment:
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=${CXBOX_DEMO_KEYCLOAK_PASSWORD:-ASfj123214LASJhFLASldkasF3LhDGASF}
+      - DB_VENDOR=h2
+    expose:
+      - 9080
+
+  rq-cxbox_postgres:
+    image: postgres:12.0
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    expose:
+      - 5432
+
+  rq-cxbox_minio:
+    image: bitnami/minio:2022.2.12
+    expose:
+      - 9000
+    environment:
+      MINIO_ROOT_USER: "4eb6a7db8b58994ea61b"
+      MINIO_ROOT_PASSWORD: "prCv8t9LGRH18FB5pLr5jqDZ/dixZkb9cFajueGW"
+      MINIO_DEFAULT_BUCKETS: "edcs3gnsadevb"
+
+  rq-activemq:
+    image: symptoma/activemq:latest
+    environment:
+      - ACTIVEMQ_USERNAME=admin
+      - ACTIVEMQ_PASSWORD=admin
+      - ACTIVEMQ_PORT=61616
+    expose:
+      - 61613
+    volumes:
+      - ./data:/var/lib/activemq/data

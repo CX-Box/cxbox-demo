@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite --port 3000",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && yarn run rename",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "rename": "node -e \"require('fs').rename('build/index.html', 'build/index.ftl', function(err) { if (err) console.log(err); console.log('index.ftl formed') })\""
   },
   "dependencies": {
     "@ant-design/icons": "^5.5.1",

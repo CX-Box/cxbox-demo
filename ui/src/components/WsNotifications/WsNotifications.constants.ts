@@ -1,3 +1,0 @@
-export const DEFAULT_MODAL_WIDTH = 1395
-export const DEFAULT_MODAL_HEIGHT = 803
-export const DEFAULT_MODAL_BODY_HEIGHT = 500

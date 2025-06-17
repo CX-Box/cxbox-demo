@@ -96,6 +96,7 @@ export const bcSaveDataEpic: RootEpic = (action$, state$, { api }) =>
                     const postInvoke = data.postActions?.[0]
                     const responseDataItem = data.record
                     return concat(
+                        of(actions.setOperationFinished({ bcName, operationType: OperationTypeCrud.save })),
                         of(actions.bcSaveDataSuccess({ bcName, cursor, dataItem: responseDataItem })),
                         of(actions.bcFetchRowMeta({ widgetName, bcName })),
                         of(actions.deselectTableRow()),
@@ -142,6 +143,7 @@ export const bcSaveDataEpic: RootEpic = (action$, state$, { api }) =>
                     }
 
                     return concat(
+                        of(actions.setOperationFinished({ bcName, operationType: OperationTypeCrud.save })),
                         of(actions.bcSaveDataFail({ bcName, bcUrl, viewError, entityError })),
                         notification$,
                         utils.createApiErrorObservable(e, context)

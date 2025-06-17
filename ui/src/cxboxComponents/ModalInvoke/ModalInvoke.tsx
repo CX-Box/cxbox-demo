@@ -2,11 +2,12 @@ import React from 'react'
 import { Dispatch } from 'redux'
 import { connect } from 'react-redux'
 import { Modal, Input } from 'antd'
+import { useTranslation } from 'react-i18next'
 import cn from 'classnames'
-import styles from './ModalInvoke.less'
+import { useOperationInProgress } from '@hooks/useOperationInProgress'
 import { interfaces, actions } from '@cxbox-ui/core'
 import { RootState } from '@store'
-import { useTranslation } from 'react-i18next'
+import styles from './ModalInvoke.less'
 
 const { closeConfirmModal, sendOperation } = actions
 const { OperationPostInvokeConfirmType, OperationPreInvokeType } = interfaces
@@ -36,6 +37,8 @@ const ModalInvoke: React.FunctionComponent<ModalInvokeProps> = props => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setValue(e.target.value || (null as any))
     }
+
+    const isOperationInProgress = useOperationInProgress(props.bcName)
 
     const getContent = () => {
         switch (props.confirmOperation?.type) {
@@ -120,7 +123,8 @@ const ModalInvoke: React.FunctionComponent<ModalInvokeProps> = props => {
                     }}
                     okButtonProps={
                         {
-                            'data-test-confirm-popup-button-ok': true
+                            'data-test-confirm-popup-button-ok': true,
+                            loading: isOperationInProgress(props.operationType)
                         } as any
                     }
                     cancelButtonProps={

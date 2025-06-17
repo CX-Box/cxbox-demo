@@ -2,16 +2,17 @@ import React, { ReactNode, useEffect, useRef } from 'react'
 import { actions, isOperationGroup, WidgetTypes, Operation, OperationGroup } from '@cxbox-ui/core'
 import { Icon } from 'antd'
 import { useAppSelector } from '@store'
-import styles from './Operations.less'
 import { useDispatch } from 'react-redux'
+import cn from 'classnames'
 import OperationsGroup from './components/OperationsGroup'
 import { AppWidgetMeta, OperationCustomMode, removeRecordOperationWidgets } from '@interfaces/widget'
 import Button, { customTypes } from '../ui/Button/Button'
-import cn from 'classnames'
 import { useWidgetOperations } from '@hooks/useWidgetOperations'
+import { useOperationInProgress } from '@hooks/useOperationInProgress'
 import TextSearchInput from '@components/Operations/components/TextSearchInput/TextSearchInput'
 import { FileUpload } from '@components/Operations/components/FileUpload/FileUpload'
 import { buildBcUrl } from '@utils/buildBcUrl'
+import styles from './Operations.less'
 
 export interface OperationsOwnProps {
     className?: string
@@ -27,6 +28,7 @@ function Operations(props: OperationsOwnProps) {
 
     const { defaultOperations, customOperations, isUploadDnDMode } = useWidgetOperationsMode(widgetMeta, operations)
     const cachedOperations = useCacheForDefaultUploadOperation(defaultOperations, bcName)
+    const isOperationInProgress = useOperationInProgress(bcName)
 
     const dispatch = useDispatch()
 
@@ -60,6 +62,7 @@ function Operations(props: OperationsOwnProps) {
                         return (
                             <OperationsGroup
                                 key={item.type}
+                                isOperationInProgress={isOperationInProgress}
                                 group={item}
                                 widgetType={widgetMeta.type}
                                 onClick={handleOperationClick}
@@ -95,7 +98,7 @@ function Operations(props: OperationsOwnProps) {
                             data-test-widget-action-item={true}
                             type={getButtonType({ widgetType: widgetMeta.type, index })}
                             onClick={() => handleOperationClick(item)}
-                            loading={metaInProgress}
+                            loading={metaInProgress || isOperationInProgress(item.type)}
                         >
                             {item.icon && <Icon type={item.icon} />}
                             {item.text}

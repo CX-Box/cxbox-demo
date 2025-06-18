@@ -1,5 +1,6 @@
 import { RootState } from '@store'
 import { PendingValidationFails } from '@cxbox-ui/core'
+import { buildBcUrl } from '@utils/buildBcUrl'
 
 export const selectBc = (state: RootState, bcName: string | undefined) => (bcName ? state.screen.bo.bc?.[bcName] : undefined)
 
@@ -8,6 +9,9 @@ export const selectBcRecordForm = (state: RootState, bcName: string | undefined)
 export const selectBcData = (state: RootState, bcName: string | undefined) => (bcName ? state.data[bcName] : undefined)
 
 export const selectBcRowMeta = (state: RootState, bcName: string | undefined) => (bcName ? state.view.rowMeta?.[bcName] : undefined)
+
+export const selectBcUrlRowMeta = (state: RootState, bcName: string | undefined, includeSelf: boolean = true) =>
+    bcName ? selectBcRowMeta(state, bcName)?.[buildBcUrl(bcName, includeSelf, state)] : undefined
 
 export const selectBcMetaInProgress = (state: RootState, bcName: string | undefined) =>
     bcName ? state.view.metaInProgress?.[bcName] : undefined

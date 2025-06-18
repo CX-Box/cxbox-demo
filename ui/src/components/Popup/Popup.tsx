@@ -48,6 +48,7 @@ const Popup: FunctionComponent<PopupProps> = props => {
         width,
         title,
         footer,
+        okButtonProps,
         ...rest
     } = props
     const computedTitle = typeof title !== 'string' ? title : <h1 className={styles.title}>{title}</h1>
@@ -66,14 +67,16 @@ const Popup: FunctionComponent<PopupProps> = props => {
                     </div>
                 )}
                 <div className={styles.actions}>
-                    <Button onClick={onOkHandler}>{defaultOkText ?? t('Save')}</Button>
+                    <Button onClick={onOkHandler} loading={okButtonProps?.loading}>
+                        {defaultOkText ?? t('Save')}
+                    </Button>
                     <Button onClick={onCancelHandler} type="formOperation">
                         {defaultCancelText ?? t('Cancel')}
                     </Button>
                 </div>
             </div>
         ),
-        [disablePagination, widgetMeta, onOkHandler, defaultOkText, t, onCancelHandler, defaultCancelText]
+        [disablePagination, widgetMeta, onOkHandler, okButtonProps?.loading, defaultOkText, t, onCancelHandler, defaultCancelText]
     )
 
     return (
@@ -86,6 +89,7 @@ const Popup: FunctionComponent<PopupProps> = props => {
                 width={computedWidth}
                 onCancel={onCancelHandler}
                 footer={footer === null ? null : footer || defaultFooter}
+                okButtonProps={okButtonProps}
                 {...rest}
             >
                 {children}

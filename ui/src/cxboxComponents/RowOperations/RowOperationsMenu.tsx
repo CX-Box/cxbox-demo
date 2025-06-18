@@ -1,9 +1,10 @@
 import React from 'react'
-import { Icon, Menu, Skeleton } from 'antd'
+import { Icon, Menu, Skeleton, Spin } from 'antd'
 import styles from './RowOperationsMenu.less'
 import { useAppDispatch, useAppSelector } from '@store'
 import { useTranslation } from 'react-i18next'
 import { useWidgetOperations } from '@hooks/useWidgetOperations'
+import { useOperationInProgress } from '@hooks/useOperationInProgress'
 import { actions, interfaces } from '@cxbox-ui/core'
 import { MenuProps } from 'antd/es/menu'
 import { buildBcUrl } from '@utils/buildBcUrl'
@@ -49,6 +50,7 @@ export const RowOperationsMenu = ({ meta, bcName: hierarchyBc, onSelect, ...rest
      * Filter operations based on widget settings
      */
     const operationList = useWidgetOperations(operations, meta, bcName)
+    const isOperationInProgress = useOperationInProgress(bcName)
 
     const handleClick: MenuProps['onClick'] = React.useCallback(
         param => {
@@ -59,13 +61,19 @@ export const RowOperationsMenu = ({ meta, bcName: hierarchyBc, onSelect, ...rest
     )
 
     const menuItem = React.useCallback(
-        (item: interfaces.Operation) => (
-            <Menu.Item key={item.type} data-test-widget-list-row-action-item={true} onClick={handleClick}>
-                {item.icon && <Icon type={item.icon} />}
-                {item.text}
-            </Menu.Item>
-        ),
-        [handleClick]
+        (item: interfaces.Operation) => {
+            const inProgress = isOperationInProgress(item.type)
+
+            return (
+                <Menu.Item key={item.type} data-test-widget-list-row-action-item={true} disabled={inProgress} onClick={handleClick}>
+                    <Spin spinning={inProgress}>
+                        {item.icon && <Icon type={item.icon} />}
+                        {item.text}
+                    </Spin>
+                </Menu.Item>
+            )
+        },
+        [handleClick, isOperationInProgress]
     )
 
     const menuItemList = operationList

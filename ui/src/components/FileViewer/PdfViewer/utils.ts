@@ -1,4 +1,4 @@
-import { FIREFOX_TOOLBAR_HEIGHT } from '@components/FileViewer/PdfViewer/constants'
+import { FIREFOX_TOOLBAR_HEIGHT } from '@constants/fileViewer'
 import { CSSProperties } from 'react'
 
 export const isFirefox = () => {

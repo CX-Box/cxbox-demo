@@ -204,7 +204,7 @@ function Table<T extends CustomDataItem>({
 
     const dragColumnProps: DragListViewProps | null = showColumnSettings ? { onDragEnd: changeOrder, nodeSelector: 'th' } : null
 
-    const isAllowEdit = !expandable && !meta.options?.readOnly && !disableCellEdit
+    const isAllowEdit = !expandable && !meta.options?.readOnly && !disableCellEdit && meta.options?.edit?.style !== 'popup'
 
     const [operationsRef, parentRef, handleRowMenu] = useRowMenu() // NOSONAR(S6440) hook is called conditionally, fix later
 

@@ -5,9 +5,13 @@ import FileIcon from './FileIconContainer'
 import { trimString } from '@utils/fileViewer'
 import { CxBoxApiInstance } from '../../api'
 import Button from '@components/ui/Button/Button'
+import FileViewer from '@components/FileViewer/FileViewer'
+import { FilePreviewMode } from '@interfaces/widget'
+import { PREVIEW_WIDTH_DEFAULT } from '@constants/fileViewer'
 
 export interface ReadOnlySingleFileUploadProps {
-    mode?: 'default' | 'snapshot'
+    mode?: FilePreviewMode
+    width?: number
 
     fileName: string
     downloadUrl?: string // undefined if file url for download is not correct (no id)
@@ -18,7 +22,8 @@ export interface ReadOnlySingleFileUploadProps {
 }
 
 function ReadOnlySingleFileUpload({
-    mode,
+    mode = 'popup',
+    width,
     fileName,
     downloadUrl,
     diffFileName,
@@ -35,34 +40,38 @@ function ReadOnlySingleFileUpload({
         diffDownloadUrl && CxBoxApiInstance.saveBlob(diffDownloadUrl, diffFileName)
     }
 
-    if (mode === 'snapshot') {
-        if ((diffDownloadUrl || downloadUrl) && diffDownloadUrl !== downloadUrl) {
-            return (
-                <div className={cn(styles.snapshot)}>
-                    {smartIcon}
-                    <div>
-                        {diffDownloadUrl && (
-                            <div>
-                                <span className={cn(styles.viewLink, styles.prevValue)}>
-                                    <Button type="link" removeIndentation={true} onClick={handleDiffDownload}>
-                                        <span>{trimString(diffFileName)}</span>
-                                    </Button>
-                                </span>
-                            </div>
-                        )}
-                        {downloadUrl && (
-                            <div>
-                                <span className={cn(styles.viewLink, styles.newValue)}>
-                                    <Button type="link" removeIndentation={true} onClick={handleDownload}>
-                                        <span>{trimString(fileName)}</span>
-                                    </Button>
-                                </span>
-                            </div>
-                        )}
-                    </div>
+    if (mode === 'inline') {
+        const size = width ?? PREVIEW_WIDTH_DEFAULT
+
+        return <FileViewer fileName={fileName} url={downloadUrl} view="preview" width={size} height={size} onClick={onFileIconClick} />
+    }
+
+    if ((diffDownloadUrl || downloadUrl) && diffDownloadUrl !== downloadUrl) {
+        return (
+            <div className={cn(styles.snapshot)}>
+                {smartIcon}
+                <div>
+                    {diffDownloadUrl && (
+                        <div>
+                            <span className={cn(styles.viewLink, styles.prevValue)}>
+                                <Button type="link" removeIndentation={true} onClick={handleDiffDownload}>
+                                    <span>{trimString(diffFileName)}</span>
+                                </Button>
+                            </span>
+                        </div>
+                    )}
+                    {downloadUrl && (
+                        <div>
+                            <span className={cn(styles.viewLink, styles.newValue)}>
+                                <Button type="link" removeIndentation={true} onClick={handleDownload}>
+                                    <span>{trimString(fileName)}</span>
+                                </Button>
+                            </span>
+                        </div>
+                    )}
                 </div>
-            )
-        }
+            </div>
+        )
     }
 
     return (

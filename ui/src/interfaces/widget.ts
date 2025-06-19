@@ -35,7 +35,8 @@ export enum CustomWidgetTypes {
     Pie1D = 'Pie1D',
     Column2D = 'Column2D',
     Line2D = 'Line2D',
-    DualAxes2D = 'DualAxes2D'
+    DualAxes2D = 'DualAxes2D',
+    CardList = 'CardList'
 }
 
 export const removeRecordOperationWidgets: Array<WidgetTypes | string> = [
@@ -74,7 +75,7 @@ export type TableWidgetField = WidgetListFieldBase & {
     excelWidth?: number
 }
 
-type InternalWidgetOption = {
+export type InternalWidgetOption = {
     widget: string
     style: 'inlineForm' | 'popup' | 'inline' | 'none'
 }
@@ -168,11 +169,14 @@ export interface SuggestionPickListWidgetMeta extends WidgetMeta {
     }>
 }
 
+export type FilePreviewMode = 'popup' | 'inline'
+
 export interface SuggestionPickListField extends Omit<PickListFieldMeta, 'type'> {
     type: CustomFieldTypes.SuggestionPickList
 }
 
 export type FileUploadFieldMeta = CoreFileUploadFieldMeta & {
+    width?: number
     preview?: {
         /**
          * Enables file previews. Default false.
@@ -189,7 +193,7 @@ export type FileUploadFieldMeta = CoreFileUploadFieldMeta & {
         /**
          * Preview display mode: popup (default), side-panel.
          */
-        mode?: 'popup' | 'side-panel'
+        mode?: FilePreviewMode
         /**
          * Includes display of mini-previews for file types for which we can, for the rest there are icons with an eye.
          * The default is false (icons with an eye are shown for all files).

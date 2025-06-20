@@ -24,14 +24,14 @@ export class Navigation {
     }
 
     private useLocationPathname = () => {
-        return useSyncExternalStore(this.subToChangeLocationEvents, () => window.location.pathname)
+        return useSyncExternalStore(this.subToChangeLocationEvents, () => window.location.pathname.split('/ui')[1])
     }
     private useLocationSearch = () => {
         return useSyncExternalStore(this.subToChangeLocationEvents, () => window.location.search)
     }
 
     public navigate: NavigateFn = (to: string, { replace = false, state = null } = {}) =>
-        window.history[replace ? this.events.replaceState : this.events.pushState](state, '', to)
+        window.history[replace ? this.events.replaceState : this.events.pushState](state, '', '/ui' + to)
 
     constructor() {
         const patchKey = Symbol.for('cxbox_router_monkey_patch')

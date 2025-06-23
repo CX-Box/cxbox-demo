@@ -38,8 +38,8 @@ export const Form: FunctionComponent<FormProps> = ({ meta, fields, missingFields
             <Row>
                 {grid?.map((row, index) => {
                     return (
-                        <>
-                            <Row gutter={24} key={index} type="flex" className={styles.nowrap}>
+                        <React.Fragment key={index}>
+                            <Row gutter={24} type="flex" className={styles.nowrap}>
                                 {row.cols.map((col, colIndex) => {
                                     const field = visibleFlattenWidgetFields.find(item => item.key === col.fieldKey)
 
@@ -52,7 +52,7 @@ export const Form: FunctionComponent<FormProps> = ({ meta, fields, missingFields
                                     )
                                 })}
                             </Row>
-                            <Row gutter={24} key={index} type="flex" className={styles.nowrap}>
+                            <Row gutter={24} type="flex" className={styles.nowrap}>
                                 {row.cols.map((col, colIndex) => {
                                     const field = visibleFlattenWidgetFields.find(item => item.key === col.fieldKey)
                                     const disabled = fields?.find(item => item.key === field?.key && item.disabled)
@@ -81,7 +81,7 @@ export const Form: FunctionComponent<FormProps> = ({ meta, fields, missingFields
                                     )
                                 })}
                             </Row>
-                        </>
+                        </React.Fragment>
                     )
                 })}
             </Row>

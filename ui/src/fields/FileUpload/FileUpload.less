@@ -137,15 +137,24 @@
 }
 
 .root {
-    display: flex;
-    overflow: hidden;
-    align-items: center;
+    & > button {
+        height: auto;
+        white-space: normal;
+        word-break: break-all;
+        text-align: start;
+        & .fileIconContainer {
+            pointer-events: unset;
+        }
+    }
+
+    & .readOnlyFileButton {
+        line-height: 22px;
+    }
 }
 
 .fileIconContainer {
     line-height: 0;
-}
-
-.readOnlyFileButton {
-    line-height: 32px;
+    float: left;
+    margin-right: 4px;
+    pointer-events: unset;
 }

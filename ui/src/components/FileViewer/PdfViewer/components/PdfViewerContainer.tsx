@@ -4,8 +4,8 @@ import { isFirefox } from '@components/FileViewer/PdfViewer/utils'
 
 interface PdfViewerContainerProps {
     displayMode?: 'inline'
-    width: number
-    height: number
+    width: string | number
+    height: string | number
     pageWidth: number
     src: string
     hideToolbar?: boolean

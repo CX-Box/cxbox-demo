@@ -1,0 +1,12 @@
+.fixedContainer {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    z-index: 10;
+}
+
+.fixedContainer :global(.ant-spin-nested-loading),
+.fixedContainer :global(.ant-spin-container) {
+    height: 100%;
+}

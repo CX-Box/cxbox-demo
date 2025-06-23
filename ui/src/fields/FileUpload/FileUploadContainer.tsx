@@ -1,22 +1,23 @@
 import React, { useCallback, useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { UploadFile } from 'antd/es/upload/interface'
-import { applyParams, getFileUploadEndpoint } from '@utils/api'
-import { BaseFieldProps } from '@components/Field/Field'
+import { AxiosError, CanceledError } from 'axios'
+import { UploadListContainer } from '@components/Operations/components/FileUpload/UploadListContainer'
+import FileViewerContainer from '@components/FileViewerContainer/FileViewerContainer'
+import SingleFileUpload from './SingleFileUpload'
+import ReadOnlySingleFileUpload, { ReadOnlySingleFileUploadProps } from './ReadOnlySingleFileUpload'
 import { useAppDispatch, useAppSelector } from '@store'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import { useUploadFilesInfoWithAutoRemove } from '@components/Operations/components/FileUpload/FileUpload.hooks'
-import { checkFileFormat } from '@components/Operations/components/FileUpload/FileUpload.utils'
-import { UploadListContainer } from '@components/Operations/components/FileUpload/UploadListContainer'
-import { RowMetaField } from '@interfaces/rowMeta'
-import { useSingleUploadRequest } from '@hooks/useSingleUploadRequest'
-import { AxiosError, CanceledError } from 'axios'
-import SingleFileUpload from './SingleFileUpload'
-import ReadOnlySingleFileUpload, { ReadOnlySingleFileUploadProps } from './ReadOnlySingleFileUpload'
-import { actions } from '@actions'
-import { FileUploadFieldMeta } from '@interfaces/widget'
-import { useDispatch } from 'react-redux'
 import { usePrevious } from '@hooks/usePrevious'
+import { checkFileFormat } from '@components/Operations/components/FileUpload/FileUpload.utils'
+import { applyParams, getFileUploadEndpoint } from '@utils/api'
+import { useSingleUploadRequest } from '@hooks/useSingleUploadRequest'
+import { actions } from '@actions'
+import { BaseFieldProps } from '@components/Field/Field'
+import { RowMetaField } from '@interfaces/rowMeta'
+import { CustomWidgetTypes, FileUploadFieldMeta } from '@interfaces/widget'
 import { DataValue } from '@cxbox-ui/core'
 
 interface Props extends Omit<BaseFieldProps, 'meta'> {
@@ -167,12 +168,23 @@ const FileUploadContainer: React.FunctionComponent<Props> = ({
     const fileName = fileNameDelta || fieldValue
 
     const displayFileViewer = preview?.enabled
+    const isInlineMode = preview?.mode === 'inline'
     const handleFileIconClick = useFileIconClick(
         widgetMeta?.name as string,
         widgetMeta?.bcName as string,
         fieldDataItem?.id as string,
         fieldName
     )
+
+    useEffect(() => {
+        if (isInlineMode && widgetMeta?.type !== CustomWidgetTypes.FilePreview) {
+            console.info(`The 'inline' preview mode is currently available for the FilePreview widget`)
+        }
+    }, [isInlineMode, widgetMeta?.type])
+
+    if (widgetMeta?.type === CustomWidgetTypes.FilePreview && displayFileViewer && isInlineMode) {
+        return <FileViewerContainer isInline={true} widgetName={widgetName as string} fieldKey={meta?.key} />
+    }
 
     if (readOnly) {
         const diffProps = getReadOnlyDiffProps()

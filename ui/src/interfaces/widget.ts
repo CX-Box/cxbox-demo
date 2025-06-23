@@ -35,7 +35,8 @@ export enum CustomWidgetTypes {
     Pie1D = 'Pie1D',
     Column2D = 'Column2D',
     Line2D = 'Line2D',
-    DualAxes2D = 'DualAxes2D'
+    DualAxes2D = 'DualAxes2D',
+    FilePreview = 'FilePreview'
 }
 
 export const removeRecordOperationWidgets: Array<WidgetTypes | string> = [
@@ -189,7 +190,7 @@ export type FileUploadFieldMeta = CoreFileUploadFieldMeta & {
         /**
          * Preview display mode: popup (default), side-panel.
          */
-        mode?: 'popup' | 'side-panel'
+        mode?: 'popup' | 'side-panel' | 'inline'
         /**
          * Includes display of mini-previews for file types for which we can, for the rest there are icons with an eye.
          * The default is false (icons with an eye are shown for all files).

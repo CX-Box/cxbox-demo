@@ -5,7 +5,7 @@ import { Spin } from 'antd'
 import Empty from '@components/FileViewer/Empty/Empty'
 
 interface InlinePdfViewerProps {
-    width: number
+    width: string | number
     height: number
     src: string
     isFirefox?: boolean

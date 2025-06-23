@@ -1,0 +1,11 @@
+.fixedContainer {
+  position: fixed;
+  overflow-y: auto;
+  z-index: 10;
+}
+
+.header {
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 28px;
+}

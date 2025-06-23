@@ -3,89 +3,103 @@ import { StateCreator } from 'zustand'
 import { UnionState } from './index.ts'
 import { produce } from 'immer'
 
-export interface MutationDraftActions {
-    initMutationDraft: (bcName: string, cursor: string, defaultValues: DataItem) => void
-    resetMutationDraft: (bcName: string, cursor: string) => void
-    destroyMutationDraft: (bcName: string, cursor: string) => void
+export interface VirtualFormActions {
+    initVirtualForm: (bcName: string, cursor: string, defaultValues: DataItem) => void
+    resetVirtualForm: (bcName: string, cursor: string) => void
+    destroyVirtualForm: (bcName: string, cursor: string) => void
     changeFieldValue: (bcName: string, cursor: string, fieldName: string, value: DataValue) => void
     setFieldTouched: (bcName: string, cursor: string, fieldName: string) => void
+    setFieldBlurred: (bcName: string, cursor: string, fieldName: string) => void
 }
 
-export const createMutationSlice: StateCreator<UnionState, [['zustand/devtools', never]], [], MutationDraftActions> = set => ({
-    initMutationDraft: (bcName, cursor, defaultValues) =>
+export const createVirtualFormSlice: StateCreator<UnionState, [['zustand/devtools', never]], [], VirtualFormActions> = set => ({
+    initVirtualForm: (bcName, cursor, defaultValues) =>
         set(
             produce((state: UnionState) => {
                 const bc = state.bcTree.find(bc => bc.name === bcName)
                 if (bc) {
-                    const fields: UnionState['bcTree'][number]['mutationDraft'][string]['fields'] = {}
+                    const fields: UnionState['bcTree'][number]['virtualForms'][string]['fields'] = {}
                     Object.entries(defaultValues).forEach(([key, value]) => {
                         fields[key] = {
                             value: value,
                             isDirty: false,
                             isPristine: true,
-                            isTouched: false
+                            isTouched: false,
+                            isBlurred: false
                         }
                     })
-                    bc.mutationDraft[cursor] = {
+                    bc.virtualForms[cursor] = {
                         defaultValues: defaultValues,
                         fields: fields
                     }
                 }
             }),
             undefined,
-            'mutationDraft/initForm'
+            'virtualForm/initForm'
         ),
     changeFieldValue: (bcName, cursor, fieldName, value) =>
         set(
             produce((state: UnionState) => {
                 const bc = state.bcTree.find(bc => bc.name === bcName)
-                if (bc && bc.mutationDraft) {
-                    bc.mutationDraft[cursor].fields[fieldName].isDirty = true
-                    bc.mutationDraft[cursor].fields[fieldName].isPristine = false
-                    bc.mutationDraft[cursor].fields[fieldName].value = value
+                if (bc && bc.virtualForms) {
+                    bc.virtualForms[cursor].fields[fieldName].isDirty = true
+                    bc.virtualForms[cursor].fields[fieldName].isPristine = false
+                    bc.virtualForms[cursor].fields[fieldName].value = value
                 }
             }),
             undefined,
-            'mutationDraft/changeFieldValue'
+            'virtualForm/changeFieldValue'
         ),
     setFieldTouched: (bcName, cursor, fieldName) =>
         set(
             produce((state: UnionState) => {
                 const bc = state.bcTree.find(bc => bc.name === bcName)
-                if (bc && bc.mutationDraft) {
-                    bc.mutationDraft[cursor].fields[fieldName].isTouched = true
+                if (bc && bc.virtualForms) {
+                    bc.virtualForms[cursor].fields[fieldName].isTouched = true
                 }
             }),
             undefined,
-            'mutationDraft/setFieldTouched'
+            'virtualForm/setFieldTouched'
         ),
-    destroyMutationDraft: (bcName, cursor) =>
+    setFieldBlurred: (bcName, cursor, fieldName) =>
+        set(
+            produce((state: UnionState) => {
+                const bc = state.bcTree.find(bc => bc.name === bcName)
+                if (bc && bc.virtualForms) {
+                    bc.virtualForms[cursor].fields[fieldName].isBlurred = true
+                }
+            }),
+            undefined,
+            'virtualForm/setFieldBlurred'
+        ),
+    destroyVirtualForm: (bcName, cursor) =>
         set(
             produce((state: UnionState) => {
                 const bc = state.bcTree.find(bc => bc.name === bcName)
                 if (bc) {
-                    delete bc.mutationDraft[cursor]
+                    delete bc.virtualForms[cursor]
                 }
             }),
             undefined,
-            'mutationDraft/destroy'
+            'virtualForm/destroy'
         ),
-    resetMutationDraft: (bcName: string, cursor) =>
+    resetVirtualForm: (bcName: string, cursor) =>
         set(
             produce((state: UnionState) => {
                 const bc = state.bcTree.find(bc => bc.name === bcName)
-                if (bc && bc.mutationDraft[cursor]) {
-                    const defaultValues = bc.mutationDraft[cursor].defaultValues
+                if (bc && bc.virtualForms[cursor]) {
+                    const defaultValues = bc.virtualForms[cursor].defaultValues
                     Object.entries(defaultValues).forEach(([k, v]) => {
-                        const field = bc.mutationDraft[cursor].fields[k]
+                        const field = bc.virtualForms[cursor].fields[k]
                         field.isDirty = false
                         field.value = v
                         field.isPristine = true
                         field.isTouched = false
+                        field.isBlurred = false
                     })
                 }
             }),
             undefined,
-            'mutationDraft/reset'
+            'virtualForm/reset'
         )
 })

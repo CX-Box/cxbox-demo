@@ -26,7 +26,7 @@ export const Router: FC<Props> = ({ children }) => {
                     name: bc.name,
                     parentName: bc.parentName,
                     cursor: bcMap.get(bc.name) || null,
-                    mutationDraft: {},
+                    virtualForms: {},
                     filters: [],
                     sorters: [],
                     pagination: {
@@ -42,7 +42,7 @@ export const Router: FC<Props> = ({ children }) => {
                         name: bc.name,
                         parentName: bc.parentName,
                         cursor: bcMap.get(bc.name) || null,
-                        mutationDraft: {},
+                        virtualForms: {},
                         filters: [],
                         sorters: [],
                         pagination: {

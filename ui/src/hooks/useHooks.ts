@@ -4,7 +4,7 @@ import { Api } from '../api'
 import { Navigation } from '../core/data/Navigation.ts'
 import { Store } from '../core/data/Store.ts'
 import type { UnionState } from '../core/data/slices'
-import { createFilterSlice, createModalSlice, createMutationSlice, createBcTreeSlice } from '../core/data/slices'
+import { createFilterSlice, createModalSlice, createVirtualFormSlice, createBcTreeSlice } from '../core/data/slices'
 
 const navigation = new Navigation()
 
@@ -13,7 +13,7 @@ const navigation = new Navigation()
  */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
-const store = new Store<UnionState>([createFilterSlice, createModalSlice, createMutationSlice, createBcTreeSlice])
+const store = new Store<UnionState>([createFilterSlice, createModalSlice, createVirtualFormSlice, createBcTreeSlice])
 
 export class Hooks extends HooksFacade<UnionState> {}
 

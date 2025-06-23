@@ -11,8 +11,8 @@ export const Write: FieldComponent['Write'] = props => {
     const bcName = widgetMeta?.bcName || ''
     const { data: rowMetaField } = hooks.useField(bcName, props.fieldKey)
     const { data: fieldMeta } = hooks.useTypedFieldMeta(isFieldInput, props.widgetName, props.fieldKey)
-    const mutationDraftFieldState = hooks.useStore(
-        state => state.bcTree.find(bc => bc.name === bcName)?.mutationDraft[props.id]?.fields[props.fieldKey]
+    const virtualFormFieldState = hooks.useStore(
+        state => state.bcTree.find(bc => bc.name === bcName)?.virtualForms[props.id]?.fields[props.fieldKey]
     )
     const changeFieldValue = hooks.useStore(state => state.changeFieldValue)
     const setFieldTouched = hooks.useStore(state => state.setFieldTouched)
@@ -25,18 +25,18 @@ export const Write: FieldComponent['Write'] = props => {
     )
 
     const handleFieldTouch = useCallback(() => {
-        if (!mutationDraftFieldState?.isTouched) {
+        if (!virtualFormFieldState?.isTouched) {
             setFieldTouched(bcName, props.id, props.fieldKey)
         }
-    }, [bcName, mutationDraftFieldState?.isTouched, props.fieldKey, props.id, setFieldTouched])
+    }, [bcName, virtualFormFieldState?.isTouched, props.fieldKey, props.id, setFieldTouched])
 
-    return mutationDraftFieldState && isDataValueString(mutationDraftFieldState.value) ? (
+    return virtualFormFieldState && isDataValueString(virtualFormFieldState.value) ? (
         <Input
             placeholder={rowMetaField?.placeholder}
             required={rowMetaField?.required}
             maxLength={fieldMeta?.maxInput}
             disabled={rowMetaField?.disabled}
-            value={mutationDraftFieldState.value}
+            value={virtualFormFieldState.value}
             type={'text'}
             onChange={handleChangeFieldValue}
             onFocus={handleFieldTouch}

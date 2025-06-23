@@ -25,19 +25,23 @@ interface FieldState {
      * true, after the user clicks/tabs into the field
      */
     isTouched: boolean
+    /**
+     * true, after the field has been blurred
+     */
+    isBlurred: boolean
 }
 
 interface FieldsMutationRecord {
     [fieldName: string]: FieldState
 }
 
-interface MutationDraftState {
+interface VirtualFormState {
     defaultValues: DataItem
     fields: FieldsMutationRecord
 }
 
-interface MutationDraftRecord {
-    [cursor: string]: MutationDraftState
+interface VirtualFormRecord {
+    [cursor: string]: VirtualFormState
 }
 
 export interface Filter {
@@ -63,7 +67,7 @@ interface BusinessComponent {
     defaultSort?: string
     filterGroups?: FilterGroup[]
     defaultFilter?: string
-    mutationDraft: MutationDraftRecord
+    virtualForms: VirtualFormRecord
     filters: Filter[]
     sorters: Sorter[]
     pagination: Pagination

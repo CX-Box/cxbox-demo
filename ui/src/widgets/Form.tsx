@@ -14,7 +14,7 @@ export const Form: FC<WidgetAnyProps> = props => {
     // const { data } = hooks.useData(bcName)
     const { cursor } = hooks.useScreenBcPath(bcName)
     const { data: rowMetaFields } = hooks.useFields(bcName)
-    const initMutationDraft = hooks.useStore(state => state.initMutationDraft)
+    const initVirtualForm = hooks.useStore(state => state.initVirtualForm)
 
     useEffect(() => {
         if (cursor && rowMetaFields) {
@@ -25,9 +25,9 @@ export const Form: FC<WidgetAnyProps> = props => {
             rowMetaFields.forEach(field => {
                 defaultValues[field.key] = field.currentValue ?? field.defaultValue
             })
-            initMutationDraft(bcName, cursor, defaultValues)
+            initVirtualForm(bcName, cursor, defaultValues)
         }
-    }, [bcName, cursor, initMutationDraft, rowMetaFields])
+    }, [bcName, cursor, initVirtualForm, rowMetaFields])
 
     return (
         <div>

@@ -285,10 +285,9 @@ const bcDeleteDataEpic: RootEpic = (action$, state$, { api }) =>
             const cursor = state.screen.bo.bc[bcName]?.cursor as string
             const bcUrl = buildBcUrl(bcName, true, state)
             const context = { widgetName: action.payload.widgetName }
-            const pendingChangesNow = state.view.pendingDataChangesNow[bcName]?.[cursor]
             const isTargetFormatPVF = state.view.pendingValidationFailsFormat === PendingValidationFailsFormat.target
 
-            return api.deleteBcData(state.screen.screenName, bcUrl, pendingChangesNow, context).pipe(
+            return api.deleteBcData(state.screen.screenName, bcUrl, context).pipe(
                 mergeMap(data => {
                     const postInvoke = data.postActions?.[0]
 

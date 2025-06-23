@@ -1,13 +1,12 @@
 import React from 'react'
-import { interfaces } from '@cxbox-ui/core'
 import { useDispatch } from 'react-redux'
 import { useAppSelector } from '@store'
 import { actions } from '@cxbox-ui/core'
 import InfoRow from './components/InfoRow'
 import { Row } from 'antd'
-import { useFlatFormFields } from '@hooks/useFlatFormFields'
 import { AppWidgetInfoMeta } from '@interfaces/widget'
 import styles from './Info.less'
+import { useProportionalWidgetGrid } from '@hooks/widgetGrid'
 
 interface InfoProps {
     meta: AppWidgetInfoMeta
@@ -20,34 +19,34 @@ interface InfoProps {
  * @constructor
  */
 function Info({ meta }: InfoProps) {
-    const { bcName, name, options } = meta
+    const { bcName, name: widgetName } = meta
     const cursor = useAppSelector(state => state.screen.bo.bc[bcName]?.cursor || '')
+
     const dispatch = useDispatch()
+
     const handleDrillDown = React.useCallback(
         (dataId: string, fieldKey: string) => {
-            dispatch(actions.userDrillDown({ widgetName: name, cursor: dataId, bcName, fieldKey }))
+            dispatch(actions.userDrillDown({ widgetName, cursor: dataId, bcName, fieldKey }))
         },
-        [dispatch, name, bcName]
+        [dispatch, widgetName, bcName]
     )
 
-    const flattenWidgetFields = useFlatFormFields<interfaces.WidgetInfoField>(meta.fields).filter(item => {
-        return !item.hidden
-    })
+    const { grid, visibleFlattenWidgetFields } = useProportionalWidgetGrid(meta)
 
-    const InfoRows = options?.layout?.rows
-        .filter(row => row.cols.find(col => flattenWidgetFields.some(i => i.key === col.fieldKey)))
-        .map((row, index) => (
-            <InfoRow
-                key={index}
-                meta={meta}
-                flattenWidgetFields={flattenWidgetFields}
-                onDrillDown={handleDrillDown}
-                row={row}
-                cursor={cursor}
-            />
-        ))
-
-    return <Row className={styles.container}>{InfoRows}</Row>
+    return (
+        <Row className={styles.container}>
+            {grid?.map((row, index) => (
+                <InfoRow
+                    key={index}
+                    meta={meta}
+                    flattenWidgetFields={visibleFlattenWidgetFields}
+                    onDrillDown={handleDrillDown}
+                    row={row}
+                    cursor={cursor}
+                />
+            ))}
+        </Row>
+    )
 }
 
 export default React.memo(Info)

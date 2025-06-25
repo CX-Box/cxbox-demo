@@ -27,7 +27,7 @@
     <!-- dependencies versions -->
     <jobrunr-spring-boot-3-starter.version>7.3.2</jobrunr-spring-boot-3-starter.version> <!--based on spring-boot 3.3.8, e.g. synced to cxbox-starter-parent-->
     <minio.version>8.5.17</minio.version>
-    <postgresql.version>42.7.5</postgresql.version>
+    <postgresql.version>42.7.7</postgresql.version>
   </properties>
 
   <dependencies>

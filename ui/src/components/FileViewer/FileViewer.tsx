@@ -14,7 +14,7 @@ export interface FileViewerProps {
     url?: string
     view: 'compact' | 'full'
     alt?: string
-    width: number
+    width: string | number
     height: number
     pageWidth?: number
     onDoubleClick?: () => void

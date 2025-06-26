@@ -34,12 +34,14 @@ import { WidgetTypes } from '@cxbox-ui/schema'
 import TimeField from '../../fields/TimePicker/TimePickerField'
 import SuggestionPickListField from '../../fields/SuggestionPickList/SuggestionPickList'
 import { StatsBlock } from '@components/widgets/StatsBlock/StatsBlock'
-import FileViewerPopup from '@components/FileViewerPopup/FileViewerPopup'
+import FileViewerContainer from '@components/FileViewerContainer/FileViewerContainer'
 import GroupingHierarchy from '@components/widgets/GroupingHierarchy/GroupingHierarchy'
 import { AdditionalListWidget } from '@components/widgets/AdditionalListWidget/AdditionalListWidget'
 import WaitUntilPopup from '@components/WaitUntilPopup/WaitUntilPopup'
 import NotificationsContainer from '@components/NotificationsContainer/NotificationsContainer'
 import Chart from '../widgets/Chart/Chart'
+import FilePreview from '@components/widgets/FilePreview/FilePreview'
+import FilePreviewCard from '@components/FilePreviewCard/FilePreviewCard'
 
 // TODO We need to remove PopupWidgetTypes from the core and replace imports throughout the entire project
 const { PopupWidgetTypes, FieldType } = interfaces
@@ -84,7 +86,8 @@ const customWidgets: Partial<Record<CustomWidgetTypes | interfaces.WidgetTypes, 
     [CustomWidgetTypes.Pie1D]: { component: Chart, card: DashboardCard },
     [CustomWidgetTypes.Column2D]: { component: Chart, card: DashboardCard },
     [CustomWidgetTypes.Line2D]: { component: Chart, card: DashboardCard },
-    [CustomWidgetTypes.DualAxes2D]: { component: Chart, card: DashboardCard }
+    [CustomWidgetTypes.DualAxes2D]: { component: Chart, card: DashboardCard },
+    [CustomWidgetTypes.FilePreview]: { component: FilePreview, card: FilePreviewCard }
 }
 
 function View() {
@@ -94,7 +97,7 @@ function View() {
     return (
         <div className={styles.container}>
             {debugMode && <ViewInfoLabel />}
-            <FileViewerPopup />
+            <FileViewerContainer />
             <WaitUntilPopup />
             <NotificationsContainer />
             <CxboxView

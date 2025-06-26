@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react'
 import { Row, Col } from 'antd'
-import { AppWidgetMeta, CustomWidgetTypes } from '@interfaces/widget'
+import Widget from '@cxboxComponents/Widget/Widget'
 import { createSkipWidgetList } from '@utils/createSkipWidgetList'
 import { interfaces } from '@cxbox-ui/core'
-import Widget from '@cxboxComponents/Widget/Widget'
+import { AppWidgetMeta, CustomWidgetTypes } from '@interfaces/widget'
 import styles from './DashboardLayout.less'
 
 export interface DashboardLayoutProps {
@@ -28,6 +28,10 @@ export function DashboardLayout(props: DashboardLayoutProps) {
         return props.widgets.filter(widget => sidebarWidgetsTypes.includes(widget.type) && !skipWidgetList.includes(widget.name))
     }, [props.widgets])
 
+    const filePreviewWidget = useMemo(() => {
+        return props.widgets.find(widget => widget.type === CustomWidgetTypes.FilePreview)
+    }, [props.widgets])
+
     const CommonWidgets = Object.values(widgetsByRow).map((row, rowIndex) => (
         <Row key={rowIndex} gutter={[24, 0]}>
             {row.map((widget, colIndex) => (
@@ -44,10 +48,26 @@ export function DashboardLayout(props: DashboardLayoutProps) {
         </Row>
     ))
 
+    const ProcessedCommonWidgets = filePreviewWidget ? (
+        <Row gutter={24}>
+            <Col span={12}>{CommonWidgets}</Col>
+            <Col span={12}>
+                <Widget
+                    meta={filePreviewWidget}
+                    customWidgets={props.customWidgets}
+                    customSpinner={props.customSpinner}
+                    disableDebugMode={props.disableDebugMode}
+                />
+            </Col>
+        </Row>
+    ) : (
+        CommonWidgets
+    )
+
     if (additionalInfoWidgets.length !== 0) {
         return (
             <Row gutter={24}>
-                <Col span={18}>{CommonWidgets}</Col>
+                <Col span={18}>{ProcessedCommonWidgets}</Col>
                 <Col span={6} className={styles.additionalInfoContainer}>
                     {additionalInfoWidgets.map(widget => (
                         <Row key={widget.name} gutter={[8, 8]}>
@@ -66,7 +86,7 @@ export function DashboardLayout(props: DashboardLayoutProps) {
         )
     }
 
-    return <React.Fragment>{CommonWidgets}</React.Fragment>
+    return <React.Fragment>{ProcessedCommonWidgets}</React.Fragment>
 }
 
 function groupByRow<WidgetMeta extends AppWidgetMeta>(widgets: WidgetMeta[], skipWidgetTypes: string[]) {
@@ -75,7 +95,12 @@ function groupByRow<WidgetMeta extends AppWidgetMeta>(widgets: WidgetMeta[], ski
 
     widgets
         .filter(item => {
-            return !skipWidgetTypes.includes(item.type) && !skipWidgetList.includes(item.name) && !sidebarWidgetsTypes.includes(item.type)
+            return (
+                !skipWidgetTypes.includes(item.type) &&
+                !skipWidgetList.includes(item.name) &&
+                !sidebarWidgetsTypes.includes(item.type) &&
+                item.type !== CustomWidgetTypes.FilePreview
+            )
         })
         .forEach(item => {
             if (!byRow[item.position]) {

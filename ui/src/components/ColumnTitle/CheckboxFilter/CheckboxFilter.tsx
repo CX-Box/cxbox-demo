@@ -7,18 +7,19 @@ import { useListHeight, useListSearch } from '@hooks/checkboxFilter'
 import { checkboxFilterMaxVisibleItems } from '@constants/filter'
 import { interfaces } from '@cxbox-ui/core'
 import styles from './CheckboxFilter.less'
+import { getIconByParams } from '@fields/Dictionary/Dictionary'
 
 export interface CheckboxFilterProps {
     title: string
     value: interfaces.DataValue[]
-    filterValues: Array<{ value: string }>
+    filterValues: Array<{ value: string; icon?: string }>
     visible?: boolean
     onChange?: (values: interfaces.DataValue[]) => void
 }
 
 const emptyValue: interfaces.DataValue[] = []
 
-export const CheckboxFilter: React.FC<CheckboxFilterProps> = ({ value, filterValues, title, visible, onChange }) => {
+const CheckboxFilter: React.FC<CheckboxFilterProps> = ({ value, filterValues, title, visible, onChange }) => {
     const { t } = useTranslation()
     const listRef = useRef<HTMLUListElement>(null)
 
@@ -37,8 +38,8 @@ export const CheckboxFilter: React.FC<CheckboxFilterProps> = ({ value, filterVal
     }
 
     const handleAll = (e: CheckboxChangeEvent) => {
-        const newValues = e.target.checked ? filterValues.map(item => item.value) : null
-        onChange?.(newValues as any)
+        const newValues = e.target.checked ? filterValues.map(item => item.value) : (null as any)
+        onChange?.(newValues)
     }
 
     return (
@@ -68,6 +69,7 @@ export const CheckboxFilter: React.FC<CheckboxFilterProps> = ({ value, filterVal
                 {visibleFilteredValues.length ? (
                     visibleFilteredValues.map((item, index) => {
                         const checked = value?.some(filterValue => item.value === filterValue)
+                        const icon = getIconByParams(item.icon)
 
                         return (
                             <li className={styles.listItem} key={index}>
@@ -78,6 +80,7 @@ export const CheckboxFilter: React.FC<CheckboxFilterProps> = ({ value, filterVal
                                     value={item.value}
                                     onChange={handleCheckbox}
                                 />
+                                {icon && <span className={styles.listItemIcon}>{icon}</span>}
                                 {item.value}
                             </li>
                         )

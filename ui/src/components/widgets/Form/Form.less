@@ -1,11 +1,22 @@
-@import '@assets/styles/theme.less';
+.formItem {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+}
 
-.div[class*="FormWidget__required"] {
-    :global(.ant-form-item-label label.ant-form-item-no-colon::after) {
-        content: "*";
-        display: inline-block;
-        color: red;
-    }
+.formLabel {
+    color: #000000d9;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 22px;
+
+    padding-bottom: 2px;
+    white-space: normal;
+}
+
+.nowrap {
+    flex-wrap: nowrap;
 }
 
 
@@ -139,5 +150,5 @@
 
 .formContainer div[class^="CheckboxPicker__container"] :global(.ant-checkbox-wrapper) {
     min-height: 40px;
-    font-size: 16px;
+    font-size: 14px;
 }

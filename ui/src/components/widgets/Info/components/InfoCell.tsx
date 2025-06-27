@@ -1,12 +1,13 @@
 import React from 'react'
 import styles from './InfoCell.less'
-import { Field, MultiValueListRecord } from '@cxboxComponents'
 import DrillDown from '@components/ui/DrillDown/DrillDown'
 import InfoValueWrapper from './InfoValueWrapper'
 import { EMPTY_ARRAY } from '@constants'
 import { useAppSelector } from '@store'
 import { interfaces } from '@cxbox-ui/core'
 import { AppWidgetInfoMeta, ETitleMode } from '@interfaces/widget'
+import MultiValueListRecord from '@components/MultiValueListRecord/MultiValueListRecord'
+import Field from '@components/Field/Field'
 
 const { FieldType } = interfaces
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import { useFlatFormFields } from '@hooks/useFlatFormFields'
 import { Col, Row } from 'antd'
-import { Field } from '@cxboxComponents'
+import Field from '@components/Field/Field'
 import { useWidgetCollapse } from '@hooks/useWidgetCollapse'
 import { RowMeta } from '@interfaces/rowMeta'
 import { AdditionalInfoWidgetMeta } from '@interfaces/widget'

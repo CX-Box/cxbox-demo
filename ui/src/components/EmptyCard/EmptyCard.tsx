@@ -1,18 +1,14 @@
 import React from 'react'
 import { Col, Row } from 'antd'
-import DebugWidgetWrapper from '../DebugWidgetWrapper/DebugWidgetWrapper'
 import styles from './EmptyCard.module.css'
-import { interfaces } from '@cxbox-ui/core'
-import { useAppSelector } from '@store'
+import { WidgetMeta } from '@cxbox-ui/core'
 
 interface EmptyCardProps {
     children?: React.ReactNode
-    meta: interfaces.WidgetMeta
+    meta: WidgetMeta
 }
 
 function EmptyCard({ children, meta }: EmptyCardProps) {
-    const debugMode = useAppSelector(state => state.session.debugMode || false)
-
     return (
         <Row
             className={styles.container}
@@ -23,11 +19,7 @@ function EmptyCard({ children, meta }: EmptyCardProps) {
             data-test-widget-name={meta.name}
             justify="center"
         >
-            <Col span={24}>
-                <DebugWidgetWrapper debugMode={debugMode} meta={meta}>
-                    {children}
-                </DebugWidgetWrapper>
-            </Col>
+            <Col span={24}>{children}</Col>
         </Row>
     )
 }

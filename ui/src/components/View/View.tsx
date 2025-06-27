@@ -1,6 +1,6 @@
 import React from 'react'
 import Card from '../Card/Card'
-import { View as CxboxView } from '@cxboxComponents'
+import { default as CxboxView } from './SimpleView'
 import { CustomFieldTypes, CustomWidgetTypes } from '@interfaces/widget'
 import MultipleSelectField from '../../fields/MultipleSelectField/MultipleSelectField'
 import Form from '../widgets/Form/Form'
@@ -19,16 +19,12 @@ import RingProgress from '../widgets/RingProgress/RingProgress'
 import DashboardCard from '../DashboardCard/DashboardCard'
 import DashboardList from '../widgets/DashboardList/DashboardList'
 import LevelMenu from '../widgets/LevelMenu/LevelMenu'
-import { Number } from '../../fields/NumberInput/NumberInput'
+import { Number } from '../../fields/Number/Number'
 import { FormPopup } from '../widgets/FormPopup/FormPopup'
 import MultivalueField from '../../fields/Multivalue/MultivalueField'
 import InlinePickList from '../../fields/InlinePickList/InlinePickList'
-import PickListField from '../../fields/PickListField/PickListField'
-import { useAppSelector } from '@store'
-import ViewInfoLabel from '../DebugPanel/components/ViewInfoLabel'
-import PopupWidgetInfoLabel from '../DebugPanel/components/PopupWidgetInfoLabel'
 import FileUpload from '../../fields/FileUpload/FileUploadContainer'
-import { interfaces } from '@cxbox-ui/core'
+import { FieldType, interfaces } from '@cxbox-ui/core'
 import { AdditionalInfoWidget } from '@components/widgets/AdditionalInfo/AdditionalInfoWidget'
 import { WidgetTypes } from '@cxbox-ui/schema'
 import TimeField from '../../fields/TimePicker/TimePickerField'
@@ -40,13 +36,7 @@ import { AdditionalListWidget } from '@components/widgets/AdditionalListWidget/A
 import WaitUntilPopup from '@components/WaitUntilPopup/WaitUntilPopup'
 import NotificationsContainer from '@components/NotificationsContainer/NotificationsContainer'
 import Chart from '../widgets/Chart/Chart'
-
-// TODO We need to remove PopupWidgetTypes from the core and replace imports throughout the entire project
-const { PopupWidgetTypes, FieldType } = interfaces
-
-const customPopupWidgetTypes: CustomWidgetTypes[] = [CustomWidgetTypes.FormPopup]
-
-const allPopupWidgetTypes: string[] = [...customPopupWidgetTypes, ...PopupWidgetTypes]
+import DebugViewInfoLabel from '@components/DebugViewInfoLabel/DebugViewInfoLabel'
 
 const customFields = {
     [FieldType.number]: Number,
@@ -54,7 +44,7 @@ const customFields = {
     [FieldType.money]: Number,
     [FieldType.dictionary]: Dictionary,
     [FieldType.multivalue]: MultivalueField,
-    [FieldType.pickList]: PickListField,
+    [FieldType.pickList]: InlinePickList,
     [FieldType.inlinePickList]: InlinePickList,
     [CustomFieldTypes.MultipleSelect]: MultipleSelectField,
     [FieldType.fileUpload]: FileUpload,
@@ -88,12 +78,9 @@ const customWidgets: Partial<Record<CustomWidgetTypes | interfaces.WidgetTypes, 
 }
 
 function View() {
-    const debugMode = useAppSelector(state => state.session.debugMode || false)
-    const widgets = useAppSelector(state => state.view.widgets)
-
     return (
         <div className={styles.container}>
-            {debugMode && <ViewInfoLabel />}
+            <DebugViewInfoLabel />
             <FileViewerPopup />
             <WaitUntilPopup />
             <NotificationsContainer />
@@ -102,10 +89,7 @@ function View() {
                 customFields={customFields}
                 card={Card as any}
                 customLayout={DashboardLayout}
-                disableDebugMode={true}
             />
-            {debugMode &&
-                widgets.filter(i => allPopupWidgetTypes.includes(i.type)).map(i => <PopupWidgetInfoLabel key={i.name} meta={i} />)}
         </div>
     )
 }

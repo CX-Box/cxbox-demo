@@ -5,8 +5,6 @@
       "@assets": ["./assets"],
       "@components/*": ["./components/*"],
       "@components": ["./components"],
-      "@cxboxComponents/*": ["./cxboxComponents/*"],
-      "@cxboxComponents": ["./cxboxComponents"],
       "@constants/*": ["./constants/*"],
       "@constants": ["./constants"],
       "@interfaces/*": ["./interfaces/*"],
@@ -22,6 +20,8 @@
       "@store": ["./store"],
       "@router": ["./router"],
       "@i18n": ["./i18n"],
+      "@fields": ["./fields"],
+      "@fields/*": ["./fields/*"],
       "@selectors/*": ["./selectors/*"],
       "@selectors": ["./selectors"]
     }

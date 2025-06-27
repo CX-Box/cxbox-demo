@@ -6,6 +6,7 @@ import { buildBcUrl } from '@utils/buildBcUrl'
 import WidgetTitle from '@components/WidgetTitle/WidgetTitle'
 import { StepsWidgetMeta } from '@interfaces/widget'
 import styles from './Steps.less'
+import { shallowEqual } from 'react-redux'
 
 interface StepsProps {
     meta: StepsWidgetMeta
@@ -26,7 +27,7 @@ function Steps({ meta }: StepsProps) {
             stepsDescriptions: stepsDescriptions?.values,
             stepCurrentValue: stepsField?.currentValue
         }
-    })
+    }, shallowEqual)
     const { isMainWidget, isCollapsed } = useWidgetCollapse(meta.name)
     const values = stepsValues?.map((val, index) => {
         return {

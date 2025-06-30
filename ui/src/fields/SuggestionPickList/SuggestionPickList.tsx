@@ -13,7 +13,7 @@ import { buildBcUrl } from '@utils/buildBcUrl'
 import { PendingDataItem } from '@cxbox-ui/core'
 import { SuggestionPickListDataItem } from '@interfaces/data'
 import { SuggestionPickListField, SuggestionPickListWidgetMeta } from '@interfaces/widget'
-import { WidgetFieldBase } from '@cxbox-ui/schema'
+import { DataValue, WidgetFieldBase } from '@cxbox-ui/schema'
 import 'rc-select/assets/index.less'
 import styles from './SuggestionPickList.less'
 
@@ -78,11 +78,21 @@ export function SuggestionPickList({
         (value: string | null) => {
             setLocalValue(null)
 
-            changeDataAction({
-                [fieldMeta.key]: value
-            })
+            if (fieldMeta.pickMap) {
+                const restData: Record<string, DataValue> = {}
+
+                Object.keys(fieldMeta.pickMap).forEach(field => {
+                    restData[field] = field === fieldMeta.key ? value : null
+                })
+
+                changeDataAction(restData)
+            } else {
+                changeDataAction({
+                    [fieldMeta.key]: value
+                })
+            }
         },
-        [changeDataAction, fieldMeta.key]
+        [changeDataAction, fieldMeta.key, fieldMeta.pickMap]
     )
 
     const changeDataFromObject = useCallback(

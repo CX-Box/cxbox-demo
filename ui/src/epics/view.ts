@@ -330,16 +330,22 @@ export const forceUpdateRowMeta: RootEpic = (action$, state$, { api }) =>
             const cursor = action.payload.cursor ?? (state.screen.bo.bc[bcName]?.cursor as string)
             const bcUrl = buildBcUrl(bcName, true, state)
             const pendingChanges = state.view.pendingDataChanges[bcName]?.[cursor]
+            const pendingChangesNow = state.view.pendingDataChangesNow[bcName]?.[cursor]
             const currentRecordData = state.data[bcName]?.find(record => record.id === cursor)
             const requestId = nanoid()
 
             return concat(
                 of(actions.addPendingRequest({ request: { requestId, type: 'force-active' } })),
                 api
-                    .getRmByForceActive(state.screen.screenName, bcUrl, {
-                        ...pendingChanges,
-                        vstamp: currentRecordData?.vstamp as number
-                    })
+                    .getRmByForceActive(
+                        state.screen.screenName,
+                        bcUrl,
+                        {
+                            ...pendingChanges,
+                            vstamp: currentRecordData?.vstamp as number
+                        },
+                        pendingChangesNow
+                    )
                     .pipe(
                         mergeMap(data => {
                             return concat(

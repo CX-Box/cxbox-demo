@@ -1,9 +1,10 @@
 import React from 'react'
 import { Input, Popover, Button, Input as InputRef } from 'antd'
 import AntdTextArea, { TextAreaProps as AntdTextAreaProps } from 'antd/lib/input/TextArea'
-import styles from './TextArea.less'
 import { BaseFieldProps } from '@components/Field/Field'
 import ReadOnlyField from '@components/ui/ReadOnlyField/ReadOnlyField'
+import { text_maxDisplayed } from '@components/ui/TextArea/constants'
+import styles from './TextArea.less'
 
 type AdditionalAntdTextAreaProps = Partial<Omit<AntdTextAreaProps, 'onChange'>>
 
@@ -75,6 +76,9 @@ const TextArea: React.FunctionComponent<TextAreaProps> = ({
     }, [minRows, maxRows])
 
     if (readOnly) {
+        const needToTrimValue = defaultValue?.length && defaultValue.length > text_maxDisplayed
+        const processedValue = needToTrimValue ? defaultValue.slice(0, text_maxDisplayed) : defaultValue
+
         return (
             <ReadOnlyField
                 widgetName={widgetName}
@@ -82,9 +86,24 @@ const TextArea: React.FunctionComponent<TextAreaProps> = ({
                 className={className}
                 backgroundColor={backgroundColor}
                 cursor={rest.cursor}
+                extraContent={
+                    needToTrimValue ? (
+                        <Popover
+                            placement="bottom"
+                            getTooltipContainer={trigger => trigger.parentElement as HTMLElement}
+                            content={
+                                <ReadOnlyField widgetName={widgetName} meta={meta}>
+                                    {defaultValue}
+                                </ReadOnlyField>
+                            }
+                        >
+                            <span className={styles.pointer}>...</span>
+                        </Popover>
+                    ) : null
+                }
                 onDrillDown={onDrillDown}
             >
-                {defaultValue}
+                {processedValue}
             </ReadOnlyField>
         )
     }

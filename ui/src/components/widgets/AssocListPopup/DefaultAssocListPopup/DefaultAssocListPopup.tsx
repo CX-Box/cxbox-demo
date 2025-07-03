@@ -1,19 +1,20 @@
 import React, { memo, useCallback, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
+import { shallowEqual } from 'react-redux'
+import cn from 'classnames'
 import Popup from '@components/Popup/Popup'
 import { actions, AssociatedItem, BcFilter, interfaces, PendingValidationFailsFormat, WidgetTableMeta } from '@cxbox-ui/core'
 import SelectionTable from './SelectionTable'
 import Title from '@components/widgets/AssocListPopup/DefaultAssocListPopup/Title'
 import { useAppDispatch, useAppSelector } from '@store'
 import Pagination from '@components/ui/Pagination/Pagination'
-import styles from '@components/widgets/AssocListPopup/AssocListPopup.less'
 import Button from '@components/ui/Button/Button'
-import { useTranslation } from 'react-i18next'
 import { EMPTY_ARRAY } from '@constants'
 import { DataItem } from '@cxbox-ui/schema'
-import { shallowEqual } from 'react-redux'
 import { useAssocRecords } from '@hooks/useAssocRecords'
-import cn from 'classnames'
+import { useOperationInProgress } from '@hooks/useOperationInProgress'
 import { FilterType } from '@interfaces/filters'
+import styles from '@components/widgets/AssocListPopup/AssocListPopup.less'
 
 interface DefaultAssocListPopupProps {
     meta: WidgetTableMeta
@@ -38,13 +39,15 @@ function DefaultAssocListPopup({ meta, isFilter }: DefaultAssocListPopupProps) {
         calleeFieldKey,
         filterDataItems,
         bcData,
-        missingFields
+        missingFields,
+        popupBcName
     } = useAppSelector(state => {
         const isFilter = state.view.popupData?.isFilter
         const calleeBCName = state.view.popupData?.calleeBCName
         const calleeWidgetName = state.view.popupData?.calleeWidgetName
         const associateFieldKey = state.view.popupData?.associateFieldKey
         const calleeFieldKey = state.view.popupData?.options?.calleeFieldKey
+        const popupBcName = state.view.popupData?.bcName
         const bcFilters = state.screen.filters?.[calleeBCName!] ?? EMPTY_ARRAY
         const filterDataItems = bcFilters.find(filterItem => filterItem.fieldName === associateFieldKey)?.value as DataItem[]
         const cursor = state.screen.bo.bc[bcName]?.cursor as string
@@ -64,7 +67,8 @@ function DefaultAssocListPopup({ meta, isFilter }: DefaultAssocListPopupProps) {
             calleeFieldKey,
             filterDataItems,
             bcData: state.data[bcName] || emptyData,
-            missingFields
+            missingFields,
+            popupBcName
         }
     }, shallowEqual)
 
@@ -88,6 +92,8 @@ function DefaultAssocListPopup({ meta, isFilter }: DefaultAssocListPopupProps) {
     const selectedRecords = useAssocRecords(data, pendingDataChanges)
 
     const dispatch = useAppDispatch()
+
+    const isOperationInProgress = useOperationInProgress(popupBcName || '')
 
     const onClose = useCallback(() => {
         dispatch(actions.closeViewPopup({ bcName }))
@@ -184,7 +190,11 @@ function DefaultAssocListPopup({ meta, isFilter }: DefaultAssocListPopupProps) {
                 <>
                     <Pagination meta={meta} />
                     <div className={styles.actions}>
-                        <Button data-test-widget-list-save={true} onClick={isFilter ? filterData : saveData}>
+                        <Button
+                            data-test-widget-list-save={true}
+                            loading={isOperationInProgress('saveAssociations')}
+                            onClick={isFilter ? filterData : saveData}
+                        >
                             {t('Save')}
                         </Button>
                         <Button data-test-widget-list-cancel={true} onClick={onClose}>

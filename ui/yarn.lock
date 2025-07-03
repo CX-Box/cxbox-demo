@@ -3363,9 +3363,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@cxbox-ui/core@npm:2.5.4-beta.0":
-  version: 2.5.4-beta.0
-  resolution: "@cxbox-ui/core@npm:2.5.4-beta.0"
+"@cxbox-ui/core@npm:2.5.4-beta.1":
+  version: 2.5.4-beta.1
+  resolution: "@cxbox-ui/core@npm:2.5.4-beta.1"
   dependencies:
     "@cxbox-ui/schema": "npm:0.8.0"
   peerDependencies:
@@ -3374,7 +3374,7 @@ __metadata:
     react: ^16.9.0 || ^17.0.0 || ^18
     react-redux: ^7.2.1 || ^8.0.2
     rxjs: ^7
-  checksum: 9352a5228af266b877f26d277c2281f77c996dc1dc8fe4cd8220192331aea9e81f23a56b8a83fb154d5584cd1acf27adb2b085f7893f28ab78373b3a4126cf40
+  checksum: 7a2c652fa75af98823969ded004fd9a78177f256410a60afb5dab2a3071132a13f094f4c6f226abee47963eae3f9765f79e9c08f4dba209fb3b592ef5a6fef50
   languageName: node
   linkType: hard
 
@@ -17533,7 +17533,7 @@ __metadata:
   dependencies:
     "@ant-design/plots": "npm:1.2.6"
     "@craco/craco": "npm:7.1.0"
-    "@cxbox-ui/core": "npm:2.5.4-beta.0"
+    "@cxbox-ui/core": "npm:2.5.4-beta.1"
     "@reduxjs/toolkit": "npm:1.7.2"
     "@stomp/stompjs": "npm:7.0.0"
     "@types/diff": "npm:5.0.3"

@@ -8,6 +8,7 @@ import {
     isViewNavigationItem
 } from '@components/ViewNavigation/tab/standard/utils/common'
 import { ViewMetaResponse } from '@interfaces/session'
+import { isChildForActiveParentNode } from '@components/ViewNavigation/tab/standard/utils/isChildForActiveParentNode'
 
 export type MenuItemNode = Omit<MenuItem, 'title'> & {
     path?: string
@@ -23,7 +24,8 @@ export const getStandardViewTabs = (
     availableViews: ViewMetaResponse[],
     currentDepth: number,
     activeView: string | undefined,
-    { idKey = 'id' }: { idKey?: string } = {}
+    // The value in the field obtained by the idKey must not contain '/'
+    { idKey = 'uid' }: { idKey?: string } = {}
 ) => {
     if (!navigation) {
         return
@@ -59,7 +61,7 @@ export const getStandardViewTabs = (
                 // Preserve the order of passing nodes
                 orderedDictionaryKeys.push(nodeId)
 
-                //  defaultView is always above navigationItem
+                //  Responsible for setting the viewName for aggregate view (defaultView is always above navigationItem)
                 if (hasDefaultView(node) && !isViewNavigationItem(node) && isAvailableView(node.defaultView)) {
                     const nodesKeys = getArrayFromNodePath(dictionary[nodeId]?.path)
                     nodesKeys?.forEach(dictionaryKey => {
@@ -71,6 +73,7 @@ export const getStandardViewTabs = (
                     })
                 }
 
+                //  Responsible for setting the viewName for single view and aggregate view without defaultView
                 if (isViewNavigationItem(node) && isAvailableView(node.viewName)) {
                     const selected = node.viewName === activeView
                     const nodesKeys = getArrayFromNodePath(dictionary[nodeId]?.path)
@@ -98,12 +101,15 @@ export const getStandardViewTabs = (
         const nodeFromDictionary = dictionary[dictionaryKey]
         const isCurrentDepth = currentDepth === nodeFromDictionary.depth
         const isFirstDepth = currentDepth === 1
-        const parentNodeIndex = (nodeFromDictionary?.depth as number) - 2
-        const isChildForActiveParentNode = String(nodeFromDictionary.path).includes(activeViewsKeys?.[parentNodeIndex] as string)
         const nodeVisibility = nodeFromDictionary.viewName && (!nodeFromDictionary.hidden || nodeFromDictionary.selected)
 
         // Leave the visible nodes that are children of the active view
-        if (isCurrentDepth && nodeVisibility && (isFirstDepth || isChildForActiveParentNode)) {
+        if (
+            isCurrentDepth &&
+            nodeVisibility &&
+            (isFirstDepth ||
+                isChildForActiveParentNode(String(nodeFromDictionary.path), nodeFromDictionary?.depth as number, activeViewsKeys || []))
+        ) {
             acc.push(nodeFromDictionary)
         }
 

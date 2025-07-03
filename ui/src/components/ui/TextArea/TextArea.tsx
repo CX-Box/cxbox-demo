@@ -89,6 +89,7 @@ const TextArea: React.FunctionComponent<TextAreaProps> = ({
                 extraContent={
                     needToTrimValue ? (
                         <Popover
+                            overlayClassName={styles.popoverOverlay}
                             placement="bottom"
                             getTooltipContainer={trigger => trigger.parentElement as HTMLElement}
                             content={

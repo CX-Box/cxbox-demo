@@ -11,7 +11,6 @@ import org.cxbox.core.dto.DrillDownType;
 import org.cxbox.core.dto.rowmeta.FieldsMeta;
 import org.cxbox.core.dto.rowmeta.RowDependentFieldsMeta;
 import org.cxbox.core.service.rowmeta.AnySourceFieldMetaBuilder;
-import org.demo.conf.cxbox.extension.drilldown.DrillDownExt;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.anysource.ClientStatsDTO;
 import org.demo.dto.cxbox.anysource.ClientStatsDTO_;
@@ -25,25 +24,19 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ClientStatsMeta extends AnySourceFieldMetaBuilder<ClientStatsDTO> {
 
-	private final DrillDownExt drillDownExt;
 
 	@Override
 	public void buildRowDependentMeta(RowDependentFieldsMeta<ClientStatsDTO> fields, BcDescription bc,
 			String id, String parentId) {
-		fields.setDrilldown(
+		fields.setDrilldownWithFilter(
 				ClientStatsDTO_.value,
 				DrillDownType.INNER,
-				getDrillDownWithFilter(id)
+				"/screen/client/view/clientlist",
+				fc->fc
+						.defaultBuilder(CxboxRestController.client, ClientReadDTO.class)
+						.filters(fb->fb
+								.dictionaryEnum(ClientAbstractDTO_.status, getStatusFilterValues(id)))
 		);
-	}
-
-	@NotNull
-	private String getDrillDownWithFilter(String id) {
-		var filter = drillDownExt.filterBcByFields(
-				CxboxRestController.client, ClientReadDTO.class, fb -> fb
-						.dictionaryEnum(ClientAbstractDTO_.status, getStatusFilterValues(id))
-		);
-		return "/screen/client/view/clientlist" + filter;
 	}
 
 	private ClientStatus getStatusFilterValues(@NonNull String id) {

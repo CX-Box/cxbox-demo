@@ -29,7 +29,7 @@ import { AdditionalInfoWidget } from '@components/widgets/AdditionalInfo/Additio
 import { WidgetTypes } from '@cxbox-ui/schema'
 import TimeField from '../../fields/TimePicker/TimePickerField'
 import SuggestionPickListField from '../../fields/SuggestionPickList/SuggestionPickList'
-import { StatsBlock } from '@components/widgets/StatsBlock/StatsBlock'
+import StatsBlock from '@components/widgets/StatsBlock/StatsBlock'
 import FileViewerContainer from '@components/FileViewerContainer/FileViewerContainer'
 import GroupingHierarchy from '@components/widgets/GroupingHierarchy/GroupingHierarchy'
 import { AdditionalListWidget } from '@components/widgets/AdditionalListWidget/AdditionalListWidget'

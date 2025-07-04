@@ -88,6 +88,11 @@ export type OperationInfo = {
     mode?: OperationCustomMode | string
 }
 
+export enum EStatsBcCursor {
+    show = 'show',
+    none = 'none'
+}
+
 export interface AppWidgetMeta extends WidgetMeta {
     personalFields?: TableSettingsItem | null // TODO make mandatory
     options?: WidgetOptions & {
@@ -124,6 +129,7 @@ export interface AppWidgetMeta extends WidgetMeta {
         }
 
         stats?: {
+            bcCursor?: EStatsBcCursor
             valueFieldKey?: string
             titleFieldKey?: string
             iconFieldKey?: string

@@ -14,8 +14,8 @@ export interface FileViewerProps {
     url?: string
     view: 'compact' | 'full'
     alt?: string
-    width: number
-    height: number
+    width: string | number
+    height: string | number
     pageWidth?: number
     onDoubleClick?: () => void
     onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void

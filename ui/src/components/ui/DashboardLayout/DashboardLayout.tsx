@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react'
 import { Row, Col } from 'antd'
-import { AppWidgetMeta } from '@interfaces/widget'
-import { createSkipWidgetList } from '@utils/createSkipWidgetList'
-import { CustomWidgetDescriptor } from '@cxbox-ui/core'
 import Widget from '@components/Widget/Widget'
-import styles from './DashboardLayout.less'
-import { sidebarWidgetsTypes } from '@constants/layout'
+import { createSkipWidgetList } from '@utils/createSkipWidgetList'
 import { getColWidth, groupByRow } from '@utils/layout'
+import { sidebarWidgetsTypes } from '@constants/layout'
+import { CustomWidgetDescriptor } from '@cxbox-ui/core'
+import { AppWidgetMeta, CustomWidgetTypes } from '@interfaces/widget'
+import styles from './DashboardLayout.less'
 
 export interface DashboardLayoutProps {
     widgets: AppWidgetMeta[]
@@ -27,6 +27,10 @@ export function DashboardLayout(props: DashboardLayoutProps) {
         return props.widgets.filter(widget => sidebarWidgetsTypes.includes(widget.type) && !skipWidgetList.includes(widget.name))
     }, [props.widgets])
 
+    const filePreviewWidget = useMemo(() => {
+        return props.widgets.find(widget => widget.type === CustomWidgetTypes.FilePreview)
+    }, [props.widgets])
+
     const CommonWidgets = Object.values(widgetsByRow).map((row, rowIndex) => (
         <Row key={rowIndex} gutter={[24, 0]}>
             {row.map((widget, colIndex) => (
@@ -37,10 +41,21 @@ export function DashboardLayout(props: DashboardLayoutProps) {
         </Row>
     ))
 
+    const ProcessedCommonWidgets = filePreviewWidget ? (
+        <Row gutter={24}>
+            <Col span={12}>{CommonWidgets}</Col>
+            <Col span={12}>
+                <Widget meta={filePreviewWidget} customWidgets={props.customWidgets} customSpinner={props.customSpinner} />
+            </Col>
+        </Row>
+    ) : (
+        CommonWidgets
+    )
+
     if (additionalInfoWidgets.length !== 0) {
         return (
             <Row gutter={24}>
-                <Col span={18}>{CommonWidgets}</Col>
+                <Col span={18}>{ProcessedCommonWidgets}</Col>
                 <Col span={6} className={styles.additionalInfoContainer}>
                     {additionalInfoWidgets.map(widget => (
                         <Row key={widget.name} gutter={[8, 8]}>
@@ -54,7 +69,7 @@ export function DashboardLayout(props: DashboardLayoutProps) {
         )
     }
 
-    return <React.Fragment>{CommonWidgets}</React.Fragment>
+    return <React.Fragment>{ProcessedCommonWidgets}</React.Fragment>
 }
 
 export default React.memo(DashboardLayout)

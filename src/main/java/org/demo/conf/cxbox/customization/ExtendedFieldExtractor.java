@@ -41,7 +41,8 @@ public class ExtendedFieldExtractor extends BaseFieldExtractor {
 				"Pie1D",
 				"Column2D",
 				"Line2D",
-				"DualAxes2D"
+				"DualAxes2D",
+				"FilePreview"
 		);
 	}
 

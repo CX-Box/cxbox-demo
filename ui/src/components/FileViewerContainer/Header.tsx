@@ -11,7 +11,7 @@ interface HeaderProps {
     title?: string
     hint?: string
     onDownload?: () => void
-    onClose: () => void
+    onClose?: () => void
     onFullscreen?: () => void
     center?: ReactNode
 }
@@ -35,7 +35,7 @@ function Header({ className, theme = 'light', title, hint, onFullscreen, onClose
                 <Button className={styles.button} type="link" icon="download" onClick={onDownload}>
                     {t('Download')}
                 </Button>
-                <Icon className={styles.close} type="close" onClick={onClose} />
+                {onClose && <Icon className={styles.close} type="close" onClick={onClose} />}
             </div>
         </div>
     )

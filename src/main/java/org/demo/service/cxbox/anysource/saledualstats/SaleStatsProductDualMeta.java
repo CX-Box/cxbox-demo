@@ -57,15 +57,12 @@ public class SaleStatsProductDualMeta extends AnySourceFieldMetaBuilder<SaleProd
 				DrillDownType.INNER,
 				"screen/sale/view/salelist",
 				fc -> fc
-						.add(fcm->fcm
-						.defaultBuilder(CxboxRestController.sale, SaleDTO.class)
-						.filters(fb -> fb
+						.add(CxboxRestController.sale, SaleDTO.class, fb -> fb
 								.dateFromTo(SaleDTO_.createdDate, dateFrom, dateTo)
 								.dictionary(SaleDTO_.product, fields.getCurrentValue(SaleProductDualDTO_.productType).orElse(null))
 								.dictionaryEnum(SaleDTO_.status, fields.getCurrentValue(SaleProductDualDTO_.saleStatus).orElse(null))
 								.multiValue(SaleDTO_.fieldOfActivity, activity)
-						))
-
+						)
 		);
 	}
 

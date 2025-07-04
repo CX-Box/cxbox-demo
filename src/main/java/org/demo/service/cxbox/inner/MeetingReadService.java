@@ -73,11 +73,11 @@ public class MeetingReadService extends VersionAwareResponseService<MeetingDTO, 
 	@Override
 	protected Specification<Meeting> getSpecification(BusinessComponent bc) {
 		Specification<Meeting> specification = super.getSpecification(bc);
-		if (CxboxRestController.meetingClientList.isBc(bc) &&  bc.getParentId()!=null){
+		if (CxboxRestController.meetingClientList.isBc(bc) && bc.getParentId() != null) {
 			return
-					(root,cq,cb)-> cb.and(
+					(root, cq, cb) -> cb.and(
 							cb.equal(root.get(Meeting_.client).get(BaseEntity_.id), bc.getParentIdAsLong())
-							);
+					);
 		}
 		return specification;
 	}

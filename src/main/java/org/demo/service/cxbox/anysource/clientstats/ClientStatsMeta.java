@@ -32,9 +32,8 @@ public class ClientStatsMeta extends AnySourceFieldMetaBuilder<ClientStatsDTO> {
 				DrillDownType.INNER,
 				"/screen/client/view/clientlist",
 				fc -> fc
-						.add(fcm -> fcm.defaultBuilder(CxboxRestController.client, ClientReadDTO.class)
-								.filters(fb -> fb
-										.dictionaryEnum(ClientAbstractDTO_.status, getStatusFilterValues(id))))
+						.add(CxboxRestController.client, ClientReadDTO.class, fb -> fb
+										.dictionaryEnum(ClientAbstractDTO_.status, getStatusFilterValues(id)))
 
 		);
 	}

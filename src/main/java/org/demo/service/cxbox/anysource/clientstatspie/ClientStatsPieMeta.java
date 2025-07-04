@@ -38,16 +38,16 @@ public class ClientStatsPieMeta extends AnySourceFieldMetaBuilder<ClientStatsDTO
 
 		var activity = parentDtoFirstLevelCache.getParentField(DashboardFilterDTO_.fieldOfActivity, getBc());
 
-		fields.setDrilldownWithFilter(ClientStatsDTO_.value,
+		fields.setDrilldownWithFilter(
+				ClientStatsDTO_.value,
 				DrillDownType.INNER,
 				"screen/client/view/clientlist",
-				fc-> fc
-						.add(fcm->fcm
-						.defaultBuilder(CxboxRestController.client,ClientReadDTO.class)
-						.filters(fb->fb
-								.dictionaryEnum(ClientAbstractDTO_.status, getStatusFilterValues(id))
-								.multiValue(ClientReadDTO_.fieldOfActivity, activity)
-						))
+				fc -> fc
+						.add(
+								CxboxRestController.client, ClientReadDTO.class, fb -> fb
+										.dictionaryEnum(ClientAbstractDTO_.status, getStatusFilterValues(id))
+										.multiValue(ClientReadDTO_.fieldOfActivity, activity)
+						)
 		);
 	}
 

@@ -13,12 +13,10 @@ import org.cxbox.core.util.filter.drilldowns.TypeToken;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.anysource.DashboardSalesProductDTO;
 import org.demo.dto.cxbox.anysource.DashboardSalesProductDTO_;
-import org.demo.dto.cxbox.inner.ClientReadDTO;
-import org.demo.dto.cxbox.inner.ClientReadDTO_;
 import org.demo.dto.cxbox.inner.DashboardFilterDTO_;
 import org.demo.dto.cxbox.inner.SaleDTO;
 import org.demo.dto.cxbox.inner.SaleDTO_;
-import org.demo.test.CustomFilterBuilder;
+import org.demo.conf.cxbox.extension.drilldown.CustomFilterBuilder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -42,23 +40,16 @@ public class SaleStatsProductMeta extends AnySourceFieldMetaBuilder<DashboardSal
 				DrillDownType.INNER,
 				"screen/sale/view/salelist",
 				fc -> fc
-						.add(fcm -> fcm.customBuilder(
-										CxboxRestController.sale,
-										new TypeToken<CustomFilterBuilder<SaleDTO>>() {
-										}
-								).filters(fb -> fb
+						.add(
+								CxboxRestController.sale, SaleDTO.class, 	new TypeToken<CustomFilterBuilder<SaleDTO>>(){},
+								fb -> fb
 										.input(SaleDTO_.clientName, fields.getCurrentValue(DashboardSalesProductDTO_.clientName).orElse(null))
 										.dictionary(
 												SaleDTO_.product,
 												fields.getCurrentValue(DashboardSalesProductDTO_.productName).orElse(null)
 										)
-										.multiValue(SaleDTO_.fieldOfActivity, activity))
+										.multiValue(SaleDTO_.fieldOfActivity, activity)
 						)
-						.add(fcm -> fcm
-								.defaultBuilder(CxboxRestController.client, ClientReadDTO.class)
-								.filters(fb -> fb.input(ClientReadDTO_.id, "123"))
-						)
-
 		);
 	}
 

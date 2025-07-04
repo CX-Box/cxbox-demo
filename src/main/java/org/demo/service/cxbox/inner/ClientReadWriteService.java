@@ -22,6 +22,7 @@ import org.cxbox.core.service.action.Actions;
 import org.cxbox.core.util.filter.drilldowns.TypeToken;
 import org.cxbox.core.util.session.SessionService;
 import org.demo.conf.cxbox.customization.icon.ActionIcon;
+import org.demo.conf.cxbox.extension.drilldown.CustomFilterBuilder;
 import org.demo.conf.cxbox.extension.fulltextsearch.FullTextSearchExt;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.inner.ClientWriteDTO;
@@ -41,7 +42,6 @@ import org.demo.repository.ClientRepository;
 import org.demo.repository.MeetingRepository;
 import org.demo.repository.core.UserRepository;
 import org.demo.service.mail.MailSendingService;
-import org.demo.test.CustomFilterBuilder;
 import org.jobrunr.scheduling.BackgroundJob;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -66,7 +66,8 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 	protected Specification<Client> getSpecification(BusinessComponent bc) {
 		var fullTextSearchFilterParam = FullTextSearchExt.getFullTextSearchFilterParam(bc);
 		var specification = super.getSpecification(bc);
-		return fullTextSearchFilterParam.map(e -> and(clientRepository.getFullTextSearchSpecification(e), specification)).orElse(specification);
+		return fullTextSearchFilterParam.map(e -> and(clientRepository.getFullTextSearchSpecification(e), specification))
+				.orElse(specification);
 	}
 
 	@Override
@@ -111,29 +112,31 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 		return Actions.<ClientWriteDTO>builder()
 				.save(sv -> sv)
 				.action(act -> act
-								.scope(ActionScope.RECORD)
-								.action("next", "Save and Continue")
-								.invoker((bc, dto) -> {
-									Client client = clientRepository.getById(bc.getIdAsLong());
-									ClientEditStep nextStep = ClientEditStep.getNextEditStep(client).get();
-									client.setEditStep(nextStep);
-									clientRepository.save(client);
+						.scope(ActionScope.RECORD)
+						.action("next", "Save and Continue")
+						.invoker((bc, dto) -> {
+							Client client = clientRepository.getById(bc.getIdAsLong());
+							ClientEditStep nextStep = ClientEditStep.getNextEditStep(client).get();
+							client.setEditStep(nextStep);
+							clientRepository.save(client);
 
-									BackgroundJob.<MailSendingService>schedule(
-											LocalDateTime.now().plusHours(5),
-											x -> x.stats("save pressed job")
-									);
+							BackgroundJob.<MailSendingService>schedule(
+									LocalDateTime.now().plusHours(5),
+									x -> x.stats("save pressed job")
+							);
 
-									return new ActionResultDTO<ClientWriteDTO>().setAction(
-											PostAction.drillDown(
-													DrillDownType.INNER,
-													nextStep.getEditView() + CxboxRestController.clientEdit + "/" + bc.getId()
-											));
-								})
-								.available(ActionAvailableChecker.and(ActionAvailableChecker.NOT_NULL_ID, bc -> {
+							return new ActionResultDTO<ClientWriteDTO>().setAction(
+									PostAction.drillDown(
+											DrillDownType.INNER,
+											nextStep.getEditView() + CxboxRestController.clientEdit + "/" + bc.getId()
+									));
+						})
+						.available(ActionAvailableChecker.and(
+								ActionAvailableChecker.NOT_NULL_ID, bc -> {
 									Client client = clientRepository.getById(bc.getIdAsLong());
 									return ClientEditStep.getNextEditStep(client).isPresent();
-								}))
+								}
+						))
 				)
 				.action(act -> act
 						.scope(ActionScope.RECORD)
@@ -149,10 +152,12 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 											"/screen/client"
 									));
 						})
-						.available(ActionAvailableChecker.and(ActionAvailableChecker.NOT_NULL_ID, bc -> {
-							Client client = clientRepository.getById(bc.getIdAsLong());
-							return !ClientEditStep.getNextEditStep(client).isPresent();
-						}))
+						.available(ActionAvailableChecker.and(
+								ActionAvailableChecker.NOT_NULL_ID, bc -> {
+									Client client = clientRepository.getById(bc.getIdAsLong());
+									return !ClientEditStep.getNextEditStep(client).isPresent();
+								}
+						))
 				)
 				.action(act -> act
 						.action("previous", "Back")
@@ -168,10 +173,12 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 											previousStep.getEditView() + CxboxRestController.clientEdit + "/" + bc.getId()
 									));
 						})
-						.available(ActionAvailableChecker.and(ActionAvailableChecker.NOT_NULL_ID, bc -> {
-							Client client = clientRepository.getById(bc.getIdAsLong());
-							return ClientEditStep.getPreviousEditStep(client).isPresent();
-						}))
+						.available(ActionAvailableChecker.and(
+								ActionAvailableChecker.NOT_NULL_ID, bc -> {
+									Client client = clientRepository.getById(bc.getIdAsLong());
+									return ClientEditStep.getPreviousEditStep(client).isPresent();
+								}
+						))
 				)
 				.cancelCreate(ccr -> ccr.text("Cancel").available(bc -> true))
 				.create(crt -> crt.text("Add"))
@@ -187,7 +194,7 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 											Client client = clientRepository.getById(bc.getIdAsLong());
 
 											ClientEditStep editStep = client.getEditStep();
-											PostAction postAction =(PostAction.drillDown(
+											PostAction postAction = (PostAction.drillDown(
 													DrillDownType.INNER,
 													editStep.getEditView()
 															+ CxboxRestController.clientEdit + "/"
@@ -199,13 +206,16 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 														DrillDownType.INNER,
 														editStep.getEditView() + CxboxRestController.clientEdit + "/" + bc.getId(),
 														fc -> fc
-
-																.add(CxboxRestController.meetingClientList,
-																		MeetingDTO.class, new TypeToken<CustomFilterBuilder<MeetingDTO>>() {},
-																		fb->fb
-																				.dictionaryEnum(MeetingDTO_.status, MeetingStatus.IN_PROGRESS))
-																.add(CxboxRestController.saleClientList, SaleDTO.class, fb -> fb.
-																		dictionaryEnum(SaleDTO_.status, SaleStatus.OPEN)
+																.add(
+																		CxboxRestController.meetingClientList,
+																		MeetingDTO.class, new TypeToken<CustomFilterBuilder<MeetingDTO>>() {
+																		},
+																		fb -> fb
+																				.dictionaryEnum(MeetingDTO_.status, MeetingStatus.IN_PROGRESS)
+																)
+																.add(
+																		CxboxRestController.saleClientList, SaleDTO.class, fb -> fb
+																				.dictionaryEnum(SaleDTO_.status, SaleStatus.OPEN)
 																)
 												);
 											}
@@ -248,7 +258,6 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 				).withIcon(ActionIcon.MENU, false)
 				.build();
 	}
-
 
 
 }

@@ -1,0 +1,61 @@
+{
+  "name": "meetingClientList",
+  "title": "Meeting",
+  "type": "List",
+  "bc": "meetingClientList",
+  "fields": [
+    {
+      "title": "Meeting Region",
+      "key": "region",
+      "type": "dictionary"
+    },
+    {
+      "title": "Meeting",
+      "key": "id",
+      "type": "input",
+      "drillDown": "true"
+    },
+    {
+      "title": "Agenda",
+      "key": "agenda",
+      "type": "input"
+    },
+    {
+      "title": "Start Date",
+      "key": "startDateTime",
+      "type": "dateTime"
+    },
+    {
+      "title": "Meeting Time",
+      "key": "meetingTime",
+      "type": "time",
+      "format": "HH:mm"
+    },
+    {
+      "title": "Status",
+      "key": "status",
+      "type": "input"
+    },
+    {
+      "title": "clientId",
+      "key": "clientId",
+      "type": "input",
+      "hidden": true
+    },
+    {
+      "title": "Contact",
+      "key": "contactName",
+      "type": "input"
+    }
+  ],
+
+  "options": {
+    "edit": {
+      "style": "none"
+    },
+    "actionGroups": {
+      "include": []
+    }
+  }
+}
+

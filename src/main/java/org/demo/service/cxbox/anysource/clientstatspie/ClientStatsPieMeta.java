@@ -42,11 +42,12 @@ public class ClientStatsPieMeta extends AnySourceFieldMetaBuilder<ClientStatsDTO
 				DrillDownType.INNER,
 				"screen/client/view/clientlist",
 				fc-> fc
+						.add(fcm->fcm
 						.defaultBuilder(CxboxRestController.client,ClientReadDTO.class)
 						.filters(fb->fb
 								.dictionaryEnum(ClientAbstractDTO_.status, getStatusFilterValues(id))
 								.multiValue(ClientReadDTO_.fieldOfActivity, activity)
-						)
+						))
 		);
 	}
 

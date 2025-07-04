@@ -16,15 +16,18 @@ import org.cxbox.core.service.action.Actions;
 import org.cxbox.core.service.action.ActionsBuilder;
 import org.cxbox.core.service.action.CxboxActionIconSpecifier;
 import org.cxbox.core.util.session.SessionService;
+import org.cxbox.model.core.entity.BaseEntity_;
 import org.demo.conf.cxbox.customization.icon.ActionIcon;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.inner.MeetingDTO;
 import org.demo.entity.Meeting;
+import org.demo.entity.Meeting_;
 import org.demo.repository.MeetingRepository;
 import org.demo.repository.core.UserRepository;
 import org.demo.service.mail.MailSendingService;
 import org.demo.service.statemodel.MeetingStatusModelActionProvider;
 import org.jobrunr.scheduling.BackgroundJob;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S3252", "java:S1186", "java:S1170"})
@@ -65,6 +68,18 @@ public class MeetingReadService extends VersionAwareResponseService<MeetingDTO, 
 	@Override
 	protected ActionResultDTO<MeetingDTO> doUpdateEntity(Meeting entity, MeetingDTO data, BusinessComponent bc) {
 		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	protected Specification<Meeting> getSpecification(BusinessComponent bc) {
+		Specification<Meeting> specification = super.getSpecification(bc);
+		if (CxboxRestController.meetingClientList.isBc(bc) &&  bc.getParentId()!=null){
+			return
+					(root,cq,cb)-> cb.and(
+							cb.equal(root.get(Meeting_.client).get(BaseEntity_.id), bc.getParentIdAsLong())
+							);
+		}
+		return specification;
 	}
 
 	@Override

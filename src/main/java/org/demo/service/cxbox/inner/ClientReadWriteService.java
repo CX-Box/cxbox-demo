@@ -19,21 +19,29 @@ import org.cxbox.core.dto.rowmeta.PreAction;
 import org.cxbox.core.service.action.ActionAvailableChecker;
 import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
+import org.cxbox.core.util.filter.drilldowns.TypeToken;
 import org.cxbox.core.util.session.SessionService;
 import org.demo.conf.cxbox.customization.icon.ActionIcon;
 import org.demo.conf.cxbox.extension.fulltextsearch.FullTextSearchExt;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.inner.ClientWriteDTO;
 import org.demo.dto.cxbox.inner.ClientWriteDTO_;
+import org.demo.dto.cxbox.inner.MeetingDTO;
+import org.demo.dto.cxbox.inner.MeetingDTO_;
+import org.demo.dto.cxbox.inner.SaleDTO;
+import org.demo.dto.cxbox.inner.SaleDTO_;
 import org.demo.entity.Client;
 import org.demo.entity.Meeting;
 import org.demo.entity.enums.ClientEditStep;
 import org.demo.entity.enums.ClientStatus;
 import org.demo.entity.enums.FieldOfActivity;
+import org.demo.entity.enums.MeetingStatus;
+import org.demo.entity.enums.SaleStatus;
 import org.demo.repository.ClientRepository;
 import org.demo.repository.MeetingRepository;
 import org.demo.repository.core.UserRepository;
 import org.demo.service.mail.MailSendingService;
+import org.demo.test.CustomFilterBuilder;
 import org.jobrunr.scheduling.BackgroundJob;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -177,13 +185,32 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 										.withoutAutoSaveBefore()
 										.invoker((bc, data) -> {
 											Client client = clientRepository.getById(bc.getIdAsLong());
+
+											ClientEditStep editStep = client.getEditStep();
+											PostAction postAction =(PostAction.drillDown(
+													DrillDownType.INNER,
+													editStep.getEditView()
+															+ CxboxRestController.clientEdit + "/"
+															+ bc.getId()
+											));
+
+											if (editStep.equals(ClientEditStep.CREATE_CLIENT_CONTACT)) {
+												postAction = PostAction.drillDownWithFilter(
+														DrillDownType.INNER,
+														editStep.getEditView() + CxboxRestController.clientEdit + "/" + bc.getId(),
+														fc -> fc
+
+																.add(CxboxRestController.meetingClientList,
+																		MeetingDTO.class, new TypeToken<CustomFilterBuilder<MeetingDTO>>() {},
+																		fb->fb
+																				.dictionaryEnum(MeetingDTO_.status, MeetingStatus.IN_PROGRESS))
+																.add(CxboxRestController.saleClientList, SaleDTO.class, fb -> fb.
+																		dictionaryEnum(SaleDTO_.status, SaleStatus.OPEN)
+																)
+												);
+											}
 											return new ActionResultDTO<ClientWriteDTO>()
-													.setAction(PostAction.drillDown(
-															DrillDownType.INNER,
-															client.getEditStep().getEditView()
-																	+ CxboxRestController.clientEdit + "/"
-																	+ bc.getId()
-													));
+													.setAction(postAction);
 										})
 								)
 								.action(act -> act

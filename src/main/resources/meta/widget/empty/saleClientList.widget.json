@@ -1,0 +1,44 @@
+{
+  "name": "saleClientList",
+  "title": "Sale",
+  "type": "List",
+  "bc": "saleClientList",
+  "fields": [
+    {
+      "title": "Field Of Activity",
+      "key": "fieldOfActivity",
+      "type": "multipleSelect",
+      "width": 300
+    },
+    {
+      "title": "Product",
+      "key": "product",
+      "type": "dictionary"
+    },
+    {
+      "title": "Status",
+      "key": "status",
+      "type": "dictionary"
+    },
+    {
+      "title": "Sum, $",
+      "key": "sum",
+      "type": "number"
+    },
+    {
+      "title": "Created",
+      "key": "createdDate",
+      "type": "date"
+    }
+  ],
+  "options": {
+    "edit": {
+      "style": "none"
+    },
+    "actionGroups": {
+      "include": []
+    }
+  }
+}
+
+

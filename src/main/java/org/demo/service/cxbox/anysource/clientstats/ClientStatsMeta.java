@@ -17,7 +17,6 @@ import org.demo.dto.cxbox.anysource.ClientStatsDTO_;
 import org.demo.dto.cxbox.inner.ClientAbstractDTO_;
 import org.demo.dto.cxbox.inner.ClientReadDTO;
 import org.demo.entity.enums.ClientStatus;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -32,10 +31,11 @@ public class ClientStatsMeta extends AnySourceFieldMetaBuilder<ClientStatsDTO> {
 				ClientStatsDTO_.value,
 				DrillDownType.INNER,
 				"/screen/client/view/clientlist",
-				fc->fc
-						.defaultBuilder(CxboxRestController.client, ClientReadDTO.class)
-						.filters(fb->fb
-								.dictionaryEnum(ClientAbstractDTO_.status, getStatusFilterValues(id)))
+				fc -> fc
+						.add(fcm -> fcm.defaultBuilder(CxboxRestController.client, ClientReadDTO.class)
+								.filters(fb -> fb
+										.dictionaryEnum(ClientAbstractDTO_.status, getStatusFilterValues(id))))
+
 		);
 	}
 

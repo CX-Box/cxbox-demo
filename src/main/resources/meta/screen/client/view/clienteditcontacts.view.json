@@ -20,6 +20,16 @@
       "gridWidth": 24
     },
     {
+      "widgetName": "meetingClientList",
+      "position": 21,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "saleClientList",
+      "position": 22,
+      "gridWidth": 24
+    },
+    {
       "widgetName": "clientEditButtons",
       "position": 30,
       "gridWidth": 24

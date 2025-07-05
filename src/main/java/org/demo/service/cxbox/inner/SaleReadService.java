@@ -10,10 +10,13 @@ import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.cxbox.core.dto.rowmeta.PostAction;
 import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
+import org.cxbox.model.core.entity.BaseEntity_;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.inner.SaleDTO;
 import org.demo.entity.Sale;
+import org.demo.entity.Sale_;
 import org.demo.repository.SaleRepository;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S3252", "java:S1186", "java:S1170"})
@@ -34,6 +37,19 @@ public class SaleReadService extends VersionAwareResponseService<SaleDTO, Sale> 
 						DrillDownType.INNER,
 						"/screen/sale/view/saleedit/" + CxboxRestController.saleEdit + "/" + entity.getId()
 				));
+	}
+
+	@Override
+	protected Specification<Sale> getSpecification(BusinessComponent bc) {
+		Specification<Sale> specification = super.getSpecification(bc);
+		if (CxboxRestController.saleClientList.isBc(bc) && bc.getParentId() != null) {
+			return (root, cq, cb) ->
+					cb.and(
+							specification.toPredicate(root, cq, cb),
+							cb.equal(root.get(Sale_.client).get(BaseEntity_.id), bc.getParentIdAsLong())
+					);
+		}
+		return specification;
 	}
 
 	@Override

@@ -55,6 +55,7 @@ public enum CxboxRestController implements EnumBcIdentifier {
 		contactEditAssoc(clientEdit, ClientContactService.class),
 		companySuggestionPickList(clientEdit, CompanyService.class),
 	meeting(MeetingReadService.class),
+	meetingClientList(clientEdit, MeetingReadService.class),
 		meetingDocumentEdit(meeting, MeetingDocumentsWriteService.class),
 	meetingEdit(MeetingWriteService.class),
 	contactAssocListPopup(meetingEdit, ContactMultivalueService.class),
@@ -63,6 +64,7 @@ public enum CxboxRestController implements EnumBcIdentifier {
 		contactPickListPopup(meetingEdit, ContactPickListService.class),
 
 	sale(SaleReadService.class),
+	saleClientList(clientEdit, SaleReadService.class),
 	saleEdit(SaleWriteService.class),
 		clientSalePickListPopup(saleEdit, ClientPickListService.class),
 	dashboardFilter(DashboardFilterService.class),

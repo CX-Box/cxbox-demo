@@ -32,8 +32,8 @@
       "valueFieldKey": "value",
       "titleFieldKey": "title",
       "iconFieldKey": "icon",
-      "descriptionFieldKey": "description"
+      "descriptionFieldKey": "description",
+      "bcCursor": "show"
     }
   }
 }
-

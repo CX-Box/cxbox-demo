@@ -39,7 +39,7 @@
   </changeSet>
 
   <changeSet id="cxbox_bc_properties" author="cxbox" runOnChange="true" context="local">
-    <loadUpdateData tableName="BC_PROPERTIES" primaryKey="ID" separator=";" quotchar="'"
+    <loadUpdateData tableName="BC_PROPERTIES" primaryKey="BC" separator=";" quotchar="'"
       file="db/data/cxbox/BC_PROPERTIES.csv">
       <column header="BC" name="BC" type="STRING"/>
       <column header="PAGE_LIMIT" name="PAGE_LIMIT" type="NUMERIC"/>

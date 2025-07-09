@@ -35,7 +35,7 @@ export const useGroupingHierarchy = <T extends CustomDataItem>(
     const filters = useAppSelector(state => state.screen.filters[meta.bcName])
     const bcData = useAppSelector(state => state.data[meta.bcName] as T[] | undefined)
     const groupingHierarchyEmptyNodes = useGroupingHierarchyLevels(meta, sortedGroupKeys)
-    const { bcCount, bcPageLimit, isIncorrectLimit } = useCheckLimit(meta.bcName)
+    const { bcPageLimit, isIncorrectLimit, bcCountForShowing } = useCheckLimit(meta.bcName)
 
     const { aggFields, aggLevels } = useMemo(
         () =>
@@ -185,7 +185,7 @@ export const useGroupingHierarchy = <T extends CustomDataItem>(
             <Tooltip
                 title={
                     isIncorrectLimit
-                        ? t('Warning! Only List mode available for Grouping Hierarchy', { limit: bcPageLimit, count: bcCount })
+                        ? t('Warning! Only List mode available for Grouping Hierarchy', { limit: bcPageLimit, bcCount: bcCountForShowing })
                         : undefined
                 }
                 trigger="hover"
@@ -202,7 +202,7 @@ export const useGroupingHierarchy = <T extends CustomDataItem>(
                 </div>
             </Tooltip>
         ) : null
-    }, [bcCount, bcPageLimit, isIncorrectLimit, enabledGrouping, isGroupingHierarchy, t, toggleEnabledGrouping])
+    }, [isGroupingHierarchy, isIncorrectLimit, t, bcPageLimit, bcCountForShowing, enabledGrouping, toggleEnabledGrouping])
 
     return {
         enabledGrouping,

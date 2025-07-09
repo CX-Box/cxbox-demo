@@ -12,6 +12,7 @@ import { PREVIEW_WIDTH_DEFAULT } from '@constants/fileViewer'
 export interface ReadOnlySingleFileUploadProps {
     mode?: FilePreviewMode
     width?: number
+    height?: number
 
     fileName: string
     downloadUrl?: string // undefined if file url for download is not correct (no id)
@@ -24,6 +25,7 @@ export interface ReadOnlySingleFileUploadProps {
 function ReadOnlySingleFileUpload({
     mode = 'popup',
     width,
+    height,
     fileName,
     downloadUrl,
     diffFileName,
@@ -41,9 +43,19 @@ function ReadOnlySingleFileUpload({
     }
 
     if (mode === 'inline') {
-        const size = width ?? PREVIEW_WIDTH_DEFAULT
+        const normalizedWidth = width ?? PREVIEW_WIDTH_DEFAULT
+        const normalizedHeight = height ?? normalizedWidth
 
-        return <FileViewer fileName={fileName} url={downloadUrl} view="preview" width={size} height={size} onClick={onFileIconClick} />
+        return (
+            <FileViewer
+                fileName={fileName}
+                url={downloadUrl}
+                view="preview"
+                width={normalizedWidth}
+                height={normalizedHeight}
+                onClick={onFileIconClick}
+            />
+        )
     }
 
     if ((diffDownloadUrl || downloadUrl) && diffDownloadUrl !== downloadUrl) {

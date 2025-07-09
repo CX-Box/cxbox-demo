@@ -38,6 +38,7 @@ import NotificationsContainer from '@components/NotificationsContainer/Notificat
 import Chart from '../widgets/Chart/Chart'
 import DebugViewInfoLabel from '@components/DebugViewInfoLabel/DebugViewInfoLabel'
 import CardList from '@components/widgets/CardList/CardList'
+import CarouselList from '@components/widgets/CarouselList/CarouselList'
 
 const customFields = {
     [FieldType.number]: Number,
@@ -76,7 +77,8 @@ const customWidgets: Partial<Record<CustomWidgetTypes | interfaces.WidgetTypes, 
     [CustomWidgetTypes.Column2D]: { component: Chart, card: DashboardCard },
     [CustomWidgetTypes.Line2D]: { component: Chart, card: DashboardCard },
     [CustomWidgetTypes.DualAxes2D]: { component: Chart, card: DashboardCard },
-    [CustomWidgetTypes.CardList]: { component: CardList }
+    [CustomWidgetTypes.CardList]: { component: CardList },
+    [CustomWidgetTypes.CarouselList]: { component: CarouselList }
 }
 
 function View() {

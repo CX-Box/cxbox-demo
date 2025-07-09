@@ -15,22 +15,23 @@ interface ArrowPaginationProps {
 }
 
 const ArrowPagination: React.FC<ArrowPaginationProps> = ({ meta, disabledLimit, mode = 'default' }) => {
-    const { hasNext, nextPage, prevPage, page: bcPage, limit: bcLimit } = usePagination(meta.name)
+    const { hasNext, nextPage, prevPage, page: bcPage, limit: bcLimit, defaultLimit } = usePagination(meta.name)
+
     const limit = meta.limit || bcLimit
 
     const { changePageLimit, hideLimitOptions, value: pageLimit, options } = useWidgetPaginationLimit(meta)
 
     const { hidePagination, disabledNextButton } = useAppSelector(state => {
-        if (mode === 'smart') {
-            const data = state.data[meta.bcName]
+        const data = state.data[meta.bcName]
 
+        if (mode === 'smart') {
             return {
-                hidePagination: data?.length < limit && bcPage === 1,
+                hidePagination: data?.length < limit && data?.length < defaultLimit && bcPage === 1,
                 disabledNextButton: data?.length < limit
             }
         } else {
             return {
-                hidePagination: !hasNext && bcPage === 1,
+                hidePagination: !hasNext && data?.length <= defaultLimit && bcPage === 1,
                 disabledNextButton: !hasNext
             }
         }

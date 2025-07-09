@@ -1,3 +1,4 @@
 export const DOCUMENT_PAGE_WIDTH = 540
 export const FIREFOX_TOOLBAR_HEIGHT = 33
 export const PREVIEW_WIDTH_DEFAULT = 300
+export const MAIN_SIZE_MULTIPLIER = 4

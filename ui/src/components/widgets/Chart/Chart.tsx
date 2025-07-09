@@ -22,7 +22,7 @@ const Chart: React.FC<ChartProps> = ({ meta }) => {
 
     const data = useAppSelector(state => state.data[meta.bcName])
 
-    const { bcCount, bcPageLimit, isIncorrectLimit } = useCheckLimit(meta.bcName)
+    const { bcPageLimit, isIncorrectLimit, bcCountForShowing } = useCheckLimit(meta.bcName)
 
     const toggleTableView = useCallback(() => {
         setIsTableView(prevState => !prevState)
@@ -58,10 +58,7 @@ const Chart: React.FC<ChartProps> = ({ meta }) => {
                 chartIcon={getChartIconByWidgetType(meta.type)}
                 tooltipTitle={
                     isIncorrectLimit
-                        ? t(
-                              `Warning! {{count}} rows were fetched from backend - limit for "Chart" mode is {{limit}}. Only "List" mode is available`,
-                              { limit: bcPageLimit, count: bcCount }
-                          )
+                        ? t(`Warning! Only List mode available for Chart`, { limit: bcPageLimit, bcCount: bcCountForShowing })
                         : undefined
                 }
                 disabled={isIncorrectLimit}

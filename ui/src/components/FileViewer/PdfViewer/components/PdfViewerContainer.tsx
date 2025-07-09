@@ -18,7 +18,8 @@ function PdfViewerContainer({ displayMode = 'inline', mode, pageWidth, ...inline
     if (displayMode === 'preview') {
         return (
             <PreviewPdfViewer
-                size={inlinePdfProps.width || inlinePdfProps.height}
+                width={inlinePdfProps.width}
+                height={inlinePdfProps.height}
                 url={inlinePdfProps.src}
                 spinning={inlinePdfProps.spinning}
             />

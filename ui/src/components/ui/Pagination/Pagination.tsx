@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import ArrowPaginationContainer from '@components/ui/Pagination/ArrowPagination'
 import DefaultPagination from '@components/ui/Pagination/DefaultPagination'
 import { AppWidgetMeta } from '@interfaces/widget'
+import { getWidgetPaginationType } from '@components/ui/Pagination/utils'
 
 export interface DefaultPaginationProps {
     meta: AppWidgetMeta
@@ -9,16 +10,22 @@ export interface DefaultPaginationProps {
 }
 
 function Pagination({ meta, disabledLimit }: DefaultPaginationProps) {
-    if (meta.options?.pagination?.type === 'nextAndPreviousSmart') {
+    const paginationType = useMemo(() => getWidgetPaginationType(meta), [meta])
+    const paginationEnabled = meta.options?.pagination?.enabled ?? true
+
+    if (!paginationEnabled) {
+        return null
+    }
+
+    if (paginationType === 'nextAndPreviousSmart') {
         return <ArrowPaginationContainer meta={meta} disabledLimit={disabledLimit} mode="smart" />
-    }
-
-    if (meta.options?.pagination?.type === 'nextAndPreviousWihHasNext') {
+    } else if (paginationType === 'nextAndPreviousWithHasNext') {
         return <ArrowPaginationContainer meta={meta} disabledLimit={disabledLimit} mode="default" />
+    } else if (paginationType === 'nextAndPreviousWithCount') {
+        return <DefaultPagination meta={meta} disabledLimit={disabledLimit} />
+    } else {
+        return null
     }
-
-    // nextAndPreviousWithCount (default)
-    return <DefaultPagination meta={meta} disabledLimit={disabledLimit} />
 }
 
 export default React.memo(Pagination)

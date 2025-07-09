@@ -184,6 +184,7 @@ const FileUploadContainer: React.FunctionComponent<Props> = ({
                 downloadUrl={downloadUrl}
                 {...diffProps}
                 width={fieldMeta.width}
+                height={fieldMeta.height}
                 mode={preview?.mode}
                 onFileIconClick={displayFileViewer ? handleFileIconClick : undefined}
             />

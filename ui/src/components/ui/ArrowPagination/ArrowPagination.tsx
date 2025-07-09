@@ -5,8 +5,8 @@ import ArrowButton from '@components/ui/ArrowPagination/ArrowButton'
 import cn from 'classnames'
 
 interface ArrowPaginationProps {
-    mode?: 'compact' | 'fullscreen'
-    onChange: (index: number) => void
+    mode?: 'compact' | 'fullscreen' | 'wrapper'
+    onChange: (nextIndex: number, previousIndex: number) => void
     currentIndex: number
     total: string | number
     disabledLeft: boolean
@@ -30,13 +30,13 @@ function ArrowPagination({
     const onPrevious = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
         event.preventDefault()
 
-        onChange(currentIndex - 1)
+        onChange(currentIndex - 1, currentIndex)
     }
 
     const onNext = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
         event.preventDefault()
 
-        onChange(currentIndex + 1)
+        onChange(currentIndex + 1, currentIndex)
     }
 
     if (mode === 'fullscreen') {
@@ -51,6 +51,16 @@ function ArrowPagination({
                 {children}
             </div>
         )
+    }
+
+    if (mode === 'wrapper') {
+        return !hide ? (
+            <div className={cn(styles[mode])}>
+                <ArrowButton icon="left" onClick={onPrevious} disabled={disabledLeft} />
+                {children}
+                <ArrowButton icon="right" onClick={onNext} disabled={disabledRight} />
+            </div>
+        ) : null
     }
 
     return !hide ? (

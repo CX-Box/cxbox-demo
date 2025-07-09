@@ -14,6 +14,7 @@ import {
 import { FileUploadFieldMeta as CoreFileUploadFieldMeta, WidgetField as CoreWidgetField } from '@cxbox-ui/schema'
 import { TableSettingsItem } from '@interfaces/tableSettings'
 import { IAggField, IAggLevel } from '@interfaces/groupingHierarchy'
+import { PaginationMode } from '@constants/pagination'
 
 export enum CustomFieldTypes {
     MultipleSelect = 'multipleSelect',
@@ -36,7 +37,8 @@ export enum CustomWidgetTypes {
     Column2D = 'Column2D',
     Line2D = 'Line2D',
     DualAxes2D = 'DualAxes2D',
-    CardList = 'CardList'
+    CardList = 'CardList',
+    CarouselList = 'CarouselList'
 }
 
 export const removeRecordOperationWidgets: Array<WidgetTypes | string> = [
@@ -131,9 +133,10 @@ export interface AppWidgetMeta extends WidgetMeta {
         }
         buttons?: OperationInfo[]
         pagination?: {
+            enabled?: boolean
             hideLimitOptions?: boolean
             availableLimitsList?: number[]
-            type?: 'nextAndPreviousWihHasNext' | 'nextAndPreviousSmart' | 'nextAndPreviousWithCount'
+            type?: PaginationMode
         }
         groupingHierarchy?: {
             counterMode?: 'none' | 'always' | 'collapsed'
@@ -177,6 +180,7 @@ export interface SuggestionPickListField extends Omit<PickListFieldMeta, 'type'>
 
 export type FileUploadFieldMeta = CoreFileUploadFieldMeta & {
     width?: number
+    height?: number
     preview?: {
         /**
          * Enables file previews. Default false.

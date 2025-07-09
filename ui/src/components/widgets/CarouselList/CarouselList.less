@@ -1,10 +1,16 @@
 .root {}
 
-.previewGroup {
+.main {
   display: flex;
-  flex-wrap: wrap;
-  column-gap: 10px;
-  row-gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.previewGroup {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
 }
 
 .card {
@@ -17,8 +23,14 @@
   color: rgba(0, 0, 0, 0.65);
 }
 
+.card.active [class*='FileViewer__preview'] {
+  border-width: 5px;
+}
+
 .empty {
   display: flex;
   justify-content: center;
   width: 100%;
 }
+
+

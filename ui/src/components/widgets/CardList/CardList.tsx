@@ -39,7 +39,9 @@ function CardList({ meta }: CardListProps) {
                                     widgetFieldMeta={widgetField}
                                     readonly={true}
                                 />
-                                <div style={{ width: size }}>{dataItem[widgetField.key]}</div>
+                                <div style={{ width: size, whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+                                    {dataItem[widgetField.key]}
+                                </div>
                             </div>
                         ) : null
                     })

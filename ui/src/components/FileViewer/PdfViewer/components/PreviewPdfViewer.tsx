@@ -9,13 +9,14 @@ import styles from '@components/FileViewer/PdfViewer/components/InlinePdfViewer.
 pdfjs.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.js', import.meta.url).toString()
 
 interface PreviewPdfViewerProps {
-    size?: number
+    width: number | undefined
+    height: number | undefined
     onClick?: () => void
     url: string | undefined
     spinning?: boolean
 }
 
-const PreviewPdfViewer: React.FC<PreviewPdfViewerProps> = ({ onClick, size, url, spinning }) => {
+const PreviewPdfViewer: React.FC<PreviewPdfViewerProps> = ({ onClick, width, height, url, spinning }) => {
     return (
         <Spin className={styles.root} spinning={spinning}>
             <span
@@ -23,15 +24,17 @@ const PreviewPdfViewer: React.FC<PreviewPdfViewerProps> = ({ onClick, size, url,
                     display: 'flex',
                     alignItems: 'flex-start',
                     justifyContent: 'center',
-                    height: size,
-                    width: size,
+                    maxHeight: height,
+                    height: '100%',
+                    maxWidth: width,
+                    width: '100%',
                     overflow: 'hidden'
                 }}
                 onClick={onClick}
             >
                 <DocumentErrorBoundary>
                     <Document file={url}>
-                        <Page height={size} pageNumber={1} />
+                        <Page height={height} pageNumber={1} />
                     </Document>
                 </DocumentErrorBoundary>
             </span>

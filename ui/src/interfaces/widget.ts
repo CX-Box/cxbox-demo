@@ -14,6 +14,7 @@ import {
 import { FileUploadFieldMeta as CoreFileUploadFieldMeta, WidgetField as CoreWidgetField } from '@cxbox-ui/schema'
 import { TableSettingsItem } from '@interfaces/tableSettings'
 import { IAggField, IAggLevel } from '@interfaces/groupingHierarchy'
+import { PaginationMode } from '@constants/pagination'
 
 export enum CustomFieldTypes {
     MultipleSelect = 'multipleSelect',
@@ -137,9 +138,10 @@ export interface AppWidgetMeta extends WidgetMeta {
         }
         buttons?: OperationInfo[]
         pagination?: {
+            enabled?: boolean
             hideLimitOptions?: boolean
             availableLimitsList?: number[]
-            type?: 'nextAndPreviousWihHasNext' | 'nextAndPreviousSmart' | 'nextAndPreviousWithCount'
+            type?: PaginationMode
         }
         groupingHierarchy?: {
             counterMode?: 'none' | 'always' | 'collapsed'

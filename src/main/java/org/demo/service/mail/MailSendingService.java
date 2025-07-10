@@ -52,7 +52,7 @@ public class MailSendingService {
 	}
 
 	@Async
-	public void send(Optional<Meeting> meeting, String subject, String message, IUser<Long> currentUser) {
+	public void send(Optional<Meeting> meeting, String subject, String message, IUser<Long> currentUser, boolean isMass) {
 		Optional<String> mailTo = meeting.map(Meeting::getContact).map(Contact::getEmail);
 		boolean mailSend = mailTo.isPresent() && mailSenderEnabled();
 		if (mailSend) {
@@ -64,41 +64,49 @@ public class MailSendingService {
 				simpleMailMessage.setSubject(subject);
 				javaMailSender.get().send(simpleMailMessage);
 			} catch (MailParseException | MailPreparationException e) {
-				notificationTemplate.saveAndSend(
-						NotificationError.builder().errorType(Type.BUSINESS_ERROR).text(e.getMessage()).build(),
-						currentUser
-				);
+				if (!isMass) {
+					notificationTemplate.saveAndSend(
+							NotificationError.builder().errorType(Type.BUSINESS_ERROR).text(e.getMessage()).build(),
+							currentUser
+					);
+				}
 			} catch (MailException e) {
-				notificationTemplate.saveAndSend(
-						NotificationError.builder().errorType(Type.SYSTEM_ERROR).text(e.getMessage()).build(),
-						currentUser
-				);
+				if (!isMass) {
+					notificationTemplate.saveAndSend(
+							NotificationError.builder().errorType(Type.SYSTEM_ERROR).text(e.getMessage()).build(),
+							currentUser
+					);
+				}
 			}
 		}
 		authzService.loginAs(authzService.createAuthentication(VANILLA));
 		String link = mailTo.map(mail -> mail.substring(mail.indexOf("@") + 1)).orElse("");
 		if (mailSend) {
-			notificationTemplate.saveAndSend(
-					Notification.builder()
-							.title("Successful")
-							.text(
-									String.format(
-											"%s from meeting №%s",
-											"Email sent to " + mailTo.orElse(""),
-											meeting.isPresent() ? meeting.get().getId() : ""
-									)
-							)
-							.links(getLinks(link, meeting))
-							.time(ZonedDateTime.now(ZoneOffset.UTC))
-							.build(),
-					currentUser
-			);
+			if (!isMass) {
+				notificationTemplate.saveAndSend(
+						Notification.builder()
+								.title("Successful")
+								.text(
+										String.format(
+												"%s from meeting №%s",
+												"Email sent to " + mailTo.orElse(""),
+												meeting.isPresent() ? meeting.get().getId() : ""
+										)
+								)
+								.links(getLinks(link, meeting))
+								.time(ZonedDateTime.now(ZoneOffset.UTC))
+								.build(),
+						currentUser
+				);
+			}
 			meeting.get().setStatus(MeetingStatus.COMPLETED);
 		} else {
-			notificationTemplate.saveAndSend(
-					NotificationError.builder().errorType(Type.BUSINESS_ERROR).text("Email was not sent").build(),
-					currentUser
-			);
+			if (!isMass) {
+				notificationTemplate.saveAndSend(
+						NotificationError.builder().errorType(Type.BUSINESS_ERROR).text("Email was not sent").build(),
+						currentUser
+				);
+			}
 		}
 	}
 

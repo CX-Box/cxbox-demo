@@ -15,9 +15,11 @@ import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import org.cxbox.api.data.dto.MassDTO;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.DrillDownType;
@@ -25,6 +27,7 @@ import org.cxbox.core.dto.MessageType;
 import org.cxbox.core.dto.multivalue.MultivalueFieldSingleValue;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
+import org.cxbox.core.dto.rowmeta.MassActionResultDTO;
 import org.cxbox.core.dto.rowmeta.PostAction;
 import org.cxbox.core.dto.rowmeta.PreAction;
 import org.cxbox.core.service.action.ActionScope;
@@ -38,6 +41,7 @@ import org.demo.dto.cxbox.inner.MeetingDTO;
 import org.demo.dto.cxbox.inner.MeetingDTO_;
 import org.demo.entity.Contact;
 import org.demo.entity.Meeting;
+import org.demo.entity.enums.MeetingStatus;
 import org.demo.repository.ClientRepository;
 import org.demo.repository.ContactRepository;
 import org.demo.repository.MeetingRepository;
@@ -160,10 +164,53 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 				)
 				.cancelCreate(ccr -> ccr.text("Cancel").available(bc -> true))
 				.action(act -> act
+						.scope(ActionScope.MASS)
+						.action("massEdit", "Mass Edit")
+						.withPreAction(PreAction.confirmWithWidget("meetingFormPopup", cfw -> cfw))
+						.massInvoker((bc, data, ids) -> {
+							var massResult = ids.stream()
+									.map(id -> {
+										try {
+											Meeting meeting = meetingRepository.getReferenceById(Long.parseLong(id));
+											meeting.setAgenda(data.getAgenda());
+											meeting.setRegion(data.getRegion());
+											return MassDTO.success(id);
+										} catch (Exception e) {
+											return MassDTO.fail(id, "cannot update agenda");
+										}
+									})
+									.collect(Collectors.toSet());
+							return new MassActionResultDTO<MeetingDTO>(massResult)
+									.setAction(PostAction.showMessage(MessageType.INFO, "The email mass operation was completed!"));
+						})
+				)
+				.action(act -> act
+						.scope(ActionScope.MASS)
+						.action("massSendEmail", "Mass Send Email")
+						.massInvoker((bc, data, ids) -> {
+							var massResult = ids.stream()
+									.map(id -> {
+										try {
+											Meeting meeting = meetingRepository.getReferenceById(Long.parseLong(id));
+											if (meeting.getStatus().equals(MeetingStatus.CANCELLED)) {
+												return MassDTO.fail(id, "Meeting is cancelled. Email cannot be sent.");
+											}
+											getSend(meeting, true);
+											return MassDTO.success(id);
+										} catch (Exception e) {
+											return MassDTO.fail(id, "cannot send meeting mail");
+										}
+									})
+									.collect(Collectors.toSet());
+							return new MassActionResultDTO<MeetingDTO>(massResult)
+									.setAction(PostAction.showMessage(MessageType.INFO, "The email mass operation was completed!"));
+						})
+				)
+				.action(act -> act
 						.action("sendEmail", "Send Email")
 						.invoker((bc, data) -> {
 							Meeting meeting = meetingRepository.getReferenceById(Long.parseLong(bc.getId()));
-							getSend(meeting);
+							getSend(meeting, false);
 							return new ActionResultDTO<MeetingDTO>()
 									.setAction(PostAction.showMessage(MessageType.INFO, "The email is currently being sent."));
 						})
@@ -183,12 +230,13 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 				.build();
 	}
 
-	private void getSend(Meeting meeting) {
+	private void getSend(Meeting meeting, boolean isMass) {
 		mailSendingService.send(
 				Optional.ofNullable(meeting),
 				meeting.getAgenda(),
 				String.format(MESSAGE_TEMPLATE, meeting.getStatus().getValue(), meeting.getResult()),
-				sessionService.getSessionUser()
+				sessionService.getSessionUser(),
+				isMass
 		);
 	}
 

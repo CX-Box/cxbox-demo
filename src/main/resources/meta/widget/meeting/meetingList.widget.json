@@ -82,7 +82,9 @@
         "edit",
         "actions",
         "sendEmail",
-        "sendEmailNextDay"
+        "sendEmailNextDay",
+        "massEdit",
+        "massSendEmail"
       ]
     }
   }

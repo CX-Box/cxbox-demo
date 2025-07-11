@@ -76,7 +76,7 @@ const NEXT_BUTTON: MassAdditionalOperation = { type: 'next', text: 'Next', hidde
 
 const APPLY_BUTTON: MassAdditionalOperation = { type: 'apply', text: 'Apply', hidden: true }
 
-const CANCEL_BUTTON: MassAdditionalOperation = { type: 'cancel', text: 'Cancel', buttonType: 'link', icon: 'close', hidden: true }
+const CANCEL_BUTTON: MassAdditionalOperation = { type: 'cancel', text: 'Cancel', buttonType: 'link', hidden: true }
 
 const BACK_BUTTON: MassAdditionalOperation = { type: 'back', text: 'Back', buttonType: 'link', hidden: true }
 

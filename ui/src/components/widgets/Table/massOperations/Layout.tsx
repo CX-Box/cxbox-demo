@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Layout as AntdLayout } from 'antd'
 import Steps from '@components/widgets/Table/massOperations/Steps'
 import {
@@ -15,7 +15,7 @@ import { useAppSelector } from '@store'
 import { shallowEqual, useDispatch } from 'react-redux'
 import { actions } from '@actions'
 import { useRowSelection } from '@components/widgets/Table/massOperations/hooks/useRowSelection'
-import { selectBcUrlRowMeta, selectWidget } from '@selectors/selectors'
+import { selectBc, selectBcData, selectBcUrlRowMeta, selectWidget } from '@selectors/selectors'
 import { BcFilter, OperationPostInvokeConfirm, OperationPostInvokeConfirmType, utils, WidgetListField } from '@cxbox-ui/core'
 import { OperationPreInvokeCustom, OperationPreInvokeSubType, OperationPreInvokeTypeCustom } from '@interfaces/operation'
 import { useTranslation } from 'react-i18next'
@@ -48,12 +48,14 @@ const Layout: React.FC<LayoutProps> = ({ widgetName, bcName, children }) => {
     const viewName = useAppSelector(state => state.view.name)
     const widget = useAppSelector(state => selectWidget(state, widgetName)) as AppWidgetMeta | undefined
     const rowMeta = useAppSelector(state => selectBcUrlRowMeta(state, bcName))
+    const bcData = useAppSelector(state => selectBcData(state, bcName))
+    const bc = useAppSelector(state => selectBc(state, bcName))
     const flattenOperations = useMemo(() => {
         return rowMeta?.actions ? utils.flattenOperations(rowMeta?.actions) : []
     }, [rowMeta?.actions])
     const { previousLimit, massModeLimit } = useAppSelector(state => {
         const previousLimit = state.screen.pagination[bcName]?.limit
-        const massModeLimit = state.screen.bo.bc[bcName]?.massPageLimit
+        const massModeLimit = state.screen.bo.bc[bcName]?.massLimit
 
         return {
             previousLimit,
@@ -163,6 +165,39 @@ const Layout: React.FC<LayoutProps> = ({ widgetName, bcName, children }) => {
 
     const filters = useAppSelector(state => state.screen.filters[bcName])
 
+    const [wasOperationCall, setWasOperationCall] = useState(false)
+
+    useEffect(() => {
+        if (wasOperationCall && bcData?.length && !bc?.loading) {
+            setWasOperationCall(false)
+            dispatch(
+                actions.sendOperation({
+                    bcName,
+                    operationType: currentMassOperation?.type as string,
+                    widgetName: widgetName,
+                    bcKey: currentMassOperation?.bcKey,
+                    confirmOperation: currentMassOperation?.preInvoke,
+                    onSuccessAction: actions.changeOperationStep({
+                        bcName,
+                        step: 'View results' as MassStepType
+                    })
+                })
+            )
+        } else if (bcData?.length === 0 && !bc?.loading) {
+            setWasOperationCall(false)
+        }
+    }, [
+        bc?.loading,
+        bcData?.length,
+        bcName,
+        currentMassOperation?.bcKey,
+        currentMassOperation?.preInvoke,
+        currentMassOperation?.type,
+        dispatch,
+        wasOperationCall,
+        widgetName
+    ])
+
     const getOperationProps = useCallback(
         (buttonType: MassOperationType) => {
             const result: { disabled?: boolean; hidden?: boolean; onClick?: () => void; hint?: string } = {}
@@ -186,9 +221,7 @@ const Layout: React.FC<LayoutProps> = ({ widgetName, bcName, children }) => {
                 }
 
                 if (buttonType === 'next' && selectedRows?.length) {
-                    const firstSelectedRow = selectedRows?.findLast(item => item)
                     result.onClick = () => {
-                        dispatch(actions.bcSelectRecord({ bcName, cursor: firstSelectedRow?.id as string }))
                         dispatch(
                             actions.bcAddFilter({
                                 bcName,
@@ -199,6 +232,11 @@ const Layout: React.FC<LayoutProps> = ({ widgetName, bcName, children }) => {
                                 }
                             })
                         )
+                        actions.bcChangeCursors({
+                            cursorsMap: {
+                                [bcName]: null as any
+                            }
+                        })
                         dispatch(actions.bcForceUpdate({ bcName }))
                         changeStep('next')
                     }
@@ -237,34 +275,16 @@ const Layout: React.FC<LayoutProps> = ({ widgetName, bcName, children }) => {
 
                 if (buttonType === 'next' && currentMassOperation && selectedRows?.length) {
                     result.onClick = () => {
-                        dispatch(
-                            actions.sendOperation({
-                                bcName,
-                                operationType: currentMassOperation?.type,
-                                widgetName: widgetName,
-                                bcKey: currentMassOperation?.bcKey,
-                                confirmOperation: currentMassOperation?.preInvoke
-                            })
-                        )
+                        clearAllFilters()
+                        setWasOperationCall(true)
                         moveToStep('Confirm operation')
                     }
                 }
 
                 if (buttonType === 'apply' && currentMassOperation && selectedRows?.length) {
                     result.onClick = () => {
-                        dispatch(
-                            actions.sendOperation({
-                                bcName,
-                                operationType: currentMassOperation?.type,
-                                widgetName: widgetName,
-                                bcKey: currentMassOperation?.bcKey,
-                                confirmOperation: currentMassOperation?.preInvoke,
-                                onSuccessAction: actions.changeOperationStep({
-                                    bcName,
-                                    step: 'View results' as MassStepType
-                                })
-                            })
-                        )
+                        clearAllFilters()
+                        setWasOperationCall(true)
                     }
                 }
             }
@@ -285,18 +305,23 @@ const Layout: React.FC<LayoutProps> = ({ widgetName, bcName, children }) => {
                 }
             }
             if (currentStep === 'View results') {
-                visibleOperationsByStep.splice(0, 0, 'close', 'export-failed')
+                visibleOperationsByStep.splice(0, 0, 'close', 'export', 'export-failed')
 
                 if (visibleOperationsByStep.includes(buttonType)) {
                     result.hidden = false
                 }
 
-                if (buttonType === 'export-failed') {
+                if (['export-failed'].includes(buttonType)) {
                     result.hint =
                         "A file with failed rows will be downloaded. To retry the operation for these rows, upload this file on Step 1 via 'Select from File'"
+                }
+
+                if (['export', 'export-failed'].includes(buttonType)) {
                     result.onClick = () => {
-                        const [failRows] = selectedRows ? filterByConditions(selectedRows, [item => !item.success]) : []
+                        const needFailedRows = buttonType === 'export-failed'
+                        const [failRows] = needFailedRows && selectedRows ? filterByConditions(selectedRows, [item => !item.success]) : []
                         const filteredFilters = filters.filter(filter => filter.fieldName === FIELDS.TECHNICAL.ID)
+                        const resultRows = needFailedRows ? failRows : selectedRows ?? []
 
                         exportTable(
                             {
@@ -305,7 +330,7 @@ const Layout: React.FC<LayoutProps> = ({ widgetName, bcName, children }) => {
                                     ...filteredFilters,
                                     {
                                         fieldName: FIELDS.TECHNICAL.ID,
-                                        value: failRows.map(item => item.id),
+                                        value: resultRows.map(item => item.id),
                                         type: FilterType.equalsOneOf,
                                         widgetName,
                                         viewName

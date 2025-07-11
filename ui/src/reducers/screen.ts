@@ -94,11 +94,11 @@ const screenReducerBuilder = reducers
         state.viewerMode[bcName]!.step = step
 
         state.bo.bc[bcName] = state.bo.bc[bcName] ?? {}
-        if (state.bo.bc[bcName].massPageLimit) {
+        if (state.bo.bc[bcName]?.massLimit) {
             state.pagination[bcName] = state.pagination[bcName] ?? {}
             state.pagination[bcName].limit = state.pagination[bcName].limit ?? state.bo.bc[bcName].limit
 
-            state.bo.bc[bcName].limit = state.bo.bc[bcName].massPageLimit
+            state.bo.bc[bcName].limit = state.bo.bc[bcName]?.massLimit
         }
     })
     .addCase(actions.resetViewerMode, (state, action) => {
@@ -107,7 +107,7 @@ const screenReducerBuilder = reducers
         delete state.viewerMode[bcName]
 
         state.bo.bc[bcName] = state.bo.bc[bcName] ?? {}
-        if (state.bo.bc[bcName].massPageLimit) {
+        if (state.bo.bc[bcName]?.massLimit) {
             state.bo.bc[bcName].limit = state.pagination[bcName].limit
         }
     })

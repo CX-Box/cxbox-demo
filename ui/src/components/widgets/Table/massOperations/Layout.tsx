@@ -433,6 +433,7 @@ const Layout: React.FC<LayoutProps> = ({ widgetName, bcName, children }) => {
             : undefined
 
         if (ids?.length) {
+            clearSelectedRows()
             dispatch(
                 actions.bcAddFilter({
                     bcName: bcName as string,

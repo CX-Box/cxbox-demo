@@ -232,11 +232,13 @@ const Layout: React.FC<LayoutProps> = ({ widgetName, bcName, children }) => {
                                 }
                             })
                         )
-                        actions.bcChangeCursors({
-                            cursorsMap: {
-                                [bcName]: null as any
-                            }
-                        })
+                        dispatch(
+                            actions.bcChangeCursors({
+                                cursorsMap: {
+                                    [bcName]: null as any
+                                }
+                            })
+                        )
                         dispatch(actions.bcForceUpdate({ bcName }))
                         changeStep('next')
                     }

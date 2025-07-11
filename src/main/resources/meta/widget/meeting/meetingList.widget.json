@@ -60,8 +60,7 @@
   ],
   "options": {
     "pagination": {
-      "type": "nextAndPreviousSmart",
-      "hideLimitOptions": true
+      "hideLimitOptions": false
     },
     "export": {
       "enabled": true,

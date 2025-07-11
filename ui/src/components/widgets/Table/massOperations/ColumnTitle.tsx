@@ -79,7 +79,7 @@ const ColumnTitle: React.FC<ColumnTitleProps> = ({ widgetName, bcName, filterabl
                 bcName: bcName as string,
                 filter: {
                     type: CoreFilterType.equalsOneOf,
-                    value: null,
+                    value: selectedRowKeys,
                     fieldName,
                     viewName,
                     widgetName: widgetName
@@ -93,7 +93,7 @@ const ColumnTitle: React.FC<ColumnTitleProps> = ({ widgetName, bcName, filterabl
         changeSuccessChecked(null as any)
         changeFailChecked(null as any)
         changeVisibility(false)
-    }, [bcName, changeFailChecked, changeSuccessChecked, changeVisibility, dispatch, fieldName, viewName, widgetName])
+    }, [bcName, changeFailChecked, changeSuccessChecked, changeVisibility, dispatch, fieldName, selectedRowKeys, viewName, widgetName])
 
     const content = (
         <Form onSubmit={handleApply} layout="vertical">

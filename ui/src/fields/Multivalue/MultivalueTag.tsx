@@ -1,5 +1,6 @@
 import React from 'react'
-import { Tag, Icon } from 'antd'
+import { Icon } from 'antd'
+import Tag from '@components/ui/Tag/Tag'
 import styles from './MultivalueTag.less'
 import cn from 'classnames'
 import { interfaces } from '@cxbox-ui/core'
@@ -64,12 +65,14 @@ const MultivalueTag: React.FunctionComponent<MultivalueTagProps> = ({
         >
             <div data-text={placeholder} className={cn(styles.enabled, { [styles.disabled]: disabled })}>
                 {(value || []).map(val => {
+                    const primary = (val.options as Record<string, any>).primary
                     return (
                         <Tag
-                            className={(val.options as Record<string, any>).primary && styles.primary}
+                            color={primary ? 'primary' : undefined}
                             onClick={e => {
                                 e.stopPropagation()
                             }}
+                            nowrap={true}
                             title={val.value}
                             closable={!disabled && !loading}
                             id={val.id}

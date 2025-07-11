@@ -49,7 +49,8 @@ public class MeetingStatusModelActionProvider {
 										Optional.ofNullable(meeting),
 										meeting.getAgenda(),
 										String.format(messageTemplate, MeetingStatus.COMPLETED.getValue(), meeting.getResult()),
-										sessionService.getSessionUser()
+										sessionService.getSessionUser(),
+										false
 								);
 								return new ActionResultDTO<MeetingDTO>().setAction(PostAction.waitUntil(
 														MeetingDTO_.status, MeetingStatus.COMPLETED

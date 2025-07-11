@@ -61,7 +61,7 @@ export function normalizeFieldValue(value: DataValue | undefined, fieldMeta?: Wi
  * @param item An object in the fields of which tokens should be searched
  * @param fields
  */
-const convertTemplatedString = (templatedString: string, item: DataItem | undefined, fields?: WidgetField[]): ReactNode => {
+const convertTemplatedString = (templatedString: string, item: Omit<DataItem, 'vstamp'> | undefined, fields?: WidgetField[]): ReactNode => {
     if (!templatedString) {
         return ''
     }
@@ -112,7 +112,7 @@ const isTemplate = (templatedString: string): boolean => {
     return templatedString.match(TAG_PLACEHOLDER_FULL) !== null
 }
 
-export function getWidgetTitle(str: string, record?: DataItem, fields?: WidgetField[]) {
+export function getWidgetTitle(str: string, record?: Omit<DataItem, 'vstamp'>, fields?: WidgetField[]) {
     if (isTemplate(str)) {
         return convertTemplatedString(str, record, fields)
     } else {

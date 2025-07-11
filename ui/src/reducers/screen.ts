@@ -1,7 +1,10 @@
 import { BcMetaState, interfaces, reducers } from '@cxbox-ui/core'
-import { actions, changeMenuCollapsed, customAction, sendOperationSuccess, setCollapsedWidgets } from '@actions'
+import { actions } from '@actions'
 import { createReducer, isAnyOf } from '@reduxjs/toolkit'
 import { FilterGroup } from '@interfaces/filters'
+import { MassStepType } from '@components/widgets/Table/massOperations/constants'
+
+export type ViewerModeMass = { mode: 'mass'; step?: MassStepType; operationType: string; widgetName: string; bcName: string }
 
 export interface ScreenState extends interfaces.ScreenState {
     menuCollapsed: boolean
@@ -10,6 +13,9 @@ export interface ScreenState extends interfaces.ScreenState {
         bc: Record<string, BcMetaState & { defaultLimit?: number; filterGroups?: FilterGroup[] }>
     }
     pagination: { [bcName: string]: { limit?: number } }
+    viewerMode: {
+        [bcName: string]: ViewerModeMass | undefined
+    }
     collapsedWidgets: { [viewName: string]: string[] }
 }
 
@@ -17,15 +23,16 @@ const initialState: ScreenState = {
     ...reducers.initialScreenState,
     menuCollapsed: false,
     pagination: {},
+    viewerMode: {},
     collapsedWidgets: {}
 }
 
 const screenReducerBuilder = reducers
     .createScreenReducerBuilderManager(initialState)
-    .addCase(changeMenuCollapsed, (state, action) => {
+    .addCase(actions.changeMenuCollapsed, (state, action) => {
         state.menuCollapsed = action.payload
     })
-    .addCase(customAction, (state, action) => {
+    .addCase(actions.customAction, (state, action) => {
         /**
          * An example reducer for custom action
          */
@@ -68,14 +75,50 @@ const screenReducerBuilder = reducers
         state.bo.bc[bcName] = state.bo.bc[bcName] ?? {}
         state.bo.bc[bcName].loading = false
     })
-    .addCase(setCollapsedWidgets, (state, action) => {
+    .addCase(actions.setCollapsedWidgets, (state, action) => {
         const { viewName, widgetNameGroup } = action.payload
         const collapsedViewWidgets = state.collapsedWidgets[viewName] || []
         state.collapsedWidgets[viewName] = collapsedViewWidgets?.includes(widgetNameGroup[0])
             ? collapsedViewWidgets?.filter(item => !widgetNameGroup?.includes(item))
             : [...collapsedViewWidgets, ...widgetNameGroup]
     })
+    .addCase(actions.setViewerMode, (state, action) => {
+        const { bcName, step, widgetName, mode, operationType } = action.payload
+
+        state.viewerMode[bcName] = state.viewerMode[bcName] ?? { ...action.payload }
+
+        state.viewerMode[bcName]!.mode = mode
+        state.viewerMode[bcName]!.widgetName = widgetName
+        state.viewerMode[bcName]!.bcName = bcName
+        state.viewerMode[bcName]!.operationType = operationType
+        state.viewerMode[bcName]!.step = step
+
+        state.bo.bc[bcName] = state.bo.bc[bcName] ?? {}
+        if (state.bo.bc[bcName]?.massLimit) {
+            state.pagination[bcName] = state.pagination[bcName] ?? {}
+            state.pagination[bcName].limit = state.pagination[bcName].limit ?? state.bo.bc[bcName].limit
+
+            state.bo.bc[bcName].limit = state.bo.bc[bcName]?.massLimit
+        }
+    })
+    .addCase(actions.resetViewerMode, (state, action) => {
+        const { bcName } = action.payload
+
+        delete state.viewerMode[bcName]
+
+        state.bo.bc[bcName] = state.bo.bc[bcName] ?? {}
+        if (state.bo.bc[bcName]?.massLimit) {
+            state.bo.bc[bcName].limit = state.pagination[bcName].limit
+        }
+    })
+    .addCase(actions.changeOperationStep, (state, action) => {
+        const { bcName, step } = action.payload
+
+        state.viewerMode[bcName] = state.viewerMode[bcName] ?? ({} as (typeof state.viewerMode)[string])
+        state.viewerMode[bcName]!.step = step
+    })
     .addMatcher(isAnyOf(actions.selectScreen), (state, action) => {
+        state.viewerMode = initialState.viewerMode
         state.collapsedWidgets = initialState.collapsedWidgets
         // временное решение чтобы сохранялся лимит при сменен экранов
         Object.values(state.bo.bc).forEach(bc => {
@@ -83,7 +126,7 @@ const screenReducerBuilder = reducers
             bc.limit = state.pagination[bc.name]?.limit ?? bc.limit
         })
     })
-    .addMatcher(isAnyOf(sendOperationSuccess, actions.bcSaveDataSuccess), (state, action) => {
+    .addMatcher(isAnyOf(actions.sendOperationSuccess, actions.bcSaveDataSuccess), (state, action) => {
         if (action.payload.dataItem) {
             const newCursor = action.payload.dataItem.id
 

@@ -83,7 +83,7 @@ public class MeetingReadService extends VersionAwareResponseService<MeetingDTO, 
 						.action("sendEmail", "Send Email")
 						.invoker((bc, data) -> {
 							Meeting meeting = meetingRepository.getReferenceById(Long.parseLong(bc.getId()));
-							getSend(meeting);
+							getSend(meeting, false);
 							return new ActionResultDTO<MeetingDTO>()
 									.setAction(PostAction.showMessage(MessageType.INFO, "Create action on the email sent."));
 						})
@@ -102,12 +102,13 @@ public class MeetingReadService extends VersionAwareResponseService<MeetingDTO, 
 				.build();
 	}
 
-	private void getSend(Meeting meeting) {
+	private void getSend(Meeting meeting, boolean isMass) {
 		mailSendingService.send(
 				Optional.ofNullable(meeting),
 				meeting.getAgenda(),
 				String.format(MESSAGE_TEMPLATE, meeting.getStatus().getValue(), meeting.getResult()),
-				sessionService.getSessionUser()
+				sessionService.getSessionUser(),
+				isMass
 		);
 	}
 

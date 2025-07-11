@@ -1,7 +1,7 @@
-import React, { FunctionComponent, useMemo } from 'react'
+import React, { FunctionComponent } from 'react'
 import { useAppSelector } from '@store'
-import { getWidgetTitle } from './utils'
 import { WidgetField } from '@cxbox-ui/schema'
+import { InnerTemplatedTitle } from '@components/TemplatedTitle/InnerTemplatedTitle'
 
 interface TemplatedTitleProps {
     id?: string
@@ -10,7 +10,7 @@ interface TemplatedTitleProps {
     container?: React.ComponentType<any>
 }
 
-export const TemplatedTitle: FunctionComponent<TemplatedTitleProps> = ({ widgetName, title, container: Container, id }) => {
+export const TemplatedTitle: FunctionComponent<TemplatedTitleProps> = ({ widgetName, title, container, id }) => {
     const widget = useAppSelector(state => {
         return state.view.widgets.find(item => item.name === widgetName)
     })
@@ -24,17 +24,7 @@ export const TemplatedTitle: FunctionComponent<TemplatedTitleProps> = ({ widgetN
     })
     const widgetFields = widget?.fields as WidgetField[] | undefined
 
-    const templatedTitle = useMemo(() => getWidgetTitle(title, dataItem, widgetFields), [dataItem, title, widgetFields])
-
-    if (!title) {
-        return null
-    }
-
-    if (Container) {
-        return <Container title={templatedTitle} />
-    }
-
-    return <> {templatedTitle} </>
+    return <InnerTemplatedTitle title={title} dataItem={dataItem} fields={widgetFields} container={container} />
 }
 
 export default TemplatedTitle

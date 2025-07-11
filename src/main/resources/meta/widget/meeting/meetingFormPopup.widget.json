@@ -1,0 +1,43 @@
+{
+  "name": "meetingFormPopup",
+  "title": "",
+  "type": "FormPopup",
+  "bc": "meetingEdit",
+  "fields": [
+    {
+      "label": "Meeting Region",
+      "key": "region",
+      "type": "dictionary"
+    },
+    {
+      "label": "Agenda",
+      "key": "agenda",
+      "type": "input"
+    }
+  ],
+  "options": {
+    "actionGroups": {
+      "include": []
+    },
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "region",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "agenda",
+              "span": 12
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

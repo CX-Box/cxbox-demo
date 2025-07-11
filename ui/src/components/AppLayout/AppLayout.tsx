@@ -20,8 +20,6 @@ export const AppLayout: React.FC = () => {
 
     const sessionActive = useAppSelector(state => state.session.active)
     const logoutRequested = useAppSelector(state => state.session.logout)
-    const modalInvoke = useAppSelector(state => state.view.modalInvoke)
-
     const { isMetaRefreshing, loginSpin } = useAppSelector(state => state.session)
     const appSpinning = isMetaRefreshing || loginSpin
 
@@ -43,7 +41,7 @@ export const AppLayout: React.FC = () => {
             <Spin wrapperClassName={styles.appSpin} spinning={appSpinning}>
                 <DevPanel />
                 <ErrorPopup />
-                {modalInvoke?.operation && <ModalInvoke />}
+                <ModalInvoke />
                 <SystemNotifications />
                 <Layout className={styles.appLayout}>
                     <AppSide />

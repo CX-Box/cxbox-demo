@@ -1,0 +1,36 @@
+.root:has(.icon) {
+    .title {
+        line-height: 1.4;
+    }
+
+    .content {
+       margin-left: 38px;
+    }
+}
+
+.icon {
+    font-size: 22px;
+    margin-right: 16px;
+    float: left;
+
+    &:global.anticon-info-circle {
+        color: #1890ff;
+    }
+    &:global.anticon-close-circle {
+        color: #f5222d;
+    }
+}
+
+.content {
+    padding: 24px 0;
+}
+
+.multiline {
+    white-space: pre-wrap;
+}
+
+.actions {
+    display: flex;
+    flex-direction: row;
+}
+

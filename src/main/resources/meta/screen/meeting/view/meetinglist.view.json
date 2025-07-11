@@ -20,6 +20,11 @@
       "gridWidth": 24
     },
     {
+      "widgetName": "meetingFormPopup",
+      "position": 25,
+      "gridWidth": 24
+    },
+    {
       "widgetName": "clientPickListPopup",
       "position": 30,
       "gridWidth": 24

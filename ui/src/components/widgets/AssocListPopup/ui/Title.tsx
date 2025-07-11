@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from './Title.less'
-import { Tag } from 'antd'
+import Tag from '@components/ui/Tag/Tag'
 import WidgetTitle from '@components/WidgetTitle/WidgetTitle'
 import { DataValue } from '@cxbox-ui/schema'
 
@@ -27,13 +27,15 @@ function Title({ title, widgetName, tags, onClose }: TitleProps) {
             </div>
             <div className={styles.tagArea}>
                 {tags?.map(value => {
+                    const primary = value.options?.primary
                     return (
                         <Tag
-                            className={value.options?.primary && styles.primary}
                             title={value._value?.toString()}
                             closable={value._closable}
                             id={value.id?.toString()}
                             key={value.id?.toString()}
+                            nowrap={true}
+                            color={primary ? 'primary' : undefined}
                             onClose={() => {
                                 onClose(value)
                             }}

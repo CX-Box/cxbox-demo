@@ -5,7 +5,7 @@ import { actions, partialUpdateRecordForm, resetRecordForm, setRecordForm } from
 import { isAnyOf, Middleware } from '@reduxjs/toolkit'
 import { OperationTypeCrud, PendingDataItem } from '@cxbox-ui/core'
 import { selectors } from '@selectors'
-import { showUnsavedNotification } from './internalFormWidgetMiddleware.utils'
+import { showUnsavedNotification } from './utils'
 
 const { selectBcRecordPendingDataChanges, selectBcRecordForm, selectBc } = selectors
 

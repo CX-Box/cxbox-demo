@@ -65,6 +65,7 @@ export const AdditionalListWidget: React.FC<Props> = ({ meta }) => {
                                 disablePagination={true}
                                 hideRowActions={true}
                                 disableCellEdit={true}
+                                disableMassMode={true}
                                 onRow={handleRow}
                             />
                         </div>

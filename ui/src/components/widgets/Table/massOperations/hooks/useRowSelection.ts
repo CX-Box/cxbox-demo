@@ -36,7 +36,7 @@ export const useRowSelection = (widgetName: string) => {
                     : pickMapFieldKey ?? (widget?.fields as WidgetField[])?.find(item => item?.key)?.key
 
             if (titleKey) {
-                result.title = record[titleKey]
+                result.title = record.title ?? record[titleKey]
             }
 
             return result

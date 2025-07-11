@@ -442,7 +442,8 @@ const Layout: React.FC<LayoutProps> = ({ widgetName, bcName, children }) => {
             selectItems(
                 true,
                 ids.map(id => ({
-                    id
+                    id,
+                    title: id
                 }))
             )
             dispatch(actions.bcForceUpdate({ bcName }))

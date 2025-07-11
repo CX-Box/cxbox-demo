@@ -1,5 +1,5 @@
 import { useAppSelector } from '@store'
-import { useDispatch } from 'react-redux'
+import { shallowEqual, useDispatch } from 'react-redux'
 import { useCallback, useEffect, useState } from 'react'
 import { actions } from '@actions'
 import { utils, WidgetMeta } from '@cxbox-ui/core'
@@ -21,15 +21,16 @@ export const useFilterGroups = (meta?: WidgetMeta) => {
     const { filtersExist, filterGroupsExist, filterGroups, filtersCount } = useAppSelector(state => {
         const bc = bcName ? state.screen.bo.bc[bcName] : undefined
         const bcFilters = bcName ? state.screen.filters[bcName] : undefined
+        const enabledMassMode = state.screen.viewerMode[bcName]?.mode === 'mass'
 
         return {
             cursor: bc?.cursor,
             filterGroups: bc?.filterGroups,
             filterGroupsExist: !!bc?.filterGroups?.length,
-            filtersExist: !!bcFilters?.length,
+            filtersExist: enabledMassMode ? !!bcFilters?.length && bcFilters.length > 1 : !!bcFilters?.length,
             filtersCount: bcFilters?.length ?? 0
         }
-    })
+    }, shallowEqual)
 
     const { filterGroupName, setFilterGroupName } = useFiltersGroupName<string>(filtersExist)
 

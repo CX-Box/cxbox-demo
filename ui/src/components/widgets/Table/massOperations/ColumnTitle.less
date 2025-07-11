@@ -1,0 +1,64 @@
+.container {
+  display: flex;
+  word-break: normal;
+  position: relative;
+}
+
+.container:hover .sort {
+  visibility: visible;
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+  align-self: center;
+  cursor: pointer;
+  margin-left: 8px;
+  color: rgb(187, 187, 187);
+  flex-shrink: 0;
+
+  :hover {
+    color: rgb(128, 128, 128);
+  }
+}
+
+.active {
+  color: rgb(85, 85, 85);
+}
+
+:global(.ant-btn).button {
+  background: none;
+  color: #0088bb;
+  border: none;
+}
+
+:global(.ant-btn:not(.ant-btn-icon-only):not(.ant-input-search-button):not(.ant-btn-circle)).button {
+  min-width: 75px;
+}
+
+.operators {
+  display: flex;
+  margin-top: 8px;
+}
+
+.checkboxContainer {
+  display: flex;
+  align-items: center;
+  column-gap: 5px
+}
+
+.columnIcon {
+  font-size: 20px;
+
+  &:global.anticon svg {
+    width: 1em;
+    height: 1em;
+  }
+
+  &:global.anticon-close-square {
+    color: #d04437;
+  }
+  &:global.anticon-check-circle {
+    color: #14892c;
+  }
+}

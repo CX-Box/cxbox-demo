@@ -5,35 +5,15 @@
 }
 
 .tagArea {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+
     overflow-y: auto;
+
     max-height: 200px;
-    :global {
-        .ant-tag {
-            position: relative;
-            margin: 2px 2px 0 2px;
-            padding-right: 20px;
-            line-height: 18px;
-            background: #ffffff;
-            white-space: initial;
 
-            .anticon {
-                position: absolute;
-                display: block;
-                top: 3px;
-                right: 6px;
-            }
-        }
-    }
+    row-gap: 2px;
+    column-gap: 4px;
 }
-
-.primary:global(.ant-tag) {
-    color: #fff;
-    background-color: #1890ff;
-    border-color: #1890ff;
-
-    :global(.anticon) {
-        color: #fff;
-    }
-
-}
-

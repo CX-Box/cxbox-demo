@@ -4,6 +4,7 @@ import { ExportOptions, exportTable } from '@utils/export'
 import { useAppSelector } from '@store'
 import { WidgetListField } from '@cxbox-ui/schema'
 import { EFeatureSettingKey } from '@interfaces/session'
+import { BcFilter } from '@cxbox-ui/core'
 
 interface UseExportButtonProps {
     bcName: string
@@ -13,6 +14,7 @@ interface UseExportButtonProps {
 }
 
 export const useExportTable = ({ bcName, fields, title, exportWithDate = false }: UseExportButtonProps) => {
+    const selectedRows = useAppSelector(state => state.view.selectedRows[bcName])
     const screenName = useAppSelector(state => state.screen.screenName)
     const tableFilters = useAppSelector(state => state.screen.filters[bcName])
     const tableSorters = useAppSelector(state => state.screen.sorters[bcName])
@@ -36,7 +38,7 @@ export const useExportTable = ({ bcName, fields, title, exportWithDate = false }
     }, shallowEqual)
 
     return {
-        exportTable: () => {
+        exportTable: (forced: Partial<{ total: number; filters: BcFilter[] }> = {}, mode?: 'mass') => {
             return exportTable(
                 screenName,
                 bcName,
@@ -45,10 +47,13 @@ export const useExportTable = ({ bcName, fields, title, exportWithDate = false }
                 exportWithDate,
                 !!widgetData?.length,
                 appExportExcelLimit,
-                total,
-                tableFilters,
+                forced.total ?? total,
+                forced.filters ?? tableFilters,
                 tableSorters,
-                exportOptions
+                exportOptions,
+                undefined,
+                selectedRows,
+                mode === 'mass'
             )
         }
     }

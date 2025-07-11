@@ -7,6 +7,7 @@ import { TableSettingsItem, TableSettingsList, TableSettingsMap } from '@interfa
 import { FilterGroup } from '@interfaces/filters'
 import { FileViewerPopupOptions, WsNotificationPopupOptions } from '@interfaces/view'
 import { DataItem } from '@cxbox-ui/core'
+import { ViewerModeMass } from '../reducers/screen'
 
 export const SSO_AUTH = createAction('SSO_AUTH')
 
@@ -125,3 +126,11 @@ export const drillDownInNewTab = createAction<{
 }>('drillDownInNewTab')
 
 export const emptyAction = createAction<undefined | AnyAction>('emptyAction')
+
+export const setViewerMode = createAction<ViewerModeMass>('setViewerMode')
+
+export const resetViewerMode = createAction<{
+    bcName: string
+}>('resetViewerMode')
+
+export const changeOperationStep = createAction<Pick<ViewerModeMass, 'bcName' | 'step'>>('changeOperationStep')

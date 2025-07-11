@@ -1,5 +1,5 @@
 import { RootState } from '@store'
-import { PendingValidationFails } from '@cxbox-ui/core'
+import { PendingValidationFails, WidgetMeta } from '@cxbox-ui/core'
 import { buildBcUrl } from '@utils/buildBcUrl'
 
 export const selectBc = (state: RootState, bcName: string | undefined) => (bcName ? state.screen.bo.bc?.[bcName] : undefined)
@@ -28,3 +28,8 @@ export const selectBcPendingValidationFails = (state: RootState, bcName: string 
 export const selectBcFilters = (state: RootState, bcName: string | undefined) => (bcName ? state.screen.filters[bcName] : undefined)
 
 export const selectBcSorters = (state: RootState, bcName: string | undefined) => (bcName ? state.screen.sorters[bcName] : undefined)
+
+export const selectWidget = (state: RootState, widgetName: string | undefined) =>
+    widgetName ? state.view.widgets.find(widget => widgetName === widget?.name) : undefined
+
+export const selectWidgetByCondition = (state: RootState, condition: (widget: WidgetMeta) => boolean) => state.view.widgets.find(condition)

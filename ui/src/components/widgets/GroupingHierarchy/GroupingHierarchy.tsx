@@ -7,7 +7,7 @@ interface GroupingHierarchyProps {
 }
 
 const GroupingHierarchy: React.FC<GroupingHierarchyProps> = ({ meta }) => {
-    return <Table meta={meta} isGroupingHierarchy={true} />
+    return <Table meta={meta} isGroupingHierarchy={true} disableMassMode={true} />
 }
 
 export default React.memo(GroupingHierarchy)

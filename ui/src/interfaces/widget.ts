@@ -94,6 +94,10 @@ export enum EStatsBcCursor {
     none = 'none'
 }
 
+export type MassOperationOption = {
+    pickMapFieldKey?: string | null
+}
+
 export interface AppWidgetMeta extends WidgetMeta {
     personalFields?: TableSettingsItem | null // TODO make mandatory
     options?: WidgetOptions & {
@@ -153,6 +157,8 @@ export interface AppWidgetMeta extends WidgetMeta {
             widget: string
         }
         dual2D?: Dual2DConfig
+
+        massOp?: MassOperationOption
     }
 }
 

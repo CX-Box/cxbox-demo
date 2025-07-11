@@ -1,0 +1,31 @@
+.tag:global(.ant-tag) {
+    min-height: 20px;
+    position: relative;
+    margin: 0;
+    padding-right: 20px;
+    line-height: 18px;
+    background: #ffffff;
+    white-space: initial;
+
+  :global(.anticon) {
+      position: absolute;
+      display: block;
+      top: 3px;
+      right: 6px;
+    }
+
+    &:not(:has(:global(.anticon-close))) {
+      padding-right: 7px;
+    }
+
+    &:hover {
+      opacity: 1;
+    }
+}
+
+.nowrap:global(.ant-tag) {
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

@@ -204,6 +204,21 @@ export const useGroupingHierarchy = <T extends CustomDataItem>(
         ) : null
     }, [isGroupingHierarchy, isIncorrectLimit, t, bcPageLimit, bcCountForShowing, enabledGrouping, toggleEnabledGrouping])
 
+    const sortFieldsByGroupKeys = useCallback(
+        (fields: AppWidgetGroupingHierarchyMeta['fields']) => {
+            if (!isGroupingHierarchy) {
+                return fields
+            }
+
+            let firstFields = sortedGroupKeys
+                .map(fieldKey => fields.find(field => field.key === fieldKey))
+                .filter(field => !!field) as AppWidgetGroupingHierarchyMeta['fields']
+
+            return [...firstFields, ...fields.filter(field => !sortedGroupKeys.includes(field.key))]
+        },
+        [isGroupingHierarchy, sortedGroupKeys]
+    )
+
     return {
         enabledGrouping,
         toggleEnabledGrouping,
@@ -217,6 +232,7 @@ export const useGroupingHierarchy = <T extends CustomDataItem>(
         openTreeToLeaf,
         renderTopButton,
         tableContainerRef,
-        hierarchyToggleButtonElement
+        hierarchyToggleButtonElement,
+        sortFieldsByGroupKeys
     }
 }

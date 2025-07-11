@@ -1,37 +1,25 @@
 .multivalue {
     display: table;
     table-layout: fixed;
+
     width: 100%;
     border: 1px solid #d9d9d9;
     padding: 4px 4px 4px 11px;
     cursor: pointer;
     background: #FFFFFF;
+    border-radius: 2px;
+}
 
-    :global {
-        .ant-tag {
-            position: relative;
-            max-width: 100%;
-            margin-left: 2px;
-            margin-right: 2px;
-            padding-right: 20px;
-            line-height: 18px;
-            cursor: default;
-            background: #ffffff;
-            overflow: hidden;
-            text-overflow: ellipsis;
+.enabled {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-wrap: wrap;
 
-            .anticon {
-                position: absolute;
-                display: block;
-                top: 3px;
-                right: 6px;
-            }
-        }
+    overflow-y: auto;
 
-        .ant-tag:hover {
-            opacity: 1;
-        }
-    }
+    row-gap: 2px;
+    column-gap: 4px;
 }
 
 .iconContainer {
@@ -53,15 +41,4 @@
 
 .enabled:empty:not(:focus):before {
     content: attr(data-text)
-}
-
-.primary:global(.ant-tag) {
-    color: #fff;
-    background-color: #1890ff;
-    border-color: #1890ff;
-
-    :global(.anticon) {
-        color: #fff;
-    }
-
 }

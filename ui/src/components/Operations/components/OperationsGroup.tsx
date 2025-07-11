@@ -1,19 +1,20 @@
 import React from 'react'
-import { Dropdown, Icon, Menu, Spin } from 'antd'
-import Button from '../../ui/Button/Button'
 import { Operation, OperationGroup, OperationType, WidgetTypes } from '@cxbox-ui/core'
-import { removeRecordOperationWidgets } from '@interfaces/widget'
+import { Dropdown, Icon, Menu, Spin } from 'antd'
 import styles from './OperationsGroup.less'
+import { removeRecordOperationWidgets } from '@interfaces/widget'
+import Button from '../../ui/Button/Button'
 
 interface OperationsGroupProps {
     group: OperationGroup
     onClick: (operation: Operation) => void
     widgetType: WidgetTypes | string
     loading?: boolean
+    getButtonProps?: (operation: Operation) => { disabled?: boolean }
     isOperationInProgress: (operationType?: OperationType) => boolean
 }
 
-function OperationsGroup({ group, widgetType, onClick, loading, isOperationInProgress }: OperationsGroupProps) {
+function OperationsGroup({ group, widgetType, onClick, loading, getButtonProps, isOperationInProgress }: OperationsGroupProps) {
     const operations = group.actions.filter(i => !(removeRecordOperationWidgets.includes(widgetType) && i.scope === 'record'))
 
     if (!operations.length) {
@@ -32,6 +33,7 @@ function OperationsGroup({ group, widgetType, onClick, loading, isOperationInPro
                             className={styles.subOperation}
                             data-test-widget-action-item={true}
                             onClick={() => !inProgress && onClick(operation)}
+                            {...getButtonProps?.(operation)}
                         >
                             <Spin spinning={inProgress}>
                                 {operation.icon && <Icon type={operation.icon} />}

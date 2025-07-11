@@ -302,6 +302,7 @@ const Layout: React.FC<LayoutProps> = ({ widgetName, bcName, children }) => {
                 if (buttonType === 'back') {
                     result.onClick = () => {
                         changeStep('back')
+                        dispatch(actions.bcCancelPendingChanges({ bcNames: [bcName] }))
                         dispatch(actions.closeViewPopup({ bcName }))
                         dispatch(actions.closeConfirmModal())
                     }

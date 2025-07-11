@@ -136,7 +136,6 @@ const Field: FunctionComponent<FieldProps> = ({
     const { t } = useTranslation()
     const [localValue, setLocalValue] = React.useState<string | null>(null)
     let standardField: React.ReactChild | null = null
-    const drillDownUrl = useDrillDownUrl(bcName, widgetFieldMeta, cursor)
 
     const value = forcedValue ? forcedValue : pendingValue !== undefined ? pendingValue : data?.[widgetFieldMeta.key]
 
@@ -160,12 +159,12 @@ const Field: FunctionComponent<FieldProps> = ({
     const bgColor = widgetFieldMeta.bgColorKey ? (data?.[widgetFieldMeta.bgColorKey] as string) : widgetFieldMeta.bgColor
 
     const handleDrilldown = React.useMemo(() => {
-        return !disableDrillDown && drillDownUrl
+        return !disableDrillDown && widgetFieldMeta.drillDown
             ? () => {
                   onDrillDown(widgetName, data?.id, bcName, widgetFieldMeta.key)
               }
             : undefined
-    }, [disableDrillDown, drillDownUrl, widgetName, data?.id, bcName, widgetFieldMeta.key, onDrillDown])
+    }, [disableDrillDown, widgetFieldMeta.drillDown, widgetFieldMeta.key, onDrillDown, widgetName, data?.id, bcName])
 
     const handleInputBlur = React.useCallback(() => {
         if (localValue != null) {

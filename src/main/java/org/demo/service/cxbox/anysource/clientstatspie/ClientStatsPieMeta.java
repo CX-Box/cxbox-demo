@@ -6,8 +6,6 @@ import static org.demo.service.cxbox.anysource.clientstats.ClientStatsDao.NEW_CL
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.cxbox.core.crudma.PlatformRequest;
-import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.bc.impl.BcDescription;
 import org.cxbox.core.dto.DrillDownType;
 import org.cxbox.core.dto.rowmeta.FieldsMeta;
@@ -27,8 +25,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class ClientStatsPieMeta extends AnySourceFieldMetaBuilder<ClientStatsDTO> {
-
-	private final PlatformRequest platformRequest;
 
 	private final ParentDtoFirstLevelCache parentDtoFirstLevelCache;
 
@@ -55,10 +51,6 @@ public class ClientStatsPieMeta extends AnySourceFieldMetaBuilder<ClientStatsDTO
 	public void buildIndependentMeta(FieldsMeta<ClientStatsDTO> fields, BcDescription bcDescription,
 			String parentId) {
 		//do nothing
-	}
-
-	private BusinessComponent getBc() {
-		return this.platformRequest.getBc();
 	}
 
 	private ClientStatus getStatusFilterValues(@NonNull String id) {

@@ -73,6 +73,7 @@
         <constraints nullable="false"/>
       </column>
       <column name="PAGE_LIMIT" remarks="Лимит страницы по умолчанию" type="NUMBER(10, 0)"/>
+      <column name="MASS_PAGE_LIMIT" remarks="Mass operation page limit. If null, then frontend will take PAGE_LIMIT" type="NUMBER(10, 0)"/>
       <column name="REPORT_PERIOD" remarks="Интервал даты по умолчанию" type="NUMBER(10, 0)"/>
       <column name="SORT" remarks="Сортировка по умолчанию" type="VARCHAR2(4000 BYTE)"/>
       <column name="DIM_FILTER_SPEC" type="CLOB"/>

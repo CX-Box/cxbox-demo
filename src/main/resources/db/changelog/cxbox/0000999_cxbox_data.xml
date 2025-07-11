@@ -43,6 +43,7 @@
       file="db/data/cxbox/BC_PROPERTIES.csv">
       <column header="BC" name="BC" type="STRING"/>
       <column header="PAGE_LIMIT" name="PAGE_LIMIT" type="NUMERIC"/>
+      <column header="MASS_PAGE_LIMIT" name="MASS_PAGE_LIMIT" type="NUMERIC"/>
       <column header="SORT" name="SORT" type="STRING"/>
       <column header="FILTER" name="FILTER" type="STRING"/>
       <column header="ID" name="ID" type="NUMERIC" defaultValue="${app_seq_next_val}"/>

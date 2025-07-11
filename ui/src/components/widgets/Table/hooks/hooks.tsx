@@ -3,6 +3,7 @@ import { shallowEqual, useDispatch } from 'react-redux'
 import { useCallback, useEffect, useState } from 'react'
 import { actions } from '@actions'
 import { utils, WidgetMeta } from '@cxbox-ui/core'
+import { FIELDS } from '@constants'
 
 function useFiltersGroupName<T>(filtersExist: boolean) {
     const [filterGroupName, setFilterGroupName] = useState<T | null>(null)
@@ -22,12 +23,20 @@ export const useFilterGroups = (meta?: WidgetMeta) => {
         const bc = bcName ? state.screen.bo.bc[bcName] : undefined
         const bcFilters = bcName ? state.screen.filters[bcName] : undefined
         const enabledMassMode = state.screen.viewerMode[bcName]?.mode === 'mass'
+        const defaultFiltersExist = !!bcFilters?.length
+        const filterById = bcFilters?.find(filter => filter.fieldName === FIELDS.TECHNICAL.ID)
+        const selectedRows = state.view.selectedRows[bcName]
+        const massModeFiltersExist =
+            !!bcFilters?.length &&
+            (bcFilters.length > 1 ||
+                !filterById ||
+                (Array.isArray(filterById.value) && !!selectedRows?.length && filterById.value.length !== selectedRows.length))
 
         return {
             cursor: bc?.cursor,
             filterGroups: bc?.filterGroups,
             filterGroupsExist: !!bc?.filterGroups?.length,
-            filtersExist: enabledMassMode ? !!bcFilters?.length && bcFilters.length > 1 : !!bcFilters?.length,
+            filtersExist: enabledMassMode ? massModeFiltersExist : defaultFiltersExist,
             filtersCount: bcFilters?.length ?? 0
         }
     }, shallowEqual)

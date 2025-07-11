@@ -85,6 +85,7 @@ function SimpleConfirm({ widgetName }: SimpleConfirmProps) {
                 {![OperationPreInvokeType.error, OperationPreInvokeType.info].includes(confirmOperationType as any) && (
                     <Button
                         onClick={() => {
+                            dispatch(actions.bcCancelPendingChanges({ bcNames: [bcName] }))
                             dispatch(actions.resetViewerMode({ bcName }))
                         }}
                         type="formOperation"

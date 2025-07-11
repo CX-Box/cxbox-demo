@@ -31,13 +31,10 @@ function ConfirmWithForm({ widgetName }: ConfirmWithFormProps) {
     const dispatch = useAppDispatch()
 
     const onClose = useCallback(() => {
-        // to prevent data clearing on the main widget
-        const needClearPendingDataForPopup = bcName !== popupData?.calleeBCName
-
-        needClearPendingDataForPopup && dispatch(actions.bcCancelPendingChanges({ bcNames: [bcName] }))
+        dispatch(actions.bcCancelPendingChanges({ bcNames: [bcName] }))
 
         dispatch(actions.resetViewerMode({ bcName }))
-    }, [bcName, dispatch, popupData?.calleeBCName])
+    }, [bcName, dispatch])
 
     const onSave = useCallback(() => {
         if (!bc?.loading && popupData?.options?.operation) {

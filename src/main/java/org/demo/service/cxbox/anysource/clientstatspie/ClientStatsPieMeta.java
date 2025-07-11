@@ -14,7 +14,6 @@ import org.cxbox.core.dto.rowmeta.FieldsMeta;
 import org.cxbox.core.dto.rowmeta.RowDependentFieldsMeta;
 import org.cxbox.core.external.core.ParentDtoFirstLevelCache;
 import org.cxbox.core.service.rowmeta.AnySourceFieldMetaBuilder;
-import org.demo.conf.cxbox.extension.drilldown.DrillDownExt;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.anysource.ClientStatsDTO;
 import org.demo.dto.cxbox.anysource.ClientStatsDTO_;
@@ -33,28 +32,29 @@ public class ClientStatsPieMeta extends AnySourceFieldMetaBuilder<ClientStatsDTO
 
 	private final ParentDtoFirstLevelCache parentDtoFirstLevelCache;
 
-	private final DrillDownExt drillDownExt;
-
 	@Override
 	public void buildRowDependentMeta(RowDependentFieldsMeta<ClientStatsDTO> fields, BcDescription bc,
 			String id, String parentId) {
-		fields.setDrilldown(ClientStatsDTO_.value, DrillDownType.INNER, getDrillDown(id));
+
+		var activity = parentDtoFirstLevelCache.getParentField(DashboardFilterDTO_.fieldOfActivity, getBc());
+
+		fields.setDrilldownWithFilter(
+				ClientStatsDTO_.value,
+				DrillDownType.INNER,
+				"screen/client/view/clientlist",
+				fc -> fc
+						.add(
+								CxboxRestController.client, ClientReadDTO.class, fb -> fb
+										.dictionaryEnum(ClientAbstractDTO_.status, getStatusFilterValues(id))
+										.multipleSelect(ClientReadDTO_.fieldOfActivity, activity)
+						)
+		);
 	}
 
 	@Override
 	public void buildIndependentMeta(FieldsMeta<ClientStatsDTO> fields, BcDescription bcDescription,
 			String parentId) {
 		//do nothing
-	}
-
-	private String getDrillDown(@NonNull String id) {
-		var activity = parentDtoFirstLevelCache.getParentField(DashboardFilterDTO_.fieldOfActivity, getBc());
-		var filter = drillDownExt.filterBcByFields(
-				CxboxRestController.client, ClientReadDTO.class, fb -> fb
-						.dictionaryEnum(ClientAbstractDTO_.status, getStatusFilterValues(id))
-						.multiValue(ClientReadDTO_.fieldOfActivity, activity)
-		);
-		return "screen/client/view/clientlist" + filter;
 	}
 
 	private BusinessComponent getBc() {

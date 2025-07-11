@@ -9,7 +9,6 @@ import org.cxbox.core.dto.rowmeta.FieldsMeta;
 import org.cxbox.core.dto.rowmeta.RowDependentFieldsMeta;
 import org.cxbox.core.external.core.ParentDtoFirstLevelCache;
 import org.cxbox.core.service.rowmeta.AnySourceFieldMetaBuilder;
-import org.demo.conf.cxbox.extension.drilldown.DrillDownExt;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.anysource.SaleProductDualDTO;
 import org.demo.dto.cxbox.anysource.SaleProductDualDTO_;
@@ -22,7 +21,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class SaleStatsProductDualMeta extends AnySourceFieldMetaBuilder<SaleProductDualDTO> {
 
-	private final DrillDownExt drillDownExt;
 
 	private final PlatformRequest platformRequest;
 
@@ -45,14 +43,6 @@ public class SaleStatsProductDualMeta extends AnySourceFieldMetaBuilder<SaleProd
 	@Override
 	public void buildIndependentMeta(FieldsMeta<SaleProductDualDTO> fields, BcDescription bcDescription,
 			String parentId) {
-		fields.setDrilldown(
-				SaleProductDualDTO_.dateCreatedSales,
-				DrillDownType.INNER,
-				urlFilterBuilder(fields)
-		);
-	}
-
-	private String urlFilterBuilder(RowDependentFieldsMeta<SaleProductDualDTO> fields) {
 		var month = fields.getCurrentValue(SaleProductDualDTO_.month).orElse(null);
 		var year = fields.getCurrentValue(SaleProductDualDTO_.year).orElse(null);
 		var dateFrom = firstDay(month, year);
@@ -61,14 +51,19 @@ public class SaleStatsProductDualMeta extends AnySourceFieldMetaBuilder<SaleProd
 				DashboardFilterDTO_.fieldOfActivity,
 				platformRequest.getBc()
 		);
-		var filter = drillDownExt.filterBcByFields(
-				CxboxRestController.sale, SaleDTO.class, fb -> fb
-						.dateFromTo(SaleDTO_.createdDate, dateFrom, dateTo)
-						.dictionary(SaleDTO_.product, fields.getCurrentValue(SaleProductDualDTO_.productType).orElse(null))
-						.dictionaryEnum(SaleDTO_.status, fields.getCurrentValue(SaleProductDualDTO_.saleStatus).orElse(null))
-						.multiValue(SaleDTO_.fieldOfActivity, activity)
+
+		fields.setDrilldownWithFilter(
+				SaleProductDualDTO_.dateCreatedSales,
+				DrillDownType.INNER,
+				"screen/sale/view/salelist",
+				fc -> fc
+						.add(CxboxRestController.sale, SaleDTO.class, fb -> fb
+								.dateFromTo(SaleDTO_.createdDate, dateFrom, dateTo)
+								.dictionary(SaleDTO_.product, fields.getCurrentValue(SaleProductDualDTO_.productType).orElse(null))
+								.dictionaryEnum(SaleDTO_.status, fields.getCurrentValue(SaleProductDualDTO_.saleStatus).orElse(null))
+								.multipleSelect(SaleDTO_.fieldOfActivity, activity)
+						)
 		);
-		return "screen/sale/view/salelist" + filter;
 	}
 
 

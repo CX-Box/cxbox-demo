@@ -8,7 +8,6 @@ import org.cxbox.core.dto.rowmeta.FieldsMeta;
 import org.cxbox.core.dto.rowmeta.RowDependentFieldsMeta;
 import org.cxbox.core.external.core.ParentDtoFirstLevelCache;
 import org.cxbox.core.service.rowmeta.AnySourceFieldMetaBuilder;
-import org.demo.conf.cxbox.extension.drilldown.DrillDownExt;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.anysource.DashboardSalesProductDTO;
 import org.demo.dto.cxbox.anysource.DashboardSalesProductDTO_;
@@ -23,16 +22,29 @@ public class SaleStatsProductMeta extends AnySourceFieldMetaBuilder<DashboardSal
 
 	private final PlatformRequest platformRequest;
 
-	private final DrillDownExt drillDownExt;
-
 	private final ParentDtoFirstLevelCache parentDtoFirstLevelCache;
 
 	public void buildRowDependentMeta(RowDependentFieldsMeta<DashboardSalesProductDTO> fields, BcDescription bc,
 			String id, String parentId) {
-		fields.setDrilldown(
+		var activity = parentDtoFirstLevelCache.getParentField(
+				DashboardFilterDTO_.fieldOfActivity,
+				platformRequest.getBc()
+		);
+
+		fields.setDrilldownWithFilter(
 				DashboardSalesProductDTO_.clientName,
 				DrillDownType.INNER,
-				drillDownWithFilter(fields)
+				"screen/sale/view/salelist",
+				fc -> fc
+						.add(
+								CxboxRestController.sale, SaleDTO.class, fb -> fb
+										.input(SaleDTO_.clientName, fields.getCurrentValue(DashboardSalesProductDTO_.clientName).orElse(null))
+										.dictionary(
+												SaleDTO_.product,
+												fields.getCurrentValue(DashboardSalesProductDTO_.productName).orElse(null)
+										)
+										.multipleSelect(SaleDTO_.fieldOfActivity, activity)
+						)
 		);
 	}
 
@@ -41,20 +53,6 @@ public class SaleStatsProductMeta extends AnySourceFieldMetaBuilder<DashboardSal
 	public void buildIndependentMeta(FieldsMeta<DashboardSalesProductDTO> fields, BcDescription bcDescription,
 			String parentId) {
 		// do nothing
-	}
-
-	private String drillDownWithFilter(RowDependentFieldsMeta<DashboardSalesProductDTO> fields) {
-		var activity = parentDtoFirstLevelCache.getParentField(
-				DashboardFilterDTO_.fieldOfActivity,
-				platformRequest.getBc()
-		);
-		var filter = drillDownExt.filterBcByFields(
-				CxboxRestController.sale, SaleDTO.class, fb -> fb
-						.input(SaleDTO_.clientName, fields.getCurrentValue(DashboardSalesProductDTO_.clientName).orElse(null))
-						.dictionary(SaleDTO_.product, fields.getCurrentValue(DashboardSalesProductDTO_.productName).orElse(null))
-						.multiValue(SaleDTO_.fieldOfActivity, activity)
-		);
-		return "screen/sale/view/salelist" + filter;
 	}
 
 }

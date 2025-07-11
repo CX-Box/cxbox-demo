@@ -324,22 +324,23 @@ const Layout: React.FC<LayoutProps> = ({ widgetName, bcName, children }) => {
                         const needFailedRows = buttonType === 'export-failed'
                         const [failRows] = needFailedRows && selectedRows ? filterByConditions(selectedRows, [item => !item.success]) : []
                         const filteredFilters = filters.filter(filter => filter.fieldName === FIELDS.TECHNICAL.ID)
-                        const resultRows = needFailedRows ? failRows : selectedRows ?? []
 
                         exportTable(
-                            {
-                                total: resultRows.length,
-                                filters: [
-                                    ...filteredFilters,
-                                    {
-                                        fieldName: FIELDS.TECHNICAL.ID,
-                                        value: resultRows.map(item => item.id),
-                                        type: FilterType.equalsOneOf,
-                                        widgetName,
-                                        viewName
-                                    }
-                                ]
-                            },
+                            needFailedRows
+                                ? {
+                                      total: failRows.length,
+                                      filters: [
+                                          ...filteredFilters,
+                                          {
+                                              fieldName: FIELDS.TECHNICAL.ID,
+                                              value: failRows.map(item => item.id),
+                                              type: FilterType.equalsOneOf,
+                                              widgetName,
+                                              viewName
+                                          }
+                                      ]
+                                  }
+                                : undefined,
                             'mass'
                         ).then(() => {
                             openNotification({

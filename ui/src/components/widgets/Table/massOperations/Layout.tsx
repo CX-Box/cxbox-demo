@@ -327,7 +327,7 @@ const Layout: React.FC<LayoutProps> = ({ widgetName, bcName, children }) => {
 
                         exportTable(
                             {
-                                total: failRows.length,
+                                total: resultRows.length,
                                 filters: [
                                     ...filteredFilters,
                                     {

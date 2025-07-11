@@ -277,6 +277,13 @@ const Layout: React.FC<LayoutProps> = ({ widgetName, bcName, children }) => {
 
                 if (buttonType === 'next' && currentMassOperation && selectedRows?.length) {
                     result.onClick = () => {
+                        dispatch(
+                            actions.bcChangeCursors({
+                                cursorsMap: {
+                                    [bcName]: null as any
+                                }
+                            })
+                        )
                         clearAllFilters()
                         setWasOperationCall(true)
                         moveToStep('Confirm operation')

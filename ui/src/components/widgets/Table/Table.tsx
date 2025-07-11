@@ -166,7 +166,7 @@ function Table<T extends CustomDataItem>({
             resultColumns.push(primaryColumn as any)
         }
 
-        if (expandIconColumn) {
+        if (expandIconColumn && !enabledMassMode) {
             resultColumns.push({
                 column: !isGroupingHierarchy
                     ? expandIconColumn
@@ -359,16 +359,17 @@ function Table<T extends CustomDataItem>({
             } as TableEventListeners
         },
         [
-            bc?.cursor,
-            bc?.name,
-            dispatch,
             handleRowMenu,
-            widgetName,
             needHideActions,
             needHideRow,
-            needRowSelectRecord,
             onRow,
-            selectedRow?.rowId
+            enabledMassMode,
+            needRowSelectRecord,
+            selectedRow?.rowId,
+            dispatch,
+            widgetName,
+            bc?.cursor,
+            bc?.name
         ]
     )
 
@@ -581,8 +582,8 @@ function Table<T extends CustomDataItem>({
             onHeaderRow={onHeaderRow}
             expandedRowKeys={expandedRowKeys}
             expandIconColumnIndex={getExpandIconColumnIndex(controlColumns, resultedFields, currentRowSelection?.type)}
-            expandIcon={resultExpandIcon}
-            expandedRowRender={expandedRowRender}
+            expandIcon={enabledMassMode ? undefined : resultExpandIcon}
+            expandedRowRender={enabledMassMode ? undefined : expandedRowRender}
             onExpand={onExpand}
             hideRowActions={hideRowActions}
             stickyWithHorizontalScroll={enabledGrouping}

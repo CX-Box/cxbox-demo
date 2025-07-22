@@ -37,7 +37,7 @@ import WaitUntilPopup from '@components/WaitUntilPopup/WaitUntilPopup'
 import NotificationsContainer from '@components/NotificationsContainer/NotificationsContainer'
 import Chart from '../widgets/Chart/Chart'
 import DebugViewInfoLabel from '@components/DebugViewInfoLabel/DebugViewInfoLabel'
-import CardList from '@components/widgets/DocumentList/CardList'
+import CardList from '@components/widgets/CardList/CardList'
 
 const customFields = {
     [FieldType.number]: Number,

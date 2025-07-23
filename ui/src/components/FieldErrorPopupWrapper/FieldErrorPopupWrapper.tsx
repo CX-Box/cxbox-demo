@@ -50,7 +50,7 @@ function FieldErrorPopupWrapper({ className, bcName, fieldKey, cursor, children,
             title={metaError?.length ? t(metaError) : null}
             getPopupContainer={trigger => trigger.parentElement as HTMLElement}
         >
-            <div className={cn(className, { [styles.fullWidth]: !readOnly })}>{content}</div>
+            <div className={cn(className, styles.content, { [styles.border]: readOnly })}>{content}</div>
         </Tooltip>
     )
 }

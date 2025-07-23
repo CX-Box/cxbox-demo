@@ -125,6 +125,7 @@
         "A file with failed rows will be downloaded. To retry the operation for these rows, upload this file on Step 1 via 'Select from File'": "Будет загружен файл с неуспешными строками. Чтобы повторно применить операцию к этим строкам, загрузите этот файл на шаге 1 через 'Загрузить из файла'.",
         "File exported. To re-apply the mass operation to these rows, use 'Select from File' on Step 1.": "Файл экспортирован. Для того чтобы применить массовую операцию к этим строкам, воспользуйтесь кнопкой 'Загрузить из файла' на Этапе 1.",
         "Changing the active record is not available until the bulk operation is finished": "Изменение активной записи недоступно до тех пор, пока не будет завершена массовая операция",
-        "There is unsaved data, save it?": "Есть несохраненные данные, сохранить их?"
+        "There is unsaved data, save it?": "Есть несохраненные данные, сохранить их?",
+        "The form contains required fields that are not available for completion. Contact your administrator.": "Форма содержит обязательные поля, недоступные для заполнения. Обратитесь к администратору."
     }
 }

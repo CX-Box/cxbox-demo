@@ -1,5 +1,6 @@
 import { Button, notification } from 'antd'
 import React from 'react'
+import { t } from 'i18next'
 import { openNotification as openNotificationDefault } from '@components/NotificationsContainer/utils'
 
 export interface OpenNotificationType {
@@ -12,7 +13,7 @@ export interface OpenNotificationType {
     onOk?: () => void
 }
 
-export const openNotification = ({ message, description, okText, cancelText, onOk, onCancel, key }: OpenNotificationType = {}) => {
+const openNotification = ({ message, description, okText, cancelText, onOk, onCancel, key }: OpenNotificationType = {}) => {
     const notificationKey = key ?? `open${Date.now()}`
 
     notification.close(notificationKey)
@@ -29,6 +30,7 @@ export const openNotification = ({ message, description, okText, cancelText, onO
             >
                 {okText}
             </Button>
+
             <Button
                 type="primary"
                 size="small"
@@ -48,22 +50,22 @@ export const openNotification = ({ message, description, okText, cancelText, onO
             message,
             description,
             btn: buttons,
-            key: notificationKey
+            key: notificationKey,
+            style: {
+                width: 'auto',
+                minWidth: 384
+            }
         })
     }, 100)
 }
 
-const TEXTS_FOR_UNSAVED_NOTIFICATION: Omit<OpenNotificationType, 'onOk' | 'onCancel'> = {
-    key: 'unsaved notification',
-    okText: 'Save',
-    cancelText: 'Cancel',
-    message: 'There is unsaved data, save it ?',
-    description: ''
-}
-
 export const showUnsavedNotification = (onOk?: () => void, onCancel?: () => void) => {
     return openNotification({
-        ...TEXTS_FOR_UNSAVED_NOTIFICATION,
+        key: 'unsaved notification',
+        okText: t('Save'),
+        cancelText: t('Cancel'),
+        message: t('There is unsaved data, save it?'),
+        description: '',
         onOk,
         onCancel
     })

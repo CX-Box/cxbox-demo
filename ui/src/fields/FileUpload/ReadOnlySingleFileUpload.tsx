@@ -62,7 +62,7 @@ function ReadOnlySingleFileUpload({
         return (
             <div className={cn(styles.snapshot)}>
                 {smartIcon}
-                <div>
+                <div onClickCapture={e => e.stopPropagation()}>
                     {diffDownloadUrl && (
                         <div>
                             <span className={cn(styles.viewLink, styles.prevValue)}>

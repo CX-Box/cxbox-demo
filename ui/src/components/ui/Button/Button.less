@@ -118,4 +118,29 @@
             margin: 0;
         }
     }
+
+    &.good, &.bad {
+        height: 40px;
+        padding: 10px;
+    }
+
+    &.good {
+        background-color: rgba(0, 140, 62, 0.2);
+        border-color: rgba(0, 140, 62, 0.2);
+        color: rgb(0, 140, 62);
+
+        &:hover, &:active, &:focus {
+            border-color: rgb(0, 140, 62);
+        }
+    }
+
+    &.bad {
+        background-color: rgba(236, 63, 63, 0.2);
+        border-color: rgba(236, 63, 63, 0.2);
+        color: #EC3F3F;
+
+        &:hover, &:active, &:focus {
+            border-color: #EC3F3F;
+        }
+    }
 }

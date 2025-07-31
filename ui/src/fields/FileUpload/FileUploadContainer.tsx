@@ -19,6 +19,7 @@ import { useDispatch } from 'react-redux'
 import { usePrevious } from '@hooks/usePrevious'
 import { DataValue } from '@cxbox-ui/core'
 import { useInternalWidgetSelector } from '@hooks/useInternalWidgetSelector'
+import { FileViewerMode } from '@interfaces/view'
 
 interface Props extends Omit<BaseFieldProps, 'meta'> {
     value: string
@@ -227,7 +228,7 @@ const FileUploadContainer: React.FunctionComponent<Props> = ({
 export default React.memo(FileUploadContainer)
 
 // The hook is needed so that before opening a popup, if there is unsaved data in the table row being edited, the popup will not open until the data is saved or deleted (internalFormWidgetMiddleware)
-export const useFileIconClick = (widgetName: string, bcName: string, recordId: string, fieldName: string) => {
+export const useFileIconClick = (widgetName: string, bcName: string, recordId: string, fieldName: string, mode?: FileViewerMode) => {
     const dispatch = useDispatch()
     const currentCursor = useAppSelector(state => state.screen.bo.bc[bcName]?.cursor)
     const [wasClick, setWasClick] = useState(false)
@@ -236,7 +237,7 @@ export const useFileIconClick = (widgetName: string, bcName: string, recordId: s
         setWasClick(true)
     }, [])
 
-    const currentCursorPrevious = usePrevious(currentCursor)
+    const previousCursor = usePrevious(currentCursor)
 
     useEffect(() => {
         if (currentCursor !== recordId && wasClick) {
@@ -257,24 +258,26 @@ export const useFileIconClick = (widgetName: string, bcName: string, recordId: s
                     active: true,
                     options: {
                         type: 'file-viewer',
-                        calleeFieldKey: fieldName
+                        calleeFieldKey: fieldName,
+                        mode
                     },
                     calleeWidgetName: widgetName as string
                 })
             )
-        } else if (currentCursor !== currentCursorPrevious && wasClick) {
+        } else if (currentCursor !== previousCursor && wasClick) {
             setWasClick(false)
         }
     }, [
         currentCursor,
-        currentCursorPrevious,
+        previousCursor,
         dispatch,
         fieldName,
         internalWidget?.bcName,
         internalWidget?.name,
         recordId,
         wasClick,
-        widgetName
+        widgetName,
+        mode
     ])
 
     return handleFileIconClick

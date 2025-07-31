@@ -5,8 +5,8 @@ import { useAppSelector } from '@store'
 import styles from './Operations.less'
 import { useDispatch } from 'react-redux'
 import OperationsGroup from './components/OperationsGroup'
-import { AppWidgetMeta, OperationCustomMode, removeRecordOperationWidgets } from '@interfaces/widget'
-import Button, { customTypes } from '../ui/Button/Button'
+import { AppWidgetMeta, OperationCustomMode, OperationInfo, removeRecordOperationWidgets } from '@interfaces/widget'
+import Button, { CustomTypes, customTypes } from '../ui/Button/Button'
 import cn from 'classnames'
 import { useWidgetOperations } from '@hooks/useWidgetOperations'
 import TextSearchInput from '@components/Operations/components/TextSearchInput/TextSearchInput'
@@ -79,7 +79,11 @@ function Operations(props: OperationsOwnProps) {
                                 <Button
                                     key={item.type}
                                     data-test-widget-action-item={true}
-                                    type={getButtonType({ widgetType: widgetMeta.type, index })}
+                                    type={getButtonType({
+                                        widgetType: widgetMeta.type,
+                                        index,
+                                        operationInfo: widgetMeta.options?.buttons?.find(button => button.actionKey === item.type)
+                                    })}
                                     loading={metaInProgress}
                                 >
                                     {item.icon && <Icon type={item.icon} />}
@@ -93,7 +97,11 @@ function Operations(props: OperationsOwnProps) {
                         <Button
                             key={item.type}
                             data-test-widget-action-item={true}
-                            type={getButtonType({ widgetType: widgetMeta.type, index })}
+                            type={getButtonType({
+                                widgetType: widgetMeta.type,
+                                index,
+                                operationInfo: widgetMeta.options?.buttons?.find(button => button.actionKey === item.type)
+                            })}
                             onClick={() => handleOperationClick(item)}
                             loading={metaInProgress}
                         >
@@ -119,8 +127,22 @@ function Operations(props: OperationsOwnProps) {
 
 export default React.memo(Operations)
 
-const getButtonType = ({ widgetType, index, defaultType }: { widgetType?: string; defaultType?: string; index: number }) => {
+const getButtonType = ({
+    widgetType,
+    index,
+    defaultType,
+    operationInfo
+}: {
+    widgetType?: string
+    defaultType?: string
+    index: number
+    operationInfo?: OperationInfo
+}) => {
     const isFormWidget = widgetType === WidgetTypes.Form
+
+    if (operationInfo?.theme && customTypes[operationInfo.theme as CustomTypes]) {
+        return operationInfo?.theme
+    }
 
     if (isFormWidget && index !== 0) {
         return customTypes.formOperation

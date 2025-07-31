@@ -9,6 +9,7 @@ import Image from './Image/Image'
 import { useTranslation } from 'react-i18next'
 import { CxBoxApiInstance } from '../../api'
 import { createLocalCache } from '@utils/localCache'
+import { ImageControl } from '@hooks/image'
 
 export interface FileViewerProps {
     fileName: string
@@ -22,30 +23,54 @@ export interface FileViewerProps {
     onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
     className?: string
     style?: CSSProperties
+    imageControlEnabled?: boolean
+    onChangeFullScreen?: () => void
+    footer?: (params: { displayType: FileViewerType; imageControl?: ImageControl }) => JSX.Element | null
 }
 
-export type FileViewerHandlers = {
+export type FileViewerRef = {
+    displayType: FileViewerType
     download: () => void
+    imageControl: ImageControl
 }
 
-const FileViewer = forwardRef<FileViewerHandlers | undefined, FileViewerProps>(
+const FileViewer = forwardRef<FileViewerRef | undefined, FileViewerProps>(
     (
-        { alt, url = '', height, width, onDoubleClick, onClick, style = {}, className, view, fileName, pageWidth = DOCUMENT_PAGE_WIDTH },
+        {
+            alt,
+            url = '',
+            height,
+            width,
+            onDoubleClick,
+            onClick,
+            style = {},
+            className,
+            view,
+            fileName,
+            pageWidth = DOCUMENT_PAGE_WIDTH,
+            imageControlEnabled = false,
+            onChangeFullScreen,
+            footer
+        },
         ref
     ) => {
+        const displayType = url ? fileViewerType(fileName) : fileViewerType()
+
+        const imageControlRef = useRef<ImageControl>()
+
         useImperativeHandle(
             ref,
             () => {
                 return {
+                    displayType,
+                    imageControl: imageControlRef.current,
                     download: () => {
                         url && CxBoxApiInstance.saveBlob(url, fileName)
                     }
                 }
             },
-            [fileName, url]
+            [displayType, fileName, url]
         )
-
-        const displayType = url ? fileViewerType(fileName) : fileViewerType()
 
         const { t } = useTranslation()
 
@@ -56,7 +81,17 @@ const FileViewer = forwardRef<FileViewerHandlers | undefined, FileViewerProps>(
         const { blobUrl, loading } = useFileUrl(url)
 
         const viewerMap: Record<FileViewerType, JSX.Element | null> = {
-            image: <Image alt={alt} src={blobUrl} mode={viewerMode} spinning={loading} />,
+            image: (
+                <Image
+                    ref={imageControlRef}
+                    imageControlEnabled={imageControlEnabled}
+                    alt={alt}
+                    src={blobUrl}
+                    mode={viewerMode}
+                    spinning={loading}
+                    onChangeFullScreen={onChangeFullScreen}
+                />
+            ),
             pdf: (
                 <PdfViewer
                     displayMode={isPreview ? 'preview' : 'inline'}
@@ -88,6 +123,7 @@ const FileViewer = forwardRef<FileViewerHandlers | undefined, FileViewerProps>(
                 style={{ ...style, width, height }}
             >
                 {viewerMap[displayType]}
+                {footer?.({ displayType, imageControl: imageControlRef.current })}
             </div>
         )
     }

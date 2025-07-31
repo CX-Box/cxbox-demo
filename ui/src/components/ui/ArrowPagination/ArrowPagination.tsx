@@ -5,7 +5,7 @@ import ArrowButton from '@components/ui/ArrowPagination/ArrowButton'
 import cn from 'classnames'
 
 interface ArrowPaginationProps {
-    mode?: 'compact' | 'fullscreen' | 'wrapper'
+    mode?: 'compact' | 'fullscreen' | 'wrapper' | 'image' | 'carouselList'
     onChange: (nextIndex: number, previousIndex: number) => void
     currentIndex: number
     total: string | number
@@ -13,6 +13,7 @@ interface ArrowPaginationProps {
     disabledRight: boolean
     children?: React.ReactNode
     hide?: boolean
+    styleWrapper?: React.CSSProperties
 }
 
 function ArrowPagination({
@@ -23,7 +24,8 @@ function ArrowPagination({
     total,
     disabledLeft,
     disabledRight,
-    children
+    children,
+    styleWrapper
 }: ArrowPaginationProps) {
     const { t } = useTranslation()
 
@@ -39,9 +41,37 @@ function ArrowPagination({
         onChange(currentIndex + 1, currentIndex)
     }
 
+    if (mode === 'carouselList') {
+        return (
+            <div className={cn(styles[mode])} style={styleWrapper}>
+                {!hide ? (
+                    <>
+                        <ArrowButton className={styles.arrow} type="ghost" icon="left" onClick={onPrevious} disabled={disabledLeft} />
+                        <ArrowButton className={styles.arrow} type="ghost" icon="right" onClick={onNext} disabled={disabledRight} />
+                    </>
+                ) : null}
+                {children}
+            </div>
+        )
+    }
+
+    if (mode === 'image') {
+        return (
+            <div className={cn(styles[mode])} style={styleWrapper}>
+                {!hide ? (
+                    <>
+                        <ArrowButton className={styles.arrow} mode="ghost" icon="left" onClick={onPrevious} disabled={disabledLeft} />
+                        <ArrowButton className={styles.arrow} mode="ghost" icon="right" onClick={onNext} disabled={disabledRight} />
+                    </>
+                ) : null}
+                {children}
+            </div>
+        )
+    }
+
     if (mode === 'fullscreen') {
         return (
-            <div className={cn(styles[mode])}>
+            <div className={cn(styles[mode])} style={styleWrapper}>
                 {!hide ? (
                     <>
                         <ArrowButton className={styles.arrow} mode="dark" icon="left" onClick={onPrevious} disabled={disabledLeft} />
@@ -55,22 +85,22 @@ function ArrowPagination({
 
     if (mode === 'wrapper') {
         return !hide ? (
-            <div className={cn(styles[mode])}>
-                <ArrowButton icon="left" onClick={onPrevious} disabled={disabledLeft} />
+            <div className={cn(styles[mode])} style={styleWrapper}>
+                <ArrowButton className={styles.arrow} icon="left" onClick={onPrevious} disabled={disabledLeft} />
                 {children}
-                <ArrowButton icon="right" onClick={onNext} disabled={disabledRight} />
+                <ArrowButton className={styles.arrow} icon="right" onClick={onNext} disabled={disabledRight} />
             </div>
         ) : null
     }
 
     return !hide ? (
-        <div className={cn(styles[mode])}>
-            <ArrowButton icon="left" onClick={onPrevious} disabled={disabledLeft} />
+        <div className={cn(styles[mode])} style={styleWrapper}>
+            <ArrowButton className={styles.arrow} icon="left" onClick={onPrevious} disabled={disabledLeft} />
             {t('number of total files', {
                 number: currentIndex + 1,
                 total: total
             })}
-            <ArrowButton icon="right" onClick={onNext} disabled={disabledRight} />
+            <ArrowButton className={styles.arrow} icon="right" onClick={onNext} disabled={disabledRight} />
         </div>
     ) : null
 }

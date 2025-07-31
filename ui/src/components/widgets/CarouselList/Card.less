@@ -1,0 +1,35 @@
+.root {
+    width: min-content;
+    position: relative;
+}
+
+.buttons {
+    visibility: hidden;
+    height: 0;
+    max-height: max-content;
+    transition: height 300ms ease 100ms;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 1px;
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    z-index: 10;
+    max-width: 50%;
+    overflow: hidden;
+
+    :global(.ant-btn) {
+        min-width: 32px;
+        min-height: 25px;
+    }
+}
+
+.root:hover .buttons {
+    visibility: visible;
+    height: 100%;
+}
+
+

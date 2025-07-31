@@ -88,6 +88,7 @@ export type OperationInfo = {
     actionKey: string
     fieldKey?: string
     mode?: OperationCustomMode | string
+    theme?: string
 }
 
 export interface AppWidgetMeta extends WidgetMeta {

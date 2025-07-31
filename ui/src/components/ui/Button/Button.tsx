@@ -9,10 +9,12 @@ export const customTypes = {
     formOperationRed: 'formOperationRed',
     customDefault: 'customDefault',
     bar: 'bar',
-    empty: 'empty'
+    empty: 'empty',
+    good: 'good',
+    bad: 'bad'
 }
 
-type CustomTypes = keyof typeof customTypes
+export type CustomTypes = keyof typeof customTypes
 type DefaultTypes = AntdButtonProps['type']
 type ButtonsTypes = DefaultTypes | CustomTypes
 

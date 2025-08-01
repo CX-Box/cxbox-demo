@@ -1,13 +1,15 @@
 import React, { CSSProperties, forwardRef, useEffect, useImperativeHandle, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { fileViewerType, FileViewerType, getExtension } from '@utils/fileViewer'
 import cn from 'classnames'
-import styles from './FileViewer.less'
 import { PdfViewer } from '@components/FileViewer/PdfViewer'
 import { DOCUMENT_PAGE_WIDTH } from '@components/FileViewer/PdfViewer/constants'
 import Empty from '@components/FileViewer/Empty/Empty'
 import Image from './Image/Image'
-import { useTranslation } from 'react-i18next'
 import { CxBoxApiInstance } from '../../api'
+import { actions, utils } from '@cxbox-ui/core'
+import { useAppDispatch } from '@store'
+import styles from './FileViewer.less'
 
 export interface FileViewerProps {
     fileName: string
@@ -32,16 +34,25 @@ const FileViewer = forwardRef<FileViewerHandlers | undefined, FileViewerProps>(
         { alt, url = '', height, width, onDoubleClick, onClick, style = {}, className, view, fileName, pageWidth = DOCUMENT_PAGE_WIDTH },
         ref
     ) => {
+        const dispatch = useAppDispatch()
+
         useImperativeHandle(
             ref,
             () => {
                 return {
                     download: () => {
-                        url && CxBoxApiInstance.saveBlob(url, fileName)
+                        if (url) {
+                            dispatch(
+                                actions.downloadFileByUrl({
+                                    url,
+                                    name: fileName
+                                })
+                            )
+                        }
                     }
                 }
             },
-            [fileName, url]
+            [dispatch, fileName, url]
         )
 
         const displayType = url ? fileViewerType(fileName) : fileViewerType()
@@ -56,10 +67,19 @@ const FileViewer = forwardRef<FileViewerHandlers | undefined, FileViewerProps>(
             let currentBlobUrl: string = ''
 
             if (url) {
-                CxBoxApiInstance.getBlob(url, { preview: true }).then(response => {
-                    currentBlobUrl = URL.createObjectURL(response.data)
-                    setBlobUrl(currentBlobUrl)
-                })
+                CxBoxApiInstance.getBlob(url, { preview: true })
+                    .then(response => {
+                        currentBlobUrl = URL.createObjectURL(response.data)
+                        setBlobUrl(currentBlobUrl)
+                    })
+                    .catch(error => {
+                        setBlobUrl('')
+                        const apiErrorAction = utils.createApiError(error)
+
+                        if (apiErrorAction) {
+                            dispatch(apiErrorAction)
+                        }
+                    })
             }
 
             return () => {
@@ -68,7 +88,7 @@ const FileViewer = forwardRef<FileViewerHandlers | undefined, FileViewerProps>(
                     setBlobUrl('')
                 }
             }
-        }, [url])
+        }, [dispatch, url])
 
         const viewerMap: Record<FileViewerType, JSX.Element | null> = {
             image: <Image alt={alt} src={blobUrl} mode={viewerMode} />,

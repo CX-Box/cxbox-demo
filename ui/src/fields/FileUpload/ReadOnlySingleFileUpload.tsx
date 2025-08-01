@@ -1,10 +1,11 @@
 import React from 'react'
 import cn from 'classnames'
-import styles from './FileUpload.less'
 import FileIcon from './FileIconContainer'
 import { trimString } from '@utils/fileViewer'
-import { CxBoxApiInstance } from '../../api'
 import Button from '@components/ui/Button/Button'
+import { actions } from '@actions'
+import { useAppDispatch } from '@store'
+import styles from './FileUpload.less'
 
 export interface ReadOnlySingleFileUploadProps {
     mode?: 'default' | 'snapshot'
@@ -25,14 +26,30 @@ function ReadOnlySingleFileUpload({
     diffDownloadUrl,
     onFileIconClick
 }: ReadOnlySingleFileUploadProps) {
+    const dispatch = useAppDispatch()
+
     const smartIcon = <FileIcon fileName={fileName} onFileIconClick={onFileIconClick} />
 
     const handleDownload = () => {
-        downloadUrl && CxBoxApiInstance.saveBlob(downloadUrl, fileName)
+        if (downloadUrl) {
+            dispatch(
+                actions.downloadFileByUrl({
+                    url: downloadUrl,
+                    name: fileName
+                })
+            )
+        }
     }
 
     const handleDiffDownload = () => {
-        diffDownloadUrl && CxBoxApiInstance.saveBlob(diffDownloadUrl, diffFileName)
+        if (diffDownloadUrl) {
+            dispatch(
+                actions.downloadFileByUrl({
+                    url: diffDownloadUrl,
+                    name: diffFileName
+                })
+            )
+        }
     }
 
     if (mode === 'snapshot') {

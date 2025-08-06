@@ -1,9 +1,8 @@
 import React from 'react'
-import { Icon } from 'antd'
-import Tag from '@components/ui/Tag/Tag'
-import styles from './MultivalueTag.less'
 import cn from 'classnames'
+import Tag from '@components/ui/Tag/Tag'
 import { interfaces } from '@cxbox-ui/core'
+import styles from './MultivalueTag.less'
 
 export interface MultivalueTagProps {
     disabled: boolean
@@ -61,6 +60,7 @@ const MultivalueTag: React.FunctionComponent<MultivalueTagProps> = ({
     return (
         <div
             className={cn(styles.multivalue, { [styles.disabled]: disabled, [styles.error]: metaError })}
+            tabIndex={0}
             onClick={loading && disabled ? undefined : handleOpen}
         >
             <div data-text={placeholder} className={cn(styles.enabled, { [styles.disabled]: disabled })}>
@@ -86,8 +86,9 @@ const MultivalueTag: React.FunctionComponent<MultivalueTagProps> = ({
                     )
                 })}
             </div>
+
             <div className={cn(styles.iconContainer, { [styles.disabled]: disabled })}>
-                <Icon type={loading ? 'loading' : 'folder-open'} spin={loading} />
+                <div className={styles.icon} data-test-field-multivalue-icon={true} />
             </div>
         </div>
     )

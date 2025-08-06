@@ -1,21 +1,37 @@
 .tag:global(.ant-tag) {
-    min-height: 20px;
+    min-height: 24px;
     position: relative;
     margin: 0;
-    padding-right: 20px;
-    line-height: 18px;
-    background: #ffffff;
+    padding: 0 20px 0 10px;
+    background-color: #fafafa;
+    border: 1px solid #e8e8e8;
+    border-radius: 2px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22px;
     white-space: initial;
+    transition: padding 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+
+    &.disabled {
+        color: rgba(0, 0, 0, 0.33);
+        background: #f5f5f5;
+    }
 
   :global(.anticon) {
       position: absolute;
       display: block;
-      top: 3px;
-      right: 6px;
+      top: 50%;
+      transform: translateY(-50%);
+      right: 4px;
+
+      svg {
+          width: 10px;
+          height: 10px;
+      }
     }
 
     &:not(:has(:global(.anticon-close))) {
-      padding-right: 7px;
+      padding-right: 10px;
     }
 
     &:hover {

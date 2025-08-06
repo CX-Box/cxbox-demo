@@ -2,11 +2,11 @@ import React, { FunctionComponent } from 'react'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import cn from 'classnames'
-import styles from './MultiValueListRecord.less'
 import DrillDown from '@components/ui/DrillDown/DrillDown'
 import { actions, interfaces } from '@cxbox-ui/core'
 import { store } from '@store'
 import { RecordSnapshotState } from '@cxbox-ui/schema'
+import styles from './MultiValueListRecord.less'
 
 const { drillDown } = actions
 

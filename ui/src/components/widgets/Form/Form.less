@@ -53,7 +53,19 @@
                 color: rgba(0, 0, 0, 0.85);
             }
 
+            .ant-select-selection--multiple {
+                min-height: 40px;
 
+                .ant-select-selection__rendered {
+                    line-height: 38px;
+                }
+
+                .ant-select-selection__choice,
+                .ant-select-search--inline {
+                    height: 32px;
+                    line-height: 32px;
+                }
+            }
 
             .ant-select-selection--single {
                 height: 40px;
@@ -132,6 +144,15 @@
                 [class*='_uploadLink_'] {
                     display: flex;
                     align-items: center;
+                }
+            }
+
+            div[class*='MultivalueTag__multivalue'] {
+                min-height: 40px;
+
+                .ant-tag {
+                    height: 32px;
+                    line-height: 30px;
                 }
             }
 

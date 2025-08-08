@@ -4,13 +4,13 @@ import { useTranslation } from 'react-i18next'
 import { Form as AntdForm, Row, Col } from 'antd'
 import Field from '@components/Field/Field'
 import TemplatedTitle from '@components/TemplatedTitle/TemplatedTitle'
+import { useProportionalWidgetGrid } from '@hooks/widgetGrid'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import { RootState } from '@store'
 import { PendingValidationFails, PendingValidationFailsFormat, WidgetFormMeta } from '@cxbox-ui/core'
-import styles from './Form.less'
 import { RowMetaField } from '@interfaces/rowMeta'
 import { WidgetField } from '@interfaces/widget'
-import { useProportionalWidgetGrid } from '@hooks/widgetGrid'
+import styles from './Form.less'
 
 interface FormOwnProps {
     meta: Omit<WidgetFormMeta, 'type'>
@@ -55,8 +55,7 @@ export const Form: FunctionComponent<FormProps> = ({ meta, fields, missingFields
                             <Row gutter={24} type="flex" className={styles.nowrap}>
                                 {row.cols.map((col, colIndex) => {
                                     const field = visibleFlattenWidgetFields.find(item => item.key === col.fieldKey)
-                                    const disabled = fields?.find(item => item.key === field?.key && item.disabled)
-                                    const error = (!disabled && missingFields?.[field?.key as string]) || metaErrors?.[field?.key as string]
+                                    const error = missingFields?.[field?.key as string] || metaErrors?.[field?.key as string]
 
                                     return (
                                         <Col key={colIndex} span={col.span}>
@@ -86,7 +85,7 @@ export const Form: FunctionComponent<FormProps> = ({ meta, fields, missingFields
                 })}
             </Row>
         )
-    }, [grid, visibleFlattenWidgetFields, fields, missingFields, metaErrors, meta.name, t, bcName, cursor, name])
+    }, [grid, visibleFlattenWidgetFields, missingFields, metaErrors, meta.name, t, bcName, cursor, name])
 
     return (
         <div className={styles.formContainer}>

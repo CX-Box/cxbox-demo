@@ -123,6 +123,7 @@
         "A file with failed rows will be downloaded. To retry the operation for these rows, upload this file on Step 1 via 'Select from File'": "A file with failed rows will be downloaded. To retry the operation for these rows, upload this file on Step 1 via 'Select from File'",
         "File exported. To re-apply the mass operation to these rows, use 'Select from File' on Step 1.": "File exported. To re-apply the mass operation to these rows, use 'Select from File' on Step 1.",
         "Changing the active record is not available until the bulk operation is finished": "Changing the active record is not available until the bulk operation is finished",
-        "There is unsaved data, save it?": "There is unsaved data, save it?"
+        "There is unsaved data, save it?": "There is unsaved data, save it?",
+        "The form contains required fields that are not available for completion. Contact your administrator.": "The form contains required fields that are not available for completion. Contact your administrator."
     }
 }

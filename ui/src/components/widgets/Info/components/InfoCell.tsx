@@ -1,15 +1,11 @@
-import React from 'react'
-import styles from './InfoCell.less'
+import React, { useCallback } from 'react'
+import Field from '@components/Field/Field'
 import DrillDown from '@components/ui/DrillDown/DrillDown'
 import InfoValueWrapper from './InfoValueWrapper'
-import { EMPTY_ARRAY } from '@constants'
 import { useAppSelector } from '@store'
 import { interfaces } from '@cxbox-ui/core'
 import { AppWidgetInfoMeta, ETitleMode } from '@interfaces/widget'
-import MultiValueListRecord from '@components/MultiValueListRecord/MultiValueListRecord'
-import Field from '@components/Field/Field'
-
-const { FieldType } = interfaces
+import styles from './InfoCell.less'
 
 export interface ValueCellProps {
     row: interfaces.LayoutRow
@@ -20,41 +16,13 @@ export interface ValueCellProps {
     onDrillDown: (widgetName: string, cursor: string, bcName: string, fieldKey: string) => void
 }
 function InfoCell({ field, colSpan, row, meta, cursor, onDrillDown }: ValueCellProps) {
-    const isMultiValue = field.type === FieldType.multivalue
     const data: interfaces.DataItem = useAppSelector(state => state.data[meta.bcName]?.find(i => i.id === cursor)) as interfaces.DataItem
 
     const dataId = data?.id
     const separateDrillDownTitle = field.drillDown && (field.drillDownTitle || (field.drillDownTitleKey && data[field.drillDownTitleKey]))
-    const handleDrillDown = React.useCallback(() => {
+    const handleDrillDown = useCallback(() => {
         onDrillDown(meta.name, dataId, meta.bcName, field.key)
     }, [onDrillDown, meta, dataId, field.key])
-
-    const ResultField = isMultiValue ? (
-        ((data?.[field.key] || EMPTY_ARRAY) as interfaces.MultivalueSingleValue[]).map((multiValueSingleValue, index) => {
-            return <MultiValueListRecord key={index} isFloat={false} multivalueSingleValue={multiValueSingleValue} />
-        })
-    ) : (
-        <>
-            {field.hintKey && data[field.hintKey] && <div className={styles.hint}>{data[field.hintKey]}</div>}
-            <Field
-                bcName={meta.bcName}
-                cursor={cursor}
-                widgetName={meta.name}
-                widgetFieldMeta={field}
-                disableDrillDown={!!separateDrillDownTitle}
-                readonly
-            />
-            {separateDrillDownTitle && (
-                <DrillDown
-                    displayedValue={separateDrillDownTitle}
-                    meta={field}
-                    widgetName={meta.name}
-                    cursor={cursor}
-                    onDrillDown={handleDrillDown}
-                />
-            )}
-        </>
-    )
 
     return (
         <InfoValueWrapper
@@ -72,8 +40,30 @@ function InfoCell({ field, colSpan, row, meta, cursor, onDrillDown }: ValueCellP
                     <span className={styles.label}>{field.label}</span>
                 </div>
             )}
+
             <div className={styles.fieldData}>
-                <span>{ResultField}</span>
+                <span>
+                    {field.hintKey && data[field.hintKey] && <div className={styles.hint}>{data[field.hintKey]}</div>}
+
+                    <Field
+                        bcName={meta.bcName}
+                        cursor={cursor}
+                        widgetName={meta.name}
+                        widgetFieldMeta={field}
+                        disableDrillDown={!!separateDrillDownTitle}
+                        readonly
+                    />
+
+                    {separateDrillDownTitle && (
+                        <DrillDown
+                            displayedValue={separateDrillDownTitle}
+                            meta={field}
+                            widgetName={meta.name}
+                            cursor={cursor}
+                            onDrillDown={handleDrillDown}
+                        />
+                    )}
+                </span>
             </div>
         </InfoValueWrapper>
     )

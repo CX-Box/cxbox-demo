@@ -46,6 +46,16 @@
 }
 /* Style for select and tag wrapper after */
 
+.root :global(.ant-select-selection--multiple .ant-select-selection__choice .anticon svg) {
+  width: 1em;
+  height: 1em;
+}
+
+.root :global(.ant-select-selection--multiple .ant-select-arrow),
+.root :global(.ant-select-selection--multiple .ant-select-selection__clear) {
+  top: 50%;
+}
+
 /* Styles for the badge maxTagCount before */
 .oneLine :global(.ant-select-selection--multiple .ant-select-selection__rendered > ul > li.ant-select-selection__choice.ant-select-selection__choice__disabled) {
   flex-shrink: 0;

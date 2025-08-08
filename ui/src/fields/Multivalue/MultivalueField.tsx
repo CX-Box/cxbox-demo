@@ -1,14 +1,18 @@
 import React, { FunctionComponent } from 'react'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
-import { DataValue, WidgetTypes } from '@cxbox-ui/schema'
-import { RootState, useAppSelector } from '@store'
-import { actions, DataItem, interfaces } from '@cxbox-ui/core'
-import MultivalueTag from './MultivalueTag'
 import MultivalueHover from '@components/ui/Multivalue/MultivalueHover'
+import MultiValueListRecord from './components/MultiValueListRecord/MultiValueListRecord'
+import MultivalueTag from './components/MultivalueTag/MultivalueTag'
+import { RootState, useAppSelector } from '@store'
 import { BaseFieldProps } from '@components/Field/Field'
+import { actions, DataItem, interfaces, WidgetTypes } from '@cxbox-ui/core'
+import { DataValue } from '@cxbox-ui/schema'
+import styles from './MultivalueField.less'
+import cn from 'classnames'
 
 export interface MultivalueFieldOwnProps extends BaseFieldProps {
+    cursor: string
     disabled?: boolean
     metaError?: string
     placeholder?: string
@@ -18,10 +22,10 @@ export interface MultivalueFieldOwnProps extends BaseFieldProps {
 }
 
 export interface MultivalueFieldProps extends MultivalueFieldOwnProps {
-    cursor: string
     page: number
     popupBcName: string
     fieldKey: string
+    ignoreDisplayedKey: boolean
     onRemove: (
         bcName: string,
         popupBcName: string,
@@ -55,12 +59,20 @@ const MultivalueField: FunctionComponent<MultivalueFieldProps> = props => {
     }
 
     if (props.readOnly) {
-        return (
-            <MultivalueHover
-                {...props}
-                data={(props.value || emptyMultivalue) as interfaces.MultivalueSingleValue[]}
-                displayedValue={props.meta.displayedKey ? props.dataItem?.[props.meta.displayedKey] : undefined}
-            />
+        const multiValueData = (props.value || emptyMultivalue) as interfaces.MultivalueSingleValue[]
+        const displayedValue = props.meta.displayedKey ? props.dataItem?.[props.meta.displayedKey] : undefined
+
+        return !props.ignoreDisplayedKey && displayedValue ? (
+            <MultivalueHover {...props} data={multiValueData} displayedValue={displayedValue} />
+        ) : (
+            <span
+                className={cn(styles.multiValueList, { [styles.coloredField]: props.backgroundColor })}
+                style={props.backgroundColor ? { backgroundColor: props.backgroundColor } : undefined}
+            >
+                {multiValueData.map((multiValueSingleValue, index) => (
+                    <MultiValueListRecord key={index} isFloat={false} multivalueSingleValue={multiValueSingleValue} />
+                ))}
+            </span>
         )
     }
 
@@ -86,19 +98,18 @@ function mapStateToProps(state: RootState, { value, ...ownProps }: MultivalueFie
     const widgetFieldMeta = ownProps.meta
     const widget = state.view.widgets.find(widget => widget.name === ownProps.widgetName)
     const bcName = widget?.bcName as string
-    const cursor = state.screen.bo.bc[bcName]?.cursor as string
-
     const popupBcName = widgetFieldMeta?.popupBcName
+
     return {
-        dataItem: state.data[bcName]?.find(item => item.id === cursor) as interfaces.DataItem,
+        dataItem: state.data[bcName]?.find(item => item.id === ownProps.cursor) as interfaces.DataItem,
         defaultValue: Array.isArray(value) && value.length > 0 ? (value as interfaces.MultivalueSingleValue[]) : emptyMultivalue,
-        cursor,
         page: 0,
         popupBcName: popupBcName as string,
         assocValueKey: widgetFieldMeta.assocValueKey as string,
         fieldKey: widgetFieldMeta.key as string,
         widgetFieldMeta,
-        bcName
+        bcName,
+        ignoreDisplayedKey: widget?.type === WidgetTypes.Info
     }
 }
 

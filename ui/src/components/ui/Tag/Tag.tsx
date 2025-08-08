@@ -1,8 +1,8 @@
 import React from 'react'
-import { TagProps as AntdTagProps } from 'antd/lib/tag'
 import { Tag as AntdTag } from 'antd'
-import styles from './Tag.less'
 import cn from 'classnames'
+import { TagProps as AntdTagProps } from 'antd/lib/tag'
+import styles from './Tag.less'
 
 const TAG_CUSTOM_COLORS = {
     primary: '#1890ff'
@@ -18,7 +18,7 @@ interface TagProps extends AntdTagProps {
 const Tag: React.FC<TagProps> = ({ className, color, nowrap, ...restProps }) => {
     return (
         <AntdTag
-            className={cn(styles.tag, className, { [styles.nowrap]: nowrap })}
+            className={cn(styles.tag, className, { [styles.nowrap]: nowrap, [styles.disabled]: !restProps.closable })}
             color={TAG_CUSTOM_COLORS[color as CustomColorsType] ?? color}
             {...restProps}
         />

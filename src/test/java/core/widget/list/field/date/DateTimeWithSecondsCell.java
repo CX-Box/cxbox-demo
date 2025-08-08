@@ -1,0 +1,18 @@
+package core.widget.list.field.date;
+
+import com.codeborne.selenide.SelenideElement;
+import core.widget.TestingTools.CellProcessor;
+import org.apache.poi.ss.usermodel.Cell;
+
+public class DateTimeWithSecondsCell extends CellProcessor {
+    @Override
+    protected boolean getTypeField(SelenideElement element) {
+        return "dateTimeWithSeconds".equals(element.getAttribute("data-test-field-type"));
+    }
+
+    @Override
+    protected void processValue(SelenideElement element, Cell cell) {
+        String text = element.getText();
+        cell.setCellValue(text);
+    }
+}

@@ -41,7 +41,27 @@
     <jobrunr-spring-boot-3-starter.version>7.3.2</jobrunr-spring-boot-3-starter.version> <!--based on spring-boot 3.3.8, e.g. synced to cxbox-starter-parent-->
     <minio.version>8.5.17</minio.version>
     <postgresql.version>42.7.7</postgresql.version>
+
+    <!-- dependency test -->
+    <allure.version>2.28.0</allure.version>
+    <allure-maven.version>2.12.0</allure-maven.version>
+    <selenide.version>7.7.0</selenide.version>
+    <aspectj.version>1.9.23</aspectj.version>
+    <poi.version>5.2.5</poi.version>
+
   </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.qameta.allure</groupId>
+        <artifactId>allure-bom</artifactId>
+        <version>${allure.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <dependencies>
     <!--spring-boot-starter's-->
@@ -151,6 +171,77 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.github.bonigarcia</groupId>
+      <artifactId>webdrivermanager</artifactId>
+      <version>5.9.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.codeborne</groupId>
+      <artifactId>selenide-proxy</artifactId>
+      <version>${selenide.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.codeborne</groupId>
+      <artifactId>selenide-video-recorder</artifactId>
+      <version>${selenide.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.seleniumhq.selenium</groupId>
+      <artifactId>selenium-devtools-v134</artifactId>
+      <version>4.30.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.qameta.allure</groupId>
+      <artifactId>allure-junit5</artifactId>
+      <version>${allure.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.qameta.allure</groupId>
+      <artifactId>allure-selenide</artifactId>
+      <version>${allure.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.qameta.allure</groupId>
+      <artifactId>allure-java-commons</artifactId>
+      <version>${allure.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.qameta.allure</groupId>
+      <artifactId>allure-junit-platform</artifactId>
+      <version>${allure.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.bouncycastle</groupId>
+      <artifactId>bcprov-jdk18on</artifactId>
+      <version>1.79</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi-ooxml</artifactId>
+      <version>${poi.version}</version>
       <scope>test</scope>
     </dependency>
 
@@ -318,6 +409,55 @@
         </plugins>
       </build>
     </profile>
+    <profile>
+      <id>Test</id>
+      <activation>
+        <property>
+          <name>runTests</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-maven</artifactId>
+            <version>2.15.2</version>
+            <configuration>
+              <reportVersion>2.27.0</reportVersion>
+              <resultsDirectory>${project.build.directory}/allure-results</resultsDirectory>
+            </configuration>
+          </plugin>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>3.2.3</version>
+            <configuration>
+              <skipTests>false</skipTests>
+              <trimStackTrace>false</trimStackTrace>
+              <rerunFailingTestsCount>3</rerunFailingTestsCount>
+              <argLine>
+                -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
+              </argLine>
+              <systemPropertyVariables>
+                <allure.results.directory>${project.build.directory}/allure-results</allure.results.directory>
+                <allure.async>false</allure.async>
+              </systemPropertyVariables>
+            </configuration>
+            <dependencies>
+              <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjweaver</artifactId>
+                <version>${aspectj.version}</version>
+                <scope>runtime</scope>
+              </dependency>
+            </dependencies>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
   </profiles>
 
 </project>

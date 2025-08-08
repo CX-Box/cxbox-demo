@@ -1,4 +1,4 @@
-import { catchError, concat, EMPTY, filter, mergeMap, of, switchMap } from 'rxjs'
+import { catchError, concat, EMPTY, filter, from, mergeMap, of, switchMap } from 'rxjs'
 import { OperationPreInvokeCustom, OperationPreInvokeSubType, OperationPreInvokeTypeCustom } from '@interfaces/operation'
 import { interfaces, utils, ViewMetaResponse } from '@cxbox-ui/core'
 import { CustomWidgetTypes } from '@interfaces/widget'
@@ -175,9 +175,12 @@ export const downloadFileEpic: RootEpic = (action$, state$, { api }) =>
     action$.pipe(
         filter(actions.downloadFile.match),
         mergeMap(action => {
-            api.saveBlob(`${api.fileUploadEndpoint}?id=${encodeURIComponent(action.payload.fileId)}`)
-
-            return EMPTY
+            return from(api.saveBlob(`${api.fileUploadEndpoint}?id=${encodeURIComponent(action.payload.fileId)}`)).pipe(
+                mergeMap(() => EMPTY),
+                catchError(error => {
+                    return utils.createApiErrorObservable(error)
+                })
+            )
         })
     )
 
@@ -185,9 +188,14 @@ export const downloadFileByUrlEpic: RootEpic = (action$, state$, { api }) =>
     action$.pipe(
         filter(actions.downloadFileByUrl.match),
         mergeMap(action => {
-            api.saveBlob(action.payload.url)
+            const { url, name } = action.payload
 
-            return EMPTY
+            return from(api.saveBlob(url, name)).pipe(
+                mergeMap(() => EMPTY),
+                catchError(error => {
+                    return utils.createApiErrorObservable(error)
+                })
+            )
         })
     )
 

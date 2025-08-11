@@ -10,7 +10,7 @@ import { FilePreviewMode } from '@interfaces/widget'
 import { PREVIEW_WIDTH_DEFAULT } from '@constants/fileViewer'
 
 export interface ReadOnlySingleFileUploadProps {
-    mode?: FilePreviewMode
+    mode?: FilePreviewMode | 'snapshot'
     width?: number
     height?: number
 
@@ -58,32 +58,34 @@ function ReadOnlySingleFileUpload({
         )
     }
 
-    if ((diffDownloadUrl || downloadUrl) && diffDownloadUrl !== downloadUrl) {
-        return (
-            <div className={cn(styles.snapshot)}>
-                {smartIcon}
-                <div onClickCapture={e => e.stopPropagation()}>
-                    {diffDownloadUrl && (
-                        <div>
-                            <span className={cn(styles.viewLink, styles.prevValue)}>
-                                <Button type="link" removeIndentation={true} onClick={handleDiffDownload}>
-                                    <span>{trimString(diffFileName)}</span>
-                                </Button>
-                            </span>
-                        </div>
-                    )}
-                    {downloadUrl && (
-                        <div>
-                            <span className={cn(styles.viewLink, styles.newValue)}>
-                                <Button type="link" removeIndentation={true} onClick={handleDownload}>
-                                    <span>{trimString(fileName)}</span>
-                                </Button>
-                            </span>
-                        </div>
-                    )}
+    if (mode === 'snapshot') {
+        if ((diffDownloadUrl || downloadUrl) && diffDownloadUrl !== downloadUrl) {
+            return (
+                <div className={cn(styles.snapshot)}>
+                    {smartIcon}
+                    <div onClickCapture={e => e.stopPropagation()}>
+                        {diffDownloadUrl && (
+                            <div>
+                                <span className={cn(styles.viewLink, styles.prevValue)}>
+                                    <Button type="link" removeIndentation={true} onClick={handleDiffDownload}>
+                                        <span>{trimString(diffFileName)}</span>
+                                    </Button>
+                                </span>
+                            </div>
+                        )}
+                        {downloadUrl && (
+                            <div>
+                                <span className={cn(styles.viewLink, styles.newValue)}>
+                                    <Button type="link" removeIndentation={true} onClick={handleDownload}>
+                                        <span>{trimString(fileName)}</span>
+                                    </Button>
+                                </span>
+                            </div>
+                        )}
+                    </div>
                 </div>
-            </div>
-        )
+            )
+        }
     }
 
     return (

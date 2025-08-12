@@ -3,13 +3,14 @@ import cn from 'classnames'
 import { useTranslation } from 'react-i18next'
 import { Icon } from 'antd'
 import { UploadFile, UploadProps } from 'antd/es/upload/interface'
-import styles from './FileUpload.less'
 import { AxiosError } from 'axios'
 import FileIcon from './FileIconContainer'
 import { trimString } from '@utils/fileViewer'
 import Upload from '@components/Upload'
-import { CxBoxApiInstance } from '../../api'
 import Button from '@components/ui/Button/Button'
+import { useAppDispatch } from '@store'
+import { actions } from '@actions'
+import styles from './FileUpload.less'
 
 export interface AdditionalUploadProps extends UploadProps {
     onStart: (file: UploadFile) => void
@@ -46,12 +47,21 @@ const SingleFileUpload: React.FunctionComponent<SingleFileUploadProps> = ({
         ...restProps
     }
 
+    const dispatch = useAppDispatch()
+
     const { t } = useTranslation()
 
     const fileIcon = <FileIcon fileName={fileName} onFileIconClick={onFileIconClick} />
 
     const handleDownload = () => {
-        downloadUrl && CxBoxApiInstance.saveBlob(downloadUrl, fileName)
+        if (downloadUrl) {
+            dispatch(
+                actions.downloadFileByUrl({
+                    url: downloadUrl,
+                    name: fileName
+                })
+            )
+        }
     }
 
     const controls: { [key: string]: React.ReactNode } = {

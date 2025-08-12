@@ -10,7 +10,7 @@ import { TableSettingsItem } from '@interfaces/tableSettings'
 import { FilterGroup, FilterType } from '@interfaces/filters'
 import { saveAs } from 'file-saver'
 import { getFileNameFromDisposition } from '@utils/getFileNameFromDisposition'
-import { Observable, map } from 'rxjs'
+import { map, Observable } from 'rxjs'
 
 class Api extends CXBoxApi {
     loginByRoleRequest(role: string) {
@@ -150,8 +150,27 @@ class Api extends CXBoxApi {
             .pipe(map(response => response.data))
     }
 
-    getBlob(url: string, params: { preview: boolean }) {
-        return this.api$.instance.get(url, { responseType: 'blob', baseURL: '', params })
+    async getBlob(url: string, params: { preview: boolean }) {
+        try {
+            return await this.api$.instance.get(url, {
+                baseURL: '',
+                params,
+                responseType: 'blob'
+            })
+        } catch (error: any) {
+            const isBlobError = error.response?.data instanceof Blob && error.response.data.type?.includes('application/json')
+
+            if (isBlobError) {
+                try {
+                    const text = await error.response.data.text()
+                    error.response.data = JSON.parse(text)
+                } catch {
+                    console.warn('Failed to parse error blob:', error)
+                }
+            }
+
+            throw error
+        }
     }
 
     async saveBlob(url: string, filename?: string) {

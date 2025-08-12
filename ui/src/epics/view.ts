@@ -444,6 +444,27 @@ const closeFormPopup: RootEpic = (action$, state$) =>
         })
     )
 
+const collapseWidgetsByDefaultEpic: RootEpic = (action$, state$, { api }) =>
+    action$.pipe(
+        filter(actions.selectView.match),
+        mergeMap(() => {
+            const viewName = state$.value.view.name
+            const viewGroups = state$.value.view.groups
+            const collapsedWidgets = state$.value.screen.collapsedWidgets?.[viewName]
+
+            const result = viewGroups
+                ?.filter(
+                    viewGroup =>
+                        viewGroup.collapsedCondition?.default === true &&
+                        viewGroup.widgetNames?.length &&
+                        !collapsedWidgets?.includes(viewGroup.widgetNames?.[0])
+                )
+                .map(viewGroup => of(actions.setCollapsedWidgets({ viewName: viewName, widgetNameGroup: viewGroup.widgetNames })))
+
+            return result?.length ? concat(...result) : EMPTY
+        })
+    )
+
 export const viewEpics = {
     bcFetchCountEpic,
     sendOperationEpic,
@@ -452,5 +473,6 @@ export const viewEpics = {
     forceUpdateRowMeta,
     closeFormPopup,
     updateRowMetaForRelatedBcEpic,
-    applyPendingPostInvokeEpic
+    applyPendingPostInvokeEpic,
+    collapseWidgetsByDefaultEpic
 }

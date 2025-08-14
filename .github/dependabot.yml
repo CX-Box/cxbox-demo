@@ -1,9 +1,8 @@
 version: 2
 updates:
   - package-ecosystem: "npm"
-    directory: "/" # Location of your package.json
+    directory: "/ui" # Location of your package.json
     schedule:
-      interval: "weekly"
-    # Only update prod dependencies, ignore devDependencies
+      interval: "daily"
     allow:
       - dependency-type: "production"

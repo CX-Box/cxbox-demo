@@ -1,0 +1,20 @@
+name: Dependabot Alert CSV Export
+
+on:
+  workflow_dispatch: # Allows manual run from GitHub Actions tab
+
+jobs:
+  export-alerts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Dependabot Alert CSV Export
+        uses: ShamKarthikS-Hexaware/dependabot-alert-export@v1.0
+
+      - name: Upload CSV as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependabot-alerts
+          path: dependabot-alerts.csv

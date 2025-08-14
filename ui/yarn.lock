@@ -4132,10 +4132,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stomp/stompjs@npm:7.0.0":
-  version: 7.0.0
-  resolution: "@stomp/stompjs@npm:7.0.0"
-  checksum: b68d32625efa71d12c57eb5174a83625277da306f9adb044ebf91000c6dec1a433abfd11e44a74d21f7b6fc27490e12997468f0c4f276767ab25c59f7ae93bd4
+"@stomp/stompjs@npm:7.1.1":
+  version: 7.1.1
+  resolution: "@stomp/stompjs@npm:7.1.1"
+  checksum: a58d6c9167ec6453f5050eb70f09114f0c1f322bd7a2b5d381c168315f2d22b5132ebd0edf184c2ca42b616fed56787fd1755df9e36e562e5fb1ff09a46be9b3
   languageName: node
   linkType: hard
 
@@ -17535,7 +17535,7 @@ __metadata:
     "@craco/craco": "npm:7.1.0"
     "@cxbox-ui/core": "npm:2.6.1-beta.2"
     "@reduxjs/toolkit": "npm:1.7.2"
-    "@stomp/stompjs": "npm:7.0.0"
+    "@stomp/stompjs": "npm:7.1.1"
     "@types/diff": "npm:5.0.3"
     "@types/file-saver": "npm:2.0.5"
     "@types/lodash.debounce": "npm:4.0.9"

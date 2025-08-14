@@ -17,7 +17,7 @@
     "@ant-design/plots": "1.2.6",
     "@cxbox-ui/core": "2.6.1-beta.2",
     "@reduxjs/toolkit": "1.7.2",
-    "@stomp/stompjs": "7.0.0",
+    "@stomp/stompjs": "7.1.1",
     "antd": "3.26.20",
     "axios": "1.8.2",
     "classnames": "2.3.2",

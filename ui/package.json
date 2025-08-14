@@ -18,7 +18,7 @@
     "@cxbox-ui/core": "2.6.1-beta.2",
     "@reduxjs/toolkit": "1.7.2",
     "@stomp/stompjs": "7.0.0",
-    "antd": "3.26.20",
+    "antd": "5.27.0",
     "axios": "1.8.2",
     "classnames": "2.3.2",
     "diff": "5.1.0",

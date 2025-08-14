@@ -31,7 +31,7 @@
     "mime-types": "2.0.0",
     "parse-data-url": "^6.0.0",
     "query-string": "5.1.1",
-    "rc-select": "14.11.0",
+    "rc-select": "14.16.8",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-drag-listview": "2.0.0",

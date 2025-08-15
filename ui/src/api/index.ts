@@ -215,4 +215,4 @@ if (!process.env['REACT_APP_NO_SSO']) {
     instance.interceptors.request.use(tokenInterceptor, () => Promise.reject())
 }
 
-export const CxBoxApiInstance = new Api(instance, Infinity, Object.values(FilterType))
+export const CxBoxApiInstance = new Api(instance, 100, Object.values(FilterType))

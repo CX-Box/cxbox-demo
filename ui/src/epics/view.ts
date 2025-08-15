@@ -112,12 +112,10 @@ export const sendOperationEpic: RootEpic = (action$, state$, { api }) =>
             const bcUrl = buildBcUrl(bcName, true, state)
             const bc = bcName ? state.screen.bo.bc[bcName] : undefined
             const rowMeta = bcUrl ? state.view.rowMeta[bcName]?.[bcUrl] : undefined
-            const fields = rowMeta?.fields
             const cursor = bc?.cursor
             const record = state.data[bcName]?.find(item => item.id === bc?.cursor)
             const filters = state.screen.filters[bcName]
             const sorters = state.screen.sorters[bcName]
-            const pendingRecordChange = { ...state.view.pendingDataChanges[bcName]?.[bc?.cursor as string] }
             const selectedRows = state.view.selectedRows[bcName]
             const flattenBcOperations = rowMeta?.actions ? utils.flattenOperations(rowMeta?.actions) : undefined
             const currentOperation = flattenBcOperations?.find(operation => operation.type === operationType)
@@ -133,12 +131,9 @@ export const sendOperationEpic: RootEpic = (action$, state$, { api }) =>
                     : undefined
             const isMassOperation = currentOperationScope === 'mass'
 
-            for (const key in pendingRecordChange) {
-                if (fields?.find(item => item.key === key && item.disabled)) {
-                    delete pendingRecordChange[key]
-                }
-            }
-            let data = record && ({ ...pendingRecordChange, vstamp: record.vstamp } as DataItem)
+            const pendingChanges = utils.removeDisabledFields(state.view.pendingDataChanges[bcName]?.[bc?.cursor as string], rowMeta)
+
+            let data = record && ({ ...pendingChanges, vstamp: record.vstamp } as DataItem)
             const defaultSaveOperation =
                 state.view.widgets?.find(item => item.name === widgetName)?.options?.actionGroups?.defaultSave ===
                     action.payload.operationType && actions.changeLocation.match(action.payload?.onSuccessAction?.type)

@@ -134,3 +134,8 @@ export const resetViewerMode = createAction<{
 }>('resetViewerMode')
 
 export const changeOperationStep = createAction<Pick<ViewerModeMass, 'bcName' | 'step'>>('changeOperationStep')
+
+export const setMassResultFilterEnabled = createAction<{
+    bcName: string
+    enabled: boolean
+}>('setMassResultFilterEnabled')

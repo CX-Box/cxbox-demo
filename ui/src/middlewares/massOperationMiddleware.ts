@@ -90,6 +90,12 @@ export const massOperationMiddleware: Middleware =
         if (actions.bcRemoveAllFilters.match(action) && actionIsRelatedToMassMode && viewerMode.step !== 'Select rows') {
             next(action)
             const selectedRows = state.view.selectedRows[action.payload?.bcName]
+            const resultFilterEnabled = state.screen.viewerMode[action.payload?.bcName]?.resultFilterEnabled
+
+            if (resultFilterEnabled) {
+                dispatch(actions.setMassResultFilterEnabled({ bcName: action.payload?.bcName, enabled: false }))
+            }
+
             dispatch(
                 actions.bcAddFilter({
                     bcName: action.payload?.bcName,

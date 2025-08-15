@@ -23,21 +23,21 @@ export const useFilterGroups = (meta?: WidgetMeta) => {
         const bc = bcName ? state.screen.bo.bc[bcName] : undefined
         const bcFilters = bcName ? state.screen.filters[bcName] : undefined
         const enabledMassMode = state.screen.viewerMode[bcName]?.mode === 'mass'
+        const resultFilterEnabled = !!state.screen.viewerMode[bcName]?.resultFilterEnabled
         const defaultFiltersExist = !!bcFilters?.length
         const filterById = bcFilters?.find(filter => filter.fieldName === FIELDS.TECHNICAL.ID)
         const selectedRows = state.view.selectedRows[bcName]
+        const filtersLength = bcFilters?.length ?? 0
         const massModeFiltersExist =
             !!bcFilters?.length &&
-            (bcFilters.length > 1 ||
-                !filterById ||
-                (Array.isArray(filterById.value) && !!selectedRows?.length && filterById.value.length !== selectedRows.length))
+            (bcFilters.length > 1 || !filterById || (Array.isArray(filterById.value) && !!selectedRows?.length && resultFilterEnabled))
 
         return {
             cursor: bc?.cursor,
             filterGroups: bc?.filterGroups,
             filterGroupsExist: !!bc?.filterGroups?.length,
             filtersExist: enabledMassMode ? massModeFiltersExist : defaultFiltersExist,
-            filtersCount: bcFilters?.length ?? 0
+            filtersCount: enabledMassMode && filterById && !resultFilterEnabled ? filtersLength - 1 : filtersLength
         }
     }, shallowEqual)
 

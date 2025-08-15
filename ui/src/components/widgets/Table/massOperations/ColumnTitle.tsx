@@ -1,4 +1,4 @@
-import React, { FormEvent, useCallback } from 'react'
+import React, { FormEvent, useCallback, useEffect } from 'react'
 import cn from 'classnames'
 import { Button, Checkbox, Col, Form, Icon, Popover, Row } from 'antd'
 import { ReactComponent as FilterIcon } from '@components/ColumnTitle/filter-solid.svg'
@@ -6,13 +6,13 @@ import { useTranslation } from 'react-i18next'
 import { useVisibility } from '@components/widgets/Table/hooks/useVisibility'
 import TemplatedTitle from '@components/TemplatedTitle/TemplatedTitle'
 import { useAppSelector } from '@store'
-import styles from './ColumnTitle.less'
 import { useRowSelection } from '@components/widgets/Table/massOperations/hooks/useRowSelection'
 import { FilterType as CoreFilterType } from '@cxbox-ui/core'
 import { actions } from '@actions'
 import { useDispatch } from 'react-redux'
 import { filterByConditions } from '@utils/filterByConditions'
 import { FIELDS } from '@constants'
+import styles from './ColumnTitle.less'
 
 interface ColumnTitleProps {
     title: string
@@ -27,6 +27,7 @@ const ColumnTitle: React.FC<ColumnTitleProps> = ({ widgetName, bcName, filterabl
     const { visibility, changeVisibility } = useVisibility(false)
     const { selectedRows, selectedRowKeys } = useRowSelection(widgetName)
     const viewName = useAppSelector(state => state.view.name)
+    const resultFilterEnabled = useAppSelector(state => state.screen.viewerMode[bcName]?.resultFilterEnabled)
     const { visibility: successChecked, changeVisibility: changeSuccessChecked } = useVisibility(null as any)
     const { visibility: failChecked, changeVisibility: changeFailChecked } = useVisibility(null as any)
     const filterApplied = successChecked || failChecked
@@ -67,6 +68,7 @@ const ColumnTitle: React.FC<ColumnTitleProps> = ({ widgetName, bcName, filterabl
                     widgetName: widgetName
                 })
             )
+            dispatch(actions.setMassResultFilterEnabled({ bcName, enabled: true }))
             dispatch(actions.bcForceUpdate({ bcName }))
             changeVisibility(false)
         },
@@ -88,12 +90,19 @@ const ColumnTitle: React.FC<ColumnTitleProps> = ({ widgetName, bcName, filterabl
             })
         )
 
+        dispatch(actions.setMassResultFilterEnabled({ bcName, enabled: false }))
         dispatch(actions.bcForceUpdate({ bcName }))
 
         changeSuccessChecked(null as any)
         changeFailChecked(null as any)
         changeVisibility(false)
     }, [bcName, changeFailChecked, changeSuccessChecked, changeVisibility, dispatch, fieldName, selectedRowKeys, viewName, widgetName])
+
+    useEffect(() => {
+        if (resultFilterEnabled === false) {
+            handleCancel()
+        }
+    }, [handleCancel, resultFilterEnabled])
 
     const content = (
         <Form onSubmit={handleApply} layout="vertical">

@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { DatePicker } from 'antd'
+import { Button, DatePicker } from 'antd'
 import moment, { Moment } from 'moment'
 import { useTranslation } from 'react-i18next'
-import RangeTransferButtons from './components/RangeTransferButtons/RangeTransferButtons'
 import { isoLocalFormatter } from '@utils/date'
 import { DatePickerProps, SinglePickerProps } from 'antd/lib/date-picker/interface'
 import { DataValue } from '@cxbox-ui/schema'
 import styles from './RangePicker.less'
+import buttonStyles from './components/RangeTransferButtons/RangeTransferButtons.less'
+import { isEmptyValue } from '@components/ColumnTitle/components/utils'
 
 interface RangePickerProps extends Omit<DatePickerProps, 'onChange' | 'value'> {
     onChange: (v: DataValue[]) => void
@@ -63,6 +64,17 @@ function RangePicker({ value, onChange, open, ...rest }: RangePickerProps) {
         }
     }
 
+    const handleDateTransfer = (type: 'toStart' | 'toEnd') => {
+        if (type === 'toStart') {
+            const newStartValue = moment(startDate).endOf('day')
+            onChange([isoLocalFormatter(startDate), isoLocalFormatter(newStartValue)])
+        }
+        if (type === 'toEnd') {
+            const newEndValue = moment(endDate).startOf('day')
+            onChange([isoLocalFormatter(newEndValue), isoLocalFormatter(endDate)])
+        }
+    }
+
     return (
         <div className={styles.container}>
             <DatePicker
@@ -76,7 +88,10 @@ function RangePicker({ value, onChange, open, ...rest }: RangePickerProps) {
                 open={startOpen}
             />
 
-            <RangeTransferButtons startValue={isoLocalFormatter(startDate)} endValue={isoLocalFormatter(endDate)} onChange={onChange} />
+            <div className={buttonStyles.container}>
+                <Button disabled={isEmptyValue(isoLocalFormatter(startDate))} onClick={() => handleDateTransfer('toStart')} icon="right" />
+                <Button disabled={isEmptyValue(isoLocalFormatter(endDate))} onClick={() => handleDateTransfer('toEnd')} icon="left" />
+            </div>
 
             <DatePicker
                 {...rest}

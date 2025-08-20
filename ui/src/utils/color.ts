@@ -23,3 +23,33 @@ export function calculateBrightnessYIQ({ r, g, b }: { r: number; g: number; b: n
 export function getContrastColor(color: string) {
     return calculateBrightnessYIQ(getRGBFromColor(color)!) > 128 ? '#000000' : '#ffffff'
 }
+
+/**
+ * Adds transparency to HEX color
+ * @param hex Color in #RGB or #RRGGBB format
+ * @param alpha Transparency (0 = fully transparent, 1 = completely opaque)
+ * @returns Color in #RRGGBBAA format
+ */
+export function addAlphaToHex(hex: string, alpha: number): string {
+    let cleanHex = hex.replace('#', '')
+
+    if (cleanHex.length === 3) {
+        cleanHex = cleanHex
+            .split('')
+            .map(ch => ch + ch)
+            .join('')
+    }
+
+    if (cleanHex.length !== 6) {
+        throw new Error('Invalid HEX format')
+    }
+
+    const clampedAlpha = Math.max(0, Math.min(1, alpha))
+
+    const alphaHex = Math.round(clampedAlpha * 255)
+        .toString(16)
+        .padStart(2, '0')
+        .toUpperCase()
+
+    return `#${cleanHex.toUpperCase()}${alphaHex}`
+}

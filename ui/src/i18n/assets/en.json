@@ -103,6 +103,7 @@
         "Operation not available": "Operation \"{{operationType}}\" not available",
         "From": "From",
         "To": "To",
-        "The table contains a large amount of data - only the first rows are presented in the report": "The table contains a large amount of data - only the first {{limit}} rows are presented in the report"
+        "The table contains a large amount of data - only the first rows are presented in the report": "The table contains a large amount of data - only the first {{limit}} rows are presented in the report",
+        "There is unsaved data, save it ?": "There is unsaved data, save it ?"
     }
 }

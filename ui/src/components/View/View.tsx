@@ -40,7 +40,7 @@ import DebugViewInfoLabel from '@components/DebugViewInfoLabel/DebugViewInfoLabe
 import CardList from '@components/widgets/CardList/CardList'
 import CardCarouselList from '@components/widgets/CardCarouselList/CardCarouselList'
 
-const customFields = {
+export const customFields = {
     [FieldType.number]: Number,
     [FieldType.percent]: Number,
     [FieldType.money]: Number,

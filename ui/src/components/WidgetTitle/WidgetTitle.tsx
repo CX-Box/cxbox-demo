@@ -16,9 +16,20 @@ interface WidgetTitleProps {
     bcColor?: string
     marginBottom?: number
     buttons?: ReactNode
+    opacity?: number
 }
 
-const WidgetTitle: React.FC<WidgetTitleProps> = ({ widgetName, text, bcColor, buttons, level = 1, className, id, marginBottom = 12 }) => {
+const WidgetTitle: React.FC<WidgetTitleProps> = ({
+    widgetName,
+    text,
+    bcColor,
+    buttons,
+    level = 1,
+    className,
+    id,
+    marginBottom = 12,
+    opacity
+}) => {
     const dispatch = useAppDispatch()
     const { viewName, widgetNameGroup, isMainWidget, isCollapsed } = useWidgetCollapse(widgetName)
 
@@ -31,7 +42,7 @@ const WidgetTitle: React.FC<WidgetTitleProps> = ({ widgetName, text, bcColor, bu
     }
 
     const element = `h${level}`
-    const templatedTitle = <TemplatedTitle widgetName={widgetName} title={text ?? ''} id={id} />
+    const templatedTitle = <TemplatedTitle widgetName={widgetName} title={text ?? ''} id={id} opacity={opacity} />
     const title = isMainWidget ? (
         <div className={styles.collapse} onClick={handleCollapseClick}>
             <Icon className={styles.collapseIcon} type={isCollapsed ? 'right' : 'down'} />

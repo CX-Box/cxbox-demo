@@ -277,6 +277,10 @@ export const internalFormWidgetMiddleware: Middleware =
             isAnyOf(actions.bcSaveDataSuccess, actions.bcNewDataFail, actions.sendOperationSuccess)(action) && actionIsRelatedToRecordForm
         // reset record form after a form-related operation is complete
         if (operationOnRecordFormIsComplete) {
+            if (bcRecordForm?.bcName && bcRecordForm.create) {
+                next(actions.partialUpdateRecordForm({ bcName: bcRecordForm.bcName, create: false }))
+            }
+
             next(action)
 
             return !isActivePopupWidget ? next(resetRecordForm({ bcName: action.payload?.bcName })) : next(actions.emptyAction())

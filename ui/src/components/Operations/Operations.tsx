@@ -186,7 +186,7 @@ const useWidgetOperationsMode = (widget: AppWidgetMeta, operations: (Operation |
 /**
  *  Решает проблему с потерей состояния FileUpload из-за metaInProgress, исчезновения rowMeta при перезагрузке страницы и хука useWidgetOperations, который всегда возвращает массив вместо undefined.
  */
-const useOperationsCache = (operations: (OperationGroup | Operation)[], bcName: string) => {
+export const useOperationsCache = (operations: (OperationGroup | Operation)[], bcName: string) => {
     const metaInProgress = useAppSelector(state => state.view.metaInProgress[bcName])
     const rowMeta = useAppSelector(state => selectBcUrlRowMeta(state, bcName))
 

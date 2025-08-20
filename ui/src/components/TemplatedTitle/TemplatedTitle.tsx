@@ -8,9 +8,10 @@ interface TemplatedTitleProps {
     title: string
     widgetName: string
     container?: React.ComponentType<any>
+    opacity?: number
 }
 
-export const TemplatedTitle: FunctionComponent<TemplatedTitleProps> = ({ widgetName, title, container: Container, id }) => {
+export const TemplatedTitle: FunctionComponent<TemplatedTitleProps> = ({ widgetName, title, container: Container, id, opacity }) => {
     const widget = useAppSelector(state => {
         return state.view.widgets.find(item => item.name === widgetName)
     })
@@ -24,7 +25,10 @@ export const TemplatedTitle: FunctionComponent<TemplatedTitleProps> = ({ widgetN
     })
     const widgetFields = widget?.fields as WidgetField[] | undefined
 
-    const templatedTitle = useMemo(() => getWidgetTitle(title, dataItem, widgetFields), [dataItem, title, widgetFields])
+    const templatedTitle = useMemo(
+        () => getWidgetTitle(title, dataItem, widgetFields, { opacity }),
+        [dataItem, opacity, title, widgetFields]
+    )
 
     if (!title) {
         return null

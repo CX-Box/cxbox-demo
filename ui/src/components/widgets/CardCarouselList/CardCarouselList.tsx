@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import cn from 'classnames'
 import styles from './CardCarouselList.less'
-import { CardCarouselListWidgetMeta, FileUploadFieldMeta, WidgetField } from '@interfaces/widget'
+import { AppWidgetMeta, CardCarouselListWidgetMeta, FileUploadFieldMeta } from '@interfaces/widget'
 import { Empty } from 'antd'
-import { DataItem, FieldType } from '@cxbox-ui/schema'
+import { FieldType } from '@cxbox-ui/schema'
 import { useAppSelector } from '@store'
 import { useTranslation } from 'react-i18next'
 import { PREVIEW_WIDTH_DEFAULT, TEMP_DEFAULT_ROW_SIZE } from '@constants/fileViewer'
@@ -18,10 +18,10 @@ import FileUploadFieldWithOperations from '@components/widgets/CardCarouselList/
 import InnerWidget from '@components/InnerWidget/InnerWidget'
 import { ImageControlEnabledContext, PreviewPaginationEnabledContext } from '@fields/FileUpload/context'
 import { usePrevious } from '@hooks/usePrevious'
-import Field from '@components/Field/Field'
 import { DictionaryFieldMeta } from '@cxbox-ui/core'
 import HorizontalScrollContainer from '@components/widgets/CardCarouselList/HorizontalScrollContainer'
 import Pagination from '@components/ui/Pagination/Pagination'
+import WidgetTitle from '@components/WidgetTitle/WidgetTitle'
 
 interface CardCarouselListProps {
     meta: CardCarouselListWidgetMeta
@@ -29,6 +29,7 @@ interface CardCarouselListProps {
 }
 
 const ITEM_GAP = 10
+const PREVIEW_STATUS_OPACITY = 0.8
 
 function CardCarouselList({ meta, type = 'carousel' }: CardCarouselListProps) {
     const isCarousel = type === 'carousel'
@@ -109,6 +110,18 @@ function CardCarouselList({ meta, type = 'carousel' }: CardCarouselListProps) {
         }
     }, [bcName, currentCursor, data, previousCursor, scrollToElement])
 
+    const getTitle = (widget?: AppWidgetMeta, text?: string, id?: string, opacity?: number) =>
+        widget ? (
+            <WidgetTitle
+                level={2}
+                widgetName={widget.name}
+                text={text ?? widget?.title}
+                bcColor={widget?.options?.title?.bgColor}
+                id={id}
+                opacity={opacity}
+            />
+        ) : null
+
     const mainFileElement =
         data?.length && meta.options?.read?.widget ? (
             <div className={cn(styles.main)}>
@@ -140,8 +153,6 @@ function CardCarouselList({ meta, type = 'carousel' }: CardCarouselListProps) {
                 >
                     {data?.length ? (
                         data?.map((dataItem, index) => {
-                            const size = widgetField?.width ?? PREVIEW_WIDTH_DEFAULT
-
                             return widgetField ? (
                                 <div
                                     key={dataItem.id}
@@ -166,19 +177,12 @@ function CardCarouselList({ meta, type = 'carousel' }: CardCarouselListProps) {
                                         >
                                             {statusField && (
                                                 <div className={styles.status}>
-                                                    <Field
-                                                        data={dataItem as DataItem}
-                                                        bcName={bcName}
-                                                        cursor={dataItem.id}
-                                                        widgetName={widgetName}
-                                                        widgetFieldMeta={statusField as WidgetField}
-                                                        readonly={true}
-                                                    />
+                                                    {getTitle(meta, `$\{${statusField.key}\}`, dataItem.id, PREVIEW_STATUS_OPACITY)}
                                                 </div>
                                             )}
                                         </FileUploadFieldWithOperations>
                                     </div>
-                                    <div style={{ width: size, whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+                                    <div style={{ width: normalizedWidth, whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
                                         {dataItem[cardOptions?.titleFieldKey ?? widgetField.key]}
                                     </div>
                                 </div>

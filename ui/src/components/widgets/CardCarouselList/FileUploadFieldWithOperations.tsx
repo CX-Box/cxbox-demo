@@ -6,6 +6,7 @@ import Card from '@components/widgets/CardCarouselList/Card'
 import { useWidgetOperationsNew } from '@hooks/useWidgetOperations'
 import { actions, Operation } from '@cxbox-ui/core'
 import { useDispatch } from 'react-redux'
+import { useOperationsCache } from '@components/Operations/Operations'
 
 const CUSTOM_EDIT_BUTTON_KEY = '_custom-edit-button'
 
@@ -31,7 +32,8 @@ const FileUploadFieldWithOperations: React.FC<FileUploadFieldWithOperationsProps
     ...cardProps
 }) => {
     const handleFileIconClick = useFileIconClick(widgetName, bcName, id, widgetField?.key as string)
-    const operations = useWidgetOperationsNew(widgetName, ['record'], false)
+    const widgetOperations = useWidgetOperationsNew(widgetName, ['record'], false)
+    const operations = useOperationsCache(widgetOperations, bcName)
     const customOperationsWithDefault = useMemo(() => {
         return [{ type: CUSTOM_EDIT_BUTTON_KEY, icon: 'edit' } as (typeof operations)[number], ...operations]
     }, [operations])
@@ -44,6 +46,12 @@ const FileUploadFieldWithOperations: React.FC<FileUploadFieldWithOperationsProps
 
             if (defaultOperation) {
                 result.onClick = () => {
+                    dispatch(
+                        actions.bcSelectRecord({
+                            bcName: bcName,
+                            cursor: id
+                        })
+                    )
                     dispatch(
                         actions.sendOperation({
                             bcName,
@@ -64,7 +72,7 @@ const FileUploadFieldWithOperations: React.FC<FileUploadFieldWithOperationsProps
 
             return result
         },
-        [bcName, dispatch, handleFileIconClick, operations, widgetName]
+        [bcName, dispatch, handleFileIconClick, id, operations, widgetName]
     )
 
     return (

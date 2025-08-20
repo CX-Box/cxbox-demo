@@ -105,6 +105,7 @@
         "Operation not available": "Операция \"{{operationType}}\" не доступна",
         "From": "От",
         "To": "До",
-        "The table contains a large amount of data - only the first rows are presented in the report": "В таблице большое количество данных — в отчете представлены только первые {{limit}} строк"
+        "The table contains a large amount of data - only the first rows are presented in the report": "В таблице большое количество данных — в отчете представлены только первые {{limit}} строк",
+        "There is unsaved data, save it ?": "Есть несохраненные данные, сохранить их ?"
     }
 }

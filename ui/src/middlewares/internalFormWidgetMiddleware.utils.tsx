@@ -1,6 +1,7 @@
 import { Button, notification } from 'antd'
 import React from 'react'
 import { openNotification as openNotificationDefault } from '@components/NotificationsContainer/utils'
+import i18n from 'i18next'
 
 export interface OpenNotificationType {
     key?: string
@@ -64,6 +65,9 @@ const TEXTS_FOR_UNSAVED_NOTIFICATION: Omit<OpenNotificationType, 'onOk' | 'onCan
 export const showUnsavedNotification = (onOk?: () => void, onCancel?: () => void) => {
     return openNotification({
         ...TEXTS_FOR_UNSAVED_NOTIFICATION,
+        okText: i18n.t('Save'),
+        cancelText: i18n.t('Cancel'),
+        message: i18n.t('There is unsaved data, save it ?'),
         onOk,
         onCancel
     })

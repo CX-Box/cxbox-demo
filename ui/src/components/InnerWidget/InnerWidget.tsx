@@ -12,9 +12,10 @@ import { AppWidgetMeta } from '@interfaces/widget'
 
 interface InnerWidgetProps {
     widgetName: string | undefined
+    hideHeader?: boolean
 }
 
-const InnerWidget: FunctionComponent<InnerWidgetProps> = ({ widgetName, ...props }) => {
+const InnerWidget: FunctionComponent<InnerWidgetProps> = ({ widgetName, hideHeader, ...props }) => {
     const widgetVisibility = useWidgetVisibility(widgetName)
     const widget = useAppSelector(state => selectWidget(state, widgetName)) as AppWidgetMeta
     const bc = useAppSelector(state => selectBc(state, widget?.bcName))
@@ -32,9 +33,10 @@ const InnerWidget: FunctionComponent<InnerWidgetProps> = ({ widgetName, ...props
 
     const widgetHasBc = widget.bcName !== null && widget.bcName !== ''
     const widgetElement = bc || !widgetHasBc ? chooseWidgetType(widget, customWidgets, props.children) : null
-    const widgetTitle = widget ? (
-        <WidgetTitle level={2} widgetName={widget.name} text={widget?.title} bcColor={widget?.options?.title?.bgColor} />
-    ) : null
+    const widgetTitle =
+        widget && !hideHeader ? (
+            <WidgetTitle level={2} widgetName={widget.name} text={widget?.title} bcColor={widget?.options?.title?.bgColor} />
+        ) : null
 
     return (
         <DebugWidgetWrapper meta={widget}>

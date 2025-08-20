@@ -44,6 +44,8 @@ export enum CustomWidgetTypes {
 export const removeRecordOperationWidgets: Array<WidgetTypes | string> = [
     WidgetTypes.List,
     CustomWidgetTypes.GroupingHierarchy,
+    CustomWidgetTypes.CardCarouselList,
+    CustomWidgetTypes.CardList,
     WidgetTypes.PickListPopup,
     WidgetTypes.AssocListPopup
 ]

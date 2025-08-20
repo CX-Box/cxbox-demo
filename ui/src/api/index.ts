@@ -2,7 +2,7 @@ import { Api as CXBoxApi, utils } from '@cxbox-ui/core'
 import { BcCountParamsMap, BcCountResponse } from '@interfaces/bcCount'
 import { keycloak, KEYCLOAK_MIN_VALIDITY } from '../keycloak'
 import axios, { AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios'
-import { __API__ } from '@constants'
+import { __API__, maxUrlLength } from '@constants'
 import { NotificationCheckNewResponse, NotificationCountResponse, NotificationsResponse } from '@interfaces/notification'
 import { fileControllerMapping } from '@constants/notification'
 import { LoginResponse } from '@interfaces/session'
@@ -215,4 +215,4 @@ if (!process.env['REACT_APP_NO_SSO']) {
     instance.interceptors.request.use(tokenInterceptor, () => Promise.reject())
 }
 
-export const CxBoxApiInstance = new Api(instance, 100, Object.values(FilterType))
+export const CxBoxApiInstance = new Api(instance, maxUrlLength, Object.values(FilterType))

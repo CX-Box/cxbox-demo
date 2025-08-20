@@ -38,6 +38,9 @@ const FileUploadContainer: React.FunctionComponent<Props> = ({
 }) => {
     const { t } = useTranslation()
     const { key: fieldName, fileIdKey, fileSource, snapshotKey, snapshotFileIdKey, preview } = meta
+
+    const [isFileDeleted, setIsFileDeleted] = useState(false)
+
     const widgetMeta = useAppSelector(state => state.view.widgets?.find(i => i.name === widgetName))
     const bcName = widgetMeta?.bcName as string
     const fieldDataItem = useAppSelector(state => (bcName && state.data[bcName]?.find(item => item.id === cursor)) || undefined)
@@ -67,6 +70,7 @@ const FileUploadContainer: React.FunctionComponent<Props> = ({
                     }
                 })
             )
+            setIsFileDeleted(!fileId)
         },
         [bcName, cursor, dispatch, fieldName, fileIdKey]
     )
@@ -159,10 +163,12 @@ const FileUploadContainer: React.FunctionComponent<Props> = ({
         return
     }
 
-    const downloadUrl = getDownloadUrl({
-        source: fileSource,
-        id: fileIdDelta || ((fileIdKey && fieldDataItem?.[fileIdKey as keyof typeof fieldDataItem]?.toString()) as string)
-    })
+    const downloadUrl = !isFileDeleted
+        ? getDownloadUrl({
+              source: fileSource,
+              id: fileIdDelta || ((fileIdKey && fieldDataItem?.[fileIdKey as keyof typeof fieldDataItem]?.toString()) as string)
+          })
+        : undefined
     const uploadUrl = applyParams(getFileUploadEndpoint(), { source: fileSource })
     const customRequest = useSingleUploadRequest()
     const fileName = fileNameDelta || fieldValue

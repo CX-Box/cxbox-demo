@@ -55,7 +55,7 @@
         "Error. File not loaded and no new row created": "Error. File not loaded and no new row created",
         "Error. File not loaded to current row": "Error. File not loaded to current row",
         "Skipped. The file upload was cancelled because a new file was added": "Skipped. The file upload was cancelled because a new file was added",
-        "number of total files": "{{number}} of {{total}} files",
+        "number of total": "{{number}} of {{total}}",
         "Field cannot be moved": "The \"{{label}}\" field cannot be moved",
         "Transfer space not available": "The location where you are trying to move the \"{{label}}\" field is not available",
         "Additional columns": "Additional columns",
@@ -124,6 +124,8 @@
         "File exported. To re-apply the mass operation to these rows, use 'Select from File' on Step 1.": "File exported. To re-apply the mass operation to these rows, use 'Select from File' on Step 1.",
         "Changing the active record is not available until the bulk operation is finished": "Changing the active record is not available until the bulk operation is finished",
         "There is unsaved data, save it?": "There is unsaved data, save it?",
-        "The form contains required fields that are not available for completion. Contact your administrator.": "The form contains required fields that are not available for completion. Contact your administrator."
+        "The form contains required fields that are not available for completion. Contact your administrator.": "The form contains required fields that are not available for completion. Contact your administrator.",
+        "This file type cannot be viewed": "This file type cannot be viewed",
+        "There is no file in this row": "There is no file in this row"
     }
 }

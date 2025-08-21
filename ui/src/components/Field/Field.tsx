@@ -22,6 +22,7 @@ import { RootState } from '@store'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import { useTranslation } from 'react-i18next'
 import FieldErrorPopupWrapper from '@components/FieldErrorPopupWrapper/FieldErrorPopupWrapper'
+import { customFields } from '@components/View/View'
 
 interface FieldOwnProps {
     widgetFieldMeta: interfaces.WidgetField
@@ -326,7 +327,7 @@ const Field: FunctionComponent<FieldProps> = ({
     const resultField = (
         <CustomizationContext.Consumer>
             {context => {
-                const CustomComponent = context.customFields?.[widgetFieldMeta.type]
+                const CustomComponent = (customFields as typeof context.customFields)?.[widgetFieldMeta.type]
 
                 if (CustomComponent) {
                     return (

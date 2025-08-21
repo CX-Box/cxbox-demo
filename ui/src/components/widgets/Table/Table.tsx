@@ -38,13 +38,14 @@ import {
 import { numberFieldTypes } from '@constants/field'
 import { aggCellBgColorRgba, totalRowKey } from './groupingHierarchy/constants'
 import { getAggCellBgOpacity } from './groupingHierarchy/utils/aggregation'
-import { selectBc, selectBcData, selectBcUrlRowMeta } from '@selectors/selectors'
+import { selectBc, selectBcData } from '@selectors/selectors'
 import ColumnOrderSettingModal from '@components/widgets/Table/components/ColumnOrderSettingModal'
 import StandardTable from '@components/widgets/Table/StandardTable'
 import MassLayout from '@components/widgets/Table/massOperations/Layout'
 import { useRowSelection } from '@components/widgets/Table/massOperations/hooks/useRowSelection'
 import ResultColumnTitle from '@components/widgets/Table/massOperations/ColumnTitle'
 import { FIELDS } from '@constants'
+import { useRowMetaWithCache } from '@hooks/useRowMetaWithCache'
 
 const ROW_KEY = FIELDS.TECHNICAL.ID
 
@@ -72,7 +73,7 @@ function Table<T extends CustomDataItem>({
     const { t } = useTranslation()
     const { bcName, name: widgetName } = unprocessedMeta
     const bc = useAppSelector(state => selectBc(state, bcName))
-    const bcRowMeta = useAppSelector(state => selectBcUrlRowMeta(state, bcName, true))
+    const bcRowMeta = useRowMetaWithCache(bcName, true)
     const selectedRow = useAppSelector(state => state.view.selectedRow)
     const bcData = useAppSelector(state => selectBcData(state, bcName)) as T[] | undefined
     const groupingHierarchyModeAggregate = !!(

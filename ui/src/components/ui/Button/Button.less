@@ -38,6 +38,11 @@
             border-radius: 2px;
             background-color: @primary-red;
 
+            &:hover {
+                border-color: @primary-red;
+                background: @primary-red;
+            }
+
             &:global(.ant-btn-primary) {
                 background-color: #176db7;
             }
@@ -50,21 +55,6 @@
 
             :global(.anticon) {
                 font-size: 20px;
-            }
-        }
-    }
-
-    &.formOperationRed {
-        &:global(.ant-btn) {
-            border-color: @primary-red;
-            border-radius: 2px;
-            background: @primary-red;
-            color: white;
-            box-shadow: none;
-
-            &:hover {
-                border-color: @primary-red;
-                background: @primary-red;
             }
         }
     }

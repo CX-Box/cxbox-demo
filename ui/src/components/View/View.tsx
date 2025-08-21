@@ -40,7 +40,7 @@ import DebugViewInfoLabel from '@components/DebugViewInfoLabel/DebugViewInfoLabe
 import FilePreview from '@components/widgets/FilePreview/FilePreview'
 import FilePreviewCard from '@components/FilePreviewCard/FilePreviewCard'
 
-const customFields = {
+export const customFields = {
     [FieldType.number]: Number,
     [FieldType.percent]: Number,
     [FieldType.money]: Number,
@@ -54,7 +54,7 @@ const customFields = {
     [CustomFieldTypes.SuggestionPickList]: SuggestionPickListField
 }
 
-const customWidgets: Partial<Record<CustomWidgetTypes | interfaces.WidgetTypes, interfaces.CustomWidgetDescriptor>> = {
+export const customWidgets: Partial<Record<CustomWidgetTypes | interfaces.WidgetTypes, interfaces.CustomWidgetDescriptor>> = {
     [WidgetTypes.Form]: { component: Form },
     [WidgetTypes.Info]: { component: Info },
     [WidgetTypes.List]: { component: Table },

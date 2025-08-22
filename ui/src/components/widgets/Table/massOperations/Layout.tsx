@@ -50,6 +50,7 @@ const Layout: React.FC<LayoutProps> = ({ widgetName, bcName, children }) => {
     const rowMeta = useAppSelector(state => selectBcUrlRowMeta(state, bcName))
     const bcData = useAppSelector(state => selectBcData(state, bcName))
     const bc = useAppSelector(state => selectBc(state, bcName))
+    const defaultSort = useAppSelector(state => state.screen.bo.bc[bcName]?.defaultSort)
     const flattenOperations = useMemo(() => {
         return rowMeta?.actions ? utils.flattenOperations(rowMeta?.actions) : []
     }, [rowMeta?.actions])
@@ -284,6 +285,12 @@ const Layout: React.FC<LayoutProps> = ({ widgetName, bcName, children }) => {
                                 }
                             })
                         )
+                        dispatch(
+                            actions.bcAddSorter({
+                                bcName,
+                                sorter: utils.parseSorters(defaultSort) || []
+                            })
+                        )
                         clearAllFilters()
                         setWasOperationCall(true)
                         moveToStep('Confirm operation')
@@ -385,6 +392,7 @@ const Layout: React.FC<LayoutProps> = ({ widgetName, bcName, children }) => {
             clearAllFilters,
             currentMassOperation,
             currentStep,
+            defaultSort,
             dispatch,
             exportTable,
             filters,

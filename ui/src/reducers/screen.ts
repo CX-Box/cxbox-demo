@@ -4,7 +4,14 @@ import { createReducer, isAnyOf } from '@reduxjs/toolkit'
 import { FilterGroup } from '@interfaces/filters'
 import { MassStepType } from '@components/widgets/Table/massOperations/constants'
 
-export type ViewerModeMass = { mode: 'mass'; step?: MassStepType; operationType: string; widgetName: string; bcName: string }
+export type ViewerModeMass = {
+    mode: 'mass'
+    step?: MassStepType
+    operationType: string
+    widgetName: string
+    bcName: string
+    resultFilterEnabled?: boolean
+}
 
 export interface ScreenState extends interfaces.ScreenState {
     menuCollapsed: boolean
@@ -116,6 +123,12 @@ const screenReducerBuilder = reducers
 
         state.viewerMode[bcName] = state.viewerMode[bcName] ?? ({} as (typeof state.viewerMode)[string])
         state.viewerMode[bcName]!.step = step
+    })
+    .addCase(actions.setMassResultFilterEnabled, (state, action) => {
+        const { bcName, enabled } = action.payload
+
+        state.viewerMode[bcName] = state.viewerMode[bcName] ?? ({} as (typeof state.viewerMode)[string])
+        state.viewerMode[bcName]!.resultFilterEnabled = enabled
     })
     .addMatcher(isAnyOf(actions.selectScreen), (state, action) => {
         state.viewerMode = initialState.viewerMode

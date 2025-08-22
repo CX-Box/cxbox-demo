@@ -34,10 +34,11 @@ export function useArrowPagination(widget?: WidgetMeta) {
     }
 
     const [changePageType, setChangePageType] = useState<'previous' | 'next' | null>(null)
+    const currentPageRef = useRef<number | null>(null)
 
     // sets the cursor to the last record when moving to the previous page
     useEffect(() => {
-        if (changePageType === 'previous' && data?.length && !bc?.loading) {
+        if (changePageType === 'previous' && data?.length && !bc?.loading && page === currentPageRef.current) {
             dispatch(
                 actions.bcSelectRecord({
                     bcName: bc?.name as string,
@@ -46,7 +47,7 @@ export function useArrowPagination(widget?: WidgetMeta) {
             )
             setChangePageType(null)
         }
-    }, [bc?.loading, bc?.name, changePageType, data, dispatch])
+    }, [bc?.loading, bc?.name, changePageType, data, dispatch, page])
 
     const onChange = (index: number) => {
         if (bc && data) {
@@ -54,9 +55,11 @@ export function useArrowPagination(widget?: WidgetMeta) {
 
             if (index === limit * (page - 1) - 1) {
                 dispatch(actions.bcChangePage({ bcName: bc.name as string, page: page - 1, widgetName: widget?.name }))
+                currentPageRef.current = page - 1
                 setChangePageType('previous')
             } else if (index === limit * page) {
                 dispatch(actions.bcChangePage({ bcName: bc.name as string, page: page + 1, widgetName: widget?.name }))
+                currentPageRef.current = page + 1
                 setChangePageType('next')
             } else {
                 dispatch(
@@ -122,6 +125,6 @@ export function useArrowPagination(widget?: WidgetMeta) {
         currentIndex: getCurrentIndex(),
         disabledLeft: isLeftButtonDisabled(),
         disabledRight: isRightButtonDisabled(),
-        hide: +total === 1
+        hide: !(+total > 1)
     }
 }

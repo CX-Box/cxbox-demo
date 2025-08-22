@@ -13,12 +13,11 @@ import {
     getFilesFromDataTransfer,
     isFileUploadComplete
 } from '@components/Operations/components/FileUpload/FileUpload.utils'
-import { useAppSelector } from '@store'
-import { buildBcUrl } from '@utils/buildBcUrl'
 import { RowMetaField } from '@interfaces/rowMeta'
 import { UPLOAD_TYPE } from '@components/Operations/components/FileUpload/FileUpload.constants'
 import Upload from '@components/Upload'
 import { WidgetMeta } from '@cxbox-ui/core'
+import { useRowMetaWithCache } from '@hooks/useRowMetaWithCache'
 
 interface FileUploadProps {
     widget: WidgetMeta
@@ -32,12 +31,11 @@ export const FileUpload = ({ mode, widget, operationInfo, children, uploadType =
     const { t } = useTranslation()
     const uploadUrl = getFileUploadEndpoint()
     const bcName = widget.bcName
-    const bcUrl = buildBcUrl(bcName, true)
-    const rowMeta = useAppSelector(state => state.view.rowMeta[bcName]?.[bcUrl])
+    const rowMeta = useRowMetaWithCache(bcName, true)
     const rowMetaField = rowMeta?.fields.find(field => field.key === operationInfo?.fieldKey)
     const fileAccept = (rowMetaField as RowMetaField)?.fileAccept
-    const disabled = !rowMetaField
-    const available = rowMeta?.actions.find(action => action.type === 'associate') !== undefined
+    const available = rowMeta?.actions.find(action => action.type === operationInfo?.actionKey) !== undefined
+    const disabled = available && ((operationInfo?.fieldKey && !rowMetaField) || !rowMeta)
 
     const {
         initializeNewAddedFile,
@@ -105,7 +103,7 @@ export const FileUpload = ({ mode, widget, operationInfo, children, uploadType =
             })
     }
 
-    return available ? (
+    return (
         <>
             <div onDrop={disabled ? undefined : handleDrop}>
                 {mode === 'drag' ? (
@@ -133,5 +131,5 @@ export const FileUpload = ({ mode, widget, operationInfo, children, uploadType =
                 data-test-widget-name={widget?.name}
             />
         </>
-    ) : null
+    )
 }

@@ -23,3 +23,5 @@ export const FIELDS = {
         MASS_IDS: 'massIds_'
     }
 } as const
+
+export const maxUrlLength = 2000

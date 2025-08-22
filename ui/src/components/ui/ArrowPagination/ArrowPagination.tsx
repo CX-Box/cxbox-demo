@@ -56,7 +56,7 @@ function ArrowPagination({
     return !hide ? (
         <div className={cn(styles[mode])}>
             <ArrowButton icon="left" onClick={onPrevious} disabled={disabledLeft} />
-            {t('number of total files', {
+            {t('number of total', {
                 number: currentIndex + 1,
                 total: total
             })}

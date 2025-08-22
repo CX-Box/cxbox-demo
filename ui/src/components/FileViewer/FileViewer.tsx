@@ -103,7 +103,14 @@ const FileViewer = forwardRef<FileViewerHandlers | undefined, FileViewerProps>(
                     pageWidth={pageWidth}
                 />
             ) : null,
-            other: <Empty type={getExtension(fileName)} size="big" mode={viewerMode} text={t('This file type cannot be viewed')} />
+            other: (
+                <Empty
+                    type={getExtension(fileName)}
+                    size="big"
+                    mode={viewerMode}
+                    text={t(blobUrl ? 'This file type cannot be viewed' : 'There is no file in this row')}
+                />
+            )
         }
 
         return (

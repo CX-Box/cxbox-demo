@@ -105,7 +105,7 @@ function FileViewerContainer({ isInline, widgetName, fieldKey }: FileViewerConta
                         title={preview?.titleKey ? record?.[preview?.titleKey] : trimString(fileName)}
                         center={
                             <div className={styles.headerCenter}>
-                                {t('number of total files', {
+                                {t('number of total', {
                                     number: paginationProps.currentIndex + 1,
                                     total: paginationProps.total
                                 })}

@@ -29,6 +29,7 @@
   ],
   "options": {
     "stats": {
+      "bcCursor": "show",
       "valueFieldKey": "value",
       "titleFieldKey": "title",
       "iconFieldKey": "icon",

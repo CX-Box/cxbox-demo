@@ -33,9 +33,12 @@ export const useProportionalWidgetCols = () => {
 export const useVisibleFlattenWidgetFields = <
     T extends Omit<AppWidgetMeta, 'fields' | 'type'> & { fields: WidgetFieldsOrBlocks<WidgetFieldBase> }
 >(
-    meta: T
+    meta: T,
+    checkHiddenFieldByRowMeta?: boolean
 ) => {
-    const rowMetaFields = useAppSelector(state => selectBcUrlRowMeta(state, meta.bcName, true)?.fields)
+    const rowMetaFields = useAppSelector(state =>
+        checkHiddenFieldByRowMeta ? selectBcUrlRowMeta(state, meta.bcName, true)?.fields : undefined
+    )
 
     return useMemo(() => {
         return meta.fields
@@ -47,9 +50,11 @@ export const useVisibleFlattenWidgetFields = <
                 }
             })
             .filter(fieldMeta => {
-                return !isHiddenFieldByMeta(fieldMeta) && !isHiddenFieldByRowMeta(fieldMeta.key, rowMetaFields)
+                return (
+                    !isHiddenFieldByMeta(fieldMeta) && (!checkHiddenFieldByRowMeta || !isHiddenFieldByRowMeta(fieldMeta.key, rowMetaFields))
+                )
             })
-    }, [meta.fields, rowMetaFields])
+    }, [meta.fields, checkHiddenFieldByRowMeta, rowMetaFields])
 }
 
 export const useProportionalWidgetGrid = <
@@ -57,7 +62,7 @@ export const useProportionalWidgetGrid = <
 >(
     meta: T
 ) => {
-    const visibleFlattenWidgetFields = useVisibleFlattenWidgetFields(meta)
+    const visibleFlattenWidgetFields = useVisibleFlattenWidgetFields(meta, true)
     const rows = meta.options?.layout?.rows
     const { calculateColSpan } = useProportionalWidgetCols()
 

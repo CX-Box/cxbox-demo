@@ -2,7 +2,6 @@ import React from 'react'
 import { Divider, Empty } from 'antd'
 import { AdditionalInfoWidgetMeta, AdditionalListWidgetMeta, AppWidgetTableMeta, CustomWidgetTypes } from '@interfaces/widget'
 import { useAppSelector } from '@store'
-import { buildBcUrl } from '@utils/buildBcUrl'
 import { AdditionalInfoItem } from '@components/widgets/AdditionalInfo/AdditionalInfoItem'
 import { StandardWrapper } from '@components/widgets/AdditionalInfo/StandardWrapper'
 import { DataItem } from '@cxbox-ui/core'
@@ -24,8 +23,6 @@ export const AdditionalListWidget: React.FC<Props> = ({ meta }) => {
         | AdditionalInfoWidgetMeta
         | undefined
     const additionalInfoBcName = additionalInfoMeta?.bcName as string
-    const bcUrl = buildBcUrl(additionalInfoBcName, true)
-    const rowMeta = useAppSelector(state => state.view.rowMeta[additionalInfoBcName]?.[bcUrl])
     const bcData = useAppSelector(state => state.data[additionalInfoBcName] as DataItem[] | undefined)
     const showHeader = meta.fields?.some(item => (item as WidgetListField).title)
 
@@ -45,7 +42,7 @@ export const AdditionalListWidget: React.FC<Props> = ({ meta }) => {
                                     return (
                                         <React.Fragment key={dataItem.id}>
                                             <DebugWidgetWrapper meta={additionalInfoMeta}>
-                                                <AdditionalInfoItem meta={additionalInfoMeta} rowMeta={rowMeta} cursor={dataItem.id} />
+                                                <AdditionalInfoItem meta={additionalInfoMeta} cursor={dataItem.id} />
                                             </DebugWidgetWrapper>
                                             <Divider className={styles.divider} />
                                         </React.Fragment>

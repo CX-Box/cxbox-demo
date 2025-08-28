@@ -23,7 +23,7 @@ function OperationsGroup({ group, widgetType, onClick, loading, getButtonProps, 
 
     const operationsMenu = (
         <div className={styles.overlayContainer}>
-            <Menu>
+            <Menu selectable={false}>
                 {operations.map(operation => {
                     const inProgress = isOperationInProgress(operation.type)
 

@@ -365,6 +365,7 @@ const Field: FunctionComponent<FieldProps> = ({
 
 function mapStateToProps(state: RootState, ownProps: FieldOwnProps) {
     const bcUrl = buildBcUrl(ownProps.bcName, true)
+    const bcCursor = state.screen.bo.bc[ownProps.bcName]?.cursor
     const rowMeta = bcUrl ? state.view.rowMeta[ownProps.bcName]?.[bcUrl] : undefined
     const rowFieldMeta = rowMeta?.fields.find(field => field.key === ownProps.widgetFieldMeta.key) as interfaces.RowMetaField
     const missing =
@@ -373,7 +374,8 @@ function mapStateToProps(state: RootState, ownProps: FieldOwnProps) {
                   ownProps.widgetFieldMeta.key
               ]
             : (state.view.pendingValidationFails?.[ownProps.widgetFieldMeta.key] as string)
-    const metaError = (missing as string) || (rowMeta?.errors?.[ownProps.widgetFieldMeta.key] as string)
+    const metaError =
+        (missing as string) || (ownProps.cursor === bcCursor ? (rowMeta?.errors?.[ownProps.widgetFieldMeta.key] as string) : '')
     const pendingValue = state.view.pendingDataChanges[ownProps.bcName]?.[ownProps.cursor]?.[ownProps.widgetFieldMeta.key]
     const widget = state.view.widgets.find(item => item.name === ownProps.widgetName)
     const showErrorPopup = widget?.type !== interfaces.WidgetTypes.Form && !ownProps.disableHoverError

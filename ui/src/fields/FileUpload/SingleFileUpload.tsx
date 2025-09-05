@@ -105,7 +105,9 @@ const SingleFileUpload: React.FunctionComponent<SingleFileUploadProps> = ({
             })}
         >
             {disabled ? (
-                <span className={styles.disabled}>{controls.downloadLink}</span>
+                downloadUrl ? (
+                    <span className={styles.disabled}>{controls.downloadLink}</span>
+                ) : null
             ) : downloadUrl ? (
                 [controls.downloadLink, controls.uploadButton, controls.deleteButton]
             ) : (

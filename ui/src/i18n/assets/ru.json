@@ -57,7 +57,7 @@
         "Error. File not loaded and no new row created": "Ошибка загрузки. Файл не загружен и не создана новая строка",
         "Error. File not loaded to current row": "Ошибка загрузки. Файл не загружен для текущей записи",
         "Skipped. The file upload was cancelled because a new file was added": "Файл пропущен. Загрузка файла отменена, потому что был добавлен новый файл",
-        "number of total files": "{{number}} of {{total}} files",
+        "number of total": "{{number}} of {{total}}",
         "Field cannot be moved": "Поле \"{{label}}\" нельзя переместить",
         "Transfer space not available": "Место в которое вы пытаетесь перенести поле \"{{label}}\" не доступно",
         "Additional columns": "Дополнительные колонки",
@@ -126,6 +126,8 @@
         "File exported. To re-apply the mass operation to these rows, use 'Select from File' on Step 1.": "Файл экспортирован. Для того чтобы применить массовую операцию к этим строкам, воспользуйтесь кнопкой 'Загрузить из файла' на Этапе 1.",
         "Changing the active record is not available until the bulk operation is finished": "Изменение активной записи недоступно до тех пор, пока не будет завершена массовая операция",
         "There is unsaved data, save it?": "Есть несохраненные данные, сохранить их?",
-        "The form contains required fields that are not available for completion. Contact your administrator.": "Форма содержит обязательные поля, недоступные для заполнения. Обратитесь к администратору."
+        "The form contains required fields that are not available for completion. Contact your administrator.": "Форма содержит обязательные поля, недоступные для заполнения. Обратитесь к администратору.",
+        "This file type cannot be viewed": "Формат файла не поддерживается для просмотра",
+        "There is no file in this row": "В этой строке нет файла"
     }
 }

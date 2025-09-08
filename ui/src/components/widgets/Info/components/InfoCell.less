@@ -17,8 +17,8 @@
 }
 
 .fieldData :global([class^='ReadOnlyField']),
-.fieldData :global([class*='_readOnly']),
-.fieldData :global([class*='_recordValue']) {
+.fieldData :global([class$='_readOnly']),
+.fieldData :global([class$='_recordValue']) {
     line-height: 20px;
     color: @main-light-mode;
 }

@@ -30,7 +30,7 @@ import { selectBcUrlRowMeta } from '@selectors/selectors'
  *
  * @category Epics
  */
-export const bcSaveDataEpic: RootEpic = (action$, state$, { api }) =>
+export const bcSaveDataEpic: RootEpic = (action$, state$, { api, utils: internalUtils }) =>
     action$.pipe(
         filter(actions.sendOperation.match),
         filter(action => utils.matchOperationRole(OperationTypeCrud.save, action.payload, state$.value as any)), // TODO remove as any
@@ -69,7 +69,10 @@ export const bcSaveDataEpic: RootEpic = (action$, state$, { api }) =>
 
             const pendingChanges = utils.removeDisabledFields(state.view.pendingDataChanges[bcName]?.[cursor], rowMeta)
 
-            const fetchChildrenBcData = Object.entries(utils.getBcChildren(bcName, state.view.widgets, state.screen.bo.bc))
+            const lazyWidgetNames = utils.getWidgetsForLazyLoad(state$.value.view.widgets, internalUtils?.getInternalWidgets)
+            const fetchChildrenBcData = Object.entries(
+                utils.getEagerBcChildren(bcName, state.view.widgets, state.screen.bo.bc, lazyWidgetNames, false)
+            )
                 .filter(entry => {
                     const [childBcName] = entry
                     // Solves the problem of calling data for rows that can be changed/deleted in the next action

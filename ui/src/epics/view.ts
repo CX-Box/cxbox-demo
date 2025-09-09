@@ -9,6 +9,7 @@ import {
     OperationPreInvoke,
     OperationTypeCrud,
     PendingValidationFailsFormat,
+    PopupWidgetTypes,
     utils
 } from '@cxbox-ui/core'
 import { EMPTY_ARRAY, FIELDS } from '@constants'
@@ -21,6 +22,7 @@ import { getGroupingHierarchyWidget } from '@utils/groupingHierarchy'
 import { DataItem } from '@cxbox-ui/schema'
 import { postInvokeHasRefreshBc } from '@utils/postInvokeHasRefreshBc'
 import { findWidgetHasCount } from '@components/ui/Pagination/utils'
+import { getInternalWidgets } from '@utils/getInternalWidgets'
 
 const getWidgetsForRowMetaUpdate = (state: RootState, activeBcName: string) => {
     const { widgets, pendingDataChanges } = state.view
@@ -483,6 +485,44 @@ const collapseWidgetsByDefaultEpic: RootEpic = (action$, state$, { api }) =>
         })
     )
 
+const checkWidgetsEpic: RootEpic = (action$, state$, { api }) =>
+    action$.pipe(
+        filter(actions.selectView.match),
+        mergeMap(() => {
+            const widgets = state$.value.view.widgets
+            const widgetsMap = widgets.reduce((acc, widget) => {
+                acc[widget.name] = widget
+                return acc
+            }, {} as Record<string, (typeof widgets)[0]>)
+            const popupInternalWidgetsMap = widgets
+                .filter(widget => PopupWidgetTypes.includes(widget.type))
+                .reduce((acc, widget) => {
+                    const internalWidgets = getInternalWidgets([widget])
+
+                    if (internalWidgets.length > 0) {
+                        acc[widget.name] = internalWidgets
+                    }
+
+                    return acc
+                }, {} as Record<string, string[]>)
+
+            Object.entries(popupInternalWidgetsMap).forEach(([widgetName, internalWidgets]) => {
+                internalWidgets.forEach(internalWidget => {
+                    const popupWidget = widgetsMap[widgetName]
+                    const currentInternalWidget = widgetsMap[internalWidget]
+
+                    if (popupWidget?.name && currentInternalWidget?.name && popupWidget.bcName !== currentInternalWidget.bcName) {
+                        console.error(
+                            `Popup Widget "${popupWidget.name}" has an internal widget "${currentInternalWidget.name}" with another BC, this is not supported."`
+                        )
+                    }
+                })
+            })
+
+            return EMPTY
+        })
+    )
+
 export const viewEpics = {
     bcFetchCountEpic,
     sendOperationEpic,
@@ -492,5 +532,6 @@ export const viewEpics = {
     closeFormPopup,
     updateRowMetaForRelatedBcEpic,
     applyPendingPostInvokeEpic,
-    collapseWidgetsByDefaultEpic
+    collapseWidgetsByDefaultEpic,
+    checkWidgetsEpic
 }

@@ -11,6 +11,7 @@ import org.demo.service.cxbox.anysource.clientstats.ClientStatsService;
 import org.demo.conf.cxbox.extension.jobRunr.service.job.JobAdminService;
 import org.demo.service.cxbox.anysource.clientstatspie.ClientStatsPieService;
 import org.demo.service.cxbox.anysource.dadatacompany.CompanyService;
+import org.demo.service.cxbox.anysource.meetingsstats.MeetingStatsService;
 import org.demo.service.cxbox.anysource.lov.LovReadService;
 import org.demo.service.cxbox.anysource.saledualstats.SaleStatsProductDualService;
 import org.demo.service.cxbox.anysource.saleproductstats.SaleStatsProductService;
@@ -54,9 +55,11 @@ public enum CxboxRestController implements EnumBcIdentifier {
 		contactEdit(clientEdit, ClientContactService.class),
 		contactEditAssoc(clientEdit, ClientContactService.class),
 		companySuggestionPickList(clientEdit, CompanyService.class),
-	meeting(MeetingReadService.class),
-		meetingDocumentEdit(meeting, MeetingDocumentsWriteService.class),
-	meetingEdit(MeetingWriteService.class),
+			meeting(MeetingReadService.class),
+			meetingDocumentEdit(meeting, MeetingDocumentsWriteService.class),
+	meetingStats(MeetingStatsService.class),
+
+	meetingEdit(meetingStats,MeetingWriteService.class),
 	contactAssocListPopup(meetingEdit, ContactMultivalueService.class),
 		responsiblePickListPopup(meetingEdit, ResponsiblePickListService.class),
 		clientPickListPopup(meetingEdit, ClientPickListService.class),

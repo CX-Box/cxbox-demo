@@ -10,6 +10,11 @@
       "gridWidth": 24
     },
     {
+      "widgetName": "meetingStats",
+      "position": 1,
+      "gridWidth": 24
+    },
+    {
       "widgetName": "meetingList",
       "position": 10,
       "gridWidth": 24

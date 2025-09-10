@@ -1,6 +1,7 @@
 package org.demo.service.cxbox.anysource.meetingsstats;
 
 import java.util.Objects;
+import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import org.cxbox.core.controller.param.QueryParameters;
 import org.cxbox.core.crudma.bc.BusinessComponent;
@@ -13,7 +14,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -90,7 +90,7 @@ public class MeetingStatsDAO extends AbstractAnySourceBaseDAO<MeetingStatsDTO> {
 			long allCount, long notStartedCount, long inCompletionCount,
 			long inProgressCount, long completedCount, long cancelledCount) {
 
-		return List.of(
+		return Stream.of(
 						createMeetingStatsDTO("All Meetings", allCount, "#779FE9", "team", ALL, "All meetings"),
 						createMeetingStatsDTO(
 								"Not Started",
@@ -111,9 +111,9 @@ public class MeetingStatsDAO extends AbstractAnySourceBaseDAO<MeetingStatsDTO> {
 						createMeetingStatsDTO("In Progress", inProgressCount, "#3A76E4", "plus-circle", IN_PROGRESS, "Meetings in progress"),
 						createMeetingStatsDTO("Completed", completedCount, "#2769E1", "check", COMPLETED, "Completed meetings"),
 						createMeetingStatsDTO("Cancelled", cancelledCount, "#145CDE", "stop", CANCELLED, "Cancelled meetings")
-				).stream()
+				)
 				.filter(dto -> dto.getValue() > 0)
-				.collect(Collectors.toList());
+				.toList();
 	}
 
 	private MeetingStatsDTO createMeetingStatsDTO(String title, long value, String color,

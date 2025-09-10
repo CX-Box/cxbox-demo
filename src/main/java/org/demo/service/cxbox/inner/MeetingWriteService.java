@@ -41,6 +41,7 @@ import org.demo.dto.cxbox.inner.MeetingDTO;
 import org.demo.dto.cxbox.inner.MeetingDTO_;
 import org.demo.entity.Contact;
 import org.demo.entity.Meeting;
+import org.demo.entity.Meeting_;
 import org.demo.entity.enums.MeetingStatus;
 import org.demo.repository.ClientRepository;
 import org.demo.repository.ContactRepository;
@@ -49,6 +50,7 @@ import org.demo.repository.core.UserRepository;
 import org.demo.service.mail.MailSendingService;
 import org.demo.service.statemodel.MeetingStatusModelActionProvider;
 import org.jobrunr.scheduling.BackgroundJob;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S3252", "java:S1186", "java:S1170"})
@@ -76,6 +78,28 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 
 	@Getter(onMethod_ = @Override)
 	private final Class<MeetingWriteMeta> meta = MeetingWriteMeta.class;
+
+	@Override
+	protected Specification<Meeting> getParentSpecification(BusinessComponent bc) {
+		if (Objects.equals(bc.getParentName(), CxboxRestController.meetingStats.getName())) {
+			return switch (bc.getParentId()) {
+				case "2" -> createStatusSpecification(bc, MeetingStatus.NOT_STARTED);
+				case "3" -> createStatusSpecification(bc, MeetingStatus.IN_COMPLETION);
+				case "4" -> createStatusSpecification(bc, MeetingStatus.IN_PROGRESS);
+				case "5" -> createStatusSpecification(bc, MeetingStatus.COMPLETED);
+				case "6" -> createStatusSpecification(bc, MeetingStatus.CANCELLED);
+				default -> (root, cq, cb) -> cb.and();
+			};
+		}
+		return (root, cq, cb) -> cb.and();
+	}
+
+	private Specification<Meeting> createStatusSpecification(BusinessComponent bc, MeetingStatus status) {
+		return (root, cq, cb) -> cb.and(
+				super.getParentSpecification(bc).toPredicate(root, cq, cb),
+				cb.equal(root.get(Meeting_.status), status)
+		);
+	}
 
 	@Override
 	protected CreateResult<MeetingDTO> doCreateEntity(Meeting entity, BusinessComponent bc) {

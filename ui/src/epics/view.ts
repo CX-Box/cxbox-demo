@@ -67,23 +67,46 @@ export const updateRowMetaForRelatedBcEpic: RootEpic = (action$, state$) =>
 
 const bcFetchCountEpic: RootEpic = (action$, state$, { api }) =>
     action$.pipe(
-        filter(actions.bcFetchDataSuccess.match),
+        filter(isAnyOf(actions.bcFetchDataSuccess, actions.selectView)),
         mergeMap(action => {
-            const state = state$.value
-            const widgetWithCount = findWidgetHasCount(action.payload.bcName, state.view.widgets)
+            if (actions.bcFetchDataSuccess.match(action)) {
+                const state = state$.value
+                const widgetWithCount = findWidgetHasCount(action.payload.bcName, state.view.widgets)
 
-            if (!widgetWithCount) {
-                return EMPTY
+                if (!widgetWithCount) {
+                    return EMPTY
+                }
+
+                const bcName = widgetWithCount.bcName
+                const screenName = state.screen.screenName
+                const filters = utils.getFilters(state.screen.filters[bcName] || EMPTY_ARRAY)
+                const bcUrl = buildBcUrl(bcName)
+                return api.fetchBcCount(screenName, bcUrl, filters).pipe(
+                    mergeMap(({ data }) => of(setBcCount({ bcName, count: data }))),
+                    catchError((error: AxiosError) => utils.createApiErrorObservable(error))
+                )
             }
-
-            const bcName = widgetWithCount.bcName
-            const screenName = state.screen.screenName
-            const filters = utils.getFilters(state.screen.filters[bcName] || EMPTY_ARRAY)
-            const bcUrl = buildBcUrl(bcName)
-            return api.fetchBcCount(screenName, bcUrl, filters).pipe(
-                mergeMap(({ data }) => of(setBcCount({ bcName, count: data }))),
-                catchError((error: AxiosError) => utils.createApiErrorObservable(error))
-            )
+            if (actions.selectView.match(action)) {
+                const state = state$.value
+                const widgets = state.view.widgets
+                const data = state.data
+                const bcList = [...new Set(widgets.map(widget => widget.bcName))]
+                const missingCountsBcNames = bcList.filter(
+                    bc => findWidgetHasCount(bc, widgets) && !(bc in state.view.bcRecordsCount) && bc in data
+                )
+                return concat(
+                    ...missingCountsBcNames.map(bc => {
+                        const screenName = state.screen.screenName
+                        const filters = utils.getFilters(state.screen.filters[bc] || EMPTY_ARRAY)
+                        const bcUrl = buildBcUrl(bc)
+                        return api.fetchBcCount(screenName, bcUrl, filters).pipe(
+                            mergeMap(({ data }) => of(setBcCount({ bcName: bc, count: data }))),
+                            catchError((error: AxiosError) => utils.createApiErrorObservable(error))
+                        )
+                    })
+                )
+            }
+            return EMPTY
         }),
         catchError(err => {
             console.error(err)

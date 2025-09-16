@@ -5,7 +5,7 @@ import { actions } from '@actions'
 import { AxiosError } from 'axios'
 import { AnyAction } from '@reduxjs/toolkit'
 import { buildBcUrl } from '@utils/buildBcUrl'
-import { selectBcUrlRowMeta } from '@selectors/selectors'
+import { selectBcNameFromPopupData, selectBcUrlRowMeta } from '@selectors/selectors'
 
 // TODO update this epic in the kernel to the current implementation
 /**
@@ -69,9 +69,13 @@ export const bcSaveDataEpic: RootEpic = (action$, state$, { api, utils: internal
 
             const pendingChanges = utils.removeDisabledFields(state.view.pendingDataChanges[bcName]?.[cursor], rowMeta)
 
-            const lazyWidgetNames = utils.getWidgetsForLazyLoad(state$.value.view.widgets, internalUtils?.getInternalWidgets)
+            const lazyWidgetNames = utils.getWidgetsForLazyLoad(
+                state$.value.view.widgets,
+                internalUtils?.getInternalWidgets,
+                selectBcNameFromPopupData(state)
+            )
             const fetchChildrenBcData = Object.entries(
-                utils.getEagerBcChildren(bcName, state.view.widgets, state.screen.bo.bc, lazyWidgetNames, false)
+                utils.getEagerBcChildren(bcName, state.view.widgets, state.screen.bo.bc, lazyWidgetNames)
             )
                 .filter(entry => {
                     const [childBcName] = entry

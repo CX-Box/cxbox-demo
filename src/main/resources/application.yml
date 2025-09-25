@@ -51,6 +51,10 @@ cxbox:
     app-info-description: ${APP_INFO_DESCRIPTION:v2.0.15}
     app-info-color: ${APP_INFO_COLOR:#3a6e49}
     app-export-excel-limit: 500
+  logging:
+    global-handler:
+      business-exception:
+        log-level: debug
 
 server:
   port: 8080

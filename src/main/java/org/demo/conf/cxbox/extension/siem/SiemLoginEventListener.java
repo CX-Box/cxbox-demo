@@ -10,7 +10,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.cxbox.core.util.session.SessionService;
 import org.demo.conf.cxbox.customization.role.LoginEvent;
-import org.demo.conf.cxbox.extension.siem.SecurityLogger.SecurityLogLevel;
+import org.springframework.boot.logging.LogLevel;
 import org.springframework.context.ApplicationListener;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -26,12 +26,13 @@ public class SiemLoginEventListener implements ApplicationListener<LoginEvent<?>
 
 	private final ObjectMapper cxboxObjectMapper;
 
+
 	@Override
 	@SneakyThrows
 	public void onApplicationEvent(@NonNull LoginEvent<?> event) {
-		SecurityLogger.SecurityLogLevel level = event.getException() != null
-				? SecurityLogger.SecurityLogLevel.ERROR
-				: SecurityLogger.SecurityLogLevel.INFO;
+		LogLevel level = event.getException() != null
+				? logger.getLevelLogException(event.getException())
+				: LogLevel.INFO;
 		logger.logSecurityEvent(
 				level,
 				"login",
@@ -40,7 +41,7 @@ public class SiemLoginEventListener implements ApplicationListener<LoginEvent<?>
 				String.join(",", sessionService.getSessionUserRoles()),
 				sessionService.getSessionId(),
 				getUserIp(),
-				SecurityLogLevel.ERROR.equals(level) ? writeErrorAsString(event.getException())
+				LogLevel.ERROR.equals(level) ? writeErrorAsString(event.getException())
 						: cxboxObjectMapper.writeValueAsString(event.getResult().getUserId())
 		);
 	}

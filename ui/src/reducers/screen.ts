@@ -1,4 +1,4 @@
-import { BcMetaState, interfaces, reducers } from '@cxbox-ui/core'
+import { BcFilter, BcMeta, BcMetaState, BcSorter, interfaces, reducers, utils } from '@cxbox-ui/core'
 import { actions } from '@actions'
 import { createReducer, isAnyOf } from '@reduxjs/toolkit'
 import { FilterGroup } from '@interfaces/filters'
@@ -129,6 +129,38 @@ const screenReducerBuilder = reducers
 
         state.viewerMode[bcName] = state.viewerMode[bcName] ?? ({} as (typeof state.viewerMode)[string])
         state.viewerMode[bcName]!.resultFilterEnabled = enabled
+    })
+    // TODO delete after execution CXBOX-1090
+    .replaceCase(actions.selectScreen, (state, action) => {
+        const { screen } = action.payload
+
+        const bcDictionary: Record<string, BcMeta> = {}
+        const bcSorters: Record<string, BcSorter[]> = {}
+        const bcFilters: Record<string, BcFilter[]> = {}
+
+        screen.meta?.bo.bc?.forEach(item => {
+            bcDictionary[item.name] = item
+
+            const sorter = !state.sorters[item.name] ? utils.parseSorters(item.defaultSort) : null
+            const filter = utils.parseFilters(item.defaultFilter)
+
+            if (sorter) {
+                bcSorters[item.name] = sorter
+            }
+            if (filter) {
+                bcFilters[item.name] = filter
+            }
+        })
+
+        Object.assign(state, {
+            screenName: screen.name,
+            primaryView: screen.meta?.primary ?? state.primaryView,
+            primaryViews: screen.meta?.primaries ?? state.primaryViews,
+            views: screen.meta?.views ?? state.views,
+            bo: { activeBcName: null, bc: bcDictionary },
+            sorters: { ...state.sorters, ...bcSorters },
+            filters: { ...state.filters, ...bcFilters }
+        })
     })
     .addMatcher(isAnyOf(actions.selectScreen), (state, action) => {
         state.viewerMode = initialState.viewerMode

@@ -23,3 +23,5 @@ export const FIELDS = {
         MASS_IDS: 'massIds_'
     }
 } as const
+
+export const WHEN_EDITABLE_FIELD_IS_DISABLED_THEN_FONT_OPACITY = 1

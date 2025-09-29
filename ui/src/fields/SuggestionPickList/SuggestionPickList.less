@@ -26,13 +26,14 @@
 
 .arrow, .clear {
     position: absolute;
+    outline: none;
     top: 50%;
     right: 10px;
-    height: 12px;
-    margin-top: -8px;
-    font-size: 12px;
-
-    color: rgba(0, 0, 0, 0.25);
+    margin-top: calc(-0.66 * var(--field-select-icon-size));
+    font-size: var(--field-select-icon-size);
+    color: var(--field-icon-color);
+    width: var(--field-select-icon-size);
+    height: var(--field-select-icon-size);
 
     svg {
         transition: transform 0.3s;

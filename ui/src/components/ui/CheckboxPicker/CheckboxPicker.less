@@ -1,26 +1,10 @@
 @import '@assets/styles/theme.less';
 
-.container :global {
+.container:not(.readOnly) :global {
     .ant-checkbox-wrapper {
         display: flex;
         align-items: center;
-        min-height: 32px;
-        font-style: normal;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: normal;
-
-        .ant-checkbox {
-            top: 0;
-
-            + span {
-                color: #bfbfbf;
-            }
-        }
-    }
-
-    .ant-checkbox-wrapper-disabled {
-        min-height: auto;
+        min-height: var(--field-height);
     }
 }
 

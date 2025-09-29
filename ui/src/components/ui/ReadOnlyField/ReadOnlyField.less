@@ -1,9 +1,8 @@
 .readOnlyField {
     display: inline-block;
     max-width: 100%; // IE11 text wrap
-    font-size: 14px;
-    line-height: 16px;
-    color: rgba(0, 0, 0, 0.65);
+    font-size: var(--field-read-font-size);
+    color: var(--field-read-color);
 }
 
 td .readOnlyField {
@@ -12,7 +11,6 @@ td .readOnlyField {
 
 .coloredField {
     padding: 0 6px;
-    line-height: 22px;
     border-radius: 4px;
 }
 

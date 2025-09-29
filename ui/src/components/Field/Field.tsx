@@ -23,6 +23,7 @@ import { buildBcUrl } from '@utils/buildBcUrl'
 import { useTranslation } from 'react-i18next'
 import FieldErrorPopupWrapper from '@components/FieldErrorPopupWrapper/FieldErrorPopupWrapper'
 import { customFields } from '@components/View/View'
+import withFieldBaseTheme from '../../hoc/withFieldBaseTheme'
 
 interface FieldOwnProps {
     widgetFieldMeta: interfaces.WidgetField
@@ -397,4 +398,4 @@ function mapDispatchToProps(dispatch: Dispatch) {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Field)
+export default connect(mapStateToProps, mapDispatchToProps)(withFieldBaseTheme(Field))

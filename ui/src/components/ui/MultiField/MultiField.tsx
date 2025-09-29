@@ -43,10 +43,7 @@ const MultiField: React.FunctionComponent<MultiFieldProps> = props => {
                             cursor={props.cursor}
                             widgetName={props.widgetName}
                             widgetFieldMeta={fieldMeta}
-                            className={cn(multiValueStyle, {
-                                [styles.listMultiValueDrillDownText]: fieldMeta.drillDown,
-                                [styles.listMultiValueText]: !fieldMeta.drillDown
-                            })}
+                            className={cn(multiValueStyle)}
                             readonly
                         />
                     </div>

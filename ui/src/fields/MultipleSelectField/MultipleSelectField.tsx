@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useRef } from 'react'
 import { Icon, Select as AntdSelect } from 'antd'
 import { connect } from 'react-redux'
 import cn from 'classnames'
-import useFixSelectDropdownForTableScroll from '@hooks/useFixSelectDropdownForTableScroll'
+import useFixSelectDropdownForScroll from '@hooks/useFixSelectDropdownForScroll'
 import Select, { SelectProps } from '@components/ui/Select/Select'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import checkbox from '../../assets/icons/checkbox.svg'
@@ -54,8 +54,7 @@ const MultipleSelectField: React.FunctionComponent<MultipleSelectFieldProps> = p
         forwardedRef: selectRef,
         className: styles.multipleSelect,
         dropdownClassName: styles.dropDownMenu,
-        getPopupContainer: trigger => trigger.parentElement as HTMLElement,
-        onDropdownVisibleChange: useFixSelectDropdownForTableScroll(selectRef),
+        onDropdownVisibleChange: useFixSelectDropdownForScroll(selectRef),
         mode: 'multiple',
         optionLabelProp: 'label',
         value: value?.map(i => i.value),

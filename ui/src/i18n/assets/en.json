@@ -110,6 +110,7 @@
         "+ values": "+ {{count}} values",
         "Move on to Step 2 to see all the chosen rows": "Move on to Step 2 to see all the chosen rows",
         "The file could not be processed or it does not contain values for field {{name}}": "The file could not be processed or it does not contain values for field {{name}}",
+        "Mass operation":  "Mass operation",
         "Select rows":  "Select rows",
         "Review rows": "Review rows",
         "Confirm operation":  "Confirm operation",

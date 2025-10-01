@@ -112,6 +112,7 @@
         "+ values": "+ {{count}} значений",
         "Move on to Step 2 to see all the chosen rows": "Перейдите на Шаг 2, чтобы увидеть все выбранные строки",
         "The file could not be processed or it does not contain values for field {{name}}": "Файл не может быть обработан или он не содержит значений для поля {{name}}",
+        "Mass operation":  "Массовая операция",
         "Select rows":  "Выбор",
         "Review rows": "Просмотр",
         "Confirm operation":  "Подтверждение",

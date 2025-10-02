@@ -5,15 +5,16 @@ import { Icon, Select as AntdSelect } from 'antd'
 import cn from 'classnames'
 import Select from '@components/ui/Select/Select'
 import { DataValue, WidgetTypes } from '@cxbox-ui/schema'
-import { actions, FieldType, InlinePickListFieldMeta, interfaces } from '@cxbox-ui/core'
+import { actions, FieldType, InlinePickListFieldMeta, interfaces, PopupWidgetTypes } from '@cxbox-ui/core'
 import { useDebounce } from '@hooks/useDebounce'
 import ReadOnlyField from '../../components/ui/ReadOnlyField/ReadOnlyField'
-import { useAppSelector } from '@store'
+import { RootState, useAppSelector } from '@store'
 import useFixSelectDropdownForTableScroll from '@hooks/useFixSelectDropdownForTableScroll'
 import { BaseFieldProps } from '@components/Field/Field'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import { isPopupWidgetFamily } from '@utils/isPopupWidgetFamily'
 import styles from './InlinePickList.less'
+import { AppWidgetMeta } from '@interfaces/widget'
 
 interface Props extends Omit<BaseFieldProps, 'meta'> {
     meta: InlinePickListFieldMeta
@@ -22,6 +23,17 @@ interface Props extends Omit<BaseFieldProps, 'meta'> {
 }
 
 const emptyData: interfaces.DataItem[] = []
+
+const isPopupDisabled = (state: RootState, widgetName: string | undefined, widgetType: string | undefined) => {
+    const popupIsActive = !!(state.view.popupData?.bcName || state.view.popupData?.widgetName || state.view.popupData?.options?.type)
+    const widgets = state.view.widgets as AppWidgetMeta[]
+    const currentWidgetIsInnerPopupWidget = widgets.some(
+        widget =>
+            PopupWidgetTypes.includes(widget.type) &&
+            (widget.options?.create?.widget === widgetName || widget.options?.edit?.widget === widgetName)
+    )
+    return isPopupWidgetFamily(widgetType) || (popupIsActive && currentWidgetIsInnerPopupWidget)
+}
 
 const InlinePickList: React.FunctionComponent<Props> = ({
     widgetName,
@@ -45,7 +57,7 @@ const InlinePickList: React.FunctionComponent<Props> = ({
         return { [`data-test-field-${meta.type?.toLowerCase()?.replace(/-/g, '')}-${postfix}`]: true }
     }
     const widgetMeta = useAppSelector(state => state.view.widgets?.find(i => i.name === widgetName))
-    const disabledPopup = isPopupWidgetFamily(widgetMeta?.type)
+    const disabledPopup = useAppSelector(state => isPopupDisabled(state, widgetName, widgetMeta?.type))
     const bcName = widgetMeta?.bcName
     const { key: fieldName, popupBcName, pickMap, searchSpec } = meta
     const data = useAppSelector(state => (bcName && popupBcName && state.data[popupBcName]) || emptyData)
@@ -80,8 +92,19 @@ const InlinePickList: React.FunctionComponent<Props> = ({
 
     const [searchTerm, setSearchTerm] = useState('')
     const debouncedSearchTerm = useDebounce(searchTerm, 500)
+    // temporary solution due to it is not possible to cancel Focus in antd Select
+    const clearWasClickRef = useRef(false)
 
-    const handleFocus = useCallback(() => onSearch(popupBcName, processedSearchSpec, ''), [onSearch, popupBcName, processedSearchSpec])
+    const handleFocus = useCallback(() => {
+        if (!clearWasClickRef.current) {
+            onSearch(popupBcName, processedSearchSpec, '')
+        }
+        clearWasClickRef.current = false
+    }, [onSearch, popupBcName, processedSearchSpec])
+
+    const handleClearMouseDown = () => {
+        clearWasClickRef.current = true
+    }
 
     React.useEffect(() => {
         if (debouncedSearchTerm && processedSearchSpec) {
@@ -146,7 +169,11 @@ const InlinePickList: React.FunctionComponent<Props> = ({
                 disabled={disabled}
                 value={value ?? undefined}
                 allowClear={!!value}
-                clearIcon={<Icon {...getUniqueDataTestAttr('clear')} type="close-circle" />}
+                clearIcon={
+                    <span onMouseDown={handleClearMouseDown}>
+                        <Icon {...getUniqueDataTestAttr('clear')} type="close-circle" />
+                    </span>
+                }
                 showSearch={neededSearch}
                 placeholder={placeholder ?? t('Enter value')}
                 defaultActiveFirstOption={false}

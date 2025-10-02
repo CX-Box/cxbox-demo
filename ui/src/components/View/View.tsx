@@ -24,7 +24,7 @@ import { FormPopup } from '../widgets/FormPopup/FormPopup'
 import MultivalueField from '../../fields/Multivalue/MultivalueField'
 import InlinePickList from '../../fields/InlinePickList/InlinePickList'
 import FileUpload from '../../fields/FileUpload/FileUploadContainer'
-import { FieldType, interfaces } from '@cxbox-ui/core'
+import { FieldType, interfaces, utils } from '@cxbox-ui/core'
 import { AdditionalInfoWidget } from '@components/widgets/AdditionalInfo/AdditionalInfoWidget'
 import { WidgetTypes } from '@cxbox-ui/schema'
 import TimeField from '../../fields/TimePicker/TimePickerField'
@@ -64,7 +64,7 @@ export const customWidgets: Partial<Record<CustomWidgetTypes | interfaces.Widget
     [CustomWidgetTypes.Funnel]: { component: Funnel, card: DashboardCard },
     [CustomWidgetTypes.RingProgress]: { component: RingProgress, card: DashboardCard },
     [CustomWidgetTypes.DashboardList]: { component: DashboardList, card: DashboardCard },
-    [CustomWidgetTypes.FormPopup]: { component: FormPopup, card: null },
+    [CustomWidgetTypes.FormPopup]: { component: FormPopup, card: null, isPopup: true },
     [CustomWidgetTypes.AdditionalInfo]: { component: AdditionalInfoWidget, card: EmptyCard },
     [CustomWidgetTypes.AdditionalList]: { component: AdditionalListWidget, card: EmptyCard },
     [WidgetTypes.AssocListPopup]: AssocListPopup,
@@ -79,6 +79,8 @@ export const customWidgets: Partial<Record<CustomWidgetTypes | interfaces.Widget
     [CustomWidgetTypes.DualAxes2D]: { component: Chart, card: DashboardCard },
     [CustomWidgetTypes.FilePreview]: { component: FilePreview, card: FilePreviewCard }
 }
+
+utils.extendPopupWidgetTypes(customWidgets)
 
 function View() {
     return (

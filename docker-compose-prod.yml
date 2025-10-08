@@ -134,7 +134,7 @@ services:
       - "127.0.0.1:5432:5432"
 
   cxbox_minio:
-    image: docker.io/bitnamilegacy/bitnami/minio:2022.2.12
+    image: bitnamilegacy/minio:2022.2.12
     expose:
       - 9000
     ports:

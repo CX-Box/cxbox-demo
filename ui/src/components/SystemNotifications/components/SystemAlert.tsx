@@ -31,6 +31,8 @@ function SystemAlert({ id, message, type, duration }: SystemAlertProps) {
 
                 if (closeBtn) {
                     closeBtn.click()
+                } else {
+                    onClose()
                 }
             }
         }, duration)

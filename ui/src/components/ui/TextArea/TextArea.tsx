@@ -5,6 +5,7 @@ import { BaseFieldProps } from '@components/Field/Field'
 import ReadOnlyField from '@components/ui/ReadOnlyField/ReadOnlyField'
 import { text_maxDisplayed } from '@components/ui/TextArea/constants'
 import styles from './TextArea.less'
+import cn from 'classnames'
 
 type AdditionalAntdTextAreaProps = Partial<Omit<AntdTextAreaProps, 'onChange'>>
 
@@ -147,7 +148,7 @@ const TextArea: React.FunctionComponent<TextAreaProps> = ({
                 disabled={disabled}
                 onBlur={popoverTextAreaBlurHandler}
                 style={style}
-                className={className}
+                className={cn(styles.autoSizeTableFix, className)}
                 maxLength={maxInput}
                 {...rest}
             />

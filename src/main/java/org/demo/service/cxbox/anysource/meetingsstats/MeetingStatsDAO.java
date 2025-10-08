@@ -33,6 +33,8 @@ public class MeetingStatsDAO extends AbstractAnySourceBaseDAO<MeetingStatsDTO> {
 
 	public static final String CANCELLED = "6";
 
+	public static final String COLOR = "#5F90EA";
+
 	@Override
 	public String getId(final MeetingStatsDTO entity) {
 		return entity.getId();
@@ -91,11 +93,11 @@ public class MeetingStatsDAO extends AbstractAnySourceBaseDAO<MeetingStatsDTO> {
 			long inProgressCount, long completedCount, long cancelledCount) {
 
 		return Stream.of(
-						createMeetingStatsDTO("All Meetings", allCount, "#779FE9", "team", ALL, "All meetings"),
+						createMeetingStatsDTO("All Meetings", allCount, COLOR, "team", ALL, "All meetings"),
 						createMeetingStatsDTO(
 								"Not Started",
 								notStartedCount,
-								"#5F90EA",
+								COLOR,
 								"calendar",
 								NOT_STARTED,
 								"Not started meetings"
@@ -103,14 +105,14 @@ public class MeetingStatsDAO extends AbstractAnySourceBaseDAO<MeetingStatsDTO> {
 						createMeetingStatsDTO(
 								"In Completion",
 								inCompletionCount,
-								"#4D83E7",
+								COLOR,
 								"pie-chart",
 								IN_COMPLETION,
 								"Meetings in completion"
 						),
-						createMeetingStatsDTO("In Progress", inProgressCount, "#3A76E4", "plus-circle", IN_PROGRESS, "Meetings in progress"),
-						createMeetingStatsDTO("Completed", completedCount, "#2769E1", "check", COMPLETED, "Completed meetings"),
-						createMeetingStatsDTO("Cancelled", cancelledCount, "#145CDE", "stop", CANCELLED, "Cancelled meetings")
+						createMeetingStatsDTO("In Progress", inProgressCount, COLOR, "plus-circle", IN_PROGRESS, "Meetings in progress"),
+						createMeetingStatsDTO("Completed", completedCount, COLOR, "check", COMPLETED, "Completed meetings"),
+						createMeetingStatsDTO("Cancelled", cancelledCount, COLOR, "stop", CANCELLED, "Cancelled meetings")
 				)
 				.filter(dto -> dto.getValue() > 0)
 				.toList();

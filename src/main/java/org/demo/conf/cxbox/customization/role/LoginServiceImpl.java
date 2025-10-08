@@ -189,6 +189,10 @@ public class LoginServiceImpl implements LoginService {
 						feature(
 								UIProperties.APP_EXPORT_EXCEL_LIMIT,
 								uiProperties.getAppExportExcelLimit()
+						),
+						feature(
+								UIProperties.TIMEOUT_SHOW_MESSAGE,
+								uiProperties.getTimeoutShowMessage()
 						)
 				)
 				.filter(Objects::nonNull)

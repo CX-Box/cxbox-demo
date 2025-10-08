@@ -35,7 +35,7 @@ services:
       - "9443:9443"
       - "10990:10990"
   cxbox_minio:
-    image: bitnami/minio:2022.2.12
+    image: bitnamilegacy/minio:2022.2.12
     expose:
       - 9000
       - 9001

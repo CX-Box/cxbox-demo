@@ -8,7 +8,7 @@ import { buildBcUrl } from '@utils/buildBcUrl'
 import { RootState } from '@store'
 import { interfaces } from '@cxbox-ui/core'
 import styles from './MultipleSelectField.less'
-import CustomCheckbox from '@fields/MultipleSelectField/Checkbox'
+import Checkbox from '@fields/MultipleSelectField/Checkbox'
 
 interface MultipleSelectFieldProps {
     value: interfaces.MultivalueSingleValue[]
@@ -30,7 +30,7 @@ const MultipleSelectField: React.FunctionComponent<MultipleSelectFieldProps> = p
             const valueIndex = value?.findIndex(v => v.value === item.value)
             return (
                 <Option key={item.value} label={<div data-test-field-multipleselect-current-item={true}>{item.value}</div>}>
-                    <CustomCheckbox checked={valueIndex >= 0} />
+                    <Checkbox checked={valueIndex >= 0} />
                     <span className={styles.span} data-test-field-multipleselect-item={true}>
                         {item.value}
                     </span>

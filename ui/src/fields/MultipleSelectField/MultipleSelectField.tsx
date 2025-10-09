@@ -8,7 +8,7 @@ import { buildBcUrl } from '@utils/buildBcUrl'
 import { RootState } from '@store'
 import { interfaces } from '@cxbox-ui/core'
 import styles from './MultipleSelectField.less'
-import CustomCheckbox from '@fields/MultipleSelectField/CustomCheckbox'
+import CustomCheckbox from '@fields/MultipleSelectField/Checkbox'
 
 interface MultipleSelectFieldProps {
     value: interfaces.MultivalueSingleValue[]

@@ -1,13 +1,13 @@
 import React from 'react'
 import checkbox from '@assets/icons/checkbox.svg'
 import checkboxEmpty from '@assets/icons/checkboxEmpty.svg'
-import styles from './CustomCheckbox.less'
+import styles from './Checkbox.less'
 
-interface CustomCheckboxProps {
+interface CheckboxProps {
     checked: boolean
 }
 
-const CustomCheckbox: React.FC<CustomCheckboxProps> = ({ checked }) => {
+const Checkbox: React.FC<CheckboxProps> = ({ checked }) => {
     return (
         <span className={styles.checkboxIcon} data-test-checked={checked}>
             <img data-visible={checked} alt={'checkbox'} src={checkbox} />
@@ -16,4 +16,4 @@ const CustomCheckbox: React.FC<CustomCheckboxProps> = ({ checked }) => {
     )
 }
 
-export default CustomCheckbox
+export default Checkbox

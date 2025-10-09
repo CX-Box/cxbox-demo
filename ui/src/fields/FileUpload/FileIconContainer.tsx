@@ -21,7 +21,7 @@ function FileIconContainer({ fileName, onFileIconClick }: FileIconContainerProps
             <span className={styles.fileIconContainer}>
                 <FileIcon
                     type={getExtension(fileName)}
-                    eye={isAvailableViewing}
+                    preview={isAvailableViewing}
                     onClick={isAvailableViewing ? onFileIconClick : undefined}
                     hoverEnabled={isInteractive}
                 />

@@ -7,6 +7,7 @@ import { RowMeta } from '@interfaces/rowMeta'
 import { AdditionalInfoWidgetMeta } from '@interfaces/widget'
 import { AdditionalInfoHeader } from '@components/widgets/AdditionalInfo/AdditionalInfoHeader'
 import styles from './AdditionalInfoItem.module.css'
+import FieldBaseThemeWrapper from '@components/FieldBaseThemeWrapper/FieldBaseThemeWrapper'
 
 interface Props {
     meta: AdditionalInfoWidgetMeta
@@ -42,7 +43,7 @@ export const AdditionalInfoItem: React.FC<Props> = ({ meta, cursor, rowMeta }) =
                                             {field.label}
                                         </Col>
                                         <Col span={12}>
-                                            <div
+                                            <FieldBaseThemeWrapper
                                                 data-test="FIELD"
                                                 data-test-field-type={field.type}
                                                 data-test-field-title={field.label || field.title}
@@ -56,7 +57,7 @@ export const AdditionalInfoItem: React.FC<Props> = ({ meta, cursor, rowMeta }) =
                                                     widgetFieldMeta={field}
                                                     readonly={true}
                                                 />
-                                            </div>
+                                            </FieldBaseThemeWrapper>
                                         </Col>
                                     </React.Fragment>
                                 ) : null

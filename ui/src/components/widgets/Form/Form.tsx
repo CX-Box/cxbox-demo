@@ -11,6 +11,7 @@ import { PendingValidationFails, PendingValidationFailsFormat, WidgetFormMeta } 
 import { RowMetaField } from '@interfaces/rowMeta'
 import { WidgetField } from '@interfaces/widget'
 import styles from './Form.less'
+import FieldBaseThemeWrapper from '@components/FieldBaseThemeWrapper/FieldBaseThemeWrapper'
 
 interface FormOwnProps {
     meta: Omit<WidgetFormMeta, 'type'>
@@ -88,11 +89,11 @@ export const Form: FunctionComponent<FormProps> = ({ meta, fields, missingFields
     }, [grid, visibleFlattenWidgetFields, missingFields, metaErrors, meta.name, t, bcName, cursor, name])
 
     return (
-        <div className={styles.formContainer}>
+        <FieldBaseThemeWrapper className={styles.formContainer}>
             <AntdForm colon={false} layout="vertical">
                 {memoizedFields}
             </AntdForm>
-        </div>
+        </FieldBaseThemeWrapper>
     )
 }
 

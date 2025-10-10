@@ -1,13 +1,15 @@
-import React, { PropsWithChildren } from 'react'
+import React, { HTMLAttributes } from 'react'
 import styles from '@assets/styles/dataEntry.less'
 import cn from 'classnames'
 
-type FieldBaseThemeWrapperProps = PropsWithChildren<{
-    className?: string
-}>
+type FieldBaseThemeWrapperProps = HTMLAttributes<HTMLDivElement>
 
-const FieldBaseThemeWrapper = ({ children, className }: FieldBaseThemeWrapperProps) => {
-    return <div className={cn(styles.fieldBaseTheme, className)}>{children}</div>
+const FieldBaseThemeWrapper = ({ children, className, ...restProps }: FieldBaseThemeWrapperProps) => {
+    return (
+        <div {...restProps} className={cn(styles.fieldBaseTheme, className)}>
+            {children}
+        </div>
+    )
 }
 
 export default React.memo(FieldBaseThemeWrapper)

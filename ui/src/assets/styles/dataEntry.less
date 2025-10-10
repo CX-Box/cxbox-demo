@@ -125,16 +125,6 @@
         border-radius: var(--field-radius);
       }
 
-      .ant-input[disabled],
-      .ant-select-disabled .ant-select-selection--multiple .ant-select-selection__choice__content,
-      .ant-select-disabled .ant-select-selection--single .ant-select-selection__rendered,
-      .ant-time-picker-input[disabled],
-      .ant-radio-disabled + span,
-      .ant-checkbox-disabled + span
-      {
-        color: var(--field-disabled-color);
-      }
-
       /* DatePicker */
 
       .ant-calendar-picker-icon,
@@ -171,6 +161,25 @@
       .ant-upload {
         font-size: var(--field-font-size);
         color: var(--field-color);
+      }
+
+      /* Radio and Checkbox */
+
+      .ant-checkbox-wrapper,
+      .ant-radio-wrapper {
+        font-size: var(--field-font-size);
+        color: var(--field-color);
+      }
+
+      /* Common */
+
+      .ant-input[disabled],
+      .ant-select-disabled .ant-select-selection--multiple .ant-select-selection__choice__content,
+      .ant-select-disabled .ant-select-selection--single .ant-select-selection__rendered,
+      .ant-time-picker-input[disabled],
+      .ant-radio-disabled + span,
+      .ant-checkbox-disabled + span {
+        color: var(--field-disabled-color);
       }
     }
   }

@@ -23,7 +23,6 @@ import { buildBcUrl } from '@utils/buildBcUrl'
 import { useTranslation } from 'react-i18next'
 import FieldErrorPopupWrapper from '@components/FieldErrorPopupWrapper/FieldErrorPopupWrapper'
 import { customFields } from '@components/View/View'
-import FieldBaseThemeWrapper from '@components/FieldBaseThemeWrapper/FieldBaseThemeWrapper'
 
 interface FieldOwnProps {
     widgetFieldMeta: interfaces.WidgetField
@@ -349,21 +348,19 @@ const Field: FunctionComponent<FieldProps> = ({
 
     if (metaError && showErrorPopup) {
         return (
-            <FieldBaseThemeWrapper>
-                <FieldErrorPopupWrapper
-                    bcName={bcName}
-                    placement={tooltipPlacement}
-                    fieldKey={widgetFieldMeta.key}
-                    cursor={cursor}
-                    readOnly={readOnly}
-                >
-                    {resultField}
-                </FieldErrorPopupWrapper>
-            </FieldBaseThemeWrapper>
+            <FieldErrorPopupWrapper
+                bcName={bcName}
+                placement={tooltipPlacement}
+                fieldKey={widgetFieldMeta.key}
+                cursor={cursor}
+                readOnly={readOnly}
+            >
+                {resultField}
+            </FieldErrorPopupWrapper>
         )
     }
 
-    return <FieldBaseThemeWrapper>{resultField}</FieldBaseThemeWrapper>
+    return resultField
 }
 
 function mapStateToProps(state: RootState, ownProps: FieldOwnProps) {

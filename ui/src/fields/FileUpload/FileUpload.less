@@ -55,8 +55,11 @@
 
 .deleteButton {
     border: none;
-    cursor: not-allowed;
     padding: 0;
+
+    &:disabled {
+      cursor: not-allowed;
+    }
 }
 
 .downloadLinkText,
@@ -99,6 +102,7 @@
 
 .downloadLink {
   :global(.ant-btn) {
+    height: var(--field-tag-height);
     border-radius: var(--field-radius);
     padding: 0 10px;
   }

@@ -1,5 +1,6 @@
 .readOnly {
-    line-height: 16px;
+  color: var(--field-read-color);
+  font-size: var(--field-read-font-size);
 }
 
 .coloredValue {

@@ -8,6 +8,7 @@ import { interfaces, actions } from '@cxbox-ui/core'
 import { RootState } from '@store'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import styles from './CheckboxPicker.less'
+import cn from 'classnames'
 
 export interface CheckboxPickerOwnProps {
     fieldName: string
@@ -53,7 +54,7 @@ const CheckboxPicker: React.FC<CheckboxPickerProps> = ({
     )
 
     return (
-        <div className={styles.container}>
+        <div className={cn(styles.container, { [styles.readOnly]: readonly })}>
             <Checkbox
                 data-test-field-checkbox-item={true}
                 checked={value as boolean}

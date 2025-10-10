@@ -1,7 +1,7 @@
 .multivalue {
     position: relative;
     display: flex;
-    min-height: 32px;
+    min-height: var(--field-height);
     width: 100%;
     border: 1px solid #d9d9d9;
     padding: 3px 5px;
@@ -10,6 +10,7 @@
     border-radius: 2px;
     transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
     outline: none;
+    font-size: var(--field-font-size);
 
     &:not(.disabled) {
         &:hover {
@@ -21,6 +22,13 @@
             box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
         }
     }
+
+  :global(.ant-tag) {
+    font-size: var(--field-font-size);
+    color: var(--field-tag-color);
+    height: var(--field-tag-height);
+    line-height: var(--field-tag-inner-height);
+  }
 }
 
 .enabled {

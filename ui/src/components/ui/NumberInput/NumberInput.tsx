@@ -131,7 +131,7 @@ const NumberInput: React.FunctionComponent<NumberInputProps> = props => {
     const extendedProps: InputProps & RefAttributes<Input> = {
         ...props,
         style: {
-            backgroundColor: props.backgroundColor || '#fff'
+            backgroundColor: !props.disabled ? props.backgroundColor : undefined
         },
         className: styles.container,
         addonAfter: currency,

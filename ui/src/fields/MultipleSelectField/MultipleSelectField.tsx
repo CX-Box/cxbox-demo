@@ -5,11 +5,10 @@ import cn from 'classnames'
 import useFixSelectDropdownForTableScroll from '@hooks/useFixSelectDropdownForTableScroll'
 import Select, { SelectProps } from '@components/ui/Select/Select'
 import { buildBcUrl } from '@utils/buildBcUrl'
-import checkbox from '../../assets/icons/checkbox.svg'
-import checkboxEmpty from '../../assets/icons/checkboxEmpty.svg'
 import { RootState } from '@store'
 import { interfaces } from '@cxbox-ui/core'
 import styles from './MultipleSelectField.less'
+import Checkbox from '@fields/MultipleSelectField/Checkbox'
 
 interface MultipleSelectFieldProps {
     value: interfaces.MultivalueSingleValue[]
@@ -31,7 +30,7 @@ const MultipleSelectField: React.FunctionComponent<MultipleSelectFieldProps> = p
             const valueIndex = value?.findIndex(v => v.value === item.value)
             return (
                 <Option key={item.value} label={<div data-test-field-multipleselect-current-item={true}>{item.value}</div>}>
-                    {valueIndex >= 0 ? <img alt="checkbox" src={checkbox} /> : <img alt="checkboxEmpty" src={checkboxEmpty} />}
+                    <Checkbox checked={valueIndex >= 0} />
                     <span className={styles.span} data-test-field-multipleselect-item={true}>
                         {item.value}
                     </span>
@@ -62,8 +61,6 @@ const MultipleSelectField: React.FunctionComponent<MultipleSelectFieldProps> = p
         onChange: handleOnChange
     }
 
-    const isOneLineStyle = false
-
     if (readOnly) {
         return <div className={styles.readOnly}>{extendedProps.value?.join(', ')}</div>
     }
@@ -72,9 +69,10 @@ const MultipleSelectField: React.FunctionComponent<MultipleSelectFieldProps> = p
         <Select
             showArrow
             {...extendedProps}
-            className={cn(styles.root, extendedProps.className, isOneLineStyle && styles.oneLine)}
+            className={cn(styles.root, extendedProps.className)}
             suffixIcon={<Icon type="down" data-test-field-multipleselect-popup={true} />}
             removeIcon={<Icon type="close" data-test-field-multipleselect-item-clear={true} />}
+            menuItemSelectedIcon={<React.Fragment />}
         >
             {currentValues}
         </Select>

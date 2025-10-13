@@ -42,14 +42,11 @@ const ColumnTitle = ({ widgetName, widgetMeta, rowMeta, onClose, showCloseButton
         onClose?.(widgetMeta.key)
     }, [onClose, widgetMeta.key])
 
-    const fullyHideCloseButton = !widgetMeta.title && !showCloseButton
-
     const close = (
         <Button
             type="empty"
             style={{
-                visibility: showCloseButton ? 'visible' : 'hidden',
-                width: fullyHideCloseButton ? 0 : undefined // reduces the size of the header cell if title is missing
+                visibility: showCloseButton ? 'visible' : 'hidden'
             }}
             className={styles.closeButton}
             onClick={handleColumnClose}
@@ -80,7 +77,9 @@ const ColumnTitle = ({ widgetName, widgetMeta, rowMeta, onClose, showCloseButton
         <ColumnSort widgetName={widgetName} fieldKey={widgetMeta.key} className={styles.sort} />
     )
 
-    const filter = rowMeta.filterable && <ColumnFilter widgetName={widgetName} widgetMeta={widgetMeta} rowMeta={rowMeta} />
+    const filter = rowMeta.filterable && (
+        <ColumnFilter className={styles.filter} widgetName={widgetName} widgetMeta={widgetMeta} rowMeta={rowMeta} />
+    )
 
     return (
         <div className={cn(styles.container, { [styles.rightAlignment]: numberFieldTypes.includes(widgetMeta.type) })}>

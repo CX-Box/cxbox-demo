@@ -174,13 +174,6 @@
             }
         }
 
-        .ant-table-wrapper {
-            .anticon svg {
-                width: 16px;
-                height: 16px;
-            }
-        }
-
         .ant-table-row div[class*='_fileUpload_'] {
             line-height: 20px;
 
@@ -212,8 +205,12 @@
         }
     }
 
+    .tableWithRowMenu thead th:last-child {
+      padding-right: calc(30px + 16px);
+    }
+
     .tableWithRowMenu tbody td:last-child {
-        padding-right: 34px;
+        padding-right: calc(30px + 4px);
     }
 }
 

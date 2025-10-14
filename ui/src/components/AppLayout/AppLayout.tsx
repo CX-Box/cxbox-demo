@@ -15,7 +15,7 @@ import { Login } from '../Login/Login'
 import { useScrollToTopAfterChangeRoute } from '@hooks/useScrollToTopAfterChangeRoute'
 import { useSetCssVariable } from '@hooks/useSetCssVariable'
 import { addAlphaToHex } from '@utils/color'
-import { WHEN_EDITABLE_FIELD_IS_DISABLED_THEN_FONT_OPACITY } from '@constants'
+import { FIELD_DISABLED_COLOR, WHEN_EDITABLE_FIELD_IS_DISABLED_THEN_FONT_OPACITY } from '@constants'
 
 export const AppLayout: React.FC = () => {
     const dispatch = useAppDispatch()
@@ -36,7 +36,7 @@ export const AppLayout: React.FC = () => {
         return document.querySelector(`.${CSS.escape(styles.mainContent)}`)
     }, [])
 
-    useSetCssVariable('--field-disabled-color', addAlphaToHex('#000', WHEN_EDITABLE_FIELD_IS_DISABLED_THEN_FONT_OPACITY))
+    useSetCssVariable('--field-disabled-color', addAlphaToHex(FIELD_DISABLED_COLOR, WHEN_EDITABLE_FIELD_IS_DISABLED_THEN_FONT_OPACITY))
 
     useScrollToTopAfterChangeRoute(getContentElement)
 

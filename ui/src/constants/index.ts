@@ -24,4 +24,5 @@ export const FIELDS = {
     }
 } as const
 
+export const FIELD_DISABLED_COLOR = '#141F35'
 export const WHEN_EDITABLE_FIELD_IS_DISABLED_THEN_FONT_OPACITY = 1

@@ -1,15 +1,17 @@
+@import './theme';
+
 :root {
   --field-font-size: 14px;
-  --field-color: rgba(0, 0, 0, 0.85);
+  --field-color: @main-light-mode;
 
   --field-read-font-size: 14px;
-  --field-read-color: rgba(0, 0, 0, 0.65);
+  --field-read-color: var(--field-color);
 
   --field-radius: 2px;
   --field-tag-color: var(--field-color);
   --field-icon-color: rgba(0, 0, 0, 0.25);
   --field-disabled-bg-color: #f5f5f5;
-  --field-disabled-color: rgba(0, 0, 0, 0.35);
+  --field-disabled-color: var(--field-color);
   --field-placeholder-color: #bfbfbf;
   --field-height: 32px;
   --field-select-icon-size: 14px;

@@ -33,8 +33,11 @@
 }
 
 .footer {
-  height: 42px;
   display: flex;
   justify-content: center;
   align-items: center;
+
+  &:empty {
+    display: none;
+  }
 }

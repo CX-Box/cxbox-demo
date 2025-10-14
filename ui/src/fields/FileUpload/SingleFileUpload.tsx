@@ -88,7 +88,7 @@ const SingleFileUpload: React.FunctionComponent<SingleFileUploadProps> = ({
         ),
 
         downloadLink: (
-            <div className={styles.downloadLink} title={`${t('Download')} ${fileName}`} key="download-lnk">
+            <div className={styles.downloadLink} title={`${t('Download')} ${fileName}`} data-test-field-value={true} key="download-lnk">
                 <Button type="Link" onClick={handleDownload}>
                     <span className={styles.downloadLinkText}>{trimString(fileName)}</span>
                 </Button>

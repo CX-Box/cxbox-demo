@@ -5,8 +5,9 @@ import { Spin } from 'antd'
 import 'react-pdf/dist/Page/AnnotationLayer.css'
 import 'react-pdf/dist/Page/TextLayer.css'
 import styles from '@components/FileViewer/PdfViewer/components/InlinePdfViewer.less'
+import workerSrc from 'pdfjs-dist/build/pdf.worker.min.js'
 
-pdfjs.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.js', import.meta.url).toString()
+pdfjs.GlobalWorkerOptions.workerSrc = workerSrc
 
 interface PreviewPdfViewerProps {
     width: number | undefined

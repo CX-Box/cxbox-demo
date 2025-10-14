@@ -46,6 +46,7 @@ import { useRowSelection } from '@components/widgets/Table/massOperations/hooks/
 import ResultColumnTitle from '@components/widgets/Table/massOperations/ColumnTitle'
 import { FIELDS } from '@constants'
 import { useRowMetaWithCache } from '@hooks/useRowMetaWithCache'
+import FieldBaseThemeWrapper from '@components/FieldBaseThemeWrapper/FieldBaseThemeWrapper'
 
 const ROW_KEY = FIELDS.TECHNICAL.ID
 
@@ -464,7 +465,7 @@ function Table<T extends CustomDataItem>({
                         }
 
                         const field = showField && (
-                            <div
+                            <FieldBaseThemeWrapper
                                 data-test="FIELD"
                                 data-test-field-type={item.type}
                                 data-test-field-title={item.label || item.title}
@@ -500,7 +501,7 @@ function Table<T extends CustomDataItem>({
                                     className={cn(editMode ? styles.fullWidth : styles.fitContentWidth)}
                                 />
                                 {showCounter && `(${countOfRecords})`}
-                            </div>
+                            </FieldBaseThemeWrapper>
                         )
 
                         if (groupingHierarchyModeAggregate) {

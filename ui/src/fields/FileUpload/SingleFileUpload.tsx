@@ -66,9 +66,9 @@ const SingleFileUpload: React.FunctionComponent<SingleFileUploadProps> = ({
 
     const controls: { [key: string]: React.ReactNode } = {
         deleteButton: (
-            <div className={styles.deleteButton} onClick={onDelete} key="delete-btn">
+            <button className={styles.deleteButton} disabled={disabled} onClick={onDelete} key="delete-btn">
                 <Icon type="delete" title={t('Delete')} />
-            </div>
+            </button>
         ),
 
         uploadButton: (
@@ -104,15 +104,9 @@ const SingleFileUpload: React.FunctionComponent<SingleFileUploadProps> = ({
                 [styles.error]: error
             })}
         >
-            {disabled ? (
-                downloadUrl ? (
-                    <span className={styles.disabled}>{controls.downloadLink}</span>
-                ) : null
-            ) : downloadUrl ? (
-                [controls.downloadLink, controls.uploadButton, controls.deleteButton]
-            ) : (
-                [controls.uploadLink, controls.uploadButton]
-            )}
+            {downloadUrl
+                ? [controls.downloadLink, controls.uploadButton, controls.deleteButton]
+                : [controls.uploadLink, controls.uploadButton]}
         </div>
     )
 }

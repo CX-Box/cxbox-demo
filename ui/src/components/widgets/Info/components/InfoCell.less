@@ -16,14 +16,11 @@
     opacity: 0.5;
 }
 
-.fieldData :global([class^='ReadOnlyField']),
-.fieldData :global([class$='_readOnly']),
-.fieldData :global([class$='_recordValue']) {
-    line-height: 20px;
-    color: @main-light-mode;
-}
-
 .fieldData {
+    --field-read-font-size: 14px;
+
+    line-height: 20px;
+
     display: flex;
     flex-direction: column;
     justify-content: flex-end;

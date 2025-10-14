@@ -4,20 +4,6 @@
     position: relative;
 
     :global{
-        .ant-select-selection-selected-value {
-            margin-right: 10px;
-        }
-
-        .ant-select-selection {
-            .ant-select-arrow {
-                width: 16px;
-            }
-
-            &__clear {
-                width: 16px;
-            }
-        }
-
         .ant-table-header-column {
             width: 100%;
         }
@@ -123,6 +109,8 @@
 
 // table body
 .tableContainer {
+    --field-read-font-size: 14px;
+
     :global {
         .ant-table-row > td {
             line-height: 1.43;
@@ -166,25 +154,6 @@
                 padding: 1px 8px;
                 margin-right: 8px;
                 margin-bottom: 8px;
-            }
-
-            .ant-select-arrow {
-                right: 8px;
-                margin-top: -7px;
-            }
-        }
-
-        .ant-table-row div[class*='_fileUpload_'] {
-            line-height: 20px;
-
-            [class*='_downloadLink_'] {
-                padding-top: 2px;
-                padding-bottom: 2px;
-
-                .ant-btn {
-                    height: 26px;
-                    line-height: inherit;
-                }
             }
         }
     }

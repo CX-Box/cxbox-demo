@@ -4,6 +4,7 @@ import Field from '@components/Field/Field'
 import { AppWidgetTableMeta, FileUploadFieldMeta } from '@interfaces/widget'
 import { FieldType } from '@cxbox-ui/core'
 import styles from './FilePreview.module.css'
+import FieldBaseThemeWrapper from '@components/FieldBaseThemeWrapper/FieldBaseThemeWrapper'
 
 interface FilePreviewProps {
     meta: AppWidgetTableMeta
@@ -26,7 +27,7 @@ const FilePreview: React.FC<FilePreviewProps> = ({ meta }) => {
     }
 
     return (
-        <div
+        <FieldBaseThemeWrapper
             className={styles.container}
             data-test="FIELD"
             data-test-field-type={fileField.type}
@@ -34,7 +35,7 @@ const FilePreview: React.FC<FilePreviewProps> = ({ meta }) => {
             data-test-field-key={fileField.key}
         >
             <Field bcName={meta.bcName} cursor={cursor} widgetName={meta.name} widgetFieldMeta={fileField} />
-        </div>
+        </FieldBaseThemeWrapper>
     )
 }
 

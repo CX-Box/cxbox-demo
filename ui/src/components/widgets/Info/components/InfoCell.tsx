@@ -6,6 +6,7 @@ import { useAppSelector } from '@store'
 import { interfaces } from '@cxbox-ui/core'
 import { AppWidgetInfoMeta, ETitleMode } from '@interfaces/widget'
 import styles from './InfoCell.less'
+import FieldBaseThemeWrapper from '@components/FieldBaseThemeWrapper/FieldBaseThemeWrapper'
 
 export interface ValueCellProps {
     row: interfaces.LayoutRow
@@ -41,7 +42,7 @@ function InfoCell({ field, colSpan, row, meta, cursor, onDrillDown }: ValueCellP
                 </div>
             )}
 
-            <div className={styles.fieldData}>
+            <FieldBaseThemeWrapper className={styles.fieldData}>
                 <span>
                     {field.hintKey && data[field.hintKey] && <div className={styles.hint}>{data[field.hintKey]}</div>}
 
@@ -64,7 +65,7 @@ function InfoCell({ field, colSpan, row, meta, cursor, onDrillDown }: ValueCellP
                         />
                     )}
                 </span>
-            </div>
+            </FieldBaseThemeWrapper>
         </InfoValueWrapper>
     )
 }

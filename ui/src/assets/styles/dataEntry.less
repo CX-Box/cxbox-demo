@@ -1,0 +1,188 @@
+@import './theme';
+
+:root {
+  --field-font-size: 14px;
+  --field-color: @main-light-mode;
+
+  --field-read-font-size: 14px;
+  --field-read-color: var(--field-color);
+
+  --field-radius: 2px;
+  --field-tag-color: var(--field-color);
+  --field-icon-color: rgba(0, 0, 0, 0.25);
+  --field-disabled-bg-color: #f5f5f5;
+  --field-disabled-color: var(--field-color);
+  --field-placeholder-color: #bfbfbf;
+  --field-height: 32px;
+  --field-select-icon-size: 14px;
+  --field-calendar-icon-size: 14px;
+  --field-vertical-padding: 4px;
+  --field-tag-height: calc(var(--field-height) - (var(--field-vertical-padding) * 2));
+  --field-border-size: 1px;
+  --field-border-color: #d9d9d9;
+  --field-inner-height: calc(var(--field-height) - (var(--field-border-size) * 2));
+  --field-tag-inner-height: calc(var(--field-tag-height) - (var(--field-border-size) * 2));
+
+  .fieldBaseTheme {
+    :global {
+      /* Select */
+
+      .ant-select {
+        width: 100%;
+        font-size: var(--field-font-size);
+        color: var(--field-color);
+      }
+
+      // so that input and placeholder are in the same place
+      .ant-select:not(.ant-select-auto-complete) .ant-select-search .ant-select-search__field {
+        padding-left: 0;
+      }
+
+      .ant-select .ant-select-selection {
+        border-radius: var(--field-radius);
+        font-size: var(--field-font-size);
+        color: var(--field-color);
+      }
+
+      .ant-select .ant-select-selection--single {
+        height: var(--field-height);
+      }
+
+      .ant-select .ant-select-selection--multiple {
+        min-height: var(--field-height);
+      }
+
+      // so that input and placeholder are in the same place
+      .ant-select .ant-select-selection--multiple:not(:has(.ant-select-selection__choice)) .ant-select-search--inline .ant-select-search__field {
+        margin-left: 6px;
+      }
+
+      .ant-select .ant-select-selection--single .ant-select-selection__rendered,
+      .ant-select .ant-select-selection--multiple .ant-select-selection__rendered {
+        font-size: var(--field-font-size);
+        color: var(--field-color);
+        line-height: var(--field-inner-height);
+      }
+
+      .ant-select-open .ant-select-selection,
+      .ant-select-focused .ant-select-selection,
+      .ant-select .ant-select-selection:hover {
+        border-radius: var(--field-radius);
+      }
+
+      .ant-select-selection--single .ant-select-arrow,
+      .ant-select-selection--single .ant-select-selection__clear,
+      .ant-select-selection--multiple .ant-select-arrow,
+      .ant-select-selection--multiple .ant-select-selection__clear {
+        position: absolute;
+        outline: none;
+        top: 50%;
+        margin-top: calc(-0.5 * var(--field-select-icon-size));
+        font-size: var(--field-select-icon-size);
+        color: var(--field-icon-color);
+        width: var(--field-select-icon-size);
+        height: var(--field-select-icon-size);
+      }
+
+      .ant-select-selection--multiple .ant-select-selection__choice__content {
+        font-size: var(--field-font-size);
+        color: var(--field-tag-color);
+      }
+
+      .ant-select-dropdown {
+        font-size: var(--field-font-size);
+        color: var(--field-color);
+
+        .ant-select-dropdown-menu-item {
+          font-size: inherit;
+        }
+      }
+
+      .ant-select-selection--multiple .ant-select-selection__rendered > ul > li,
+      .ant-select-selection--multiple > ul > li {
+        height: var(--field-tag-height);
+        line-height: var(--field-tag-inner-height);
+      }
+
+      /* Input */
+
+      .ant-input {
+        border-radius: var(--field-radius);
+        font-size: var(--field-font-size);
+        color: var(--field-color);
+      }
+
+      .ant-input:not(textarea) {
+        height: var(--field-height);
+      }
+
+      textarea.ant-input {
+        min-height: var(--field-height);
+      }
+
+      .ant-input:focus,
+      .ant-input:hover,
+      .ant-time-picker-input:focus,
+      .ant-time-picker-input:hover {
+        border-radius: var(--field-radius);
+      }
+
+      /* DatePicker */
+
+      .ant-calendar-picker-icon,
+      .ant-calendar-picker-clear {
+        font-size: var(--field-calendar-icon-size);
+        width: var(--field-calendar-icon-size);
+        height: var(--field-calendar-icon-size);
+        color: var(--field-icon-color);
+        margin-top: calc(-0.5 * var(--field-calendar-icon-size));
+
+      }
+
+      /* TimePicker */
+
+      .ant-time-picker-input {
+        border-radius: var(--field-radius);
+        font-size: var(--field-font-size);
+        color: var(--field-color);
+      }
+
+      .ant-time-picker {
+        width: 100%;
+      }
+
+      /* Checkbox */
+
+      .ant-checkbox-wrapper {
+        font-size: var(--field-font-size);
+        color: var(--field-color);
+      }
+
+      /* Upload */
+
+      .ant-upload {
+        font-size: var(--field-font-size);
+        color: var(--field-color);
+      }
+
+      /* Radio and Checkbox */
+
+      .ant-checkbox-wrapper,
+      .ant-radio-wrapper {
+        font-size: var(--field-font-size);
+        color: var(--field-color);
+      }
+
+      /* Common */
+
+      .ant-input[disabled],
+      .ant-select-disabled .ant-select-selection--multiple .ant-select-selection__choice__content,
+      .ant-select-disabled .ant-select-selection--single .ant-select-selection__rendered,
+      .ant-time-picker-input[disabled],
+      .ant-radio-disabled + span,
+      .ant-checkbox-disabled + span {
+        color: var(--field-disabled-color);
+      }
+    }
+  }
+}

@@ -13,6 +13,9 @@ import { useAppDispatch, useAppSelector } from '@store'
 import Notifications from '@components/Notifications/Notifications'
 import { Login } from '../Login/Login'
 import { useScrollToTopAfterChangeRoute } from '@hooks/useScrollToTopAfterChangeRoute'
+import { useSetCssVariable } from '@hooks/useSetCssVariable'
+import { addAlphaToHex } from '@utils/color'
+import { FIELD_DISABLED_COLOR, WHEN_EDITABLE_FIELD_IS_DISABLED_THEN_FONT_OPACITY } from '@constants'
 
 export const AppLayout: React.FC = () => {
     const dispatch = useAppDispatch()
@@ -32,6 +35,8 @@ export const AppLayout: React.FC = () => {
     const getContentElement = useCallback(() => {
         return document.querySelector(`.${CSS.escape(styles.mainContent)}`)
     }, [])
+
+    useSetCssVariable('--field-disabled-color', addAlphaToHex(FIELD_DISABLED_COLOR, WHEN_EDITABLE_FIELD_IS_DISABLED_THEN_FONT_OPACITY))
 
     useScrollToTopAfterChangeRoute(getContentElement)
 

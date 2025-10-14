@@ -21,141 +21,13 @@
 
 
 .formContainer {
+    --field-height: 40px;
+    --field-tag-height: calc(var(--field-height) - (var(--field-vertical-padding) * 2));
+    --field-inner-height: calc(var(--field-height) - (var(--field-border-size) * 2));
+    --field-tag-inner-height: calc(var(--field-tag-height) - (var(--field-border-size) * 2));
+
     :global {
-        .ant-col.ant-form-item-label {
-            padding-bottom: 2px;
-            white-space: normal; // ie11 word wrap fix
-
-            label {
-                font-style: normal;
-                font-weight: 700;
-                font-size: 14px;
-                line-height: 22px;
-                color: rgba(0, 0, 0, 0.85);
-            }
-        }
-
         .ant-col.ant-form-item-control-wrapper {
-
-            .ant-input-affix-wrapper:hover .ant-input:not(.ant-input-disabled) {
-                border-color: #d9d9d9;
-            }
-
-            input:not([class*="ant-select"]) {
-                height: 40px;
-                padding: 0 12px;
-                border: 1px solid #d9d9d9;
-                border-radius: 2px;
-                font-style: normal;
-                font-weight: 400;
-                font-size: 16px;
-                line-height: 24px;
-                color: rgba(0, 0, 0, 0.85);
-            }
-
-            .ant-select-selection--multiple {
-                min-height: 40px;
-
-                .ant-select-selection__rendered {
-                    line-height: 38px;
-                }
-
-                .ant-select-selection__choice,
-                .ant-select-search--inline {
-                    height: 32px;
-                    line-height: 32px;
-                }
-            }
-
-            .ant-select-selection--single {
-                height: 40px;
-                border-radius: 2px;
-                padding: 0 11px;
-
-                .ant-select-selection__rendered {
-                    height:100%;
-                    margin: 0;
-                    color: rgba(0, 0, 0, 0.85);
-                    line-height: 38px;
-                    font-size: 16px;
-                    font-weight: 400;
-
-                    .ant-select-search--inline {
-                        left: 0;
-                    }
-                }
-            }
-
-            .ant-input-group {
-                input {
-                    border-right: none;
-                    border-radius: 2px 0 0 2px;
-
-                    &:focus {
-                        box-shadow: none;
-                    }
-                }
-
-                .ant-input-group-addon {
-                    width: 32px;
-                    border: 1px solid #d9d9d9;
-                    border-left: none;
-                    padding: 0;
-                    border-radius: 0 2px 2px 0;
-
-                    i {
-                        display: block;
-                        width: 100%;
-                        height: 38px;
-                        background: url('/assets/icons/folder.svg') no-repeat center right 12px;
-
-                        &[class*="disabledButton"] {
-                            background-color: #f5f5f5;
-                        }
-
-                        svg {
-                            display: none;
-                        }
-                    }
-                }
-            }
-
-            div[class*='_fileUpload_'] {
-                height: 40px;
-                border-color: #d9d9d9;
-
-                &[class*='_error_'] {
-                    border-color: red;
-                }
-
-                & > * {
-                    height: inherit;
-                }
-
-                [class*='_downloadLink_'] {
-                    display: flex;
-                    align-items: center;
-                }
-
-                [class*='_uploadButton_'] {
-                    border-color: #d9d9d9;
-                }
-
-                [class*='_uploadLink_'] {
-                    display: flex;
-                    align-items: center;
-                }
-            }
-
-            div[class*='MultivalueTag__multivalue'] {
-                min-height: 40px;
-
-                .ant-tag {
-                    height: 32px;
-                    line-height: 30px;
-                }
-            }
-
             .ant-form-item-control.has-error {
                 input {
                     border-color: #f85359;
@@ -165,14 +37,6 @@
                     border-color: #f85359;
                 }
             }
-            .ant-time-picker {
-                width: 100%;
-            }
         }
     }
-}
-
-.formContainer div[class^="CheckboxPicker__container"] :global(.ant-checkbox-wrapper) {
-    min-height: 40px;
-    font-size: 14px;
 }

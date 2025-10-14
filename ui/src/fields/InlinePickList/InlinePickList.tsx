@@ -13,6 +13,7 @@ import useFixSelectDropdownForTableScroll from '@hooks/useFixSelectDropdownForTa
 import { BaseFieldProps } from '@components/Field/Field'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import { isPopupWidgetFamily } from '@utils/isPopupWidgetFamily'
+import { ReactComponent as folder } from '../../assets/icons/folder.svg'
 import styles from './InlinePickList.less'
 
 interface Props extends Omit<BaseFieldProps, 'meta'> {
@@ -134,9 +135,12 @@ const InlinePickList: React.FunctionComponent<Props> = ({
     }
 
     const popupOpenButton = !disabledPopup && (
-        <span className={cn(styles.buttonContainer, { [styles.disabledButton]: disabled })} onClick={!disabled ? handleClick : undefined}>
-            <Icon {...getUniqueDataTestAttr('popup')} type="paper-clip" />
-        </span>
+        <Icon
+            className={cn(styles.openIcon, { [styles.disabledButton]: disabled })}
+            {...getUniqueDataTestAttr('popup')}
+            component={folder}
+            onClick={!disabled ? handleClick : undefined}
+        />
     )
 
     return (
@@ -146,7 +150,6 @@ const InlinePickList: React.FunctionComponent<Props> = ({
                 disabled={disabled}
                 value={value ?? undefined}
                 allowClear={!!value}
-                clearIcon={<Icon {...getUniqueDataTestAttr('clear')} type="close-circle" />}
                 showSearch={neededSearch}
                 placeholder={placeholder ?? t('Enter value')}
                 defaultActiveFirstOption={false}
@@ -159,6 +162,7 @@ const InlinePickList: React.FunctionComponent<Props> = ({
                 getPopupContainer={trigger => trigger.parentElement?.parentElement as HTMLElement}
                 forwardedRef={selectRef}
                 onDropdownVisibleChange={handleDropdownVisibleChange}
+                clearIcon={<Icon {...getUniqueDataTestAttr('clear')} type="close-circle" />}
             >
                 {neededSearch &&
                     data.map(item => {

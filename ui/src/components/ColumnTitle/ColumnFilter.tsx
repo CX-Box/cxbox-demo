@@ -13,6 +13,7 @@ import { EFeatureSettingKey } from '@interfaces/session'
 import { FIELDS } from '@constants'
 
 interface ColumnFilterProps {
+    className?: string
     widgetName: string
     widgetMeta: WidgetListField
     rowMeta: RowMetaField
@@ -21,7 +22,7 @@ interface ColumnFilterProps {
     }
 }
 
-function ColumnFilter({ widgetName, widgetMeta, rowMeta, components }: ColumnFilterProps) {
+function ColumnFilter({ widgetName, widgetMeta, rowMeta, components, className }: ColumnFilterProps) {
     const widget = useAppSelector(state => state.view.widgets.find(item => item.name === widgetName))
     const filterByRangeEnabled = useAppSelector(
         state =>
@@ -145,7 +146,7 @@ function ColumnFilter({ widgetName, widgetMeta, rowMeta, components }: ColumnFil
             onVisibleChange={handleVisibleChange}
         >
             <div
-                className={cn(styles.icon, {
+                className={cn(className, styles.icon, {
                     [styles.active]: (filter?.value?.toString()?.length as number) > 0 || Array.isArray(filter?.value)
                 })}
                 data-test-widget-list-header-column-filter={true}

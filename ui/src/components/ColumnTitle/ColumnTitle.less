@@ -2,6 +2,7 @@
     display: flex;
     word-break: normal;
     position: relative;
+    align-items: center;
 }
 
 .sort {
@@ -13,11 +14,46 @@
 }
 
 .closeButton {
-    position: relative;
-    right: -10px;
-    top: -10px;
+  position: relative;
+  top: -10px;
+  right: -8px;
+  width: 16px;
+  margin: 0 -8px;
+
+  &:global(.ant-btn .anticon) {
+    width: 12px;
+    height: 12px;
+    font-size: 12px;
+  }
 }
 
 .rightAlignment {
-    justify-content: flex-end;
+    justify-content: flex-start;
+    flex-direction: row-reverse;
+}
+
+.container {
+  &:not(.rightAlignment) {
+    .filter {
+      margin-left: 8px;
+    }
+
+    .sort {
+      margin-left: 2px;
+    }
+  }
+
+  &.rightAlignment {
+    .filter {
+      margin-right: 8px;
+    }
+
+    .sort {
+      margin-right: 2px;
+    }
+
+    .closeButton {
+      order: -1;
+    }
+  }
 }

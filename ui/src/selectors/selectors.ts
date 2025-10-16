@@ -33,3 +33,15 @@ export const selectWidget = (state: RootState, widgetName: string | undefined) =
     widgetName ? state.view.widgets.find(widget => widgetName === widget?.name) : undefined
 
 export const selectWidgetByCondition = (state: RootState, condition: (widget: WidgetMeta) => boolean) => state.view.widgets.find(condition)
+
+export const selectBcNameFromPopupData = (state: RootState) => {
+    const { bcName, widgetName } = state.view.popupData ?? {}
+
+    if (bcName) {
+        return bcName
+    }
+
+    if (widgetName) {
+        return state.view.widgets.find(widget => widget.name === widgetName)?.bcName
+    }
+}

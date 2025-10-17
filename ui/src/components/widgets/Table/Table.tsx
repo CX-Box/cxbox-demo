@@ -500,7 +500,7 @@ function Table<T extends CustomDataItem>({
                                     forceFocus={editMode}
                                     className={cn(editMode ? styles.fullWidth : styles.fitContentWidth)}
                                 />
-                                {showCounter && `(${countOfRecords})`}
+                                {showCounter ? <span className={styles.counter}>({countOfRecords})</span> : null}
                             </FieldBaseThemeWrapper>
                         )
 

@@ -11,7 +11,7 @@ export type PaginationMode = (typeof AVAILABLE_PAGINATION_TYPES)[number]
 
 export const MAIN_DEFAULT_PAGINATION_TYPE: PaginationMode = 'nextAndPreviousSmart'
 
-export const SECONDARY_DEFAULT_PAGINATION_TYPE_WITH_COUNT: PaginationMode = 'nextAndPreviousWithCount'
+export const SECONDARY_DEFAULT_PAGINATION_TYPE_WITH_COUNT = AVAILABLE_PAGINATION_TYPES[2]
 
 export const WIDGETS_WITH_SECONDARY_DEFAULT_PAGINATION_TYPE_WITH_COUNT: (WidgetTypes | CustomWidgetTypes)[] = [
     WidgetTypes.List,

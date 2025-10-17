@@ -28,15 +28,23 @@ export const isPdfExtension = (extension: string) => {
     return /(pdf)$/i.test(extension)
 }
 
-export type FileViewerType = 'image' | 'pdf' | 'other' // 'excel' | 'word'
+export const isAudioExtension = (extension: string) => {
+    return /(mp3|wav|m4a|wma)$/i.test(extension)
+}
+
+export type FileViewerType = 'image' | 'pdf' | 'audio' | 'other' // 'excel' | 'word'
 
 export const fileViewerType = (fileName: string = ''): FileViewerType => {
     const extension = getExtension(fileName) ?? ''
 
     if (isImageExtension(extension)) {
         return 'image'
-    } else if (isPdfExtension(extension)) {
+    }
+    if (isPdfExtension(extension)) {
         return 'pdf'
+    }
+    if (isAudioExtension(extension)) {
+        return 'audio'
     }
 
     return 'other'

@@ -355,12 +355,23 @@ const bcDeleteDataEpic: RootEpic = (action$, state$, { api }) =>
                         const newData = oldData.filter(dataItem => dataItem.id !== cursor)
                         const previousCursor = oldData?.[previousElementIndex]?.id ?? newData[0]?.id ?? null
 
+                        const bcMeta = state.screen.bo.bc[bcName]
+                        const actions$ = []
+
+                        if ((bcMeta.hasNext || bcMeta.page !== 1) && bcMeta.limit === oldData.length) {
+                            actions$.push(of(actions.bcFetchDataRequest({ bcName, widgetName })))
+                        } else {
+                            actions$.push(
+                                of(actions.updateBcData({ bcName, data: newData })),
+                                of(actions.bcChangeCursors({ cursorsMap: { [bcName]: previousCursor } })),
+                                of(actions.bcFetchRowMeta({ widgetName, bcName }))
+                            )
+                        }
+
                         return concat(
                             of(actions.setOperationFinished({ bcName, operationType: OperationTypeCrud.delete })),
                             isTargetFormatPVF ? of(actions.bcCancelPendingChanges({ bcNames: [bcName] })) : EMPTY,
-                            of(actions.updateBcData({ bcName, data: newData })),
-                            of(actions.bcChangeCursors({ cursorsMap: { [bcName]: previousCursor } })),
-                            of(actions.bcFetchRowMeta({ widgetName, bcName })),
+                            ...actions$,
                             postInvoke ? of(actions.processPostInvoke({ bcName, postInvoke, cursor, widgetName })) : EMPTY
                         )
                     }

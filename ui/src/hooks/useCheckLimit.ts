@@ -9,18 +9,18 @@ export const useCheckLimit = (bcName: string) => {
     const widgets = useAppSelector(state => state.view.widgets)
     const paginationTypes = getBcPaginationTypes(bcName, widgets)
 
-    let isIncorrectLimit
-    let bcCountForShowing
+    let isIncorrectLimit: boolean
+    let bcCountForShowing: string | number
 
     if (paginationTypes.has('nextAndPreviousWithCount')) {
         isIncorrectLimit = bcLimit != null && bcCount != null && bcCount > bcLimit
         bcCountForShowing = bcCount
     } else if (paginationTypes.has('nextAndPreviousWithHasNext')) {
-        isIncorrectLimit = typeof bcHasNext === 'boolean' && (bcHasNext || bcPage !== 1)
+        isIncorrectLimit = bcHasNext || bcPage !== 1
         bcCountForShowing = `${bcLimit}+`
     } else {
-        isIncorrectLimit = false
-        bcCountForShowing = Infinity
+        isIncorrectLimit = (!!bcLimit && bcCount >= bcLimit) || Boolean(bcHasNext) || bcPage !== 1
+        bcCountForShowing = bcCount
     }
 
     return {

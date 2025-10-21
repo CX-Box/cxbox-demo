@@ -11,7 +11,7 @@ import { buildBcUrl } from '@utils/buildBcUrl'
 import * as dictionaryCustomIcons from '@assets/icons/dictionaryCustomIcons'
 import { AppDictionaryFieldMeta, EDictionaryMode } from '@interfaces/widget'
 import cn from 'classnames'
-import useFixSelectDropdownForTableScroll from '@hooks/useFixSelectDropdownForTableScroll'
+import useFixSelectDropdownForScroll from '@hooks/useFixSelectDropdownForScroll'
 import DrillDown from '@components/ui/DrillDown/DrillDown'
 
 export interface DictionaryProps extends BaseFieldProps {
@@ -67,8 +67,7 @@ const Dictionary: React.FC<DictionaryProps> = props => {
         value: resultValue as string | string[],
         allowClear: !!value,
         showSearch: true,
-        getPopupContainer: trigger => trigger.parentElement as HTMLElement,
-        onDropdownVisibleChange: useFixSelectDropdownForTableScroll(selectRef),
+        onDropdownVisibleChange: useFixSelectDropdownForScroll(selectRef),
         onChange: handleChange,
         dropdownMatchSelectWidth: false,
         forwardedRef: selectRef,

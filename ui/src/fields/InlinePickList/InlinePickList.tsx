@@ -9,7 +9,7 @@ import { actions, FieldType, InlinePickListFieldMeta, interfaces, PopupWidgetTyp
 import { useDebounce } from '@hooks/useDebounce'
 import ReadOnlyField from '../../components/ui/ReadOnlyField/ReadOnlyField'
 import { RootState, useAppSelector } from '@store'
-import useFixSelectDropdownForTableScroll from '@hooks/useFixSelectDropdownForTableScroll'
+import useFixSelectDropdownForScroll from '@hooks/useFixSelectDropdownForScroll'
 import { BaseFieldProps } from '@components/Field/Field'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import { isPopupWidgetFamily } from '@utils/isPopupWidgetFamily'
@@ -140,7 +140,7 @@ const InlinePickList: React.FunctionComponent<Props> = ({
         [pickMap, bcName, cursor, data, dispatch]
     )
 
-    const handleDropdownVisibleChange = useFixSelectDropdownForTableScroll(selectRef)
+    const handleDropdownVisibleChange = useFixSelectDropdownForScroll(selectRef)
 
     if (readOnly) {
         return (
@@ -182,7 +182,6 @@ const InlinePickList: React.FunctionComponent<Props> = ({
                 onFocus={neededSearch ? handleFocus : undefined}
                 onChange={onChange}
                 notFoundContent={null}
-                getPopupContainer={trigger => trigger.parentElement?.parentElement as HTMLElement}
                 forwardedRef={selectRef}
                 onDropdownVisibleChange={handleDropdownVisibleChange}
                 clearIcon={

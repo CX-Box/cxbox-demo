@@ -19,11 +19,8 @@
 }
 
 .table {
+    overflow-x: auto;
     :global {
-        .ant-table .ant-table-body {
-            overflow-x: auto;
-        }
-
         .ant-table .ant-table-thead > tr > th {
             padding: 11px 16px;
             font-weight: 500;
@@ -257,15 +254,15 @@
             height: 14px;
         }
     }
-}
 
-.treeButton:not(.active)[disabled] {
-    color: #f5222d;
-    opacity: 0.75;
-}
+    .treeButton.active {
+      color: #808080;
+    }
 
-.treeButton.active {
-    color: #808080;
+    .treeButton:not(.active)[disabled] {
+      color: #f5222d;
+      opacity: 0.75;
+    }
 }
 
 .expandRow form {

@@ -86,5 +86,7 @@ export const useProportionalWidgetGrid = <
         return rows ? filterVisibleItemsOnGrid(rows) : undefined
     }, [filterVisibleItemsOnGrid, rows])
 
-    return { grid, visibleFlattenWidgetFields }
+    const empty = !grid || grid.every(row => row.cols.length === 0)
+
+    return { empty, grid, visibleFlattenWidgetFields }
 }

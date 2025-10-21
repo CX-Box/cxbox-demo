@@ -32,7 +32,7 @@ interface FormProps extends FormOwnProps {
 export const Form: FunctionComponent<FormProps> = ({ meta, fields, missingFields, metaErrors, cursor }) => {
     const { t } = useTranslation()
     const { bcName, name } = meta
-    const { grid, visibleFlattenWidgetFields } = useProportionalWidgetGrid(meta)
+    const { empty, grid, visibleFlattenWidgetFields } = useProportionalWidgetGrid(meta)
 
     const memoizedFields = React.useMemo(() => {
         return (
@@ -87,6 +87,10 @@ export const Form: FunctionComponent<FormProps> = ({ meta, fields, missingFields
             </Row>
         )
     }, [grid, visibleFlattenWidgetFields, missingFields, metaErrors, meta.name, t, bcName, cursor, name])
+
+    if (empty) {
+        return null
+    }
 
     return (
         <FieldBaseThemeWrapper className={styles.formContainer}>

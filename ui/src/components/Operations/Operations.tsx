@@ -31,7 +31,7 @@ function Operations(props: OperationsOwnProps) {
     })
     const metaInProgress = useAppSelector(state => state.view.metaInProgress[bcName])
 
-    const { defaultOperations, customOperations, isUploadDnDMode } = useWidgetOperationsMode(widgetMeta, operations)
+    const { defaultOperations, customOperations, isUploadDnDMode, hasOperations } = useWidgetOperationsMode(widgetMeta, operations)
     const cachedOperations = useOperationsCache(defaultOperations, bcName)
     const isOperationInProgress = useOperationInProgress(bcName)
 
@@ -68,6 +68,10 @@ function Operations(props: OperationsOwnProps) {
         return {
             disabled: operation.scope === 'mass' ? !bcData?.length : false
         }
+    }
+
+    if (!hasOperations) {
+        return null
     }
 
     return (
@@ -181,7 +185,10 @@ const useWidgetOperationsMode = (widget: AppWidgetMeta, operations: (Operation |
         return FILE_UPLOAD_DND_MODE.includes(mode as OperationCustomMode)
     }
 
+    const hasOperations = !!(customOperations?.length || defaultOperations?.length)
+
     return {
+        hasOperations,
         defaultOperations,
         customOperations,
         isUploadDnDMode

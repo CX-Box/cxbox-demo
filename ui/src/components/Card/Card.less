@@ -6,6 +6,12 @@
     margin-bottom: 24px;
 }
 
+.container:empty,
+  /* checks that there is nothing and the widget does not contain content */
+.container:has(> :only-child > :global(.ant-spin-container):empty) {
+  margin-bottom: 0;
+}
+
 .operations {
     margin-bottom: 10px;
 }

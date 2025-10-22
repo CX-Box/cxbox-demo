@@ -67,4 +67,5 @@ public class Meeting extends BaseEntity {
 	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	private Set<Contact> additionalContacts = new HashSet<>();
 
+
 }

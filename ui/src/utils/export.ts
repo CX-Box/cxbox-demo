@@ -134,7 +134,7 @@ export function valueMapper(value: DataValue, isExcel: boolean, fieldMeta?: Tabl
         case FieldType.date:
         case FieldType.dateTime:
         case FieldType.dateTimeWithSeconds:
-            const date = value ? new Date(value as string) : null
+            const date = value ? moment.parseZone(value as string, moment.ISO_8601).toDate() : null
             result = date && !isExcel ? getFormattedDateString(value as string, fieldMeta.type, true) : date
             break
         case FieldType.percent:

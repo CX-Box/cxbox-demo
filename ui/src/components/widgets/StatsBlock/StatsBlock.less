@@ -4,6 +4,10 @@
   display: flex !important;
   border-radius: 8px;
   cursor: pointer;
+  transition: border-color ease-in-out .15s;
+  &:hover {
+    border-color: #000000 !important;
+  }
 }
 
 .itemContent {
@@ -19,4 +23,8 @@
   font-size: 20px;
   background-color: #eeeeee;
   border-radius: 50%;
+}
+
+.itemSelected {
+  border-color: #000000 !important;
 }

@@ -5,10 +5,10 @@ import { useAppDispatch, useAppSelector } from '@store'
 import { useWidgetCollapse } from '@hooks/useWidgetCollapse'
 import { getItemPropertyValue, getItemColor } from './utils'
 import { actions } from '@actions'
-import { selectedItemOpacity } from './constants'
 import { DataItem } from '@cxbox-ui/core'
 import { AppWidgetTableMeta, EStatsBcCursor } from '@interfaces/widget'
 import styles from './StatsBlock.less'
+import cn from 'classnames'
 
 interface Props {
     meta: AppWidgetTableMeta
@@ -53,10 +53,9 @@ const StatsBlock: React.FC<Props> = ({ meta }) => {
                     renderItem={item => (
                         <Tooltip title={getItemPropertyValue(item, meta, 'description')}>
                             <List.Item
-                                className={styles.itemContainer}
+                                className={cn(styles.itemContainer, { [styles.itemSelected]: isBcCursorShow && item.id === cursor })}
                                 style={{
-                                    backgroundColor: getItemColor(item, meta),
-                                    opacity: isBcCursorShow && item.id === cursor ? selectedItemOpacity : 'initial'
+                                    backgroundColor: getItemColor(item, meta)
                                 }}
                                 onClick={() => handleClick(item)}
                             >

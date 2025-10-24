@@ -1,0 +1,33 @@
+{
+  "name": "calendarList",
+  "title": "",
+  "type": "List",
+  "bc": "calendarList",
+  "fields": [
+    {
+      "title": "value",
+      "key": "agenda",
+      "type": "input",
+      "drillDown": true
+    },
+    {
+      "title": "start",
+      "key": "startDateTime",
+      "type": "dateTime"
+    },
+    {
+      "title": "end",
+      "key": "endDateTime",
+      "type": "dateTime"
+    }
+  ],
+  "options": {
+    "calendar": {
+      "valueFieldKey": "agenda"
+    },
+    "pagination":{
+      "type": "nextAndPreviousSmart",
+      "hideLimitOptions" : true
+    }
+  }
+}

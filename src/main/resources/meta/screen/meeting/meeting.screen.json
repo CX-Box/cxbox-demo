@@ -19,6 +19,12 @@
             "viewName": "meetingview"
           }
         ]
+      },
+      {
+        "viewName": "calendarView"
+      },
+      {
+        "viewName": "calendarYearView"
       }
     ]
   }

@@ -64,5 +64,31 @@
     </loadUpdateData>
   </changeSet>
 
+  <changeSet id="create-meetings-views-postgresql" author="myunmgan" dbms="postgresql" runOnChange="true">
+    <sqlFile path="db/changelog/sql/postgres/CXBOX_1101_VIEW_CALENDAR_YEAR.sql"
+      relativeToChangelogFile="false"
+      splitStatements="false"
+      stripComments="false"/>
+    <rollback>
+      DROP VIEW IF EXISTS v_meetings_clients;
+      DROP VIEW IF EXISTS v_meetings_by_day;
+    </rollback>
+  </changeSet>
+
+  <changeSet id="create-meetings-views-oracle" author="myunmgan" dbms="oracle" runOnChange="true">
+    <sqlFile path="db/changelog/sql/oracle/CXBOX_1101_VIEW_CALENDAR_YEAR.sql"
+      relativeToChangelogFile="false"
+      splitStatements="false"
+      stripComments="false"/>
+    <rollback>
+      DROP VIEW v_meetings_clients;
+      DROP VIEW v_meetings_by_day;
+    </rollback>
+  </changeSet>
+
+  <changeSet id="create-indexes-for-views" author="myungman" runOnChange="true">
+    <sqlFile path="db/changelog/sql/CXBOX_1101_CREATE_INDEXES.sql"
+      relativeToChangelogFile="false"/>
+  </changeSet>
 
 </databaseChangeLog>

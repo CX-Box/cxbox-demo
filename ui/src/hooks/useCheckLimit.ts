@@ -5,7 +5,7 @@ export const useCheckLimit = (bcName: string) => {
     const bcLimit = useAppSelector(state => state.screen.bo.bc[bcName].limit)
     const bcPage = useAppSelector(state => state.screen.bo.bc[bcName]?.page) as number
     const bcHasNext = useAppSelector(state => state.screen.bo.bc[bcName].hasNext)
-    const bcCount = useAppSelector(state => state.view.bcRecordsCount[bcName]?.count)
+    const bcCount = useAppSelector(state => state.view.bcRecordsCount[bcName]?.count ?? state.data[bcName]?.length)
     const widgets = useAppSelector(state => state.view.widgets)
     const paginationTypes = getBcPaginationTypes(bcName, widgets)
 

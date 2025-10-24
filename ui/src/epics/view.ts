@@ -358,7 +358,7 @@ const bcDeleteDataEpic: RootEpic = (action$, state$, { api }) =>
                         const bcMeta = state.screen.bo.bc[bcName]
                         const actions$ = []
 
-                        if ((bcMeta.hasNext || bcMeta.page !== 1) && bcMeta.limit === oldData.length) {
+                        if (bcMeta.hasNext || bcMeta.page !== 1 || bcMeta.limit === oldData.length) {
                             actions$.push(of(actions.bcFetchDataRequest({ bcName, widgetName })))
                         } else {
                             actions$.push(

@@ -34,8 +34,8 @@ public class MeetingDocumentsDTO extends DataResponseDTO {
 	@SearchParameter(name = "document", provider = EnumValueProvider.class)
 	private Documents document;
 
-	@Min(value = 1, message = "Priority cannot be higher than 1")
-	@Max(value = 5, message = "Priority cannot be lower than 5")
+	@Min(value = 1, message = "Priority cannot be lower than 1")
+	@Max(value = 5, message = "Priority cannot be higher than 5")
 	@SearchParameter(name = "priority", provider = BigDecimalValueProvider.class)
 	private Long priority;
 

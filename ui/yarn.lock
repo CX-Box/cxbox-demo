@@ -17581,6 +17581,7 @@ __metadata:
     source-map-loader: "npm:4.0.1"
     typescript: "npm:5.2.2"
     uuid: "npm:9.0.0"
+    wavesurfer.js: "npm:7.10.1"
   languageName: unknown
   linkType: soft
 
@@ -17882,6 +17883,13 @@ __metadata:
     glob-to-regexp: "npm:^0.4.1"
     graceful-fs: "npm:^4.1.2"
   checksum: c5e35f9fb9338d31d2141d9835643c0f49b5f9c521440bb648181059e5940d93dd8ed856aa8a33fbcdd4e121dad63c7e8c15c063cf485429cd9d427be197fe62
+  languageName: node
+  linkType: hard
+
+"wavesurfer.js@npm:7.10.1":
+  version: 7.10.1
+  resolution: "wavesurfer.js@npm:7.10.1"
+  checksum: 1508373830bbfaaf89638cd38d8d8cb96bfdf2360ddaa74f397079b792624ccc6bc5f7c4914ba26d889b60a544eb1f8a5bef114500ff8fdeb0f1b16691e67cee
   languageName: node
   linkType: hard
 

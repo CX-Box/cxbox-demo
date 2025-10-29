@@ -68,7 +68,7 @@ const convertTemplatedString = (templatedString: string, item: Omit<DataItem, 'v
 
     // If the regular expression contains capturing parentheses, then each time separator is matched the results (including any undefined results) of the capturing parentheses are spliced into the output array.
     return (
-        <span>
+        <>
             {templatedString.split(TAG_PLACEHOLDER_FULL).reduce<ReactNode[]>((acc, str, index) => {
                 const value = str.match(TAG_PLACEHOLDER_VALUE)
 
@@ -100,7 +100,7 @@ const convertTemplatedString = (templatedString: string, item: Omit<DataItem, 'v
 
                 return acc
             }, [])}
-        </span>
+        </>
     )
 }
 
@@ -116,6 +116,6 @@ export function getWidgetTitle(str: string, record?: Omit<DataItem, 'vstamp'>, f
     if (isTemplate(str)) {
         return convertTemplatedString(str, record, fields)
     } else {
-        return <span>{str}</span>
+        return <>{str}</>
     }
 }

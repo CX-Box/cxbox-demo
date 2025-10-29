@@ -5,21 +5,17 @@ import { DataItem } from '@cxbox-ui/core'
 
 export interface InnerTemplatedTitleProps {
     title: string
-    container?: React.ComponentType<any>
+    className?: string
     fields?: WidgetField[] | undefined
     dataItem?: Omit<DataItem, 'vstamp'> | undefined
 }
 
-export const InnerTemplatedTitle: FunctionComponent<InnerTemplatedTitleProps> = ({ title, container: Container, fields, dataItem }) => {
+export const InnerTemplatedTitle: FunctionComponent<InnerTemplatedTitleProps> = ({ className, title, fields, dataItem }) => {
     const templatedTitle = useMemo(() => getWidgetTitle(title, dataItem, fields), [dataItem, title, fields])
 
     if (!title) {
         return null
     }
 
-    if (Container) {
-        return <Container title={templatedTitle} />
-    }
-
-    return <>{templatedTitle}</>
+    return <span className={className}>{templatedTitle}</span>
 }

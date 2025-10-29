@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { Checkbox } from 'antd'
@@ -9,6 +9,7 @@ import { RootState } from '@store'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import styles from './CheckboxPicker.less'
 import cn from 'classnames'
+import { useResizeObserver } from '@hooks/useResizeObserver'
 
 export interface CheckboxPickerOwnProps {
     fieldName: string
@@ -40,6 +41,8 @@ const CheckboxPicker: React.FC<CheckboxPickerProps> = ({
     placeholder,
     onChange
 }) => {
+    const { ref: containerRef, isMultiline } = useMultilineCheck<HTMLDivElement>()
+
     const handleChange = React.useCallback(
         (event: CheckboxChangeEvent) => {
             const dataItem: interfaces.PendingDataItem = { [fieldName]: event.target.checked }
@@ -54,7 +57,7 @@ const CheckboxPicker: React.FC<CheckboxPickerProps> = ({
     )
 
     return (
-        <div className={cn(styles.container, { [styles.readOnly]: readonly })}>
+        <div ref={containerRef} className={cn(styles.container, { [styles.readOnly]: readonly, [styles.multiline]: isMultiline })}>
             <Checkbox
                 data-test-field-checkbox-item={true}
                 checked={value as boolean}
@@ -86,3 +89,29 @@ function mapDispatchToProps(dispatch: Dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CheckboxPicker)
+
+export const useMultilineCheck = <T extends HTMLElement>() => {
+    const elementRef = useRef<T>(null)
+    const [isMultiline, setIsMultiline] = useState(false)
+
+    const checkHeight = useCallback<ResizeObserverCallback>(entries => {
+        const element = elementRef.current
+        const entry = entries?.[0]
+
+        if (!entry || !element) {
+            return
+        }
+
+        const heightThreshold = parseFloat(window.getComputedStyle(element).getPropertyValue('--field-height').trim())
+
+        if (isNaN(heightThreshold)) {
+            return
+        }
+
+        setIsMultiline(entry.contentRect.height > heightThreshold)
+    }, [])
+
+    useResizeObserver(elementRef, checkHeight)
+
+    return { ref: elementRef, isMultiline }
+}

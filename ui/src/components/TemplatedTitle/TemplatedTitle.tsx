@@ -5,12 +5,12 @@ import { InnerTemplatedTitle } from '@components/TemplatedTitle/InnerTemplatedTi
 
 interface TemplatedTitleProps {
     id?: string
+    className?: string
     title: string
     widgetName: string
-    container?: React.ComponentType<any>
 }
 
-export const TemplatedTitle: FunctionComponent<TemplatedTitleProps> = ({ widgetName, title, container, id }) => {
+export const TemplatedTitle: FunctionComponent<TemplatedTitleProps> = ({ widgetName, title, className, id }) => {
     const widget = useAppSelector(state => {
         return state.view.widgets.find(item => item.name === widgetName)
     })
@@ -24,7 +24,7 @@ export const TemplatedTitle: FunctionComponent<TemplatedTitleProps> = ({ widgetN
     })
     const widgetFields = widget?.fields as WidgetField[] | undefined
 
-    return <InnerTemplatedTitle title={title} dataItem={dataItem} fields={widgetFields} container={container} />
+    return <InnerTemplatedTitle title={title} dataItem={dataItem} fields={widgetFields} className={className} />
 }
 
 export default TemplatedTitle

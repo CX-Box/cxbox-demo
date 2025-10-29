@@ -11,7 +11,7 @@ interface TitleProps extends InnerTemplatedTitleProps {
     style?: React.CSSProperties
 }
 
-const Title: React.FC<TitleProps> = ({ level, title, fields, dataItem, container, marginBottom = 12, bcColor, className, style }) => {
+const Title: React.FC<TitleProps> = ({ level, title, fields, dataItem, marginBottom = 12, bcColor, className, style }) => {
     const element = `h${level}`
 
     return createElement(
@@ -20,7 +20,7 @@ const Title: React.FC<TitleProps> = ({ level, title, fields, dataItem, container
             className: cn(styles.title, styles[element], className, { [styles.colorHeader]: bcColor }),
             style: { background: bcColor, marginBottom, ...style }
         },
-        <InnerTemplatedTitle title={title} dataItem={dataItem} fields={fields} container={container} />
+        <InnerTemplatedTitle title={title} dataItem={dataItem} fields={fields} />
     )
 }
 

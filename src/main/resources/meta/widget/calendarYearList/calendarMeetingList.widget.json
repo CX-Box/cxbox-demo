@@ -1,8 +1,8 @@
 {
-  "name": "meetingList",
+  "name": "calendarMeetingList",
   "title": "",
   "type": "List",
-  "bc": "meetingEdit",
+  "bc": "calendarYearMeeting",
   "fields": [
     {
       "title": "Meeting Region",

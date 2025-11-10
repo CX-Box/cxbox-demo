@@ -10,6 +10,7 @@ import { CxBoxApiInstance } from '../../api'
 import { actions, utils } from '@cxbox-ui/core'
 import { useAppDispatch } from '@store'
 import styles from './FileViewer.less'
+import { Audio } from '@components/FileViewer/Audio/Audio'
 
 export interface FileViewerProps {
     fileName: string
@@ -103,6 +104,7 @@ const FileViewer = forwardRef<FileViewerHandlers | undefined, FileViewerProps>(
                     pageWidth={pageWidth}
                 />
             ) : null,
+            audio: <Audio src={blobUrl} />,
             other: (
                 <Empty
                     type={getExtension(fileName)}
@@ -118,7 +120,7 @@ const FileViewer = forwardRef<FileViewerHandlers | undefined, FileViewerProps>(
                 className={cn(styles.root, className, styles[view])}
                 onDoubleClick={onDoubleClick}
                 onClick={onClick}
-                style={{ ...style, width, height }}
+                style={{ ...style, width, maxHeight: height }}
             >
                 {viewerMap[displayType]}
             </div>

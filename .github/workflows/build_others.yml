@@ -9,6 +9,11 @@ on:
     branches-ignore:
       - 'main'
       - 'react_query'
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GITHUB_EVENT_NAME: ${{ github.event_name }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,6 +22,80 @@ jobs:
         java: ['17']
     steps:
       - uses: actions/checkout@v3
+
+      - name: Validate MR title
+        shell: bash
+        env:
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+          LC_ALL: C.UTF-8
+        run: |
+          echo "Checking MR title format..."
+          
+          if [ "${GITHUB_EVENT_NAME}" == "pull_request" ]; then
+            TITLE="${{ github.event.pull_request.title }}"
+          else
+            TITLE=$(gh pr list --head "$GITHUB_REF_NAME" --state open --json title -q '.[0].title')
+            if [ -z "$TITLE" ]; then
+              echo "⚠️ No open PR found for branch $GITHUB_REF_NAME. Skipping title check."
+              exit 0
+            fi
+          fi
+          
+          echo "Title: $TITLE"
+          
+          LEFT_PART=$(echo "$TITLE" | cut -d'|' -f1 | xargs)   # ticket
+          RIGHT_PART=$(echo "$TITLE" | cut -d'|' -f2 | xargs)  # type + description
+          
+          ERROR_MESSAGE="::error ::
+          ✅ Correct examples:
+            CXBOX-1234 | Fixed. Fixed login bug
+            CXBOX-5678 | Added. New feature
+          
+          Rules:
+            • Start with ticket number (CXBOX-XXXX)
+            • Then ' | ' (space, pipe, space)
+            • Then 'Fixed.' or 'Added.'
+            • Then a description starting with a capital letter"
+          
+          # 0. Check |
+          if [[ "$TITLE" != *"|"* ]]; then
+          echo "::error ::❌  MR title does not match the required format: Add ' | ' separator!"
+            echo "$ERROR_MESSAGE"
+            exit 1
+          fi
+          
+          # 1. Check ticket
+          if [[ ! $LEFT_PART =~ ^CXBOX-[0-9]+$ ]]; then
+            echo "::error ::❌ MR title does not match the required format: Add number ticket (CXBOX-) !"
+            echo "$ERROR_MESSAGE"
+            exit 1
+          fi
+          
+          # 2. Check type changing
+          TYPE=$(echo "$RIGHT_PART" | awk '{print $1}' | sed 's/\.//')   
+          if [[ ! "$TYPE" =~ ^(Fixed|Added)$ ]]; then
+            echo "::error ::❌ MR title does not match the required format: Add type changing (Fixed|Added) !"
+            echo "$ERROR_MESSAGE"
+            exit 1
+          fi
+          
+          # 3. Check first char in description
+          DESCRIPTION=$(echo "$RIGHT_PART" | cut -d' ' -f2-)
+          DESCRIPTION_NO_SPACES="${DESCRIPTION// /}"
+          FIRST_CHAR=${DESCRIPTION_NO_SPACES:0:1}
+          
+          case "$FIRST_CHAR" in
+          [A-ZА-Я]*)
+          echo "✅ First char is capital"
+          ;;
+          *)
+          echo "::error ::❌ MR title does not match the required format: Description must start with a capital letter!"
+          echo "$ERROR_MESSAGE"
+          exit 1
+          ;;
+          esac
+          echo "✅ MR title is valid."
+
       - name: Set up JDK ${{ matrix.java }}
         uses: actions/setup-java@v3
         with:

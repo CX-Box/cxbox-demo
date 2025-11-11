@@ -9,6 +9,11 @@ on:
     branches-ignore:
       - 'main'
       - 'react_query'
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GITHUB_EVENT_NAME: ${{ github.event_name }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -21,7 +26,6 @@ jobs:
       - name: Validate MR title
         shell: bash
         env:
-          GITHUB_EVENT_NAME: ${{ github.event_name }}
           GITHUB_REF_NAME: ${{ github.ref_name }}
           LC_ALL: C.UTF-8
         run: |

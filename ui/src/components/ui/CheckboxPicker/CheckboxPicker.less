@@ -1,13 +1,30 @@
-@import '@assets/styles/theme.less';
+.container:not(.readOnly) {
+  /* multiLine mode */
+  :global(.ant-checkbox-wrapper) {
+    display: flex;
+    align-items: flex-start;
+    min-height: var(--field-height);
+  }
 
-.container:not(.readOnly) :global {
-    .ant-checkbox-wrapper {
-        display: flex;
-        align-items: center;
-        min-height: var(--field-height);
+  :global(.ant-checkbox) {
+    position: relative;
+    top: 0;
+    transform: translateY(calc(((var(--field-font-size) * 1.5) - 16px) / 2));
+  }
+
+  /* single line mode */
+  &:not(.multiline) {
+    :global(.ant-checkbox) {
+      transform: translateY(calc((var(--field-height) - 16px) / 2));
     }
+
+    :global(.ant-checkbox + span) {
+      position: relative;
+      transform: translateY(calc((var(--field-height) - (var(--field-font-size) * 1.5)) / 2));
+    }
+  }
 }
 
 td .container {
-    padding: 0 12px;
+  padding: 0 12px;
 }

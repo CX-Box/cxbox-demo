@@ -130,6 +130,10 @@
         "This file type cannot be viewed": "Формат файла не поддерживается для просмотра",
         "There is no file in this row": "В этой строке нет файла",
         "The form contains required fields that are not available for completion. Contact your administrator.": "Форма содержит обязательные поля (\"{{value}}\"), недоступные для заполнения. Обратитесь к администратору.",
-        "The form contains a required field that is not available for completion. Contact your administrator.": "Форма содержит обязательное поле (\"{{value}}\"), недоступное для заполнения. Обратитесь к администратору."
+        "The form contains a required field that is not available for completion. Contact your administrator.": "Форма содержит обязательное поле (\"{{value}}\"), недоступное для заполнения. Обратитесь к администратору.",
+        "Retry": "Повтор",
+        "Export failed": "Экспортировать неуспешные",
+        "Result": "Результат",
+        "Export": " Экспортировать"
     }
 }

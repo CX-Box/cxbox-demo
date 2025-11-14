@@ -48,7 +48,7 @@ cxbox:
     side-bar-search-enabled: true
     notification-mode: stack
     app-info-env: ${APP_INFO_ENV:Local}
-    app-info-description: ${APP_INFO_DESCRIPTION:v2.0.15}
+    app-info-description: ${APP_INFO_DESCRIPTION:v2.0.16}
     app-info-color: ${APP_INFO_COLOR:#3a6e49}
     app-export-excel-limit: 500
     timeout-show-message: 10_000

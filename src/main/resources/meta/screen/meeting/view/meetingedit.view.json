@@ -10,11 +10,6 @@
       "gridWidth": 24
     },
     {
-      "widgetName": "secondLevelMenu",
-      "position": 0,
-      "gridWidth": 24
-    },
-    {
       "widgetName": "meetingEditHeader",
       "position": 10,
       "gridWidth": 24

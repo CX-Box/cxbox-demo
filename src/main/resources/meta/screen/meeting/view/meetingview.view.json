@@ -5,11 +5,6 @@
   "url": "/screen/meeting/view/meetingview",
   "widgets": [
     {
-      "widgetName": "secondLevelMenu",
-      "position": 0,
-      "gridWidth": 24
-    },
-    {
       "widgetName": "meetingEditViewHeader",
       "position": 10,
       "gridWidth": 24

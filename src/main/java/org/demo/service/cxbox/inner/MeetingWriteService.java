@@ -12,7 +12,9 @@ import static org.demo.dto.cxbox.inner.MeetingDTO_.result;
 import static org.demo.dto.cxbox.inner.MeetingDTO_.startDateTime;
 
 import jakarta.persistence.EntityManager;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -39,6 +41,7 @@ import org.demo.conf.cxbox.extension.multivaluePrimary.MultivalueExt;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.inner.MeetingDTO;
 import org.demo.dto.cxbox.inner.MeetingDTO_;
+import org.demo.entity.CalendarYearMeeting;
 import org.demo.entity.Contact;
 import org.demo.entity.Meeting;
 import org.demo.entity.Meeting_;
@@ -46,6 +49,7 @@ import org.demo.entity.enums.MeetingStatus;
 import org.demo.repository.ClientRepository;
 import org.demo.repository.ContactRepository;
 import org.demo.repository.MeetingRepository;
+import org.demo.repository.MeetingsByDayRepository;
 import org.demo.repository.core.UserRepository;
 import org.demo.service.mail.MailSendingService;
 import org.demo.service.statemodel.MeetingStatusModelActionProvider;
@@ -79,8 +83,27 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 	@Getter(onMethod_ = @Override)
 	private final Class<MeetingWriteMeta> meta = MeetingWriteMeta.class;
 
+	private final MeetingsByDayRepository meetingsByDayRepository;
+
 	@Override
 	protected Specification<Meeting> getParentSpecification(BusinessComponent bc) {
+		if (bc.getParentName().equals(CxboxRestController.calendarYearList.getName())) {
+			LocalDate eventDate = Optional.ofNullable(bc.getParentIdAsLong()).map(meetingsByDayRepository::findById)
+					.flatMap(m -> m)
+					.map(CalendarYearMeeting::getEventDate)
+					.map(LocalDateTime::toLocalDate).orElse(null);
+			if (eventDate != null) {
+				return (root, cq, cb) ->
+						cb.and(
+								cb.lessThanOrEqualTo(root.get(Meeting_.startDateTime), eventDate.atTime(LocalTime.MAX)),
+								cb.greaterThanOrEqualTo(root.get(Meeting_.endDateTime), eventDate.atStartOfDay())
+						)
+						;
+			} else {
+				return (root, cq, cb) -> cb.disjunction();
+			}
+		}
+
 		if (Objects.equals(bc.getParentName(), CxboxRestController.meetingStats.getName())) {
 			return switch (bc.getParentId()) {
 				case "2" -> createStatusSpecification(bc, MeetingStatus.NOT_STARTED);
@@ -151,8 +174,8 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 	}
 
 	@Override
-	public ActionResultDTO onCancel(BusinessComponent bc) {
-		return new ActionResultDTO<>().setAction(PostAction.drillDown(
+	public ActionResultDTO<MeetingDTO> onCancel(BusinessComponent bc) {
+		return new ActionResultDTO<MeetingDTO>().setAction(PostAction.drillDown(
 				DrillDownType.INNER,
 				"/screen/meeting/"
 		));
@@ -169,6 +192,14 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 						0,
 						addEditAction(statusModelActionProvider.getMeetingActions()).build()
 				)
+				.action(act -> act
+						.action("save-with-validation", "Save")
+						.scope(ActionScope.RECORD)
+						.invoker((bc, dto) -> {
+							MeetingStartAndEndDateValidator.validateStartAndEndDate(bc, dto);
+							return new ActionResultDTO<>(dto);
+						})
+				)
 				.withIcon(ActionIcon.MENU, false)
 				.action(act -> act
 						.scope(ActionScope.RECORD)
@@ -180,11 +211,14 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 										.yesText("Approve and Save")
 										.noText("Cancel")
 						))
-						.invoker((bc, dto) -> new ActionResultDTO<MeetingDTO>().setAction(
-								PostAction.drillDown(
-										DrillDownType.INNER,
-										"/screen/meeting/view/meetingview/" + CxboxRestController.meeting + "/" + bc.getId()
-								)))
+						.invoker((bc, dto) -> {
+							MeetingStartAndEndDateValidator.validateStartAndEndDate(bc, dto);
+							return new ActionResultDTO<MeetingDTO>().setAction(
+									PostAction.drillDown(
+											DrillDownType.INNER,
+											"/screen/meeting/view/meetingview/" + CxboxRestController.meeting + "/" + bc.getId()
+									));
+						})
 				)
 				.cancelCreate(ccr -> ccr.text("Cancel").available(bc -> true))
 				.action(act -> act
@@ -250,7 +284,6 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 									.setAction(PostAction.showMessage(MessageType.INFO, "The email will be dispatched tomorrow."));
 						})
 				)
-
 				.build();
 	}
 

@@ -20,53 +20,54 @@ public class MeetingWriteMeta extends FieldMetaBuilder<MeetingDTO> {
 	@Override
 	public void buildRowDependentMeta(RowDependentFieldsMeta<MeetingDTO> fields, InnerBcDescription bcDescription,
 			Long id, Long parentId) {
-		fields.setEnabled(MeetingDTO_.region);
-		fields.setDictionaryValues(MeetingDTO_.region);
-		fields.setEnabled(MeetingDTO_.additionalContacts);
-		if (MeetingStatus.IN_COMPLETION.equals(fields.get(MeetingDTO_.status).getCurrentValue())) {
-			fields.setEnabled(
-					MeetingDTO_.notes,
-					MeetingDTO_.result
-			);
-		} else {
-			fields.setEnabled(
-					MeetingDTO_.agenda,
-					MeetingDTO_.startDateTime,
-					MeetingDTO_.endDateTime,
-					MeetingDTO_.address,
-					MeetingDTO_.responsibleName,
-					MeetingDTO_.responsibleId,
-					MeetingDTO_.clientName,
-					MeetingDTO_.clientId,
-					MeetingDTO_.contactId
-			);
-			if (fields.get(MeetingDTO_.clientId).getCurrentValue() != null) {
+		if (!CxboxRestController.calendarList.isBc(bcDescription)) {
+			fields.setEnabled(MeetingDTO_.region);
+			fields.setDictionaryValues(MeetingDTO_.region);
+			fields.setEnabled(MeetingDTO_.additionalContacts);
+			if (MeetingStatus.IN_COMPLETION.equals(fields.get(MeetingDTO_.status).getCurrentValue())) {
 				fields.setEnabled(
-						MeetingDTO_.contactName,
+						MeetingDTO_.notes,
+						MeetingDTO_.result
+				);
+			} else {
+				fields.setEnabled(
+						MeetingDTO_.agenda,
+						MeetingDTO_.startDateTime,
+						MeetingDTO_.endDateTime,
+						MeetingDTO_.address,
+						MeetingDTO_.responsibleName,
+						MeetingDTO_.responsibleId,
+						MeetingDTO_.clientName,
+						MeetingDTO_.clientId,
 						MeetingDTO_.contactId
+				);
+				if (fields.get(MeetingDTO_.clientId).getCurrentValue() != null) {
+					fields.setEnabled(
+							MeetingDTO_.contactName,
+							MeetingDTO_.contactId
+					);
+				}
+			}
+
+			fields.setDrilldown(
+					MeetingDTO_.id,
+					DrillDownType.INNER,
+					"/screen/meeting/view/meetingview/" + CxboxRestController.meeting + "/" + id
+			);
+			if (Optional.ofNullable(fields.get(MeetingDTO_.clientId)).map(FieldDTO::getCurrentValue).isPresent()) {
+				fields.setDrilldown(
+						MeetingDTO_.clientName,
+						DrillDownType.INNER,
+						"/screen/client/view/clientview/" + CxboxRestController.client + "/" +
+								fields.get(MeetingDTO_.clientId).getCurrentValue()
 				);
 			}
 		}
-
 		fields.setRequired(
 				MeetingDTO_.agenda,
 				MeetingDTO_.startDateTime,
 				MeetingDTO_.endDateTime
 		);
-
-		fields.setDrilldown(
-				MeetingDTO_.id,
-				DrillDownType.INNER,
-				"/screen/meeting/view/meetingview/" + CxboxRestController.meeting + "/" + id
-		);
-		if (Optional.ofNullable(fields.get(MeetingDTO_.clientId)).map(FieldDTO::getCurrentValue).isPresent()) {
-			fields.setDrilldown(
-					MeetingDTO_.clientName,
-					DrillDownType.INNER,
-					"/screen/client/view/clientview/" + CxboxRestController.client + "/" +
-							fields.get(MeetingDTO_.clientId).getCurrentValue()
-			);
-		}
 	}
 
 	@Override
@@ -85,6 +86,8 @@ public class MeetingWriteMeta extends FieldMetaBuilder<MeetingDTO> {
 		fields.enableSort(MeetingDTO_.startDateTime);
 		fields.enableFilter(MeetingDTO_.startDateTime);
 		fields.setForceActive(MeetingDTO_.endDateTime);
+		fields.enableSort(MeetingDTO_.endDateTime);
+		fields.enableFilter(MeetingDTO_.endDateTime);
 		fields.enableSort(MeetingDTO_.agenda);
 		fields.enableSort(MeetingDTO_.id);
 		fields.enableSort(MeetingDTO_.status);

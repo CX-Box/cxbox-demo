@@ -1,0 +1,59 @@
+{
+  "name": "calendarFormForList",
+  "title": "",
+  "type": "Form",
+  "bc": "calendarList",
+  "fields": [
+    {
+      "label": "Agenda",
+      "key": "agenda",
+      "type": "input"
+    },
+    {
+      "label": "Start Date Time",
+      "key": "startDateTime",
+      "type": "dateTime"
+    },
+    {
+      "label": "End Date Time",
+      "key": "endDateTime",
+      "type": "dateTime"
+    }
+  ],
+  "options": {
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "agenda",
+              "span": 24
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "startDateTime",
+              "span": 24
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "endDateTime",
+              "span": 24
+            }
+          ]
+        }
+      ]
+    },
+    "actionGroups": {
+      "include": [
+        "save-with-validation",
+        "cancel-create"
+      ]
+    }
+  }
+}

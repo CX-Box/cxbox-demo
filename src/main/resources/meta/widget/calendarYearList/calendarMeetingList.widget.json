@@ -1,8 +1,8 @@
 {
-  "name": "meetingList",
+  "name": "calendarMeetingList",
   "title": "",
   "type": "List",
-  "bc": "meetingEdit",
+  "bc": "calendarYearMeeting",
   "fields": [
     {
       "title": "Meeting Region",
@@ -51,7 +51,7 @@
       "title": "Client Name",
       "key": "clientName",
       "type": "pickList",
-      "popupBcName": "clientPickListPopup",
+      "popupBcName": "clientCalendarPickListPopup",
       "pickMap": {
         "clientName": "fullName",
         "clientId": "id"
@@ -75,10 +75,10 @@
       "enabled": true
     },
     "create": {
-      "widget": "meetingFormForList"
+      "widget": "calendarYearFormForList"
     },
     "edit": {
-      "widget": "meetingFormForList"
+      "widget": "calendarYearFormForList"
     },
     "actionGroups": {
       "include": [

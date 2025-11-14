@@ -1,0 +1,42 @@
+{
+  "name": "calendarYearList",
+  "title": "",
+  "type": "CalendarYearList",
+  "bc": "calendarYearList",
+  "fields": [
+    {
+      "title": "Value",
+      "key": "value",
+      "type": "input"
+    },
+    {
+      "title": "Start Date Time",
+      "key": "startDateTime",
+      "type": "dateTime"
+    },
+    {
+      "title": "End Date Time",
+      "key": "endDateTime",
+      "type": "dateTime"
+    },
+    {
+      "title": "Client Name",
+      "key": "clients",
+      "displayedKey": "clientsDisplayName",
+      "type": "multivalue",
+      "popupBcName": "client",
+      "assocValueKey": "fullName"
+    }
+  ],
+  "options": {
+    "calendar": {
+      "valueFieldKey": "value",
+      "startFieldKey": "startDateTime",
+      "endFieldKey": "endDateTime"
+    },
+    "pagination": {
+      "type": "nextAndPreviousSmart",
+      "hideLimitOptions" : true
+    }
+  }
+}

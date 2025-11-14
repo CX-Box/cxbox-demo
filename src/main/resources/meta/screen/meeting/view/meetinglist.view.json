@@ -5,43 +5,48 @@
   "url": "/screen/meeting/view/meetinglist",
   "widgets": [
     {
-      "widgetName": "meetingListHeader",
+      "widgetName": "secondLevelMenu",
       "position": 0,
       "gridWidth": 24
     },
     {
-      "widgetName": "meetingStats",
-      "position": 1,
-      "gridWidth": 24
-    },
-    {
-      "widgetName": "meetingList",
+      "widgetName": "meetingListHeader",
       "position": 10,
       "gridWidth": 24
     },
     {
-      "widgetName": "meetingFormForList",
+      "widgetName": "meetingStats",
       "position": 20,
       "gridWidth": 24
     },
     {
-      "widgetName": "meetingFormPopup",
-      "position": 25,
-      "gridWidth": 24
-    },
-    {
-      "widgetName": "clientPickListPopup",
+      "widgetName": "meetingList",
       "position": 30,
       "gridWidth": 24
     },
     {
-      "widgetName": "contactPickListPopup",
+      "widgetName": "meetingFormForList",
       "position": 40,
       "gridWidth": 24
-    }
-  ,{
+    },
+    {
+      "widgetName": "meetingFormPopup",
+      "position": 50,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "clientPickListPopup",
+      "position": 60,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "contactPickListPopup",
+      "position": 70,
+      "gridWidth": 24
+    },
+    {
       "widgetName": "contactFormForList",
-      "position": 41,
+      "position": 80,
       "gridWidth": 24
     }
   ],

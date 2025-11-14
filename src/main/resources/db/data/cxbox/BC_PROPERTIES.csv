@@ -12,3 +12,5 @@ saleStatsProduct;1000;NULL;NULL;'""';
 saleStatsProductDual;1000;NULL;NULL;'""';
 saleStatsProductTypeLines;1000;NULL;NULL;'""';
 saleStatsProductStatusColumn;1000;NULL;NULL;'""';
+calendarYearList;1000;NULL;_sort.0.asc=startDateTime;'""';
+calendarList;1000;NULL;NULL;'""';

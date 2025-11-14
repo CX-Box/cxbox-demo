@@ -41,6 +41,7 @@ public class MeetingDTO extends DataResponseDTO {
 	@SearchParameter(name = "startDateTime", provider = DateTimeValueProvider.class)
 	private LocalDateTime startDateTime;
 
+	@SearchParameter(name = "endDateTime", provider = DateTimeValueProvider.class)
 	private LocalDateTime endDateTime;
 
 	private String period;

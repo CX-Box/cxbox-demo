@@ -1,0 +1,24 @@
+{
+  "name": "calendarView",
+  "title": "Calendar",
+  "template": "DashboardView",
+  "url": "/screen/meeting/view/calendarView",
+  "widgets": [
+    {
+      "widgetName": "calendarFormForList",
+      "position": 2,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "secondLevelMenu",
+      "position": 0,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "calendarList",
+      "position": 10,
+      "gridWidth": 24
+    }
+  ],
+  "rolesAllowed": ["CXBOX_USER", "ADMIN"]
+}

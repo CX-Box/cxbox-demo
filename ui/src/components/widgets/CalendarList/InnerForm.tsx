@@ -1,6 +1,5 @@
 import React from 'react'
 import { Operation, OperationGroup, WidgetFormMeta } from '@cxbox-ui/core'
-import styles from './InnerForm.less'
 import Form from '@components/widgets/Form/Form'
 import Operations, { OperationsProps } from '@components/Operations/Operations'
 import { AppWidgetMeta } from '@interfaces/widget'
@@ -17,7 +16,7 @@ function InnerForm({ widgetMeta, operations, rowId, additionalOperations }: Inne
     }
 
     return (
-        <div className={styles.root} data-test-widget-list-row-id={rowId}>
+        <div data-test-widget-list-row-id={rowId}>
             <Form meta={widgetMeta as WidgetFormMeta} />
             {operations?.length ? (
                 <Operations

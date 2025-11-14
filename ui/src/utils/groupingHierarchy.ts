@@ -11,7 +11,7 @@ import { WidgetFieldBase } from '@cxbox-ui/schema'
  * @param widget
  * @param bc
  */
-export const createDefaultSort = (widget: AppWidgetMeta | undefined, bc: BcMeta) => {
+export const createDefaultSort = (widget: AppWidgetMeta, bc: BcMeta) => {
     const groupingHierarchyOption = widget?.options?.groupingHierarchy
 
     if (widget && groupingHierarchyOption?.fields.length) {

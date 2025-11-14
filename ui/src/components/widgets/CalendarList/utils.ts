@@ -26,7 +26,7 @@ export const getLastDayOfYear = (date: moment.MomentInput) => {
     return moment(date).endOf('year')
 }
 
-export const getFirsDay = () => {
+export const getFirstDay = () => {
     return moment.localeData().firstDayOfWeek()
 }
 

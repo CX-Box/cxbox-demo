@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react'
 import FullCalendar from '@fullcalendar/react'
-import { getFirsDay } from '@components/widgets/CalendarList/utils'
+import { getFirstDay } from '@components/widgets/CalendarList/utils'
 import { useTranslation } from 'react-i18next'
 import styles from './Calendar.less'
 import { useCalendarCellAspectRatio } from '@components/widgets/CalendarList/hooks'
@@ -18,7 +18,6 @@ const EVENT_MAIN_BG_COLOR = 'rgb(193, 233, 254)'
 const EVENT_MAIN_TEXT_COLOR = '#141F35'
 
 const Calendar = React.forwardRef<FullCalendar, CalendarProps>(({ initialView, datesSet, autoHeight, ...restProps }, ref) => {
-    const restCalendarProps = { ...restProps }
     const { i18n } = useTranslation()
     const wrapperRef = useRef<HTMLDivElement>(null)
 
@@ -51,9 +50,11 @@ const Calendar = React.forwardRef<FullCalendar, CalendarProps>(({ initialView, d
         [datesSet, needToSetAspectRatio]
     )
 
+    const heightProps: Pick<FullCalendarProps, 'height' | 'contentHeight'> = {}
+
     if (autoHeight) {
-        restCalendarProps.height = aspectRatioEnabled ? 'auto' : restCalendarProps.height ?? 'auto'
-        restCalendarProps.contentHeight = aspectRatioEnabled ? 'auto' : restCalendarProps.contentHeight ?? 'auto'
+        heightProps.height = aspectRatioEnabled ? 'auto' : restProps.height ?? 'auto'
+        heightProps.contentHeight = aspectRatioEnabled ? 'auto' : restProps.contentHeight ?? 'auto'
     }
 
     return (
@@ -65,10 +66,11 @@ const Calendar = React.forwardRef<FullCalendar, CalendarProps>(({ initialView, d
                 eventBorderColor={EVENT_MAIN_BG_COLOR}
                 eventTextColor={EVENT_MAIN_TEXT_COLOR}
                 locale={i18n.language}
-                firstDay={getFirsDay()} // To avoid desynchronization of filtering with the display
+                firstDay={getFirstDay()} // To avoid desynchronization of filtering with the display
                 initialView={initialView}
                 datesSet={handleDateSet}
-                {...restCalendarProps}
+                {...restProps}
+                {...heightProps}
             />
         </div>
     )

@@ -13,7 +13,8 @@ export enum EFeatureSettingKey {
     sideBarWordBreak = 'sideBarWordBreak',
     sideBarSearchEnabled = 'sideBarSearchEnabled',
     defaultDate = 'defaultDate',
-    appExportExcelLimit = 'appExportExcelLimit'
+    appExportExcelLimit = 'appExportExcelLimit',
+    timeoutShowMessage = 'timeoutShowMessage'
 }
 
 export type FeatureSetting = {

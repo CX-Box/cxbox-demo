@@ -8,7 +8,7 @@ import OperationsGroup from './components/OperationsGroup'
 import { AppWidgetMeta, OperationCustomMode, OperationInfo, removeRecordOperationWidgets } from '@interfaces/widget'
 import Button, { customTypes } from '../ui/Button/Button'
 import cn from 'classnames'
-import { useWidgetOperations } from '@hooks/useWidgetOperations'
+import { useWidgetOperationsOld } from '@hooks/useWidgetOperations'
 import { useOperationInProgress } from '@hooks/useOperationInProgress'
 import TextSearchInput from '@components/Operations/components/TextSearchInput/TextSearchInput'
 import { FileUpload } from '@components/Operations/components/FileUpload/FileUpload'
@@ -16,7 +16,7 @@ import { actions } from '@actions'
 import { AVAILABLE_MASS_STEPS } from '@components/widgets/Table/massOperations/constants'
 import { selectBcUrlRowMeta } from '@selectors/selectors'
 
-export interface OperationsOwnProps {
+export interface OperationsProps {
     className?: string
     bcName: string
     widgetMeta: AppWidgetMeta
@@ -24,7 +24,7 @@ export interface OperationsOwnProps {
     additionalOperations?: ReactNode
 }
 
-function Operations(props: OperationsOwnProps) {
+function Operations(props: OperationsProps) {
     const { bcName, widgetMeta, operations = [], className, additionalOperations } = props
     const bcData = useAppSelector(state => {
         return state.data[bcName]
@@ -177,7 +177,7 @@ const useWidgetOperationsMode = (widget: AppWidgetMeta, operations: (Operation |
         ?.filter(button => !CUSTOM_COMBINED_WITH_DEFAULT_MODE.includes(button.mode as OperationCustomMode))
         .map(button => button.actionKey)
 
-    const defaultOperations = useWidgetOperations(operations, widget).filter(
+    const defaultOperations = useWidgetOperationsOld(operations, widget).filter(
         item => !customOperationsWithoutDefaultMode?.includes(item.type as string)
     )
 

@@ -1,12 +1,12 @@
 import { useAppSelector } from '@store'
-import { selectBcUrlRowMeta } from '@selectors/selectors'
+import { selectBcMetaInProgress, selectBcUrlRowMeta } from '@selectors/selectors'
 import { useEffect, useRef } from 'react'
 import { RowMeta } from '@interfaces/rowMeta'
 
 // TODO rewrite the implementation to a variant with the cursor and without useRef
-export const useRowMetaWithCache = (bcName: string, includeSelf?: boolean) => {
-    const metaInProgress = useAppSelector(state => state.view.metaInProgress[bcName])
-    const rowMeta = useAppSelector(state => selectBcUrlRowMeta(state, bcName, includeSelf))
+export const useRowMetaWithCache = (bcName: string | undefined, includeSelf?: boolean) => {
+    const metaInProgress = useAppSelector(selectBcMetaInProgress(bcName))
+    const rowMeta = useAppSelector(selectBcUrlRowMeta(bcName, includeSelf))
 
     const cached = useRef<RowMeta | null>(null)
 

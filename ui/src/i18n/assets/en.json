@@ -1,5 +1,13 @@
 {
     "translation": {
+        "Today": "Today",
+        "Month": "Month",
+        "Week": "Week",
+        "Day": "Day",
+        "Grid": "Grid",
+        "Stack": "Stack",
+        "Continuous": "Continuous",
+        "Click on the date to see all events": "Click on the date to see all events",
         "Apply": "Apply",
         "Attention": "Attention",
         "Clear": "Clear",
@@ -102,6 +110,8 @@
         "No expanded columns": "No expanded columns",
         "Warning! Only List mode available for Grouping Hierarchy": "Warning! There are {{bcCount}} rows on the backend - limit for \"Grouping Hierarchy\" mode is {{limit}}. Only \"List\" mode is available",
         "Warning! Only List mode available for Chart": "Warning! There are {{bcCount}} rows on the backend - limit for \"Chart\" mode is {{limit}}. Only \"List\" mode is available",
+        "Warning! Only List mode available for CalendarList": "Warning! There are {{bcCount}} rows on the backend - limit for \"CalendarList\" mode is {{limit}}. Only \"List\" mode is available",
+        "There is incorrect data, only table mode is available": "There is incorrect data, only table mode is available",
         "Search in filters": "Search in filters",
         "Operation not available": "Operation \"{{operationType}}\" not available",
         "From": "From",

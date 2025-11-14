@@ -22,6 +22,7 @@ interface ViewState extends Omit<CoreViewState, 'popupData'> {
             bcName: string
             cursor: string
             create: boolean
+            options?: Record<string, unknown>
         }
     }
     popupData?: PopupData

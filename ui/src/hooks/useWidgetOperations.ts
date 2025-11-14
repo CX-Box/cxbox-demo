@@ -1,9 +1,11 @@
 import { useMemo } from 'react'
-import { interfaces } from '@cxbox-ui/core'
+import { OperationScope, isOperationGroup, Operation, OperationGroup, OperationInclusionDescriptor, WidgetMeta } from '@cxbox-ui/core'
+import { WidgetOperations } from '@cxbox-ui/schema'
+import { selectWidget } from '@selectors/selectors'
+import { useAppSelector } from '@store'
+import { useRowMetaWithCache } from '@hooks/useRowMetaWithCache'
 
-const { isOperationGroup } = interfaces
-
-const emptyArray: Array<interfaces.Operation | interfaces.OperationGroup> = []
+const emptyArray: Array<Operation | OperationGroup> = []
 
 /**
  * Returns a memoized array of operations with respect to include/exclude list in widget meta configuration
@@ -13,19 +15,13 @@ const emptyArray: Array<interfaces.Operation | interfaces.OperationGroup> = []
  * @param bcName BC name in case of hierarchy usage
  * @category Hooks
  */
-export function useWidgetOperations(
-    operations: Array<interfaces.Operation | interfaces.OperationGroup>,
-    widgetMeta: interfaces.WidgetMeta,
-    bcName: string = ''
-) {
+export function useWidgetOperationsOld(operations: Array<Operation | OperationGroup>, widgetMeta: WidgetMeta, bcName: string = '') {
     return useMemo(() => {
         const operationsHierarchy = widgetMeta?.options?.hierarchy
         const isHierarchy = operationsHierarchy ? operationsHierarchy.length > 0 : false
         const actionGroup =
             widgetMeta.options?.actionGroups &&
-            (isHierarchy
-                ? (widgetMeta.options.actionGroups as Record<string, interfaces.WidgetOperations>)[bcName]
-                : widgetMeta.options.actionGroups)
+            (isHierarchy ? (widgetMeta.options.actionGroups as Record<string, WidgetOperations>)[bcName] : widgetMeta.options.actionGroups)
         if (!actionGroup) {
             return operations || emptyArray
         }
@@ -33,10 +29,26 @@ export function useWidgetOperations(
         const { include, exclude } = actionGroup
         return getIncludedOperations(
             operations || emptyArray,
-            include as interfaces.OperationInclusionDescriptor[],
-            exclude as interfaces.OperationInclusionDescriptor[]
+            include as OperationInclusionDescriptor[],
+            exclude as OperationInclusionDescriptor[]
         )
     }, [operations, widgetMeta, bcName])
+}
+
+export function useWidgetOperations(widgetName: string = '', scopes?: OperationScope[], includeEmptyGroups?: boolean) {
+    const widgetMeta = useAppSelector(selectWidget(widgetName))
+    const operations = useRowMetaWithCache(widgetMeta?.bcName, true)?.actions
+    const { include, exclude } = widgetMeta?.options?.actionGroups || {}
+
+    return useMemo(() => {
+        return getIncludedOperations(
+            operations || emptyArray,
+            include as OperationInclusionDescriptor[],
+            exclude as OperationInclusionDescriptor[],
+            scopes,
+            includeEmptyGroups
+        )
+    }, [operations, include, exclude, scopes, includeEmptyGroups])
 }
 
 /**
@@ -48,20 +60,24 @@ export function useWidgetOperations(
  * @param operations List of operations
  * @param include List of operations to include
  * @param exclude List of operations to exclude
+ * @param scopes
+ * @param includeEmptyGroups
  * @category Utils
  */
 export function getIncludedOperations(
-    operations: Array<interfaces.Operation | interfaces.OperationGroup>,
-    include?: interfaces.OperationInclusionDescriptor[] | null,
-    exclude?: interfaces.OperationInclusionDescriptor[] | null
+    operations: Array<Operation | OperationGroup>,
+    include?: OperationInclusionDescriptor[] | null,
+    exclude?: OperationInclusionDescriptor[] | null,
+    scopes?: OperationScope[],
+    includeEmptyGroups: boolean = true
 ) {
-    const result: Array<interfaces.Operation | interfaces.OperationGroup> = []
+    const result: Array<Operation | OperationGroup> = []
     operations.forEach(item => {
-        if (shouldPickOperationOrGroupWithOperation(item, include, exclude)) {
+        if (shouldPickOperation(item, include, exclude, scopes)) {
             if (isOperationGroup(item)) {
                 const filtered = item.actions.filter(operation => {
                     if (!include) {
-                        return shouldPickOperation(operation, null, exclude)
+                        return shouldPickOperation(operation, null, exclude, scopes)
                     }
 
                     const nestedDescriptor = include.find(descriptor => getDescriptorValue(descriptor) === item.type)
@@ -78,9 +94,12 @@ export function getIncludedOperations(
                             ? null
                             : include
 
-                    return shouldPickOperation(operation, includeAll, excludeAll)
+                    return shouldPickOperation(operation, includeAll, excludeAll, scopes)
                 })
-                result.push({ ...item, actions: filtered })
+
+                if (filtered.length || includeEmptyGroups) {
+                    result.push({ ...item, actions: filtered })
+                }
             } else {
                 result.push(item)
             }
@@ -99,10 +118,10 @@ export function getIncludedOperations(
  * @param exclude List of operations to exclude
  * @category Utils
  */
-export function shouldPickOperation(
-    item: interfaces.Operation | interfaces.OperationGroup,
-    include?: interfaces.OperationInclusionDescriptor[] | null,
-    exclude?: interfaces.OperationInclusionDescriptor[] | null
+export function operationPicked(
+    item: Operation | OperationGroup,
+    include?: OperationInclusionDescriptor[] | null,
+    exclude?: OperationInclusionDescriptor[] | null
 ) {
     if (!include && exclude) {
         return exclude.every(descriptor => getDescriptorValue(descriptor) !== item.type)
@@ -119,16 +138,22 @@ export function shouldPickOperation(
     return true
 }
 
-export function shouldPickOperationOrGroupWithOperation(
-    item: interfaces.Operation | interfaces.OperationGroup,
-    include?: interfaces.OperationInclusionDescriptor[] | null,
-    exclude?: interfaces.OperationInclusionDescriptor[] | null
+export function shouldPickOperation(
+    item: Operation | OperationGroup,
+    include?: OperationInclusionDescriptor[] | null,
+    exclude?: OperationInclusionDescriptor[] | null,
+    scopes?: OperationScope[]
 ) {
+    const isNecessaryScopes = (currentScope: OperationScope) => (scopes?.length ? scopes.includes(currentScope) : true)
+
     if (isOperationGroup(item)) {
-        return shouldPickOperation(item, include, exclude) || item.actions.some(action => shouldPickOperation(action, include, exclude))
+        return (
+            operationPicked(item, include, exclude) ||
+            item.actions.some(action => operationPicked(action, include, exclude) && isNecessaryScopes(action.scope))
+        )
     }
 
-    return shouldPickOperation(item, include, exclude)
+    return operationPicked(item, include, exclude) && isNecessaryScopes(item.scope)
 }
 
 /**
@@ -136,7 +161,7 @@ export function shouldPickOperationOrGroupWithOperation(
  *
  * @param descriptor Строка или объект с этой строкой
  */
-function getDescriptorValue(descriptor: interfaces.OperationInclusionDescriptor) {
+function getDescriptorValue(descriptor: OperationInclusionDescriptor) {
     if (typeof descriptor === 'string') {
         return descriptor
     }

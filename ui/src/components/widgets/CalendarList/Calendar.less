@@ -1,0 +1,106 @@
+@import '../../../assets/styles/theme.less';
+
+.calendar {
+  --fc-now-indicator-color: rgb(193, 233, 254);
+  --fc-today-bg-color: transparent;
+  --fc-frame-min-height: 100%;
+  --fc-small-font-size: 12px;
+
+  a:not([class^='ActionLink']) {
+    color: inherit;
+  }
+
+  :global {
+    /* Day */
+
+    .fc .fc-daygrid-day .fc-daygrid-day-top {
+      border-top-width: 4px;
+      border-top-style: solid;
+      border-top-color: transparent;
+    }
+
+
+    .fc .fc-daygrid-body-unbalanced .fc-daygrid-day-events {}
+
+    .fc .fc-daygrid-day-frame {
+      min-height: var(--fc-frame-min-height);
+      height: 100%;
+    }
+
+    /* Active day */
+
+    .fc:has(.fc-dayGridMonth-view) .fc-daygrid-day.fc-day-active .fc-daygrid-day-top {
+      border-top-color: #deecf9;
+    }
+
+    .fc .fc-daygrid-day.fc-day-active .fc-daygrid-day-frame {
+      background-color: #deecf9;
+    }
+
+    .fc .fc-daygrid-day.fc-day-active .fc-daygrid-day-top {
+      color: #0072c6;
+      font-weight: 600;
+    }
+
+    /* Today */
+
+    .fc:has(.fc-dayGridMonth-view) .fc-daygrid-day.fc-day-today .fc-daygrid-day-top,
+    .fc:has(.fc-multiMonthYear-view) .fc-daygrid-day.fc-day-today .fc-daygrid-day-top {
+      border-top-color: #0072c6;
+    }
+
+    .fc .fc-daygrid-day.fc-day-today .fc-daygrid-day-top {
+      color: #0072c6;
+    }
+
+    /* Other day */
+
+    .fc .fc-day-other .fc-daygrid-day-events {
+      //opacity: 0.3;
+    }
+
+
+    /* Events */
+
+    .fc-h-event .fc-event-title {
+      display: inline; // для отображения в одну строку со временем
+    }
+
+    .fc-daygrid-event-dot {
+      display: none;
+    }
+
+    .fc-daygrid-dot-event {
+      padding: 0;
+    }
+
+    .fc-daygrid-dot-event .fc-daygrid-event-dot {
+      display: inline-block; // для отображения точки
+    }
+
+    .fc-daygrid-dot-event.fc-event-mirror,
+    .fc-daygrid-dot-event:hover,
+    .fc .fc-daygrid-more-link:hover {
+      background-color: transparent;
+    }
+
+    .fc-event,
+    .fc .fc-daygrid-more-link {
+      border: 1px solid transparent;
+    }
+
+    .fc-timegrid-event .fc-event-time {
+      margin-right: 3px;
+    }
+
+    .fc-timegrid-event-short .fc-event-time::after {
+      content: '';
+    }
+
+    .fc-event:hover,
+    .fc .fc-daygrid-more-link:hover,
+    .fc-event.fc-active-event {
+      border-color: rgba(0, 0, 0, 1) !important;
+    }
+  }
+}

@@ -18,9 +18,7 @@ const ActionLink: React.FC<IActionLinkProps> = ({ className, children, onClick }
         (e: React.MouseEvent<HTMLAnchorElement>) => {
             e.preventDefault()
             e.stopPropagation()
-            if (onClick) {
-                onClick(e)
-            }
+            onClick?.(e)
         },
         [onClick]
     )

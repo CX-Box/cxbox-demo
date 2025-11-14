@@ -55,6 +55,7 @@ export const setRecordForm = createAction<{
     cursor: string
     active: boolean
     create: boolean
+    options?: Record<string, unknown>
 }>('setRecordForm')
 
 export const partialUpdateRecordForm = createAction<{
@@ -63,6 +64,7 @@ export const partialUpdateRecordForm = createAction<{
     cursor?: string
     active?: boolean
     create?: boolean
+    options?: Record<string, unknown>
 }>('partialUpdateRecordForm')
 
 export const resetRecordForm = createAction<{ bcName?: string } | undefined>('resetRecordForm')

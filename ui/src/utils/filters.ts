@@ -1,5 +1,7 @@
 import { BcFilter, FieldType, FilterType } from '@cxbox-ui/core'
 import { CustomFieldTypes } from '@interfaces/widget'
+import { EFeatureSettingKey } from '@interfaces/session'
+import { isRangeFieldType } from '@constants/field'
 
 const EMPTY_OBJECT = {}
 const normalizeFilterValue = (value: unknown) => {
@@ -35,7 +37,7 @@ export const convertFiltersIntoObject = (filters?: BcFilter[]) => {
  *
  * @param fieldType Field type
  */
-export function getFilterType(fieldType: FieldType | CustomFieldTypes) {
+export function getFilterType(fieldType: string) {
     switch (fieldType) {
         case CustomFieldTypes.MultipleSelect:
         case FieldType.radio:
@@ -55,5 +57,14 @@ export function getFilterType(fieldType: FieldType | CustomFieldTypes) {
         }
         default:
             return FilterType.equals
+    }
+}
+
+export function getLocalFilterType(fieldType: string, options: { [EFeatureSettingKey.filterByRangeEnabled]?: boolean }) {
+    // The filter is converted on the frontend before being sent.
+    if (isRangeFieldType(fieldType, options)) {
+        return FilterType.range
+    } else {
+        return getFilterType(fieldType)
     }
 }

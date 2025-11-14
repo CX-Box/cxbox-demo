@@ -1,0 +1,36 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: rgba(0, 0, 0, 1);
+  --fc-has-events-color: rgb(193, 233, 254);
+
+  :global {
+    /* Day */
+    .fc-daygrid-day-frame:has(.fc-event) {
+      background-color: var(--fc-has-events-color);
+    }
+  }
+}
+
+.toolbarContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.calendarContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+
+.operationsPopover {
+  :global(.ant-popover-inner-content) {
+    padding: 4px;
+  }
+}
+

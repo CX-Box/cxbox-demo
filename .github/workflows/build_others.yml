@@ -26,19 +26,40 @@ jobs:
       - name: Validate MR title
         shell: bash
         env:
-          GITHUB_REF_NAME: ${{ github.ref_name }}
           LC_ALL: C.UTF-8
         run: |
-          echo "Checking MR title format..."
+          echo "Checking MR title format..."ф
+          # If it's a push — try to find an open PR for this branch
+          TITLE=$(gh pr list --head "$GITHUB_REF_NAME" --state open --json title -q '.[0].title')
           
-          if [ "${GITHUB_EVENT_NAME}" == "pull_request" ]; then
-            TITLE="${{ github.event.pull_request.title }}"
-          else
-            TITLE=$(gh pr list --head "$GITHUB_REF_NAME" --state open --json title -q '.[0].title')
-            if [ -z "$TITLE" ]; then
-              echo "⚠️ No open PR found for branch $GITHUB_REF_NAME. Skipping title check."
-              exit 0
+          # If no PR exists — determine the number of commits and set the title based on commits in the branch
+          
+          if [ -z "$TITLE" ]; then
+          # If no PR exists — determine the number of commits and set the title based on commits in the branch
+          
+          TARGET_BRANCH="main"
+          
+          # Make sure the main branch info is up to date
+          git fetch origin $TARGET_BRANCH
+          
+          # Count how many commits are in the current branch but not in main
+          COMMIT_COUNT=$(git rev-list --count origin/$TARGET_BRANCH..HEAD)
+          
+            # If there is only one commit — use its message as the title
+            if [ "$COMMIT_COUNT" -eq 1 ]; then
+              TITLE=$(git log -1 --pretty=%s)
+            else
+            # If there are multiple commits — use the branch name as the title
+              BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
+              TITLE="$BRANCH_NAME"
             fi
+          fi
+          
+          
+          if [ -z "$TITLE" ]; then
+          # If there is no commit message either — skip the check
+          echo "⚠️ No PR and no commit title found for branch $GITHUB_REF_NAME. Skipping title check."
+          exit 0
           fi
           
           echo "Title: $TITLE"
@@ -63,6 +84,7 @@ jobs:
             echo "$ERROR_MESSAGE"
             exit 1
           fi
+          echo "✅  ' | ' separator"
           
           # 1. Check ticket
           if [[ ! $LEFT_PART =~ ^CXBOX-[0-9]+$ ]]; then
@@ -70,6 +92,7 @@ jobs:
             echo "$ERROR_MESSAGE"
             exit 1
           fi
+          echo "✅ Check ticket"
           
           # 2. Check type changing
           TYPE=$(echo "$RIGHT_PART" | awk '{print $1}' | sed 's/\.//')   
@@ -78,6 +101,7 @@ jobs:
             echo "$ERROR_MESSAGE"
             exit 1
           fi
+          echo "✅ Check type changing"
           
           # 3. Check first char in description
           DESCRIPTION=$(echo "$RIGHT_PART" | cut -d' ' -f2-)
@@ -94,7 +118,7 @@ jobs:
           exit 1
           ;;
           esac
-          echo "✅ MR title is valid."
+                  echo "✅ MR title is valid."
 
       - name: Set up JDK ${{ matrix.java }}
         uses: actions/setup-java@v3

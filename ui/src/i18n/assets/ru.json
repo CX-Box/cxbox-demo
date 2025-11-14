@@ -1,5 +1,13 @@
 {
     "translation": {
+        "Today": "Сегодня",
+        "Month": "Месяц",
+        "Week": "Неделя",
+        "Day": "День",
+        "Grid": "Сетка",
+        "Stack": "Стек",
+        "Continuous": "Непрерывный",
+        "Click on the date to see all events": "Нажмите на дату, чтобы увидеть все события",
         "Apply": "Применить",
         "Attention": "Внимание",
         "Clear": "Сбросить",
@@ -104,6 +112,8 @@
         "No expanded columns": "Нет развернутых столбцов",
         "Warning! Only List mode available for Grouping Hierarchy": "Внимание! На сервере имеется {{bcCount}} строк — лимит для режима \"Групповая иерархия\" составляет {{limit}}. Доступен только режим \"Список\"",
         "Warning! Only List mode available for Chart": "Внимание! На сервере имеется {{bcCount}} строк - лимит для режима \"Диаграмма\" составляет {{limit}}. Доступен только режим \"Список\"",
+        "Warning! Only List mode available for CalendarList": "Внимание! На сервере имеется {{bcCount}} строк - лимит для режима \"Календарь\" составляет {{limit}}. Доступен только режим \"Список\"",
+        "There is incorrect data, only table mode is available": "Есть неверные данные, доступен только табличный режим",
         "Search in filters": "Поиск по фильтрам",
         "Operation not available": "Операция \"{{operationType}}\" не доступна",
         "From": "От",

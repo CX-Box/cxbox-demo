@@ -3,7 +3,7 @@ import { Icon, Menu, Skeleton, Spin } from 'antd'
 import styles from './RowOperationsMenu.less'
 import { useAppDispatch, useAppSelector } from '@store'
 import { useTranslation } from 'react-i18next'
-import { useWidgetOperations } from '@hooks/useWidgetOperations'
+import { useWidgetOperationsOld } from '@hooks/useWidgetOperations'
 import { useOperationInProgress } from '@hooks/useOperationInProgress'
 import { actions, interfaces } from '@cxbox-ui/core'
 import { MenuProps } from 'antd/es/menu'
@@ -49,7 +49,7 @@ export const RowOperationsMenu = ({ meta, bcName: hierarchyBc, onSelect, ...rest
     /**
      * Filter operations based on widget settings
      */
-    const operationList = useWidgetOperations(operations, meta, bcName)
+    const operationList = useWidgetOperationsOld(operations, meta, bcName)
     const isOperationInProgress = useOperationInProgress(bcName)
 
     const handleClick: MenuProps['onClick'] = React.useCallback(

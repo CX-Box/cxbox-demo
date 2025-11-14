@@ -39,6 +39,18 @@ epicMiddleware.run((action$, state$, dependencies) =>
         })
     )
 )
+
+// Identifies redux state by indirect signs
+export function isStateObject(arg: any): arg is RootState {
+    const hasRequiredStoreProperties = (obj: object): obj is RootState => {
+        const requiredProperties: Extract<keyof RootState, 'router' | 'screen' | 'view'>[] = ['router', 'screen', 'view']
+
+        return requiredProperties.every(property => property in obj)
+    }
+
+    return typeof arg === 'object' && arg !== null && hasRequiredStoreProperties(arg)
+}
+
 export type RootState = ReturnType<typeof rootReducer>
 
 export type RootEpic = interfaces.CXBoxEpic<RootState, typeof CxBoxApiInstance>

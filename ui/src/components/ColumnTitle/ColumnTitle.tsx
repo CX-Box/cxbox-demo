@@ -19,6 +19,9 @@ interface ColumnTitleProps {
     rowMeta: RowMetaField | undefined
     onClose?: (fieldKey: string) => void
     showCloseButton?: boolean
+    disableSort?: boolean
+    disableFilter?: boolean
+    className?: string
 }
 
 const { FieldType } = interfaces
@@ -32,13 +35,22 @@ export const notSortableFields: readonly (interfaces.FieldType | CustomFieldType
     FieldType.hint
 ]
 
-const ColumnTitle = ({ widgetName, widgetMeta, rowMeta, onClose, showCloseButton }: ColumnTitleProps) => {
+const ColumnTitle = ({
+    className,
+    widgetName,
+    widgetMeta,
+    rowMeta,
+    onClose,
+    showCloseButton,
+    disableFilter,
+    disableSort
+}: ColumnTitleProps) => {
     const sortingSetting = useAppSelector(state =>
         state.session.featureSettings?.find(feature => feature.key === EFeatureSettingKey.sortEnabled)
     )
     const isServerSideSortingEnabled = sortingSetting?.value === 'true' || rowMeta?.sortable === true
-    const isSortingEnabled = !notSortableFields.includes(widgetMeta.type) && isServerSideSortingEnabled
-    const isFilteringEnabled = rowMeta?.filterable
+    const isSortingEnabled = !disableSort && !notSortableFields.includes(widgetMeta.type) && isServerSideSortingEnabled
+    const isFilteringEnabled = !disableFilter && rowMeta?.filterable
 
     const handleColumnClose = useCallback(() => {
         onClose?.(widgetMeta.key)
@@ -70,7 +82,7 @@ const ColumnTitle = ({ widgetName, widgetMeta, rowMeta, onClose, showCloseButton
     )
 
     return (
-        <div className={cn(styles.container, { [styles.rightAlignment]: numberFieldTypes.includes(widgetMeta.type) })}>
+        <div className={cn(styles.container, className, { [styles.rightAlignment]: numberFieldTypes.includes(widgetMeta.type) })}>
             {title}
             {filter}
             {sort}

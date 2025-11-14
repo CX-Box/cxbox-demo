@@ -1,0 +1,9 @@
+.container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.container .listButton:global(.ant-btn[disabled]) {
+    color: #f5222d;
+    opacity: 0.75;
+}

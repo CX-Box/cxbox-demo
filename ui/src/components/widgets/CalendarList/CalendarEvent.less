@@ -1,0 +1,34 @@
+.calendarEvent {
+  &:global(.fc-event-main-frame) {
+      line-height: 1.4;
+  }
+
+  :global {
+    .fc-event-time {
+      white-space: pre-wrap;
+      font-weight: 500;
+    }
+
+    .fc-event-title {
+      font-weight: 700;
+    }
+  }
+}
+
+.actionLink {
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  color: #0088bb;
+  padding: 0;
+
+  &:visited {
+    color: #0088bb;
+  }
+
+  &:hover {
+    text-decoration: underline;
+    color: #0088bb;
+  }
+}

@@ -10,14 +10,13 @@ import { FieldType, WidgetField, WidgetTypes } from '@cxbox-ui/schema'
 import { useAppSelector } from '@store'
 import { useAssociateFieldKeyForPickList } from '../ColumnTitle/ColumnFilter'
 import { actions } from '@actions'
-import { PickListFieldMeta, BcFilter, DataValue, FilterType as CoreFilterType, RowMetaField } from '@cxbox-ui/core'
-import { getFilterType } from '@utils/filters'
+import { BcFilter, DataValue, FilterType as CoreFilterType, PickListFieldMeta, RowMetaField } from '@cxbox-ui/core'
+import { getLocalFilterType } from '@utils/filters'
 import { checkboxFilterCounterLimit, checkboxFilterMaxVisibleItems } from '@constants/filter'
-import { numberFieldTypes } from '@constants/field'
 import { checkboxFilterFieldTypes } from './constants'
-import { FilterType } from '@interfaces/filters'
-import { CustomFieldTypes } from '@interfaces/widget'
 import styles from './FilterPopup.less'
+import { selectBcFilters } from '@selectors/selectors'
+import { useCleanOldRangeFilters } from '@hooks/useCleanOldRangeFilters'
 
 interface FilterPopupProps {
     widgetName: string
@@ -31,16 +30,30 @@ interface FilterPopupProps {
     onCancel?: () => void
 }
 
+const isFilterValueEmpty = (value: unknown): boolean => {
+    if (value === null || value === undefined) {
+        return true
+    }
+
+    if (Array.isArray(value) && value.length === 0) {
+        return true
+    }
+
+    return false
+}
+
 const FilterPopup: React.FC<FilterPopupProps> = props => {
+    const { fieldType, filterByRangeEnabled, value, fieldKey, onApply } = props
+
     const widget = useAppSelector(state => {
         return state.view.widgets.find(item => item.name === props.widgetName)
     })
     const viewName = useAppSelector(state => {
         return state.view.name
     })
-    const filter = useAppSelector(state => {
-        return state.screen.filters[widget?.bcName as string]?.find(item => item.fieldName === props.fieldKey)
-    })
+    const filters = useAppSelector(selectBcFilters(widget?.bcName))
+    const filter = filters?.find(item => item.fieldName === props.fieldKey)
+
     const allFilters = useAppSelector(state => {
         return state.screen.filters[widget?.bcName as string]
     })
@@ -59,6 +72,8 @@ const FilterPopup: React.FC<FilterPopupProps> = props => {
 
     const dispatch = useDispatch()
     const { t } = useTranslation()
+
+    const cleanOldRangeFilters = useCleanOldRangeFilters(widget?.bcName)
 
     const filtersCounter = useMemo(() => {
         if (checkboxFilterFieldTypes.includes(props?.fieldType as FieldType)) {
@@ -82,48 +97,58 @@ const FilterPopup: React.FC<FilterPopupProps> = props => {
 
     const handleApply = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        const newFilter: BcFilter = {
-            type: ([
-                FieldType.date,
-                FieldType.dateTime,
-                FieldType.dateTimeWithSeconds,
-                CustomFieldTypes.Time,
-                ...(props.filterByRangeEnabled ? numberFieldTypes : [])
-            ].includes(props?.fieldType as FieldType | CustomFieldTypes)
-                ? FilterType.range
-                : getFilterType(widgetMeta.type)) as CoreFilterType,
-            value: props.value,
-            fieldName: props.fieldKey,
-            viewName,
-            widgetName: widget?.name as string
+
+        if (!widget?.name || !widget.bcName) {
+            return
         }
-        if (FieldType.pickList === props.fieldType) {
-            const foundPickListFilter = allFilters?.find(filter => {
-                return filter.fieldName === associateFieldKeyForPickList
-            })
-            if (foundPickListFilter) {
-                dispatch(actions.bcRemoveFilter({ bcName: widget?.bcName as string, filter: foundPickListFilter as BcFilter }))
-                picklistPopupWidget?.bcName && dispatch(actions.bcCancelPendingChanges({ bcNames: [picklistPopupWidget?.bcName] }))
+
+        const newFilter: BcFilter = {
+            type: getLocalFilterType(fieldType!, { filterByRangeEnabled }) as CoreFilterType,
+            value: value,
+            fieldName: fieldKey,
+            viewName,
+            widgetName: widget.name
+        }
+
+        if (fieldType === FieldType.pickList) {
+            const associatedFilter = allFilters?.find(filter => filter.fieldName === associateFieldKeyForPickList)
+            if (associatedFilter) {
+                dispatch(actions.bcRemoveFilter({ bcName: widget.bcName, filter: associatedFilter }))
+                if (picklistPopupWidget?.bcName) {
+                    dispatch(actions.bcCancelPendingChanges({ bcNames: [picklistPopupWidget.bcName] }))
+                }
             }
         }
-        if ((props.value === null || props.value === undefined) && FieldType.checkbox === props.fieldType) {
-            dispatch(
-                actions.bcAddFilter({
-                    bcName: widget?.bcName as string,
-                    filter: { ...newFilter, value: false },
-                    widgetName: widget?.name as string
-                })
-            )
-        } else if (props.value === null || props.value === undefined || (Array.isArray(props.value) && !props.value?.length)) {
-            dispatch(actions.bcRemoveFilter({ bcName: widget?.bcName as string, filter: filter as BcFilter }))
+
+        const isValueEmpty = isFilterValueEmpty(value)
+
+        cleanOldRangeFilters(newFilter)
+
+        if (isValueEmpty) {
+            if (fieldType === FieldType.checkbox) {
+                // For Checkbox, an empty value is 'false'
+                dispatch(
+                    actions.bcAddFilter({
+                        bcName: widget.bcName,
+                        filter: { ...newFilter, value: false },
+                        widgetName: widget.name
+                    })
+                )
+            } else if (filter) {
+                // Delete an existing filter if the value has become empty
+                dispatch(actions.bcRemoveFilter({ bcName: widget.bcName, filter }))
+            }
         } else {
-            dispatch(actions.bcAddFilter({ bcName: widget?.bcName as string, filter: newFilter, widgetName: widget?.name as string }))
+            // Adding or updating a filter
+            dispatch(actions.bcAddFilter({ bcName: widget.bcName, filter: newFilter, widgetName: widget.name }))
         }
+
         // FullHierarchy has its own implementation of data search without backend query filtered data
-        if (!widget?.options?.hierarchyFull) {
-            dispatch(actions.bcForceUpdate({ bcName: widget?.bcName as string }))
+        if (!widget.options?.hierarchyFull) {
+            dispatch(actions.bcForceUpdate({ bcName: widget.bcName }))
         }
-        props.onApply?.()
+
+        onApply?.()
     }
 
     const handleCancel = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {

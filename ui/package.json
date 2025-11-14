@@ -16,6 +16,13 @@
   "dependencies": {
     "@ant-design/plots": "1.2.6",
     "@cxbox-ui/core": "2.7.1-beta.1",
+    "@fullcalendar/core": "6.1.18",
+    "@fullcalendar/daygrid": "6.1.18",
+    "@fullcalendar/interaction": "6.1.18",
+    "@fullcalendar/list": "6.1.18",
+    "@fullcalendar/multimonth": "6.1.8",
+    "@fullcalendar/react": "6.1.18",
+    "@fullcalendar/timegrid": "6.1.18",
     "@reduxjs/toolkit": "1.7.2",
     "@stomp/stompjs": "7.0.0",
     "antd": "3.26.20",

@@ -171,6 +171,25 @@ const screenReducerBuilder = reducers
             bc.limit = state.pagination[bc.name]?.limit ?? bc.limit
         })
     })
+    .addMatcher(isAnyOf(actions.bcSelectRecord), (state, action) => {
+        const { bcName } = action.payload
+        const parentBc = state.bo.bc[bcName]
+
+        if (!parentBc) {
+            return
+        }
+
+        // Reset pagination and cursor for all child BCs
+        const childBcUrlPattern = `${parentBc.url}/:id`
+
+        Object.values(state.bo.bc)
+            .filter(bc => bc.url.includes(childBcUrlPattern))
+            .forEach(childBc => {
+                state.bo.bc[childBc.name].page = 1
+                state.bo.bc[childBc.name].cursor = null
+            })
+    })
+
     .addMatcher(isAnyOf(actions.sendOperationSuccess, actions.bcSaveDataSuccess), (state, action) => {
         if (action.payload.dataItem) {
             const newCursor = action.payload.dataItem.id

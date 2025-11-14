@@ -37,14 +37,17 @@ export enum CustomWidgetTypes {
     Column2D = 'Column2D',
     Line2D = 'Line2D',
     DualAxes2D = 'DualAxes2D',
-    FilePreview = 'FilePreview'
+    FilePreview = 'FilePreview',
+    CalendarList = 'CalendarList',
+    CalendarYearList = 'CalendarYearList'
 }
 
 export const removeRecordOperationWidgets: Array<WidgetTypes | string> = [
     WidgetTypes.List,
     CustomWidgetTypes.GroupingHierarchy,
     WidgetTypes.PickListPopup,
-    WidgetTypes.AssocListPopup
+    WidgetTypes.AssocListPopup,
+    CustomWidgetTypes.CalendarList
 ]
 
 export interface StepsWidgetMeta extends WidgetMeta {
@@ -76,9 +79,11 @@ export type TableWidgetField = WidgetListFieldBase & {
     excelWidth?: number
 }
 
-type InternalWidgetOption = {
+export type InternalWidgetStyle = 'inlineForm' | 'popup' | 'inline' | 'none'
+
+export type InternalWidgetOption = {
     widget: string
-    style: 'inlineForm' | 'popup' | 'inline' | 'none'
+    style: InternalWidgetStyle
 }
 
 export type OperationCustomMode = 'default' | 'file-upload-dnd' | 'default-and-file-upload-dnd'
@@ -96,6 +101,12 @@ export enum EStatsBcCursor {
 
 export type MassOperationOption = {
     pickMapFieldKey?: string | null
+}
+export type CalendarOption = {
+    valueFieldKey?: string
+    startFieldKey?: string
+    endFieldKey?: string
+    descriptionFieldKey?: string
 }
 
 export interface AppWidgetMeta extends WidgetMeta {
@@ -159,6 +170,8 @@ export interface AppWidgetMeta extends WidgetMeta {
         dual2D?: Dual2DConfig
 
         massOp?: MassOperationOption
+
+        calendar?: CalendarOption
     }
 }
 

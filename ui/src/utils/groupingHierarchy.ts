@@ -11,10 +11,10 @@ import { WidgetFieldBase } from '@cxbox-ui/schema'
  * @param widget
  * @param bc
  */
-export const createDefaultSort = (widget: AppWidgetMeta, bc: BcMeta) => {
-    const groupingHierarchyOption = widget.options?.groupingHierarchy
+export const createDefaultSort = (widget: AppWidgetMeta | undefined, bc: BcMeta) => {
+    const groupingHierarchyOption = widget?.options?.groupingHierarchy
 
-    if (groupingHierarchyOption?.fields.length) {
+    if (widget && groupingHierarchyOption?.fields.length) {
         const sortedGroupKeys =
             (widget.fields as WidgetFieldBase[])
                 .filter(field => groupingHierarchyOption?.fields.includes(field.key))

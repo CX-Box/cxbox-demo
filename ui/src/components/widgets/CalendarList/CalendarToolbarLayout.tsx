@@ -12,11 +12,11 @@ export interface CalendarToolbarLayoutProps {
 export const CalendarToolbarLayout: React.FC<CalendarToolbarLayoutProps> = ({ title, leftControls, rightControls, className }) => {
     return (
         <div className={cn(styles.toolbarLayout, className)}>
-            <div className={styles.section}>{leftControls}</div>
+            <div className={styles.leftControls}>{leftControls}</div>
 
-            <div className={cn(styles.section)}>{title}</div>
+            <div className={styles.title}>{title}</div>
 
-            <div className={styles.section}>{rightControls}</div>
+            <div className={styles.rightControls}>{rightControls}</div>
         </div>
     )
 }

@@ -54,18 +54,18 @@ export const getMonthViewList = () => [
 ]
 
 export const getYearViewList = () => [
-    {
-        value: CALENDAR_GRID.multiMonthYear,
-        title: i18n.t('Grid')
-    },
-    {
-        value: CALENDAR_CUSTOM_GRID.multiMonthYearStack,
-        title: i18n.t('Stack')
-    },
-    {
-        value: CALENDAR_GRID.dayGridYear,
-        title: i18n.t('Continuous')
-    }
+    // {
+    //     value: CALENDAR_GRID.multiMonthYear,
+    //     title: i18n.t('Grid')
+    // },
+    // {
+    //     value: CALENDAR_CUSTOM_GRID.multiMonthYearStack,
+    //     title: i18n.t('Stack')
+    // },
+    // {
+    //     value: CALENDAR_GRID.dayGridYear,
+    //     title: i18n.t('Continuous')
+    // }
 ]
 
 export const normalizeView = (view: CalendarGridViews | CalendarCustomGridViews) => {

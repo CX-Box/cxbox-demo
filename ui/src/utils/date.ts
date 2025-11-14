@@ -1,7 +1,14 @@
 import moment, { Moment, MomentInput } from 'moment'
 import { dateFormat, DateFormat } from '@interfaces/date'
 import { FieldType, interfaces } from '@cxbox-ui/core'
-import { getFirstDayOfMonthGrid, getLastDayOfMonthGrid } from '@components/widgets/CalendarList/utils'
+import {
+    getFirstDayOfMonthGrid,
+    getFirstDayOfYear,
+    getLastDayOfMonthGrid,
+    getLastDayOfYear,
+    isBoundariesOfDay
+} from '@components/widgets/CalendarList/utils'
+import { dateFieldTypes } from '@constants/field'
 
 export const isoLocalFormatter = (date?: Moment | null) => date?.format('YYYY-MM-DD[T]HH:mm:ss')
 
@@ -59,7 +66,7 @@ export const getAverageDate = (startDate: moment.MomentInput, endDate: moment.Mo
 }
 
 export const isDateField = (type: string) => {
-    return [FieldType.date, FieldType.dateTime, FieldType.dateTimeWithSeconds].includes(type as interfaces.FieldType)
+    return dateFieldTypes.includes(type as interfaces.FieldType)
 }
 
 export type DateTypes = typeof FieldType.date | typeof FieldType.dateTime | typeof FieldType.dateTimeWithSeconds
@@ -119,7 +126,7 @@ export const isRangeValid = (startInput: MomentInput, endInput: MomentInput): Ca
     return { ok: true }
 }
 
-export const isCalendarGridRangeValid = (startInput: MomentInput, endInput: MomentInput): CalendarGridValidationResult => {
+export const isCalendarMonthGridRangeValid = (startInput: MomentInput, endInput: MomentInput): CalendarGridValidationResult => {
     const base = isRangeValid(startInput, endInput)
 
     if (!base.ok) {
@@ -133,12 +140,54 @@ export const isCalendarGridRangeValid = (startInput: MomentInput, endInput: Mome
     const gridStartExpected = getFirstDayOfMonthGrid(avg)
     const gridEndExpected = getLastDayOfMonthGrid(avg)
 
-    if (!start.isSame(gridStartExpected, 'day')) {
+    if (!start.isSame(gridStartExpected, 'second')) {
         return { ok: false, reason: 'Start boundary does not match calendar grid start' }
     }
 
-    if (!end.isSame(gridEndExpected, 'day')) {
+    if (!end.isSame(gridEndExpected, 'second')) {
         return { ok: false, reason: 'End boundary does not match calendar grid end' }
+    }
+
+    return { ok: true }
+}
+
+export const isCalendarYearGridRangeValid = (startInput: MomentInput, endInput: MomentInput): CalendarGridValidationResult => {
+    const base = isRangeValid(startInput, endInput)
+
+    if (!base.ok) {
+        return base
+    }
+
+    const start = moment(startInput)
+    const end = moment(endInput)
+
+    if (!start.isSame(end, 'year')) {
+        return { ok: false, reason: 'Start and end dates must be within the same year' }
+    }
+
+    const gridStartExpected = getFirstDayOfYear(start)
+    const gridEndExpected = getLastDayOfYear(end)
+
+    if (!start.isSame(gridStartExpected, 'second')) {
+        return { ok: false, reason: 'Start date must be the exact beginning of the year' }
+    }
+
+    if (!end.isSame(gridEndExpected, 'second')) {
+        return { ok: false, reason: 'End date must be the exact end of the year' }
+    }
+
+    return { ok: true }
+}
+
+export const isCalendarYearEventRangeValid = (startInput: MomentInput, endInput: MomentInput): CalendarGridValidationResult => {
+    const base = isRangeValid(startInput, endInput)
+
+    if (!base.ok) {
+        return base
+    }
+
+    if (!isBoundariesOfDay([startInput, endInput])) {
+        return { ok: false, reason: 'Dates are not the boundaries of the day' }
     }
 
     return { ok: true }

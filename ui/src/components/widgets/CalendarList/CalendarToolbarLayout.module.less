@@ -1,13 +1,24 @@
 .toolbarLayout {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   align-items: center;
-  justify-content: space-between;
-  position: relative;
+  gap: 8px;
   width: 100%;
 }
 
-.section {
+.leftControls {
   display: flex;
-  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+.title {
+  display: flex;
+  justify-content: center;
+}
+
+.rightControls {
+  display: flex;
+  justify-content: flex-end;
   gap: 8px;
 }

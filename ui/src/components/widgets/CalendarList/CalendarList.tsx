@@ -11,7 +11,7 @@ import Filters from '@components/widgets/CalendarList/Filters'
 import { mapRefinerKeyToFieldKey } from '@components/widgets/CalendarList/interfaces'
 import { useWidgetOperations } from '@hooks/useWidgetOperations'
 import { selectBcRecordForm } from '@selectors/selectors'
-import { useCalendarDataCheck } from '@components/widgets/CalendarList/hooks/useCalendarDataCheck'
+import { useCalendarMonthDataCheck } from '@components/widgets/CalendarList/hooks/useCalendarMonthDataCheck'
 
 interface CalendarListProps {
     meta: AppWidgetMeta
@@ -26,7 +26,7 @@ const CalendarList: React.FC<CalendarListProps> = ({ meta: widget }) => {
     const operations = useWidgetOperations(widget.name, ['bc', 'mass'])
     const [isList, setIsList] = useState(false)
     const { bcPageLimit, isIncorrectLimit, bcCountForShowing } = useCheckLimit(widget.bcName)
-    const { isIncorrectData } = useCalendarDataCheck(widget.name)
+    const { isIncorrectData } = useCalendarMonthDataCheck(widget.name)
 
     const toggleWidgetView = useCallback(() => {
         setIsList(prev => !prev)

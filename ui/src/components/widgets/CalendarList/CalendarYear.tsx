@@ -25,7 +25,7 @@ import {
 import { useFilterControls } from '@hooks/useFilterControls'
 import { isSameFilter } from '@utils/calendar'
 import { createYearEndFilter, createYearStartFilter, extractIntersectionDateRangeFromFilters } from '@components/widgets/CalendarList/utils'
-import { getAverageDate, isCalendarGridRangeValid, yearChanged } from '@utils/date'
+import { getAverageDate, isCalendarYearGridRangeValid, yearChanged } from '@utils/date'
 import { BcFilter, DataItem } from '@cxbox-ui/core'
 import { useFieldDrilldown } from '@hooks/useFieldDrilldown'
 import { useEventDataTransform } from '@components/widgets/CalendarList/hooks'
@@ -115,7 +115,7 @@ const CalendarYear = React.forwardRef<CalendarYearApiHandle, CalendarYearProps>(
         const [endValue, startValue] = filters ? extractIntersectionDateRangeFromFilters(filters, refinerKeys) : [undefined, undefined]
 
         if (isDefined(startValue) && isDefined(endValue)) {
-            const validation = isCalendarGridRangeValid(startValue, endValue)
+            const validation = isCalendarYearGridRangeValid(startValue, endValue)
 
             if (validation.ok) {
                 const newAvgDate = getAverageDate(startValue, endValue).toDate()

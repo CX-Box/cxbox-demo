@@ -6,7 +6,7 @@ import { mapRefinerKeyToFieldKey } from '@components/widgets/CalendarList/interf
 import { useMemo } from 'react'
 import type { MomentInput } from 'moment'
 
-export const useCalendarDataCheck = (widgetName: string) => {
+export const useCalendarMonthDataCheck = (widgetName: string) => {
     const widget = useAppSelector(selectWidget(widgetName)) as AppWidgetMeta | undefined
     const data = useAppSelector(selectBcData(widget?.bcName))
     const calendarWidgetOptions = widget?.options?.calendar

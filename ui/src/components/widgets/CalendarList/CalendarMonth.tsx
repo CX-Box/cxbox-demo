@@ -31,7 +31,7 @@ import {
     createMonthStartFilter,
     extractIntersectionDateRangeFromFilters
 } from '@components/widgets/CalendarList/utils'
-import { dayChanged, getAverageDate, isCalendarGridRangeValid, monthChanged, toYMD } from '@utils/date'
+import { dayChanged, getAverageDate, isCalendarMonthGridRangeValid, monthChanged, toYMD } from '@utils/date'
 import { BcFilter, DataItem } from '@cxbox-ui/core'
 import { useFieldDrilldown } from '@hooks/useFieldDrilldown'
 import RowOperationsButton from '@components/widgets/CalendarList/RowOperations/RowOperationsButton'
@@ -122,7 +122,7 @@ const CalendarMonth = React.forwardRef<CalendarMonthApiHandle, CalendarMonthProp
         const [endValue, startValue] = filters ? extractIntersectionDateRangeFromFilters(filters, refinerKeys) : [undefined, undefined]
 
         if (isDefined(startValue) && isDefined(endValue)) {
-            const validation = isCalendarGridRangeValid(startValue, endValue)
+            const validation = isCalendarMonthGridRangeValid(startValue, endValue)
 
             if (validation.ok) {
                 const newAvgDate = getAverageDate(startValue, endValue).toDate()

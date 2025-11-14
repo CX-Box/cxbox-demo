@@ -110,9 +110,21 @@ export const extractIntersectionDateRangeFromFilters = (
     return [start, end]
 }
 
-const isBoundariesOfDay = (range: [moment.MomentInput, moment.MomentInput], day: moment.MomentInput) => {
-    const momentDay = moment(day)
-    const [momentStart, momentEnd] = range.map(i => moment(i))
+export const isBoundariesOfDay = (range: [moment.MomentInput, moment.MomentInput], day?: moment.MomentInput) => {
+    const [boundaryStart, boundaryEnd] = range.map(i => moment(i))
 
-    return momentStart.isSame(momentDay.clone().startOf('day'), 'second') && momentEnd.isSame(momentDay.clone().endOf('day'), 'second')
+    if (!boundaryStart.isValid() || !boundaryEnd.isValid()) {
+        return false
+    }
+
+    const targetDay = moment(day ?? boundaryStart)
+
+    if (!targetDay.isValid() || (!day && !boundaryStart.isSame(boundaryEnd, 'day'))) {
+        return false
+    }
+
+    const dayStart = targetDay.clone().startOf('day')
+    const dayEnd = targetDay.clone().endOf('day')
+
+    return boundaryStart.isSame(dayStart, 'second') && boundaryEnd.isSame(dayEnd, 'second')
 }

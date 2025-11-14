@@ -1,8 +1,8 @@
 {
-  "name": "meetingFormForList",
+  "name": "calendarYearFormForList",
   "title": "",
   "type": "Form",
-  "bc": "meetingEdit",
+  "bc": "calendarYearMeeting",
   "fields": [
     {
       "label": "Meeting Region",
@@ -28,7 +28,7 @@
       "label": "Client Name",
       "key": "clientName",
       "type": "pickList",
-      "popupBcName": "clientPickListPopup",
+      "popupBcName": "clientCalendarPickListPopup",
       "pickMap": {
         "clientName": "fullName",
         "clientId": "id"
@@ -38,7 +38,7 @@
       "label": "Contact",
       "key": "contactName",
       "type": "pickList",
-      "popupBcName": "contactPickListPopup",
+      "popupBcName": "contactCalendarPickListPopup",
       "pickMap": {
         "contactName": "fullName",
         "contactId": "id"

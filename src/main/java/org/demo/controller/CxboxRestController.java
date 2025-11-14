@@ -11,10 +11,12 @@ import org.demo.service.cxbox.anysource.clientstats.ClientStatsService;
 import org.demo.conf.cxbox.extension.jobRunr.service.job.JobAdminService;
 import org.demo.service.cxbox.anysource.clientstatspie.ClientStatsPieService;
 import org.demo.service.cxbox.anysource.dadatacompany.CompanyService;
+import org.demo.service.cxbox.inner.calendar.CalendarYearMeetingService;
 import org.demo.service.cxbox.anysource.meetingsstats.MeetingStatsService;
 import org.demo.service.cxbox.anysource.lov.LovReadService;
 import org.demo.service.cxbox.anysource.saledualstats.SaleStatsProductDualService;
 import org.demo.service.cxbox.anysource.saleproductstats.SaleStatsProductService;
+import org.demo.service.cxbox.inner.CalendarService;
 import org.demo.service.cxbox.inner.ClientContactService;
 import org.demo.service.cxbox.inner.ClientPickListService;
 import org.demo.service.cxbox.inner.ClientReadWriteService;
@@ -65,6 +67,7 @@ public enum CxboxRestController implements EnumBcIdentifier {
 		clientPickListPopup(meetingEdit, ClientPickListService.class),
 		contactPickListPopup(meetingEdit, ContactPickListService.class),
 
+
 	sale(SaleReadService.class),
 	saleEdit(SaleWriteService.class),
 		clientSalePickListPopup(saleEdit, ClientPickListService.class),
@@ -89,7 +92,14 @@ public enum CxboxRestController implements EnumBcIdentifier {
 		succeededJobs(jobsStats, JobAdminService.class),
 		failedJobs(jobsStats, JobAdminService.class),
 		deletedJobs(jobsStats, JobAdminService.class),
-	lovExternal(LovReadService.class);
+	lovExternal(LovReadService.class),
+
+	calendarList(CalendarService.class),
+	calendarYearList(CalendarYearMeetingService.class),
+		calendarYearMeeting(calendarYearList, MeetingWriteService.class),
+			clientCalendarPickListPopup(calendarYearMeeting, ClientPickListService.class),
+			contactCalendarPickListPopup(calendarYearMeeting, ContactPickListService.class)
+	;
 
 
 	// @formatter:on

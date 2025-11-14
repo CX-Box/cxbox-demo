@@ -35,7 +35,7 @@ public class Meeting extends BaseEntity {
 
 	private LocalDateTime startDateTime = LocalDateTime.now();
 
-	private LocalDateTime endDateTime = LocalDateTime.now();
+	private LocalDateTime endDateTime;
 
 	@Enumerated(EnumType.STRING)
 	private MeetingStatus status = MeetingStatus.NOT_STARTED;
@@ -66,5 +66,6 @@ public class Meeting extends BaseEntity {
 	)
 	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	private Set<Contact> additionalContacts = new HashSet<>();
+
 
 }

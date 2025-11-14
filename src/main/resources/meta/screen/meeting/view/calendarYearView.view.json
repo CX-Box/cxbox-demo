@@ -1,0 +1,44 @@
+{
+  "name": "calendarYearView",
+  "title": "Year Calendar",
+  "template": "DashboardView",
+  "url": "/screen/meeting/view/calendarYearView",
+  "widgets": [
+    {
+      "widgetName": "contactCalendarPickListPopup",
+      "position": 2,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "calendarYearFormForList",
+      "position": 2,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "clientAssocListPopup",
+      "position": 2,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "secondLevelMenu",
+      "position": 0,
+      "gridWidth": 24
+    } ,
+    {
+      "widgetName": "calendarYearList",
+      "position": 10,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "calendarMeetingList",
+      "position": 20,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "clientCalendarPickListPopup",
+      "position": 30,
+      "gridWidth": 24
+    }
+  ],
+  "rolesAllowed": ["CXBOX_USER", "ADMIN"]
+}

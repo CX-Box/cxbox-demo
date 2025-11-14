@@ -1,0 +1,48 @@
+{
+  "name": "calendarList",
+  "title": "",
+  "type": "CalendarList",
+  "bc": "calendarList",
+  "fields": [
+    {
+      "title": "Agenda",
+      "key": "agenda",
+      "type": "input",
+      "drillDown": true
+    },
+    {
+      "title": "Start Date Time",
+      "key": "startDateTime",
+      "type": "dateTime"
+    },
+    {
+      "title": "End Date Time",
+      "key": "endDateTime",
+      "type": "dateTime"
+    }
+  ],
+  "options": {
+    "actionGroups": {
+      "include" : [
+        "create",
+        "cancel-create",
+        "save-with-validation"
+      ]
+    },
+    "calendar": {
+      "valueFieldKey": "agenda",
+      "startFieldKey": "startDateTime",
+      "endFieldKey": "endDateTime"
+    },
+    "create": {
+      "widget": "calendarFormForList"
+    },
+    "edit": {
+      "widget": "calendarFormForList"
+    },
+    "pagination":{
+      "type": "nextAndPreviousSmart",
+      "hideLimitOptions" : true
+    }
+  }
+}

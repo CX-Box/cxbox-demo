@@ -1,0 +1,24 @@
+{
+  "name": "contactCalendarPickListPopup",
+  "title": "clientCalendarPickListPopup title",
+  "type": "PickListPopup",
+  "bc": "contactCalendarPickListPopup",
+  "fields": [
+
+    {
+      "title": "Contact Name",
+      "key": "fullName",
+      "type": "input"
+    },
+    {
+      "title": "Phone Number",
+      "key": "phoneNumber",
+      "type": "input"
+    },
+    {
+      "title": "Email",
+      "key": "email",
+      "type": "input"
+    }
+  ]
+}

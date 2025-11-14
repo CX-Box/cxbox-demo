@@ -36,7 +36,7 @@ public class MeetingDocumentsWriteMeta extends FieldMetaBuilder<MeetingDocuments
 		fields.enableFilter(MeetingDocumentsDTO_.priority);
 		fields.enableFilter(MeetingDocumentsDTO_.file);
 		fields.enableSort(MeetingDocumentsDTO_.file);
-		fields.setFileAccept(MeetingDocumentsDTO_.file, List.of(".png", ".pdf", ".jpg", ".jpeg"));
+		fields.setFileAccept(MeetingDocumentsDTO_.file, List.of(".png", ".pdf", ".jpg", ".jpeg", ".mp3", ".wav", ".m4a"));
 		fields.enableSort(MeetingDocumentsDTO_.document);
 		fields.enableSort(MeetingDocumentsDTO_.briefing);
 		fields.enableSort(MeetingDocumentsDTO_.id);

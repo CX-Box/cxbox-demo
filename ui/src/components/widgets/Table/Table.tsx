@@ -588,7 +588,7 @@ function Table<T extends CustomDataItem>({
             expandedRowRender={enabledMassMode ? undefined : expandedRowRender}
             onExpand={onExpand}
             hideRowActions={hideRowActions}
-            stickyWithHorizontalScroll={enabledGrouping}
+            stickyWithHorizontalScroll={enabledGrouping && !!dataSource?.length}
             hidePagination={disablePagination || enabledGrouping}
             {...rest}
             rowSelection={currentRowSelection}

@@ -20,7 +20,7 @@
     "@fullcalendar/daygrid": "6.1.18",
     "@fullcalendar/interaction": "6.1.18",
     "@fullcalendar/list": "6.1.18",
-    "@fullcalendar/multimonth": "6.1.8",
+    "@fullcalendar/multimonth": "6.1.18",
     "@fullcalendar/react": "6.1.18",
     "@fullcalendar/timegrid": "6.1.18",
     "@reduxjs/toolkit": "1.7.2",

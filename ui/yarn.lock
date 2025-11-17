@@ -3481,7 +3481,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fullcalendar/daygrid@npm:~6.1.18, @fullcalendar/daygrid@npm:~6.1.8":
+"@fullcalendar/daygrid@npm:~6.1.18":
   version: 6.1.19
   resolution: "@fullcalendar/daygrid@npm:6.1.19"
   peerDependencies:
@@ -3508,14 +3508,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fullcalendar/multimonth@npm:6.1.8":
-  version: 6.1.8
-  resolution: "@fullcalendar/multimonth@npm:6.1.8"
+"@fullcalendar/multimonth@npm:6.1.18":
+  version: 6.1.18
+  resolution: "@fullcalendar/multimonth@npm:6.1.18"
   dependencies:
-    "@fullcalendar/daygrid": "npm:~6.1.8"
+    "@fullcalendar/daygrid": "npm:~6.1.18"
   peerDependencies:
-    "@fullcalendar/core": ~6.1.8
-  checksum: 73a3bf54ed35e4933b82e45b755109d21e979f42298e3e61129274fbd6f4e182cad331b40be9f667bdb653d667a1a5ffbdca097f6c67c310e34969c4425f86ef
+    "@fullcalendar/core": ~6.1.18
+  checksum: 0f54587eedc5078e9976342fa2d4ad72ae5b656b5e4046c0d421eaf773303136dbf7eb856c6a680682835a73ed2d8a5464eff7f3ab7f3fe8986dafc8f00db940
   languageName: node
   linkType: hard
 
@@ -17623,7 +17623,7 @@ __metadata:
     "@fullcalendar/daygrid": "npm:6.1.18"
     "@fullcalendar/interaction": "npm:6.1.18"
     "@fullcalendar/list": "npm:6.1.18"
-    "@fullcalendar/multimonth": "npm:6.1.8"
+    "@fullcalendar/multimonth": "npm:6.1.18"
     "@fullcalendar/react": "npm:6.1.18"
     "@fullcalendar/timegrid": "npm:6.1.18"
     "@reduxjs/toolkit": "npm:1.7.2"

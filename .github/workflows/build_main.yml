@@ -5,6 +5,9 @@ on:
     branches:
       - 'main'
   workflow_dispatch:
+concurrency:
+  group: deploy-main
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -13,7 +16,10 @@ jobs:
       matrix:
         java: ['17']
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout last state of main
+        uses: actions/checkout@v3
+        with:
+          ref: 'main'
       - name: Set up JDK ${{ matrix.java }}
         uses: actions/setup-java@v3
         with:

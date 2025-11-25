@@ -28,7 +28,7 @@ import org.cxbox.model.core.dao.JpaDao;
 import org.demo.conf.cxbox.customization.metaAdmin.MetaAdminServiceExt;
 import org.demo.conf.cxbox.customization.responsibilitiesAction.dto.ResponsibilitiesActionAdminDTO;
 import org.demo.util.CSVUtils;
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S3252", "java:S1186", "java:S6813", "java:S1170"})
@@ -118,7 +118,7 @@ public class ResponsibilitiesActionAdminService extends
 	}
 
 	@SneakyThrows
-	@NotNull
+	@NonNull
 	private FileDownloadDto toCsv() {
 		String name = "RESPONSIBILITIES_ACTION.csv";
 		var header = List.of("INTERNAL_ROLE_CD;ACTION;VIEW;WIDGET;ID");

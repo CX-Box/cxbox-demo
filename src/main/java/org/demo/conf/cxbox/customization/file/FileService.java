@@ -8,6 +8,7 @@ import io.minio.PutObjectArgs;
 import io.minio.RemoveObjectArgs;
 import io.minio.StatObjectArgs;
 import io.minio.StatObjectResponse;
+import jakarta.annotation.Nullable;
 import java.util.Collections;
 import java.util.UUID;
 import lombok.NonNull;
@@ -15,8 +16,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.cxbox.core.file.dto.FileDownloadDto;
 import org.cxbox.core.file.service.CxboxFileService;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -66,7 +65,7 @@ public class FileService implements CxboxFileService {
 	}
 
 	@SneakyThrows
-	private GetObjectResponse getObject(@NotNull String id) {
+	private GetObjectResponse getObject(@NonNull String id) {
 		return minioClient.getObject(GetObjectArgs
 				.builder()
 				.bucket(defaultBucketName)

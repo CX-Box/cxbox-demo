@@ -55,7 +55,7 @@ import org.cxbox.model.dictionary.entity.DictionaryTypeDesc;
 import org.demo.conf.cxbox.customization.dictionary.dto.DictionaryAdminDTO;
 import org.demo.util.CSVUtils;
 import org.hibernate.exception.ConstraintViolationException;
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -163,7 +163,7 @@ public class DictionaryAdminService extends VersionAwareResponseService<Dictiona
 	}
 
 	@SneakyThrows
-	@NotNull
+	@NonNull
 	private FileDownloadDto toCsv() {
 		String name = "DICTIONARY.csv";
 		var header = List.of("TYPE", "KEY", "VALUE", "DISPLAY_ORDER", "DESCRIPTION", "ACTIVE", "ID");

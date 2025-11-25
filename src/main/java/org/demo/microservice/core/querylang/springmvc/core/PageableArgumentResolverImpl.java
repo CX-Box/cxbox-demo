@@ -1,7 +1,7 @@
 package org.demo.microservice.core.querylang.springmvc.core;
 
 import io.micrometer.common.util.StringUtils;
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 import org.springframework.core.MethodParameter;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,9 +18,9 @@ public class PageableArgumentResolverImpl extends PageableHandlerMethodArgumentR
 
 	private static final int DEFAULT_PAGE_SIZE = 5;
 
-	@NotNull
+	@NonNull
 	@Override
-	public Pageable resolveArgument(@NotNull MethodParameter parameter, ModelAndViewContainer mavContainer,
+	public Pageable resolveArgument(@NonNull MethodParameter parameter, ModelAndViewContainer mavContainer,
 			NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
 		String page = webRequest.getParameter("_page");
 		String size = webRequest.getParameter("_size");

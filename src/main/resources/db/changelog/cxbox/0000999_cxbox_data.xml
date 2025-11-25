@@ -96,7 +96,7 @@
       quotchar="&quot;" file="db/data/cxbox/RESPONSIBILITIES_SCREEN_OVERRIDE.csv">
       <column header="INTERNAL_ROLE_CD" name="INTERNAL_ROLE_CD" type="STRING"/>
       <column header="RESP_TYPE" name="RESP_TYPE" type="STRING"/>
-      <column header="SCREEN" name="SCREEN" type="STRING"/>
+      <column header="SCREENS" name="SCREENS" type="STRING"/>
       <column header="ID" name="ID" type="NUMERIC" defaultValue="${meta_seq_next_val}"/>
     </loadUpdateData>
 

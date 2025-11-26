@@ -32,7 +32,7 @@ import org.demo.conf.cxbox.customization.metaAdmin.MetaAdminServiceExt;
 import org.demo.conf.cxbox.customization.responsibilities.dto.ResponsibilitiesAdminDTO;
 import org.demo.conf.cxbox.customization.responsibilities.dto.ResponsibilitiesAdminDTO_;
 import org.demo.util.CSVUtils;
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -143,7 +143,7 @@ public class ResponsibilitiesAdminService extends VersionAwareResponseService<Re
 	}
 
 	@SneakyThrows
-	@NotNull
+	@NonNull
 	public FileDownloadDto toCsv() {
 		String name = "RESPONSIBILITIES.csv";
 		var header = List.of("INTERNAL_ROLE_CD", "RESPONSIBILITIES", "ID");

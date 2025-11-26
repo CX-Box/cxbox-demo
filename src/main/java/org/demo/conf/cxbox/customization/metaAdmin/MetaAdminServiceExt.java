@@ -1,5 +1,6 @@
 package org.demo.conf.cxbox.customization.metaAdmin;
 
+import lombok.NonNull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -25,7 +26,6 @@ import org.cxbox.meta.metahotreload.dto.ViewSourceDTO;
 import org.cxbox.meta.metahotreload.dto.WidgetSourceDTO;
 import org.cxbox.meta.metahotreload.repository.MetaRepository;
 import org.cxbox.meta.metahotreload.service.MetaResourceReaderService;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.cache.Cache;
 import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.context.annotation.Lazy;
@@ -68,7 +68,7 @@ public class MetaAdminServiceExt {
 		cxboxCachingService.evictUiCache();
 	}
 
-	public Set<String> getViewsByWidgetNames(@NotNull Set<String> widgetNames) {
+	public Set<String> getViewsByWidgetNames(@NonNull Set<String> widgetNames) {
 		var allScreens = metaRepository.getAllScreens();
 		Set<String> result = new HashSet<>();
 		allScreens.values().forEach(screenDTO -> ((ScreenDTO) screenDTO.getMeta())
@@ -103,19 +103,19 @@ public class MetaAdminServiceExt {
 		return widgetToNameAndDescription(viewWidgets);
 	}
 
-	@NotNull
+	@NonNull
 	public List<ViewSourceDTO> getAllViews() {
 		return metaResourceReaderService.getViews();
 	}
 
-	@NotNull
+	@NonNull
 	public Map<String, WidgetSourceDTO> getAllWidgets() {
 		return metaResourceReaderService.getWidgets().stream()
 				.collect(Collectors.toMap(WidgetSourceDTO::getName, e -> e));
 	}
 
 
-	public @NotNull Map<String, String> widgetToNameAndDescription(List<WidgetDTO> viewWidgets) {
+	public @NonNull Map<String, String> widgetToNameAndDescription(List<WidgetDTO> viewWidgets) {
 		return viewWidgets.stream().collect(Collectors.toMap(
 				WidgetDTO::getName,
 				widgetDTO -> "'/api/v1/../" + widgetDTO.getBcName() + "' by widget '" + widgetDTO.getName() + "'",

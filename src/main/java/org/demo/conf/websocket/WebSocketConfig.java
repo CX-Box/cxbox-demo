@@ -6,7 +6,6 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.cxbox.api.service.session.IUser;
 import org.cxbox.core.util.session.SessionService;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
@@ -98,7 +97,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 		});
 	}
 
-	@NotNull
+	@NonNull
 	public static String getUserNotificationsDestination(String prefix, String urlPath, IUser<Long> currentUser) {
 		return prefix + "/" + currentUser.getId() + urlPath;
 	}

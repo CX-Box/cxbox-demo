@@ -1,5 +1,5 @@
 import { RowMeta as CoreRowMeta, RowMetaField as CoreRowMetaField } from '@cxbox-ui/core'
-import { EmptyNodeLevel } from '@components/widgets/Table/groupingHierarchy'
+import { EmptyNodeLevel } from '@components/Table/groupingHierarchy'
 
 export interface RowMetaField extends CoreRowMetaField {
     fileAccept?: string

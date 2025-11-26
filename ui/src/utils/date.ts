@@ -7,7 +7,7 @@ import {
     getLastDayOfMonthGrid,
     getLastDayOfYear,
     isBoundariesOfDay
-} from '@components/widgets/CalendarList/utils'
+} from '../widgets/CalendarList/utils'
 import { dateFieldTypes } from '@constants/field'
 
 export const isoLocalFormatter = (date?: Moment | null) => date?.format('YYYY-MM-DD[T]HH:mm:ss')

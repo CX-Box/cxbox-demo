@@ -2,7 +2,7 @@ import { BcFilter, BcMeta, BcMetaState, BcSorter, interfaces, reducers, utils } 
 import { actions } from '@actions'
 import { createReducer, isAnyOf } from '@reduxjs/toolkit'
 import { FilterGroup } from '@interfaces/filters'
-import { MassStepType } from '@components/widgets/Table/massOperations/constants'
+import { MassStepType } from '@components/Table/massOperations/constants'
 
 export type ViewerModeMass = {
     mode: 'mass'

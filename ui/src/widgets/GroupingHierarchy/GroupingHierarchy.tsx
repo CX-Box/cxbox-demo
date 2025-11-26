@@ -1,0 +1,13 @@
+import React from 'react'
+import { AppWidgetGroupingHierarchyMeta } from '@interfaces/widget'
+import Table from '@components/Table/Table'
+
+interface GroupingHierarchyProps {
+    meta: AppWidgetGroupingHierarchyMeta
+}
+
+const GroupingHierarchy: React.FC<GroupingHierarchyProps> = ({ meta }) => {
+    return <Table meta={meta} isGroupingHierarchy={true} disableMassMode={true} />
+}
+
+export default React.memo(GroupingHierarchy)

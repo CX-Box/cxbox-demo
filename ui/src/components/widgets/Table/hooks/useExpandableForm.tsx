@@ -18,7 +18,7 @@ type WidgetMetaField = { type: string; hidden?: boolean }
 
 const EXPAND_ICON_COLUMN = {
     title: '',
-    width: '66px',
+    width: '25px',
     key: '_expandIconField'
 }
 

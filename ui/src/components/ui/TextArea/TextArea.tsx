@@ -1,7 +1,7 @@
 import React from 'react'
 import { Input, Popover, Button, Input as InputRef } from 'antd'
 import AntdTextArea, { TextAreaProps as AntdTextAreaProps } from 'antd/lib/input/TextArea'
-import { BaseFieldProps } from '@components/Field/Field'
+import { BaseFieldProps } from '@features/Field/Field'
 import ReadOnlyField from '@components/ui/ReadOnlyField/ReadOnlyField'
 import { text_maxDisplayed } from '@components/ui/TextArea/constants'
 import styles from './TextArea.less'

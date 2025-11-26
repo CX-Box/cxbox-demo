@@ -4,6 +4,11 @@ import { TableRowSelection } from 'antd/lib/table'
 import { AssociatedItem, DataItem, interfaces } from '@cxbox-ui/core'
 import { AppWidgetTableMeta } from '@interfaces/widget'
 import { TableProps } from 'antd/es/table'
+<<<<<<<< HEAD:ui/src/components/widgets/AssocListPopup/DefaultAssocListPopup/components/SelectionTable.tsx
+========
+import Table from '@components/Table/Table'
+import { useDefaultAssociations } from './hooks/useDefaultAssociations'
+>>>>>>>> 2745e8d6 (CXBOX-1123 | Fixed. File system rework):ui/src/widgets/AssocListPopup/DefaultAssocListPopup/SelectionTable.tsx
 
 interface SelectionTableProps {
     meta: AppWidgetTableMeta

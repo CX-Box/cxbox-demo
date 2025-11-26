@@ -12,7 +12,7 @@ import { DataValue, FieldType, RowMetaField, WidgetListField, WidgetMeta } from 
 import { DateFieldTypes } from '@interfaces/date'
 import { AppNumberFieldMeta, CustomFieldTypes } from '@interfaces/widget'
 import TimeRangePicker from '@components/ColumnTitle/TimeRangePicker'
-import { ITimePickerFieldMeta } from '../../fields/TimePicker/TimePickerField'
+import { ITimePickerFieldMeta } from '@fields/__fields_to_migrate/TimePicker/TimePickerField'
 
 interface FilterFieldProps {
     widgetFieldMeta: WidgetListField

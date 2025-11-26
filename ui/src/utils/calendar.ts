@@ -1,12 +1,7 @@
 import { AppWidgetMeta, CustomWidgetTypes } from '@interfaces/widget'
 import { BcFilter, BcMeta, utils } from '@cxbox-ui/core'
-import { mapRefinerKeyToFieldKey } from '@components/widgets/CalendarList/interfaces'
-import {
-    createMonthEndFilter,
-    createMonthStartFilter,
-    createYearEndFilter,
-    createYearStartFilter
-} from '@components/widgets/CalendarList/utils'
+import { mapRefinerKeyToFieldKey } from '../widgets/CalendarList/interfaces'
+import { createMonthEndFilter, createMonthStartFilter, createYearEndFilter, createYearStartFilter } from '../widgets/CalendarList/utils'
 import { isCalendarWidget } from '@constants/widget'
 
 export const createDefaultFilter = (widget: AppWidgetMeta | undefined, bc: BcMeta) => {

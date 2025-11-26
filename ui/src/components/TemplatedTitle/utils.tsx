@@ -7,7 +7,7 @@ import { getFormat as getDateFormat } from '@utils/date'
 import { FieldType } from '@cxbox-ui/core'
 import { NumberInputFormat } from '@components/ui/NumberInput/formaters'
 import { DateFieldMeta, DateTimeFieldMeta, DateTimeWithSecondsFieldMeta } from '@cxbox-ui/core'
-import { ITimePickerFieldMeta } from '../../fields/TimePicker/TimePickerField'
+import { ITimePickerFieldMeta } from '@fields/__fields_to_migrate/TimePicker/TimePickerField'
 import { AppNumberFieldMeta, CustomFieldTypes } from '@interfaces/widget'
 
 // Token format: '${fieldName:defaultValue}'

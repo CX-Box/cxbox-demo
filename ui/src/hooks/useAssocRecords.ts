@@ -18,19 +18,13 @@ export function useAssocRecords<T extends interfaces.AssociatedItem>(
 ): T[] {
     return React.useMemo(() => {
         let records = emptyData
-        if (data) {
-            records = data.filter(item => {
-                if (pendingChanges?.[item.id]) {
-                    return pendingChanges[item.id]._associate
-                }
+        const pendingRecords = Object.values(pendingChanges || {}).filter(item => item._associate)
 
-                if (isRadio && pendingChanges && Object.keys(pendingChanges).length) {
-                    return false
-                }
-
-                return item?._associate
-            })
+        if (data && !(isRadio && pendingChanges && Object.keys(pendingChanges).length)) {
+            const pendingIds = new Set(pendingRecords.map(i => i.id))
+            records = data.filter(item => item?._associate && !pendingIds.has(item.id))
         }
-        return records
+
+        return [...pendingRecords, ...records]
     }, [data, pendingChanges, isRadio])
 }

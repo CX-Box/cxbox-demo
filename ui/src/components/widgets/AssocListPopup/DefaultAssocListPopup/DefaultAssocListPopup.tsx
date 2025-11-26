@@ -1,18 +1,19 @@
-import React, { memo, useCallback, useMemo } from 'react'
+import React, { memo, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { shallowEqual } from 'react-redux'
 import cn from 'classnames'
-import Popup from '@components/Popup/Popup'
-import { actions, AssociatedItem, BcFilter, interfaces, PendingValidationFailsFormat, WidgetTableMeta } from '@cxbox-ui/core'
-import SelectionTable from './SelectionTable'
-import Title from '@components/widgets/AssocListPopup/DefaultAssocListPopup/Title'
-import { useAppDispatch, useAppSelector } from '@store'
-import Pagination from '@components/ui/Pagination/Pagination'
 import Button from '@components/ui/Button/Button'
-import { EMPTY_ARRAY } from '@constants'
-import { DataItem } from '@cxbox-ui/schema'
-import { useAssocRecords } from '@hooks/useAssocRecords'
+import Pagination from '@components/ui/Pagination/Pagination'
+import Popup from '@components/Popup/Popup'
+import SelectionTable from './components/SelectionTable'
+import Title from './components/Title'
+import AssocSelectionTable from './components/AssocSelectionTable'
+import AssocTitle from './components/AssocTitle'
+import { useAppDispatch, useAppSelector } from '@store'
 import { useOperationInProgress } from '@hooks/useOperationInProgress'
+import { useFilterRecords } from './hooks/useFilterRecords'
+import { EMPTY_ARRAY } from '@constants'
+import { actions, BcFilter, interfaces, PendingValidationFailsFormat, WidgetTableMeta } from '@cxbox-ui/core'
 import { FilterType } from '@interfaces/filters'
 import styles from '@components/widgets/AssocListPopup/AssocListPopup.less'
 
@@ -21,79 +22,45 @@ interface DefaultAssocListPopupProps {
     isFilter: boolean | undefined
 }
 
-const emptyData: AssociatedItem[] = []
-
 function DefaultAssocListPopup({ meta, isFilter }: DefaultAssocListPopupProps) {
     const assocValueKey = useAppSelector(state => state.view.popupData?.assocValueKey ?? '')
     const { t } = useTranslation()
 
     const { bcName } = meta
     const isFullHierarchy = !!meta.options?.hierarchyFull
-    const {
-        associateFieldKey,
-        pendingDataChanges,
-        bcFilters,
-        calleeBCName,
-        calleeWidgetName,
-        viewName,
-        calleeFieldKey,
-        filterDataItems,
-        bcData,
-        missingFields,
-        popupBcName
-    } = useAppSelector(state => {
-        const isFilter = state.view.popupData?.isFilter
-        const calleeBCName = state.view.popupData?.calleeBCName
-        const calleeWidgetName = state.view.popupData?.calleeWidgetName
-        const associateFieldKey = state.view.popupData?.associateFieldKey
-        const calleeFieldKey = state.view.popupData?.options?.calleeFieldKey
-        const popupBcName = state.view.popupData?.bcName
-        const bcFilters = state.screen.filters?.[calleeBCName!] ?? EMPTY_ARRAY
-        const filterDataItems = bcFilters.find(filterItem => filterItem.fieldName === associateFieldKey)?.value as DataItem[]
-        const cursor = state.screen.bo.bc[bcName]?.cursor as string
-        const missingFields =
-            state.view.pendingValidationFailsFormat === PendingValidationFailsFormat.target
-                ? (state.view.pendingValidationFails as interfaces.PendingValidationFails)?.[bcName]?.[cursor]
-                : (state.view.pendingValidationFails as Record<string, string>)
+    const { associateFieldKey, bcFilters, calleeBCName, calleeWidgetName, viewName, calleeFieldKey, missingFields, popupBcName, filter } =
+        useAppSelector(state => {
+            const calleeBCName = state.view.popupData?.calleeBCName
+            const calleeWidgetName = state.view.popupData?.calleeWidgetName
+            const associateFieldKey = state.view.popupData?.associateFieldKey
+            const calleeFieldKey = state.view.popupData?.options?.calleeFieldKey
+            const popupBcName = state.view.popupData?.bcName
+            const bcFilters = state.screen.filters?.[calleeBCName!] ?? EMPTY_ARRAY
+            const filter = bcFilters.find(filterItem => filterItem.fieldName === associateFieldKey)
+            const cursor = state.screen.bo.bc[bcName]?.cursor as string
+            const missingFields =
+                state.view.pendingValidationFailsFormat === PendingValidationFailsFormat.target
+                    ? (state.view.pendingValidationFails as interfaces.PendingValidationFails)?.[bcName]?.[cursor]
+                    : (state.view.pendingValidationFails as Record<string, string>)
 
-        return {
-            associateFieldKey: associateFieldKey,
-            pendingDataChanges: state.view.pendingDataChanges[bcName],
-            bcFilters,
-            isFilter,
-            calleeBCName,
-            calleeWidgetName,
-            viewName: state.view.name,
-            calleeFieldKey,
-            filterDataItems,
-            bcData: state.data[bcName] || emptyData,
-            missingFields,
-            popupBcName
-        }
-    }, shallowEqual)
-
-    const data = useMemo(() => {
-        if (isFilter && filterDataItems?.length > 0) {
-            return bcData?.map(dataItem => {
-                if (filterDataItems.includes(dataItem.id as unknown as DataItem)) {
-                    return {
-                        ...dataItem,
-                        _associate: true
-                    }
-                }
-
-                return dataItem
-            })
-        }
-
-        return bcData
-    }, [bcData, filterDataItems, isFilter]) as AssociatedItem[]
-
-    const selectedRecords = useAssocRecords(data, pendingDataChanges)
+            return {
+                associateFieldKey: associateFieldKey,
+                bcFilters,
+                calleeBCName,
+                calleeWidgetName,
+                viewName: state.view.name,
+                calleeFieldKey,
+                missingFields,
+                popupBcName,
+                filter
+            }
+        }, shallowEqual)
 
     const dispatch = useAppDispatch()
 
     const isOperationInProgress = useOperationInProgress(popupBcName || '')
+
+    const { selectedFilterRecords, handleSelect, handleDeleteTag, handleSelectAll } = useFilterRecords(filter)
 
     const onClose = useCallback(() => {
         dispatch(actions.closeViewPopup({ bcName }))
@@ -135,7 +102,7 @@ function DefaultAssocListPopup({ meta, isFilter }: DefaultAssocListPopupProps) {
     }, [meta.options?.hierarchy, bcName, onSave, isFullHierarchy, onClose])
 
     const filterData = useCallback(() => {
-        const filterValue = selectedRecords.map(item => item.id)
+        const filterValue = selectedFilterRecords.map(item => item.id)
         if (associateFieldKey && calleeBCName && filterValue.length > 0) {
             const existingFilter = bcFilters.find(filter => {
                 return filter.fieldName === calleeFieldKey
@@ -150,7 +117,8 @@ function DefaultAssocListPopup({ meta, isFilter }: DefaultAssocListPopupProps) {
                 fieldName: associateFieldKey,
                 value: filterValue,
                 viewName,
-                widgetName: calleeWidgetName
+                widgetName: calleeWidgetName,
+                assocItems: selectedFilterRecords
             })
         } else {
             const currentFilters = bcFilters?.find(filterItem => filterItem.fieldName === associateFieldKey)?.value
@@ -164,7 +132,7 @@ function DefaultAssocListPopup({ meta, isFilter }: DefaultAssocListPopupProps) {
         }
         onClose()
     }, [
-        selectedRecords,
+        selectedFilterRecords,
         associateFieldKey,
         calleeBCName,
         onClose,
@@ -180,7 +148,21 @@ function DefaultAssocListPopup({ meta, isFilter }: DefaultAssocListPopupProps) {
     return (
         <Popup
             className={cn(styles.container)}
-            title={<Title title={meta.title} widgetName={meta.name} assocValueKey={assocValueKey} bcName={meta.bcName} />}
+            title={
+                <>
+                    {isFilter ? (
+                        <Title
+                            title={meta.title}
+                            widgetName={meta.name}
+                            assocValueKey={assocValueKey}
+                            selectedRecords={selectedFilterRecords}
+                            onDelete={handleDeleteTag}
+                        />
+                    ) : (
+                        <AssocTitle title={meta.title} widgetName={meta.name} assocValueKey={assocValueKey} bcName={meta.bcName} />
+                    )}
+                </>
+            }
             showed
             size="large"
             onCancelHandler={onClose}
@@ -205,7 +187,11 @@ function DefaultAssocListPopup({ meta, isFilter }: DefaultAssocListPopupProps) {
             }
             wrapProps={isFilter ? { 'data-test-filter-popup': true } : undefined}
         >
-            <SelectionTable meta={meta} disablePagination={true} />
+            {isFilter ? (
+                <SelectionTable meta={meta} selectedRecords={selectedFilterRecords} onSelect={handleSelect} onSelectAll={handleSelectAll} />
+            ) : (
+                <AssocSelectionTable meta={meta} />
+            )}
         </Popup>
     )
 }

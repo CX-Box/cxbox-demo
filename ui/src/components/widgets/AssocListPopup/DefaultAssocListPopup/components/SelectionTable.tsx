@@ -1,23 +1,23 @@
 import React from 'react'
+import Table from '@components/widgets/Table/Table'
 import { TableRowSelection } from 'antd/lib/table'
-import { interfaces } from '@cxbox-ui/core'
+import { AssociatedItem, DataItem, interfaces } from '@cxbox-ui/core'
 import { AppWidgetTableMeta } from '@interfaces/widget'
 import { TableProps } from 'antd/es/table'
-import Table from '@components/widgets/Table/Table'
-import { useDefaultAssociations } from './hooks/useDefaultAssociations'
 
 interface SelectionTableProps {
     meta: AppWidgetTableMeta
-    disablePagination?: boolean
+    selectedRecords: DataItem[]
+    onSelect: (record: AssociatedItem, selected: boolean) => void
+    onSelectAll: (selected: boolean, selectedRows: DataItem[], changedRows: DataItem[]) => void
 }
 
-const SelectionTable: React.FC<SelectionTableProps> = props => {
-    const { values, select, selectAll } = useDefaultAssociations(props.meta.bcName)
+const SelectionTable: React.FC<SelectionTableProps> = ({ meta, selectedRecords, onSelect, onSelectAll }) => {
     const rowSelection: TableProps<interfaces.AssociatedItem>['rowSelection'] = {
         type: 'checkbox',
-        selectedRowKeys: values.map(item => item.id),
-        onSelect: select,
-        onSelectAll: selectAll,
+        selectedRowKeys: selectedRecords.map(item => item.id),
+        onSelect,
+        onSelectAll,
         getCheckboxProps: () => ({
             'data-test-widget-list-column-select': true
         })
@@ -25,10 +25,10 @@ const SelectionTable: React.FC<SelectionTableProps> = props => {
 
     return (
         <Table
-            meta={props.meta}
+            meta={meta}
             rowSelection={rowSelection as TableRowSelection<interfaces.DataItem>}
             disableMassMode={true}
-            disablePagination={props.disablePagination}
+            disablePagination={true}
         />
     )
 }

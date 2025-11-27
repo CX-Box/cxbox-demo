@@ -1,4 +1,4 @@
-import { RootEpic, RootState } from '@store'
+import { RootEpic } from '@store'
 import { catchError, concat, EMPTY, filter, mergeMap, of, switchMap } from 'rxjs'
 import { isAnyOf, nanoid } from '@reduxjs/toolkit'
 import {
@@ -17,55 +17,12 @@ import { actions, sendOperationSuccess, setBcCount } from '@actions'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import { AxiosError } from 'axios'
 import { postOperationRoutine } from './utils/postOperationRoutine'
-import { AppWidgetGroupingHierarchyMeta, AppWidgetMeta, CustomWidgetTypes } from '@interfaces/widget'
+import { AppWidgetGroupingHierarchyMeta, CustomWidgetTypes } from '@interfaces/widget'
 import { getGroupingHierarchyWidget } from '@utils/groupingHierarchy'
 import { DataItem } from '@cxbox-ui/schema'
 import { postInvokeHasRefreshBc } from '@utils/postInvokeHasRefreshBc'
 import { findWidgetHasCount } from '@components/ui/Pagination/utils'
 import { getInternalWidgets } from '@utils/getInternalWidgets'
-
-const getWidgetsForRowMetaUpdate = (state: RootState, activeBcName: string) => {
-    const { widgets, pendingDataChanges } = state.view
-    const bcDictionary: { [bcName: string]: AppWidgetMeta } = {}
-
-    widgets.forEach(widget => {
-        if (
-            !bcDictionary[widget.bcName] &&
-            widget.showCondition?.bcName === activeBcName &&
-            widget.bcName !== activeBcName &&
-            utils.checkShowCondition(
-                widget.showCondition,
-                state.screen.bo.bc[widget.showCondition?.bcName as string]?.cursor || '',
-                state.data[widget.showCondition?.bcName as string],
-                pendingDataChanges
-            )
-        ) {
-            bcDictionary[widget.bcName] = widget
-        }
-    })
-
-    return Object.values(bcDictionary)
-}
-
-export const updateRowMetaForRelatedBcEpic: RootEpic = (action$, state$) =>
-    action$.pipe(
-        filter(isAnyOf(actions.forceActiveRmUpdate)),
-        switchMap(action => {
-            const { bcName } = action.payload
-            const state = state$.value
-            const widgetsForRowMetaUpdate = getWidgetsForRowMetaUpdate(state, bcName)
-
-            if (widgetsForRowMetaUpdate.length) {
-                return concat(
-                    ...widgetsForRowMetaUpdate.map(currentWidget =>
-                        of(actions.bcFetchRowMeta({ widgetName: currentWidget.name, bcName: currentWidget.bcName }))
-                    )
-                )
-            }
-
-            return EMPTY
-        })
-    )
 
 const bcFetchCountEpic: RootEpic = (action$, state$, { api }) =>
     action$.pipe(
@@ -541,7 +498,6 @@ export const viewEpics = {
     bcDeleteDataEpic,
     forceUpdateRowMeta,
     closeFormPopup,
-    updateRowMetaForRelatedBcEpic,
     applyPendingPostInvokeEpic,
     collapseWidgetsByDefaultEpic,
     checkWidgetsEpic

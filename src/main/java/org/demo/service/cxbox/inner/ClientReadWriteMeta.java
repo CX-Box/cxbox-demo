@@ -12,14 +12,21 @@ import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.inner.ClientReadDTO_;
 import org.demo.dto.cxbox.inner.ClientWriteDTO;
 import org.demo.dto.cxbox.inner.ClientWriteDTO_;
+import org.demo.entity.dictionary.ClientImportance;
 import org.demo.entity.enums.ClientEditStep;
 import org.demo.entity.enums.ClientStatus;
 import org.demo.entity.enums.FieldOfActivity;
+import org.demo.repository.ClientRepository;
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S3252","java:S1186"})
 @Service
 public class ClientReadWriteMeta extends FieldMetaBuilder<ClientWriteDTO> {
+	private final ClientRepository clientRepository;
+
+	public ClientReadWriteMeta(ClientRepository clientRepository) {
+		this.clientRepository = clientRepository;
+	}
 
 	@Override
 	public void buildRowDependentMeta(RowDependentFieldsMeta<ClientWriteDTO> fields, InnerBcDescription bcDescription,
@@ -41,7 +48,7 @@ public class ClientReadWriteMeta extends FieldMetaBuilder<ClientWriteDTO> {
 				ClientWriteDTO_.fieldOfActivity,
 				ClientWriteDTO_.status
 		);
-
+		long cancelledCount2 = clientRepository.findByStatusId(ClientImportance.HIGH).size();;
 		fields.setDictionaryValues(ClientWriteDTO_.importance);
 
 		fields.setEnumValues(ClientWriteDTO_.editStep, ClientEditStep.values());

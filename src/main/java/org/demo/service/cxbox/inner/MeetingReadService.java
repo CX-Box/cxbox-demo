@@ -1,7 +1,11 @@
 package org.demo.service.cxbox.inner;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.cxbox.core.crudma.bc.BusinessComponent;
@@ -20,7 +24,9 @@ import org.demo.conf.cxbox.customization.icon.ActionIcon;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.inner.MeetingDTO;
 import org.demo.entity.Meeting;
+import org.demo.entity.dictionary.EmployeeRequestRegulatorRole;
 import org.demo.repository.MeetingRepository;
+import org.demo.repository.RequestRegulatorEmployeeLinkRepoBase;
 import org.demo.repository.core.UserRepository;
 import org.demo.service.mail.MailSendingService;
 import org.demo.service.statemodel.MeetingStatusModelActionProvider;
@@ -41,6 +47,10 @@ public class MeetingReadService extends VersionAwareResponseService<MeetingDTO, 
 	private final MeetingStatusModelActionProvider statusModelActionProvider;
 
 	private final MailSendingService mailSendingService;
+
+	private final RequestRegulatorEmployeeLinkRepoBase requestRegulatorEmployeeLinkRepoBase;
+
+	private final EntityManager entityManager;
 
 	private static final String MESSAGE_TEMPLATE = "Status: %s; \nMeeting Result: %s";
 
@@ -82,6 +92,28 @@ public class MeetingReadService extends VersionAwareResponseService<MeetingDTO, 
 				.action(act -> act
 						.action("sendEmail", "Send Email")
 						.invoker((bc, data) -> {
+//							requestRegulatorEmployeeLinkRepoBase.findRequest(
+//									//Set.of(EmployeeRequestRegulatorRole.COORDINATOR, EmployeeRequestRegulatorRole.ACCOUNTANT)
+//							);
+							requestRegulatorEmployeeLinkRepoBase.findRequest1(
+									Set.of(EmployeeRequestRegulatorRole.COORDINATOR, EmployeeRequestRegulatorRole.ACCOUNTANT)
+							);
+							String jpql =
+									"SELECT DISTINCT c.employeeRoleCd " +
+											"FROM RequestRegulatorEmployeeLinkBase c " +
+											"WHERE c.employeeRoleCd IN :roles";
+
+							TypedQuery<EmployeeRequestRegulatorRole> query =
+									entityManager.createQuery(jpql, EmployeeRequestRegulatorRole.class);
+
+							List<EmployeeRequestRegulatorRole> rolesFilter = List.of(
+									EmployeeRequestRegulatorRole.COORDINATOR,
+									EmployeeRequestRegulatorRole.ACCOUNTANT
+							);
+
+							query.setParameter("roles", rolesFilter);
+
+							List<EmployeeRequestRegulatorRole> resultList = query.getResultList();
 							Meeting meeting = meetingRepository.getReferenceById(Long.parseLong(bc.getId()));
 							getSend(meeting, false);
 							return new ActionResultDTO<MeetingDTO>()

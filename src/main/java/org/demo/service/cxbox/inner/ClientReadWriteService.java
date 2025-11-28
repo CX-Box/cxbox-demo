@@ -30,6 +30,7 @@ import org.demo.entity.Meeting;
 import org.demo.entity.enums.ClientEditStep;
 import org.demo.entity.enums.ClientStatus;
 import org.demo.entity.enums.FieldOfActivity;
+import org.demo.entity.enums.MeetingStatus;
 import org.demo.repository.ClientRepository;
 import org.demo.repository.MeetingRepository;
 import org.demo.repository.core.UserRepository;
@@ -86,6 +87,7 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 		setIfChanged(data, ClientWriteDTO_.address, entity::setAddress);
 		setIfChanged(data, ClientWriteDTO_.brief, entity::setBrief);
 		setIfChanged(data, ClientWriteDTO_.briefId, entity::setBriefId);
+
 		return new ActionResultDTO<>(entityToDto(bc, entity));
 	}
 

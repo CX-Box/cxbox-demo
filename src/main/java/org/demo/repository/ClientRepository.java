@@ -2,14 +2,17 @@ package org.demo.repository;
 
 import java.util.List;
 import java.util.Set;
+import org.cxbox.dictionary.Dictionary;
 import org.demo.entity.Client;
 import org.demo.entity.Client_;
+import org.demo.entity.dictionary.ClientImportance;
 import org.demo.entity.enums.ClientStatus;
 import org.demo.conf.cxbox.extension.fulltextsearch.FullTextSearchExt;
 import org.demo.entity.enums.FieldOfActivity;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -35,5 +38,11 @@ public interface ClientRepository extends JpaRepository<Client, Long>, JpaSpecif
 
 	List<Client> findAllByFieldOfActivitiesInAndStatusIn(Set<FieldOfActivity> fieldOfActivities, List<ClientStatus> status);
 
+	@Query(
+			"""
+			SELECT status FROM Client WHERE  importance in (:clientImportance)
+			"""
+	)
+	List<Dictionary> findByStatusId(ClientImportance clientImportance);
 
 }

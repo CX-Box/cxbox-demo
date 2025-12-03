@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@ant-design/plots": "1.2.6",
-    "@cxbox-ui/core": "2.7.3-CXBOX-1138-alpha.0",
+    "@cxbox-ui/core": "2.7.3",
     "@fullcalendar/core": "6.1.18",
     "@fullcalendar/daygrid": "6.1.18",
     "@fullcalendar/interaction": "6.1.18",

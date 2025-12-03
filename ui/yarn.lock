@@ -3363,9 +3363,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@cxbox-ui/core@npm:2.7.3-CXBOX-1138-alpha.0":
-  version: 2.7.3-CXBOX-1138-alpha.0
-  resolution: "@cxbox-ui/core@npm:2.7.3-CXBOX-1138-alpha.0"
+"@cxbox-ui/core@npm:2.7.3":
+  version: 2.7.3
+  resolution: "@cxbox-ui/core@npm:2.7.3"
   dependencies:
     "@cxbox-ui/schema": "npm:0.8.0"
   peerDependencies:
@@ -3374,7 +3374,7 @@ __metadata:
     react: ^16.9.0 || ^17.0.0 || ^18
     react-redux: ^7.2.1 || ^8.0.2
     rxjs: ^7
-  checksum: 8e03cbf5944768aeb2defadf61a33b2ec168cfc2c829ff9be4c82846e12609f8dc4132221ead7656e9abfcc8addb1d1a74cf98dfe2957978b5e3c5f98b4a22bc
+  checksum: f9ee13bda6508a655aab7822b3ae584fe73657f495b60cd2f18b0603249906d6e7ab61ba86ebb4cbb13ac22a21bbd29c9ddbfc14ce166060a55b942be06f7965
   languageName: node
   linkType: hard
 
@@ -17618,7 +17618,7 @@ __metadata:
   dependencies:
     "@ant-design/plots": "npm:1.2.6"
     "@craco/craco": "npm:7.1.0"
-    "@cxbox-ui/core": "npm:2.7.3-CXBOX-1138-alpha.0"
+    "@cxbox-ui/core": "npm:2.7.3"
     "@fullcalendar/core": "npm:6.1.18"
     "@fullcalendar/daygrid": "npm:6.1.18"
     "@fullcalendar/interaction": "npm:6.1.18"

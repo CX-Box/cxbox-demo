@@ -88,7 +88,8 @@
         "sendEmail",
         "sendEmailNextDay",
         "massEdit",
-        "massSendEmail"
+        "massSendEmail",
+        "customExportToExcel"
       ]
     }
   }

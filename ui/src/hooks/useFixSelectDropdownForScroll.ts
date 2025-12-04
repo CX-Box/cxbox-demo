@@ -3,15 +3,24 @@ import { RefObject, useCallback, useEffect, useRef } from 'react'
 const useFixSelectDropdownForScroll = (selectRef: RefObject<any>) => {
     const tickingRef = useRef(false)
 
-    const alignDropdownFn = useCallback(() => {
-        if (!tickingRef.current) {
-            tickingRef.current = true
-            requestAnimationFrame(() => {
-                tickingRef.current = false
-                selectRef.current?.rcSelect?.forcePopupAlign?.()
-            })
-        }
-    }, [selectRef])
+    const alignDropdownFn = useCallback(
+        (event: Event) => {
+            const target = event.target as HTMLElement | null
+
+            if (!target || target.closest('.ant-select-dropdown')) {
+                return
+            }
+
+            if (!tickingRef.current) {
+                tickingRef.current = true
+                requestAnimationFrame(() => {
+                    tickingRef.current = false
+                    selectRef.current?.rcSelect?.forcePopupAlign?.()
+                })
+            }
+        },
+        [selectRef]
+    )
 
     const handleDropdownVisibleChange = useCallback(
         (open: boolean) => {

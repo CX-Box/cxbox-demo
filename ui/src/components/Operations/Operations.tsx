@@ -70,7 +70,7 @@ function Operations(props: OperationsProps) {
         }
     }
 
-    if (!hasOperations) {
+    if (!hasOperations && !additionalOperations && !widgetMeta.options?.fullTextSearch?.enabled) {
         return null
     }
 

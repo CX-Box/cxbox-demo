@@ -1,20 +1,7 @@
-export * from './Checkbox'
-export * from './Date'
-export * from './DateTime'
-export * from './DateTimeWithSeconds'
-export * from './Dictionary'
-export * from './FileUpload'
-export * from './Hint'
-export * from './InlinePickList'
-export * from './Money'
-export * from './Multifield'
-export * from './MultipleSelect'
-export * from './Multivalue'
-export * from './MultivalueHover'
-export * from './Number'
-export * from './Percent'
-export * from './PickList'
-export * from './Radio'
-export * from './SuggestionPickList'
-export * from './Text'
-export * from './Time'
+import { FieldComponent } from '@features'
+
+export const Time: FieldComponent = () => null
+
+Time.Filter = () => null
+Time.Read = () => null
+Time.Write = () => null

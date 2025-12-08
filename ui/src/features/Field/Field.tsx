@@ -1,15 +1,14 @@
-import React, { FunctionComponent } from 'react'
+import React, { FC, FunctionComponent } from 'react'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { Icon, Input } from 'antd'
 import DatePickerField from '@components/ui/DatePickerField/DatePickerField'
 import TextArea from '@components/ui/TextArea/TextArea'
-import MultiField from '@fields/Multifield/MultiField'
+import MultiField from '@fields/_temp_fields/Multifield/MultiField'
 import ReadOnlyField from '@components/ui/ReadOnlyField/ReadOnlyField'
-import MultivalueHover from '@fields/MultivalueHover/MultivalueHover'
+import MultivalueHover from '@fields/_temp_fields/MultivalueHover/MultivalueHover'
 import cn from 'classnames'
 import readOnlyFieldStyles from '@components/ui/ReadOnlyField/ReadOnlyField.less'
-import CheckboxPicker from '@fields/Checkbox/Checkbox'
 import RadioButton from '@components/ui/RadioButton/RadioButton'
 import styles from './Field.less'
 import { CustomizationContext } from '@features/View/SimpleView'
@@ -23,6 +22,13 @@ import { buildBcUrl } from '@utils/buildBcUrl'
 import { useTranslation } from 'react-i18next'
 import FieldErrorPopupWrapper from '@components/FieldErrorPopupWrapper/FieldErrorPopupWrapper'
 import { customFields } from '@features/View/View'
+
+export interface FieldComponent {
+    (): void
+    Filter: FC
+    Read: FC
+    Write: FC
+}
 
 interface FieldOwnProps {
     widgetFieldMeta: interfaces.WidgetField

@@ -61,7 +61,7 @@ const RowOperationsButton = ({ meta, parent, ...props }: RowOperationsButtonProp
      * Fetches row meta to get
      */
     const handleFetchMeta = React.useCallback(() => {
-        dispatch(actions.bcSelectRecord({ bcName, cursor: selectedRow }))
+        dispatch(actions.bcSelectRecord({ bcName, cursor: selectedRow, keepRowMeta: true }))
     }, [bcName, selectedRow, dispatch])
 
     /**

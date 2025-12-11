@@ -1,13 +1,14 @@
 import React from 'react'
 import { Divider } from 'antd'
 import { shallowEqual, useDispatch } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 import cn from 'classnames'
-import { useAppSelector } from '@store'
 import Button from '../../../ui/Button/Button'
+import { useAppSelector } from '@store'
+import { handleBeforeUnload, isBrowserNavigationWarnEnabled } from '@constants/navigationGuard'
 import { actions, interfaces } from '@cxbox-ui/core'
 import { EFeatureSettingKey } from '@interfaces/session'
 import styles from './UserMenuContent.less'
-import { useTranslation } from 'react-i18next'
 
 export const UserMenuContent: React.FC = () => {
     const { firstName, lastName, login, activeRole, roles, multiroleEnabled } = useAppSelector(state => {
@@ -26,7 +27,13 @@ export const UserMenuContent: React.FC = () => {
         (roleKey: string) => () => dispatch(actions.switchRole({ role: roleKey })),
         [dispatch]
     )
-    const handleLogout = React.useCallback(() => dispatch(actions.logout(null)), [dispatch])
+    const handleLogout = React.useCallback(() => {
+        if (isBrowserNavigationWarnEnabled) {
+            window.removeEventListener('beforeunload', handleBeforeUnload)
+        }
+
+        dispatch(actions.logout(null))
+    }, [dispatch])
     const fullName = `${lastName} ${firstName}`
     const sortedRoles = React.useMemo(() => [...(roles || [])]?.sort(roleComparator), [roles])
     const { t } = useTranslation()

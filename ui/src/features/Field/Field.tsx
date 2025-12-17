@@ -4,9 +4,9 @@ import { Dispatch } from 'redux'
 import { Icon, Input } from 'antd'
 import DatePickerField from '@components/ui/DatePickerField/DatePickerField'
 import TextArea from '@components/ui/TextArea/TextArea'
-import MultiField from '@fields/_temp_fields/Multifield/MultiField'
+import MultiField from '@fields/__fields_to_migrate/Multifield/MultiField'
 import ReadOnlyField from '@components/ui/ReadOnlyField/ReadOnlyField'
-import MultivalueHover from '@fields/_temp_fields/MultivalueHover/MultivalueHover'
+import MultivalueHover from '@fields/__fields_to_migrate/MultivalueHover/MultivalueHover'
 import cn from 'classnames'
 import readOnlyFieldStyles from '@components/ui/ReadOnlyField/ReadOnlyField.less'
 import RadioButton from '@components/ui/RadioButton/RadioButton'
@@ -22,12 +22,17 @@ import { buildBcUrl } from '@utils/buildBcUrl'
 import { useTranslation } from 'react-i18next'
 import FieldErrorPopupWrapper from '@components/FieldErrorPopupWrapper/FieldErrorPopupWrapper'
 import { customFields } from '@features/View/View'
+import CheckboxPicker from '@fields/__fields_to_migrate/Checkbox/Checkbox'
+import * as fields from '@fields'
+import get from 'lodash/get'
+import upperFirst from 'lodash.upperfirst'
+import camelcase from 'lodash.camelCase'
 
 export interface FieldComponent {
     (): void
-    Filter: FC
-    Read: FC
-    Write: FC
+    Filter?: FC
+    Read?: FC
+    Write?: FC
 }
 
 interface FieldOwnProps {
@@ -406,3 +411,5 @@ function mapDispatchToProps(dispatch: Dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Field)
+
+export function noop() {}

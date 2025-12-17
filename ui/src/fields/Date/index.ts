@@ -1,7 +1,7 @@
-import { FieldComponent } from '@features'
+import { FieldComponent, noop } from '@features'
 
-export const Date: FieldComponent = () => null
+export const Date: FieldComponent = noop
 
-Date.Filter = () => null
-Date.Read = () => null
-Date.Write = () => null
+// Date.Filter = () => null
+// Date.Read = () => null
+// Date.Write = () => null

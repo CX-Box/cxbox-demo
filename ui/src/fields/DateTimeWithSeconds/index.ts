@@ -1,7 +1,7 @@
-import { FieldComponent } from '@features'
+import { FieldComponent, noop } from '@features'
 
-export const DateTimeWithSeconds: FieldComponent = () => null
+export const DateTimeWithSeconds: FieldComponent = noop
 
-DateTimeWithSeconds.Filter = () => null
-DateTimeWithSeconds.Read = () => null
-DateTimeWithSeconds.Write = () => null
+// DateTimeWithSeconds.Filter = () => null
+// DateTimeWithSeconds.Read = () => null
+// DateTimeWithSeconds.Write = () => null

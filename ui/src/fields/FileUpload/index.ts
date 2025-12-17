@@ -1,8 +1,7 @@
-import { FieldComponent } from '@features'
-import { default as TempFileUpload } from '../_temp_fields/FileUpload/FileUploadContainer'
+import { FieldComponent, noop } from '@features'
 
-export const FileUpload: FieldComponent = () => null
+export const FileUpload: FieldComponent = noop
 
-FileUpload.Filter = TempFileUpload
-FileUpload.Read = TempFileUpload
-FileUpload.Write = TempFileUpload
+// FileUpload.Filter = TempFileUpload
+// FileUpload.Read = TempFileUpload
+// FileUpload.Write = TempFileUpload

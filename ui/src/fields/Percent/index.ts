@@ -1,7 +1,7 @@
-import { FieldComponent } from '@features'
+import { FieldComponent, noop } from '@features'
 
-export const Percent: FieldComponent = () => null
+export const Percent: FieldComponent = noop
 
-Percent.Filter = () => null
-Percent.Read = () => null
-Percent.Write = () => null
+// Percent.Filter = () => null
+// Percent.Read = () => null
+// Percent.Write = () => null

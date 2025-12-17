@@ -1,7 +1,7 @@
-import { FieldComponent } from '@features'
+import { FieldComponent, noop } from '@features'
 
-export const Multifield: FieldComponent = () => null
+export const Multifield: FieldComponent = noop
 
-Multifield.Filter = () => null
-Multifield.Read = () => null
-Multifield.Write = () => null
+// Multifield.Filter = () => null
+// Multifield.Read = () => null
+// Multifield.Write = () => null

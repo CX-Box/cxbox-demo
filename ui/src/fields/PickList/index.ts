@@ -1,7 +1,7 @@
-import { FieldComponent } from '@features'
+import { FieldComponent, noop } from '@features'
 
-export const PickList: FieldComponent = () => null
+export const PickList: FieldComponent = noop
 
-PickList.Filter = () => null
-PickList.Read = () => null
-PickList.Write = () => null
+// PickList.Filter = () => null
+// PickList.Read = () => null
+// PickList.Write = () => null

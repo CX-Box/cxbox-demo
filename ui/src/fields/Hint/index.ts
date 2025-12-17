@@ -1,7 +1,7 @@
-import { FieldComponent } from '@features'
+import { FieldComponent, noop } from '@features'
 
-export const Hint: FieldComponent = () => null
+export const Hint: FieldComponent = noop
 
-Hint.Filter = () => null
-Hint.Read = () => null
-Hint.Write = () => null
+// Hint.Filter = () => null
+// Hint.Read = () => null
+// Hint.Write = () => null

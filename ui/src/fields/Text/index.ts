@@ -1,6 +1,6 @@
-import { FieldComponent } from '@features'
+import { FieldComponent, noop } from '@features'
 
-export const Text: FieldComponent = () => null
+export const Text: FieldComponent = noop
 
 Text.Filter = () => null
 Text.Read = () => null

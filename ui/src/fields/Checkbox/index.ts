@@ -1,8 +1,7 @@
-import { FieldComponent } from '@features'
-import { default as TempCheckbox } from '../_temp_fields/Checkbox/Checkbox'
+import { FieldComponent, noop } from '@features'
 
-export const Checkbox: FieldComponent = () => null
+export const Checkbox: FieldComponent = noop
 
-Checkbox.Filter = TempCheckbox
-Checkbox.Read = TempCheckbox
-Checkbox.Write = TempCheckbox
+// Checkbox.Filter = TempCheckbox
+// Checkbox.Read = TempCheckbox
+// Checkbox.Write = TempCheckbox

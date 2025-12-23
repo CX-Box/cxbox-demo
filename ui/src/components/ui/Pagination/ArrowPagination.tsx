@@ -1,20 +1,23 @@
 import React from 'react'
-import { WidgetMeta } from '@cxbox-ui/core'
-import styles from './ArrowPagination.less'
+import { shallowEqual } from 'react-redux'
 import { Button } from 'antd'
+import Limit from './components/Limit'
+import AlternativePaginationButton from './components/AlternativePaginationButton/AlternativePaginationButton'
+import { useWidgetPaginationLimit } from './hooks/useWidgetPaginationLimit'
 import { usePagination } from '@hooks/usePagination'
 import { useAppSelector } from '@store'
-import Limit from '@components/ui/Pagination/components/Limit'
-import { useWidgetPaginationLimit } from '@components/ui/Pagination/hooks/useWidgetPaginationLimit'
-import { shallowEqual } from 'react-redux'
+import { PaginationMode } from '@constants/pagination'
+import { AppWidgetMeta } from '@interfaces/widget'
+import styles from './ArrowPagination.less'
 
 interface ArrowPaginationProps {
-    meta: WidgetMeta
+    meta: AppWidgetMeta
+    alternativeType?: PaginationMode
     disabledLimit?: boolean
     mode?: 'default' | 'smart'
 }
 
-const ArrowPagination: React.FC<ArrowPaginationProps> = ({ meta, disabledLimit, mode = 'default' }) => {
+const ArrowPagination: React.FC<ArrowPaginationProps> = ({ meta, alternativeType, disabledLimit, mode = 'default' }) => {
     const { hasNext, nextPage, prevPage, page: bcPage, limit: bcLimit, defaultLimit } = usePagination(meta.name)
 
     const limit = meta.limit || bcLimit
@@ -51,18 +54,24 @@ const ArrowPagination: React.FC<ArrowPaginationProps> = ({ meta, disabledLimit, 
                     data-test-widget-list-pagination-prev={true}
                     onClick={prevPage}
                 />
+
                 <Button disabled={disabledNextButton} icon="right" data-test-widget-list-pagination-next={true} onClick={nextPage} />
             </div>
+
             {!hideLimitOptions && (
-                <Limit
-                    className={styles.limits}
-                    classNameContainer={styles.limitContainer}
-                    disabled={disabledLimit}
-                    value={pageLimit}
-                    onChange={changePageLimit}
-                    total={null}
-                    options={options}
-                />
+                <>
+                    <Limit
+                        className={styles.limits}
+                        classNameContainer={styles.limitContainer}
+                        disabled={disabledLimit}
+                        value={pageLimit}
+                        onChange={changePageLimit}
+                        total={null}
+                        options={options}
+                    />
+
+                    {alternativeType && <AlternativePaginationButton widgetName={meta.name} alternativeType={alternativeType} />}
+                </>
             )}
         </div>
     )

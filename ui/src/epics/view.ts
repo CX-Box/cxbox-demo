@@ -23,6 +23,7 @@ import { DataItem } from '@cxbox-ui/schema'
 import { postInvokeHasRefreshBc } from '@utils/postInvokeHasRefreshBc'
 import { findWidgetHasCount } from '@components/ui/Pagination/utils'
 import { getInternalWidgets } from '@utils/getInternalWidgets'
+import { SECONDARY_DEFAULT_PAGINATION_TYPE_WITH_COUNT } from '@constants/pagination'
 
 const getWidgetsForRowMetaUpdate = (state: RootState, activeBcName: string) => {
     const { widgets, pendingDataChanges } = state.view
@@ -69,32 +70,17 @@ export const updateRowMetaForRelatedBcEpic: RootEpic = (action$, state$) =>
 
 const bcFetchCountEpic: RootEpic = (action$, state$, { api }) =>
     action$.pipe(
-        filter(isAnyOf(actions.bcFetchDataSuccess, actions.selectView)),
+        filter(isAnyOf(actions.bcFetchDataSuccess, actions.selectView, actions.setAlternativePaginationType)),
         mergeMap(action => {
-            if (actions.bcFetchDataSuccess.match(action)) {
-                const state = state$.value
-                const widgetWithCount = findWidgetHasCount(action.payload.bcName, state.view.widgets)
+            const state = state$.value
 
-                if (!widgetWithCount) {
-                    return EMPTY
-                }
-
-                const bcName = widgetWithCount.bcName
-                const screenName = state.screen.screenName
-                const filters = utils.getFilters(state.screen.filters[bcName] || EMPTY_ARRAY)
-                const bcUrl = buildBcUrl(bcName)
-                return api.fetchBcCount(screenName, bcUrl, filters).pipe(
-                    mergeMap(({ data }) => of(setBcCount({ bcName, count: data }))),
-                    catchError((error: AxiosError) => utils.createApiErrorObservable(error))
-                )
-            }
             if (actions.selectView.match(action)) {
-                const state = state$.value
                 const widgets = state.view.widgets
+                const alternativePagination = state.screen.alternativePagination
                 const data = state.data
                 const bcList = [...new Set(widgets.map(widget => widget.bcName))]
                 const missingCountsBcNames = bcList.filter(
-                    bc => findWidgetHasCount(bc, widgets) && !(bc in state.view.bcRecordsCount) && bc in data
+                    bc => findWidgetHasCount(bc, widgets, alternativePagination) && !(bc in state.view.bcRecordsCount) && bc in data
                 )
                 return concat(
                     ...missingCountsBcNames.map(bc => {
@@ -108,7 +94,32 @@ const bcFetchCountEpic: RootEpic = (action$, state$, { api }) =>
                     })
                 )
             }
-            return EMPTY
+
+            let widgetWithCount = null
+            if (
+                actions.setAlternativePaginationType.match(action) &&
+                action.payload.type === SECONDARY_DEFAULT_PAGINATION_TYPE_WITH_COUNT
+            ) {
+                const widgets: AppWidgetMeta[] = state.view.widgets
+                widgetWithCount = widgets?.find(item => item.name === action.payload.widgetName)
+            }
+
+            if (actions.bcFetchDataSuccess.match(action)) {
+                widgetWithCount = findWidgetHasCount(action.payload.bcName, state.view.widgets, state.screen.alternativePagination)
+            }
+
+            if (widgetWithCount) {
+                const bcName = widgetWithCount.bcName
+                const screenName = state.screen.screenName
+                const filters = utils.getFilters(state.screen.filters[bcName] || EMPTY_ARRAY)
+                const bcUrl = buildBcUrl(bcName)
+                return api.fetchBcCount(screenName, bcUrl, filters).pipe(
+                    mergeMap(({ data }) => of(setBcCount({ bcName, count: data }))),
+                    catchError((error: AxiosError) => utils.createApiErrorObservable(error))
+                )
+            } else {
+                return EMPTY
+            }
         }),
         catchError(err => {
             console.error(err)

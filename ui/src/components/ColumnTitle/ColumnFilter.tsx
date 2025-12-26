@@ -1,16 +1,18 @@
-import React, { memo, useCallback, useEffect } from 'react'
+import React, { memo, useCallback, useMemo } from 'react'
 import { Button, Popover } from 'antd'
 import styles from './ColumnFilter.less'
 import cn from 'classnames'
 import { ReactComponent as FilterIcon } from './filter-solid.svg'
-import { RowMetaField, interfaces } from '@cxbox-ui/core'
+import { RowMetaField, interfaces, BcFilter } from '@cxbox-ui/core'
 import FilterPopup from '../FilterPopup/FilterPopup'
 import FilterField from './FilterField'
 import { useAppDispatch, useAppSelector } from '@store'
-import { FieldType, WidgetListField, PickListFieldMeta } from '@cxbox-ui/schema'
+import { FieldType, WidgetListField } from '@cxbox-ui/schema'
 import { actions } from '@actions'
 import { EFeatureSettingKey } from '@interfaces/session'
-import { FIELDS } from '@constants'
+import { isRangeFieldType } from '@constants/field'
+import { isPartialRangeFilter, transformRangeFilters } from '@utils/filters'
+import { useAssociateFieldKeyForPickList } from '@components/ColumnTitle/hooks/useAssociateFieldKeyForPickList'
 
 interface ColumnFilterProps {
     className?: string
@@ -22,7 +24,7 @@ interface ColumnFilterProps {
     }
 }
 
-function ColumnFilter({ widgetName, widgetMeta, rowMeta, components, className }: ColumnFilterProps) {
+function ColumnFilter({ widgetName, widgetMeta: widgetFieldMeta, rowMeta, components, className }: ColumnFilterProps) {
     const widget = useAppSelector(state => state.view.widgets.find(item => item.name === widgetName))
     const filterByRangeEnabled = useAppSelector(
         state =>
@@ -31,8 +33,24 @@ function ColumnFilter({ widgetName, widgetMeta, rowMeta, components, className }
     )
     const bcName = widget?.bcName ?? ''
     const listFields = widget?.fields as interfaces.WidgetListField[]
-    const effectiveFieldMeta = (listFields?.find(item => item.key === widgetMeta.filterBy) ?? widgetMeta) as interfaces.WidgetListField
-    const filter = useAppSelector(state => state.screen.filters[bcName]?.find(item => item.fieldName === effectiveFieldMeta.key))
+    const effectiveFieldMeta = (listFields?.find(item => item.key === widgetFieldMeta.filterBy) ??
+        widgetFieldMeta) as interfaces.WidgetListField
+    const widgetFilters = useAppSelector(state => state.screen.filters[bcName]) as BcFilter[] | undefined
+    const filter = useMemo(() => {
+        const isRangeFilter = isRangeFieldType(effectiveFieldMeta.type, { filterByRangeEnabled })
+
+        if (isRangeFilter) {
+            const fieldFilters = widgetFilters?.filter(item => item.fieldName === effectiveFieldMeta.key)
+            const partialRangeFilters = fieldFilters?.filter(isPartialRangeFilter)
+            // This conversion is done to display the filter value correctly in UI components that expect a range (like date pickers or number ranges),
+            // since locally they work with 'range' type, while globally (backend) these transformed into 'greaterOrEqualThan' and 'lessOrEqualThan'.
+            if (partialRangeFilters?.length) {
+                return transformRangeFilters(partialRangeFilters)[0]
+            }
+        }
+
+        return widgetFilters?.find(item => item.fieldName === effectiveFieldMeta.key)
+    }, [effectiveFieldMeta.key, effectiveFieldMeta.type, filterByRangeEnabled, widgetFilters])
     const [value, setValue] = React.useState(filter?.value)
     const [visible, setVisible] = React.useState(false)
 
@@ -158,32 +176,3 @@ function ColumnFilter({ widgetName, widgetMeta, rowMeta, components, className }
 }
 
 export default memo(ColumnFilter)
-
-function getAssociateFieldKeyForPickList(fieldMeta: PickListFieldMeta) {
-    if (!fieldMeta?.pickMap) {
-        return null
-    }
-
-    return Object.entries(fieldMeta.pickMap).reduce((acc: null | string, [key, value]) => {
-        if (value === FIELDS.TECHNICAL.ID) {
-            return key
-        }
-
-        return acc
-    }, null)
-}
-
-export function useAssociateFieldKeyForPickList(fieldMeta: PickListFieldMeta) {
-    const isPickList = fieldMeta.type === FieldType.pickList
-    const associateFieldKeyForPickList = getAssociateFieldKeyForPickList(fieldMeta)
-
-    useEffect(() => {
-        if (isPickList && !associateFieldKeyForPickList) {
-            console.info(`pickmap with "id" on right side not found - filter will be applied to field referenced in "key"`)
-        }
-    }, [associateFieldKeyForPickList, isPickList])
-
-    return {
-        associateFieldKeyForPickList
-    }
-}

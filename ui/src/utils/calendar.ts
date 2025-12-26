@@ -1,6 +1,6 @@
 import { AppWidgetMeta, CustomWidgetTypes } from '@interfaces/widget'
 import { BcFilter, BcMeta, utils } from '@cxbox-ui/core'
-import { mapRefinerKeyToFieldKey } from '@components/widgets/CalendarList/interfaces'
+import { mapRefinerKeyToFieldKey } from '@components/widgets/CalendarList/constants'
 import {
     createMonthEndFilter,
     createMonthStartFilter,

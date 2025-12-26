@@ -71,6 +71,7 @@ export const processScreensOnLogin = (screens: SessionScreen[]) => {
 
             if (bcWithCalendar && screenBcList && calendarWidget) {
                 bcWithCalendar.defaultFilter = createDefaultFilter(calendarWidget, bcWithCalendar)
+                bcWithCalendar.cursorSelectionStrategy = 'closestDate'
             }
         })
 

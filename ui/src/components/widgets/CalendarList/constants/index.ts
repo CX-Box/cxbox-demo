@@ -1,18 +1,22 @@
 import { createKeyMirror } from '@utils/createKeyMirror'
 import { CalendarOption } from '@interfaces/widget'
 import i18n from 'i18next'
+import { createListWithMap } from '@utils/createListWithMap'
+import { UseScrollToCurrentDayOptions } from '@components/widgets/CalendarList/hooks/useScrollToCurrentDay'
 
 export type ToolbarSize = 'small' | 'large' | 'default'
 
-export const CALENDAR_GRID_VIEWS = ['dayGridMonth', 'dayGridYear', 'timeGridDay', 'timeGridWeek', 'multiMonthYear'] as const
-
-export const CALENDAR_GRID = createKeyMirror(CALENDAR_GRID_VIEWS)
+export const [CALENDAR_GRID_VIEWS, CALENDAR_GRID] = createListWithMap([
+    'dayGridMonth',
+    'dayGridYear',
+    'timeGridDay',
+    'timeGridWeek',
+    'multiMonthYear'
+])
 
 export type CalendarGridViews = ValueOf<typeof CALENDAR_GRID>
 
-export const CALENDAR_GRID_CUSTOM_VIEWS = ['multiMonthYearStack'] as const
-
-export const CALENDAR_CUSTOM_GRID = createKeyMirror(CALENDAR_GRID_CUSTOM_VIEWS)
+export const [CALENDAR_GRID_CUSTOM_VIEWS, CALENDAR_CUSTOM_GRID] = createListWithMap(['multiMonthYearStack'])
 
 export type CalendarCustomGridViews = ValueOf<typeof CALENDAR_CUSTOM_GRID>
 
@@ -52,6 +56,15 @@ export const getMonthViewList = () => [
         title: i18n.t('Day')
     }
 ]
+
+export const SCROLL_TO_CURRENT_DAY_CONFIG: {
+    [key in CalendarGridViews | CalendarCustomGridViews]?: UseScrollToCurrentDayOptions
+} = {
+    [CALENDAR_GRID.multiMonthYear]: {
+        todaySelector: '.fc-multimonth-month:has(.fc-day-today)',
+        scrollContainerSelector: '.fc-multiMonthYear-view.fc-view'
+    }
+}
 
 export const getYearViewList = () => [
     // {

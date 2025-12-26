@@ -2,11 +2,11 @@
  * Opens when column filter requested
  */
 
-import React, { FormEvent, useMemo } from 'react'
+import React, { FormEvent, useCallback, useMemo } from 'react'
 import { Button, Form } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
-import { FieldType, WidgetField, WidgetTypes } from '@cxbox-ui/schema'
+import { FieldType, WidgetField } from '@cxbox-ui/schema'
 import { useAppSelector } from '@store'
 import { useAssociateFieldKeyForPickList } from '../ColumnTitle/ColumnFilter'
 import { actions } from '@actions'
@@ -43,32 +43,24 @@ const isFilterValueEmpty = (value: unknown): boolean => {
 }
 
 const FilterPopup: React.FC<FilterPopupProps> = props => {
-    const { fieldType, filterByRangeEnabled, value, fieldKey, onApply } = props
+    const { fieldType, filterByRangeEnabled, value, widgetName, fieldKey, onApply } = props
 
     const widget = useAppSelector(state => {
-        return state.view.widgets.find(item => item.name === props.widgetName)
+        return state.view.widgets.find(item => item.name === widgetName)
     })
     const viewName = useAppSelector(state => {
         return state.view.name
     })
     const filters = useAppSelector(selectBcFilters(widget?.bcName))
-    const filter = filters?.find(item => item.fieldName === props.fieldKey)
 
-    const allFilters = useAppSelector(state => {
-        return state.screen.filters[widget?.bcName as string]
-    })
+    const filter = filters?.find(item => item.fieldName === fieldKey)
     const widgetMeta = (widget?.fields as WidgetField[])?.find(item => item.key === props.fieldKey)
     const fieldMetaPickListField = widgetMeta as PickListFieldMeta
 
     const { associateFieldKeyForPickList } = useAssociateFieldKeyForPickList(fieldMetaPickListField)
-
-    const pickListPopupBcName = fieldMetaPickListField?.popupBcName
-
-    const picklistPopupWidget = useAppSelector(state => {
-        return state.view.widgets.find(item => {
-            return item.type === WidgetTypes.PickListPopup && item.bcName === pickListPopupBcName
-        })
-    })
+    const associatedFilter = associateFieldKeyForPickList
+        ? filters?.find(filter => filter.fieldName === associateFieldKeyForPickList)
+        : undefined
 
     const dispatch = useDispatch()
     const { t } = useTranslation()
@@ -91,6 +83,12 @@ const FilterPopup: React.FC<FilterPopupProps> = props => {
         return null
     }, [props?.fieldType, props.rowFieldMeta?.filterValues?.length, props.value])
 
+    const clearAssociatedFilter = useCallback(() => {
+        if (associatedFilter) {
+            dispatch(actions.bcRemoveFilter({ bcName: widget?.bcName as string, filter: associatedFilter }))
+        }
+    }, [associatedFilter, dispatch, widget?.bcName])
+
     if (!widgetMeta) {
         return null
     }
@@ -110,17 +108,16 @@ const FilterPopup: React.FC<FilterPopupProps> = props => {
             widgetName: widget.name
         }
 
+        const isValueEmpty = isFilterValueEmpty(value)
+
         if (fieldType === FieldType.pickList) {
-            const associatedFilter = allFilters?.find(filter => filter.fieldName === associateFieldKeyForPickList)
-            if (associatedFilter) {
-                dispatch(actions.bcRemoveFilter({ bcName: widget.bcName, filter: associatedFilter }))
-                if (picklistPopupWidget?.bcName) {
-                    dispatch(actions.bcCancelPendingChanges({ bcNames: [picklistPopupWidget.bcName] }))
-                }
+            clearAssociatedFilter()
+
+            if (!isValueEmpty && filter && filter.type !== newFilter.type) {
+                dispatch(actions.bcRemoveFilter({ bcName: widget.bcName, filter }))
+                newFilter.value = String(value)
             }
         }
-
-        const isValueEmpty = isFilterValueEmpty(value)
 
         cleanOldRangeFilters(newFilter)
 
@@ -153,12 +150,19 @@ const FilterPopup: React.FC<FilterPopupProps> = props => {
 
     const handleCancel = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
         e.preventDefault()
+
+        if (fieldType === FieldType.pickList) {
+            clearAssociatedFilter()
+        }
+
         if (filter) {
             dispatch(actions.bcRemoveFilter({ bcName: widget?.bcName as string, filter }))
-            if (!widget?.options?.hierarchyFull) {
-                dispatch(actions.bcForceUpdate({ bcName: widget?.bcName as string }))
-            }
         }
+
+        if ((filter || associatedFilter) && !widget?.options?.hierarchyFull) {
+            dispatch(actions.bcForceUpdate({ bcName: widget?.bcName as string }))
+        }
+
         props.onCancel?.()
     }
 

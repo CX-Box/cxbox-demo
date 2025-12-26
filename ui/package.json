@@ -98,7 +98,6 @@
     "prettier": "2.8.8",
     "react-app-alias": "2.2.2",
     "react-scripts": "5.0.0",
-    "source-map-loader": "4.0.1",
     "typescript": "5.2.2"
   },
   "packageManager": "yarn@4.0.2",

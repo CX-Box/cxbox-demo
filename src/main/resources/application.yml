@@ -52,6 +52,7 @@ cxbox:
     app-info-color: ${APP_INFO_COLOR:#3a6e49}
     app-export-excel-limit: 500
     timeout-show-message: 10_000
+    seasonal-effects-enabled: true
   logging:
     global-handler:
       business-exception:

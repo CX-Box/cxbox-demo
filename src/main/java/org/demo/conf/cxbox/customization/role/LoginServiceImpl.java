@@ -193,6 +193,10 @@ public class LoginServiceImpl implements LoginService {
 						feature(
 								UIProperties.TIMEOUT_SHOW_MESSAGE,
 								uiProperties.getTimeoutShowMessage()
+						),
+						feature(
+								UIProperties.SEASONAL_EFFECTS_ENABLED,
+								uiProperties.isSeasonalEffectsEnabled()
 						)
 				)
 				.filter(Objects::nonNull)

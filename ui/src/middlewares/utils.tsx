@@ -2,6 +2,7 @@ import { Button, notification } from 'antd'
 import React from 'react'
 import { t } from 'i18next'
 import { openNotification as openNotificationDefault } from '@components/NotificationsContainer/utils'
+import { AppWidgetMeta } from '@interfaces/widget'
 
 export interface OpenNotificationType {
     key?: string
@@ -13,7 +14,7 @@ export interface OpenNotificationType {
     onOk?: () => void
 }
 
-const openNotification = ({ message, description, okText, cancelText, onOk, onCancel, key }: OpenNotificationType = {}) => {
+export const openNotification = ({ message, description, okText, cancelText, onOk, onCancel, key }: OpenNotificationType = {}) => {
     const notificationKey = key ?? `open${Date.now()}`
 
     notification.close(notificationKey)
@@ -69,4 +70,8 @@ export const showUnsavedNotification = (onOk?: () => void, onCancel?: () => void
         onOk,
         onCancel
     })
+}
+
+export const getInnerWidgetOptions = (externalWidget: AppWidgetMeta | undefined, type: 'create' | 'edit') => {
+    return externalWidget?.options?.[type]
 }

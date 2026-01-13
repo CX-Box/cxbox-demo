@@ -1,7 +1,7 @@
 import queryString from 'query-string'
 import { CxBoxApiInstance } from '../api'
 
-type QueryParamsMap = Record<string, string | number>
+type QueryParamsMap = Record<string, string | number | undefined>
 
 export function addTailControlSequences(url: string) {
     return !url.includes('?') ? url + '?' : url + '&'

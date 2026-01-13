@@ -1,6 +1,6 @@
 import { AppWidgetMeta } from '@interfaces/widget'
-import React, { useCallback } from 'react'
-import { shallowEqual, useDispatch } from 'react-redux'
+import React, { useCallback, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 import { useAppSelector } from '@store'
 import { ExpandIconProps } from 'antd/lib/table'
 import ExpandIcon from '../components/ExpandIcon'
@@ -8,11 +8,11 @@ import ExpandedRow from '../components/ExpandedRow'
 import { resetRecordForm, setRecordForm } from '@actions'
 import { Spin } from 'antd'
 import DebugWidgetWrapper from '../../../DebugWidgetWrapper/DebugWidgetWrapper'
-import { buildBcUrl } from '@utils/buildBcUrl'
-import { WidgetFormMeta, FieldType } from '@cxbox-ui/core'
+import { FieldType, WidgetFormMeta } from '@cxbox-ui/core'
 import { ControlColumn, CustomDataItem } from '@components/widgets/Table/Table.interfaces'
 import { RowSelectionType } from 'antd/es/table'
 import { getRowSelectionOffset } from '@components/widgets/Table/utils/rowSelection'
+import { InternalWidgetOptionsName, useInternalWidget } from '@hooks/useInternalWidget'
 
 type WidgetMetaField = { type: string; hidden?: boolean }
 
@@ -22,55 +22,28 @@ const EXPAND_ICON_COLUMN = {
     key: '_expandIconField'
 }
 
-export function useInternalWidgetSelector(externalWidget: AppWidgetMeta) {
-    return useAppSelector(state => {
-        const widgetNameForCreate = externalWidget.options?.create?.widget
-        const widgetNameForEdit = externalWidget.options?.edit?.widget
-        const isWidgetForEditIsInline = externalWidget.options?.edit?.style === 'inline'
-        const isWidgetForEditIsDisabled = externalWidget.options?.edit?.style === 'none'
-        const isWidgetForEditIsInlineForm = externalWidget.options?.edit?.style === 'inlineForm'
-        if (isWidgetForEditIsInlineForm && !widgetNameForEdit) {
-            console.error(`Widget "name": ${externalWidget.name} has meta inspection warning! 
-Inspection Description: options.edit.widget must be set for options.edit.style = "inlineForm" and must not be set in other cases
-Fallback behavior: options.edit.style = "inline", because edit widget was not set.`)
-        }
-        if (isWidgetForEditIsInline && widgetNameForEdit) {
-            console.error(`Widget "name": ${externalWidget.name} has meta inspection warning! 
-Inspection Description: options.edit.widget must be set for options.edit.style = "inlineForm" and must not be set in other cases
-Fallback behavior: options.edit.style = "inline" has higher priority than option.edit.widget`)
-        }
-        if (isWidgetForEditIsDisabled && widgetNameForEdit) {
-            console.error(`Widget "name": ${externalWidget.name} has meta inspection warning! 
-Inspection Description: options.edit.widget must be set for options.edit.style = "inlineForm" and must not be set in other cases
-Fallback behavior: options.edit.style = "none" has higher priority than option.edit.widget`)
-        }
+const validateInternalWidgetOptions = (externalWidget: AppWidgetMeta, type: InternalWidgetOptionsName) => {
+    const innerWidgetOptions = externalWidget?.options?.[type]
 
-        const widgetForCreate = state.view.widgets.find(widget => widgetNameForCreate === widget?.name) as WidgetFormMeta
-        const widgetForEdit =
-            !isWidgetForEditIsInline && !isWidgetForEditIsDisabled
-                ? (state.view.widgets.find(widget => widgetNameForEdit === widget?.name) as WidgetFormMeta)
-                : undefined
-        const bcName = (widgetForCreate || widgetForEdit)?.bcName as string
-        const bc = bcName ? state.screen.bo.bc[bcName] : undefined
-        const bcUrl = bc ? buildBcUrl(bcName, true) : ''
+    if (!innerWidgetOptions) {
+        return
+    }
 
-        const rowMeta = state.view.rowMeta?.[bcName]?.[bcUrl]
-        const data = state.data[bcName]
-
-        const currentDataItem = data?.find(dataItem => dataItem.id === bc?.cursor)
-        const isCreateStyle = currentDataItem?.vstamp === -1
-
-        return {
-            internalWidget: isCreateStyle ? widgetForCreate : widgetForEdit,
-            internalWidgetBcUrl: bcUrl,
-            internalWidgetRowMeta: rowMeta,
-            internalWidgetData: data,
-            internalWidgetOperations: rowMeta?.actions,
-            internalWidgetActiveCursor: bc?.cursor,
-            isCreateStyle: isCreateStyle,
-            isEditStyle: !isCreateStyle
-        }
-    }, shallowEqual)
+    if (innerWidgetOptions.style === 'inlineForm' && !innerWidgetOptions.widget) {
+        console.error(`Widget "name": ${externalWidget.name} has meta inspection warning! 
+Inspection Description: options.${type}.widget must be set for options.${type}.style = "inlineForm" and must not be set in other cases
+Fallback behavior: options.${type}.style = "inline", because ${type} widget was not set.`)
+    }
+    if (innerWidgetOptions.style === 'inline' && innerWidgetOptions.widget) {
+        console.error(`Widget "name": ${externalWidget.name} has meta inspection warning! 
+Inspection Description: options.${type}.widget must be set for options.${type}.style = "inlineForm" and must not be set in other cases
+Fallback behavior: options.${type}.style = "inline" has higher priority than options.${type}.widget`)
+    }
+    if (innerWidgetOptions.style === 'none' && innerWidgetOptions.widget) {
+        console.error(`Widget "name": ${externalWidget.name} has meta inspection warning! 
+Inspection Description: options.${type}.widget must be set for options.${type}.style = "inlineForm" and must not be set in other cases
+Fallback behavior: options.${type}.style = "none" has higher priority than options.${type}.widget`)
+    }
 }
 
 function isExpandColumn<T>(item: ControlColumn<T>) {
@@ -78,8 +51,13 @@ function isExpandColumn<T>(item: ControlColumn<T>) {
 }
 
 export function useExpandableForm<R extends CustomDataItem>(currentWidgetMeta: AppWidgetMeta) {
+    useEffect(() => {
+        validateInternalWidgetOptions(currentWidgetMeta, 'create')
+        validateInternalWidgetOptions(currentWidgetMeta, 'edit')
+    }, [currentWidgetMeta])
+
     const { internalWidget, internalWidgetOperations, internalWidgetActiveCursor, isCreateStyle, isEditStyle } =
-        useInternalWidgetSelector(currentWidgetMeta)
+        useInternalWidget(currentWidgetMeta)
     const recordForm = useAppSelector(state => state.view.recordForm[currentWidgetMeta.bcName])
     const currentActiveRowId = recordForm?.cursor
     const isActiveRecord = useCallback(
@@ -137,7 +115,7 @@ export function useExpandableForm<R extends CustomDataItem>(currentWidgetMeta: A
             isActiveRecord(record) && internalWidget !== undefined ? (
                 <DebugWidgetWrapper meta={internalWidget}>
                     <Spin spinning={isLoading}>
-                        <ExpandedRow widgetMeta={internalWidget} operations={internalWidgetOperations} record={record} />
+                        <ExpandedRow widgetMeta={internalWidget as WidgetFormMeta} operations={internalWidgetOperations} record={record} />
                     </Spin>
                 </DebugWidgetWrapper>
             ) : null,

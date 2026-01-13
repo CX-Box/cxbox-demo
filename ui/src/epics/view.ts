@@ -17,12 +17,14 @@ import { actions, sendOperationSuccess, setBcCount } from '@actions'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import { AxiosError } from 'axios'
 import { postOperationRoutine } from './utils/postOperationRoutine'
-import { AppWidgetGroupingHierarchyMeta, AppWidgetMeta, CustomWidgetTypes } from '@interfaces/widget'
+import { AppWidgetGroupingHierarchyMeta, AppWidgetMeta } from '@interfaces/widget'
 import { getGroupingHierarchyWidget } from '@utils/groupingHierarchy'
 import { DataItem } from '@cxbox-ui/schema'
 import { postInvokeHasRefreshBc } from '@utils/postInvokeHasRefreshBc'
 import { findWidgetHasCount } from '@components/ui/Pagination/utils'
 import { getInternalWidgets } from '@utils/getInternalWidgets'
+import { closePopupRules } from './utils/closePopup'
+import { isDefined } from '@utils/isDefined'
 
 const getWidgetsForRowMetaUpdate = (state: RootState, activeBcName: string) => {
     const { widgets, pendingDataChanges } = state.view
@@ -456,22 +458,14 @@ export const forceUpdateRowMeta: RootEpic = (action$, state$, { api }) =>
         })
     )
 
-const closeFormPopup: RootEpic = (action$, state$) =>
+const closePopupEpic: RootEpic = (action$, state$) =>
     action$.pipe(
         filter(isAnyOf(sendOperationSuccess, actions.bcSaveDataSuccess)),
         switchMap(action => {
             const state = state$.value
-            const popupWidgetName = state.view.popupData?.widgetName
 
-            const formPopupWidget =
-                popupWidgetName &&
-                state.view.widgets.find(item => item.name === popupWidgetName && item.type === CustomWidgetTypes.FormPopup)
-
-            if (formPopupWidget) {
-                return of(actions.closeViewPopup({ bcName: formPopupWidget.bcName }))
-            }
-
-            return EMPTY
+            const closeAction = closePopupRules.map(rule => rule(state, action)).find(isDefined)
+            return closeAction ? of(closeAction) : EMPTY
         })
     )
 
@@ -540,7 +534,7 @@ export const viewEpics = {
     fileUploadConfirmEpic,
     bcDeleteDataEpic,
     forceUpdateRowMeta,
-    closeFormPopup,
+    closePopupEpic,
     updateRowMetaForRelatedBcEpic,
     applyPendingPostInvokeEpic,
     collapseWidgetsByDefaultEpic,

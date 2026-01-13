@@ -1,11 +1,13 @@
 import { AnyAction, Dispatch, MiddlewareAPI } from 'redux'
 import { RootState } from '@store'
-import { AppWidgetMeta } from '@interfaces/widget'
+import { AppWidgetMeta, FileUploadFieldMeta, InternalWidgetOption } from '@interfaces/widget'
 import { actions, partialUpdateRecordForm, resetRecordForm, setRecordForm } from '@actions'
 import { isAnyOf, Middleware } from '@reduxjs/toolkit'
 import { OperationTypeCrud, PendingDataItem } from '@cxbox-ui/core'
 import { selectors } from '@selectors'
-import { showUnsavedNotification } from './utils'
+import { getInnerWidgetOptions, showUnsavedNotification } from './utils'
+import { selectBcData, selectWidget, selectWidgetByCondition } from '@selectors/selectors'
+import { FieldType } from '@cxbox-ui/schema'
 
 const { selectBcRecordPendingDataChanges, selectBcRecordForm, selectBc } = selectors
 
@@ -28,6 +30,8 @@ export const internalFormWidgetMiddleware: Middleware =
             bcRecordForm?.cursor !== action.payload?.cursor &&
             bcRecordForm?.active
         const isChangeActiveRecordForm = setRecordForm.match(action) && action.payload?.cursor !== bcRecordForm?.cursor
+
+        const isActivePopupWidget = state.view.popupData?.options?.type === 'file-viewer'
 
         const saveCallback = () => {
             dispatch(
@@ -56,16 +60,127 @@ export const internalFormWidgetMiddleware: Middleware =
                 })
             )
         }
+        // Disable form editing when closing a popup
+        if (actions.closeViewPopup.match(action) && state.view.popupData?.bcName === bcRecordForm?.bcName) {
+            dispatch(resetRecordForm({ bcName: bcRecordForm?.bcName as string }))
+
+            return next(action)
+        }
+
+        // Enable internal form when opening popup
+        if (actions.showFileViewerPopup.match(action)) {
+            const calleeWidget = selectWidget(state, action.payload.calleeWidgetName)
+            const currentDataItem = selectBcData(state, calleeWidget?.bcName)?.find(
+                dataItem => dataItem.id === selectBc(state, calleeWidget?.bcName as string)?.cursor
+            )
+            const isCreate = currentDataItem?.vstamp === -1
+            const innerWidgetType = isCreate ? 'create' : 'edit'
+
+            const innerPopupWidget =
+                getInnerWidgetOptions(calleeWidget, innerWidgetType)?.widget &&
+                getInnerWidgetOptions(calleeWidget, innerWidgetType)?.style === 'popup'
+                    ? selectWidget(state, getInnerWidgetOptions(calleeWidget, innerWidgetType)?.widget)
+                    : undefined
+
+            const innerWidgetBc = selectBc(state, innerPopupWidget?.bcName)
+
+            if (innerPopupWidget && innerWidgetBc?.cursor) {
+                const currentDataItem = selectBcData(state, innerWidgetBc?.name)?.find(dataItem => dataItem.id === innerWidgetBc?.cursor)
+                const isCreate = currentDataItem?.vstamp === -1
+
+                dispatch(
+                    setRecordForm({
+                        widgetName: innerPopupWidget.name,
+                        cursor: innerWidgetBc?.cursor,
+                        bcName: innerPopupWidget.bcName,
+                        active: true,
+                        create: isCreate
+                    })
+                )
+            }
+
+            return next(action)
+        }
+
+        if (
+            actions.bcChangePage.match(action) &&
+            actionIsRelatedToRecordForm &&
+            previousRecordHasPendingDataChanges &&
+            bcRecordForm?.active
+        ) {
+            const cancelCallback = () => {
+                if (bcRecordForm?.create) {
+                    cancelCreate()
+                } else {
+                    previousRecordHasPendingDataChanges && cancelPendingChanges(action.payload?.bcName)
+                    isSelectRecordWithOpenedForm && !isActivePopupWidget && next(resetRecordForm({ bcName: action.payload?.bcName }))
+                    next(action)
+                }
+            }
+
+            if (previousRecordHasPendingDataChanges) {
+                showUnsavedNotification(() => saveCallback(), cancelCallback)
+            } else {
+                cancelCallback()
+            }
+
+            return next(actions.emptyAction(action))
+        }
+        const bcNameFromChangeCursorsAction = actions.bcChangeCursors.match(action) ? Object.keys(action.payload.cursorsMap)[0] : undefined
+        const bcRecordFormForChangeCursors = selectBcRecordForm(state, bcNameFromChangeCursorsAction)
+        if (
+            isActivePopupWidget &&
+            bcNameFromChangeCursorsAction &&
+            bcRecordFormForChangeCursors?.cursor &&
+            action.payload?.cursorsMap?.[bcNameFromChangeCursorsAction] &&
+            bcRecordFormForChangeCursors?.cursor !== action.payload?.cursorsMap?.[bcNameFromChangeCursorsAction]
+        ) {
+            dispatch(
+                actions.partialUpdateRecordForm({
+                    bcName: bcNameFromChangeCursorsAction,
+                    cursor: action.payload?.cursorsMap[bcNameFromChangeCursorsAction as string]
+                })
+            )
+
+            return next(action)
+        }
 
         if (isSelectRecordWithOpenedForm || isChangeActiveRecordForm) {
+            const currentDataItem = selectBcData(state, bcRecordForm?.bcName)?.find(dataItem => dataItem.id === action.payload?.cursor)
+            const isCreate = currentDataItem?.vstamp === -1
+            const popupData = state.view.popupData
+            const innerWidgetType = isCreate ? 'create' : 'edit'
+            const externalWidgetWithInnerFormPopup = selectWidgetByCondition(
+                state,
+                widget =>
+                    !!(
+                        popupData?.calleeWidgetName === widget.name &&
+                        getInnerWidgetOptions(widget, innerWidgetType)?.widget &&
+                        getInnerWidgetOptions(widget, innerWidgetType)?.style === 'popup'
+                    )
+            )
+            const innerPopupWidget = selectWidget(state, getInnerWidgetOptions(externalWidgetWithInnerFormPopup, innerWidgetType)?.widget)
+
             const cancelCallback = () => {
                 if (bcRecordForm?.create) {
                     cancelCreate()
                 } else {
                     previousRecordHasPendingDataChanges && cancelPendingChanges(action.payload?.bcName)
 
-                    isSelectRecordWithOpenedForm && next(resetRecordForm({ bcName: action.payload?.bcName }))
+                    isSelectRecordWithOpenedForm && !isActivePopupWidget && next(resetRecordForm({ bcName: action.payload?.bcName }))
                     next(action)
+                    isSelectRecordWithOpenedForm &&
+                        isSelectRecordWithOpenedForm &&
+                        innerPopupWidget &&
+                        dispatch(
+                            actions.setRecordForm({
+                                cursor: action.payload?.cursor,
+                                widgetName: innerPopupWidget.name,
+                                bcName: innerPopupWidget.bcName,
+                                active: true,
+                                create: isCreate
+                            })
+                        )
                     isChangeActiveRecordForm &&
                         dispatch(
                             actions.bcSelectRecord({
@@ -127,6 +242,33 @@ export const internalFormWidgetMiddleware: Middleware =
                 })
             )
 
+            // before: Opening file viewer popup
+            const widgetWithInternalPopupWidgetCreate = getWidgetWithInternalWidgetCreateByBcName(
+                state.view.widgets as AppWidgetMeta[],
+                action.payload.bcName,
+                'popup'
+            )
+
+            if (widgetWithInternalPopupWidgetCreate) {
+                const cardOptions = widgetWithInternalPopupWidgetCreate?.options?.card
+                const widgetField = (widgetWithInternalPopupWidgetCreate?.fields as FileUploadFieldMeta[])?.find(field =>
+                    cardOptions?.valueFieldKey ? cardOptions?.valueFieldKey === field.key : field.type === FieldType.fileUpload
+                )
+
+                dispatch(
+                    actions.showFileViewerPopup({
+                        active: true,
+                        options: {
+                            bcName: action.payload?.bcName,
+                            type: 'file-viewer',
+                            calleeFieldKey: widgetField?.key as string
+                        },
+                        calleeWidgetName: widgetWithInternalPopupWidgetCreate?.name as string
+                    })
+                )
+            }
+            // after: Opening file viewer popup
+
             return next(EMPTY_ACTION)
         }
 
@@ -134,9 +276,13 @@ export const internalFormWidgetMiddleware: Middleware =
             isAnyOf(actions.bcSaveDataSuccess, actions.bcNewDataFail, actions.sendOperationSuccess)(action) && actionIsRelatedToRecordForm
         // reset record form after a form-related operation is complete
         if (operationOnRecordFormIsComplete) {
+            if (bcRecordForm?.bcName && bcRecordForm.create) {
+                next(actions.partialUpdateRecordForm({ bcName: bcRecordForm.bcName, create: false }))
+            }
+
             next(action)
 
-            return next(resetRecordForm({ bcName: action.payload?.bcName }))
+            return !isActivePopupWidget ? next(resetRecordForm({ bcName: action.payload?.bcName })) : next(actions.emptyAction())
         }
 
         const currentPendingDataChanges = selectBcRecordPendingDataChanges(state, action.payload?.bcName, bcRecordForm?.cursor)
@@ -158,8 +304,19 @@ export const internalFormWidgetMiddleware: Middleware =
         return next(action)
     }
 
-function getWidgetWithInternalWidgetCreateForAction(widgets: AppWidgetMeta[], action: AnyAction) {
-    return widgets.find(item => item.name === action.payload.widgetName && item.options?.create?.widget)
+function getWidgetWithInternalWidgetCreateForAction(widgets: AppWidgetMeta[], action: AnyAction, type?: InternalWidgetOption['style']) {
+    return widgets.find(
+        item =>
+            item.name === action.payload.widgetName &&
+            item.options?.create?.widget &&
+            (!type || type === (item.options?.create?.style ?? 'inlineForm'))
+    )
+}
+
+function getWidgetWithInternalWidgetCreateByBcName(widgets: AppWidgetMeta[], bcName: string, type?: InternalWidgetOption['style']) {
+    return widgets.find(
+        item => item.bcName === bcName && item.options?.create?.widget && (!type || type === (item.options?.create?.style ?? 'inlineForm'))
+    )
 }
 
 function hasPendingDataChanges(pendingDataChanges: PendingDataItem | undefined) {

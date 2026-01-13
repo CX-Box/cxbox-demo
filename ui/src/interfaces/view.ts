@@ -1,8 +1,12 @@
 import { actions } from '@actions'
 import { PopupData as CorePopupData } from '@cxbox-ui/core'
 
+export type FileViewerMode = 'onlyFullscreen'
+
 export interface FileViewerPopupOptions {
     type: 'file-viewer'
+    mode?: FileViewerMode
+    bcName: string
     calleeFieldKey: string
 }
 

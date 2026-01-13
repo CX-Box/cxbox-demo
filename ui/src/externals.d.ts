@@ -3,6 +3,8 @@ declare module '*.less' {
     export default classes
 }
 
+declare module 'pdfjs-dist/build/pdf.worker.min.js'
+
 declare type ValueOf<T> = T[keyof T]
 
 declare type KeysMatching<T, V> = ValueOf<{
@@ -12,3 +14,5 @@ declare type KeysMatching<T, V> = ValueOf<{
 declare type KeyMirror<Keys> = { [K in Keys]: K }
 
 declare type PartialExcept<T, K extends keyof T> = Pick<T, K> & Partial<Omit<T, K>>
+
+declare type ElementOf<T extends readonly unknown[]> = T[number]

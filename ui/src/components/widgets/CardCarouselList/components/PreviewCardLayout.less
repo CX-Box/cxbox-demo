@@ -1,0 +1,45 @@
+.root {
+  position: relative;
+  width: min-content;
+}
+
+.topActions {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 25%;
+  padding: 2px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  gap: 2px;
+
+  opacity: 0;
+  transition: opacity 150ms ease;
+  z-index: 10;
+}
+
+.footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  min-height: 25%;
+  max-height: 50%;
+  padding: 10px 10px 8px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 4px;
+
+  color: #fff;
+  background: linear-gradient(to top, rgba(0,0,0,0.4), rgba(0,0,0,0.2));
+  z-index: 9;
+}
+
+.root:hover .topActions,
+.root:focus-within .topActions {
+  opacity: 1;
+}

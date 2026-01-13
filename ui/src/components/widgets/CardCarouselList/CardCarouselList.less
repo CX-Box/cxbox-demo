@@ -1,0 +1,66 @@
+.main {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+}
+
+.previewGroup {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 10px;
+  row-gap: 10px;
+}
+
+.previewGroup.carousel {
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+.active [class*='FileViewer__preview'] {
+  border-width: 8px;
+}
+
+.status {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+.title,
+.description {
+  font-size: 14px;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card:not(:has(.description)) .title,
+.card:not(:has(.title)) .description {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.title {
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+}
+
+.title .linkIcon {
+  line-height: 0;
+  float: left;
+  margin-right: 4px;
+  pointer-events: unset;
+}
+
+.empty {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+

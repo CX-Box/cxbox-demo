@@ -151,7 +151,7 @@ export const Widget: FunctionComponent<WidgetProps> = props => {
  * @param customWidgets Dictionary where key is a widget type and value is a component that should be rendered
  * @param children Widgets children component, returned in case type is unknown
  */
-function chooseWidgetType(
+export function chooseWidgetType(
     widgetMeta: WidgetMeta | WidgetMetaAny,
     customWidgets?: Record<string, CustomWidgetDescriptor>,
     children?: React.ReactNode

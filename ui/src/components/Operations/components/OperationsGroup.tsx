@@ -3,9 +3,9 @@ import { Operation, OperationGroup, OperationType, WidgetTypes } from '@cxbox-ui
 import { Dropdown, Icon, Menu, Spin } from 'antd'
 import styles from './OperationsGroup.less'
 import { removeRecordOperationWidgets } from '@interfaces/widget'
-import Button from '../../ui/Button/Button'
+import Button, { ButtonProps } from '../../ui/Button/Button'
 
-interface OperationsGroupProps {
+interface OperationsGroupProps extends Pick<ButtonProps, 'bgColor'> {
     group: OperationGroup
     onClick: (operation: Operation) => void
     widgetType: WidgetTypes | string
@@ -14,7 +14,7 @@ interface OperationsGroupProps {
     isOperationInProgress: (operationType?: OperationType) => boolean
 }
 
-function OperationsGroup({ group, widgetType, onClick, loading, getButtonProps, isOperationInProgress }: OperationsGroupProps) {
+function OperationsGroup({ group, widgetType, onClick, loading, getButtonProps, isOperationInProgress, bgColor }: OperationsGroupProps) {
     const operations = group.actions.filter(i => !(removeRecordOperationWidgets.includes(widgetType) && i.scope === 'record'))
 
     if (!operations.length) {
@@ -48,7 +48,7 @@ function OperationsGroup({ group, widgetType, onClick, loading, getButtonProps, 
 
     return (
         <Dropdown trigger={['click']} overlay={operationsMenu} getPopupContainer={element => element.parentElement as HTMLElement}>
-            <Button key={group.text} data-test-widget-action-group={true} loading={loading}>
+            <Button key={group.text} data-test-widget-action-group={true} bgColor={bgColor} loading={loading}>
                 <Icon type={group.icon} />
                 {group.text}
             </Button>

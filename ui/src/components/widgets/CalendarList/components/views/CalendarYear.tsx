@@ -44,7 +44,7 @@ import { ConfigProvider, Spin } from 'antd'
 import DebugWidgetWrapper from '@components/DebugWidgetWrapper/DebugWidgetWrapper'
 import InnerForm from '@components/widgets/CalendarList/components/others/InnerForm'
 import RowOperationsButton from '@components/widgets/CalendarList/components/others/RowOperations/RowOperationsButton'
-import { useInternalWidget } from '@hooks/useInternalWidgetSelector'
+import { useInternalWidget } from '@hooks/useInternalWidget'
 import { useDispatch } from 'react-redux'
 import UniquePopoverHoverAndClick, {
     UniquePopoverHoverAndClickProps

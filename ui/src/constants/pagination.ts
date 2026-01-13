@@ -32,5 +32,7 @@ export const WIDGETS_WITH_SECONDARY_DEFAULT_PAGINATION_TYPE_WITH_COUNT: (WidgetT
     CustomWidgetTypes.Pie1D,
     CustomWidgetTypes.Column2D,
     CustomWidgetTypes.Line2D,
-    CustomWidgetTypes.DualAxes2D
+    CustomWidgetTypes.DualAxes2D,
+    CustomWidgetTypes.CardList,
+    CustomWidgetTypes.CardCarouselList
 ]

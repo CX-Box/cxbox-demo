@@ -1,0 +1,33 @@
+import React from 'react'
+import { Tooltip } from 'antd'
+import { getExtension, isAvailableFileViewing } from '@utils/fileViewer'
+import FileIcon from '@components/FileViewer/components/FileIcon/FileIcon'
+import { useTranslation } from 'react-i18next'
+import styles from '../FileUpload.less'
+
+interface FilePreviewIconProps {
+    fileName: string
+    onFileIconClick?: () => void
+}
+
+function FilePreviewIcon({ fileName, onFileIconClick }: FilePreviewIconProps) {
+    const { t } = useTranslation()
+    const isInteractive = !!onFileIconClick
+    const isAvailableViewing = isAvailableFileViewing(fileName) && isInteractive
+    const tooltipTitle = isAvailableViewing ? t('Preview') : t('No preview')
+
+    return fileName?.length > 0 ? (
+        <Tooltip title={isInteractive ? tooltipTitle : undefined} placement="bottomRight">
+            <span className={styles.fileIconContainer}>
+                <FileIcon
+                    type={getExtension(fileName)}
+                    preview={isAvailableViewing}
+                    onClick={isAvailableViewing ? onFileIconClick : undefined}
+                    hoverEnabled={isInteractive}
+                />
+            </span>
+        </Tooltip>
+    ) : null
+}
+
+export default FilePreviewIcon

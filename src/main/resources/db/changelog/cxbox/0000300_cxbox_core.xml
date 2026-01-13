@@ -596,6 +596,13 @@
     <addPrimaryKey columnNames="ID, LANGUAGE" constraintName="DICTIONARY_ITEM_TR_PK"
       forIndexName="DICTIONARY_ITEM_TR_PK" tableName="DICTIONARY_ITEM_TR"/>
   </changeSet>
+  <changeSet author="cxbox" id="DICTIONARY_ITEM INDEXES_VALUE" dbms="oracle">
+    <createIndex indexName="DICTIONARY_ITEM_TR_VALUE" tableName="DICTIONARY_ITEM_TR" unique="true">
+      <column name="ID"/>
+      <column name="LANGUAGE"/>
+      <column name="VALUE"/>
+    </createIndex>
+  </changeSet>
   <changeSet author="cxbox" id="DICTIONARY_ITEM_TR INDEXES" dbms="postgresql">
     <createIndex indexName="DICTIONARY_ITEM_IND3" tableName="DICTIONARY_ITEM_TR" unique="true">
       <column name="ID"/>
@@ -604,7 +611,13 @@
     <addPrimaryKey columnNames="ID, LANGUAGE" constraintName="DICTIONARY_ITEM_TR_PK"
       tableName="DICTIONARY_ITEM_TR"/>
   </changeSet>
-
+  <changeSet author="cxbox" id="DICTIONARY_ITEM_TR INDEXES_VALUE" dbms="postgresql">
+    <createIndex indexName="DICTIONARY_ITEM_INDX_VALUE_PSTGR" tableName="DICTIONARY_ITEM_TR" unique="true">
+      <column name="ID"/>
+      <column name="LANGUAGE"/>
+      <column name="VALUE"/>
+    </createIndex>
+  </changeSet>
   <changeSet author="cxbox" id="USERS INDEXES">
     <addUniqueConstraint columnNames="LOGIN" constraintName="UK_LOGIN_NAME" tableName="USERS"/>
     <createIndex indexName="UK_LOGIN_NAME_INDEX" tableName="USERS" unique="true">

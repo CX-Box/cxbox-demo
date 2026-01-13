@@ -1,17 +1,17 @@
 import { hasOwn } from '@utils/object'
 
-type EnumLikeInput = readonly string[] | Readonly<Record<string, string | number>>
+type LookupInput = readonly string[] | Readonly<Record<string, string | number>>
 
 type ObjectMergePrettify<T> = { [K in keyof T]: T[K] } & {}
-type EnumLikeObjectMerge<A, B> = ObjectMergePrettify<Omit<A, keyof B> & B>
+type LookupObjectMerge<A, B> = ObjectMergePrettify<Omit<A, keyof B> & B>
 
-export class EnumLike {
+export class Lookup {
     static concat<const A extends readonly string[], const B extends readonly string[]>(a: A, b: B): readonly [...A, ...B]
     static concat<const A extends Readonly<Record<string, string | number>>, const B extends Readonly<Record<string, string | number>>>(
         a: A,
         b: B
-    ): Readonly<EnumLikeObjectMerge<A, B>>
-    static concat(a: EnumLikeInput, b: EnumLikeInput) {
+    ): Readonly<LookupObjectMerge<A, B>>
+    static concat(a: LookupInput, b: LookupInput) {
         if (Array.isArray(a) && Array.isArray(b)) {
             return Object.freeze([...a, ...b])
         }
@@ -20,19 +20,19 @@ export class EnumLike {
             return Object.freeze({ ...a, ...b })
         }
 
-        throw new Error('[EnumLike.concat] Cannot concat array with object. Both arguments must be arrays or both must be objects.')
+        throw new Error('[Lookup.concat] Cannot concat array with object. Both arguments must be arrays or both must be objects.')
     }
 
     static create<const T extends readonly string[]>(input: T): { readonly [K in T[number]]: K }
     static create<const T extends Readonly<Record<string, string | number>>>(input: T): Readonly<T>
-    static create(input: EnumLikeInput) {
+    static create(input: LookupInput) {
         const obj = Array.isArray(input) ? Object.fromEntries(input.map(key => [key, key])) : { ...input }
         return Object.freeze(obj)
     }
 
     static keys<const T extends readonly string[]>(input: T): T
     static keys<const T extends Readonly<Record<string, string | number>>>(input: T): readonly Extract<keyof T, string>[]
-    static keys(input: EnumLikeInput) {
+    static keys(input: LookupInput) {
         if (Array.isArray(input)) {
             return input
         }
@@ -41,7 +41,7 @@ export class EnumLike {
 
     static values<const T extends readonly string[]>(input: T): T
     static values<const T extends Readonly<Record<string, string | number>>>(input: T): readonly T[keyof T][]
-    static values(input: EnumLikeInput) {
+    static values(input: LookupInput) {
         if (Array.isArray(input)) {
             return input
         }
@@ -50,7 +50,7 @@ export class EnumLike {
 
     static has<const T extends readonly string[]>(input: T, value: unknown): value is T[number]
     static has<const T extends Readonly<Record<string, string | number>>>(input: T, value: unknown): value is T[keyof T]
-    static has(input: EnumLikeInput, value: unknown) {
+    static has(input: LookupInput, value: unknown) {
         if (Array.isArray(input)) {
             return (input as readonly unknown[]).includes(value)
         }
@@ -60,7 +60,7 @@ export class EnumLike {
 
     static hasKey<const T extends readonly string[]>(input: T, key: unknown): key is T[number]
     static hasKey<const T extends Readonly<Record<string, string | number>>>(input: T, key: unknown): key is Extract<keyof T, string>
-    static hasKey(input: EnumLikeInput, key: unknown) {
+    static hasKey(input: LookupInput, key: unknown) {
         if (Array.isArray(input)) {
             return (input as readonly unknown[]).includes(key)
         }
@@ -68,5 +68,5 @@ export class EnumLike {
     }
 }
 
-export type EnumLikeValueOf<T extends EnumLikeInput> = T extends readonly string[] ? T[number] : T[keyof T]
-export type EnumLikeKeyOf<T extends EnumLikeInput> = T extends readonly string[] ? T[number] : Extract<keyof T, string>
+export type LookupValueOf<T extends LookupInput> = T extends readonly string[] ? T[number] : T[keyof T]
+export type LookupKeyOf<T extends LookupInput> = T extends readonly string[] ? T[number] : Extract<keyof T, string>

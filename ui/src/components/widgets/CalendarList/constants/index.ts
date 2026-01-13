@@ -1,26 +1,26 @@
 import { CalendarOption } from '@interfaces/widget'
 import i18n from 'i18next'
 import { UseScrollToCurrentDayOptions } from '@components/widgets/CalendarList/hooks/useScrollToCurrentDay'
-import { EnumLike, EnumLikeValueOf } from '@utils/EnumLike'
+import { Lookup, LookupValueOf } from '@utils/Lookup'
 
 export type ToolbarSize = 'small' | 'large' | 'default'
 
-export const CALENDAR_GRID = EnumLike.create(['dayGridMonth', 'dayGridYear', 'timeGridDay', 'timeGridWeek', 'multiMonthYear'])
+export const CALENDAR_GRID = Lookup.create(['dayGridMonth', 'dayGridYear', 'timeGridDay', 'timeGridWeek', 'multiMonthYear'])
 
-export type CalendarGridViews = EnumLikeValueOf<typeof CALENDAR_GRID>
+export type CalendarGridViews = LookupValueOf<typeof CALENDAR_GRID>
 
-export const CALENDAR_CUSTOM_GRID = EnumLike.create(['multiMonthYearStack'])
+export const CALENDAR_CUSTOM_GRID = Lookup.create(['multiMonthYearStack'])
 
-export type CalendarCustomGridViews = EnumLikeValueOf<typeof CALENDAR_CUSTOM_GRID>
+export type CalendarCustomGridViews = LookupValueOf<typeof CALENDAR_CUSTOM_GRID>
 
 const EVENT_BASE_REFINERS = ['extendedProps', 'start', 'end', 'date', 'allDay', 'id', 'groupId', 'title', 'url', 'interactive'] as const
 const EVENT_CUSTOM_REFINERS = ['description', 'color'] as const
 export const EVENT_ALL_REFINERS = [...EVENT_BASE_REFINERS, ...EVENT_CUSTOM_REFINERS] as const
 
-export type EventAllRefinersKeys = EnumLikeValueOf<typeof EVENT_ALL_REFINERS>
+export type EventAllRefinersKeys = LookupValueOf<typeof EVENT_ALL_REFINERS>
 export type EventAllRefiners = Partial<Record<EventAllRefinersKeys, any>>
 
-export const EVENT_ALL_REFINERS_DICTIONARY = EnumLike.create(EVENT_ALL_REFINERS)
+export const EVENT_ALL_REFINERS_DICTIONARY = Lookup.create(EVENT_ALL_REFINERS)
 
 export const DEFAULT_EVENT_FIELD_MAP = {
     [EVENT_ALL_REFINERS_DICTIONARY.title]: 'value'

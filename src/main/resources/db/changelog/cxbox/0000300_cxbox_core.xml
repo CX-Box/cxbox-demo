@@ -592,6 +592,7 @@
     <createIndex indexName="DICTIONARY_ITEM_TR_PK" tableName="DICTIONARY_ITEM_TR" unique="true">
       <column name="ID"/>
       <column name="LANGUAGE"/>
+      <column name="VALUE"/>
     </createIndex>
     <addPrimaryKey columnNames="ID, LANGUAGE" constraintName="DICTIONARY_ITEM_TR_PK"
       forIndexName="DICTIONARY_ITEM_TR_PK" tableName="DICTIONARY_ITEM_TR"/>

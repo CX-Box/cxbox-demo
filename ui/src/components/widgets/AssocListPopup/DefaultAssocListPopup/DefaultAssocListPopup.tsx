@@ -164,13 +164,13 @@ function DefaultAssocListPopup({ meta, isFilter }: DefaultAssocListPopupProps) {
                 </>
             }
             showed
-            size="large"
             onCancelHandler={onClose}
             bcName={meta.bcName}
             widgetName={meta.name}
             footer={
                 <>
                     <Pagination meta={meta} />
+
                     <div className={styles.actions}>
                         <Button
                             data-test-widget-list-save={true}
@@ -179,6 +179,7 @@ function DefaultAssocListPopup({ meta, isFilter }: DefaultAssocListPopupProps) {
                         >
                             {t('Save')}
                         </Button>
+
                         <Button data-test-widget-list-cancel={true} onClick={onClose}>
                             {t('Cancel')}
                         </Button>

@@ -1,13 +1,14 @@
-import React, { FunctionComponent } from 'react'
+import React, { FunctionComponent, useMemo, useRef } from 'react'
 import { Modal } from 'antd'
 import { useTranslation } from 'react-i18next'
-import styles from './Popup.less'
-import { ModalProps } from 'antd/lib/modal'
 import cn from 'classnames'
 import Button from '@components/ui/Button/Button'
 import Pagination from '@components/ui/Pagination/Pagination'
-import { interfaces } from '@cxbox-ui/core'
 import { useAppSelector } from '@store'
+import usePopupWidth from './hooks/usePopupWidth'
+import { interfaces } from '@cxbox-ui/core'
+import { ModalProps } from 'antd/lib/modal'
+import styles from './Popup.less'
 
 export interface PopupProps extends ModalProps {
     onOkHandler?: () => void
@@ -20,11 +21,6 @@ export interface PopupProps extends ModalProps {
     disablePagination?: boolean
     defaultOkText?: string
     defaultCancelText?: string
-}
-
-export const widths = {
-    medium: '570px',
-    large: '808px'
 }
 
 /**
@@ -51,14 +47,18 @@ const Popup: FunctionComponent<PopupProps> = props => {
         okButtonProps,
         ...rest
     } = props
+    const containerRef = useRef<HTMLDivElement>(null)
+
     const computedTitle = typeof title !== 'string' ? title : <h1 className={styles.title}>{title}</h1>
-    const computedWidth = width || (size ? widths[size] : widths.medium)
+
     const widgetMeta = useAppSelector(state => {
         return state.view.widgets.find(widget => widget.name === widgetName)
     })
     const { t } = useTranslation()
 
-    const defaultFooter = React.useMemo(
+    const computedWidth = usePopupWidth(containerRef, width, size)
+
+    const defaultFooter = useMemo(
         () => (
             <div className={styles.footerContainer}>
                 {!disablePagination && widgetMeta && (
@@ -66,10 +66,12 @@ const Popup: FunctionComponent<PopupProps> = props => {
                         <Pagination meta={widgetMeta as interfaces.WidgetTableMeta} />
                     </div>
                 )}
+
                 <div className={styles.actions}>
                     <Button onClick={onOkHandler} loading={okButtonProps?.loading}>
                         {defaultOkText ?? t('Save')}
                     </Button>
+
                     <Button onClick={onCancelHandler} type="formOperation">
                         {defaultCancelText ?? t('Cancel')}
                     </Button>
@@ -80,7 +82,7 @@ const Popup: FunctionComponent<PopupProps> = props => {
     )
 
     return (
-        <div>
+        <div ref={containerRef}>
             <Modal
                 title={computedTitle}
                 className={cn(styles.popupModal, className)}

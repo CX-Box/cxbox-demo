@@ -8,8 +8,8 @@ import { CxBoxApiInstance } from '../api'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import { openNotification } from '@components/NotificationsContainer/utils'
 import { defaultExcelLimit, maxExcelLimit } from '@constants/export'
-import { TableWidgetField } from '@interfaces/widget'
-import { BcFilter, BcSorter, DataItem, DataValue, FieldType, MultivalueSingleValue } from '@cxbox-ui/core'
+import { AppNumberFieldMeta, CustomFieldTypes, TableWidgetField } from '@interfaces/widget'
+import { BcFilter, BcSorter, DataItem, DataValue, FieldType, MultiFieldMeta, MultivalueSingleValue } from '@cxbox-ui/core'
 import { FIELDS } from '@constants'
 
 export type ExportOptions = { page?: number; limit?: number }
@@ -123,10 +123,11 @@ export async function exportTable(
 /**
  * Converts values before sending to excel:
  */
-export function valueMapper(value: DataValue, isExcel: boolean, fieldMeta?: TableWidgetField) {
+export function valueMapper(value: DataValue, isExcel: boolean, fieldMeta?: TableWidgetField, item?: DataItem) {
     let result: any
+    const type = fieldMeta?.type as FieldType | CustomFieldTypes | undefined
 
-    switch (fieldMeta?.type) {
+    switch (type) {
         case FieldType.checkbox: {
             result = value ? 'Yes' : 'No'
             break
@@ -135,13 +136,26 @@ export function valueMapper(value: DataValue, isExcel: boolean, fieldMeta?: Tabl
         case FieldType.dateTime:
         case FieldType.dateTimeWithSeconds:
             const date = value ? moment.parseZone(value as string, moment.ISO_8601).toDate() : null
-            result = date && !isExcel ? getFormattedDateString(value as string, fieldMeta.type, true) : date
+            result = date && !isExcel ? getFormattedDateString(value as string, type, true) : date
             break
         case FieldType.percent:
             result = (value as number) / 100
             break
         case FieldType.multivalue:
+        case FieldType.multivalueHover:
+        case CustomFieldTypes.MultipleSelect:
             result = Array.isArray(value) ? (value as MultivalueSingleValue[]).map(mvValue => mvValue.value).join(', ') : null
+            break
+        case FieldType.multifield:
+            result = (fieldMeta as MultiFieldMeta).fields
+                .map(field => {
+                    return valueMapper(item?.[field.key], true, field as TableWidgetField)
+                })
+                .join(', ')
+            break
+        case FieldType.money:
+            const currency = (fieldMeta as AppNumberFieldMeta).currency
+            result = currency ? `${value} ${currency}` : value
             break
         default: {
             result = typeof value !== 'object' ? value : null

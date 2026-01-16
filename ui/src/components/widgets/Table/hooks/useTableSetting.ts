@@ -2,7 +2,7 @@ import { AppWidgetMeta, AppWidgetTableMeta } from '@interfaces/widget'
 import { useDispatch } from 'react-redux'
 import { useCallback, useEffect, useMemo } from 'react'
 import { TableSettingsItem, TableSettingsList } from '@interfaces/tableSettings'
-import { createMap, createSettingPath } from '@utils/tableSettings'
+import { calculateFieldsOrder, calculateHiddenFields, createSettingPath } from '@utils/tableSettings'
 import { actions } from '@actions'
 import { useAppSelector } from '@store'
 import { FieldType, WidgetListField } from '@cxbox-ui/schema'
@@ -141,34 +141,14 @@ export function useTableSetting(
         }
     }, [dispatch, settingPath, settingsMap, updateSetting, viewName, widgetName])
 
-    const calculateHiddenFields = useCallback(() => {
-        let hiddenFields = additionalFields ? [...additionalFields] : []
-
-        hiddenFields = hiddenFields.filter(additionalField => !setting?.removedFromAdditionalFields?.includes(additionalField))
-
-        hiddenFields = setting?.addedToAdditionalFields?.length ? [...hiddenFields, ...setting.addedToAdditionalFields] : hiddenFields
-
-        return hiddenFields
-    }, [additionalFields, setting?.addedToAdditionalFields, setting?.removedFromAdditionalFields])
-
-    const calculateFieldsOrder = useCallback(
-        (hiddenFields: string[]) => {
-            const newVisibleFields = visibleFields.filter(visibleField => !hiddenFields.includes(visibleField.key))
-
-            const fieldsDictionary = createMap(newVisibleFields, 'key')
-
-            return setting?.orderFields?.length
-                ? setting.orderFields.map(fieldKey => fieldsDictionary[fieldKey]).filter(field => !!field)
-                : newVisibleFields
-        },
-        [setting?.orderFields, visibleFields]
+    const currentAdditionalFields = useMemo(
+        () => calculateHiddenFields(additionalFields || [], setting?.addedToAdditionalFields, setting?.removedFromAdditionalFields),
+        [additionalFields, setting?.addedToAdditionalFields, setting?.removedFromAdditionalFields]
     )
 
     const resultedFields: WidgetListField[] = useMemo(() => {
-        const currentAdditionalFields = calculateHiddenFields()
-
-        return calculateFieldsOrder(currentAdditionalFields)
-    }, [calculateHiddenFields, calculateFieldsOrder])
+        return calculateFieldsOrder(currentAdditionalFields, visibleFields, setting?.orderFields)
+    }, [currentAdditionalFields, setting?.orderFields, visibleFields])
 
     const changeOrderWithMutate = useCallback(<T>(array: T[], oldIndex: number, newIndex: number) => {
         array.splice(newIndex, 0, array.splice(oldIndex, 1)[0])
@@ -287,7 +267,7 @@ export function useTableSetting(
         showColumnSettings: !!widget?.options?.additional?.enabled,
         allFields: visibleFields,
         resultedFields,
-        currentAdditionalFields: calculateHiddenFields(),
+        currentAdditionalFields,
         changeOrder: changeFieldOrder,
         changeColumnsVisibility,
         resetSetting

@@ -1,9 +1,10 @@
 import React, { RefAttributes } from 'react'
 import { Input } from 'antd'
-import { InputProps } from 'antd/es/input'
+import cn from 'classnames'
 import { BaseFieldProps } from '@components/Field/Field'
-import { fractionsRound, NumberInputFormat, NumberTypes } from './formaters'
 import ReadOnlyField from '@components/ui/ReadOnlyField/ReadOnlyField'
+import { fractionsRound, NumberInputFormat, NumberTypes } from './formaters'
+import { InputProps } from 'antd/es/input'
 import styles from './NumberInput.less'
 
 export interface NumberInputProps extends BaseFieldProps {
@@ -133,7 +134,7 @@ const NumberInput: React.FunctionComponent<NumberInputProps> = props => {
         style: {
             backgroundColor: !props.disabled ? props.backgroundColor : undefined
         },
-        className: styles.container,
+        className: cn(props.className, styles.container),
         addonAfter: currency,
         onChange: handleOnChange,
         onBlur: handleOnBlur,

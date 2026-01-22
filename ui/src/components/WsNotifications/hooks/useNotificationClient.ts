@@ -38,7 +38,7 @@ export function useNotificationClient(subscribeCallback?: (messageBody: SocketNo
     const drillDownTooltipEnabled =
         featureSettings?.find(setting => setting.key === EFeatureSettingKey.drillDownTooltip)?.value === EDrillDownTooltipValue.newAndCopy
     const disableWebSocketNotification =
-        featureSettings?.find(setting => setting.key === EFeatureSettingKey.webSocketNotification)?.value === 'false'
+        featureSettings?.find(setting => setting.key === EFeatureSettingKey.webSocketNotificationEnabled)?.value === 'false'
 
     const handleStompConnectRef = useRef<(frame: IFrame, subscribeUrl: string) => void>((frame, subscribeUrl) => {
         const checkAndShowErrorMessage = (errorType: number, text: any) => {

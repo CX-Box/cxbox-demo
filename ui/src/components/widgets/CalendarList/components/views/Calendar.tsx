@@ -4,12 +4,13 @@ import { getFirstDay } from '@components/widgets/CalendarList/utils'
 import { useTranslation } from 'react-i18next'
 import styles from './Calendar.less'
 import { useCalendarCellAspectRatio } from '@components/widgets/CalendarList/hooks'
-import { CALENDAR_GRID } from '@components/widgets/CalendarList/interfaces'
+import { CALENDAR_GRID } from '@components/widgets/CalendarList/constants'
 import { DatesSetArg } from '@fullcalendar/core'
+import { useDebouncedWidthResize } from '@components/widgets/CalendarList/hooks/useDebouncedWidthResize'
 
 export interface FullCalendarProps extends React.ComponentProps<typeof FullCalendar> {}
 
-interface CalendarProps extends Omit<FullCalendarProps, 'headerToolbar'> {
+interface CalendarProps extends Omit<FullCalendarProps, 'headerToolbar' | 'handleWindowResize' | 'windowResize'> {
     initialView: string
     autoHeight?: boolean
 }
@@ -57,6 +58,12 @@ const Calendar = React.forwardRef<FullCalendar, CalendarProps>(({ initialView, d
         heightProps.contentHeight = aspectRatioEnabled ? 'auto' : restProps.contentHeight ?? 'auto'
     }
 
+    const updateCalendarSize = useCallback(() => {
+        calendarRef.current?.getApi().updateSize()
+    }, [])
+    // The standard FullCalendar size update only works when the browser window is resized.
+    useDebouncedWidthResize(wrapperRef, updateCalendarSize)
+
     return (
         <div ref={wrapperRef} className={styles.calendar}>
             <FullCalendar
@@ -69,6 +76,7 @@ const Calendar = React.forwardRef<FullCalendar, CalendarProps>(({ initialView, d
                 firstDay={getFirstDay()} // To avoid desynchronization of filtering with the display
                 initialView={initialView}
                 datesSet={handleDateSet}
+                handleWindowResize={false}
                 {...restProps}
                 {...heightProps}
             />

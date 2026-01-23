@@ -1,10 +1,11 @@
 import { useAppSelector } from '@store'
 import { selectBcData, selectWidget } from '@selectors/selectors'
-import { isCalendarYearEventRangeValid, toYMD } from '@utils/date'
-import { AppWidgetMeta } from '@interfaces/widget'
-import { mapRefinerKeyToFieldKey } from '@components/widgets/CalendarList/interfaces'
+import { toYMD } from '@utils/date'
+import { AppWidgetMeta, WidgetField } from '@interfaces/widget'
+import { mapRefinerKeyToFieldKey } from '@components/widgets/CalendarList/constants'
 import { useMemo } from 'react'
 import { MomentInput } from 'moment'
+import { getEventTimeGranularity, isCalendarYearEventRangeValid } from '@components/widgets/CalendarList/utils'
 
 export const useCalendarYearDataCheck = (widgetName: string) => {
     const widget = useAppSelector(selectWidget(widgetName)) as AppWidgetMeta | undefined
@@ -26,7 +27,15 @@ export const useCalendarYearDataCheck = (widgetName: string) => {
             const start = item?.[startKey] as MomentInput
             const end = item?.[endKey] as MomentInput
 
-            const isEventInvalid = !isCalendarYearEventRangeValid(start, end).ok
+            const isEventInvalid = !isCalendarYearEventRangeValid(
+                start,
+                end,
+                getEventTimeGranularity(
+                    (widget?.fields as WidgetField[])
+                        .filter(field => [refinerKeyToFieldKeyMapper.start, refinerKeyToFieldKeyMapper.end].includes(field.key))
+                        .map(item => item.type)
+                )
+            ).ok
             const dayKey = toYMD(start)
 
             if (dayKey) {
@@ -39,7 +48,7 @@ export const useCalendarYearDataCheck = (widgetName: string) => {
 
             return isEventInvalid
         })
-    }, [data, refinerKeyToFieldKeyMapper])
+    }, [data, refinerKeyToFieldKeyMapper, widget?.fields])
 
     return { isIncorrectData: error }
 }

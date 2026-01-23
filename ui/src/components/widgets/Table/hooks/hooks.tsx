@@ -2,8 +2,9 @@ import { useAppSelector } from '@store'
 import { shallowEqual, useDispatch } from 'react-redux'
 import { useCallback, useEffect, useState } from 'react'
 import { actions } from '@actions'
-import { utils, WidgetMeta } from '@cxbox-ui/core'
+import { utils } from '@cxbox-ui/core'
 import { FIELDS } from '@constants'
+import { selectBc, selectBcFilters } from '@selectors/selectors'
 
 function useFiltersGroupName<T>(filtersExist: boolean) {
     const [filterGroupName, setFilterGroupName] = useState<T | null>(null)
@@ -17,13 +18,13 @@ function useFiltersGroupName<T>(filtersExist: boolean) {
     return { filterGroupName, setFilterGroupName }
 }
 
-export const useFilterGroups = (meta?: WidgetMeta) => {
-    const { bcName = '', name: widgetName = '' } = meta || {}
+export const useFilterGroups = (bcName: string = '') => {
     const { filtersExist, filterGroupsExist, filterGroups, filtersCount } = useAppSelector(state => {
-        const bc = bcName ? state.screen.bo.bc[bcName] : undefined
-        const bcFilters = bcName ? state.screen.filters[bcName] : undefined
-        const enabledMassMode = state.screen.viewerMode[bcName]?.mode === 'mass'
-        const resultFilterEnabled = !!state.screen.viewerMode[bcName]?.resultFilterEnabled
+        const bc = selectBc(state, bcName)
+        const bcFilters = selectBcFilters(state, bcName)
+        const screenViewerMode = state.screen.viewerMode[bcName]
+        const enabledMassMode = screenViewerMode?.mode === 'mass'
+        const resultFilterEnabled = !!screenViewerMode?.resultFilterEnabled
         const defaultFiltersExist = !!bcFilters?.length
         const filterById = bcFilters?.find(filter => filter.fieldName === FIELDS.TECHNICAL.ID)
         const selectedRows = state.view.selectedRows[bcName]
@@ -57,10 +58,10 @@ export const useFilterGroups = (meta?: WidgetMeta) => {
 
             setFilterGroupName(filterGroup?.name ?? null)
             dispatch(actions.bcRemoveAllFilters({ bcName }))
-            parsedFilters.forEach(filter => dispatch(actions.bcAddFilter({ bcName, filter, widgetName })))
+            parsedFilters.forEach(filter => dispatch(actions.bcAddFilter({ bcName, filter })))
             dispatch(actions.bcForceUpdate({ bcName }))
         },
-        [bcName, dispatch, filterGroups, setFilterGroupName, widgetName]
+        [bcName, dispatch, filterGroups, setFilterGroupName]
     )
 
     return {

@@ -53,6 +53,7 @@ cxbox:
     app-export-excel-limit: 500
     timeout-show-message: 10_000
     seasonal-effects-enabled: true
+    web-socket-notification-enabled: true
   logging:
     global-handler:
       business-exception:

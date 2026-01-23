@@ -197,6 +197,10 @@ public class LoginServiceImpl implements LoginService {
 						feature(
 								UIProperties.SEASONAL_EFFECTS_ENABLED,
 								uiProperties.isSeasonalEffectsEnabled()
+						),
+						feature(
+								UIProperties.WEB_SOCKET_NOTIFICATION_ENABLED,
+								uiProperties.isWebSocketNotificationEnabled()
 						)
 				)
 				.filter(Objects::nonNull)

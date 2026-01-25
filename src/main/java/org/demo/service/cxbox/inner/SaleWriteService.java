@@ -51,6 +51,13 @@ public class SaleWriteService extends VersionAwareResponseService<SaleDTO, Sale>
 				entity.setClient(null);
 			}
 		}
+		if (data.isFieldChanged(SaleDTO_.clientSellerId)) {
+			if (data.getClientSellerId() != null) {
+				entity.setClientSeller(clientRepository.getReferenceById(data.getClientSellerId()));
+			} else {
+				entity.setClientSeller(null);
+			}
+		}
 		setIfChanged(data, SaleDTO_.product, entity::setProduct);
 		setIfChanged(data, SaleDTO_.status, entity::setStatus);
 		setIfChanged(data, SaleDTO_.sum, entity::setSum);
@@ -59,6 +66,7 @@ public class SaleWriteService extends VersionAwareResponseService<SaleDTO, Sale>
 
 	@Override
 	public ActionResultDTO<SaleDTO> onCancel(BusinessComponent bc) {
+		Sale sale = loadEntity(bc, getOne(bc));
 		return new ActionResultDTO<SaleDTO>().setAction(
 				PostAction.drillDown(
 						DrillDownType.INNER,

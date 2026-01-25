@@ -446,4 +446,13 @@
     </sql>
   </changeSet>
 
+  <changeSet id="CXBOX-1205 ADD COLUMN TO SALE" author="cxbox">
+    <addColumn tableName="SALE">
+      <column name="CLIENT_SELLER_ID" type = "NUMBER(19,0)">
+        <constraints foreignKeyName="FK_CLIENT_SELLER_ID__CLIENT_ID" references="CLIENT(ID)"/>
+      </column>
+    </addColumn>
+  </changeSet>
+
+
 </databaseChangeLog>

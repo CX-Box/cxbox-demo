@@ -11,11 +11,14 @@ import org.cxbox.core.dto.rowmeta.PostAction;
 import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
 import org.cxbox.core.service.action.CxboxActionIconSpecifier;
+import org.cxbox.model.core.entity.BaseEntity;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.inner.SaleDTO;
 import org.demo.dto.cxbox.inner.SaleDTO_;
+import org.demo.entity.RelationGraph;
 import org.demo.entity.Sale;
 import org.demo.repository.ClientRepository;
+import org.demo.repository.RelationGraphRepository;
 import org.demo.repository.SaleRepository;
 import org.springframework.stereotype.Service;
 
@@ -51,6 +54,14 @@ public class SaleWriteService extends VersionAwareResponseService<SaleDTO, Sale>
 				entity.setClient(null);
 			}
 		}
+		if(data.isFieldChanged(SaleDTO_.clientSellerId)){
+			if(data.getClientSellerId() != null){
+				entity.setClientSeller(clientRepository.getReferenceById(data.getClientSellerId()));
+			}else {
+				entity.setClientSeller(null);
+			}
+		}
+
 		setIfChanged(data, SaleDTO_.product, entity::setProduct);
 		setIfChanged(data, SaleDTO_.status, entity::setStatus);
 		setIfChanged(data, SaleDTO_.sum, entity::setSum);
@@ -59,6 +70,8 @@ public class SaleWriteService extends VersionAwareResponseService<SaleDTO, Sale>
 
 	@Override
 	public ActionResultDTO<SaleDTO> onCancel(BusinessComponent bc) {
+		Sale sale = loadEntity(bc, getOne(bc));
+//		relationGraphRepository.deleteAllById(sale.getRelationGraph().stream().map(BaseEntity::getId).toList());
 		return new ActionResultDTO<SaleDTO>().setAction(
 				PostAction.drillDown(
 						DrillDownType.INNER,

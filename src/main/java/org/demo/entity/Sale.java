@@ -1,5 +1,8 @@
 package org.demo.entity;
 
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
+import java.util.Set;
 import lombok.EqualsAndHashCode;
 import org.demo.entity.dictionary.Product;
 import org.demo.entity.enums.SaleStatus;
@@ -34,7 +37,11 @@ public class Sale extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private SaleStatus status;
 
-
 	private Long sum;
+
+	@ManyToOne
+	@JoinColumn(name="CLIENT_SELLER_ID")
+	private Client clientSeller;
+
 
 }

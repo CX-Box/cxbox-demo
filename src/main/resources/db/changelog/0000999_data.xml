@@ -58,6 +58,7 @@
       file="db/data/SALES.csv">
       <column header="ID" name="ID" type="STRING"/>
        <column header="client_id" name="client_id" type="STRING"/>
+       <column header="client_seller_id" name="client_seller_id" type="STRING"/>
       <column header="product" name="product" type="STRING"/>
       <column header="status" name="status" type="STRING"/>
       <column header="sum" name="sum" type="STRING"/>
@@ -91,4 +92,13 @@
       relativeToChangelogFile="false"/>
   </changeSet>
 
+  <changeSet id="CXBOX-1157 VIEW_RELATION_GRAPG" author="myunmgan" dbms="postgresql" runOnChange="true">
+    <sqlFile path="db/changelog/sql/postgres/CXBOX-1157_VIEW_RELATION_GRAPH.sql"
+      relativeToChangelogFile="false"
+      splitStatements="false"
+      stripComments="false"/>
+    <rollback>
+      DROP VIEW IF EXISTS V_RELATION_GRAPH;
+    </rollback>
+  </changeSet>
 </databaseChangeLog>

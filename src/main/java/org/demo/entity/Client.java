@@ -1,6 +1,9 @@
 package org.demo.entity;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToMany;
+import java.util.List;
 import lombok.EqualsAndHashCode;
 import org.demo.entity.dictionary.ClientImportance;
 import org.demo.entity.enums.ClientEditStep;
@@ -21,6 +24,8 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 @Entity
 @Table(name = "CLIENT")
@@ -57,5 +62,15 @@ public class Client extends BaseEntity {
 	private String brief;
 
 	private String briefId;
+
+//	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+//	@JoinColumn(
+//			name = "SELLER_ID",
+//			referencedColumnName = "id",
+//			insertable = false,
+//			updatable = false
+//	)
+//	@Fetch(FetchMode.SUBSELECT)
+//	private Set<RelationGraph> hierarchyRelations = new  HashSet<>();
 
 }

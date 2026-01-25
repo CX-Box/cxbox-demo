@@ -1,6 +1,7 @@
 package org.demo.dto.cxbox.inner;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,6 +14,7 @@ import org.cxbox.core.util.filter.provider.impl.EnumValueProvider;
 import org.cxbox.core.util.filter.provider.impl.EnumValueProvider.BaseEnum;
 import org.cxbox.core.util.filter.provider.impl.LongValueProvider;
 import org.cxbox.core.util.filter.provider.impl.MultiFieldValueProvider;
+import org.demo.entity.Client;
 import org.demo.entity.Sale;
 import org.demo.entity.dictionary.Product;
 import org.demo.entity.enums.FieldOfActivity;
@@ -27,6 +29,11 @@ public class SaleDTO extends DataResponseDTO {
 	private String clientName;
 
 	private Long clientId;
+
+	@SearchParameter(name="clientSeller.fullName")
+	private String clientSellerName;
+
+	private Long clientSellerId;
 
 	@SearchParameter(name = "product", provider = DictionaryValueProvider.class)
 	private Product product;
@@ -59,6 +66,7 @@ public class SaleDTO extends DataResponseDTO {
 						Enum::name,
 						FieldOfActivity::getValue
 				));
+		this.clientSellerName = Optional.of(sale).map(Sale::getClientSeller).map(Client::getFullName).orElse(null);
 		this.createdDate = sale.getCreatedDate();
 	}
 

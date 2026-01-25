@@ -23,12 +23,12 @@
     {
       "title": "Start Date",
       "key": "startDateTime",
-      "type": "dateTime"
+      "type": "dateTimeWithSeconds"
     },
     {
       "title": "End Date",
       "key": "endDateTime",
-      "type": "dateTime"
+      "type": "dateTimeWithSeconds"
     },
     {
       "title": "Meeting Time",

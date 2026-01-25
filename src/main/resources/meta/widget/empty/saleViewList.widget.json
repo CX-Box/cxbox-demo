@@ -1,8 +1,8 @@
 {
-  "name": "saleList",
+  "name": "saleViewList",
   "title": "",
   "type": "List",
-  "bc": "sale",
+  "bc": "saleClient",
   "fields": [
     {
       "title": "Client",
@@ -38,7 +38,7 @@
     {
       "title": "Created",
       "key": "createdDate",
-      "type": "dateTimeWithSeconds"
+      "type": "date"
     }
   ],
   "options": {
@@ -58,3 +58,4 @@
     }
   }
 }
+

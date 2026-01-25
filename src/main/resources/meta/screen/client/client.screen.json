@@ -22,7 +22,15 @@
             "viewName": "clienteditoverview"
           },
           {
-            "viewName": "clientview"
+            "title": "Tab Title 2 [0]",
+            "child": [
+              {
+                "viewName": "clientview"
+              },
+              {
+                "viewName": "clientSales"
+              }
+            ]
           },
 
           {

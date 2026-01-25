@@ -1,0 +1,63 @@
+{
+  "name": "saleViewRelation",
+  "title": "Title",
+  "type": "RelationGraph",
+  "bc": "relationSale",
+  "fields": [
+    {
+      "title": "id",
+      "key": "id",
+      "type": "input"
+    },
+    {
+      "title": "sourceNodeId",
+      "key": "sourceNodeId",
+      "type": "input"
+    },
+    {
+      "title": "targetNodeId",
+      "key": "targetNodeId",
+      "type": "input"
+    },
+    {
+      "title": "targetNodeType",
+      "key": "targetNodeType",
+      "type": "input"
+    },
+    {
+      "title": "targetNodeName",
+      "key": "targetNodeName",
+      "type": "input"
+    },
+    {
+      "title": "edgeDescription",
+      "key": "edgeDescription",
+      "type": "input"
+    },
+    {
+      "title": "edgeValue",
+      "key": "edgeValue",
+      "type": "input",
+      "bgColorKey": "colorEdge"
+    },
+    {
+      "label": "targetNodeExpanded",
+      "key": "targetNodeExpanded",
+      "type": "input"
+    }
+  ],
+  "options": {
+    "relationGraph": {
+      "dragNode": true,
+      "nodes": {
+        "fieldKeys": ["sourceNodeId", "targetNodeId"],
+        "descriptionFieldKeys": ["targetNodeName", "edgeDescription"]
+      },
+      "edges": {
+        "labelFieldKeys": [ "edgeValue"],
+        "type": "polyline"
+      }
+    }
+  }
+}
+

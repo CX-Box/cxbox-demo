@@ -20,6 +20,16 @@
       }
     },
     {
+      "label": "Client Seller Name",
+      "key": "clientSellerName",
+      "type": "pickList",
+      "popupBcName": "clientSalePickListPopup",
+      "pickMap": {
+        "clientSellerName": "fullName",
+        "clientSellerId": "id"
+      }
+    },
+    {
       "label": "Product",
       "key": "product",
       "type": "dictionary"
@@ -49,6 +59,14 @@
           "cols": [
             {
               "fieldKey": "clientName",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "clientSellerName",
               "span": 12
             }
           ]

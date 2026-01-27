@@ -1,15 +1,14 @@
 import { Skeleton } from 'antd'
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import Form from '../Form/Form'
 import Popup from '../../Popup/Popup'
 import WidgetTitle from '@components/WidgetTitle/WidgetTitle'
 import { useAppDispatch, useAppSelector } from '@store'
-import useFormPopupWidth from './hooks/useFormPopupWidth'
 import { useOperationInProgress } from '@hooks/useOperationInProgress'
+import { usePopupVisibility } from '@hooks/popup'
+import { actions } from '@actions'
 import { WidgetFormPopupMeta } from '@interfaces/widget'
 import styles from './FormPopup.less'
-import { actions } from '@actions'
-import { usePopupVisibility } from '@hooks/popup'
 
 export interface FormPopupProps {
     meta: WidgetFormPopupMeta
@@ -19,7 +18,6 @@ const forceUpdateSetting = true // todo temporary enabled for all FormPopup widg
 
 export function FormPopup(props: FormPopupProps) {
     const dispatch = useAppDispatch()
-    const formPopupRef = useRef<HTMLDivElement>(null)
 
     const bcName = props.meta.bcName
 
@@ -38,7 +36,6 @@ export function FormPopup(props: FormPopupProps) {
     const { popupData, closePopup, preInvoke, visibility: showed } = usePopupVisibility(widgetName, bcName)
     const bcLoading = bc && bc.loading
 
-    const popupWidth = useFormPopupWidth(formPopupRef)
     const isOperationInProgress = useOperationInProgress(bcName)
 
     const onClose = useCallback(() => {
@@ -61,47 +58,46 @@ export function FormPopup(props: FormPopupProps) {
         }
     }, [bcLoading, popupData?.options?.operation, dispatch])
 
-    const popupTitle = (
-        <WidgetTitle className={styles.title} level={1} widgetName={props.meta.name} text={preInvoke?.message ?? props.meta.title} />
-    )
-
     useEffect(() => {
         if (forceUpdateSetting && showed) {
             dispatch(actions.forceUpdateRowMeta({ bcName }))
         }
     }, [bcName, dispatch, showed, widgetName])
 
+    if (!showed) {
+        return null
+    }
+
+    const popupTitle = (
+        <WidgetTitle className={styles.title} level={1} widgetName={props.meta.name} text={preInvoke?.message ?? props.meta.title} />
+    )
+
     return (
-        <div ref={formPopupRef}>
-            {showed && (
-                <Popup
-                    className={styles.popupContainer}
-                    title={popupTitle}
-                    showed
-                    width={popupWidth}
-                    onOkHandler={onSave}
-                    onCancelHandler={onClose}
-                    bcName={bcName}
-                    widgetName={props.meta.name}
-                    disablePagination={true}
-                    getContainer={null}
-                    defaultOkText={preInvoke?.yesText}
-                    defaultCancelText={preInvoke?.noText}
-                    okButtonProps={{
-                        loading: isOperationInProgress(popupData?.options?.operation?.operationType)
-                    }}
-                >
-                    {bcLoading || forceUpdateRowMetaPending ? (
-                        <div data-test-loading={true}>
-                            <Skeleton loading paragraph={{ rows: 5 }} />
-                        </div>
-                    ) : (
-                        <div className={styles.formPopupModal}>
-                            <Form meta={props.meta} />
-                        </div>
-                    )}
-                </Popup>
+        <Popup
+            className={styles.popupContainer}
+            title={popupTitle}
+            showed
+            onOkHandler={onSave}
+            onCancelHandler={onClose}
+            bcName={bcName}
+            widgetName={props.meta.name}
+            disablePagination={true}
+            getContainer={null}
+            defaultOkText={preInvoke?.yesText}
+            defaultCancelText={preInvoke?.noText}
+            okButtonProps={{
+                loading: isOperationInProgress(popupData?.options?.operation?.operationType)
+            }}
+        >
+            {bcLoading || forceUpdateRowMetaPending ? (
+                <div data-test-loading={true}>
+                    <Skeleton loading paragraph={{ rows: 5 }} />
+                </div>
+            ) : (
+                <div className={styles.formPopupModal}>
+                    <Form meta={props.meta} />
+                </div>
             )}
-        </div>
+        </Popup>
     )
 }

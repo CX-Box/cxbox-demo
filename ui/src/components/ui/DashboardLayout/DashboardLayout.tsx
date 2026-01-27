@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import { Row, Col } from 'antd'
 import Widget from '@components/Widget/Widget'
 import { createSkipWidgetList } from '@utils/createSkipWidgetList'
-import { getColWidth, groupByRow } from '@utils/layout'
+import { groupByRow } from '@utils/layout'
 import { sidebarWidgetsTypes } from '@constants/layout'
 import { CustomWidgetDescriptor } from '@cxbox-ui/core'
 import { AppWidgetMeta, CustomWidgetTypes } from '@interfaces/widget'
@@ -34,7 +34,7 @@ export function DashboardLayout(props: DashboardLayoutProps) {
     const CommonWidgets = Object.values(widgetsByRow).map((row, rowIndex) => (
         <Row key={rowIndex} gutter={[24, 0]}>
             {row.map((widget, colIndex) => (
-                <Col key={colIndex} span={getColWidth(widget)}>
+                <Col key={colIndex} span={widget.gridWidth}>
                     <Widget meta={widget} card={props.card} customWidgets={props.customWidgets} customSpinner={props.customSpinner} />
                 </Col>
             ))}

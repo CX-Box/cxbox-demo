@@ -1,24 +1,33 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Empty } from 'antd'
 import { useTranslation } from 'react-i18next'
 import Table from '@components/widgets/Table/Table'
 import ChartToggleButton from './components/ChartToggleButton/ChartToggleButton'
-import Pie1D from './components/Pie1D/Pie1D'
 import Chart2D from './components/Chart2D/Chart2D'
 import DualAxes2D from './components/DualAxes2D/DualAxes2D'
+import Pie1D from './components/Pie1D/Pie1D'
+import RelationGraph from './components/RelationGraph/RelationGraph'
 import { useCheckLimit } from '@hooks/useCheckLimit'
 import { useAppSelector } from '@store'
 import { getChartIconByWidgetType } from './utils'
-import { AppWidgetTableMeta, Chart2DWidgetMeta, CustomWidgetTypes, DualAxes2DWidgetMeta, Pie1DWidgetMeta } from '@interfaces/widget'
+import {
+    AppWidgetTableMeta,
+    Chart2DWidgetMeta,
+    CustomWidgetTypes,
+    DualAxes2DWidgetMeta,
+    Pie1DWidgetMeta,
+    RelationGraphWidgetMeta
+} from '@interfaces/widget'
 
 interface ChartProps {
-    meta: Chart2DWidgetMeta | Pie1DWidgetMeta | DualAxes2DWidgetMeta
+    meta: Chart2DWidgetMeta | Pie1DWidgetMeta | DualAxes2DWidgetMeta | RelationGraphWidgetMeta
 }
 
 const Chart: React.FC<ChartProps> = ({ meta }) => {
     const { t } = useTranslation()
 
     const [isTableView, setIsTableView] = useState(false)
+    const [isIncorrectData, setIsIncorrectData] = useState(false)
 
     const data = useAppSelector(state => state.data[meta.bcName])
 
@@ -28,11 +37,30 @@ const Chart: React.FC<ChartProps> = ({ meta }) => {
         setIsTableView(prevState => !prevState)
     }, [])
 
-    useEffect(() => {
+    const tooltipErrorTitle = useMemo(() => {
         if (isIncorrectLimit) {
-            setIsTableView(true)
+            return t(`Warning! Only List mode available for Chart`, {
+                limit: bcPageLimit,
+                bcCount: bcCountForShowing
+            })
         }
-    }, [isIncorrectLimit])
+
+        if (isIncorrectData) {
+            return t('There is incorrect data, only table mode is available')
+        }
+
+        return undefined
+    }, [bcCountForShowing, bcPageLimit, isIncorrectData, isIncorrectLimit, t])
+
+    useEffect(() => {
+        if (isIncorrectLimit || isIncorrectData) {
+            setIsTableView(true)
+
+            if (meta.type === CustomWidgetTypes.RelationGraph) {
+                console.info(`${meta.name}: there is incorrect data, only table mode is available`)
+            }
+        }
+    }, [isIncorrectData, isIncorrectLimit, meta.name, meta.type])
 
     if (!data?.length) {
         return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
@@ -47,6 +75,8 @@ const Chart: React.FC<ChartProps> = ({ meta }) => {
                 return <Chart2D meta={meta} />
             case CustomWidgetTypes.DualAxes2D:
                 return <DualAxes2D meta={meta} />
+            case CustomWidgetTypes.RelationGraph:
+                return <RelationGraph meta={meta} setDataValidationError={() => setIsIncorrectData(true)} />
             default:
                 return null
         }
@@ -56,12 +86,8 @@ const Chart: React.FC<ChartProps> = ({ meta }) => {
         <div>
             <ChartToggleButton
                 chartIcon={getChartIconByWidgetType(meta.type)}
-                tooltipTitle={
-                    isIncorrectLimit
-                        ? t(`Warning! Only List mode available for Chart`, { limit: bcPageLimit, bcCount: bcCountForShowing })
-                        : undefined
-                }
-                disabled={isIncorrectLimit}
+                tooltipTitle={tooltipErrorTitle}
+                disabled={isIncorrectLimit || isIncorrectData}
                 isTableView={isTableView}
                 onClick={toggleTableView}
             />

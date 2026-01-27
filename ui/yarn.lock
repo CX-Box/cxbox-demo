@@ -38,6 +38,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@ant-design/colors@npm:^4.0.5":
+  version: 4.0.5
+  resolution: "@ant-design/colors@npm:4.0.5"
+  dependencies:
+    tinycolor2: "npm:^1.4.1"
+  checksum: 307b0a27014151d72bd315fdc06b9bf6379ee56fab4469ba195b8abcd893448b50c3027033b2ba3a558d4d958a49a86b365d776bce71dbe20c619023b4e42b76
+  languageName: node
+  linkType: hard
+
 "@ant-design/create-react-context@npm:^0.2.4":
   version: 0.2.6
   resolution: "@ant-design/create-react-context@npm:0.2.6"
@@ -55,6 +64,23 @@ __metadata:
   version: 1.7.3
   resolution: "@ant-design/css-animation@npm:1.7.3"
   checksum: ac0a32914b09c2a9bc49cd1abbcdea1ada96a361245bd7f11a88c8e1ad5b01740d219aba5653a7b86ffb4a820c3d2949c781904bd65ff170e8f6394481adb11f
+  languageName: node
+  linkType: hard
+
+"@ant-design/graphs@npm:1.4.2":
+  version: 1.4.2
+  resolution: "@ant-design/graphs@npm:1.4.2"
+  dependencies:
+    "@antv/dom-util": "npm:^2.0.4"
+    "@antv/g6": "npm:^4.2.4"
+    "@antv/layout": "npm:^0.1.17"
+    "@antv/util": "npm:^2.0.17"
+    insert-css: "npm:^2.0.0"
+    react-content-loader: "npm:^5.0.4"
+  peerDependencies:
+    react: ">=16.8.4"
+    react-dom: ">=16.8.4"
+  checksum: 87cf219934bcfc6af565477a43c517392a429f2bd5662f7d2ce8c72c5dad5ad9a2ab2c99fb0a3ae46413d7ba102d204b94c15ddbe2ec55fdcd5315deca695f4a
   languageName: node
   linkType: hard
 
@@ -99,6 +125,16 @@ __metadata:
     "@antv/util": "npm:~2.0.0"
     tslib: "npm:^1.10.0"
   checksum: dcc074857b60a16c244653f7a5ecbf45264dcea505caf45c45c9e65c4e23ff9747400b3a91d930d04f45ea0efcae3cc64381e6827502c7ba1af7b7540bda0adf
+  languageName: node
+  linkType: hard
+
+"@antv/algorithm@npm:^0.1.26":
+  version: 0.1.26
+  resolution: "@antv/algorithm@npm:0.1.26"
+  dependencies:
+    "@antv/util": "npm:^2.0.13"
+    tslib: "npm:^2.0.0"
+  checksum: 2d154263e6ba8e4fc80aaa91f881e239d7e33ba674a052ed953bd1a23d7e06e3dcc25c9bea92368e9f0058aad7ffeb76ac6034587820f283de3287f8e29ef1c3
   languageName: node
   linkType: hard
 
@@ -152,7 +188,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@antv/dom-util@npm:^2.0.2, @antv/dom-util@npm:~2.0.1":
+"@antv/dom-util@npm:^2.0.1, @antv/dom-util@npm:^2.0.2, @antv/dom-util@npm:^2.0.4, @antv/dom-util@npm:~2.0.1":
   version: 2.0.4
   resolution: "@antv/dom-util@npm:2.0.4"
   dependencies:
@@ -165,6 +201,25 @@ __metadata:
   version: 0.1.3
   resolution: "@antv/event-emitter@npm:0.1.3"
   checksum: 5bdfd96e83627c6eebad81b69131a09125c40bb86e6d550eca125ed871008c615be5f4181233ecc980005fddaff54158f3f7c8043195a571225dabe16f5e4649
+  languageName: node
+  linkType: hard
+
+"@antv/g-base@npm:^0.5.1":
+  version: 0.5.16
+  resolution: "@antv/g-base@npm:0.5.16"
+  dependencies:
+    "@antv/event-emitter": "npm:^0.1.1"
+    "@antv/g-math": "npm:^0.1.9"
+    "@antv/matrix-util": "npm:^3.1.0-beta.1"
+    "@antv/path-util": "npm:~2.0.5"
+    "@antv/util": "npm:~2.0.13"
+    "@types/d3-timer": "npm:^2.0.0"
+    d3-ease: "npm:^1.0.5"
+    d3-interpolate: "npm:^3.0.1"
+    d3-timer: "npm:^1.0.9"
+    detect-browser: "npm:^5.1.0"
+    tslib: "npm:^2.0.3"
+  checksum: 4a5bd97261a7404942c500c80070fcdf0f9deaccc193713b963aec44bee09cd4d2c42c9849b4113a4ef520008866452786150ddcfd36599f8aa8b4219f3d3031
   languageName: node
   linkType: hard
 
@@ -187,6 +242,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@antv/g-canvas@npm:^0.5.2":
+  version: 0.5.17
+  resolution: "@antv/g-canvas@npm:0.5.17"
+  dependencies:
+    "@antv/g-base": "npm:^0.5.12"
+    "@antv/g-math": "npm:^0.1.9"
+    "@antv/matrix-util": "npm:^3.1.0-beta.1"
+    "@antv/path-util": "npm:~2.0.5"
+    "@antv/util": "npm:~2.0.0"
+    gl-matrix: "npm:^3.0.0"
+    tslib: "npm:^2.0.3"
+  checksum: b558b49650d9358312c348b4e9f985d3a477662160bcaabb56ef0c8c74a524031a5f0564df7e6c6341b618dfab016e695b866f50928b1746e9ec2fcca0db308f
+  languageName: node
+  linkType: hard
+
 "@antv/g-canvas@npm:~0.5.10":
   version: 0.5.14
   resolution: "@antv/g-canvas@npm:0.5.14"
@@ -202,7 +272,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@antv/g-math@npm:^0.1.9":
+"@antv/g-math@npm:^0.1.1, @antv/g-math@npm:^0.1.9":
   version: 0.1.9
   resolution: "@antv/g-math@npm:0.1.9"
   dependencies:
@@ -212,7 +282,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@antv/g-svg@npm:~0.5.6":
+"@antv/g-svg@npm:^0.5.1, @antv/g-svg@npm:^0.5.2, @antv/g-svg@npm:~0.5.6":
   version: 0.5.7
   resolution: "@antv/g-svg@npm:0.5.7"
   dependencies:
@@ -222,6 +292,95 @@ __metadata:
     detect-browser: "npm:^5.0.0"
     tslib: "npm:^2.0.3"
   checksum: a423194ccc61e6eaee4cb2e2a63ed9f3316b4a87af721211f248cec6cc2f1d636d7775685f4891fc04b5c2db26480e735b540b604a55b40442954d04c754b603
+  languageName: node
+  linkType: hard
+
+"@antv/g-webgpu-core@npm:^0.5.5, @antv/g-webgpu-core@npm:^0.5.6":
+  version: 0.5.6
+  resolution: "@antv/g-webgpu-core@npm:0.5.6"
+  dependencies:
+    eventemitter3: "npm:^4.0.0"
+    gl-matrix: "npm:^3.1.0"
+    inversify: "npm:^5.0.1"
+    inversify-inject-decorators: "npm:^3.1.0"
+    probe.gl: "npm:^3.1.1"
+    reflect-metadata: "npm:^0.1.13"
+  checksum: 1c4b0622890da409fa81e7ad91eeff3576e4d9e123c13022ec462a81a68b5b80daac9328f7d127b9aad71b2984c2d63ea817b2beabc97fa732f226d015ab4ae5
+  languageName: node
+  linkType: hard
+
+"@antv/g-webgpu-core@npm:^0.7.2":
+  version: 0.7.2
+  resolution: "@antv/g-webgpu-core@npm:0.7.2"
+  dependencies:
+    eventemitter3: "npm:^4.0.0"
+    gl-matrix: "npm:^3.1.0"
+    lodash: "npm:^4.17.15"
+    probe.gl: "npm:^3.1.1"
+  checksum: 26254e61203f5cd4e8c510da72c2388956411f034b611f909d797b2a1297fc03f1368c3979b4538e0926414ad2323e0d46cb2f1b020a55da969d148d60fbf95d
+  languageName: node
+  linkType: hard
+
+"@antv/g-webgpu-engine@npm:^0.5.5":
+  version: 0.5.6
+  resolution: "@antv/g-webgpu-engine@npm:0.5.6"
+  dependencies:
+    "@antv/g-webgpu-core": "npm:^0.5.6"
+    "@webgpu/glslang": "npm:^0.0.15"
+    "@webgpu/types": "npm:^0.0.31"
+    gl-matrix: "npm:^3.1.0"
+    hammerjs: "npm:^2.0.8"
+    inversify: "npm:^5.0.1"
+    inversify-inject-decorators: "npm:^3.1.0"
+    probe.gl: "npm:^3.1.1"
+    reflect-metadata: "npm:^0.1.13"
+    regl: "npm:^1.3.11"
+  checksum: 71038862675e9f570ee6fc6462beece84a61e001d47db8a68e5557b970ee7bb6f916fa302784af7b8f60ea648a3600f2c26bb3804d223dca7a26d52615e16c2e
+  languageName: node
+  linkType: hard
+
+"@antv/g-webgpu-engine@npm:^0.7.2":
+  version: 0.7.2
+  resolution: "@antv/g-webgpu-engine@npm:0.7.2"
+  dependencies:
+    "@antv/g-webgpu-core": "npm:^0.7.2"
+    gl-matrix: "npm:^3.1.0"
+    lodash: "npm:^4.17.15"
+    regl: "npm:^1.3.11"
+  checksum: 99bc84eac2ec4e32ac8e8efd93b584ded28e9d74c6e5e62c495b5a5d208dcd065694633a23e23ccbf6d49c09461520428b6cf110ecdbc42f43a46454a29f821d
+  languageName: node
+  linkType: hard
+
+"@antv/g-webgpu@npm:0.5.5":
+  version: 0.5.5
+  resolution: "@antv/g-webgpu@npm:0.5.5"
+  dependencies:
+    "@antv/g-webgpu-core": "npm:^0.5.5"
+    "@antv/g-webgpu-engine": "npm:^0.5.5"
+    "@webgpu/types": "npm:^0.0.31"
+    gl-matrix: "npm:^3.1.0"
+    gl-vec2: "npm:^1.3.0"
+    hammerjs: "npm:^2.0.8"
+    inversify: "npm:^5.0.1"
+    inversify-inject-decorators: "npm:^3.1.0"
+    polyline-miter-util: "npm:^1.0.1"
+    polyline-normals: "npm:^2.0.2"
+    probe.gl: "npm:^3.1.1"
+    reflect-metadata: "npm:^0.1.13"
+  checksum: 09b746871a223a89223205886d1504dcc6895c3c8bc6c007c2bfd4696db1f1d5d5dae8d9afcd0bbe1da4430d7543bc1b4623a0b3f0b41fe73b40cf1d5e35da8d
+  languageName: node
+  linkType: hard
+
+"@antv/g-webgpu@npm:0.7.2":
+  version: 0.7.2
+  resolution: "@antv/g-webgpu@npm:0.7.2"
+  dependencies:
+    "@antv/g-webgpu-core": "npm:^0.7.2"
+    "@antv/g-webgpu-engine": "npm:^0.7.2"
+    gl-matrix: "npm:^3.1.0"
+    gl-vec2: "npm:^1.3.0"
+    lodash: "npm:^4.17.15"
+  checksum: bc4b69879560f7e3c14c8c058c8a46b4d05559a37c8bf14ec71e9c63b51a81be5278d1ad358258dadbf8f62aa47d1684247f20fdbbe602e09768beffe987b55f
   languageName: node
   linkType: hard
 
@@ -270,6 +429,139 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@antv/g6-core@npm:0.8.24":
+  version: 0.8.24
+  resolution: "@antv/g6-core@npm:0.8.24"
+  dependencies:
+    "@antv/algorithm": "npm:^0.1.26"
+    "@antv/dom-util": "npm:^2.0.1"
+    "@antv/event-emitter": "npm:~0.1.0"
+    "@antv/g-base": "npm:^0.5.1"
+    "@antv/g-math": "npm:^0.1.1"
+    "@antv/matrix-util": "npm:^3.1.0-beta.3"
+    "@antv/path-util": "npm:^2.0.3"
+    "@antv/util": "npm:~2.0.5"
+    ml-matrix: "npm:^6.5.0"
+    tslib: "npm:^2.6.2"
+  checksum: 9bdc53eb32e46fc3bd68dd55aeda65b0e7f9eddfd6cc9c458df5588bd9b2aa4c1c2d9ee845351183efbd07398f9fadb5c6e2ecc32bda32aad03d0b93cc3cddc1
+  languageName: node
+  linkType: hard
+
+"@antv/g6-element@npm:0.8.25":
+  version: 0.8.25
+  resolution: "@antv/g6-element@npm:0.8.25"
+  dependencies:
+    "@antv/g-base": "npm:^0.5.1"
+    "@antv/g6-core": "npm:0.8.24"
+    "@antv/util": "npm:~2.0.5"
+    tslib: "npm:^2.6.2"
+  peerDependencies:
+    "@antv/g6": 4.8.25
+  checksum: 1ffaf892b15dd97c778eb1346eab84c2a0d652c9f274009cb5c408646e0d03f2e7312f0647fcf739e1fe68bfdcc40e8f11442c78bc893cc29c6e9080ab5b6f57
+  languageName: node
+  linkType: hard
+
+"@antv/g6-pc@npm:0.8.25":
+  version: 0.8.25
+  resolution: "@antv/g6-pc@npm:0.8.25"
+  dependencies:
+    "@ant-design/colors": "npm:^4.0.5"
+    "@antv/algorithm": "npm:^0.1.26"
+    "@antv/dom-util": "npm:^2.0.1"
+    "@antv/event-emitter": "npm:~0.1.0"
+    "@antv/g-base": "npm:^0.5.1"
+    "@antv/g-canvas": "npm:^0.5.2"
+    "@antv/g-math": "npm:^0.1.1"
+    "@antv/g-svg": "npm:^0.5.1"
+    "@antv/g6-core": "npm:0.8.24"
+    "@antv/g6-element": "npm:0.8.25"
+    "@antv/g6-plugin": "npm:0.8.25"
+    "@antv/hierarchy": "npm:^0.6.10"
+    "@antv/layout": "npm:^0.3.0"
+    "@antv/matrix-util": "npm:^3.1.0-beta.3"
+    "@antv/path-util": "npm:^2.0.3"
+    "@antv/util": "npm:~2.0.5"
+    color: "npm:^3.1.3"
+    d3-force: "npm:^2.0.1"
+    dagre: "npm:^0.8.5"
+    insert-css: "npm:^2.0.0"
+    ml-matrix: "npm:^6.5.0"
+    tslib: "npm:^2.6.2"
+  checksum: a238346270beb8add30a86f5475e2f6cc2a795af2ac27390c4cc44a1dc3dc6f367660fae33cb099021e4dbeda97224764c75143125b83f3c1e4de4b5aa3949b2
+  languageName: node
+  linkType: hard
+
+"@antv/g6-plugin@npm:0.8.25":
+  version: 0.8.25
+  resolution: "@antv/g6-plugin@npm:0.8.25"
+  dependencies:
+    "@antv/dom-util": "npm:^2.0.2"
+    "@antv/g-base": "npm:^0.5.1"
+    "@antv/g-canvas": "npm:^0.5.2"
+    "@antv/g-svg": "npm:^0.5.2"
+    "@antv/g6-core": "npm:0.8.24"
+    "@antv/g6-element": "npm:0.8.25"
+    "@antv/matrix-util": "npm:^3.1.0-beta.3"
+    "@antv/path-util": "npm:^2.0.3"
+    "@antv/scale": "npm:^0.3.4"
+    "@antv/util": "npm:^2.0.9"
+    insert-css: "npm:^2.0.0"
+  peerDependencies:
+    "@antv/g6": 4.8.25
+  checksum: ab16c519b8ccc6ffae407014216b49f877c50264585f052cd50c7af06597c4b740e72274e1cf5972e2f4e40402dd8384769f87d4db4c398bac9774023fd2e587
+  languageName: node
+  linkType: hard
+
+"@antv/g6@npm:^4.2.4":
+  version: 4.8.25
+  resolution: "@antv/g6@npm:4.8.25"
+  dependencies:
+    "@antv/g6-pc": "npm:0.8.25"
+  checksum: b72464b09b6f2ae42827f7966edccda32423f8b75ff2eaa91b10c2842c0ad67a3add5a759bd0f9b2d7d6aa31f3e3cd47ba73a4bd7fb00639b3b5e1907ad8acf0
+  languageName: node
+  linkType: hard
+
+"@antv/graphlib@npm:^1.0.0":
+  version: 1.2.0
+  resolution: "@antv/graphlib@npm:1.2.0"
+  checksum: 937e0f98956c150f777f1dbb429809d129bc7ea945c679a9ce6792c87c947ffee851dee168b3b58b3dce9cd7f04bd5f39009e820ba6a61a183b40cc7831ff5de
+  languageName: node
+  linkType: hard
+
+"@antv/hierarchy@npm:^0.6.10":
+  version: 0.6.14
+  resolution: "@antv/hierarchy@npm:0.6.14"
+  checksum: 6b186b507d67f66bed6399dd76f50b7e11e223591f2fcd34b8bad21ede9817c2a3b50a286e163c2f2f8b398987e0114350e7cdbf0e308ae666f2341ddcb1556d
+  languageName: node
+  linkType: hard
+
+"@antv/layout@npm:^0.1.17":
+  version: 0.1.31
+  resolution: "@antv/layout@npm:0.1.31"
+  dependencies:
+    "@antv/g-webgpu": "npm:0.5.5"
+    "@dagrejs/graphlib": "npm:2.1.4"
+    d3-force: "npm:^2.0.1"
+    ml-matrix: "npm:^6.5.0"
+  checksum: cdee27065bea2991fe29b09e2df1ca7f0a5aaa386dd00a68413f1cd29ef35592f91d7c10997a87416f3726be067b00f2fd16e32ccdf602079ec59b4b67c9b704
+  languageName: node
+  linkType: hard
+
+"@antv/layout@npm:^0.3.0":
+  version: 0.3.25
+  resolution: "@antv/layout@npm:0.3.25"
+  dependencies:
+    "@antv/g-webgpu": "npm:0.7.2"
+    "@antv/graphlib": "npm:^1.0.0"
+    "@antv/util": "npm:^3.3.2"
+    d3-force: "npm:^2.1.1"
+    d3-quadtree: "npm:^2.0.0"
+    dagre-compound: "npm:^0.0.11"
+    ml-matrix: "npm:6.5.0"
+  checksum: a0ea258dbc7aca4cf8b01a818de9523faa6c2e1332b4f294e51243227a61cde33816ab974e0e133361a0906b392fb22d126782aacf837eb5cdbbb90b6090e10e
+  languageName: node
+  linkType: hard
+
 "@antv/matrix-util@npm:^3.0.4":
   version: 3.0.4
   resolution: "@antv/matrix-util@npm:3.0.4"
@@ -292,7 +584,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@antv/path-util@npm:^2.0.15, @antv/path-util@npm:~2.0.5, @antv/path-util@npm:~2.0.7":
+"@antv/path-util@npm:^2.0.15, @antv/path-util@npm:^2.0.3, @antv/path-util@npm:~2.0.5, @antv/path-util@npm:~2.0.7":
   version: 2.0.15
   resolution: "@antv/path-util@npm:2.0.15"
   dependencies:
@@ -314,7 +606,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@antv/scale@npm:^0.3.0, @antv/scale@npm:^0.3.14, @antv/scale@npm:^0.3.18, @antv/scale@npm:~0.3.1":
+"@antv/scale@npm:^0.3.0, @antv/scale@npm:^0.3.14, @antv/scale@npm:^0.3.18, @antv/scale@npm:^0.3.4, @antv/scale@npm:~0.3.1":
   version: 0.3.18
   resolution: "@antv/scale@npm:0.3.18"
   dependencies:
@@ -325,13 +617,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@antv/util@npm:^2.0.17, @antv/util@npm:^2.0.9, @antv/util@npm:~2.0.0, @antv/util@npm:~2.0.12, @antv/util@npm:~2.0.13, @antv/util@npm:~2.0.3, @antv/util@npm:~2.0.5":
+"@antv/util@npm:^2.0.13, @antv/util@npm:^2.0.17, @antv/util@npm:^2.0.9, @antv/util@npm:~2.0.0, @antv/util@npm:~2.0.12, @antv/util@npm:~2.0.13, @antv/util@npm:~2.0.3, @antv/util@npm:~2.0.5":
   version: 2.0.17
   resolution: "@antv/util@npm:2.0.17"
   dependencies:
     csstype: "npm:^3.0.8"
     tslib: "npm:^2.0.3"
   checksum: 6aec661e1a2a5c0a15865dc7447e0eece2bb278e2d77b7e8c144ee8c057e7cb67da55994bb55de230f197ab248fcf265d9af4d43ebb7ad94166d221eabb2f762
+  languageName: node
+  linkType: hard
+
+"@antv/util@npm:^3.3.2":
+  version: 3.3.11
+  resolution: "@antv/util@npm:3.3.11"
+  dependencies:
+    fast-deep-equal: "npm:^3.1.3"
+    gl-matrix: "npm:^3.3.0"
+    tslib: "npm:^2.3.1"
+  checksum: 28f0d34a1806e5a55051cbc2c928caec967ff7385b0dd79a836746b2f7f245402a0647c331bed6635668642442cde0080807ed1a662db6f46778e58ba3a4c121
   languageName: node
   linkType: hard
 
@@ -3078,6 +3381,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.0.0":
+  version: 7.28.6
+  resolution: "@babel/runtime@npm:7.28.6"
+  checksum: 358cf2429992ac1c466df1a21c1601d595c46930a13c1d4662fde908d44ee78ec3c183aaff513ecb01ef8c55c3624afe0309eeeb34715672dbfadb7feedb2c0d
+  languageName: node
+  linkType: hard
+
 "@babel/runtime@npm:^7.10.1, @babel/runtime@npm:^7.11.1, @babel/runtime@npm:^7.11.2, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.15.4, @babel/runtime@npm:^7.16.3, @babel/runtime@npm:^7.18.0, @babel/runtime@npm:^7.18.3, @babel/runtime@npm:^7.22.5, @babel/runtime@npm:^7.23.2, @babel/runtime@npm:^7.7.6, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.9.2":
   version: 7.23.8
   resolution: "@babel/runtime@npm:7.23.8"
@@ -3382,6 +3692,15 @@ __metadata:
   version: 0.8.0
   resolution: "@cxbox-ui/schema@npm:0.8.0"
   checksum: 43c1be06832e7bb04a400a2ee7ecd607e4179e3e2fc60a8cb1e04dfee9dd7267de5db5160c1d90f3bc36fddb015201e34bee714ae99af56e539fd3892903f166
+  languageName: node
+  linkType: hard
+
+"@dagrejs/graphlib@npm:2.1.4":
+  version: 2.1.4
+  resolution: "@dagrejs/graphlib@npm:2.1.4"
+  dependencies:
+    lodash: "npm:^4.11.1"
+  checksum: 648e84cbc070e2863db3906b4b9d1f9cd478c42c67ca5023abe59829ffc56ede8d09abfff2e4cbacfd317bb06e52f944bbd8c1ece349c1301cf11d6e635ed769
   languageName: node
   linkType: hard
 
@@ -4066,6 +4385,34 @@ __metadata:
     webpack-plugin-serve:
       optional: true
   checksum: a9c8468417a14a23339e313cff6ddb8029e0637748973070e61d83a2534620b3492b9a42ecf9eb9d63cb709f53c17fe814bc7dd68d64c300db338e9fd7287bc4
+  languageName: node
+  linkType: hard
+
+"@probe.gl/env@npm:3.6.0":
+  version: 3.6.0
+  resolution: "@probe.gl/env@npm:3.6.0"
+  dependencies:
+    "@babel/runtime": "npm:^7.0.0"
+  checksum: 407593697a94ee871d38abcbe541357140dfcce7075b120eed4f66473eb0496df87890a3b7a77032b006a488a60d7f4bd11a476e672cf33393e0b69daa98bf68
+  languageName: node
+  linkType: hard
+
+"@probe.gl/log@npm:3.6.0":
+  version: 3.6.0
+  resolution: "@probe.gl/log@npm:3.6.0"
+  dependencies:
+    "@babel/runtime": "npm:^7.0.0"
+    "@probe.gl/env": "npm:3.6.0"
+  checksum: 03bbddffd89a482a4d539225132154cd1e63eae77a286b22919e5e46e99498f5f1a6a55a61348672e339ed64c7936a85aae980a6120bdd841eb66ec87ff1d2fb
+  languageName: node
+  linkType: hard
+
+"@probe.gl/stats@npm:3.6.0":
+  version: 3.6.0
+  resolution: "@probe.gl/stats@npm:3.6.0"
+  dependencies:
+    "@babel/runtime": "npm:^7.0.0"
+  checksum: 81077d458314a5d08ed5f2393cdd7572f40ea68589bc16ff0cc3e690f54db1443df6499e77c44af0a0ca3faff8613d6895df4e0203f785bf9d83801ff402cc66
   languageName: node
   linkType: hard
 
@@ -5350,6 +5697,20 @@ __metadata:
     "@webassemblyjs/ast": "npm:1.11.6"
     "@xtuc/long": "npm:4.2.2"
   checksum: 916b90fa3a8aadd95ca41c21d4316d0a7582cf6d0dcf6d9db86ab0de823914df513919fba60ac1edd227ff00e93a66b927b15cbddd36b69d8a34c8815752633c
+  languageName: node
+  linkType: hard
+
+"@webgpu/glslang@npm:^0.0.15":
+  version: 0.0.15
+  resolution: "@webgpu/glslang@npm:0.0.15"
+  checksum: a8af85081e22f77239ee191498334a5f195e8b918e4bb36575c1450be47de1eeddab302f630573a55ba44424e73ef3fea891fb98a8ed0894cf5fcd8f6fae7eb4
+  languageName: node
+  linkType: hard
+
+"@webgpu/types@npm:^0.0.31":
+  version: 0.0.31
+  resolution: "@webgpu/types@npm:0.0.31"
+  checksum: b35203d973b98b6cff3d01f1e69252ffbb0f291a8841d3ee94f0cc16c4708084cf04c2970526a31a24c8e6ad0536527ff87920760c844c024668c612ecaf9a17
   languageName: node
   linkType: hard
 
@@ -6870,7 +7231,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"color-convert@npm:^1.9.0":
+"color-convert@npm:^1.9.0, color-convert@npm:^1.9.3":
   version: 1.9.3
   resolution: "color-convert@npm:1.9.3"
   dependencies:
@@ -6895,10 +7256,30 @@ __metadata:
   languageName: node
   linkType: hard
 
-"color-name@npm:~1.1.4":
+"color-name@npm:^1.0.0, color-name@npm:~1.1.4":
   version: 1.1.4
   resolution: "color-name@npm:1.1.4"
   checksum: a1a3f914156960902f46f7f56bc62effc6c94e84b2cae157a526b1c1f74b677a47ec602bf68a61abfa2b42d15b7c5651c6dbe72a43af720bc588dff885b10f95
+  languageName: node
+  linkType: hard
+
+"color-string@npm:^1.6.0":
+  version: 1.9.1
+  resolution: "color-string@npm:1.9.1"
+  dependencies:
+    color-name: "npm:^1.0.0"
+    simple-swizzle: "npm:^0.2.2"
+  checksum: b0bfd74c03b1f837f543898b512f5ea353f71630ccdd0d66f83028d1f0924a7d4272deb278b9aef376cacf1289b522ac3fb175e99895283645a2dc3a33af2404
+  languageName: node
+  linkType: hard
+
+"color@npm:^3.1.3":
+  version: 3.2.1
+  resolution: "color@npm:3.2.1"
+  dependencies:
+    color-convert: "npm:^1.9.3"
+    color-string: "npm:^1.6.0"
+  checksum: 39345d55825884c32a88b95127d417a2c24681d8b57069413596d9fcbb721459ef9d9ec24ce3e65527b5373ce171b73e38dbcd9c830a52a6487e7f37bf00e83c
   languageName: node
   linkType: hard
 
@@ -7599,10 +7980,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"d3-dispatch@npm:1 - 2":
+  version: 2.0.0
+  resolution: "d3-dispatch@npm:2.0.0"
+  checksum: 379f7ce1510f529da00a34016630e92e41c0f6bbffef7b849f4e46733c188c67418df266a9a541cda17572b5286e32fbaf66308fe04dcfe52aa551830825bc93
+  languageName: node
+  linkType: hard
+
 "d3-ease@npm:^1.0.5":
   version: 1.0.7
   resolution: "d3-ease@npm:1.0.7"
   checksum: 784de7696cc683f251b2186ae4e248761758bdbfab1f78f1a7bddb08a4832923033be765dba907485f8911270f9343c3068e543d33d77cca1182582b34cb4970
+  languageName: node
+  linkType: hard
+
+"d3-force@npm:^2.0.1, d3-force@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "d3-force@npm:2.1.1"
+  dependencies:
+    d3-dispatch: "npm:1 - 2"
+    d3-quadtree: "npm:1 - 2"
+    d3-timer: "npm:1 - 2"
+  checksum: 0044ad969c524fa32d39d414fb698d183a10b7a9ec9369ac04aa00cc026bc1262308971d70bf20873adfb3d73f557aea9203797d40bd7d7247ed9714be946fb4
   languageName: node
   linkType: hard
 
@@ -7622,6 +8021,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"d3-quadtree@npm:1 - 2, d3-quadtree@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "d3-quadtree@npm:2.0.0"
+  checksum: b8dcbda82a04915018ea5309bcdc045971afbea293d87d32a34c31c69351c153a9e1a4d0ea77163a8ebe8f4fd9a6b114a7360e436f34552f284c1457275eda97
+  languageName: node
+  linkType: hard
+
 "d3-regression@npm:^1.3.5":
   version: 1.3.10
   resolution: "d3-regression@npm:1.3.10"
@@ -7629,10 +8035,36 @@ __metadata:
   languageName: node
   linkType: hard
 
+"d3-timer@npm:1 - 2":
+  version: 2.0.0
+  resolution: "d3-timer@npm:2.0.0"
+  checksum: 95f92ed8edbd0844c023de543ebca4d6aba7f9f8b2ecdbc3d61e01e4df5e74ffbce81238a3c4fd63d118bb1d05ca6331522df565fab146a2790e5c6a847f6275
+  languageName: node
+  linkType: hard
+
 "d3-timer@npm:^1.0.9":
   version: 1.0.10
   resolution: "d3-timer@npm:1.0.10"
   checksum: 7e77030a206861e4e626754c689795d43f036fb07a7f8ca6360eb8b7cbe6f52bf43c9c4297ae9a9a906e4de594212702f83c0cde23d4e20d8689a4211e438155
+  languageName: node
+  linkType: hard
+
+"dagre-compound@npm:^0.0.11":
+  version: 0.0.11
+  resolution: "dagre-compound@npm:0.0.11"
+  peerDependencies:
+    dagre: ^0.8.5
+  checksum: 42151b96e218162a7b4142d8964db8d4b819d1ae8ce2b0c47cc0e3a0ee3eecabd5e2b3d266c96ff8d4c3439a93da55478df61411d54a2b2b4ddbed159a9a2cee
+  languageName: node
+  linkType: hard
+
+"dagre@npm:^0.8.5":
+  version: 0.8.5
+  resolution: "dagre@npm:0.8.5"
+  dependencies:
+    graphlib: "npm:^2.1.8"
+    lodash: "npm:^4.17.15"
+  checksum: 1c021b66961aa9a700bb6ec51747bcc214720a661ad6cb1878eab7316ecb550a759664a6754081a315b37d0355e3c19ff162813b36f20cbeb2e37f7440364d62
   languageName: node
   linkType: hard
 
@@ -9748,6 +10180,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"gl-vec2@npm:^1.0.0, gl-vec2@npm:^1.3.0":
+  version: 1.3.0
+  resolution: "gl-vec2@npm:1.3.0"
+  checksum: 60e8b0f604f13791874e13b40113dcff46462601a530686b0d6981b4d152a5056cb95a8aefb2a7df0367f833aafa3973375564647eac200fc32551cb8c204d05
+  languageName: node
+  linkType: hard
+
 "glob-parent@npm:^5.1.2, glob-parent@npm:~5.1.2":
   version: 5.1.2
   resolution: "glob-parent@npm:5.1.2"
@@ -9905,6 +10344,15 @@ __metadata:
   version: 1.4.0
   resolution: "graphemer@npm:1.4.0"
   checksum: e951259d8cd2e0d196c72ec711add7115d42eb9a8146c8eeda5b8d3ac91e5dd816b9cd68920726d9fd4490368e7ed86e9c423f40db87e2d8dfafa00fa17c3a31
+  languageName: node
+  linkType: hard
+
+"graphlib@npm:^2.1.8":
+  version: 2.1.8
+  resolution: "graphlib@npm:2.1.8"
+  dependencies:
+    lodash: "npm:^4.17.15"
+  checksum: 41c525e4d91a6d8b4e8da1883bf4e85689a547e908557ccc53f64db9141bdfb351b9162a79f13cae81c5b3a410027f59e4fc1edc1ea442234ec08e629859b188
   languageName: node
   linkType: hard
 
@@ -10472,6 +10920,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"insert-css@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "insert-css@npm:2.0.0"
+  checksum: 2ccdf967e7f05454c91ab3284ad24402a955d69e5a33ae7117591b2239e4ed18059bace08138c151aeada39383b990fd5454e425a26bd7d2ecba8ea01827a20c
+  languageName: node
+  linkType: hard
+
 "internal-slot@npm:^1.0.5":
   version: 1.0.6
   resolution: "internal-slot@npm:1.0.6"
@@ -10494,6 +10949,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"inversify-inject-decorators@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "inversify-inject-decorators@npm:3.1.0"
+  checksum: e2b2c3028938e60e106c965e94dde3c92c26aa455bddc7f23a0cb84d33ff212425d18e11e6828b89519509c36532a999085de5fb4c33c7855921905f6577cffc
+  languageName: node
+  linkType: hard
+
+"inversify@npm:^5.0.1":
+  version: 5.1.1
+  resolution: "inversify@npm:5.1.1"
+  checksum: 0c061ab6e8526ffd40c63301ab12267f0f208fce3bac384fdf97c7d8ea0c0896e1358c1a2419ad202395244625d10cb90a254b25735a969574f19a2666d1ca00
+  languageName: node
+  linkType: hard
+
 "ip@npm:2.0.1":
   version: 2.0.1
   resolution: "ip@npm:2.0.1"
@@ -10512,6 +10981,13 @@ __metadata:
   version: 2.1.0
   resolution: "ipaddr.js@npm:2.1.0"
   checksum: 9aa43ff99771e3d14ab3683df3909b3b033fe81337646bc63780b00ec9bc51d4a696a047c0b261c05867c0a25086ab03f0ce32ea444a6b39e10fac1315d53cab
+  languageName: node
+  linkType: hard
+
+"is-any-array@npm:^2.0.0, is-any-array@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "is-any-array@npm:2.0.1"
+  checksum: f9807458a51e63ca1ac27fd6f3a3ace8200f077094e00d9b05b24cfbc9d5594d586d6ecf3416271f26939d5cb93fc52ca869cb5744e77318c3f53ec70b08d61f
   languageName: node
   linkType: hard
 
@@ -10550,6 +11026,13 @@ __metadata:
   version: 0.2.1
   resolution: "is-arrayish@npm:0.2.1"
   checksum: e7fb686a739068bb70f860b39b67afc62acc62e36bb61c5f965768abce1873b379c563e61dd2adad96ebb7edf6651111b385e490cf508378959b0ed4cac4e729
+  languageName: node
+  linkType: hard
+
+"is-arrayish@npm:^0.3.1":
+  version: 0.3.4
+  resolution: "is-arrayish@npm:0.3.4"
+  checksum: 1fa672a2f0bedb74154440310f616c0b6e53a95cf0625522ae050f06626d1cabd1a3d8085c882dc45c61ad0e7df2529aff122810b3b4a552880bf170d6df94e0
   languageName: node
   linkType: hard
 
@@ -12310,6 +12793,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lodash@npm:^4.11.1, lodash@npm:^4.17.15":
+  version: 4.17.23
+  resolution: "lodash@npm:4.17.23"
+  checksum: 1264a90469f5bb95d4739c43eb6277d15b6d9e186df4ac68c3620443160fc669e2f14c11e7d8b2ccf078b81d06147c01a8ccced9aab9f9f63d50dcf8cace6bf6
+  languageName: node
+  linkType: hard
+
 "lodash@npm:^4.16.5, lodash@npm:^4.17.13, lodash@npm:^4.17.20, lodash@npm:^4.17.21, lodash@npm:^4.17.4, lodash@npm:^4.17.5, lodash@npm:^4.7.0":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
@@ -12729,6 +13219,54 @@ __metadata:
   bin:
     mkdirp: bin/cmd.js
   checksum: 46ea0f3ffa8bc6a5bc0c7081ffc3907777f0ed6516888d40a518c5111f8366d97d2678911ad1a6882bf592fa9de6c784fea32e1687bb94e1f4944170af48a5cf
+  languageName: node
+  linkType: hard
+
+"ml-array-max@npm:^1.2.4":
+  version: 1.2.4
+  resolution: "ml-array-max@npm:1.2.4"
+  dependencies:
+    is-any-array: "npm:^2.0.0"
+  checksum: 05eacc44ccc182f6d191bc7cd233c97b55ebd695e423f0f07e2358831af7d7a2f64e2698fee4e1edc9bbcd962b8df2141f52b5403219bc2432a77b2bab8e25df
+  languageName: node
+  linkType: hard
+
+"ml-array-min@npm:^1.2.3":
+  version: 1.2.3
+  resolution: "ml-array-min@npm:1.2.3"
+  dependencies:
+    is-any-array: "npm:^2.0.0"
+  checksum: ba7aef2fd1bfe9f1937efa96242147c0ab30e5af4f22364b419a47f8c194b3c16b96b024fd6562eaddbf2d8648fcda3f54d3c2f394ec58beb756b9ed71c81593
+  languageName: node
+  linkType: hard
+
+"ml-array-rescale@npm:^1.3.1, ml-array-rescale@npm:^1.3.7":
+  version: 1.3.7
+  resolution: "ml-array-rescale@npm:1.3.7"
+  dependencies:
+    is-any-array: "npm:^2.0.0"
+    ml-array-max: "npm:^1.2.4"
+    ml-array-min: "npm:^1.2.3"
+  checksum: 2b8fca33c38bee3c957e5e2f178d7f109d61acc2add924cc8a4a0eac30dfa2d0974642f25f2b4e46e82f9ac90de275268aca382bd644dac2960a83b349c7e706
+  languageName: node
+  linkType: hard
+
+"ml-matrix@npm:6.5.0":
+  version: 6.5.0
+  resolution: "ml-matrix@npm:6.5.0"
+  dependencies:
+    ml-array-rescale: "npm:^1.3.1"
+  checksum: 927847bf08da2d75fa82363fd4304c5194486e7a2554964e0beba68d133febcc52960018b81c7716c5e98a9eb6831783cba007eebe5e84c2059bb88b79785a91
+  languageName: node
+  linkType: hard
+
+"ml-matrix@npm:^6.5.0":
+  version: 6.12.1
+  resolution: "ml-matrix@npm:6.12.1"
+  dependencies:
+    is-any-array: "npm:^2.0.1"
+    ml-array-rescale: "npm:^1.3.7"
+  checksum: 1e7a382a9abf099f6650a01056f09072f95bba15f566c1c9d78b208ebef5ba4cd4498d5aeef4a1014e71e059a5101a31fc2d5e3260f812b55b3d610bbd3d5484
   languageName: node
   linkType: hard
 
@@ -13463,6 +14001,24 @@ __metadata:
   dependencies:
     find-up: "npm:^3.0.0"
   checksum: ecb60e1f8e1f611c0bdf1a0b6a474d6dfb51185567dc6f29cdef37c8d480ecba5362e006606bb290519bbb6f49526c403fabea93c3090c20368d98bb90c999ab
+  languageName: node
+  linkType: hard
+
+"polyline-miter-util@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "polyline-miter-util@npm:1.0.1"
+  dependencies:
+    gl-vec2: "npm:^1.0.0"
+  checksum: b3e10b7bf3b3c8c383850b1748adfe5bc0e0ca25f5edabde4ee8f7d7d5da04f53979a2d42c39838c8c4c0ba3cb1df823f01bdabce22d3b2cc68978eb0ec18266
+  languageName: node
+  linkType: hard
+
+"polyline-normals@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "polyline-normals@npm:2.0.2"
+  dependencies:
+    polyline-miter-util: "npm:^1.0.1"
+  checksum: bce9a79d52e62883749b9e6170918671b1561d43dfe182fbfcb2508ea6bcac775afff64a6afcac188f6a325ebb8ec7a9bb4fe41185c90883f9648073b431a118
   languageName: node
   linkType: hard
 
@@ -14380,6 +14936,18 @@ __metadata:
     ansi-styles: "npm:^5.0.0"
     react-is: "npm:^18.0.0"
   checksum: 596d8b459b6fdac7dcbd70d40169191e889939c17ffbcc73eebe2a9a6f82cdbb57faffe190274e0a507d9ecdf3affadf8a9b43442a625eecfbd2813b9319660f
+  languageName: node
+  linkType: hard
+
+"probe.gl@npm:^3.1.1":
+  version: 3.6.0
+  resolution: "probe.gl@npm:3.6.0"
+  dependencies:
+    "@babel/runtime": "npm:^7.0.0"
+    "@probe.gl/env": "npm:3.6.0"
+    "@probe.gl/log": "npm:3.6.0"
+    "@probe.gl/stats": "npm:3.6.0"
+  checksum: 868bb0eed46c1862d0303101e9e27adcd3a7afce7ef6150e601c1a39f0adbd1e92018f05a4f0353e8b2ed0863ee3186991a6712a053a0d75c067e9782e9d7c56
   languageName: node
   linkType: hard
 
@@ -15540,6 +16108,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"reflect-metadata@npm:^0.1.13":
+  version: 0.1.14
+  resolution: "reflect-metadata@npm:0.1.14"
+  checksum: 3a6190c7f6cb224f26a012d11f9e329360c01c1945e2cbefea23976a8bacf9db6b794aeb5bf18adcb673c448a234fbc06fc41853c00a6c206b30f0777ecf019e
+  languageName: node
+  linkType: hard
+
 "reflect.getprototypeof@npm:^1.0.4":
   version: 1.0.4
   resolution: "reflect.getprototypeof@npm:1.0.4"
@@ -15667,6 +16242,13 @@ __metadata:
   bin:
     regjsparser: bin/parser
   checksum: fe44fcf19a99fe4f92809b0b6179530e5ef313ff7f87df143b08ce9a2eb3c4b6189b43735d645be6e8f4033bfb015ed1ca54f0583bc7561bed53fd379feb8225
+  languageName: node
+  linkType: hard
+
+"regl@npm:^1.3.11":
+  version: 1.7.0
+  resolution: "regl@npm:1.7.0"
+  checksum: 16edd050b76b75c64494ddfe00e2d4d5f1bf374e51d969d93ed2fc493c43d7992efd0d049428b84bf3455fca4f97dd190aeb0b2b145984702bbc9d29033d9d0b
   languageName: node
   linkType: hard
 
@@ -16371,6 +16953,15 @@ __metadata:
   version: 4.1.0
   resolution: "signal-exit@npm:4.1.0"
   checksum: 41602dce540e46d599edba9d9860193398d135f7ff72cab629db5171516cfae628d21e7bfccde1bbfdf11c48726bc2a6d1a8fb8701125852fbfda7cf19c6aa83
+  languageName: node
+  linkType: hard
+
+"simple-swizzle@npm:^0.2.2":
+  version: 0.2.4
+  resolution: "simple-swizzle@npm:0.2.4"
+  dependencies:
+    is-arrayish: "npm:^0.3.1"
+  checksum: 846c3fdd1325318d5c71295cfbb99bfc9edc4c8dffdda5e6e9efe30482bbcd32cf360fc2806f46ac43ff7d09bcfaff20337bb79f826f0e6a8e366efd3cdd7868
   languageName: node
   linkType: hard
 
@@ -17379,6 +17970,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tslib@npm:^2.6.2":
+  version: 2.8.1
+  resolution: "tslib@npm:2.8.1"
+  checksum: 9c4759110a19c53f992d9aae23aac5ced636e99887b51b9e61def52611732872ff7668757d4e4c61f19691e36f4da981cd9485e869b4a7408d689f6bf1f14e62
+  languageName: node
+  linkType: hard
+
 "tslib@npm:~2.1.0":
   version: 2.1.0
   resolution: "tslib@npm:2.1.0"
@@ -17616,6 +18214,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "ui@workspace:."
   dependencies:
+    "@ant-design/graphs": "npm:1.4.2"
     "@ant-design/plots": "npm:1.2.6"
     "@craco/craco": "npm:7.1.0"
     "@cxbox-ui/core": "npm:2.7.4-beta.1"

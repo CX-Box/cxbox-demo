@@ -37,6 +37,7 @@ export enum CustomWidgetTypes {
     Column2D = 'Column2D',
     Line2D = 'Line2D',
     DualAxes2D = 'DualAxes2D',
+    RelationGraph = 'RelationGraph',
     FilePreview = 'FilePreview',
     CalendarList = 'CalendarList',
     CalendarYearList = 'CalendarYearList'
@@ -310,4 +311,24 @@ export interface Dual2DConfig {
 
 export interface DualAxes2DWidgetMeta extends Omit<AppWidgetTableMeta, 'type'> {
     type: CustomWidgetTypes.DualAxes2D
+}
+
+export interface RelationGraphConfig {
+    mode?: 'TB' | 'BT' | 'LR' | 'RL'
+    dragNode?: boolean
+    nodes?: {
+        fieldKeys?: [string, string]
+        descriptionFieldKeys?: string[]
+    }
+    edges?: {
+        labelFieldKeys?: string[]
+        type?: 'polyline' | 'line' | 'arc' | 'quadratic'
+    }
+}
+
+export interface RelationGraphWidgetMeta extends Omit<AppWidgetTableMeta, 'type'> {
+    type: CustomWidgetTypes.RelationGraph
+    options: AppWidgetMeta['options'] & {
+        relationGraph?: RelationGraphConfig
+    }
 }

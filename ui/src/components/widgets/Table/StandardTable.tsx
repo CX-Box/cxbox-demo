@@ -57,10 +57,10 @@ function StandardTable<T extends { id: unknown }>({
     const tableElement = (
         <div className={cn(styles.tableContainer, { [styles.stickyWithHorizontalScroll]: stickyWithHorizontalScroll })} ref={wrapperRef}>
             <Header meta={widget} />
-            <div style={{ position: 'relative' }}>
+            <div className={styles.tableWrapper}>
                 {settingsRender ? (
-                    <div style={{ position: 'sticky', zIndex: 10, top: 0 }}>
-                        <div className={styles.settingButton}>{settingsRender}</div>
+                    <div style={{ position: stickyWithHorizontalScroll ? 'sticky' : 'absolute' }} className={styles.settingsContainer}>
+                        <div className={styles.settingsButton}>{settingsRender}</div>
                     </div>
                 ) : null}
                 <AntdTable

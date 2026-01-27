@@ -337,6 +337,21 @@ function Table<T extends CustomDataItem>({
                             />
                         </div>
                     ) : null}
+                    {isGroupingHierarchy && isIncorrectLimit ? (
+                        <Tooltip
+                            title={
+                                isIncorrectLimit
+                                    ? t('Warning! Only List mode available for Grouping Hierarchy', {
+                                          limit: bcPageLimit,
+                                          bcCount: bcCountForShowing
+                                      })
+                                    : undefined
+                            }
+                            trigger="hover"
+                        >
+                            <Icon type="warning" className={styles.limitWarningIcon} />
+                        </Tooltip>
+                    ) : null}
                 </>
             )
         }

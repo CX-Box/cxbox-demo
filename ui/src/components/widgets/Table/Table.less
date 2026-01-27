@@ -188,7 +188,13 @@
     column-gap: 8px;
 }
 
-.settingButton {
+.settingsContainer {
+    top: 0;
+    right: 0;
+    z-index: 3;
+}
+
+.settingsButton {
   position: absolute;
   top: 12px;
   right: 5px;
@@ -198,7 +204,13 @@
   border-radius: 12px;
   display: flex;
   justify-content: center;
-  padding-top: 1px;
+    & :global(.ant-btn) {
+        border: 0;
+        padding: 2px;
+    }
+    & i:global(.anticon) {
+        line-height: 0;
+    }
 }
 
 // TODO temporary solution to use sticky and horizontal scroll until upgrading to and 4.7.0 or higher. Use Table.props.scroll={{ y: true, x: 'calc(700px + 50%)' }}
@@ -303,4 +315,16 @@
 
 .counter {
   word-break: keep-all;
+}
+
+.tableWrapper {
+    position: relative;
+}
+
+.limitWarningIcon {
+    position: absolute;
+    font-size: 10px;
+    bottom: -2px;
+    left: -2px;
+    color: #f5222d;
 }

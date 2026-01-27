@@ -1,4 +1,4 @@
-import { AppWidgetMeta } from '@interfaces/widget'
+import { AppWidgetMeta, WidgetField } from '@interfaces/widget'
 import { useCallback, useMemo } from 'react'
 import { EventInput } from '@fullcalendar/core'
 import {
@@ -7,10 +7,24 @@ import {
     EventAllRefiners,
     EventAllRefinersKeys,
     mapRefinerKeyToFieldKey
-} from '@components/widgets/CalendarList/interfaces'
-import { isAllDayOrMultiDay } from '@components/widgets/CalendarList/utils'
+} from '@components/widgets/CalendarList/constants'
+import { getEventTimeGranularity, isAllDayOrMultiDay } from '@components/widgets/CalendarList/utils'
 import { WidgetFieldBase } from '@cxbox-ui/core'
 import { hasOwn } from '@utils/object'
+import moment from 'moment'
+import { isoLocalFormatter } from '@utils/date'
+
+/**
+ * Normalizes the end date for all-day events.
+ *
+ * FullCalendar treats the end date as exclusive (e.g., [start, end)) according to iCalendar Specifications (RFC 5545).
+ * To include the last day in the visualization, we need to change an end date.
+ *
+ * @param endDate
+ */
+const normalizeAllDayEndDate = (endDate: moment.MomentInput) => {
+    return isoLocalFormatter(moment(endDate).endOf('day').add(1, 'ms'))
+}
 
 export const useEventDataTransform = (widget: AppWidgetMeta) => {
     const calendarWidgetOptions = widget.options?.calendar
@@ -44,7 +58,8 @@ export const useEventDataTransform = (widget: AppWidgetMeta) => {
 
                         // Title must be a string. Nullish values can cause rendering issues.
                         if (key === 'title') {
-                            refiners.title = value ?? ''
+                            // Use non-breaking space to prevent event from collapsing if title is empty
+                            refiners.title = value ?? '\u00A0'
                         } else {
                             refiners[key] = value
                         }
@@ -61,14 +76,26 @@ export const useEventDataTransform = (widget: AppWidgetMeta) => {
                 }
             }
 
+            const granularity = getEventTimeGranularity(
+                (widget.fields as WidgetField[])
+                    .filter(field => [refinerKeyToFieldKeyMapper.start, refinerKeyToFieldKeyMapper.end].includes(field.key))
+                    .map(item => item.type)
+            )
+
+            const isAllDay = isAllDayOrMultiDay([refiners.start, refiners.end], granularity)
+
+            if (isAllDay) {
+                refiners.end = normalizeAllDayEndDate(refiners.end)
+            }
+
             return {
                 ...refiners,
-                allDay: isAllDayOrMultiDay([refiners.start, refiners.end]),
+                allDay: isAllDay,
                 extendedProps: {
                     ...raw
                 }
             }
         },
-        [bgColorKey, refinerKeyToFieldKeyMapper, staticBgColor]
+        [bgColorKey, refinerKeyToFieldKeyMapper, staticBgColor, widget.fields]
     )
 }

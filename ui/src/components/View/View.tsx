@@ -81,7 +81,8 @@ export const customWidgets: Partial<Record<CustomWidgetTypes | interfaces.Widget
     [CustomWidgetTypes.DualAxes2D]: { component: Chart, card: DashboardCard },
     [CustomWidgetTypes.FilePreview]: { component: FilePreview, card: FilePreviewCard },
     [CustomWidgetTypes.CalendarList]: { component: CalendarList, card: null },
-    [CustomWidgetTypes.CalendarYearList]: { component: CalendarYearList, card: null }
+    [CustomWidgetTypes.CalendarYearList]: { component: CalendarYearList, card: null },
+    [CustomWidgetTypes.RelationGraph]: { component: Chart, card: DashboardCard }
 }
 
 utils.extendPopupWidgetTypes(customWidgets)

@@ -157,6 +157,7 @@ export interface AppWidgetMeta extends WidgetMeta {
             hideLimitOptions?: boolean
             availableLimitsList?: number[]
             type?: PaginationMode
+            alternativeType?: PaginationMode
         }
         groupingHierarchy?: {
             counterMode?: 'none' | 'always' | 'collapsed'

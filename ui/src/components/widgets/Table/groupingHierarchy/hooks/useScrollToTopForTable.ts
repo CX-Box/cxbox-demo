@@ -1,17 +1,21 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-export const useScrollToTopForTable = (active: boolean, getFirstRowElement: () => Element | null | undefined) => {
+export const useScrollToTopForTable = (
+    active: boolean,
+    getFirstRowElement: () => Element | null | undefined,
+    getTableTopElement: () => Element | null | undefined
+) => {
     const [showUp, setShowUp] = useState(false)
 
     const intersectionObserverRef = useRef<IntersectionObserver | undefined>()
 
     const scrollToTop = useCallback(() => {
-        const element = getFirstRowElement()
+        const element = getTableTopElement()
 
         setTimeout(() => {
-            element?.scrollIntoView({ block: 'center' })
+            element?.scrollIntoView({ block: 'start', behavior: 'smooth' })
         }, 0)
-    }, [getFirstRowElement])
+    }, [getTableTopElement])
 
     useEffect(() => {
         intersectionObserverRef.current = active
@@ -33,6 +37,8 @@ export const useScrollToTopForTable = (active: boolean, getFirstRowElement: () =
         }
 
         const element = getFirstRowElement()
+
+        console.log(element)
 
         if (element) {
             intersectionObserverRef.current?.observe(element)

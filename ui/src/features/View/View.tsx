@@ -2,7 +2,6 @@ import React, { memo } from 'react'
 import { CustomFieldTypes, CustomWidgetTypes } from '@interfaces/widget'
 import MultipleSelectField from '@fields/__fields_to_migrate/MultipleSelectField/MultipleSelectField'
 import styles from './View.module.css'
-import Dictionary from '@fields/Dictionary/Dictionary'
 import { Number } from '@fields/__fields_to_migrate/Number/Number'
 import MultivalueField from '@fields/__fields_to_migrate/Multivalue/MultivalueField'
 import InlinePickList from '@fields/__fields_to_migrate/InlinePickList/InlinePickList'
@@ -15,6 +14,7 @@ import WaitUntilPopup from '@components/WaitUntilPopup/WaitUntilPopup'
 import NotificationsContainer from '@components/NotificationsContainer/NotificationsContainer'
 import DebugViewInfoLabel from '@components/DebugViewInfoLabel/DebugViewInfoLabel'
 import { Layout } from '@features'
+import Dictionary from '@fields/__fields_to_migrate/Dictionary/Dictionary'
 
 export const customFields = {
     [FieldType.number]: Number,

@@ -23,10 +23,6 @@ import { useTranslation } from 'react-i18next'
 import FieldErrorPopupWrapper from '@components/FieldErrorPopupWrapper/FieldErrorPopupWrapper'
 import { customFields } from '@features/View/View'
 import CheckboxPicker from '@fields/__fields_to_migrate/Checkbox/Checkbox'
-import * as fields from '@fields'
-import get from 'lodash/get'
-import upperFirst from 'lodash.upperfirst'
-import camelcase from 'lodash.camelCase'
 
 export interface FieldComponent {
     (): void

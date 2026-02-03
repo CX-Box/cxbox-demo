@@ -3,7 +3,7 @@ import { Radio } from 'antd'
 import { RadioChangeEvent } from 'antd/es/radio'
 import { BaseFieldProps } from '@features/Field/Field'
 import ReadOnlyField from '@components/ui/ReadOnlyField/ReadOnlyField'
-import { getIconByParams } from '@fields/Dictionary/Dictionary'
+import { getIconByParams } from '@fields/__fields_to_migrate/Dictionary/Dictionary'
 
 export interface RadioButtonProps extends BaseFieldProps {
     value?: string | null

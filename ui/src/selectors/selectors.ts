@@ -1,5 +1,5 @@
 import { RootState } from '@store'
-import { PendingValidationFails, WidgetMeta } from '@cxbox-ui/core'
+import { DataItem, PendingValidationFails, WidgetMeta } from '@cxbox-ui/core'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import { createUniversalSelector } from '@selectors/createUniversalSelector'
 
@@ -13,6 +13,15 @@ export const selectBcRecordForm = createUniversalSelector((state: RootState, bcN
 
 export const selectBcData = createUniversalSelector((state: RootState, bcName: string | undefined) =>
     bcName ? state.data[bcName] : undefined
+)
+
+export const selectBcDataItemByCondition = createUniversalSelector(
+    (state: RootState, bcName: string | undefined, condition: (item: DataItem, index: number) => boolean) =>
+        selectBcData(state, bcName)?.find(condition)
+)
+
+export const selectBcDataItem = createUniversalSelector((state: RootState, bcName: string | undefined, id: string | undefined | null) =>
+    selectBcDataItemByCondition(state, bcName, item => item.id === id)
 )
 
 export const selectBcRowMeta = createUniversalSelector((state: RootState, bcName: string | undefined) =>

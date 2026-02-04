@@ -8,10 +8,11 @@ export interface InnerTemplatedTitleProps {
     className?: string
     fields?: WidgetField[] | undefined
     dataItem?: Omit<DataItem, 'vstamp'> | undefined
+    opacity?: number
 }
 
-export const InnerTemplatedTitle: FunctionComponent<InnerTemplatedTitleProps> = ({ className, title, fields, dataItem }) => {
-    const templatedTitle = useMemo(() => getWidgetTitle(title, dataItem, fields), [dataItem, title, fields])
+export const InnerTemplatedTitle: FunctionComponent<InnerTemplatedTitleProps> = ({ className, title, fields, dataItem, opacity }) => {
+    const templatedTitle = useMemo(() => getWidgetTitle(title, dataItem, fields, { opacity }), [dataItem, title, fields])
 
     if (!title) {
         return null

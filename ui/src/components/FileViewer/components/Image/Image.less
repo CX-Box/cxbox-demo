@@ -1,0 +1,20 @@
+.root {
+  position: relative;
+  height: 100%;
+  width: 100%;
+
+  img {
+    transition: all 0.3s ease-out;
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+  }
+
+  :global {
+    .ant-spin-spinning {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}

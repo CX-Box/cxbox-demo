@@ -61,7 +61,7 @@ export function useArrowPagination(widget?: WidgetMeta) {
                 dispatch(actions.bcChangePage({ bcName: bc.name as string, page: page + 1, widgetName: widget?.name }))
                 currentPageRef.current = page + 1
                 setChangePageType('next')
-            } else {
+            } else if (bc.cursor !== data[indexOnPage].id) {
                 dispatch(
                     actions.bcSelectRecord({
                         bcName: bc.name as string,

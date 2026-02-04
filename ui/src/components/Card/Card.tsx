@@ -7,7 +7,7 @@ import { useAppSelector } from '@store'
 import { useWidgetCollapse } from '@hooks/useWidgetCollapse'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import WidgetTitle from '@components/WidgetTitle/WidgetTitle'
-import { AppWidgetMeta } from '@interfaces/widget'
+import { AppWidgetMeta, CustomWidgetTypes } from '@interfaces/widget'
 import styles from './Card.less'
 
 export interface CardProps {
@@ -16,7 +16,7 @@ export interface CardProps {
     className?: string
 }
 
-const showOperations = [WidgetTypes.DataGrid, WidgetTypes.Form]
+const showOperations = [WidgetTypes.DataGrid, WidgetTypes.Form, CustomWidgetTypes.CardCarouselList, CustomWidgetTypes.CardList]
 
 function Card({ meta, children, className }: CardProps) {
     const { type, bcName } = meta

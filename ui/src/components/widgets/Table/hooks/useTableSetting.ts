@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo } from 'react'
 import { TableSettingsItem, TableSettingsList } from '@interfaces/tableSettings'
 import { createMap, createSettingPath } from '@utils/tableSettings'
 import { actions } from '@actions'
-import { useAppSelector } from '@store'
+import { useAppDispatch, useAppSelector } from '@store'
 import { FieldType, WidgetListField } from '@cxbox-ui/schema'
 import { CxBoxApiInstance } from '../../../../api'
 import { firstValueFrom } from 'rxjs'
@@ -13,6 +13,107 @@ import { useTranslation } from 'react-i18next'
 import { ControlColumn } from '@components/widgets/Table/Table.interfaces'
 import { getRowSelectionOffset } from '@components/widgets/Table/utils/rowSelection'
 import { useVisibleFlattenWidgetFields } from '@hooks/widgetGrid'
+
+const changeOrderWithMutate = <T>(array: T[], oldIndex: number, newIndex: number) => {
+    array.splice(newIndex, 0, array.splice(oldIndex, 1)[0])
+}
+
+const calculateHiddenFields = (additionalFields?: string[], setting?: TableSettingsItem | null) => {
+    let hiddenFields = additionalFields ? [...additionalFields] : []
+
+    hiddenFields = hiddenFields.filter(additionalField => !setting?.removedFromAdditionalFields?.includes(additionalField))
+
+    hiddenFields = setting?.addedToAdditionalFields?.length ? [...hiddenFields, ...setting.addedToAdditionalFields] : hiddenFields
+
+    return hiddenFields
+}
+
+function useTableSettingMap(viewName: string, widgetName: string) {
+    const settingPath = createSettingPath({ view: viewName, widget: widgetName })
+    const settingsMap = useAppSelector(state => state.session.tableSettings)
+    const setting = settingsMap?.[settingPath as string] ?? null
+
+    return { setting, settingPath, settingsMap }
+}
+
+function useTableSettingUpdate(widget: AppWidgetMeta) {
+    const view = useAppSelector(state => state.view)
+    const { setting, settingPath } = useTableSettingMap(view.name, widget.name)
+    const dispatch = useAppDispatch()
+    return useCallback(
+        (partialSetting: Partial<Omit<TableSettingsItem, 'view' | 'widget'>>, withoutRequest: boolean = false) => {
+            if (settingPath) {
+                dispatch(actions.changeTableSettings({ view: view.name, widget: widget.name, ...partialSetting }))
+
+                if (withoutRequest) {
+                    return
+                }
+
+                Object.keys(partialSetting).forEach(key => {
+                    if ((partialSetting as Record<string, any>)[key] === undefined) {
+                        delete (partialSetting as Record<string, any>)[key]
+                    }
+                })
+
+                const data = [
+                    {
+                        view: view.name,
+                        widget: widget.name,
+                        orderFields: setting?.orderFields ?? [],
+                        addedToAdditionalFields: setting?.addedToAdditionalFields ?? [],
+                        removedFromAdditionalFields: setting?.removedFromAdditionalFields ?? [],
+                        ...partialSetting
+                    }
+                ]
+
+                if (!setting?.id) {
+                    firstValueFrom(CxBoxApiInstance.createPersonalSetting(data)).then(response => {
+                        response.data?.forEach(item => {
+                            if (item.id) {
+                                dispatch(actions.changeTableSettings({ view: view.name, widget: widget.name, id: item.id }))
+                            }
+                        })
+                    })
+                } else {
+                    CxBoxApiInstance.updatePersonalSetting(data)
+                }
+            }
+        },
+        [
+            dispatch,
+            setting?.addedToAdditionalFields,
+            setting?.id,
+            setting?.orderFields,
+            setting?.removedFromAdditionalFields,
+            settingPath,
+            view.name,
+            widget.name
+        ]
+    )
+}
+
+function useTableSettingVisibleFields(widget: AppWidgetMeta, blockedFields?: string[]) {
+    const allVisibleFields = useVisibleFlattenWidgetFields(widget as AppWidgetTableMeta)
+
+    return useMemo(() => {
+        const allFields = (allVisibleFields as (WidgetListField & { disabled?: boolean })[]).filter(
+            field => !field?.hidden && field.type !== FieldType.hidden
+        )
+
+        blockedFields?.forEach(groupingFieldKey => {
+            const groupingFieldIndex = allFields?.findIndex(field => field.key === groupingFieldKey) ?? -1
+
+            if (groupingFieldIndex !== -1) {
+                allFields[groupingFieldIndex] = {
+                    ...allFields[groupingFieldIndex],
+                    disabled: true
+                }
+            }
+        })
+
+        return allFields
+    }, [allVisibleFields, blockedFields])
+}
 
 export function useTableSetting(
     widget: AppWidgetMeta,
@@ -23,10 +124,8 @@ export function useTableSetting(
     const view = useAppSelector(state => state.view)
     const viewName = view.name
     const widgetName = widget?.name
+    const { setting, settingPath, settingsMap } = useTableSettingMap(viewName, widgetName)
     const additionalFields = widget?.options?.additional?.fields
-    const settingPath = createSettingPath({ view: viewName, widget: widgetName })
-    const settingsMap = useAppSelector(state => state.session.tableSettings)
-    const setting = settingsMap?.[settingPath as string] ?? null
     const sessionScreens = useAppSelector(state => state.session.screens)
     const { t } = useTranslation()
 
@@ -46,26 +145,7 @@ export function useTableSetting(
         }
     }, [dispatch, sessionScreens, settingPath, settingsMap, view.widgets])
 
-    const allVisibleFields = useVisibleFlattenWidgetFields(widget as AppWidgetTableMeta)
-
-    const visibleFields = useMemo(() => {
-        const allFields = (allVisibleFields as (WidgetListField & { disabled?: boolean })[]).filter(
-            field => !field?.hidden && field.type !== FieldType.hidden
-        )
-
-        blockedFields?.forEach(groupingFieldKey => {
-            const groupingFieldIndex = allFields?.findIndex(field => field.key === groupingFieldKey) ?? -1
-
-            if (groupingFieldIndex !== -1) {
-                allFields[groupingFieldIndex] = {
-                    ...allFields[groupingFieldIndex],
-                    disabled: true
-                }
-            }
-        })
-
-        return allFields
-    }, [allVisibleFields, blockedFields])
+    const visibleFields = useTableSettingVisibleFields(widget, blockedFields)
 
     const getColumnOffset = useCallback(
         (type: ControlColumn<unknown>['position']) => {
@@ -77,102 +157,9 @@ export function useTableSetting(
         [controlColumns, rowSelectionType]
     )
 
-    const updateSetting = useCallback(
-        (partialSetting: Partial<Omit<TableSettingsItem, 'view' | 'widget'>>, withoutRequest: boolean = false) => {
-            if (settingPath) {
-                dispatch(actions.changeTableSettings({ view: viewName, widget: widgetName, ...partialSetting }))
+    const updateSetting = useTableSettingUpdate(widget)
 
-                if (withoutRequest) {
-                    return
-                }
-
-                Object.keys(partialSetting).forEach(key => {
-                    if ((partialSetting as Record<string, any>)[key] === undefined) {
-                        delete (partialSetting as Record<string, any>)[key]
-                    }
-                })
-
-                const data = [
-                    {
-                        view: viewName,
-                        widget: widgetName,
-                        orderFields: setting?.orderFields ?? [],
-                        addedToAdditionalFields: setting?.addedToAdditionalFields ?? [],
-                        removedFromAdditionalFields: setting?.removedFromAdditionalFields ?? [],
-                        ...partialSetting
-                    }
-                ]
-
-                if (!setting?.id) {
-                    firstValueFrom(CxBoxApiInstance.createPersonalSetting(data)).then(response => {
-                        response.data?.forEach(item => {
-                            if (item.id) {
-                                dispatch(actions.changeTableSettings({ view: viewName, widget: widgetName, id: item.id }))
-                            }
-                        })
-                    })
-                } else {
-                    CxBoxApiInstance.updatePersonalSetting(data)
-                }
-            }
-        },
-        [
-            dispatch,
-            setting?.addedToAdditionalFields,
-            setting?.id,
-            setting?.orderFields,
-            setting?.removedFromAdditionalFields,
-            settingPath,
-            viewName,
-            widgetName
-        ]
-    )
-
-    const resetSetting = useCallback(() => {
-        const currentSetting = settingPath ? settingsMap?.[settingPath] : null
-        const id = settingPath ? settingsMap?.[settingPath]?.id : null
-
-        dispatch(actions.resetTableSettings({ view: viewName, widget: widgetName }))
-
-        if (currentSetting && id) {
-            firstValueFrom(CxBoxApiInstance.deletePersonalSetting(id)).catch(() => {
-                updateSetting(currentSetting, true)
-            })
-        }
-    }, [dispatch, settingPath, settingsMap, updateSetting, viewName, widgetName])
-
-    const calculateHiddenFields = useCallback(() => {
-        let hiddenFields = additionalFields ? [...additionalFields] : []
-
-        hiddenFields = hiddenFields.filter(additionalField => !setting?.removedFromAdditionalFields?.includes(additionalField))
-
-        hiddenFields = setting?.addedToAdditionalFields?.length ? [...hiddenFields, ...setting.addedToAdditionalFields] : hiddenFields
-
-        return hiddenFields
-    }, [additionalFields, setting?.addedToAdditionalFields, setting?.removedFromAdditionalFields])
-
-    const calculateFieldsOrder = useCallback(
-        (hiddenFields: string[]) => {
-            const newVisibleFields = visibleFields.filter(visibleField => !hiddenFields.includes(visibleField.key))
-
-            const fieldsDictionary = createMap(newVisibleFields, 'key')
-
-            return setting?.orderFields?.length
-                ? setting.orderFields.map(fieldKey => fieldsDictionary[fieldKey]).filter(field => !!field)
-                : newVisibleFields
-        },
-        [setting?.orderFields, visibleFields]
-    )
-
-    const resultedFields: WidgetListField[] = useMemo(() => {
-        const currentAdditionalFields = calculateHiddenFields()
-
-        return calculateFieldsOrder(currentAdditionalFields)
-    }, [calculateHiddenFields, calculateFieldsOrder])
-
-    const changeOrderWithMutate = useCallback(<T>(array: T[], oldIndex: number, newIndex: number) => {
-        array.splice(newIndex, 0, array.splice(oldIndex, 1)[0])
-    }, [])
+    const resultedFields = useTableSettingResultedFields(widget)
 
     // Changes the order of fields contained in the meta
     const changeFieldOrder = useCallback(
@@ -218,7 +205,6 @@ export function useTableSetting(
             getColumnOffset,
             resultedFields,
             blockedFields,
-            changeOrderWithMutate,
             updateSetting,
             controlColumns,
             rowSelectionType,
@@ -284,12 +270,55 @@ export function useTableSetting(
     )
 
     return {
-        showColumnSettings: !!widget?.options?.additional?.enabled,
         allFields: visibleFields,
         resultedFields,
-        currentAdditionalFields: calculateHiddenFields(),
+        currentAdditionalFields: calculateHiddenFields(additionalFields, setting),
         changeOrder: changeFieldOrder,
-        changeColumnsVisibility,
-        resetSetting
+        changeColumnsVisibility
     }
+}
+
+export function useTableSettingReset(widget: AppWidgetMeta) {
+    const view = useAppSelector(state => state.view)
+    const { settingPath, settingsMap } = useTableSettingMap(view.name, widget.name)
+    const dispatch = useAppDispatch()
+    const updateSetting = useTableSettingUpdate(widget)
+
+    return useCallback(() => {
+        const currentSetting = settingPath ? settingsMap?.[settingPath] : null
+        const id = settingPath ? settingsMap?.[settingPath]?.id : null
+
+        dispatch(actions.resetTableSettings({ view: view.name, widget: widget.name }))
+
+        if (currentSetting && id) {
+            firstValueFrom(CxBoxApiInstance.deletePersonalSetting(id)).catch(() => {
+                updateSetting(currentSetting, true)
+            })
+        }
+    }, [dispatch, settingPath, settingsMap, updateSetting, view.name, widget.name])
+}
+
+export function useTableSettingResultedFields(widget: AppWidgetMeta, blockedFields?: string[]) {
+    const view = useAppSelector(state => state.view)
+    const { setting } = useTableSettingMap(view.name, widget.name)
+    const additionalFields = widget?.options?.additional?.fields
+    const visibleFields = useTableSettingVisibleFields(widget, blockedFields)
+
+    const calculateFieldsOrder = useCallback(
+        (hiddenFields: string[]) => {
+            const newVisibleFields = visibleFields.filter(visibleField => !hiddenFields.includes(visibleField.key))
+
+            const fieldsDictionary = createMap(newVisibleFields, 'key')
+
+            return setting?.orderFields?.length
+                ? setting.orderFields.map(fieldKey => fieldsDictionary[fieldKey]).filter(field => !!field)
+                : newVisibleFields
+        },
+        [setting?.orderFields, visibleFields]
+    )
+    return useMemo(() => {
+        const currentAdditionalFields = calculateHiddenFields(additionalFields, setting)
+
+        return calculateFieldsOrder(currentAdditionalFields)
+    }, [additionalFields, setting, calculateFieldsOrder])
 }

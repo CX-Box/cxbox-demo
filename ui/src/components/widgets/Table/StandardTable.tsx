@@ -1,4 +1,4 @@
-import React, { MutableRefObject } from 'react'
+import React, { MutableRefObject, ReactNode } from 'react'
 import styles from '@components/widgets/Table/Table.less'
 import { Table as AntdTable } from 'antd'
 import cn from 'classnames'
@@ -19,8 +19,8 @@ interface StandardTableProps<T> extends Omit<TableProps<T>, 'scroll' | 'paginati
     hidePagination?: boolean
     disabledLimit?: boolean
     stickyWithHorizontalScroll?: boolean
-
     onColumnDragEnd?: (fromIndex: number, toIndex: number) => void
+    settingsRender?: ReactNode
 }
 
 const COLUMN_SELECTOR = 'th'
@@ -44,6 +44,7 @@ function StandardTable<T extends { id: unknown }>({
     disabledLimit,
     hidePagination,
     stickyWithHorizontalScroll = false,
+    settingsRender,
     ...rest
 }: StandardTableProps<T>) {
     const widget = useAppSelector(state => selectWidget(state, widgetName)) as AppWidgetTableMeta
@@ -56,25 +57,32 @@ function StandardTable<T extends { id: unknown }>({
     const tableElement = (
         <div className={cn(styles.tableContainer, { [styles.stickyWithHorizontalScroll]: stickyWithHorizontalScroll })} ref={wrapperRef}>
             <Header meta={widget} />
-            <AntdTable
-                className={cn(styles.table, { [styles.tableWithRowMenu]: !hideRowActions })}
-                columns={columns}
-                dataSource={dataSource}
-                rowKey={rowKey}
-                pagination={false}
-                onRow={onRow}
-                onHeaderRow={onHeaderRow}
-                rowClassName={record => (record.id === bc?.cursor ? 'ant-table-row-selected' : '')}
-                expandedRowKeys={expandedRowKeys}
-                expandIconColumnIndex={expandIconColumnIndex}
-                expandIconAsCell={false}
-                expandIcon={expandIcon}
-                expandedRowRender={expandedRowRender}
-                onExpand={onExpand}
-                indentSize={0}
-                scroll={stickyWithHorizontalScroll ? { y: true, x: 'calc(700px + 50%)' } : undefined}
-                {...rest}
-            />
+            <div className={styles.tableWrapper}>
+                {settingsRender ? (
+                    <div style={{ position: stickyWithHorizontalScroll ? 'sticky' : 'absolute' }} className={styles.settingsContainer}>
+                        <div className={styles.settingsButton}>{settingsRender}</div>
+                    </div>
+                ) : null}
+                <AntdTable
+                    className={cn(styles.table, { [styles.tableWithRowMenu]: !hideRowActions })}
+                    columns={columns}
+                    dataSource={dataSource}
+                    rowKey={rowKey}
+                    pagination={false}
+                    onRow={onRow}
+                    onHeaderRow={onHeaderRow}
+                    rowClassName={record => (record.id === bc?.cursor ? 'ant-table-row-selected' : '')}
+                    expandedRowKeys={expandedRowKeys}
+                    expandIconColumnIndex={expandIconColumnIndex}
+                    expandIconAsCell={false}
+                    expandIcon={expandIcon}
+                    expandedRowRender={expandedRowRender}
+                    onExpand={onExpand}
+                    indentSize={0}
+                    scroll={stickyWithHorizontalScroll ? { y: true, x: 'calc(700px + 50%)' } : undefined}
+                    {...rest}
+                />
+            </div>
             {!hideRowActions && <RowOperationsButton meta={widget as AppWidgetTableMeta} ref={operationsRef} parent={wrapperRef} />}
         </div>
     )

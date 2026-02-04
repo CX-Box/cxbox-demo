@@ -1,19 +1,19 @@
 import React from 'react'
-import AssocListPopup from '../AssocListPopup/AssocListPopup'
-import { AppWidgetTableMeta } from '@interfaces/widget'
-import { useAppSelector } from '@store'
-import Table from '@components/widgets/Table/Table'
-import { buildBcUrl } from '@utils/buildBcUrl'
-import { actions } from '@actions'
 import { shallowEqual, useDispatch } from 'react-redux'
+import { Spin } from 'antd'
 import Popup from '@components/Popup/Popup'
 import WidgetTitle from '@components/WidgetTitle/WidgetTitle'
+import Table from '@components/widgets/Table/Table'
+import AssocListPopup from '../AssocListPopup/AssocListPopup'
+import { useAppSelector } from '@store'
+import { buildBcUrl } from '@utils/buildBcUrl'
+import { actions } from '@actions'
+import { FIELDS } from '@constants'
 import { TableEventListeners } from 'antd/lib/table/interface'
 import { DataItem } from '@cxbox-ui/schema'
 import { PendingDataItem } from '@cxbox-ui/core'
+import { AppWidgetTableMeta } from '@interfaces/widget'
 import styles from './PickListPopup.module.css'
-import { Spin } from 'antd'
-import { FIELDS } from '@constants'
 
 interface PickListPopupProps {
     meta: AppWidgetTableMeta
@@ -77,7 +77,6 @@ function PickListPopup({ meta }: PickListPopupProps) {
     return (
         <Popup
             title={<WidgetTitle className={styles.title} level={1} widgetName={meta.name} text={meta.title} />}
-            size="large"
             showed
             onOkHandler={onClose}
             onCancelHandler={onClose}

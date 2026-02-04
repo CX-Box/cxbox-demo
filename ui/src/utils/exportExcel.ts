@@ -43,7 +43,8 @@ export const exportXlsx = (
                 row[col] = valueMapper(
                     item[key],
                     true,
-                    filteredFieldsMeta.find((field: TableWidgetField) => field.key === key)
+                    filteredFieldsMeta.find((field: TableWidgetField) => field.key === key),
+                    item
                 )
                 col++
             }

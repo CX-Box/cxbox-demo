@@ -284,6 +284,12 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 									.setAction(PostAction.showMessage(MessageType.INFO, "The email will be dispatched tomorrow."));
 						})
 				)
+				.action(act -> act
+						.scope(ActionScope.BC)
+						.withPreAction(PreAction.confirm(cf -> cf.text("Export to Excel?")))
+						.action("customExportToExcel", "Custom export to excel")
+						.invoker((bc, data) -> new ActionResultDTO<MeetingDTO>().setAction(PostAction.exportToExcel()))
+				)
 				.build();
 	}
 

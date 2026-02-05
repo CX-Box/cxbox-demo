@@ -1,9 +1,9 @@
 import React from 'react'
 import { Button, Radio } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { ToolbarSize } from '@components/widgets/CalendarList/interfaces'
-import { CalendarToolbarLayout } from '@components/widgets/CalendarList/CalendarToolbarLayout'
-import CalendarTitle from '@components/widgets/CalendarList/CalendarTitle'
+import { ToolbarSize } from '@components/widgets/CalendarList/constants'
+import { CalendarToolbarLayout } from '@components/widgets/CalendarList/components/toolbar/CalendarToolbarLayout'
+import CalendarTitle from '@components/widgets/CalendarList/components/toolbar/CalendarTitle'
 
 interface CalendarToolbarProps<T = string> {
     mode?: 'month' | 'year'

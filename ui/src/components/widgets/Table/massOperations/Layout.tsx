@@ -155,7 +155,7 @@ const Layout: React.FC<LayoutProps> = ({ widgetName, bcName, children }) => {
         )
     }, [currentMassOperation?.preInvoke])
 
-    const { clearAllFilters } = useFilterGroups(widget)
+    const { clearAllFilters } = useFilterGroups(widget?.bcName)
 
     const exportConfig = widget?.options?.export
     const { exportTable } = useExportTable({

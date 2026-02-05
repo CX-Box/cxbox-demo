@@ -39,8 +39,7 @@ import Chart from '../widgets/Chart/Chart'
 import DebugViewInfoLabel from '@components/DebugViewInfoLabel/DebugViewInfoLabel'
 import FilePreview from '@components/widgets/FilePreview/FilePreview'
 import FilePreviewCard from '@components/FilePreviewCard/FilePreviewCard'
-import CalendarList from '@components/widgets/CalendarList/CalendarList'
-import CalendarYearList from '@components/widgets/CalendarList/CalendarYearList'
+import { CalendarList, CalendarYearList } from '@components/widgets/CalendarList'
 
 export const customFields = {
     [FieldType.number]: Number,

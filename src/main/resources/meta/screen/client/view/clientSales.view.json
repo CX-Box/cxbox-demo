@@ -1,8 +1,8 @@
 {
-  "name": "clientview",
-  "title": "Contacts",
+  "name": "clientSales",
+  "title": "Sales",
   "template": "DashboardView",
-  "url": "/screen/client/view/clientview",
+  "url": "/screen/client/view/clientSales",
   "widgets": [
     {
       "widgetName": "secondLevelMenu",
@@ -35,13 +35,18 @@
       "gridWidth": 24
     },
     {
-      "widgetName" : "fourthLevelMenu",
-      "position": 39,
+      "widgetName": "fourthLevelMenu",
+      "position": 45,
       "gridWidth": 24
     },
     {
-      "widgetName": "contactViewList",
+      "widgetName": "saleViewRelation",
       "position": 50,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "saleViewList",
+      "position": 60,
       "gridWidth": 24
     },
     {

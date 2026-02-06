@@ -1,5 +1,6 @@
 package org.demo.entity;
 
+
 import jakarta.persistence.ManyToMany;
 import lombok.EqualsAndHashCode;
 import org.demo.entity.dictionary.ClientImportance;

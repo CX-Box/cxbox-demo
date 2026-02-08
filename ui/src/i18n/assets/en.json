@@ -142,6 +142,10 @@
         "Retry": "Retry",
         "Export failed": "Export failed",
         "Result": "Result",
-        "Export": "Export"
+        "Export": "Export",
+        "Alternative pagination type is already applied. Reload the page to return to default pagination": "Alternative pagination type is already applied. Reload the page to return to default pagination",
+        "Switch to nextAndPreviousSmart pagination (total count is not displayed, pagination is calculated based on _limit and the number of records returned from /data)": "Switch to nextAndPreviousSmart pagination (total count is not displayed, pagination is calculated based on _limit and the number of records returned from /data)",
+        "Switch to nextAndPreviousWithHasNext pagination (total count is not displayed, pagination is based on the hasNext flag)": "Switch to nextAndPreviousWithHasNext pagination (total count is not displayed, pagination is based on the hasNext flag)",
+        "Switch to nextAndPreviousWithCount pagination (uses /count endpoint to calculate total number of records)": "Switch to nextAndPreviousWithCount pagination (uses /count endpoint to calculate total number of records)"
     }
 }

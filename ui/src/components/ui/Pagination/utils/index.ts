@@ -11,8 +11,8 @@ export const isAvailablePaginationType = (paginationType: PaginationMode | undef
     return typeof paginationType === 'string' && AVAILABLE_PAGINATION_TYPES.includes(paginationType)
 }
 
-export const getWidgetPaginationType = (meta: AppWidgetMeta) => {
-    const optionsPaginationType = meta.options?.pagination?.type
+export const getWidgetPaginationType = (meta: AppWidgetMeta, alternativeType: PaginationMode) => {
+    const optionsPaginationType = alternativeType || meta.options?.pagination?.type
     let widgetPaginationType: PaginationMode
 
     if (isAvailablePaginationType(optionsPaginationType)) {
@@ -26,16 +26,28 @@ export const getWidgetPaginationType = (meta: AppWidgetMeta) => {
     return widgetPaginationType
 }
 
-export const getBcPaginationTypes = (bcName: string | undefined, widgets: AppWidgetMeta[] | undefined) => {
+export const getBcPaginationTypes = (
+    bcName: string | undefined,
+    widgets: AppWidgetMeta[] | undefined,
+    alternativePagination: { [widgetName: string]: PaginationMode }
+) => {
     const usedPaginationTypes = new Set<PaginationMode>()
 
-    widgets?.forEach(widget => widget.bcName === bcName && usedPaginationTypes.add(getWidgetPaginationType(widget)))
+    widgets?.forEach(
+        widget => widget.bcName === bcName && usedPaginationTypes.add(getWidgetPaginationType(widget, alternativePagination[widget.name]))
+    )
 
     return usedPaginationTypes
 }
 
-export const findWidgetHasCount = (bcName: string | undefined, widgets: AppWidgetMeta[] | undefined) => {
+export const findWidgetHasCount = (
+    bcName: string | undefined,
+    widgets: AppWidgetMeta[] | undefined,
+    alternativePagination: { [widgetName: string]: PaginationMode }
+) => {
     return widgets?.find(
-        widget => widget.bcName === bcName && getWidgetPaginationType(widget) === SECONDARY_DEFAULT_PAGINATION_TYPE_WITH_COUNT
+        widget =>
+            widget.bcName === bcName &&
+            getWidgetPaginationType(widget, alternativePagination[widget.name]) === SECONDARY_DEFAULT_PAGINATION_TYPE_WITH_COUNT
     )
 }

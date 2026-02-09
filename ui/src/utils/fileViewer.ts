@@ -29,7 +29,7 @@ export const isPdfExtension = (extension: string) => {
 }
 
 export const isAudioExtension = (extension: string) => {
-    return /(mp3|wav|m4a)$/i.test(extension)
+    return /(aac|flac|mp3|wav|m4a|ogg)$/i.test(extension)
 }
 
 export type FileViewerType = 'image' | 'pdf' | 'audio' | 'other' // 'excel' | 'word'

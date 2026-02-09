@@ -49,7 +49,6 @@ const Chart: React.FC<ChartProps> = ({ meta }) => {
         return undefined
     }, [bcCountForShowing, bcPageLimit, isIncorrectData, isIncorrectLimit, t])
 
-
     useEffect(() => {
         if (isIncorrectLimit || isIncorrectData) {
             setIsTableView(true)
@@ -59,7 +58,6 @@ const Chart: React.FC<ChartProps> = ({ meta }) => {
             }
         }
     }, [isIncorrectData, isIncorrectLimit, meta.name, meta.type])
-
 
     const selectedKeys = useMemo(() => {
         if (isTableView) {
@@ -76,11 +74,7 @@ const Chart: React.FC<ChartProps> = ({ meta }) => {
                     <Menu selectedKeys={selectedKeys}>
                         <Menu.ItemGroup key={'mode'} title={t('Mode')}>
                             <Menu.Item key={'chart'} onClick={() => setIsTableView(false)} disabled={isIncorrectLimit || isIncorrectData}>
-                                <Tooltip
-                                    title={
-                                        tooltipErrorTitle
-                                    }
-                                >
+                                <Tooltip title={tooltipErrorTitle}>
                                     <Icon type={getChartIconByWidgetType(meta.type)} />
                                     {t('Chart')}
                                 </Tooltip>
@@ -94,7 +88,7 @@ const Chart: React.FC<ChartProps> = ({ meta }) => {
                 }
             />
         ),
-        [bcCountForShowing, bcPageLimit, isIncorrectLimit, isTableView, meta.type, selectedKeys, t]
+        [isIncorrectData, isIncorrectLimit, isTableView, meta.type, selectedKeys, t, tooltipErrorTitle]
     )
 
     if (!data?.length) {

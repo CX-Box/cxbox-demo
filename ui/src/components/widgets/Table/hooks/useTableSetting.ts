@@ -149,7 +149,7 @@ export function useTableSetting(
 
     const updateSetting = useTableSettingUpdate(widget)
 
-    const resultedFields = useTableSettingResultedFields(widget)
+    const { resultedFields, currentAdditionalFields } = useTableSettingResultedFields(widget)
 
     // Changes the order of fields contained in the meta
     const changeFieldOrder = useCallback(
@@ -262,7 +262,7 @@ export function useTableSetting(
     return {
         allFields: visibleFields,
         resultedFields,
-        currentAdditionalFields: calculateHiddenFields(additionalFields, setting),
+        currentAdditionalFields,
         changeOrder: changeFieldOrder,
         changeColumnsVisibility
     }
@@ -294,21 +294,17 @@ export function useTableSettingResultedFields(widget: AppWidgetMeta, blockedFiel
     const additionalFields = widget?.options?.additional?.fields
     const visibleFields = useTableSettingVisibleFields(widget, blockedFields)
 
-    const calculateFieldsOrder = useCallback(
-        (hiddenFields: string[]) => {
-            const newVisibleFields = visibleFields.filter(visibleField => !hiddenFields.includes(visibleField.key))
-
-            const fieldsDictionary = createMap(newVisibleFields, 'key')
-
-            return setting?.orderFields?.length
-                ? setting.orderFields.map(fieldKey => fieldsDictionary[fieldKey]).filter(field => !!field)
-                : newVisibleFields
-        },
-        [setting?.orderFields, visibleFields]
+    const currentAdditionalFields = useMemo(
+        () => calculateHiddenFields(additionalFields || [], setting?.addedToAdditionalFields, setting?.removedFromAdditionalFields),
+        [additionalFields, setting?.addedToAdditionalFields, setting?.removedFromAdditionalFields]
     )
-    return useMemo(() => {
-        const currentAdditionalFields = calculateHiddenFields(additionalFields, setting)
 
-        return calculateFieldsOrder(currentAdditionalFields)
-    }, [additionalFields, setting, calculateFieldsOrder])
+    const resultedFields = useMemo(() => {
+        return calculateFieldsOrder(currentAdditionalFields, visibleFields, setting?.orderFields)
+    }, [currentAdditionalFields, visibleFields, setting?.orderFields])
+
+    return {
+        currentAdditionalFields,
+        resultedFields
+    }
 }

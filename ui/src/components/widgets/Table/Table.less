@@ -208,7 +208,7 @@
         border: 0;
         padding: 2px;
     }
-    & i:global(.anticon) {
+    & i:global(.anticon-setting) {
         line-height: 0;
         font-size: 21px !important;
     }
@@ -324,8 +324,10 @@
 
 .limitWarningIcon {
     position: absolute;
-    font-size: 10px;
-    bottom: -2px;
-    left: -2px;
+    top: -2px;
+    right: -2px;
     color: #f5222d;
+    &:global(.anticon-warning) {
+        font-size: 10px;
+    }
 }

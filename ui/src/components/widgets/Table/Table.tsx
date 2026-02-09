@@ -160,7 +160,7 @@ function Table<T extends CustomDataItem>({
     const showExport = exportConfig?.enabled
     const showSettings = showSaveFiltersButton || showColumnSettings || showExport || enabledGrouping || isGroupingHierarchy
     const resetSetting = useTableSettingReset(processedMeta)
-    const resultedFields = useTableSettingResultedFields(processedMeta, sortedGroupKeys)
+    const { resultedFields } = useTableSettingResultedFields(processedMeta, sortedGroupKeys)
     const { exportTable } = useExportTable({
         bcName: bcName,
         fields: resultedFields,

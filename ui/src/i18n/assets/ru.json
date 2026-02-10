@@ -144,6 +144,10 @@
         "Retry": "Повтор",
         "Export failed": "Экспортировать неуспешные",
         "Result": "Результат",
-        "Export": " Экспортировать"
+        "Export": " Экспортировать",
+        "Alternative pagination type is already applied. Reload the page to return to default pagination": "Альтернативный режим пагинации страниц уже применён. Перезагрузите страницу, чтобы вернуться к режиму пагинации страниц по умолчанию.",
+        "Switch to nextAndPreviousSmart pagination (total count is not displayed, pagination is calculated based on _limit and the number of records returned from /data)": "Переключиться на режим пагинации nextAndPreviousSmart (общее количество не отображается, пагинация рассчитывается на основе _limit и количества записей, возвращаемых из /data)",
+        "Switch to nextAndPreviousWithHasNext pagination (total count is not displayed, pagination is based on the hasNext flag)": "Переключиться на режим пагинации nextAndPreviousWithHasNext (общее количество не отображается, разбиение на страницы основано на флаге hasNext)",
+        "Switch to nextAndPreviousWithCount pagination (uses /count endpoint to calculate total number of records)": "Переключиться на режим пагинации nextAndPreviousWithCount (использует эндпоинт /count для расчета общего количества записей)"
     }
 }

@@ -6,7 +6,8 @@ export const useCheckLimit = (bcName: string) => {
     const bc = useAppSelector(selectBc(bcName))
     const bcCount = useAppSelector(state => state.view.bcRecordsCount[bcName]?.count ?? state.data[bcName]?.length)
     const widgets = useAppSelector(state => state.view.widgets)
-    const paginationTypes = getBcPaginationTypes(bcName, widgets)
+    const alternativePagination = useAppSelector(state => state.screen.alternativePagination)
+    const paginationTypes = getBcPaginationTypes(bcName, widgets, alternativePagination)
 
     let isIncorrectLimit: boolean
     let bcCountForShowing: string | number

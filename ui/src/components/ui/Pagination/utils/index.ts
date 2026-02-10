@@ -26,16 +26,28 @@ export const getWidgetPaginationType = (meta: AppWidgetMeta) => {
     return widgetPaginationType
 }
 
-export const getBcPaginationTypes = (bcName: string | undefined, widgets: AppWidgetMeta[] | undefined) => {
+export const getBcPaginationTypes = (
+    bcName: string | undefined,
+    widgets: AppWidgetMeta[] | undefined,
+    alternativePagination: { [widgetName: string]: PaginationMode }
+) => {
     const usedPaginationTypes = new Set<PaginationMode>()
 
-    widgets?.forEach(widget => widget.bcName === bcName && usedPaginationTypes.add(getWidgetPaginationType(widget)))
+    widgets?.forEach(
+        widget => widget.bcName === bcName && usedPaginationTypes.add(alternativePagination[widget.name] || getWidgetPaginationType(widget))
+    )
 
     return usedPaginationTypes
 }
 
-export const findWidgetHasCount = (bcName: string | undefined, widgets: AppWidgetMeta[] | undefined) => {
+export const findWidgetHasCount = (
+    bcName: string | undefined,
+    widgets: AppWidgetMeta[] | undefined,
+    alternativePagination: { [widgetName: string]: PaginationMode }
+) => {
     return widgets?.find(
-        widget => widget.bcName === bcName && getWidgetPaginationType(widget) === SECONDARY_DEFAULT_PAGINATION_TYPE_WITH_COUNT
+        widget =>
+            widget.bcName === bcName &&
+            (alternativePagination[widget.name] || getWidgetPaginationType(widget)) === SECONDARY_DEFAULT_PAGINATION_TYPE_WITH_COUNT
     )
 }

@@ -1,17 +1,20 @@
 import React from 'react'
 import { Pagination as AntPagination } from 'antd'
-import styles from './DefaultPagination.less'
-import { interfaces } from '@cxbox-ui/core'
 import Limit from '@components/ui/Pagination/components/Limit'
-import { useWidgetPaginationLimit } from '@components/ui/Pagination/hooks/useWidgetPaginationLimit'
+import AlternativePaginationButton from './components/AlternativePaginationButton/AlternativePaginationButton'
+import { useWidgetPaginationLimit } from './hooks/useWidgetPaginationLimit'
 import { usePagination } from '@hooks/usePagination'
+import { PaginationMode } from '@constants/pagination'
+import { AppWidgetMeta } from '@interfaces/widget'
+import styles from './DefaultPagination.less'
 
 export interface DefaultPaginationProps {
-    meta: interfaces.WidgetMeta
+    meta: AppWidgetMeta
+    alternativeType?: PaginationMode
     disabledLimit?: boolean
 }
 
-function DefaultPagination({ meta, disabledLimit }: DefaultPaginationProps) {
+function DefaultPagination({ meta, alternativeType, disabledLimit }: DefaultPaginationProps) {
     const { changePage, page: bcPage, limit: bcLimit, total } = usePagination(meta.name)
 
     const limit = meta.limit || bcLimit
@@ -33,16 +36,21 @@ function DefaultPagination({ meta, disabledLimit }: DefaultPaginationProps) {
                 total={total}
                 onChange={changePage}
             />
+
             {!hideLimitOptions && (
-                <Limit
-                    className={styles.limits}
-                    classNameContainer={styles.limitContainer}
-                    disabled={disabledLimit}
-                    value={pageLimit}
-                    onChange={changePageLimit}
-                    total={total}
-                    options={options}
-                />
+                <>
+                    <Limit
+                        className={styles.limits}
+                        classNameContainer={styles.limitContainer}
+                        disabled={disabledLimit}
+                        value={pageLimit}
+                        onChange={changePageLimit}
+                        total={total}
+                        options={options}
+                    />
+
+                    {alternativeType && <AlternativePaginationButton widgetName={meta.name} alternativeType={alternativeType} />}
+                </>
             )}
         </div>
     )

@@ -62,7 +62,10 @@
 .notification {
     i {
         font-size: 24px;
-        color: #000;
+    }
+
+    &:global(.ant-btn):not(:hover):not([disabled]) {
+      color: #000;
     }
 
     &:global(.ant-btn > .anticon + span),

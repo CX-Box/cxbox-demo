@@ -47,7 +47,8 @@ export const removeRecordOperationWidgets: Array<WidgetTypes | string> = [
     CustomWidgetTypes.GroupingHierarchy,
     WidgetTypes.PickListPopup,
     WidgetTypes.AssocListPopup,
-    CustomWidgetTypes.CalendarList
+    CustomWidgetTypes.CalendarList,
+    CustomWidgetTypes.CalendarYearList
 ]
 
 export interface StepsWidgetMeta extends WidgetMeta {

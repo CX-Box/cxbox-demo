@@ -13,7 +13,7 @@ export interface HeaderProps {
 function Header({ meta }: HeaderProps) {
     const { t } = useTranslation()
     const { filterGroups, appliedFilterGroup, appliedFiltersCount, showFilterGroups, applyFilterGroup, showClearButton, clearAllFilters } =
-        useFilterGroups(meta)
+        useFilterGroups(meta?.bcName)
     const { showAllRecords, showAllRecordsButton } = useTableShowAllRecords(meta.bcName)
 
     return (

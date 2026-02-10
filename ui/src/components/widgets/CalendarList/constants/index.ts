@@ -1,29 +1,26 @@
-import { createKeyMirror } from '@utils/createKeyMirror'
 import { CalendarOption } from '@interfaces/widget'
 import i18n from 'i18next'
+import { UseScrollToCurrentDayOptions } from '@components/widgets/CalendarList/hooks/useScrollToCurrentDay'
+import { Lookup, LookupValueOf } from '@utils/Lookup'
 
 export type ToolbarSize = 'small' | 'large' | 'default'
 
-export const CALENDAR_GRID_VIEWS = ['dayGridMonth', 'dayGridYear', 'timeGridDay', 'timeGridWeek', 'multiMonthYear'] as const
+export const CALENDAR_GRID = Lookup.create(['dayGridMonth', 'dayGridYear', 'timeGridDay', 'timeGridWeek', 'multiMonthYear'])
 
-export const CALENDAR_GRID = createKeyMirror(CALENDAR_GRID_VIEWS)
+export type CalendarGridViews = LookupValueOf<typeof CALENDAR_GRID>
 
-export type CalendarGridViews = ValueOf<typeof CALENDAR_GRID>
+export const CALENDAR_CUSTOM_GRID = Lookup.create(['multiMonthYearStack'])
 
-export const CALENDAR_GRID_CUSTOM_VIEWS = ['multiMonthYearStack'] as const
-
-export const CALENDAR_CUSTOM_GRID = createKeyMirror(CALENDAR_GRID_CUSTOM_VIEWS)
-
-export type CalendarCustomGridViews = ValueOf<typeof CALENDAR_CUSTOM_GRID>
+export type CalendarCustomGridViews = LookupValueOf<typeof CALENDAR_CUSTOM_GRID>
 
 const EVENT_BASE_REFINERS = ['extendedProps', 'start', 'end', 'date', 'allDay', 'id', 'groupId', 'title', 'url', 'interactive'] as const
 const EVENT_CUSTOM_REFINERS = ['description', 'color'] as const
 export const EVENT_ALL_REFINERS = [...EVENT_BASE_REFINERS, ...EVENT_CUSTOM_REFINERS] as const
 
-export type EventAllRefinersKeys = (typeof EVENT_ALL_REFINERS)[number]
+export type EventAllRefinersKeys = LookupValueOf<typeof EVENT_ALL_REFINERS>
 export type EventAllRefiners = Partial<Record<EventAllRefinersKeys, any>>
 
-export const EVENT_ALL_REFINERS_DICTIONARY = createKeyMirror(EVENT_ALL_REFINERS)
+export const EVENT_ALL_REFINERS_DICTIONARY = Lookup.create(EVENT_ALL_REFINERS)
 
 export const DEFAULT_EVENT_FIELD_MAP = {
     [EVENT_ALL_REFINERS_DICTIONARY.title]: 'value'
@@ -52,6 +49,15 @@ export const getMonthViewList = () => [
         title: i18n.t('Day')
     }
 ]
+
+export const SCROLL_TO_CURRENT_DAY_CONFIG: {
+    [key in CalendarGridViews | CalendarCustomGridViews]?: UseScrollToCurrentDayOptions
+} = {
+    [CALENDAR_GRID.multiMonthYear]: {
+        todaySelector: '.fc-multimonth-month:has(.fc-day-today)',
+        scrollContainerSelector: '.fc-multiMonthYear-view.fc-view'
+    }
+}
 
 export const getYearViewList = () => [
     // {

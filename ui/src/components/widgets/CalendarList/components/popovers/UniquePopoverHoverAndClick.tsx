@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { UniquePopover, UniquePopoverProps } from '@components/widgets/CalendarList/UniquePopover'
+import { UniquePopover, UniquePopoverProps } from '@components/widgets/CalendarList/components/popovers/UniquePopover'
 
 export interface UniquePopoverHoverAndClickProps
     extends Omit<UniquePopoverProps, 'trigger' | 'content' | 'uid' | 'overlayClassName' | 'onVisibleChange'> {

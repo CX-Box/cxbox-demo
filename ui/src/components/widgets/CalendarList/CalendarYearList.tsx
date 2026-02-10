@@ -2,13 +2,13 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { AppWidgetMeta, AppWidgetTableMeta } from '@interfaces/widget'
 import Operations from '@components/Operations/Operations'
 import { useAppSelector } from '@store'
-import Calendar, { CalendarYearApiHandle } from '@components/widgets/CalendarList/CalendarYear'
-import ListToggleButton from '@components/widgets/CalendarList/ListToggleButton'
+import CalendarYear, { CalendarYearApiHandle } from '@components/widgets/CalendarList/components/views/CalendarYear'
+import ListToggleButton from '@components/widgets/CalendarList/components/others/ListToggleButton'
 import { useCheckLimit } from '@hooks/useCheckLimit'
 import { useTranslation } from 'react-i18next'
 import Table from '@components/widgets/Table/Table'
-import Filters from '@components/widgets/CalendarList/Filters'
-import { mapRefinerKeyToFieldKey } from '@components/widgets/CalendarList/interfaces'
+import Filters from '@components/widgets/CalendarList/components/filters/Filters'
+import { mapRefinerKeyToFieldKey } from '@components/widgets/CalendarList/constants'
 import { useWidgetOperations } from '@hooks/useWidgetOperations'
 import { selectBcRecordForm } from '@selectors/selectors'
 import { useCalendarYearDataCheck } from '@components/widgets/CalendarList/hooks/useCalendarYearDataCheck'
@@ -92,7 +92,7 @@ const CalendarYearList: React.FC<CalendarYearListProps> = ({ meta: widget }) => 
                 <>
                     {operations?.length ? <Operations widgetMeta={widget} bcName={widget.bcName} operations={operations} /> : null}
                     <Filters widgetName={widget.name} ignoreFieldNames={ignoreFieldNames} />
-                    <Calendar ref={calendarRef} meta={widget} toggleButton={listToggleButton} />
+                    <CalendarYear ref={calendarRef} meta={widget} toggleButton={listToggleButton} />
                 </>
             )}
         </div>

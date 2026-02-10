@@ -1,63 +1,68 @@
-import React, { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState, useImperativeHandle } from 'react'
-import { AppWidgetMeta } from '@interfaces/widget'
+import React, { ChangeEvent, useCallback, useEffect, useRef, useState, useImperativeHandle, useMemo } from 'react'
+import { AppWidgetMeta, WidgetField } from '@interfaces/widget'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
+import multiMonthPlugin from '@fullcalendar/multimonth'
 import listPlugin from '@fullcalendar/list'
 import FullCalendar from '@fullcalendar/react'
-import styles from './CalendarMonth.less'
+import styles from './CalendarYear.less'
 import { useAppSelector } from '@store'
 import { selectBc, selectBcData, selectBcFilters, selectBcMetaInProgress } from '@selectors/selectors'
-import CalendarToolbar from '@components/widgets/CalendarList/CalendarToolbar'
-import CalendarEvent from '@components/widgets/CalendarList/CalendarEvent'
-import { CustomContentGenerator, DateInput, EventContentArg, MoreLinkContentArg } from '@fullcalendar/core'
-import InnerForm from '@components/widgets/CalendarList/InnerForm'
-import { useInternalWidget } from '@hooks/useInternalWidgetSelector'
-import { ConfigProvider, Spin } from 'antd'
-import { useDispatch } from 'react-redux'
-import { actions, resetRecordForm, setRecordForm } from '@actions'
-import DebugWidgetWrapper from '@components/DebugWidgetWrapper/DebugWidgetWrapper'
+import CalendarToolbar from '@components/widgets/CalendarList/components/toolbar/CalendarToolbar'
+import CalendarEvent from '@components/widgets/CalendarList/components/events/CalendarEvent'
+import { CustomContentGenerator, DateInput, EventContentArg } from '@fullcalendar/core'
 import {
+    CALENDAR_CUSTOM_GRID,
     CALENDAR_GRID,
+    CalendarCustomGridViews,
     CalendarGridViews,
-    getMonthViewList,
+    getYearViewList,
     mapRefinerKeyToFieldKey,
+    normalizeView,
+    SCROLL_TO_CURRENT_DAY_CONFIG,
     ToolbarSize
-} from '@components/widgets/CalendarList/interfaces'
+} from '@components/widgets/CalendarList/constants'
 import { useFilterControls } from '@hooks/useFilterControls'
 import { isSameFilter } from '@utils/calendar'
 import {
-    createMonthEndFilter,
-    createMonthStartFilter,
-    extractIntersectionDateRangeFromFilters
+    createYearEndFilter,
+    createYearStartFilter,
+    extractIntersectionDateRangeFromFilters,
+    getEventTimeGranularity,
+    isCalendarYearGridRangeValid
 } from '@components/widgets/CalendarList/utils'
-import { dayChanged, getAverageDate, isCalendarMonthGridRangeValid, monthChanged, toYMD } from '@utils/date'
+import { getAverageDate, yearChanged } from '@utils/date'
 import { BcFilter, DataItem } from '@cxbox-ui/core'
 import { useFieldDrilldown } from '@hooks/useFieldDrilldown'
-import RowOperationsButton from '@components/widgets/CalendarList/RowOperations/RowOperationsButton'
-import { MoreLink } from './MoreLink'
 import { useEventDataTransform } from '@components/widgets/CalendarList/hooks'
 import { useCleanOldRangeFilters } from '@hooks/useCleanOldRangeFilters'
 import { isDefined } from '@utils/isDefined'
-import Calendar from '@components/widgets/CalendarList/Calendar'
-import UniquePopoverHoverAndClick, { UniquePopoverHoverAndClickProps } from '@components/widgets/CalendarList/UniquePopoverHoverAndClick'
+import Calendar from '@components/widgets/CalendarList/components/views/Calendar'
+import { actions, resetRecordForm, setRecordForm } from '@actions'
+import { ConfigProvider, Spin } from 'antd'
+import DebugWidgetWrapper from '@components/DebugWidgetWrapper/DebugWidgetWrapper'
+import InnerForm from '@components/widgets/CalendarList/components/others/InnerForm'
+import RowOperationsButton from '@components/widgets/CalendarList/components/others/RowOperations/RowOperationsButton'
+import { useInternalWidget } from '@hooks/useInternalWidgetSelector'
+import { useDispatch } from 'react-redux'
+import UniquePopoverHoverAndClick, {
+    UniquePopoverHoverAndClickProps
+} from '@components/widgets/CalendarList/components/popovers/UniquePopoverHoverAndClick'
+import { useCalendarMultimonthYearHeight } from '@components/widgets/CalendarList/hooks/useCalendarMultimonthYearHeight'
+import { useViewHeight } from '@components/widgets/CalendarList/hooks/useViewHeight'
+import { useScrollToCurrentDay } from '@components/widgets/CalendarList/hooks/useScrollToCurrentDay'
 
-interface CalendarMonthProps {
+interface CalendarYearProps {
     meta: AppWidgetMeta
     toggleButton?: React.ReactNode
 }
 
-export type CalendarMonthApiHandle = {
+export type CalendarYearApiHandle = {
     navigateToDateByFilter: () => void
 }
 
 const TOOLBAR_GROUP_ITEM_SIZE: ToolbarSize = 'default'
-
-const CALENDAR_GRID_VIEW_SETTINGS: Partial<Record<CalendarGridViews, { dayMaxEvents?: number }>> = {
-    [CALENDAR_GRID.dayGridMonth]: {
-        dayMaxEvents: 5
-    }
-}
 
 const EVENT_TIME_FORMAT = {
     hour: '2-digit',
@@ -65,7 +70,7 @@ const EVENT_TIME_FORMAT = {
     hour12: false
 } as React.ComponentProps<typeof FullCalendar>['eventTimeFormat']
 
-const CalendarMonth = React.forwardRef<CalendarMonthApiHandle, CalendarMonthProps>(({ meta, toggleButton }, ref) => {
+const CalendarYear = React.forwardRef<CalendarYearApiHandle, CalendarYearProps>(({ meta, toggleButton }, ref) => {
     const calendarRef = useRef<FullCalendar>(null)
     const wrapperRef = useRef<HTMLDivElement>(null)
     const bcData = useAppSelector(selectBcData(meta.bcName))
@@ -73,14 +78,15 @@ const CalendarMonth = React.forwardRef<CalendarMonthApiHandle, CalendarMonthProp
 
     const [title, setTitle] = useState('')
     const [currentDate, setCurrentDate] = useState(new Date())
-    const [view, setView] = useState<CalendarGridViews>(CALENDAR_GRID.dayGridMonth)
-    const [activeDate, setActiveDate] = useState<Date | null>(null)
+    const [view, setView] = useState<CalendarGridViews | CalendarCustomGridViews>(CALENDAR_GRID.multiMonthYear)
     const eventDataTransform = useEventDataTransform(meta)
-    const isMonthView = view === CALENDAR_GRID.dayGridMonth
 
     const filters = useAppSelector(selectBcFilters(meta.bcName))
     const { addFilter, forceUpdate } = useFilterControls(meta.bcName)
     const cleanOldRangeFilters = useCleanOldRangeFilters(meta.bcName)
+    const multimonthYearHeight = useCalendarMultimonthYearHeight(wrapperRef, CALENDAR_GRID.multiMonthYear !== view)
+    const standardHeight = useViewHeight(CALENDAR_GRID.multiMonthYear === view)
+    const height = multimonthYearHeight ?? (typeof standardHeight === 'number' ? standardHeight - 30 : undefined)
 
     const hasNewFilters = useCallback(
         (newFilters: BcFilter[]) => {
@@ -93,8 +99,8 @@ const CalendarMonth = React.forwardRef<CalendarMonthApiHandle, CalendarMonthProp
         (date: Date) => {
             const refinerKeyToFieldKeyMapper = mapRefinerKeyToFieldKey(meta?.options?.calendar)
             const [startFilter, endFilter] = [
-                createMonthStartFilter(refinerKeyToFieldKeyMapper.start, date),
-                createMonthEndFilter(refinerKeyToFieldKeyMapper.end, date)
+                createYearStartFilter(refinerKeyToFieldKeyMapper.start, date),
+                createYearEndFilter(refinerKeyToFieldKeyMapper.end, date)
             ]
 
             if (hasNewFilters([startFilter, endFilter])) {
@@ -122,11 +128,19 @@ const CalendarMonth = React.forwardRef<CalendarMonthApiHandle, CalendarMonthProp
         const [endValue, startValue] = filters ? extractIntersectionDateRangeFromFilters(filters, refinerKeys) : [undefined, undefined]
 
         if (isDefined(startValue) && isDefined(endValue)) {
-            const validation = isCalendarMonthGridRangeValid(startValue, endValue)
+            const validation = isCalendarYearGridRangeValid(
+                startValue,
+                endValue,
+                getEventTimeGranularity(
+                    (meta?.fields as WidgetField[])
+                        .filter(field => [refinerKeys.start, refinerKeys.end].includes(field.key))
+                        .map(field => field.type)
+                )
+            )
 
             if (validation.ok) {
                 const newAvgDate = getAverageDate(startValue, endValue).toDate()
-                if (monthChanged(currentDate, newAvgDate)) {
+                if (yearChanged(currentDate, newAvgDate)) {
                     api.gotoDate(newAvgDate)
                 }
             } else {
@@ -135,7 +149,7 @@ const CalendarMonth = React.forwardRef<CalendarMonthApiHandle, CalendarMonthProp
         } else {
             changeDateFilter(currentDate)
         }
-    }, [changeDateFilter, filters, meta?.options?.calendar])
+    }, [changeDateFilter, filters, meta.fields, meta?.options?.calendar])
 
     const changeDate = useCallback(
         (date: Date) => {
@@ -149,14 +163,14 @@ const CalendarMonth = React.forwardRef<CalendarMonthApiHandle, CalendarMonthProp
         [changeDateFilter]
     )
 
-    const changeMonth = useCallback(
+    const changeYear = useCallback(
         (newDate: Date) => {
             const api = calendarRef.current?.getApi()
 
             if (api) {
                 const currentDate = api.getDate()
 
-                if (monthChanged(currentDate, newDate)) {
+                if (yearChanged(currentDate, newDate)) {
                     api.gotoDate(newDate)
                     changeDateFilter(newDate)
                 }
@@ -165,54 +179,14 @@ const CalendarMonth = React.forwardRef<CalendarMonthApiHandle, CalendarMonthProp
         [changeDateFilter]
     )
 
-    const changeDay = useCallback(
-        (newDate: Date) => {
-            const api = calendarRef.current?.getApi()
-
-            if (api) {
-                const currentDate = api.getDate()
-
-                if (dayChanged(currentDate, newDate)) {
-                    api.gotoDate(newDate)
-
-                    if (monthChanged(currentDate, newDate)) {
-                        changeDateFilter(newDate)
-                    }
-                }
-            }
-        },
-        [changeDateFilter]
-    )
-
-    const changeActiveDate = useCallback((newDate: Date, options: { toggle: boolean } = { toggle: false }) => {
-        if (options.toggle) {
-            setActiveDate(prevActiveDate => {
-                return prevActiveDate?.toDateString() === newDate?.toDateString() ? null : newDate
-            })
-        } else {
-            setActiveDate(newDate)
-        }
-    }, [])
-
     const handleDateClick = useCallback(
         (info: { date: Date }) => {
-            changeMonth(info.date)
-            changeActiveDate(info.date, { toggle: true })
+            changeYear(info.date)
         },
-        [changeActiveDate, changeMonth]
+        [changeYear]
     )
 
-    // Setting the class name of the active day
-    const dayCellClassNames = useCallback(
-        (arg: { date: Date; view: any }) => {
-            if (!activeDate) {
-                return []
-            }
-
-            return toYMD(arg.date) === toYMD(activeDate) ? ['fc-day-active'] : []
-        },
-        [activeDate]
-    )
+    const [multiMonthMaxColumns, setMultiMonthMaxColumns] = useState<number | undefined>()
 
     const handleDateSet = useCallback(() => {
         if (calendarRef.current) {
@@ -227,21 +201,29 @@ const CalendarMonth = React.forwardRef<CalendarMonthApiHandle, CalendarMonthProp
         handleDateSet()
     }, [handleDateSet])
 
-    const changeView = useCallback((view: CalendarGridViews, date?: DateInput | null) => {
+    const changeView = useCallback((view: CalendarGridViews | CalendarCustomGridViews, date?: DateInput | null) => {
         const api = calendarRef.current?.getApi()
 
         if (api) {
             const dateToGo = date ?? api.getDate()
-            api.changeView(view, dateToGo)
+            api.changeView(normalizeView(view), dateToGo)
             setView(view)
+
+            if (view === CALENDAR_CUSTOM_GRID.multiMonthYearStack) {
+                setMultiMonthMaxColumns(1)
+            } else {
+                setMultiMonthMaxColumns(undefined)
+            }
         }
     }, [])
 
     const handleViewChange = useCallback(
         (e: ChangeEvent<HTMLInputElement>) => {
-            changeView(e.target.value as CalendarGridViews, activeDate)
+            let newView = e.target.value as CalendarGridViews | CalendarCustomGridViews
+
+            changeView(newView)
         },
-        [activeDate, changeView]
+        [changeView]
     )
 
     const handlePrevButton = useCallback(() => {
@@ -262,21 +244,8 @@ const CalendarMonth = React.forwardRef<CalendarMonthApiHandle, CalendarMonthProp
 
     const handleTodayButton = useCallback(() => {
         const today = new Date()
-        changeDay(today)
-        changeActiveDate(today, { toggle: false })
-    }, [changeActiveDate, changeDay])
-
-    const createNavLinkHandler = useCallback(
-        (view: CalendarGridViews) => (date: Date) => {
-            changeMonth(date)
-            changeActiveDate(date, { toggle: false })
-            changeView(view, date)
-        },
-        [changeActiveDate, changeView, changeMonth]
-    )
-
-    const handleNavLinkDayClick = useMemo(() => createNavLinkHandler(CALENDAR_GRID.timeGridDay), [createNavLinkHandler])
-    const handleNavLinkWeekClick = useMemo(() => createNavLinkHandler(CALENDAR_GRID.timeGridWeek), [createNavLinkHandler])
+        changeYear(today)
+    }, [changeYear])
 
     const { internalWidget, internalWidgetOperations, internalWidgetActiveCursor, internalWidgetStyle } = useInternalWidget(meta)
     const rowMetaInProgress = useAppSelector(selectBcMetaInProgress(internalWidget?.bcName))
@@ -286,10 +255,6 @@ const CalendarMonth = React.forwardRef<CalendarMonthApiHandle, CalendarMonthProp
         meta,
         mapRefinerKeyToFieldKey(meta.options?.calendar).title
     )
-
-    const renderMoreLinkContent: CustomContentGenerator<MoreLinkContentArg> = useCallback(arg => {
-        return <MoreLink {...arg} />
-    }, [])
 
     const [activePopoverUid, setActivePopoverUid] = useState<string | null>(null)
 
@@ -399,12 +364,15 @@ const CalendarMonth = React.forwardRef<CalendarMonthApiHandle, CalendarMonthProp
         [navigateToDateByFilter]
     )
 
-    const viewList = useMemo(() => getMonthViewList(), [])
+    const viewList = useMemo(() => getYearViewList(), [])
+
+    useScrollToCurrentDay(wrapperRef, SCROLL_TO_CURRENT_DAY_CONFIG[view])
 
     return (
         <div ref={wrapperRef} className={styles.container}>
             <div className={styles.toolbarContainer}>
                 <CalendarToolbar
+                    mode="year"
                     title={title}
                     currentDate={currentDate}
                     onDateChange={changeDate}
@@ -415,33 +383,28 @@ const CalendarMonth = React.forwardRef<CalendarMonthApiHandle, CalendarMonthProp
                     onToday={handleTodayButton}
                     onViewChange={handleViewChange}
                     viewList={viewList}
-                    disableFilter={!isMonthView}
                 />
                 {toggleButton}
             </div>
             <Calendar
                 ref={calendarRef}
-                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
+                multiMonthMaxColumns={multiMonthMaxColumns ?? 3}
+                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, multiMonthPlugin, listPlugin]}
                 initialView={view}
-                droppable={true}
-                dayMaxEvents={CALENDAR_GRID_VIEW_SETTINGS[view]?.dayMaxEvents}
                 eventContent={renderEventContent}
                 events={bcData}
                 datesSet={handleDateSet}
                 dateClick={handleDateClick}
-                dayCellClassNames={dayCellClassNames}
                 eventDataTransform={eventDataTransform}
                 eventTimeFormat={EVENT_TIME_FORMAT}
-                navLinks={true}
-                navLinkDayClick={handleNavLinkDayClick}
-                navLinkWeekClick={handleNavLinkWeekClick}
-                moreLinkContent={renderMoreLinkContent}
-                moreLinkClick={view} // whatever popover calls
+                dayMaxEvents={false}
+                multiMonthMinWidth={420}
+                moreLinkContent={false}
+                height={height}
                 eventClassNames={renderProps => (renderProps.event.id === bcCursor ? 'fc-active-event' : '')}
-                autoHeight={true}
             />
         </div>
     )
 })
 
-export default React.memo(CalendarMonth)
+export default React.memo(CalendarYear)

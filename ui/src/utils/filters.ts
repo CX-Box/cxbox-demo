@@ -68,3 +68,64 @@ export function getLocalFilterType(fieldType: string, options: { [EFeatureSettin
         return getFilterType(fieldType)
     }
 }
+
+export const isPartialRangeFilter = (filter: BcFilter): boolean => {
+    return filter.type === FilterType.greaterOrEqualThan || filter.type === FilterType.lessOrEqualThan
+}
+
+/**
+ * Combines separate filters 'greaterOrEqualThan' and 'lessOrEqualThan' one field at a time into one filter of type 'range'.
+ *
+ * Warning: This function does not check the field type. It blindly converts any pair OR single instance of 'greaterOrEqualThan'
+ * or 'lessOrEqualThan' filters for the same field into a 'range' filter.
+ *
+ * @param filters
+ */
+export const transformRangeFilters = (filters: BcFilter[]): BcFilter[] => {
+    if (!filters || filters.length === 0) {
+        return []
+    }
+
+    const hasCandidates = filters.some(isPartialRangeFilter)
+
+    if (!hasCandidates) {
+        return filters
+    }
+
+    const resultFilters: BcFilter[] = []
+
+    const filtersByField = filters.reduce((acc, filter) => {
+        if (!acc[filter.fieldName]) {
+            acc[filter.fieldName] = []
+        }
+        acc[filter.fieldName].push(filter)
+        return acc
+    }, {} as Record<string, BcFilter[]>)
+
+    Object.keys(filtersByField).forEach(fieldName => {
+        const fieldFilters = filtersByField[fieldName]
+
+        const greaterFilter = fieldFilters.find(f => f.type === FilterType.greaterOrEqualThan)
+        const lessFilter = fieldFilters.find(f => f.type === FilterType.lessOrEqualThan)
+
+        if (greaterFilter || lessFilter) {
+            const newRangeFilter = {
+                fieldName: fieldName,
+                type: FilterType.range,
+                value: [greaterFilter?.value ?? null, lessFilter?.value ?? null]
+            } as BcFilter
+
+            resultFilters.push(newRangeFilter)
+
+            fieldFilters.forEach(filter => {
+                if (filter !== greaterFilter && filter !== lessFilter) {
+                    resultFilters.push(filter)
+                }
+            })
+        } else {
+            resultFilters.push(...fieldFilters)
+        }
+    })
+
+    return resultFilters
+}

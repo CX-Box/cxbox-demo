@@ -1,10 +1,10 @@
 import { useAppSelector } from '@store'
 import { selectBcData, selectWidget } from '@selectors/selectors'
-import { isRangeValid } from '@utils/date'
 import { AppWidgetMeta } from '@interfaces/widget'
-import { mapRefinerKeyToFieldKey } from '@components/widgets/CalendarList/interfaces'
+import { mapRefinerKeyToFieldKey } from '@components/widgets/CalendarList/constants'
 import { useMemo } from 'react'
 import type { MomentInput } from 'moment'
+import { isRangeValid } from '@components/widgets/CalendarList/utils'
 
 export const useCalendarMonthDataCheck = (widgetName: string) => {
     const widget = useAppSelector(selectWidget(widgetName)) as AppWidgetMeta | undefined

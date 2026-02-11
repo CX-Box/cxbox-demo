@@ -11,6 +11,7 @@ import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.demo.dto.cxbox.inner.RelationSaleDTO;
 import org.demo.entity.RelationGraph;
 import org.demo.entity.RelationGraph_;
+import org.demo.entity.enums.TargetNodeType;
 import org.demo.repository.RelationGraphRepository;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -33,11 +34,23 @@ public class RelationSaleService extends VersionAwareResponseService<RelationSal
 	}
 
 	@Override
+	public RelationSaleDTO getOne(BusinessComponent bc) {
+		RelationSaleDTO one = super.getOne(bc);
+		if (bc == null || bc.getParentId() == null) {
+			return one;
+		}
+		if (bc.getParentId().equals(one.getTargetNodeId())) {
+			one.setTargetNodeType(TargetNodeType.MAIN);
+		}
+		return one;
+	}
+
+	@Override
 	public ResultPage<RelationSaleDTO> getList(BusinessComponent bc) {
-		var list = super.getList(bc);
+		ResultPage<RelationSaleDTO> list = super.getList(bc);
 		list.getResult().stream()
 				.filter(relationSaleDTO -> relationSaleDTO.getTargetNodeId().equals(bc.getParentId()))
-				.forEach(p -> p.setTargetNodeType("main"));
+				.forEach(p -> p.setTargetNodeType(TargetNodeType.MAIN));
 		return list;
 	}
 

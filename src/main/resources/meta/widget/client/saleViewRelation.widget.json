@@ -1,6 +1,6 @@
 {
   "name": "saleViewRelation",
-  "title": "Title",
+  "title": "Sales",
   "type": "RelationGraph",
   "bc": "relationSale",
   "fields": [
@@ -17,7 +17,8 @@
     {
       "title": "targetNodeId",
       "key": "targetNodeId",
-      "type": "input"
+      "type": "input",
+      "width": 200
     },
     {
       "title": "targetNodeType",

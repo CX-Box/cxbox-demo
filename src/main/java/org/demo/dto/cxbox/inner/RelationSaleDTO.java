@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.cxbox.api.data.dto.DataResponseDTO;
 import org.demo.entity.RelationGraph;
+import org.demo.entity.enums.TargetNodeType;
 
 @Getter
 @Setter
@@ -19,7 +20,7 @@ public class RelationSaleDTO extends DataResponseDTO {
 
 	private String targetNodeName;
 
-	private String targetNodeType;
+	private TargetNodeType targetNodeType;
 
 	private String edgeDescription;
 

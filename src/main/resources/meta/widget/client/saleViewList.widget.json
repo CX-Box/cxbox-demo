@@ -1,8 +1,8 @@
 {
-  "name": "saleList",
+  "name": "saleViewList",
   "title": "",
   "type": "List",
-  "bc": "sale",
+  "bc": "saleClient",
   "fields": [
     {
       "title": "Client",
@@ -58,3 +58,4 @@
     }
   }
 }
+

@@ -2,11 +2,14 @@ package org.demo.repository;
 
 import java.util.List;
 import java.util.Set;
+import org.cxbox.model.core.entity.BaseEntity_;
 import org.demo.entity.Sale;
+import org.demo.entity.Sale_;
 import org.demo.entity.enums.FieldOfActivity;
 import org.demo.repository.projection.DashboardSalesByMonthAndProductPrj;
 import org.demo.repository.projection.DashboardSalesByMonthAndStatusPrj;
 import org.demo.repository.projection.DashboardSalesProductPrj;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -54,4 +57,10 @@ public interface SaleRepository extends JpaRepository<Sale, Long>, JpaSpecificat
 			""")
 	List<DashboardSalesByMonthAndProductPrj> getSalesByMonthAndProduct(Set<FieldOfActivity> fieldOfActivities);
 
+	default Specification<Sale> findSalesByClientId(Long clientId) {
+		return (root, cq, cb) -> cb.or(
+				cb.equal(root.get(Sale_.clientSeller).get(BaseEntity_.id), clientId),
+				cb.equal(root.get(Sale_.client).get(BaseEntity_.id), clientId)
+		);
+	}
 }

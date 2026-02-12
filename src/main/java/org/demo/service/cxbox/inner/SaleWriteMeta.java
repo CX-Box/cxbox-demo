@@ -26,7 +26,9 @@ public class SaleWriteMeta extends FieldMetaBuilder<SaleDTO> {
 				SaleDTO_.clientId,
 				SaleDTO_.product,
 				SaleDTO_.status,
-				SaleDTO_.sum
+				SaleDTO_.sum,
+				SaleDTO_.clientSellerName,
+				SaleDTO_.clientSellerId
 		);
 
 		fields.setRequired(
@@ -34,7 +36,9 @@ public class SaleWriteMeta extends FieldMetaBuilder<SaleDTO> {
 				SaleDTO_.clientId,
 				SaleDTO_.product,
 				SaleDTO_.status,
-				SaleDTO_.sum
+				SaleDTO_.sum,
+				SaleDTO_.clientSellerName,
+				SaleDTO_.clientSellerId
 		);
 		fields.setDictionaryValues(SaleDTO_.product);
 		fields.setEnumValues(SaleDTO_.status, SaleStatus.values());

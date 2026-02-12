@@ -10,7 +10,7 @@
   <parent>
     <groupId>org.cxbox</groupId>
     <artifactId>cxbox-starter-parent</artifactId>
-    <version>4.0.0-M22-CXBOX-1157-1-SNAPSHOT</version><!-- based on spring-boot-starter-parent 3.5.7!-->
+    <version>4.0.0-M22-SNAPSHOT</version><!-- based on spring-boot-starter-parent 3.5.7!-->
     <relativePath/><!-- lookup parent from repository -->
   </parent>
   <repositories>

@@ -12,7 +12,7 @@ import CalendarToolbar from '@components/widgets/CalendarList/components/toolbar
 import CalendarEvent from '@components/widgets/CalendarList/components/events/CalendarEvent'
 import { CustomContentGenerator, DateInput, EventContentArg, MoreLinkContentArg } from '@fullcalendar/core'
 import InnerForm from '@components/widgets/CalendarList/components/others/InnerForm'
-import { useInternalWidget } from '@hooks/useInternalWidgetSelector'
+import { useInternalWidget } from '@hooks/useInternalWidget'
 import { ConfigProvider, Spin } from 'antd'
 import { useDispatch } from 'react-redux'
 import { actions, resetRecordForm, setRecordForm } from '@actions'

@@ -23,14 +23,14 @@ import { Number } from '../../fields/Number/Number'
 import { FormPopup } from '../widgets/FormPopup/FormPopup'
 import MultivalueField from '../../fields/Multivalue/MultivalueField'
 import InlinePickList from '../../fields/InlinePickList/InlinePickList'
-import FileUpload from '../../fields/FileUpload/FileUploadContainer'
+import FileUpload from '@fields/FileUpload/FileUpload'
 import { FieldType, interfaces, utils } from '@cxbox-ui/core'
 import { AdditionalInfoWidget } from '@components/widgets/AdditionalInfo/AdditionalInfoWidget'
 import { WidgetTypes } from '@cxbox-ui/schema'
 import TimeField from '../../fields/TimePicker/TimePickerField'
 import SuggestionPickListField from '../../fields/SuggestionPickList/SuggestionPickList'
 import StatsBlock from '@components/widgets/StatsBlock/StatsBlock'
-import FileViewerContainer from '@components/FileViewerContainer/FileViewerContainer'
+import FileViewerPopup from '@components/FileViewerContainer/FileViewerContainer'
 import GroupingHierarchy from '@components/widgets/GroupingHierarchy/GroupingHierarchy'
 import { AdditionalListWidget } from '@components/widgets/AdditionalListWidget/AdditionalListWidget'
 import WaitUntilPopup from '@components/WaitUntilPopup/WaitUntilPopup'
@@ -39,6 +39,8 @@ import Chart from '../widgets/Chart/Chart'
 import DebugViewInfoLabel from '@components/DebugViewInfoLabel/DebugViewInfoLabel'
 import FilePreview from '@components/widgets/FilePreview/FilePreview'
 import FilePreviewCard from '@components/FilePreviewCard/FilePreviewCard'
+import CardList from '@components/widgets/CardList/CardList'
+import CardCarouselList from '@components/widgets/CardCarouselList/CardCarouselList'
 import { CalendarList, CalendarYearList } from '@components/widgets/CalendarList'
 
 export const customFields = {
@@ -81,6 +83,8 @@ export const customWidgets: Partial<Record<CustomWidgetTypes | interfaces.Widget
     [CustomWidgetTypes.FilePreview]: { component: FilePreview, card: FilePreviewCard },
     [CustomWidgetTypes.CalendarList]: { component: CalendarList, card: null },
     [CustomWidgetTypes.CalendarYearList]: { component: CalendarYearList, card: null },
+    [CustomWidgetTypes.CardList]: { component: CardList },
+    [CustomWidgetTypes.CardCarouselList]: { component: CardCarouselList },
     [CustomWidgetTypes.RelationGraph]: { component: Chart, card: DashboardCard }
 }
 
@@ -90,7 +94,7 @@ function View() {
     return (
         <div className={styles.container}>
             <DebugViewInfoLabel />
-            <FileViewerContainer />
+            <FileViewerPopup />
             <WaitUntilPopup />
             <NotificationsContainer />
             <CxboxView

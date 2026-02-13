@@ -101,11 +101,12 @@
 }
 
 .downloadLink {
-  :global(.ant-btn) {
-    height: var(--field-tag-height);
-    border-radius: var(--field-radius);
-    padding: 0 10px;
-  }
+    :global(.ant-btn) {
+        height: var(--field-tag-height);
+        border-radius: var(--field-radius);
+        padding: 0 10px;
+        overflow: hidden;
+    }
 }
 
 .disabled {
@@ -185,7 +186,10 @@
 
 .fileIconContainer {
     line-height: 0;
-    float: left;
     margin-right: 4px;
     pointer-events: unset;
+}
+
+.downloadButton {
+    width: 100%;
 }

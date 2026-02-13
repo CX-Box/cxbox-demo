@@ -1,12 +1,7 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useAppSelector } from '@store'
 import { AppWidgetGroupingHierarchyMeta } from '@interfaces/widget'
 import { useExpandableGroup } from '@components/widgets/Table/hooks/useExpandableGroup'
-import Button from '@components/ui/Button/Button'
-import styles from '@components/widgets/Table/Table.less'
-import { Icon, Tooltip } from 'antd'
-import cn from 'classnames'
-import { useTranslation } from 'react-i18next'
 import { CustomDataItem } from '@components/widgets/Table/Table.interfaces'
 import { GroupingHierarchyCommonNode } from '@components/widgets/Table/groupingHierarchy'
 import { nodeHasGroupWithCertainCountOfChildNodes } from '@components/widgets/Table/groupingHierarchy/utils/nodeHasGroupWithCertainCountOfChildNodes'
@@ -104,14 +99,9 @@ export const useGroupingHierarchy = <T extends CustomDataItem>(
         sortedGroupKeys
     ])
 
-    const toggleEnabledGrouping = useCallback(() => {
-        setEnabledGrouping(enabledGrouping => !enabledGrouping)
-    }, [])
-
     const getFirstRowKey = useCallback(() => {
         const firstCursor = bcData?.find(item => item.id)?.id
         const node = firstCursor && nodeDictionary?.[firstCursor as string]
-
         return node ? getGroupingHierarchyRowKey(node) : undefined
     }, [bcData, nodeDictionary])
 
@@ -149,8 +139,12 @@ export const useGroupingHierarchy = <T extends CustomDataItem>(
     }, [])
 
     const getFirstRowElement = useCallback(() => {
-        return getRowElement(getFirstRowKey())
-    }, [getFirstRowKey, getRowElement])
+        return tableContainerRef.current?.querySelector(`[data-row-key]:first-of-type`)
+    }, [])
+
+    const getTableTopElement = useCallback(() => {
+        return tableContainerRef.current?.querySelector(`.ant-table-scroll`)
+    }, [])
 
     const getRowElementByRowId = useCallback(
         (rowId: string | null) => {
@@ -159,50 +153,9 @@ export const useGroupingHierarchy = <T extends CustomDataItem>(
         [getGroupingHierarchyRowKeyByRecordId, getRowElement]
     )
 
-    const { showUp, scrollToTop } = useScrollToTopForTable(enabledGrouping, getFirstRowElement)
+    const { showUp, scrollToTop } = useScrollToTopForTable(enabledGrouping, getFirstRowElement, getTableTopElement)
 
     useAutoScrollToEditedRow(meta, isGroupingHierarchy, getRowElementByRowId, openTreeToLeaf)
-
-    const { t } = useTranslation()
-
-    const renderTopButton = useCallback(() => {
-        return showUp ? (
-            <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-                <Button
-                    className={styles.moveToTop}
-                    type="empty"
-                    onClick={() => {
-                        scrollToTop()
-                    }}
-                    icon="arrow-up"
-                />
-            </div>
-        ) : undefined
-    }, [scrollToTop, showUp])
-
-    const hierarchyToggleButtonElement = useMemo(() => {
-        return isGroupingHierarchy ? (
-            <Tooltip
-                title={
-                    isIncorrectLimit
-                        ? t('Warning! Only List mode available for Grouping Hierarchy', { limit: bcPageLimit, bcCount: bcCountForShowing })
-                        : undefined
-                }
-                trigger="hover"
-            >
-                <div style={{ display: 'inline-block' }}>
-                    <Button
-                        type="empty"
-                        className={cn(styles.treeButton, { [styles.active]: enabledGrouping })}
-                        disabled={isIncorrectLimit}
-                        onClick={toggleEnabledGrouping}
-                    >
-                        <Icon type="apartment" />
-                    </Button>
-                </div>
-            </Tooltip>
-        ) : null
-    }, [isGroupingHierarchy, isIncorrectLimit, t, bcPageLimit, bcCountForShowing, enabledGrouping, toggleEnabledGrouping])
 
     const sortFieldsByGroupKeys = useCallback(
         (fields: AppWidgetGroupingHierarchyMeta['fields']) => {
@@ -221,7 +174,7 @@ export const useGroupingHierarchy = <T extends CustomDataItem>(
 
     return {
         enabledGrouping,
-        toggleEnabledGrouping,
+        setEnabledGrouping,
         sortedGroupKeys,
         changeExpand,
         clearExpand,
@@ -230,9 +183,12 @@ export const useGroupingHierarchy = <T extends CustomDataItem>(
         getFirstRowKey,
         getGroupingHierarchyRowKeyByRecordId,
         openTreeToLeaf,
-        renderTopButton,
         tableContainerRef,
-        hierarchyToggleButtonElement,
-        sortFieldsByGroupKeys
+        isIncorrectLimit,
+        bcPageLimit,
+        bcCountForShowing,
+        sortFieldsByGroupKeys,
+        showUp,
+        scrollToTop
     }
 }

@@ -1,10 +1,10 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { ReactNode, useCallback, useMemo } from 'react'
 import { ColumnProps, TableProps as AntdTableProps } from 'antd/es/table'
 import { useExpandableForm } from './hooks/useExpandableForm'
 import styles from './Table.less'
 import { AppWidgetGroupingHierarchyMeta, AppWidgetTableMeta, CustomWidgetTypes } from '@interfaces/widget'
 import { useAppSelector } from '@store'
-import { useTableSetting } from '@components/widgets/Table/hooks/useTableSetting'
+import { useTableSetting, useTableSettingReset, useTableSettingResultedFields } from '@components/widgets/Table/hooks/useTableSetting'
 import { useVisibility } from '@components/widgets/Table/hooks/useVisibility'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
@@ -22,7 +22,6 @@ import { DataItem, FieldType, IdItemResponse } from '@cxbox-ui/core'
 import { TableEventListeners } from 'antd/lib/table/interface'
 import { ExpandIconProps } from 'antd/lib/table'
 import { WidgetListField } from '@cxbox-ui/schema'
-import Button from '@components/ui/Button/Button'
 import { interfaces } from '@cxbox-ui/core'
 import ColumnTitle from '@components/ColumnTitle/ColumnTitle'
 import ExpandIcon from '@components/widgets/Table/components/ExpandIcon'
@@ -47,6 +46,9 @@ import ResultColumnTitle from '@components/widgets/Table/massOperations/ColumnTi
 import { FIELDS } from '@constants'
 import { useRowMetaWithCache } from '@hooks/useRowMetaWithCache'
 import FieldBaseThemeWrapper from '@components/FieldBaseThemeWrapper/FieldBaseThemeWrapper'
+import ResultColumnCell from '@components/widgets/Table/massOperations/ResultColumnCell'
+import Button from '@components/ui/Button/Button'
+import { ReactComponent as HierarchySVG } from '@assets/icons/hierarchy.svg'
 
 const ROW_KEY = FIELDS.TECHNICAL.ID
 
@@ -58,6 +60,7 @@ interface TableProps<T extends CustomDataItem> extends AntdTableProps<T> {
     disableCellEdit?: boolean
     disableMassMode?: boolean
     isGroupingHierarchy?: boolean
+    settingsComponent?: ReactNode
 }
 
 function Table<T extends CustomDataItem>({
@@ -69,6 +72,7 @@ function Table<T extends CustomDataItem>({
     disableCellEdit = false,
     disableMassMode = false,
     onRow,
+    settingsComponent: outerSettingsComponent,
     ...rest
 }: TableProps<T>) {
     const { t } = useTranslation()
@@ -98,10 +102,14 @@ function Table<T extends CustomDataItem>({
         sortedGroupKeys,
         tree,
         getGroupingHierarchyRowKeyByRecordId,
-        renderTopButton,
         tableContainerRef,
-        hierarchyToggleButtonElement,
-        sortFieldsByGroupKeys
+        setEnabledGrouping,
+        sortFieldsByGroupKeys,
+        isIncorrectLimit,
+        bcCountForShowing,
+        bcPageLimit,
+        scrollToTop,
+        showUp
     } = useGroupingHierarchy(unprocessedMeta as AppWidgetGroupingHierarchyMeta, isGroupingHierarchy)
 
     const processedMeta = useMemo(
@@ -124,87 +132,7 @@ function Table<T extends CustomDataItem>({
         return selectedRowsDictionary
     }, [selectedRows])
 
-    const massResultColumn: ControlColumn<T> = useMemo(
-        () => ({
-            column: {
-                title: (
-                    <ResultColumnTitle
-                        title={t('Result')}
-                        widgetName={widgetName}
-                        bcName={bcName}
-                        filterable={true}
-                        fieldName={FIELDS.TECHNICAL.ID}
-                    />
-                ),
-                key: '_mass-result',
-                render: (text, record: Partial<IdItemResponse>) => {
-                    let content: React.ReactNode
-                    const resultRecord = { ...record, ...selectedRowsDictionary[record.id as string] }
-
-                    if (typeof resultRecord.success !== 'boolean') {
-                        content = <Icon className={styles.columnIcon} type="minus-circle" theme="filled" />
-                    } else if (resultRecord.success) {
-                        content = <Icon className={styles.columnIcon} type="check-circle" theme="filled" />
-                    } else {
-                        content = (
-                            <Tooltip trigger="hover" title={resultRecord.errorMessage ?? ''}>
-                                <Icon className={styles.columnIcon} type="close-square" theme="filled" />
-                            </Tooltip>
-                        )
-                    }
-
-                    return <div className={styles.massResultColum}>{content}</div>
-                }
-            },
-            position: 'left'
-        }),
-        [bcName, selectedRowsDictionary, t, widgetName]
-    )
-
-    const controlColumns = useMemo(() => {
-        const resultColumns: Array<ControlColumn<T>> = []
-
-        if (processedMeta.options?.primary?.enabled && primaryColumn) {
-            resultColumns.push(primaryColumn as any)
-        }
-
-        if (expandIconColumn && !enabledMassMode) {
-            resultColumns.push({
-                column: !isGroupingHierarchy
-                    ? expandIconColumn
-                    : {
-                          ...expandIconColumn,
-                          title: renderTopButton
-                      },
-                position: 'right'
-            })
-        }
-
-        if (isGroupingHierarchy && !expandIconColumn) {
-            resultColumns.push({
-                column: {
-                    width: '62px',
-                    title: renderTopButton
-                },
-                position: 'right'
-            })
-        }
-
-        if (enabledMassMode && step === 'View results') {
-            resultColumns.push(massResultColumn)
-        }
-
-        return [...resultColumns]
-    }, [
-        processedMeta.options?.primary?.enabled,
-        primaryColumn,
-        expandIconColumn,
-        isGroupingHierarchy,
-        enabledMassMode,
-        step,
-        renderTopButton,
-        massResultColumn
-    ])
+    const showSaveFiltersButton = processedMeta.options?.filterSetting?.enabled
 
     const disabledCheckboxForMassMode = step !== 'Select rows'
     const showCheckboxForMassMode = (['Select rows', 'Review rows'] as (typeof step)[]).includes(step)
@@ -227,9 +155,71 @@ function Table<T extends CustomDataItem>({
     )
 
     const currentRowSelection = enabledMassMode ? rowSelectionForMassMode : rest.rowSelection
+    const showColumnSettings = !!processedMeta?.options?.additional?.enabled
+    const exportConfig = processedMeta.options?.export
+    const showExport = exportConfig?.enabled
+    const showSettings = showSaveFiltersButton || showColumnSettings || showExport || enabledGrouping || isGroupingHierarchy
+    const resetSetting = useTableSettingReset(processedMeta)
+    const { resultedFields } = useTableSettingResultedFields(processedMeta, sortedGroupKeys)
+    const { exportTable } = useExportTable({
+        bcName: bcName,
+        fields: resultedFields,
+        title: exportConfig?.title ?? processedMeta.title
+    })
 
-    const { showColumnSettings, allFields, resultedFields, currentAdditionalFields, changeOrder, changeColumnsVisibility, resetSetting } =
-        useTableSetting(processedMeta, sortedGroupKeys, currentRowSelection?.type, controlColumns)
+    const controlColumns = useMemo(() => {
+        const resultColumns: Array<ControlColumn<T>> = []
+
+        if (processedMeta.options?.primary?.enabled && primaryColumn) {
+            resultColumns.push(primaryColumn as any)
+        }
+
+        if (expandIconColumn && !enabledMassMode) {
+            resultColumns.push({
+                column: expandIconColumn,
+                position: 'right'
+            })
+        }
+
+        if (enabledMassMode && step === 'View results') {
+            resultColumns.push({
+                column: {
+                    title: (
+                        <ResultColumnTitle
+                            title={t('Result')}
+                            widgetName={widgetName}
+                            bcName={bcName}
+                            filterable={true}
+                            fieldName={FIELDS.TECHNICAL.ID}
+                        />
+                    ),
+                    key: '_mass-result',
+                    render: (text, record: Partial<IdItemResponse>) => (
+                        <ResultColumnCell record={record} selectedRow={selectedRowsDictionary[record.id as string]} />
+                    )
+                },
+                position: 'left'
+            })
+        }
+        return [...resultColumns]
+    }, [
+        processedMeta.options?.primary?.enabled,
+        primaryColumn,
+        expandIconColumn,
+        enabledMassMode,
+        step,
+        t,
+        widgetName,
+        bcName,
+        selectedRowsDictionary
+    ])
+
+    const { allFields, currentAdditionalFields, changeOrder, changeColumnsVisibility } = useTableSetting(
+        processedMeta,
+        sortedGroupKeys,
+        currentRowSelection?.type,
+        controlColumns
+    )
 
     const hideColumn = useCallback((fieldKey: string) => changeColumnsVisibility([fieldKey], false), [changeColumnsVisibility])
 
@@ -247,21 +237,146 @@ function Table<T extends CustomDataItem>({
     // TODO the condition is necessary because of editable table cells inside the core, so that there would not be duplicated actions of record change
     const needRowSelectRecord = !expandable && processedMeta.options?.readOnly !== true && processedMeta.options?.edit?.style !== 'none'
 
-    const exportConfig = processedMeta.options?.export
-    const showExport = exportConfig?.enabled
-    const { exportTable } = useExportTable({
-        bcName: bcName,
-        fields: resultedFields,
-        title: exportConfig?.title ?? processedMeta.title
-    })
-
-    const showSaveFiltersButton = processedMeta.options?.filterSetting?.enabled
-
-    const showSettings = showSaveFiltersButton || showColumnSettings || showExport
-
     const isAllowEdit = !expandable && !processedMeta.options?.readOnly && !disableCellEdit && !enabledMassMode
 
     const [operationsRef, parentRef, handleRowMenu] = useRowMenu() // NOSONAR(S6440) hook is called conditionally, fix later
+
+    const settings = useMemo(() => {
+        if (outerSettingsComponent) {
+            return outerSettingsComponent
+        }
+        if (showSettings) {
+            let selectedKeys: string[] = []
+            if (isGroupingHierarchy) {
+                selectedKeys = enabledGrouping ? ['grouping_enabled'] : ['grouping_disabled']
+            }
+            return (
+                <>
+                    <DropdownSetting
+                        overlay={
+                            <Menu selectedKeys={selectedKeys}>
+                                {showColumnSettings && (
+                                    <Menu.ItemGroup key="additionalColumns" title={t('Additional columns')}>
+                                        <Menu.Item key="0" onClick={transfer.toggleVisibility}>
+                                            {t('Change')}
+                                        </Menu.Item>
+                                        <Menu.Item key="1" onClick={resetSetting}>
+                                            {t('Reset')}
+                                        </Menu.Item>
+                                    </Menu.ItemGroup>
+                                )}
+                                {showExport && (
+                                    <Menu.ItemGroup key="export" title={t('Export to')}>
+                                        <Menu.Item key="3" onClick={() => exportTable()}>
+                                            {t('Excel')}
+                                            <Icon type="file-excel" style={{ fontSize: 14, marginLeft: 4 }} />
+                                        </Menu.Item>
+                                    </Menu.ItemGroup>
+                                )}
+                                {showSaveFiltersButton && (
+                                    <Menu.ItemGroup key="filtersSettings" title={t('Filters settings')}>
+                                        <Menu.Item key="4" onClick={filterSetting.toggleVisibility}>
+                                            {t('Save filters')}
+                                        </Menu.Item>
+                                    </Menu.ItemGroup>
+                                )}
+                                {isGroupingHierarchy && (
+                                    <Menu.ItemGroup key={'mode'} title={t('Mode')}>
+                                        <Menu.Item
+                                            key={'grouping_enabled'}
+                                            disabled={isIncorrectLimit}
+                                            onClick={() => setEnabledGrouping(true)}
+                                        >
+                                            <Tooltip
+                                                title={
+                                                    isIncorrectLimit
+                                                        ? t('Warning! Only List mode available for Grouping Hierarchy', {
+                                                              limit: bcPageLimit,
+                                                              bcCount: bcCountForShowing
+                                                          })
+                                                        : undefined
+                                                }
+                                                trigger="hover"
+                                            >
+                                                <Icon component={HierarchySVG} />
+                                                {t('Hierarchy')}
+                                            </Tooltip>
+                                        </Menu.Item>
+                                        <Menu.Item key={'grouping_disabled'} onClick={() => setEnabledGrouping(false)}>
+                                            <Icon type="table" />
+                                            {t('Table')}
+                                        </Menu.Item>
+                                    </Menu.ItemGroup>
+                                )}
+                                {enabledGrouping && (
+                                    <Menu.ItemGroup key={'grouping'} title={t('Grouping')}>
+                                        <Menu.Item onClick={clearParentExpand}>{t('Collapse all')}</Menu.Item>
+                                        {/*<Menu.Item onClick={clearParentExpand}>{t('Expand')}</Menu.Item>*/}
+                                    </Menu.ItemGroup>
+                                )}
+                            </Menu>
+                        }
+                    />
+                    {isGroupingHierarchy ? (
+                        <div
+                            style={{
+                                display: showUp ? 'flex' : 'none',
+                                position: 'absolute',
+                                alignItems: 'center',
+                                top: 0,
+                                bottom: 0
+                            }}
+                        >
+                            <Button
+                                className={styles.moveToTop}
+                                type="empty"
+                                onClick={() => {
+                                    scrollToTop()
+                                }}
+                                icon="arrow-up"
+                            />
+                        </div>
+                    ) : null}
+                    {isGroupingHierarchy && isIncorrectLimit ? (
+                        <Tooltip
+                            title={
+                                isIncorrectLimit
+                                    ? t('Warning! Only List mode available for Grouping Hierarchy', {
+                                          limit: bcPageLimit,
+                                          bcCount: bcCountForShowing
+                                      })
+                                    : undefined
+                            }
+                            trigger="hover"
+                        >
+                            <Icon type="warning" className={styles.limitWarningIcon} />
+                        </Tooltip>
+                    ) : null}
+                </>
+            )
+        }
+        return null
+    }, [
+        bcCountForShowing,
+        bcPageLimit,
+        clearParentExpand,
+        enabledGrouping,
+        exportTable,
+        filterSetting.toggleVisibility,
+        isGroupingHierarchy,
+        isIncorrectLimit,
+        outerSettingsComponent,
+        resetSetting,
+        scrollToTop,
+        setEnabledGrouping,
+        showColumnSettings,
+        showExport,
+        showSaveFiltersButton,
+        showSettings,
+        showUp,
+        t,
+        transfer.toggleVisibility
+    ])
 
     const onHeaderRow = useCallback(() => {
         return {
@@ -590,6 +705,7 @@ function Table<T extends CustomDataItem>({
             hideRowActions={hideRowActions}
             stickyWithHorizontalScroll={enabledGrouping && !!dataSource?.length}
             hidePagination={disablePagination || enabledGrouping}
+            settingsRender={settings}
             {...rest}
             rowSelection={currentRowSelection}
         />
@@ -604,69 +720,8 @@ function Table<T extends CustomDataItem>({
             ) : (
                 <>
                     <div className={styles.operations}>
-                        <Operations
-                            operations={bcRowMeta?.actions}
-                            bcName={bcName}
-                            widgetMeta={processedMeta}
-                            additionalOperations={
-                                <>
-                                    {enabledGrouping && (
-                                        <Tooltip
-                                            title={!expandedParentRowKeys.length ? t(`No expanded columns`) : t('Collapse columns')}
-                                            trigger="hover"
-                                        >
-                                            <div style={{ display: 'inline-block' }}>
-                                                <Button
-                                                    type="empty"
-                                                    className={cn(styles.collapseTreeButton)}
-                                                    disabled={!expandedParentRowKeys.length}
-                                                    onClick={clearParentExpand}
-                                                >
-                                                    <Icon type="unordered-list" />
-                                                </Button>
-                                            </div>
-                                        </Tooltip>
-                                    )}
-                                    {hierarchyToggleButtonElement}
-                                    {showSettings && (
-                                        <DropdownSetting
-                                            buttonClassName={styles.settingButton}
-                                            overlay={
-                                                <Menu>
-                                                    {showColumnSettings && (
-                                                        <Menu.ItemGroup key="additionalColumns" title={t('Additional columns')}>
-                                                            <Menu.Item key="0" onClick={transfer.toggleVisibility}>
-                                                                {t('Change')}
-                                                            </Menu.Item>
-                                                            <Menu.Item key="1" onClick={resetSetting}>
-                                                                {t('Reset')}
-                                                            </Menu.Item>
-                                                        </Menu.ItemGroup>
-                                                    )}
-                                                    {showExport && (
-                                                        <Menu.ItemGroup key="export" title={t('Export to')}>
-                                                            <Menu.Item key="3" onClick={() => exportTable()}>
-                                                                {t('Excel')}
-                                                                <Icon type="file-excel" style={{ fontSize: 14, marginLeft: 4 }} />
-                                                            </Menu.Item>
-                                                        </Menu.ItemGroup>
-                                                    )}
-                                                    {showSaveFiltersButton && (
-                                                        <Menu.ItemGroup key="filtersSettings" title={t('Filters settings')}>
-                                                            <Menu.Item key="4" onClick={filterSetting.toggleVisibility}>
-                                                                {t('Save filters')}
-                                                            </Menu.Item>
-                                                        </Menu.ItemGroup>
-                                                    )}
-                                                </Menu>
-                                            }
-                                        />
-                                    )}
-                                </>
-                            }
-                        />
+                        <Operations operations={bcRowMeta?.actions} bcName={bcName} widgetMeta={processedMeta} />
                     </div>
-
                     {tableElement}
                 </>
             )}

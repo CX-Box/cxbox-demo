@@ -1,8 +1,7 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { Empty } from 'antd'
+import React, { useEffect, useMemo, useState } from 'react'
+import { Empty, Icon, Menu, Tooltip } from 'antd'
 import { useTranslation } from 'react-i18next'
 import Table from '@components/widgets/Table/Table'
-import ChartToggleButton from './components/ChartToggleButton/ChartToggleButton'
 import Chart2D from './components/Chart2D/Chart2D'
 import DualAxes2D from './components/DualAxes2D/DualAxes2D'
 import Pie1D from './components/Pie1D/Pie1D'
@@ -18,7 +17,9 @@ import {
     Pie1DWidgetMeta,
     RelationGraphWidgetMeta
 } from '@interfaces/widget'
-
+import DropdownSetting from '@components/widgets/Table/components/DropdownSetting'
+import cn from 'classnames'
+import styles from './Chart.module.less'
 interface ChartProps {
     meta: Chart2DWidgetMeta | Pie1DWidgetMeta | DualAxes2DWidgetMeta | RelationGraphWidgetMeta
 }
@@ -32,10 +33,6 @@ const Chart: React.FC<ChartProps> = ({ meta }) => {
     const data = useAppSelector(state => state.data[meta.bcName])
 
     const { bcPageLimit, isIncorrectLimit, bcCountForShowing } = useCheckLimit(meta.bcName)
-
-    const toggleTableView = useCallback(() => {
-        setIsTableView(prevState => !prevState)
-    }, [])
 
     const tooltipErrorTitle = useMemo(() => {
         if (isIncorrectLimit) {
@@ -62,6 +59,38 @@ const Chart: React.FC<ChartProps> = ({ meta }) => {
         }
     }, [isIncorrectData, isIncorrectLimit, meta.name, meta.type])
 
+    const selectedKeys = useMemo(() => {
+        if (isTableView) {
+            return ['table']
+        }
+        return ['chart']
+    }, [isTableView])
+
+    const menu = useMemo(
+        () => (
+            <DropdownSetting
+                buttonClassName={cn({ [styles.menuButton]: !isTableView })}
+                overlay={
+                    <Menu selectedKeys={selectedKeys}>
+                        <Menu.ItemGroup key={'mode'} title={t('Mode')}>
+                            <Menu.Item key={'chart'} onClick={() => setIsTableView(false)} disabled={isIncorrectLimit || isIncorrectData}>
+                                <Tooltip title={tooltipErrorTitle}>
+                                    <Icon type={getChartIconByWidgetType(meta.type)} />
+                                    {t('Chart')}
+                                </Tooltip>
+                            </Menu.Item>
+                            <Menu.Item key={'table'} onClick={() => setIsTableView(true)}>
+                                <Icon type={'table'} />
+                                {t('Table')}
+                            </Menu.Item>
+                        </Menu.ItemGroup>
+                    </Menu>
+                }
+            />
+        ),
+        [isIncorrectData, isIncorrectLimit, isTableView, meta.type, selectedKeys, t, tooltipErrorTitle]
+    )
+
     if (!data?.length) {
         return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
     }
@@ -84,15 +113,8 @@ const Chart: React.FC<ChartProps> = ({ meta }) => {
 
     return (
         <div>
-            <ChartToggleButton
-                chartIcon={getChartIconByWidgetType(meta.type)}
-                tooltipTitle={tooltipErrorTitle}
-                disabled={isIncorrectLimit || isIncorrectData}
-                isTableView={isTableView}
-                onClick={toggleTableView}
-            />
-
-            {isTableView ? <Table meta={meta as unknown as AppWidgetTableMeta} /> : getChartByWidgetType()}
+            {!isTableView ? menu : null}
+            {isTableView ? <Table meta={meta as unknown as AppWidgetTableMeta} settingsComponent={menu} /> : getChartByWidgetType()}
         </div>
     )
 }

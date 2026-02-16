@@ -132,29 +132,20 @@ pair_metrics AS (SELECT LEAST(s.client_seller_id, s.client_id)::bigint    AS a_i
                  GROUP BY LEAST(s.client_seller_id, s.client_id),
                           GREATEST(s.client_seller_id, s.client_id))
 
-SELECT hashtextextended(
-               e.selected_id::text || ':' ||
-               COALESCE(e.source_id::text, 'null') || '->' ||
-               e.target_id::text,
-               0
-       ) /*  synthetic edge id (hash of root:source->target) */           AS id,
-
-       e.selected_id /* selected client (acts as "graph request root") */ AS root_client_id,
-
+SELECT
+       target_id                                                          AS id,
+       e.selected_id                                                      AS root_client_id,
        e.source_id::text                                                  AS source_node_id,
        e.target_id::text                                                  AS target_node_id,
-
        tgt.full_name                                                      AS target_node_name,
        (e.depth IN (0, 1))                                                AS target_node_expanded,
-       tgt.address                                                        AS edge_description,
-
+       tgt.address                                                        AS target_node_description,
+       tgt.importance                                                     AS target_importance,
        COALESCE(pm.edge_value, 0)::bigint                                 AS edge_value,
-
        e.target_id                                                        AS target_client_id,
-
        0                                                                  AS vstamp,
-       current_date                                                       AS created_date,
-       current_date                                                       AS updated_date,
+       tgt.created_date                                                   AS created_date,
+       tgt.updated_date                                                   AS updated_date,
        1                                                                  AS created_by_user_id,
        1                                                                  AS last_upd_by_user_id
 

@@ -1,10 +1,11 @@
-package org.demo.dto.cxbox.inner;
+package org.demo.dto.cxbox.anysource;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.cxbox.api.data.dto.DataResponseDTO;
 import org.demo.entity.RelationGraph;
+import org.demo.entity.dictionary.ClientImportance;
 import org.demo.entity.enums.TargetNodeType;
 
 @Getter
@@ -22,12 +23,15 @@ public class RelationSaleDTO extends DataResponseDTO {
 
 	private TargetNodeType targetNodeType;
 
+	private String targetNodeDescription;
+
 	private String edgeDescription;
 
 	private Long edgeValue;
 
-	private String colorEdge;
+	private String edgeColor;
 
+	private String targetNodeColor;
 
 	public RelationSaleDTO(RelationGraph entity) {
 		this.id = entity.getId().toString();
@@ -35,15 +39,10 @@ public class RelationSaleDTO extends DataResponseDTO {
 		this.targetNodeId = entity.getTargetNodeId();
 		this.targetNodeExpanded = entity.getTargetNodeExpanded();
 		this.targetNodeName = entity.getTargetNodeName();
-		this.edgeDescription = entity.getEdgeDescription();
+		this.targetNodeDescription = entity.getTargetNodeDescription();
 		this.edgeValue = entity.getEdgeValue();
-		this.colorEdge = "#4C4C4C";
-		if (entity.getEdgeValue() != null && entity.getEdgeValue() > 1000) {
-			this.colorEdge = "#000000";
-			if (entity.getEdgeValue() > 5000) {
-				this.colorEdge = "#FF0000";
-			}
-		}
+		this.edgeDescription = "Sum, $";
+		this.targetNodeColor = ClientImportance.colors.get(entity.getTargetImportance());
 	}
 
 }

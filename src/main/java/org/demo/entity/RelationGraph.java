@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.cxbox.model.core.entity.BaseEntity;
+import org.demo.entity.dictionary.ClientImportance;
 import org.hibernate.annotations.Immutable;
 
 @Entity
@@ -31,8 +32,8 @@ public class RelationGraph  extends BaseEntity {
 	@Column(name = "target_node_name")
 	private String targetNodeName;
 
-	@Column(name = "edge_description")
-	private String edgeDescription;
+	@Column(name = "target_node_description")
+	private String targetNodeDescription;
 
 	@Column(name = "edge_value")
 	private Long edgeValue;
@@ -42,5 +43,9 @@ public class RelationGraph  extends BaseEntity {
 
 	@Column(name = "root_client_id")
 	private Long rootClientId;
+
+	@Column(name = "target_importance")
+	private ClientImportance targetImportance = ClientImportance.LOW;
+
 
 }

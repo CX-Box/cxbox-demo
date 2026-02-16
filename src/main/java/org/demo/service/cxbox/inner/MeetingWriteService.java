@@ -287,7 +287,7 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 				.action(act -> act
 						.scope(ActionScope.BC)
 						.withPreAction(PreAction.confirm(cf -> cf.text("Export to Excel?")))
-						.action("customExportToExcel", "Custom export to excel")
+						.action("customExportToExcel", "Export to excel")
 						.invoker((bc, data) -> new ActionResultDTO<MeetingDTO>().setAction(PostAction.exportToExcel()))
 				)
 				.build();

@@ -7,14 +7,21 @@ export const edgeFieldKey = 'edgeValue'
 export const defaultMode = 'TB'
 export const defaultWidth = 150
 export const height = 40
+
+export const mainNodeColor = '#A9A9A9'
+export const nodeColor = '#F6F6F6'
+export const nodeTextColor = '#000'
+export const nodeShadowColor = '#A9A9A9'
+export const nodeHoverShadowColor = '#1890FF'
+
 export const defaultEdgeType = 'polyline'
-export const defaultEdgeColor = '#CCC'
-export const labelColor = '#AAA'
+export const defaultEdgeColor = '#A9A9A9'
+export const edgeTextColor = '#AEAEAE'
 export const drillDownEdgeColor = '#1890FF'
-export const defaultBadgeColor = '#40A9FF'
-export const mainNodeColor = '#9FBBEF'
-export const nodeColor = '#E6EAF1'
-export const nodeTitleColor = '#000'
+
+export const defaultBadgeColor = '#A9A9A9'
+export const markerStrokeColor = '#A9A9A9'
+export const endArrowSize = 7
 
 export const anchorPointsByMode: Record<string, number[][]> = {
     TB: [

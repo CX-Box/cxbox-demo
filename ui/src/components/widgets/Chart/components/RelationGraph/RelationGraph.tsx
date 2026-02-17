@@ -22,12 +22,16 @@ import {
     defaultWidth,
     drillDownEdgeColor,
     edgeFieldKey,
+    edgeTextColor,
+    endArrowSize,
     height,
-    labelColor,
     mainNodeColor,
     markerPositionByMode,
+    markerStrokeColor,
     nodeColor,
-    nodeTitleColor
+    nodeHoverShadowColor,
+    nodeShadowColor,
+    nodeTextColor
 } from './constants'
 import { WidgetListField } from '@cxbox-ui/core'
 import { RelationGraphWidgetMeta } from '@interfaces/widget'
@@ -111,7 +115,7 @@ const RelationGraph: React.FC<RelationGraphProps> = ({ meta, setDataValidationEr
                 data,
                 layout: {
                     rankdir: mode || defaultMode,
-                    ranksepFunc: () => 20
+                    ranksepFunc: () => 15
                 },
                 nodeCfg: {
                     size: [nodeFieldMeta?.width || defaultWidth, height],
@@ -120,49 +124,65 @@ const RelationGraph: React.FC<RelationGraphProps> = ({ meta, setDataValidationEr
                         style: (node: INode) => ({
                             cursor: 'pointer',
                             fill: getNodeBgColor(node.id, targetNodeKey, initialData, nodeFieldMeta) || defaultBadgeColor,
-                            radius: [2, 0, 0, 2]
+                            radius: [4, 0, 0, 4]
                         })
                     },
                     anchorPoints: anchorPointsByMode[mode || defaultMode],
+                    nodeStateStyles: {
+                        hover: {
+                            shadowColor: nodeHoverShadowColor,
+                            shadowBlur: 8,
+                            shadowOffsetX: 0,
+                            shadowOffsetY: 0
+                        }
+                    },
                     title: {
-                        containerStyle: {
+                        containerStyle: (node: INode) => ({
                             cursor: 'pointer',
-                            fill: 'transparent'
-                        },
+                            fill: node.value?.type === 'main' ? mainNodeColor : nodeColor,
+                            radius: [4, 4, 0, 0]
+                        }),
                         style: {
                             cursor: 'pointer',
-                            fill: nodeTitleColor,
-                            fontSize: 12
+                            fill: nodeTextColor,
+                            fontSize: 12,
+                            stroke: nodeTextColor,
+                            lineWidth: 0.3
                         }
                     },
                     items: {
-                        padding: 6,
                         containerStyle: {
-                            cursor: 'pointer',
-                            fill: '#FFF'
+                            cursor: 'pointer'
                         },
                         style: {
                             cursor: 'pointer',
-                            fill: labelColor,
+                            fill: nodeTextColor,
                             fontSize: 12
                         }
                     },
-                    style: (node: INode) => ({
+                    style: {
                         cursor: 'pointer',
-                        fill: node.value?.type === 'main' ? mainNodeColor : nodeColor
-                    })
+                        stroke: 'transparent',
+                        radius: 4,
+                        shadowColor: nodeShadowColor,
+                        shadowBlur: 8,
+                        shadowOffsetX: 0,
+                        shadowOffsetY: 0
+                    }
                 },
                 edgeCfg: {
                     label: {
                         style: {
                             cursor: 'pointer',
-                            fill: labelColor,
+                            textBaseline: 'bottom',
+                            fill: edgeTextColor,
                             fontSize: 12
                         }
                     },
                     type: edges?.type || defaultEdgeType,
                     endArrow: (edge: IEdge) => ({
-                        fill: getEdgeFill(edge.edgeId)
+                        fill: getEdgeFill(edge.edgeId),
+                        size: endArrowSize
                     }),
                     style: (edge: IEdge) => {
                         const edgeId = edge.edgeId
@@ -171,14 +191,19 @@ const RelationGraph: React.FC<RelationGraphProps> = ({ meta, setDataValidationEr
                         return {
                             cursor: 'pointer',
                             lineWidth: isSelected ? 2 : 1,
-                            stroke: getEdgeFill(edgeId)
+                            stroke: getEdgeFill(edgeId),
+                            radius: 4,
+                            offset: 20
                         }
                     }
                 },
                 markerCfg: cfg => {
                     return {
                         position: markerPositionByMode[mode || defaultMode],
-                        show: data.edges.find((item: IEdge) => item.source === cfg.id)
+                        show: data.edges.find((item: IEdge) => item.source === cfg.id),
+                        style: {
+                            stroke: markerStrokeColor
+                        }
                     }
                 },
                 behaviors: ['drag-canvas', 'zoom-canvas', ...(dragNode ? ['drag-node'] : [])],
@@ -188,14 +213,7 @@ const RelationGraph: React.FC<RelationGraphProps> = ({ meta, setDataValidationEr
                     customContent: item => <div>{item.value.title}</div>
                 },
                 onReady: graph => {
-                    let initialLayoutApplied = false
-
-                    graph.on('afterlayout', () => {
-                        if (initialLayoutApplied) {
-                            return
-                        }
-                        initialLayoutApplied = true
-
+                    graph.once('afterlayout', () => {
                         const collapsedNodeItems = graph.getNodes().filter(node => !(node.getModel()?.value as any)?.expanded)
 
                         collapsedNodeItems.forEach(nodeItem => {

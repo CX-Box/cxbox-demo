@@ -280,6 +280,12 @@ function Table<T extends CustomDataItem>({
                                         </Menu.Item>
                                     </Menu.ItemGroup>
                                 )}
+                                {enabledGrouping && (
+                                    <Menu.ItemGroup key={'grouping'} title={t('Grouping')}>
+                                        <Menu.Item onClick={clearParentExpand}>{t('Collapse all')}</Menu.Item>
+                                        {/*<Menu.Item onClick={clearParentExpand}>{t('Expand')}</Menu.Item>*/}
+                                    </Menu.ItemGroup>
+                                )}
                                 {isGroupingHierarchy && (
                                     <Menu.ItemGroup key={'mode'} title={t('Mode')}>
                                         <Menu.Item
@@ -306,12 +312,6 @@ function Table<T extends CustomDataItem>({
                                             <Icon type="table" />
                                             {t('Table')}
                                         </Menu.Item>
-                                    </Menu.ItemGroup>
-                                )}
-                                {enabledGrouping && (
-                                    <Menu.ItemGroup key={'grouping'} title={t('Grouping')}>
-                                        <Menu.Item onClick={clearParentExpand}>{t('Collapse all')}</Menu.Item>
-                                        {/*<Menu.Item onClick={clearParentExpand}>{t('Expand')}</Menu.Item>*/}
                                     </Menu.ItemGroup>
                                 )}
                             </Menu>

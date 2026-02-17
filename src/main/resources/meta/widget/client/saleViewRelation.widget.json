@@ -5,46 +5,53 @@
   "bc": "relationSale",
   "fields": [
     {
-      "title": "id",
+      "title": "Id",
       "key": "id",
       "type": "input"
     },
     {
-      "title": "sourceNodeId",
+      "title": "Source Node Id",
       "key": "sourceNodeId",
       "type": "input"
     },
     {
-      "title": "targetNodeId",
+      "title": "Target Node Id",
       "key": "targetNodeId",
       "type": "input",
-      "width": 200
+      "width": 200,
+      "bgColorKey": "targetNodeColor"
     },
     {
-      "title": "targetNodeType",
+      "title": "Target Node Type",
       "key": "targetNodeType",
       "type": "input"
     },
     {
-      "title": "targetNodeName",
+      "title": "Target Node Name",
       "key": "targetNodeName",
+      "type": "input",
+      "bgColorKey": "targetNodeColor"
+    },
+    {
+      "title": "Target Node Description",
+      "key": "targetNodeDescription",
       "type": "input"
     },
     {
-      "title": "edgeDescription",
+      "title": "Edge Value",
+      "key": "edgeValue",
+      "type": "input",
+      "bgColorKey": "edgeColor"
+    },
+    {
+      "title": "Edge Description",
       "key": "edgeDescription",
       "type": "input"
     },
     {
-      "title": "edgeValue",
-      "key": "edgeValue",
-      "type": "input",
-      "bgColorKey": "colorEdge"
-    },
-    {
-      "label": "targetNodeExpanded",
+      "title": "Target Node Expanded",
       "key": "targetNodeExpanded",
-      "type": "input"
+      "type": "hidden"
     }
   ],
   "options": {
@@ -52,10 +59,10 @@
       "dragNode": true,
       "nodes": {
         "fieldKeys": ["sourceNodeId", "targetNodeId"],
-        "descriptionFieldKeys": ["targetNodeName", "edgeDescription"]
+        "descriptionFieldKeys": ["targetNodeName", "targetNodeDescription"]
       },
       "edges": {
-        "labelFieldKeys": [ "edgeValue"],
+        "labelFieldKeys": ["edgeDescription", "edgeValue"],
         "type": "polyline"
       }
     }

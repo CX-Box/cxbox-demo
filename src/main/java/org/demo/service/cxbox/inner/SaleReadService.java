@@ -13,7 +13,6 @@ import org.cxbox.core.service.action.Actions;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.inner.SaleDTO;
 import org.demo.entity.Sale;
-import org.demo.repository.RelationGraphRepository;
 import org.demo.repository.SaleRepository;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -25,8 +24,6 @@ public class SaleReadService extends VersionAwareResponseService<SaleDTO, Sale> 
 
 	private final SaleRepository saleRepository;
 
-	private final RelationGraphRepository  relationGraphRepository;
-
 	@Getter(onMethod_ = @Override)
 	private final Class<SaleReadMeta> meta = SaleReadMeta.class;
 
@@ -34,9 +31,11 @@ public class SaleReadService extends VersionAwareResponseService<SaleDTO, Sale> 
 	@Override
 	protected Specification<Sale> getParentSpecification(BusinessComponent bc) {
 		if (CxboxRestController.saleClient.isBc(bc)) {
-			var relationGraph = relationGraphRepository.getReferenceById(bc.getParentIdAsLong());
-			return super.getParentSpecification(bc)
-					.and(saleRepository.findSalesByClientId(relationGraph.getTargetClientId()));
+			var split = bc.getParentId().split("_");
+			if (split.length == 2) {
+				return saleRepository.findSalesByClientId(Long.valueOf(split[0]), Long.valueOf(split[1]));
+			}
+			return (root, query, cb) -> cb.and();
 		}
 		return super.getParentSpecification(bc);
 	}

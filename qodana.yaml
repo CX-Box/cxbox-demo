@@ -18,7 +18,7 @@ profile:
 #    paths:
 #      - <path/where/not/run/inspection>
 
-projectJDK: 17 #(Applied in CI/CD pipeline)
+projectJDK: "17" #(Applied in CI/CD pipeline)
 
 #Execute shell command before Qodana execution (Applied in CI/CD pipeline)
 #bootstrap: sh ./prepare-qodana.sh
@@ -28,6 +28,6 @@ plugins:
   - id: io.tesler.tesler-helper #(plugin id can be found at https://plugins.jetbrains.com)
 
 #Specify Qodana linter for analysis (Applied in CI/CD pipeline)
-linter: jetbrains/qodana-jvm-community:2024.1
+linter: jetbrains/qodana-jvm-community:2025.3
 exclude:
   - name: SpringJavaAutowiredFieldsWarningInspection

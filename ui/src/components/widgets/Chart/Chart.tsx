@@ -68,25 +68,36 @@ const Chart: React.FC<ChartProps> = ({ meta }) => {
 
     const menu = useMemo(
         () => (
-            <DropdownSetting
-                buttonClassName={cn({ [styles.menuButton]: !isTableView })}
-                overlay={
-                    <Menu selectedKeys={selectedKeys}>
-                        <Menu.ItemGroup key={'mode'} title={t('Mode')}>
-                            <Menu.Item key={'chart'} onClick={() => setIsTableView(false)} disabled={isIncorrectLimit || isIncorrectData}>
-                                <Tooltip title={tooltipErrorTitle}>
-                                    <Icon type={getChartIconByWidgetType(meta.type)} />
-                                    {t('Chart')}
-                                </Tooltip>
-                            </Menu.Item>
-                            <Menu.Item key={'table'} onClick={() => setIsTableView(true)}>
-                                <Icon type={'table'} />
-                                {t('Table')}
-                            </Menu.Item>
-                        </Menu.ItemGroup>
-                    </Menu>
-                }
-            />
+            <>
+                <DropdownSetting
+                    buttonClassName={cn({ [styles.menuButton]: !isTableView })}
+                    overlay={
+                        <Menu selectedKeys={selectedKeys}>
+                            <Menu.ItemGroup key={'mode'} title={t('Mode')}>
+                                <Menu.Item
+                                    key={'chart'}
+                                    onClick={() => setIsTableView(false)}
+                                    disabled={isIncorrectLimit || isIncorrectData}
+                                >
+                                    <Tooltip title={tooltipErrorTitle}>
+                                        <Icon type={getChartIconByWidgetType(meta.type)} />
+                                        {t('Chart')}
+                                    </Tooltip>
+                                </Menu.Item>
+                                <Menu.Item key={'table'} onClick={() => setIsTableView(true)}>
+                                    <Icon type={'table'} />
+                                    {t('Table')}
+                                </Menu.Item>
+                            </Menu.ItemGroup>
+                        </Menu>
+                    }
+                />
+                {tooltipErrorTitle ? (
+                    <Tooltip title={tooltipErrorTitle} trigger="hover">
+                        <Icon type="warning" className={styles.limitWarningIcon} />
+                    </Tooltip>
+                ) : null}
+            </>
         ),
         [isIncorrectData, isIncorrectLimit, isTableView, meta.type, selectedKeys, t, tooltipErrorTitle]
     )

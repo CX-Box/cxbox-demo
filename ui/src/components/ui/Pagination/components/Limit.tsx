@@ -1,7 +1,7 @@
 import React from 'react'
 import { Select } from 'antd'
 import { useTranslation } from 'react-i18next'
-import styles from './Limit.less'
+import styles from './Limit.module.less'
 import cn from 'classnames'
 import { AVAILABLE_LIMITS_LIST, DEFAULT_PAGE_LIMIT } from '@constants/pagination'
 

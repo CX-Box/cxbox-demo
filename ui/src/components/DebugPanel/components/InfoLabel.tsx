@@ -1,7 +1,7 @@
 import React from 'react'
 import cn from 'classnames'
 import CopyableText from '../../ui/CopyableText/CopyableText'
-import styles from './InfoLabel.less'
+import styles from './InfoLabel.module.less'
 
 interface InfoLabelProps {
     label: string

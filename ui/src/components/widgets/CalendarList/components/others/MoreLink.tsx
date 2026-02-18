@@ -1,7 +1,7 @@
 import React from 'react'
 import { Popover } from 'antd'
 import { MoreLinkContentArg } from '@fullcalendar/core'
-import styles from './MoreLink.less'
+import styles from './MoreLink.module.less'
 import { useTranslation } from 'react-i18next'
 
 interface MoreLinkProps extends MoreLinkContentArg {}

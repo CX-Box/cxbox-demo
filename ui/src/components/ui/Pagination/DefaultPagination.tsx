@@ -6,7 +6,7 @@ import { useWidgetPaginationLimit } from './hooks/useWidgetPaginationLimit'
 import { usePagination } from '@hooks/usePagination'
 import { PaginationMode } from '@constants/pagination'
 import { AppWidgetMeta } from '@interfaces/widget'
-import styles from './DefaultPagination.less'
+import styles from './DefaultPagination.module.less'
 
 export interface DefaultPaginationProps {
     meta: AppWidgetMeta

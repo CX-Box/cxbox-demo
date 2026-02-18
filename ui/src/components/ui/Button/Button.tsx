@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import { Button as AntdButton } from 'antd'
 import { ButtonProps as AntdButtonProps } from 'antd/lib/button'
 import cn from 'classnames'
-import styles from './Button.less'
+import styles from './Button.module.less'
 import ReactDOM from 'react-dom'
 
 export const customTypes = {

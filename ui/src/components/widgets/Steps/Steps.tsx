@@ -5,7 +5,7 @@ import { useWidgetCollapse } from '@hooks/useWidgetCollapse'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import WidgetTitle from '@components/WidgetTitle/WidgetTitle'
 import { StepsWidgetMeta } from '@interfaces/widget'
-import styles from './Steps.less'
+import styles from './Steps.module.less'
 import { shallowEqual } from 'react-redux'
 
 interface StepsProps {

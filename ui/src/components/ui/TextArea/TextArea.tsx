@@ -4,7 +4,7 @@ import AntdTextArea, { TextAreaProps as AntdTextAreaProps } from 'antd/lib/input
 import { BaseFieldProps } from '@components/Field/Field'
 import ReadOnlyField from '@components/ui/ReadOnlyField/ReadOnlyField'
 import { text_maxDisplayed } from '@components/ui/TextArea/constants'
-import styles from './TextArea.less'
+import styles from './TextArea.module.less'
 import cn from 'classnames'
 
 type AdditionalAntdTextAreaProps = Partial<Omit<AntdTextAreaProps, 'onChange'>>

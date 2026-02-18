@@ -4,7 +4,7 @@ import TruncatedText from '@components/ui/TruncatedText/TruncatedText'
 import DrillDown from '@components/ui/DrillDown/DrillDown'
 import { WidgetField } from '@interfaces/widget'
 import cn from 'classnames'
-import styles from './CalendarEvent.less'
+import styles from './CalendarEvent.module.less'
 
 interface CalendarEventProps extends EventContentArg {
     onDrillDown?: (recordId: string) => void

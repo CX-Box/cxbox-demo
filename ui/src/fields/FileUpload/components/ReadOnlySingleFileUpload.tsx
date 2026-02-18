@@ -1,6 +1,6 @@
 import React from 'react'
 import cn from 'classnames'
-import styles from '../FileUpload.less'
+import styles from '../FileUpload.module.less'
 import FilePreviewIcon from '../components/FilePreviewIcon'
 import { trimString } from '@utils/fileViewer'
 import Button from '@components/ui/Button/Button'

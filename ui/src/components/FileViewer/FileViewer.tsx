@@ -1,7 +1,7 @@
 import React, { CSSProperties, forwardRef, useImperativeHandle, useMemo, useRef } from 'react'
 import { fileViewerType, FileViewerType } from '@utils/fileViewer'
 import cn from 'classnames'
-import styles from './FileViewer.less'
+import styles from './FileViewer.module.less'
 import { DOCUMENT_PAGE_WIDTH } from '@constants/fileViewer'
 import { useTranslation } from 'react-i18next'
 import { ImageControl, useImageControl } from '@hooks/image'

@@ -5,7 +5,7 @@ import { actions } from '@cxbox-ui/core'
 import InfoRow from './components/InfoRow'
 import { Row } from 'antd'
 import { AppWidgetInfoMeta } from '@interfaces/widget'
-import styles from './Info.less'
+import styles from './Info.module.less'
 import { useProportionalWidgetGrid } from '@hooks/widgetGrid'
 
 interface InfoProps {

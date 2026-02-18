@@ -6,7 +6,7 @@ import { UploadList } from '@components/Operations/components/FileUpload/UploadL
 import { AddedFileInfo } from '@components/Operations/components/FileUpload/FileUpload.interfaces'
 import { isFileUploadSuccess } from '@components/Operations/components/FileUpload/FileUpload.utils'
 import { openNotification } from '@components/NotificationsContainer/utils'
-import styles from './FileUpload.less'
+import styles from './FileUpload.module.less'
 
 interface UploadListContainerProps {
     addedFileList: AddedFileInfo[]

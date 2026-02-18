@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from './MultiField.less'
+import styles from './MultiField.module.less'
 import Field from '@components/Field/Field'
 import cn from 'classnames'
 import { DataItem } from '@cxbox-ui/core'

@@ -1,6 +1,6 @@
 import React from 'react'
 import cn from 'classnames'
-import styles from './ActionLink.less'
+import styles from './ActionLink.module.less'
 
 export interface IActionLinkProps {
     className?: string

@@ -2,7 +2,7 @@ import React from 'react'
 import { Button } from 'antd'
 import { isEmptyValue } from '../utils'
 import { DataValue } from '@cxbox-ui/schema'
-import styles from './RangeTransferButtons.less'
+import styles from './RangeTransferButtons.module.less'
 
 interface RangeTransferButtonsProps {
     startValue: DataValue

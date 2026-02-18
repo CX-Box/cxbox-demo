@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react'
 import { Modal, Form, Collapse, Button, Icon } from 'antd'
 import cn from 'classnames'
-import styles from './ErrorPopup.less'
+import styles from './ErrorPopup.module.less'
 import { Dispatch } from 'redux'
 import { connect } from 'react-redux'
 import { RootState } from '@store'

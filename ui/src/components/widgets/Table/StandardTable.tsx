@@ -1,5 +1,5 @@
 import React, { MutableRefObject, ReactNode } from 'react'
-import styles from '@components/widgets/Table/Table.less'
+import styles from '@components/widgets/Table/Table.module.less'
 import { Table as AntdTable } from 'antd'
 import cn from 'classnames'
 import ReactDragListView from 'react-drag-listview'

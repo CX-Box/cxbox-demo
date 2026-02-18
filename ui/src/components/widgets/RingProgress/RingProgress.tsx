@@ -1,6 +1,6 @@
 import React from 'react'
 import { RingProgress } from '@ant-design/plots'
-import styles from './RingProgress.less'
+import styles from './RingProgress.module.less'
 import { RingProgressWidgetMeta } from '@interfaces/widget'
 import { Statistic, StyleAttr } from '@antv/g2plot/lib/types'
 import { useAppSelector } from '@store'

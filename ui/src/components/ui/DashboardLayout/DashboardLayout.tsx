@@ -6,7 +6,7 @@ import { groupByRow } from '@utils/layout'
 import { sidebarWidgetsTypes } from '@constants/layout'
 import { CustomWidgetDescriptor } from '@cxbox-ui/core'
 import { AppWidgetMeta, CustomWidgetTypes } from '@interfaces/widget'
-import styles from './DashboardLayout.less'
+import styles from './DashboardLayout.module.less'
 
 export interface DashboardLayoutProps {
     widgets: AppWidgetMeta[]

@@ -6,7 +6,7 @@ import { useAppSelector } from '@store'
 import Button from '../../../ui/Button/Button'
 import { actions, interfaces } from '@cxbox-ui/core'
 import { EFeatureSettingKey } from '@interfaces/session'
-import styles from './UserMenuContent.less'
+import styles from './UserMenuContent.module.less'
 import { useTranslation } from 'react-i18next'
 
 export const UserMenuContent: React.FC = () => {

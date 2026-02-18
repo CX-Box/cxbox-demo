@@ -3,7 +3,7 @@ import cn from 'classnames'
 import DebugPanel from '../DebugPanel/DebugPanel'
 import { WidgetMeta, WidgetMetaAny } from '@cxbox-ui/core'
 import { useAppSelector } from '@store'
-import styles from './DebugWidgetWrapper.less'
+import styles from './DebugWidgetWrapper.module.less'
 
 interface Props {
     className?: string

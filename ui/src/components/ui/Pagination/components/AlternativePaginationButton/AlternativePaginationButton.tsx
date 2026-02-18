@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from '@store'
 import { actions } from '@actions'
 import { paginationTypeButtonPopoverText } from './constants'
 import { PaginationMode } from '@constants/pagination'
-import styles from './AlternativePaginationButton.less'
+import styles from './AlternativePaginationButton.module.less'
 
 export interface AlternativePaginationButtonProps {
     widgetName: string

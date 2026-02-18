@@ -1,7 +1,7 @@
 import React from 'react'
 import { Operation, OperationGroup, OperationType, WidgetTypes } from '@cxbox-ui/core'
 import { Dropdown, Icon, Menu, Spin } from 'antd'
-import styles from './OperationsGroup.less'
+import styles from './OperationsGroup.module.less'
 import { removeRecordOperationWidgets } from '@interfaces/widget'
 import Button, { ButtonProps } from '../../ui/Button/Button'
 

@@ -10,7 +10,7 @@ import { RootState } from '@store'
 import { PendingValidationFails, PendingValidationFailsFormat, WidgetFormMeta } from '@cxbox-ui/core'
 import { RowMetaField } from '@interfaces/rowMeta'
 import { WidgetField } from '@interfaces/widget'
-import styles from './Form.less'
+import styles from './Form.module.less'
 import FieldBaseThemeWrapper from '@components/FieldBaseThemeWrapper/FieldBaseThemeWrapper'
 
 interface FormOwnProps {

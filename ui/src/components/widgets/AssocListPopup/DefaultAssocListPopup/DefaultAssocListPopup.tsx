@@ -15,7 +15,7 @@ import { useFilterRecords } from './hooks/useFilterRecords'
 import { EMPTY_ARRAY } from '@constants'
 import { actions, BcFilter, interfaces, PendingValidationFailsFormat, WidgetTableMeta } from '@cxbox-ui/core'
 import { FilterType } from '@interfaces/filters'
-import styles from '@components/widgets/AssocListPopup/AssocListPopup.less'
+import styles from '@components/widgets/AssocListPopup/AssocListPopup.module.less'
 
 interface DefaultAssocListPopupProps {
     meta: WidgetTableMeta

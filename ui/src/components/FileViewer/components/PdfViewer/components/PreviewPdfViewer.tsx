@@ -4,8 +4,8 @@ import DocumentErrorBoundary from '@components/FileViewer/components/PdfViewer/c
 import { Spin } from 'antd'
 import 'react-pdf/dist/Page/AnnotationLayer.css'
 import 'react-pdf/dist/Page/TextLayer.css'
-import styles from '@components/FileViewer/components/PdfViewer/components/InlinePdfViewer.less'
-import workerSrc from 'pdfjs-dist/build/pdf.worker.min.js'
+import styles from '@components/FileViewer/components/PdfViewer/components/InlinePdfViewer.module.less'
+import workerSrc from 'pdfjs-dist/build/pdf.worker.min.js?url'
 
 pdfjs.GlobalWorkerOptions.workerSrc = workerSrc
 

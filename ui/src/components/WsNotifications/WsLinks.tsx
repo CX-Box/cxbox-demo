@@ -4,7 +4,7 @@ import DrillDown from '@components/ui/DrillDown/DrillDown'
 import { actions } from '@actions'
 import { useAppSelector } from '@store'
 import { NotificationLink } from '@interfaces/notification'
-import styles from './WsLinks.module.less'
+import styles from './WsLinks.module.module.less'
 
 interface Props {
     links: NotificationLink[]

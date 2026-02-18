@@ -1,7 +1,7 @@
 import React, { FormEvent, useCallback, useEffect } from 'react'
 import cn from 'classnames'
 import { Button, Checkbox, Col, Form, Icon, Popover, Row } from 'antd'
-import { ReactComponent as FilterIcon } from '@components/ColumnTitle/filter-solid.svg'
+import FilterIcon from '@components/ColumnTitle/filter-solid.svg?react'
 import { useTranslation } from 'react-i18next'
 import { useVisibility } from '@components/widgets/Table/hooks/useVisibility'
 import TemplatedTitle from '@components/TemplatedTitle/TemplatedTitle'
@@ -12,7 +12,7 @@ import { actions } from '@actions'
 import { useDispatch } from 'react-redux'
 import { filterByConditions } from '@utils/filterByConditions'
 import { FIELDS } from '@constants'
-import styles from './ColumnTitle.less'
+import styles from './ColumnTitle.module.less'
 
 interface ColumnTitleProps {
     title: string

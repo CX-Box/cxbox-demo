@@ -1,7 +1,7 @@
 import React from 'react'
 import InfoLabel from './InfoLabel'
 import { useAppSelector } from '@store'
-import styles from './ViewInfoLabel.less'
+import styles from './ViewInfoLabel.module.less'
 
 const ViewInfoLabel: React.FunctionComponent = () => {
     const screenName = useAppSelector(state => state.screen.screenName) ?? ''

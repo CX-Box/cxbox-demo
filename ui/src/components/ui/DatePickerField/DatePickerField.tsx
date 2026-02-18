@@ -1,7 +1,7 @@
 import React, { RefAttributes } from 'react'
 import moment, { Moment } from 'moment'
 import { DatePicker } from 'antd'
-import styles from './DatePickerField.less'
+import styles from './DatePickerField.module.less'
 import cn from 'classnames'
 import { BaseFieldProps } from '@components/Field/Field'
 import ReadOnlyField from '@components/ui/ReadOnlyField/ReadOnlyField'

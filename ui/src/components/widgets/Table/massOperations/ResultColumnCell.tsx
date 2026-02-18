@@ -1,7 +1,7 @@
 import { DataItem, IdItemResponse } from '@cxbox-ui/core'
 import { FC, memo, ReactNode } from 'react'
 import { Icon, Tooltip } from 'antd'
-import styles from './../Table.less'
+import styles from './../Table.module.less'
 
 interface Props {
     record: Partial<IdItemResponse>

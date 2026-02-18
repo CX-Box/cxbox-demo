@@ -1,6 +1,6 @@
 import React, { MouseEventHandler, useCallback } from 'react'
 import { icons } from './icons'
-import styles from './FileIcon.less'
+import styles from './FileIcon.module.less'
 import cn from 'classnames'
 import { isAudioExtension } from '@utils/fileViewer'
 import PreviewIcon from '@components/FileViewer/components/PreviewIcon/PreviewIcon'

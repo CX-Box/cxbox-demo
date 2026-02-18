@@ -1,7 +1,7 @@
 import React from 'react'
 import checkbox from '@assets/icons/checkbox.svg'
 import checkboxEmpty from '@assets/icons/checkboxEmpty.svg'
-import styles from './Checkbox.less'
+import styles from './Checkbox.module.less'
 
 interface CheckboxProps {
     checked: boolean

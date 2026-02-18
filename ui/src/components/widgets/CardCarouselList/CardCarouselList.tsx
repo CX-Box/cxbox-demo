@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import cn from 'classnames'
-import styles from './CardCarouselList.less'
+import styles from './CardCarouselList.module.less'
 import { AppWidgetMeta, CardCarouselListWidgetMeta, FileUploadFieldMeta } from '@interfaces/widget'
 import { Empty, Icon } from 'antd'
 import { FieldType } from '@cxbox-ui/schema'

@@ -3,7 +3,7 @@ import { Dropdown } from 'antd'
 import RowOperationsMenu from './RowOperationsMenu'
 import { AppWidgetMeta } from '@interfaces/widget'
 import Button from '@components/ui/Button/Button'
-import styles from './RowOperationsButton.less'
+import styles from './RowOperationsButton.module.less'
 import { DropDownProps } from 'antd/lib/dropdown'
 
 interface RowOperationsButtonProps extends Pick<DropDownProps, 'getPopupContainer'> {

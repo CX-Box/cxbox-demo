@@ -1,6 +1,6 @@
 import React from 'react'
 import Button, { ButtonProps } from '@components/ui/Button/Button'
-import styles from '@components/ui/ArrowPagination/ArrowPagination.less'
+import styles from '@components/ui/ArrowPagination/ArrowPagination.module.less'
 import cn from 'classnames'
 
 export interface ArrowButtonProps extends Pick<ButtonProps, 'onClick' | 'disabled' | 'className'> {

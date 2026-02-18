@@ -8,7 +8,7 @@ import { selectBc, selectWidget } from '@selectors/selectors'
 import Form from '@components/widgets/Form/Form'
 import { WidgetFormMeta } from '@cxbox-ui/core'
 import Button from '@components/ui/Button/Button'
-import styles from './ConfirmWithForm.less'
+import styles from './ConfirmWithForm.module.less'
 import { useTranslation } from 'react-i18next'
 
 interface ConfirmWithFormProps {

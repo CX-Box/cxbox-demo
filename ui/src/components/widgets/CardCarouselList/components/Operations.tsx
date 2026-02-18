@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import Button from '@components/ui/Button/Button'
 import { useTranslation } from 'react-i18next'
 import { Dropdown, Icon, Menu, Tooltip } from 'antd'
-import styles from './Operations.less'
+import styles from './Operations.module.less'
 import { isOperationGroup, Operation, OperationGroup } from '@cxbox-ui/core'
 
 type DynamicOperationProps = {

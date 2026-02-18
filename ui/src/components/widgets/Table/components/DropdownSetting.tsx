@@ -2,7 +2,7 @@ import React from 'react'
 import { Dropdown, Icon } from 'antd'
 import Button from '../../../ui/Button/Button'
 import { DropDownProps } from 'antd/lib/dropdown'
-import styles from './DropdownSettings.module.less'
+import styles from './DropdownSettings.module.module.less'
 
 interface DropdownSettingProps extends Omit<DropDownProps, 'trigger'> {
     buttonClassName?: string

@@ -4,7 +4,7 @@ import AppSide from '../AppSide/AppSide'
 import AppBar from '../AppBar/AppBar'
 import DevPanel from '../DevPanel/DevPanel'
 import { SSO_AUTH } from '@actions'
-import styles from './AppLayout.less'
+import styles from './AppLayout.module.less'
 import View from '../View/View'
 import ModalInvoke from '../ModalInvoke/ModalInvoke'
 import SystemNotifications from '../SystemNotifications/SystemNotifications'
@@ -19,7 +19,7 @@ import { FIELD_DISABLED_COLOR, WHEN_EDITABLE_FIELD_IS_DISABLED_THEN_FONT_OPACITY
 
 export const AppLayout: React.FC = () => {
     const dispatch = useAppDispatch()
-    const noSSO = Boolean(process.env['REACT_APP_NO_SSO'])
+    const noSSO = Boolean(import.meta.env.VITE_NO_SSO)
 
     const sessionActive = useAppSelector(state => state.session.active)
     const logoutRequested = useAppSelector(state => state.session.logout)

@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from './Header.less'
+import styles from './Header.module.less'
 import { useTranslation } from 'react-i18next'
 import Select from '@components/ui/Select/Select'
 import { WidgetMeta } from '@cxbox-ui/core'

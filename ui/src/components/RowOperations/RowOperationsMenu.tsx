@@ -1,6 +1,6 @@
 import React from 'react'
 import { Icon, Menu, Skeleton, Spin } from 'antd'
-import styles from './RowOperationsMenu.less'
+import styles from './RowOperationsMenu.module.less'
 import { useAppDispatch, useAppSelector } from '@store'
 import { useTranslation } from 'react-i18next'
 import { useWidgetOperationsOld } from '@hooks/useWidgetOperations'

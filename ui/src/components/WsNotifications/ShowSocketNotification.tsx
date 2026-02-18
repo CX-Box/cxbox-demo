@@ -10,7 +10,7 @@ import { closeNotification, openBusinessNotification } from '@components/Notific
 import { actions, interfaces } from '@cxbox-ui/core'
 import { CxBoxApiInstance } from '../../api'
 import { SocketNotification } from '@interfaces/notification'
-import styles from './ShowSocketNotification.less'
+import styles from './ShowSocketNotification.module.less'
 
 interface NotificationProps extends Omit<ArgsProps, 'icon'>, SocketNotification {
     route: interfaces.Route

@@ -4,7 +4,7 @@ import { Menu, Icon } from 'antd'
 import { ClickParam } from 'antd/lib/menu'
 import { useAppSelector } from '@store'
 import Search from 'antd/lib/input/Search'
-import styles from './ScreenNavigation.less'
+import styles from './ScreenNavigation.module.less'
 import { useChangeLocation } from '@router'
 
 const selectedItemClass = 'selectedItem'

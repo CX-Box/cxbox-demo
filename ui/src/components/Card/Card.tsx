@@ -8,7 +8,7 @@ import { useWidgetCollapse } from '@hooks/useWidgetCollapse'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import WidgetTitle from '@components/WidgetTitle/WidgetTitle'
 import { AppWidgetMeta, CustomWidgetTypes } from '@interfaces/widget'
-import styles from './Card.less'
+import styles from './Card.module.less'
 
 export interface CardProps {
     children: React.ReactNode

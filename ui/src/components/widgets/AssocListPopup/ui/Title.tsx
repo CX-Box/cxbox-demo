@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from './Title.less'
+import styles from './Title.module.less'
 import Tag from '@components/ui/Tag/Tag'
 import WidgetTitle from '@components/WidgetTitle/WidgetTitle'
 import { DataValue } from '@cxbox-ui/schema'

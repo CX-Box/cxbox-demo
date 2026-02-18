@@ -211,7 +211,7 @@ const instance = axios.create({
     }
 })
 
-if (!process.env['REACT_APP_NO_SSO']) {
+if (!import.meta.env.VITE_NO_SSO) {
     instance.interceptors.request.use(tokenInterceptor, () => Promise.reject())
 }
 

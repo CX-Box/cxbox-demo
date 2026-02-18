@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Icon, Select } from 'antd'
 import cn from 'classnames'
-import styles from './Pagination.less'
+import styles from './Pagination.module.less'
 import { generateRange } from '@utils/range'
 import { useStompNotification } from '@components/WsNotifications/hooks'
 

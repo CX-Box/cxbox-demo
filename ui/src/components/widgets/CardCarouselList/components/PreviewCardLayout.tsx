@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from './PreviewCardLayout.less'
+import styles from './PreviewCardLayout.module.less'
 import cn from 'classnames'
 
 interface PreviewCardLayoutProps extends React.HTMLAttributes<HTMLDivElement> {

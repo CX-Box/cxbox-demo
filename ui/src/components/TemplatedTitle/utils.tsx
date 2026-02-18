@@ -1,6 +1,6 @@
 import { DataItem, DataValue, WidgetField, WidgetFieldBase } from '@cxbox-ui/schema'
 import React, { ReactNode } from 'react'
-import styles from './TemplatedTitle.less'
+import styles from './TemplatedTitle.module.less'
 import cn from 'classnames'
 import moment from 'moment'
 import { getFormat as getDateFormat } from '@utils/date'

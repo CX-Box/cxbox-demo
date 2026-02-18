@@ -5,8 +5,8 @@ import { useTranslation } from 'react-i18next'
 import { isoLocalFormatter } from '@utils/date'
 import { DatePickerProps, SinglePickerProps } from 'antd/lib/date-picker/interface'
 import { DataValue } from '@cxbox-ui/schema'
-import styles from './RangePicker.less'
-import buttonStyles from './components/RangeTransferButtons/RangeTransferButtons.less'
+import styles from './RangePicker.module.less'
+import buttonStyles from './components/RangeTransferButtons/RangeTransferButtons.module.less'
 import { isEmptyValue } from '@components/ColumnTitle/components/utils'
 
 interface RangePickerProps extends Omit<DatePickerProps, 'onChange' | 'value'> {

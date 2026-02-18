@@ -5,7 +5,7 @@ import { useAppDispatch } from '@store'
 import { useWidgetCollapse } from '@hooks/useWidgetCollapse'
 import TemplatedTitle from '@components/TemplatedTitle/TemplatedTitle'
 import { setCollapsedWidgets } from '@actions'
-import styles from './WidgetTitle.less'
+import styles from './WidgetTitle.module.less'
 
 interface WidgetTitleProps {
     id?: string

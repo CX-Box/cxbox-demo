@@ -1,6 +1,6 @@
 import React from 'react'
 import { Steps as AntSteps } from 'antd'
-import styles from './Steps.less'
+import styles from './Steps.module.less'
 import { MassStep } from '@components/widgets/Table/massOperations/constants'
 
 const { Step } = AntSteps

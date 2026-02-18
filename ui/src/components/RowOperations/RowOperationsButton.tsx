@@ -1,6 +1,6 @@
 import React, { ForwardedRef, MutableRefObject } from 'react'
 import { Button, Dropdown } from 'antd'
-import styles from './RowOperationsButton.less'
+import styles from './RowOperationsButton.module.less'
 import RowOperationsMenu from './RowOperationsMenu'
 import { useAppDispatch } from '@store'
 import { actions, DataItem, WidgetTableMeta } from '@cxbox-ui/core'

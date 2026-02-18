@@ -13,8 +13,8 @@ import useFixSelectDropdownForScroll from '@hooks/useFixSelectDropdownForScroll'
 import { BaseFieldProps } from '@components/Field/Field'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import { isPopupWidgetFamily } from '@utils/isPopupWidgetFamily'
-import { ReactComponent as folder } from '../../assets/icons/folder.svg'
-import styles from './InlinePickList.less'
+import folder from '../../assets/icons/folder.svg?react'
+import styles from './InlinePickList.module.less'
 import { AppWidgetMeta } from '@interfaces/widget'
 
 interface Props extends Omit<BaseFieldProps, 'meta'> {

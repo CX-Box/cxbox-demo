@@ -11,7 +11,7 @@ import { interfaces } from '@cxbox-ui/core'
 import { EFeatureSettingKey } from '@interfaces/session'
 import { CustomFieldTypes } from '@interfaces/widget'
 import { RowMetaField } from '@interfaces/rowMeta'
-import styles from './ColumnTitle.less'
+import styles from './ColumnTitle.module.less'
 
 interface ColumnTitleProps {
     widgetName: string

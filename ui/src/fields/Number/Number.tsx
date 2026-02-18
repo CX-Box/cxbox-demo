@@ -2,7 +2,7 @@ import React from 'react'
 import { NumberTypes } from '@components/ui/NumberInput/formaters'
 import NumberInput from '@components/ui/NumberInput/NumberInput'
 import { AppNumberFieldMeta } from '@interfaces/widget'
-import styles from './Number.less'
+import styles from './Number.module.less'
 
 interface NumberProps {
     value: number

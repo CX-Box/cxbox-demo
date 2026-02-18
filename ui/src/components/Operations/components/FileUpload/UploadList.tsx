@@ -6,7 +6,7 @@ import {
     isFileUploading,
     isFileUploadSuccess
 } from '@components/Operations/components/FileUpload/FileUpload.utils'
-import styles from './UploadList.less'
+import styles from './UploadList.module.less'
 import { AddedFileInfo } from '@components/Operations/components/FileUpload/FileUpload.interfaces'
 
 interface UploadListProps {

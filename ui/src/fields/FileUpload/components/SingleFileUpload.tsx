@@ -8,7 +8,7 @@ import FilePreviewIcon from './FilePreviewIcon'
 import { trimString } from '@utils/fileViewer'
 import Upload from '@components/Upload'
 import Button from '@components/ui/Button/Button'
-import styles from '../FileUpload.less'
+import styles from '../FileUpload.module.less'
 
 export interface AdditionalUploadProps extends UploadProps {
     onStart: (file: UploadFile) => void

@@ -1,7 +1,7 @@
 import React from 'react'
 import cn from 'classnames'
 import { Icon, Input } from 'antd'
-import styles from './SearchInput.less'
+import styles from './SearchInput.module.less'
 
 interface SearchInputProps {
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void

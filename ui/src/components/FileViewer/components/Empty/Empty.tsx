@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from './Empty.less'
+import styles from './Empty.module.less'
 import FileIcon, { FileIconProps } from '@components/FileViewer/components/FileIcon/FileIcon'
 import cn from 'classnames'
 import { isDefined } from '@utils/isDefined'

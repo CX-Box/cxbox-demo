@@ -2,7 +2,7 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import { actions } from '@cxbox-ui/core'
 import { Form, Input, Button, Icon } from 'antd'
-import styles from './Login.less'
+import styles from './Login.module.less'
 import { useAppSelector } from '@store'
 import { useTranslation } from 'react-i18next'
 

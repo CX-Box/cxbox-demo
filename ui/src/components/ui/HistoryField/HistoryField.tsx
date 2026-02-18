@@ -1,6 +1,6 @@
 import React from 'react'
 import Field from '@components/Field/Field'
-import styles from './HistoryField.less'
+import styles from './HistoryField.module.less'
 import { diffWords } from 'diff'
 import cn from 'classnames'
 import { interfaces } from '@cxbox-ui/core'

@@ -10,7 +10,7 @@ import { changeMenuCollapsed } from '@actions'
 import { SIDE_BAR_BG_COLOR, SIDE_BAR_COLLAPSED_WIDTH, SIDE_BAR_WIDTH } from '@components/AppSide/constants'
 import logo from '../../assets/icons/logo.svg'
 import logoWide from '../../assets/icons/logo-wide.svg'
-import styles from './AppSide.less'
+import styles from './AppSide.module.less'
 
 function AppSide() {
     const dispatch = useAppDispatch()

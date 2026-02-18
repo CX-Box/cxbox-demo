@@ -14,7 +14,7 @@ import { BcFilter, DataValue, FilterType as CoreFilterType, PickListFieldMeta, R
 import { getLocalFilterType } from '@utils/filters'
 import { checkboxFilterCounterLimit, checkboxFilterMaxVisibleItems } from '@constants/filter'
 import { checkboxFilterFieldTypes } from './constants'
-import styles from './FilterPopup.less'
+import styles from './FilterPopup.module.less'
 import { selectBcFilters } from '@selectors/selectors'
 import { useCleanOldRangeFilters } from '@hooks/useCleanOldRangeFilters'
 

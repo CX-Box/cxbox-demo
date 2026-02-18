@@ -2,7 +2,7 @@ import React from 'react'
 import { Input } from 'antd'
 import { InputProps } from 'antd/es/input'
 import cn from 'classnames'
-import styles from './Input.less'
+import styles from './Input.module.less'
 
 interface CustomInputProps extends InputProps {}
 

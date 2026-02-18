@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from './FullscreenLayout.less'
+import styles from './FullscreenLayout.module.less'
 
 interface FullscreenLayoutProps {
     title: React.ReactNode

@@ -1,10 +1,3 @@
-declare module '*.less' {
-    const classes: { readonly [key: string]: string }
-    export default classes
-}
-
-declare module 'pdfjs-dist/build/pdf.worker.min.js'
-
 declare type ValueOf<T> = T[keyof T]
 
 declare type KeysMatching<T, V> = ValueOf<{

@@ -11,7 +11,7 @@
 
 import React, { FunctionComponent } from 'react'
 import cn from 'classnames'
-import styles from './InteractiveInput.less'
+import styles from './InteractiveInput.module.less'
 
 export interface InteractiveInputProps {
     suffixClassName?: string

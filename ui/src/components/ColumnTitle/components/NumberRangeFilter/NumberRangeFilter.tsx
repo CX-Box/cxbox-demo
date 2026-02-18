@@ -5,7 +5,7 @@ import RangeTransferButtons from '@components/ColumnTitle/components/RangeTransf
 import { isEmptyValue } from '../utils'
 import { initialFilterValues } from './constants'
 import { DataValue } from '@cxbox-ui/schema'
-import styles from './NumberRangeFilter.less'
+import styles from './NumberRangeFilter.module.less'
 
 interface NumberRangeFilterProps extends Omit<NumberInputProps, 'onChange' | 'value'> {
     onChange: (v: DataValue[] | null) => void

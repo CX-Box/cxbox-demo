@@ -7,7 +7,7 @@ import { RootState } from '@store'
 import { WidgetShowCondition } from '@cxbox-ui/schema'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import { ScreenState } from '../../reducers/screen'
-import styles from './Widget.less'
+import styles from './Widget.module.less'
 import DebugWidgetWrapper from '@components/DebugWidgetWrapper/DebugWidgetWrapper'
 
 interface WidgetOwnProps {

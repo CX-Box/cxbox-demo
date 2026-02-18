@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import styles from './InlinePdfViewer.less'
+import styles from './InlinePdfViewer.module.less'
 import { getInlineFirefoxHideToolbarStyle } from '@components/FileViewer/components/PdfViewer/utils'
 import { Spin } from 'antd'
 import Empty from '@components/FileViewer/components/Empty/Empty'

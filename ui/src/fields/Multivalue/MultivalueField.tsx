@@ -8,7 +8,7 @@ import { RootState, useAppSelector } from '@store'
 import { BaseFieldProps } from '@components/Field/Field'
 import { actions, DataItem, interfaces, WidgetTypes } from '@cxbox-ui/core'
 import { DataValue } from '@cxbox-ui/schema'
-import styles from './MultivalueField.less'
+import styles from './MultivalueField.module.less'
 import cn from 'classnames'
 
 export interface MultivalueFieldOwnProps extends BaseFieldProps {

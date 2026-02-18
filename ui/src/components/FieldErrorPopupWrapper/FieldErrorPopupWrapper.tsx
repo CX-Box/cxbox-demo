@@ -5,7 +5,7 @@ import { buildBcUrl } from '@utils/buildBcUrl'
 import { interfaces } from '@cxbox-ui/core'
 import { useTranslation } from 'react-i18next'
 import { TooltipPlacement } from 'antd/es/tooltip'
-import styles from './FieldErrorPopupWrapper.less'
+import styles from './FieldErrorPopupWrapper.module.less'
 import cn from 'classnames'
 import { selectBcRowMeta } from '@selectors/selectors'
 

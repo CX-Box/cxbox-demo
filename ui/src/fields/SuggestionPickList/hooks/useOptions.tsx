@@ -7,7 +7,7 @@ import { CxBoxApiInstance } from '../../../api'
 import { MIN_SEARCH_VALUE_LENGTH } from '../constants'
 import { SuggestionPickListDataItem } from '@interfaces/data'
 import { SuggestionPickListWidgetMeta } from '@interfaces/widget'
-import styles from '../SuggestionPickList.less'
+import styles from '../SuggestionPickList.module.less'
 
 type DebounceFunc = ReturnType<typeof debounce>
 

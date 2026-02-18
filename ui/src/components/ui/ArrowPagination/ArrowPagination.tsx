@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import styles from './ArrowPagination.less'
+import styles from './ArrowPagination.module.less'
 import { useTranslation } from 'react-i18next'
 import ArrowButton, { ArrowButtonProps } from '@components/ui/ArrowPagination/ArrowButton'
 import cn from 'classnames'

@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef } from 'react'
+import { Icon } from 'antd'
 import { FlowAnalysisGraph as AntFlowAnalysisGraph } from '@ant-design/graphs'
 import { useAppDispatch, useAppSelector } from '@store'
 import {
@@ -13,9 +14,8 @@ import {
 import { actions } from '@actions'
 import {
     anchorPointsByMode,
-    defaultBadgeColor,
+    cursorEdgeLineWidth,
     defaultEdgeColor,
-    defaultEdgeType,
     defaultMode,
     defaultSourceKey,
     defaultTargetKey,
@@ -23,7 +23,10 @@ import {
     drillDownEdgeColor,
     edgeFieldKey,
     edgeTextColor,
+    endArrowPath,
     endArrowSize,
+    fontFamily,
+    fontSize,
     height,
     mainNodeColor,
     markerPositionByMode,
@@ -37,6 +40,7 @@ import { WidgetListField } from '@cxbox-ui/core'
 import { RelationGraphWidgetMeta } from '@interfaces/widget'
 import { FlowAnalysisGraphConfig } from '@ant-design/graphs/es/components/flow-analysis-graph'
 import { IEdge, INode } from './interfaces'
+import styles from './RelationGraph.less'
 
 interface RelationGraphProps {
     meta: RelationGraphWidgetMeta
@@ -63,14 +67,6 @@ const RelationGraph: React.FC<RelationGraphProps> = ({ meta, setDataValidationEr
 
     const hasCycle = useMemo(() => hasCycles(initialData, sourceNodeKey, targetNodeKey), [initialData, sourceNodeKey, targetNodeKey])
 
-    const data = useMemo(() => {
-        if (hasDuplicates || hasCycle) {
-            return null
-        }
-
-        return mapToFlowGraphData(initialData, sourceNodeKey, targetNodeKey, edges?.labelFieldKeys, nodes?.descriptionFieldKeys) as any
-    }, [initialData, sourceNodeKey, targetNodeKey, edges?.labelFieldKeys, nodes?.descriptionFieldKeys, hasDuplicates, hasCycle])
-
     const nodeFieldMeta = useMemo(() => {
         return fields.find(field => field.key === targetNodeKey)
     }, [fields, targetNodeKey])
@@ -78,6 +74,30 @@ const RelationGraph: React.FC<RelationGraphProps> = ({ meta, setDataValidationEr
     const edgeFieldMeta = useMemo(() => {
         return fields.find(field => field.key === edgeFieldKey)
     }, [fields])
+
+    const data = useMemo(() => {
+        if (hasDuplicates || hasCycle) {
+            return null
+        }
+
+        return mapToFlowGraphData(
+            initialData,
+            sourceNodeKey,
+            targetNodeKey,
+            nodeFieldMeta?.width || defaultWidth,
+            edges?.labelFieldKeys,
+            nodes?.descriptionFieldKeys
+        ) as any
+    }, [
+        hasDuplicates,
+        hasCycle,
+        initialData,
+        sourceNodeKey,
+        targetNodeKey,
+        nodeFieldMeta?.width,
+        edges?.labelFieldKeys,
+        nodes?.descriptionFieldKeys
+    ])
 
     const onClick = useCallback(
         (itemId: string, valueFieldMeta?: WidgetListField) => {
@@ -99,10 +119,9 @@ const RelationGraph: React.FC<RelationGraphProps> = ({ meta, setDataValidationEr
 
     const getEdgeFill = useCallback(
         (edgeId: string) => {
-            const isSelected = cursorRef.current === edgeId
             const edgeColor = getEdgeBgColor(edgeId, initialData, edgeFieldMeta) || defaultEdgeColor
 
-            return edgeFieldMeta?.drillDown || isSelected ? drillDownEdgeColor : edgeColor
+            return edgeFieldMeta?.drillDown ? drillDownEdgeColor : edgeColor
         },
         [edgeFieldMeta, initialData]
     )
@@ -110,12 +129,11 @@ const RelationGraph: React.FC<RelationGraphProps> = ({ meta, setDataValidationEr
     const config: FlowAnalysisGraphConfig | null = useMemo(
         () =>
             data && {
-                autoFit: true,
-                fitCenter: true,
+                className: styles.container,
                 data,
                 layout: {
                     rankdir: mode || defaultMode,
-                    ranksepFunc: () => 15
+                    ranksepFunc: () => 25
                 },
                 nodeCfg: {
                     size: [nodeFieldMeta?.width || defaultWidth, height],
@@ -123,10 +141,11 @@ const RelationGraph: React.FC<RelationGraphProps> = ({ meta, setDataValidationEr
                         show: true,
                         style: (node: INode) => ({
                             cursor: 'pointer',
-                            fill: getNodeBgColor(node.id, targetNodeKey, initialData, nodeFieldMeta) || defaultBadgeColor,
+                            fill: getNodeBgColor(node.id, targetNodeKey, initialData, nodeFieldMeta) || 'transparent',
                             radius: [4, 0, 0, 4]
                         })
                     },
+                    padding: [6, 12, 6, 6],
                     anchorPoints: anchorPointsByMode[mode || defaultMode],
                     nodeStateStyles: {
                         hover: {
@@ -140,14 +159,15 @@ const RelationGraph: React.FC<RelationGraphProps> = ({ meta, setDataValidationEr
                         containerStyle: (node: INode) => ({
                             cursor: 'pointer',
                             fill: node.value?.type === 'main' ? mainNodeColor : nodeColor,
-                            radius: [4, 4, 0, 0]
+                            radius: node.value?.items ? [4, 4, 0, 0] : [4, 4, 4, 4]
                         }),
                         style: {
                             cursor: 'pointer',
                             fill: nodeTextColor,
-                            fontSize: 12,
+                            fontSize: fontSize,
                             stroke: nodeTextColor,
-                            lineWidth: 0.3
+                            lineWidth: 0.3,
+                            fontFamily: fontFamily
                         }
                     },
                     items: {
@@ -157,7 +177,8 @@ const RelationGraph: React.FC<RelationGraphProps> = ({ meta, setDataValidationEr
                         style: {
                             cursor: 'pointer',
                             fill: nodeTextColor,
-                            fontSize: 12
+                            fontSize: fontSize,
+                            fontFamily: fontFamily
                         }
                     },
                     style: {
@@ -176,13 +197,16 @@ const RelationGraph: React.FC<RelationGraphProps> = ({ meta, setDataValidationEr
                             cursor: 'pointer',
                             textBaseline: 'bottom',
                             fill: edgeTextColor,
-                            fontSize: 12
+                            fontSize: fontSize,
+                            fontFamily: fontFamily
                         }
                     },
-                    type: edges?.type || defaultEdgeType,
+                    type: edges?.type || (['TB', 'BT'].includes(mode || defaultMode) ? 'cubic-vertical' : 'cubic-horizontal'),
                     endArrow: (edge: IEdge) => ({
                         fill: getEdgeFill(edge.edgeId),
-                        size: endArrowSize
+                        size: endArrowSize,
+                        path: endArrowPath,
+                        d: 1
                     }),
                     style: (edge: IEdge) => {
                         const edgeId = edge.edgeId
@@ -190,7 +214,7 @@ const RelationGraph: React.FC<RelationGraphProps> = ({ meta, setDataValidationEr
 
                         return {
                             cursor: 'pointer',
-                            lineWidth: isSelected ? 2 : 1,
+                            lineWidth: isSelected ? cursorEdgeLineWidth : 1,
                             stroke: getEdgeFill(edgeId),
                             radius: 4,
                             offset: 20
@@ -212,7 +236,21 @@ const RelationGraph: React.FC<RelationGraphProps> = ({ meta, setDataValidationEr
                     show: true,
                     customContent: item => <div>{item.value.title}</div>
                 },
+                toolbarCfg: {
+                    show: true,
+                    renderIcon: ({ zoomIn, zoomOut, toggleFullscreen, fullscreen }) => (
+                        <div className={styles.toolbar}>
+                            <Icon className={styles.toolbarButton} type={fullscreen ? 'close' : 'fullscreen'} onClick={toggleFullscreen} />
+                            <Icon className={styles.toolbarButton} type="plus" onClick={zoomIn} />
+                            <Icon className={styles.toolbarButton} type="minus" onClick={zoomOut} />
+                        </div>
+                    )
+                },
                 onReady: graph => {
+                    graph.on('afterrender', () => {
+                        graph.fitView()
+                    })
+
                     graph.once('afterlayout', () => {
                         const collapsedNodeItems = graph.getNodes().filter(node => !(node.getModel()?.value as any)?.expanded)
 
@@ -250,7 +288,6 @@ const RelationGraph: React.FC<RelationGraphProps> = ({ meta, setDataValidationEr
                                 showSubTree(graph, id)
                                 graph.updateItem(id, { collapsed: false })
                                 graph.layout()
-                                graph.paint()
                             }
                             return
                         }

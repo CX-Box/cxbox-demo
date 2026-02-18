@@ -1,12 +1,20 @@
+import { fontFamily, fontSize, maxItemsLines, wrapItemsWidthPercent } from './constants'
 import { DataItem } from '@cxbox-ui/core'
 import { WidgetListField } from '@cxbox-ui/schema'
 import { IGraph } from '@ant-design/graphs'
 import { IEdge, INode } from './interfaces'
 
+const canvas = document.createElement('canvas')
+const ctx = canvas.getContext('2d')!
+ctx.font = `${fontSize}px ${fontFamily}`
+
+const hasValue = (v: any) => v !== undefined && v !== null && v !== ''
+
 export const mapToFlowGraphData = (
     data: DataItem[],
     sourceNodeKey: string,
     targetNodeKey: string,
+    nodeWidth: number,
     labelFieldKeys?: string[],
     descriptionFieldKeys?: string[]
 ) => {
@@ -15,22 +23,9 @@ export const mapToFlowGraphData = (
     const [nodeTitle, ...rest] = descriptionFieldKeys || []
 
     data.forEach((item: any) => {
-        if (item[targetNodeKey] && !nodesMap.has(item[targetNodeKey])) {
-            nodesMap.set(item[targetNodeKey], {
-                id: item[targetNodeKey],
-                value: {
-                    title: item[nodeTitle || targetNodeKey] || ' ',
-                    ...(rest?.length
-                        ? {
-                              items: rest.map(key => ({
-                                  text: item[key]
-                              }))
-                          }
-                        : {}),
-                    type: item.targetNodeType ?? 'default',
-                    expanded: item.targetNodeExpanded
-                }
-            })
+        const id = item[targetNodeKey]
+        if (!id) {
+            return
         }
 
         if (item[sourceNodeKey] && item[targetNodeKey]) {
@@ -47,6 +42,50 @@ export const mapToFlowGraphData = (
                       }
                     : {})
             })
+        }
+
+        const newTitle = item[nodeTitle || targetNodeKey] || ' '
+
+        const newItems = rest?.length
+            ? rest
+                  .map(key => ({
+                      text: formatDescriptionByWidth(item[key], nodeWidth * wrapItemsWidthPercent, maxItemsLines)
+                  }))
+                  .filter(i => hasValue(i.text))
+            : undefined
+
+        const newType = item.targetNodeType
+        const newExpanded = item.targetNodeExpanded
+
+        const existing = nodesMap.get(id)
+
+        if (!existing) {
+            nodesMap.set(id, {
+                id,
+                value: {
+                    title: newTitle,
+                    ...(newItems?.length ? { items: newItems } : {}),
+                    type: newType ?? 'default',
+                    expanded: newExpanded
+                }
+            })
+            return
+        }
+
+        if (hasValue(newTitle)) {
+            existing.value.title = newTitle
+        }
+
+        if (newItems?.length) {
+            existing.value.items = newItems
+        }
+
+        if (hasValue(newType)) {
+            existing.value.type = newType
+        }
+
+        if (newExpanded !== undefined && newExpanded !== null) {
+            existing.value.expanded = newExpanded
         }
     })
 
@@ -179,10 +218,40 @@ export const getNodeBgColor = (targetNodeId: string, targetNodeKey: string, data
     const colorKey = fieldMeta?.bgColorKey
 
     if (colorKey) {
-        const dataItem = data.find(item => item[targetNodeKey] === targetNodeId)
-
-        return dataItem?.[colorKey] as string
+        return data.find(item => item[targetNodeKey] === targetNodeId && item[colorKey])?.[colorKey]
     } else {
         return fieldMeta?.bgColor
     }
+}
+
+export const formatDescriptionByWidth = (text: string, maxWidthPx: number, maxLines: number) => {
+    if (!text) {
+        return ''
+    }
+
+    const clean = text.trim()
+    let lines: string[] = []
+    let currentLine = ''
+
+    for (let i = 0; i < clean.length; i++) {
+        const testLine = currentLine + clean[i]
+        const { width } = ctx.measureText(testLine)
+
+        if (width > maxWidthPx) {
+            lines.push(currentLine)
+            currentLine = clean[i]
+
+            if (lines.length === maxLines) {
+                const last = lines[maxLines - 1]
+                lines[maxLines - 1] = last.slice(0, -3) + '...'
+                return lines.join('\n')
+            }
+        } else {
+            currentLine = testLine
+        }
+    }
+
+    lines.push(currentLine)
+
+    return lines.slice(0, maxLines).join('\n')
 }

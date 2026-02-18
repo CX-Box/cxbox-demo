@@ -1,17 +1,15 @@
 package org.demo.service.cxbox.anysource.sale;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.cxbox.core.controller.param.QueryParameters;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.dao.impl.AbstractAnySourceBaseDAO;
-import org.cxbox.model.core.entity.BaseEntity_;
 import org.demo.dto.cxbox.inner.SaleDTO;
 import org.demo.entity.Sale;
-import org.demo.entity.Sale_;
 import org.demo.repository.SaleRepository;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -32,17 +30,14 @@ public class SaleClientDAO extends AbstractAnySourceBaseDAO<SaleDTO> {
 
 	@Override
 	public SaleDTO getByIdIgnoringFirstLevelCache(BusinessComponent bc) {
-		return getAllData(bc, null).stream()
-				.filter(e -> e.getId().equals(bc.getIdAsLong()))
-				.findFirst().map(SaleDTO::new)
+		return saleRepository.findById(bc.getIdAsLong())
+				.map(SaleDTO::new)
 				.orElse(null);
 	}
 
 	@Override
 	public Page<SaleDTO> getList(BusinessComponent bc, QueryParameters queryParameters) {
-		return new PageImpl<>(getAllData(bc, queryParameters).stream()
-				.map(SaleDTO::new)
-				.toList());
+		return getSales(bc, queryParameters).map(SaleDTO::new);
 	}
 
 	@Override
@@ -60,12 +55,14 @@ public class SaleClientDAO extends AbstractAnySourceBaseDAO<SaleDTO> {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
-	private List<Sale> getAllData(BusinessComponent bc, QueryParameters queryParameters) {
-		var params = bc.getParentId().split("_");
-		return saleRepository.findAll((root, cq, cb) -> cb.and(
-				cb.equal(root.get(Sale_.client).get(BaseEntity_.id), Long.valueOf(params[0])),
-				cb.equal(root.get(Sale_.clientSeller).get(BaseEntity_.id), Long.valueOf(params[1]))
-		));
+	private Page<Sale> getSales(BusinessComponent bc, QueryParameters queryParameters) {
+		var ids = bc.getParentId().split("_");
+		Long targetId = Long.parseLong(ids[0]);
+		Long sourceId = Long.parseLong(ids[1]);
+		int pageNumber = queryParameters.getPageNumber();
+		int pageSize = queryParameters.getPageSize();
+		Pageable pageable = PageRequest.of(pageNumber, pageSize);
+		return saleRepository.findAll(saleRepository.findSaleByTargetIdAndSellerId(targetId, sourceId), pageable);
 	}
 
 }

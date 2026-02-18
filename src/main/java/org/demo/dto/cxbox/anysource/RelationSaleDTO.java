@@ -1,12 +1,13 @@
 package org.demo.dto.cxbox.anysource;
 
+import java.util.Optional;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.cxbox.api.data.dto.DataResponseDTO;
-import org.demo.entity.RelationGraph;
-import org.demo.entity.dictionary.ClientImportance;
+import org.demo.entity.Client;
 import org.demo.entity.enums.TargetNodeType;
+import org.demo.repository.projection.RelationGraphPrj;
 
 @Getter
 @Setter
@@ -33,16 +34,20 @@ public class RelationSaleDTO extends DataResponseDTO {
 
 	private String targetNodeColor;
 
-	public RelationSaleDTO(RelationGraph entity) {
-		this.id = entity.getId().toString();
-		this.sourceNodeId = entity.getSourceNodeId();
-		this.targetNodeId = entity.getTargetNodeId();
-		this.targetNodeExpanded = entity.getTargetNodeExpanded();
-		this.targetNodeName = entity.getTargetNodeName();
-		this.targetNodeDescription = entity.getTargetNodeDescription();
-		this.edgeValue = entity.getEdgeValue();
-		this.edgeDescription = "Sum, $";
-		this.targetNodeColor = ClientImportance.colors.get(entity.getTargetImportance());
+	public RelationSaleDTO(RelationGraphPrj node, Client targetClient) {
+		this.setId(node.targetId() + "_" + node.sourceId());
+		this.setSourceNodeId(Optional.ofNullable(node.sourceId()).map(String::valueOf).orElse(null));
+		if (node.sourceId() == null) {
+			this.setId(node.targetId() + "_" + node.targetId());
+		}
+		this.setTargetNodeId(String.valueOf(node.targetId()));
+		this.setTargetNodeExpanded(true);
+		this.setTargetNodeDescription(String.valueOf(targetClient.getAddress()));
+		this.setTargetNodeName(String.valueOf(targetClient.getFullName()));
+		this.setTargetNodeType(null);
+		this.setEdgeColor(null);
+		this.setEdgeDescription("Sum, $");
+		this.setEdgeValue(node.sum());
 	}
 
 }

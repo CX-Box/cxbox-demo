@@ -57,10 +57,11 @@ public interface SaleRepository extends JpaRepository<Sale, Long>, JpaSpecificat
 			""")
 	List<DashboardSalesByMonthAndProductPrj> getSalesByMonthAndProduct(Set<FieldOfActivity> fieldOfActivities);
 
-	default Specification<Sale> findSalesByClientId(Long sellerId, Long clientId) {
+	default Specification<Sale> findSaleByTargetIdAndSellerId(Long targetId, Long sourceId) {
 		return (root, cq, cb) -> cb.and(
-				cb.equal(root.get(Sale_.clientSeller).get(BaseEntity_.id), sellerId),
-				cb.equal(root.get(Sale_.client).get(BaseEntity_.id), clientId)
+				cb.equal(root.get(Sale_.clientSeller).get(BaseEntity_.id), sourceId),
+				cb.equal(root.get(Sale_.client).get(BaseEntity_.id), targetId)
 		);
 	}
+
 }

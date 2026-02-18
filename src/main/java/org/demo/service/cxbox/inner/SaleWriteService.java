@@ -66,7 +66,6 @@ public class SaleWriteService extends VersionAwareResponseService<SaleDTO, Sale>
 
 	@Override
 	public ActionResultDTO<SaleDTO> onCancel(BusinessComponent bc) {
-		Sale sale = loadEntity(bc, getOne(bc));
 		return new ActionResultDTO<SaleDTO>().setAction(
 				PostAction.drillDown(
 						DrillDownType.INNER,

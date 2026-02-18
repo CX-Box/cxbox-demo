@@ -39,9 +39,6 @@ public class SaleClientService extends AnySourceVersionAwareResponseService<Sale
 	@Override
 	public Actions<SaleDTO> getActions() {
 		return Actions.<SaleDTO>builder()
-				.create(crt -> crt.text("Create"))
-				.delete(dlt -> dlt.text("Delete"))
-				.save(sv -> sv.text("Save"))
 				.build();
 	}
 

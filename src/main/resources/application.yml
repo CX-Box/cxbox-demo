@@ -97,7 +97,7 @@ spring:
     password: ${DATABASE_PASSWORD:postgres}
   liquibase:
     change-log: classpath:/db/db.changelog-master.xml
-    drop-first: true
+    drop-first: false
     contexts: local
   cache:
     type: SIMPLE

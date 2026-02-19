@@ -94,7 +94,6 @@ public class ClientSalesGraphDAO extends AbstractAnySourceBaseDAO<GraphEdgeDTO> 
 					.build()
 			);
 		}
-		RelationGraphUtils.normalizeResult(result);
 		return result;
 	}
 

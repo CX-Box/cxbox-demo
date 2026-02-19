@@ -16,17 +16,4 @@ public enum TargetNodeType {
 	@JsonValue
 	private final String value;
 
-	private static final Map<String, TargetNodeType> BY_VALUE =
-			Arrays.stream(values()).collect(Collectors.toMap(TargetNodeType::getValue, Function.identity()));
-
-	public static TargetNodeType fromValue(String value) {
-		if (value == null) {
-			return null;
-		}
-		TargetNodeType t = BY_VALUE.get(value);
-		if (t == null) {
-			throw new IllegalArgumentException("Unknown TargetNodeType value: " + value);
-		}
-		return t;
-	}
 }

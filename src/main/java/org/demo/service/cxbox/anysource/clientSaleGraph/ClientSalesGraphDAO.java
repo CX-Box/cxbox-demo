@@ -1,8 +1,9 @@
-package org.demo.service.cxbox.anysource.relationSale;
+package org.demo.service.cxbox.anysource.clientSaleGraph;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.cxbox.core.controller.param.QueryParameters;
@@ -83,16 +84,13 @@ public class ClientSalesGraphDAO extends AbstractAnySourceBaseDAO<GraphEdgeDTO> 
 					//edge params
 					.edgeDescription("Sum, $")
 					.edgeValue(edge.value())
-					.edgeColor(edge.value() > MAX_SUM ? COLOR_RED : null)
-					//edge key
-					.sourceNodeId(String.valueOf(edge.sourceNodeId()))
-					.targetNodeId(String.valueOf(edge.targetNodeId()))
+					.edgeColor(Optional.ofNullable(edge.value()).map(value -> value > MAX_SUM ? COLOR_RED : null).orElse(null))
 					//node params (must be same for all target nodes!)
-					.targetNodeExpanded(null)
+					.targetNodeExpanded(true)
 					.targetNodeName(nodes.get(edge.targetNodeId()).getFullName())
 					.targetNodeType(Objects.equals(edge.targetNodeId(), bc.getParentIdAsLong()) ? TargetNodeType.MAIN : null)
 					.targetNodeDescription(nodes.get(edge.targetNodeId()).getAddress())
-					.targetNodeColor(edge.value() > MAX_SUM ? COLOR_RED : null)
+					.targetNodeColor(Optional.ofNullable(edge.value()).map(value -> value > MAX_SUM ? COLOR_RED : null).orElse(null))
 					.build()
 			);
 		}

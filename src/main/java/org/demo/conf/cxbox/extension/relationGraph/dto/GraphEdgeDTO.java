@@ -2,6 +2,7 @@ package org.demo.conf.cxbox.extension.relationGraph.dto;
 
 import jakarta.annotation.Nullable;
 import java.util.Optional;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -37,7 +38,8 @@ public class GraphEdgeDTO extends DataResponseDTO {
 
 	private String targetNodeColor;
 
-	private Boolean targetNodeExpanded;
+	@Builder.Default
+	private Boolean targetNodeExpanded = true;
 
 	@NonNull
 	public static String toId(@Nullable String sourceIdStr, @NonNull String targetIdStr) {

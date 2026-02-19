@@ -1,6 +1,5 @@
 package org.demo.entity;
 
-
 import lombok.EqualsAndHashCode;
 import org.demo.entity.dictionary.Product;
 import org.demo.entity.enums.SaleStatus;

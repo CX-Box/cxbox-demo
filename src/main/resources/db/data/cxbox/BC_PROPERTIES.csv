@@ -14,4 +14,4 @@ saleStatsProductTypeLines;1000;NULL;NULL;'""';
 saleStatsProductStatusColumn;1000;NULL;NULL;'""';
 calendarYearList;1000;NULL;_sort.0.asc=startDateTime;'""';
 calendarList;1000;NULL;NULL;'""';
-relationSale;10000;NULL;NULL;'""';
+clientSaleGraph;10000;NULL;NULL;'""';

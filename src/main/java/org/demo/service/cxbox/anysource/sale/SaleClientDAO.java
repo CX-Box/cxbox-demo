@@ -6,7 +6,6 @@ import org.cxbox.core.controller.param.QueryParameters;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.dao.impl.AbstractAnySourceBaseDAO;
 import org.demo.conf.cxbox.extension.relationGraph.dto.GraphEdgeDTO;
-import org.demo.dto.cxbox.inner.SaleDTO;
 import org.demo.entity.Sale;
 import org.demo.repository.SaleRepository;
 import org.springframework.data.domain.Page;
@@ -16,39 +15,37 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class SaleClientDAO extends AbstractAnySourceBaseDAO<SaleDTO> {
+public class SaleClientDAO extends AbstractAnySourceBaseDAO<Sale> {
 
 	private final SaleRepository saleRepository;
 
 	@Override
-	public String getId(SaleDTO entity) {
-		return entity.getId();
+	public String getId(Sale entity) {
+		return Optional.ofNullable(entity.getId()).map(String::valueOf).orElse(null);
 	}
 
 	@Override
-	public void setId(String id, SaleDTO entity) {
-		entity.setId(id);
+	public void setId(String id, Sale entity) {
+		entity.setId(Long.parseLong(id));
 	}
 
 	@Override
-	public SaleDTO getByIdIgnoringFirstLevelCache(BusinessComponent bc) {
-		return saleRepository.findById(bc.getIdAsLong())
-				.map(SaleDTO::new)
-				.orElse(null);
+	public Sale getByIdIgnoringFirstLevelCache(BusinessComponent bc) {
+		return saleRepository.findById(bc.getIdAsLong()).orElse(null);
 	}
 
 	@Override
-	public Page<SaleDTO> getList(BusinessComponent bc, QueryParameters queryParameters) {
-		return getSales(bc, queryParameters).map(SaleDTO::new);
+	public Page<Sale> getList(BusinessComponent bc, QueryParameters queryParameters) {
+		return getSales(bc, queryParameters);
 	}
 
 	@Override
-	public SaleDTO create(BusinessComponent bc, SaleDTO entity) {
+	public Sale create(BusinessComponent bc, Sale entity) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public SaleDTO update(BusinessComponent bc, SaleDTO entity) {
+	public Sale update(BusinessComponent bc, Sale entity) {
 		throw new UnsupportedOperationException();
 	}
 

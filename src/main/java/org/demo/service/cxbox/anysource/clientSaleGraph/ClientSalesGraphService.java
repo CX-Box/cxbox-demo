@@ -1,4 +1,4 @@
-package org.demo.service.cxbox.anysource.relationSale;
+package org.demo.service.cxbox.anysource.clientSaleGraph;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

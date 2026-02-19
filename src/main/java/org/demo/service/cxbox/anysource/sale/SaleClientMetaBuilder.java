@@ -14,12 +14,12 @@ public class SaleClientMetaBuilder extends AnySourceFieldMetaBuilder<SaleDTO> {
 	public void buildRowDependentMeta(RowDependentFieldsMeta<SaleDTO> fields, BcDescription bcDescription,
 			String id,
 			String parentId) {
-
+		//do nothing
 	}
 
 	@Override
 	public void buildIndependentMeta(FieldsMeta<SaleDTO> fields, BcDescription bcDescription, String parentId) {
-
+		//do nothing
 	}
 
 }

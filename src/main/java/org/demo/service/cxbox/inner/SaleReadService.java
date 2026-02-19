@@ -26,7 +26,6 @@ public class SaleReadService extends VersionAwareResponseService<SaleDTO, Sale> 
 	@Getter(onMethod_ = @Override)
 	private final Class<SaleReadMeta> meta = SaleReadMeta.class;
 
-
 	@Override
 	protected CreateResult<SaleDTO> doCreateEntity(Sale entity, BusinessComponent bc) {
 		saleRepository.save(entity);
@@ -59,4 +58,5 @@ public class SaleReadService extends VersionAwareResponseService<SaleDTO, Sale> 
 				)
 				.build();
 	}
+
 }

@@ -1,4 +1,4 @@
-package org.demo.service.cxbox.anysource.relationSale;
+package org.demo.service.cxbox.anysource.clientSaleGraph;
 
 import org.cxbox.core.crudma.bc.impl.BcDescription;
 import org.cxbox.core.dto.rowmeta.FieldsMeta;

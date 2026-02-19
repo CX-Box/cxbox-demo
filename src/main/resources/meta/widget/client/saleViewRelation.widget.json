@@ -2,7 +2,7 @@
   "name": "saleViewRelation",
   "title": "Sales",
   "type": "RelationGraph",
-  "bc": "relationSale",
+  "bc": "clientSaleGraph",
   "fields": [
     {
       "title": "Id",

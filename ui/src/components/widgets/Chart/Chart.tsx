@@ -19,7 +19,7 @@ import {
 } from '@interfaces/widget'
 import DropdownSetting from '@components/widgets/Table/components/DropdownSetting'
 import cn from 'classnames'
-import styles from './Chart.module.module.less'
+import styles from './Chart.module.less'
 interface ChartProps {
     meta: Chart2DWidgetMeta | Pie1DWidgetMeta | DualAxes2DWidgetMeta | RelationGraphWidgetMeta
 }

@@ -1,6 +1,6 @@
 import React from 'react'
 import cn from 'classnames'
-import styles from './CalendarToolbarLayout.module.module.less'
+import styles from './CalendarToolbarLayout.module.less'
 
 export interface CalendarToolbarLayoutProps {
     title: React.ReactNode

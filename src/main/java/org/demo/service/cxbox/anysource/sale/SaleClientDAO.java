@@ -1,71 +1,66 @@
 package org.demo.service.cxbox.anysource.sale;
 
-import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.cxbox.core.controller.param.QueryParameters;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.dao.impl.AbstractAnySourceBaseDAO;
-import org.cxbox.model.core.entity.BaseEntity_;
-import org.demo.dto.cxbox.inner.SaleDTO;
+import org.demo.conf.cxbox.extension.relationGraph.dto.GraphEdgeDTO;
 import org.demo.entity.Sale;
-import org.demo.entity.Sale_;
 import org.demo.repository.SaleRepository;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class SaleClientDAO extends AbstractAnySourceBaseDAO<SaleDTO> {
+public class SaleClientDAO extends AbstractAnySourceBaseDAO<Sale> {
 
 	private final SaleRepository saleRepository;
 
 	@Override
-	public String getId(SaleDTO entity) {
-		return entity.getId();
+	public String getId(Sale entity) {
+		return Optional.ofNullable(entity.getId()).map(String::valueOf).orElse(null);
 	}
 
 	@Override
-	public void setId(String id, SaleDTO entity) {
-		entity.setId(id);
+	public void setId(String id, Sale entity) {
+		entity.setId(Long.parseLong(id));
 	}
 
 	@Override
-	public SaleDTO getByIdIgnoringFirstLevelCache(BusinessComponent bc) {
-		return getAllData(bc, null).stream()
-				.filter(e -> e.getId().equals(bc.getIdAsLong()))
-				.findFirst().map(SaleDTO::new)
-				.orElse(null);
+	public Sale getByIdIgnoringFirstLevelCache(BusinessComponent bc) {
+		return saleRepository.findById(bc.getIdAsLong()).orElse(null);
 	}
 
 	@Override
-	public Page<SaleDTO> getList(BusinessComponent bc, QueryParameters queryParameters) {
-		return new PageImpl<>(getAllData(bc, queryParameters).stream()
-				.map(SaleDTO::new)
-				.toList());
+	public Page<Sale> getList(BusinessComponent bc, QueryParameters queryParameters) {
+		return getSales(bc, queryParameters);
 	}
 
 	@Override
-	public SaleDTO create(BusinessComponent bc, SaleDTO entity) {
-		throw new UnsupportedOperationException("Not supported yet.");
+	public Sale create(BusinessComponent bc, Sale entity) {
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public SaleDTO update(BusinessComponent bc, SaleDTO entity) {
-		throw new UnsupportedOperationException("Not supported yet.");
+	public Sale update(BusinessComponent bc, Sale entity) {
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void delete(BusinessComponent bc) {
-		throw new UnsupportedOperationException("Not supported yet.");
+		throw new UnsupportedOperationException();
 	}
 
-	private List<Sale> getAllData(BusinessComponent bc, QueryParameters queryParameters) {
-		var params = bc.getParentId().split("_");
-		return saleRepository.findAll((root, cq, cb) -> cb.and(
-				cb.equal(root.get(Sale_.client).get(BaseEntity_.id), Long.valueOf(params[0])),
-				cb.equal(root.get(Sale_.clientSeller).get(BaseEntity_.id), Long.valueOf(params[1]))
-		));
+	private Page<Sale> getSales(BusinessComponent bc, QueryParameters queryParameters) {
+		Long targetId = Long.parseLong(GraphEdgeDTO.idToTargetId(bc.getParentId()));
+		Long sourceId = Optional.ofNullable(GraphEdgeDTO.idToSourceId(bc.getParentId())).map(Long::parseLong).orElse(null);
+		int pageNumber = queryParameters.getPageNumber();
+		int pageSize = queryParameters.getPageSize();
+		Pageable pageable = PageRequest.of(pageNumber, pageSize);
+		return saleRepository.findAll(saleRepository.findSaleByTargetIdAndSellerId(targetId, sourceId), pageable);
 	}
 
 }

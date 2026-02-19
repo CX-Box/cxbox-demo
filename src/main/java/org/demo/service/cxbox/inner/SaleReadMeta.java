@@ -39,6 +39,7 @@ public class SaleReadMeta extends FieldMetaBuilder<SaleDTO> {
 		fields.enableFilter(SaleDTO_.status);
 		fields.setEnumFilterValues(fields,SaleDTO_.status, SaleStatus.values());
 		fields.enableFilter(SaleDTO_.clientName);
+		fields.enableFilter(SaleDTO_.clientSellerName);
 		fields.enableFilter(SaleDTO_.product);
 		fields.setDictionaryFilterValues(SaleDTO_.product);
 		fields.enableFilter(SaleDTO_.fieldOfActivity);

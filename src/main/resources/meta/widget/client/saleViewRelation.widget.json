@@ -2,7 +2,7 @@
   "name": "saleViewRelation",
   "title": "Sales",
   "type": "RelationGraph",
-  "bc": "relationSale",
+  "bc": "clientSaleGraph",
   "fields": [
     {
       "title": "Id",
@@ -29,8 +29,7 @@
     {
       "title": "Target Node Name",
       "key": "targetNodeName",
-      "type": "input",
-      "bgColorKey": "targetNodeColor"
+      "type": "input"
     },
     {
       "title": "Target Node Description",
@@ -62,8 +61,7 @@
         "descriptionFieldKeys": ["targetNodeName", "targetNodeDescription"]
       },
       "edges": {
-        "labelFieldKeys": ["edgeDescription", "edgeValue"],
-        "type": "polyline"
+        "labelFieldKeys": ["edgeDescription", "edgeValue"]
       }
     }
   }

@@ -1,7 +1,9 @@
 package org.demo.repository;
 
+import jakarta.annotation.Nullable;
 import java.util.List;
 import java.util.Set;
+import lombok.NonNull;
 import org.cxbox.model.core.entity.BaseEntity_;
 import org.demo.entity.Sale;
 import org.demo.entity.Sale_;
@@ -57,10 +59,13 @@ public interface SaleRepository extends JpaRepository<Sale, Long>, JpaSpecificat
 			""")
 	List<DashboardSalesByMonthAndProductPrj> getSalesByMonthAndProduct(Set<FieldOfActivity> fieldOfActivities);
 
-	default Specification<Sale> findSalesByClientId(Long sellerId, Long clientId) {
+	default Specification<Sale> findSaleByTargetIdAndSellerId(@NonNull Long targetId, @Nullable Long sourceId) {
 		return (root, cq, cb) -> cb.and(
-				cb.equal(root.get(Sale_.clientSeller).get(BaseEntity_.id), sellerId),
-				cb.equal(root.get(Sale_.client).get(BaseEntity_.id), clientId)
+				cb.equal(root.get(Sale_.client).get(BaseEntity_.id), targetId),
+				sourceId != null
+						? cb.equal(root.get(Sale_.clientSeller).get(BaseEntity_.id), sourceId)
+						: cb.isNull(root.get(Sale_.clientSeller).get(BaseEntity_.id))
 		);
 	}
+
 }

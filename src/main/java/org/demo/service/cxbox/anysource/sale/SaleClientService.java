@@ -9,13 +9,14 @@ import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.cxbox.core.dto.rowmeta.PostAction;
 import org.cxbox.core.service.action.Actions;
 import org.demo.dto.cxbox.inner.SaleDTO;
+import org.demo.entity.Sale;
 import org.springframework.stereotype.Service;
 
 
 @Getter
 @Service
 @RequiredArgsConstructor
-public class SaleClientService extends AnySourceVersionAwareResponseService<SaleDTO, SaleDTO> {
+public class SaleClientService extends AnySourceVersionAwareResponseService<SaleDTO, Sale> {
 
 	@Getter(onMethod_ = @Override)
 	private final Class<SaleClientMetaBuilder> meta = SaleClientMetaBuilder.class;
@@ -24,13 +25,13 @@ public class SaleClientService extends AnySourceVersionAwareResponseService<Sale
 	private final Class<SaleClientDAO> dao = SaleClientDAO.class;
 
 	@Override
-	protected CreateResult<SaleDTO> doCreateEntity(SaleDTO entity, BusinessComponent bc) {
+	protected CreateResult<SaleDTO> doCreateEntity(Sale entity, BusinessComponent bc) {
 		return new CreateResult<>(entityToDto(bc, getBaseDao().create(bc, entity)))
 				.setAction(PostAction.refreshBc(bc));
 	}
 
 	@Override
-	protected ActionResultDTO<SaleDTO> doUpdateEntity(SaleDTO entity, SaleDTO data,
+	protected ActionResultDTO<SaleDTO> doUpdateEntity(Sale entity, SaleDTO data,
 			BusinessComponent bc) {
 		return new ActionResultDTO<>(entityToDto(bc, getBaseDao().update(bc, entity)))
 				.setAction(PostAction.refreshBc(bc));
@@ -39,9 +40,6 @@ public class SaleClientService extends AnySourceVersionAwareResponseService<Sale
 	@Override
 	public Actions<SaleDTO> getActions() {
 		return Actions.<SaleDTO>builder()
-				.create(crt -> crt.text("Create"))
-				.delete(dlt -> dlt.text("Delete"))
-				.save(sv -> sv.text("Save"))
 				.build();
 	}
 

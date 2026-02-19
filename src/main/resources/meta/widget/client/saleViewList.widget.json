@@ -50,11 +50,7 @@
       "meeting": "sale"
     },
     "actionGroups": {
-      "include": [
-        "create",
-        "edit",
-        "delete"
-      ]
+      "include": []
     }
   }
 }

@@ -5,7 +5,7 @@ import { BaseFieldProps } from '@components/Field/Field'
 import ReadOnlyField from '@components/ui/ReadOnlyField/ReadOnlyField'
 import { fractionsRound, NumberInputFormat, NumberTypes } from './formaters'
 import { InputProps } from 'antd/es/input'
-import styles from './NumberInput.less'
+import styles from './NumberInput.module.less'
 
 export interface NumberInputProps extends BaseFieldProps {
     onChange?: (value: number) => void

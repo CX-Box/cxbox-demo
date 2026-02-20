@@ -1,6 +1,6 @@
 import React from 'react'
 import { Tabs } from 'antd'
-import styles from './ViewTabs.less'
+import styles from './ViewTabs.module.less'
 import { TabsProps } from 'antd/es/tabs'
 import cn from 'classnames'
 

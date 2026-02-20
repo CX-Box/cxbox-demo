@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import { DatePicker } from 'antd'
-import styles from '@components/widgets/CalendarList/components/toolbar/CalendarTitle.less'
+import styles from '@components/widgets/CalendarList/components/toolbar/CalendarTitle.module.less'
 import moment from 'moment'
 import { getFormat } from '@components/ui/DatePickerField/DatePickerField'
 import cn from 'classnames'

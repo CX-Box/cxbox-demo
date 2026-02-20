@@ -3,7 +3,7 @@ import { Tooltip } from 'antd'
 import { getExtension, isAvailableFileViewing } from '@utils/fileViewer'
 import FileIcon from '@components/FileViewer/components/FileIcon/FileIcon'
 import { useTranslation } from 'react-i18next'
-import styles from '../FileUpload.less'
+import styles from '../FileUpload.module.less'
 
 interface FilePreviewIconProps {
     fileName: string

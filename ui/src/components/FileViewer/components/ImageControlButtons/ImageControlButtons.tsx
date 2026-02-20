@@ -2,7 +2,7 @@ import React from 'react'
 import Button from '@components/ui/Button/Button'
 import { Divider } from 'antd'
 import { ImageControl } from '@hooks/image'
-import styles from './ImageControlButtons.less'
+import styles from './ImageControlButtons.module.less'
 
 interface ImageControlButtonsProps {
     imageControl: ImageControl | undefined

@@ -7,7 +7,7 @@ import Select, { SelectProps } from '@components/ui/Select/Select'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import { RootState } from '@store'
 import { interfaces } from '@cxbox-ui/core'
-import styles from './MultipleSelectField.less'
+import styles from './MultipleSelectField.module.less'
 import Checkbox from '@fields/MultipleSelectField/Checkbox'
 
 interface MultipleSelectFieldProps {

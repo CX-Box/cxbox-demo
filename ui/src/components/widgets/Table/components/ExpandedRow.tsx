@@ -1,7 +1,7 @@
 import React from 'react'
 import Operations from '../../../Operations/Operations'
 import Form from '../../Form/Form'
-import styles from '../Table.less'
+import styles from '../Table.module.less'
 import { Operation, OperationGroup, WidgetFormMeta } from '@cxbox-ui/core'
 import { CustomDataItem } from '@components/widgets/Table/Table.interfaces'
 

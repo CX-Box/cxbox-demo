@@ -1,5 +1,5 @@
 import React, { HTMLAttributes } from 'react'
-import styles from '@assets/styles/dataEntry.less'
+import styles from '@assets/styles/dataEntry.module.less'
 import cn from 'classnames'
 
 type FieldBaseThemeWrapperProps = HTMLAttributes<HTMLDivElement>

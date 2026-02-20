@@ -15,7 +15,7 @@ import { SuggestionPickListDataItem } from '@interfaces/data'
 import { SuggestionPickListField, SuggestionPickListWidgetMeta } from '@interfaces/widget'
 import { WidgetFieldBase } from '@cxbox-ui/schema'
 import 'rc-select/assets/index.less'
-import styles from './SuggestionPickList.less'
+import styles from './SuggestionPickList.module.less'
 
 export interface SuggestionPickListProps extends Omit<BaseFieldProps, 'meta'> {
     meta: SuggestionPickListField

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Icon, Popover } from 'antd'
-import styles from './MultivalueHover.less'
+import styles from './MultivalueHover.module.less'
 import cn from 'classnames'
 import { BaseFieldProps } from '@components/Field/Field'
 import SearchHighlight from '@components/ui/SearchHightlight/SearchHightlight'

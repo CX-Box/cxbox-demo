@@ -1,6 +1,6 @@
 import React from 'react'
 import { Layout as AntLayout } from 'antd'
-import styles from './DevToolsPanel.less'
+import styles from './DevToolsPanel.module.less'
 import RefreshMetaButton from './components/RefreshMetaButton'
 import DebugModeButton from './components/DebugModeButton'
 import cn from 'classnames'

@@ -1,7 +1,7 @@
 import React from 'react'
 import { t } from 'i18next'
 import { Icon } from 'antd'
-import styles from './DrillDownTooltipContent.less'
+import styles from './DrillDownTooltipContent.module.less'
 
 export interface DrillDownToolsProps {
     onDrillDownInNewTab: (e: React.MouseEvent<HTMLElement>) => void

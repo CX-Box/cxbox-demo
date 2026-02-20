@@ -2,7 +2,7 @@ import React from 'react'
 import cn from 'classnames'
 import Tag from '@components/ui/Tag/Tag'
 import { interfaces } from '@cxbox-ui/core'
-import styles from './MultivalueTag.less'
+import styles from './MultivalueTag.module.less'
 
 export interface MultivalueTagProps {
     disabled: boolean

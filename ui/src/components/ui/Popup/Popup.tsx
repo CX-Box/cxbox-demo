@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from 'react'
 import { Modal } from 'antd'
-import styles from './Popup.less'
+import styles from './Popup.module.less'
 import { ModalProps } from 'antd/lib/modal'
 import cn from 'classnames'
 

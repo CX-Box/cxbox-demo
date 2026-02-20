@@ -9,7 +9,7 @@ import {
     MassOperationType,
     operationGroupHasSettingMode
 } from '@components/widgets/Table/massOperations/constants'
-import styles from './Operations.less'
+import styles from './Operations.module.less'
 import DropdownSetting from '@components/widgets/Table/components/DropdownSetting'
 import { filterByConditions } from '@utils/filterByConditions'
 import Tags, { TagsProps } from '@components/ui/Tags/Tags'

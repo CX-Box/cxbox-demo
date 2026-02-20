@@ -1,7 +1,7 @@
 import React from 'react'
 import { Avatar, Popover } from 'antd'
 import UserMenuContent from '../UserMenuContent/UserMenuContent'
-import styles from './UserMenu.less'
+import styles from './UserMenu.module.less'
 import Button from '../../../ui/Button/Button'
 
 export const UserMenu: React.FC = () => {

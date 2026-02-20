@@ -1,6 +1,6 @@
 import React, { createElement } from 'react'
 import { InnerTemplatedTitle, InnerTemplatedTitleProps } from '@components/TemplatedTitle/InnerTemplatedTitle'
-import styles from '@components/WidgetTitle/WidgetTitle.less'
+import styles from '@components/WidgetTitle/WidgetTitle.module.less'
 import cn from 'classnames'
 
 interface TitleProps extends InnerTemplatedTitleProps {

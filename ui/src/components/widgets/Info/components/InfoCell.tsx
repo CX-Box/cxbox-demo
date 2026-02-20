@@ -5,7 +5,7 @@ import InfoValueWrapper from './InfoValueWrapper'
 import { useAppSelector } from '@store'
 import { interfaces } from '@cxbox-ui/core'
 import { AppWidgetInfoMeta, ETitleMode } from '@interfaces/widget'
-import styles from './InfoCell.less'
+import styles from './InfoCell.module.less'
 import FieldBaseThemeWrapper from '@components/FieldBaseThemeWrapper/FieldBaseThemeWrapper'
 
 export interface ValueCellProps {

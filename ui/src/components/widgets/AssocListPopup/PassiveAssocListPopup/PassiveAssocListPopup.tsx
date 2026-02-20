@@ -10,7 +10,7 @@ import Title from './Title'
 import { useAppSelector } from '@store'
 import { actions } from '@cxbox-ui/core'
 import { AppWidgetTableMeta } from '@interfaces/widget'
-import styles from '../AssocListPopup.less'
+import styles from '../AssocListPopup.module.less'
 
 interface PassiveAssocListPopupProps {
     meta: AppWidgetTableMeta

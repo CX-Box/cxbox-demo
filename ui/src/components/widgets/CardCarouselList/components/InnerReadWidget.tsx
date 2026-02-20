@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useCallback, useEffect, useMemo, useState } from 'react'
 import { Col, Row, Spin } from 'antd'
 import { useAppSelector } from '@store'
-import styles from './InnerReadWidget.less'
+import styles from './InnerReadWidget.module.less'
 import DebugWidgetWrapper from '@components/DebugWidgetWrapper/DebugWidgetWrapper'
 import { selectBc, selectBcData, selectBcUrlRowMeta, selectWidget } from '@selectors/selectors'
 import { useWidgetVisibility } from '@hooks/useWidgetVisibility'

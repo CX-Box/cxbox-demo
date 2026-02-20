@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react'
 import { Spin } from 'antd'
 import { useAppSelector } from '@store'
-import styles from './InnerWidget.less'
+import styles from './InnerWidget.module.less'
 import DebugWidgetWrapper from '@components/DebugWidgetWrapper/DebugWidgetWrapper'
 import { selectBc, selectBcData, selectBcUrlRowMeta, selectWidget } from '@selectors/selectors'
 import { useWidgetVisibility } from '@hooks/useWidgetVisibility'

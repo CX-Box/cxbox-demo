@@ -8,7 +8,7 @@ import { useOperationInProgress } from '@hooks/useOperationInProgress'
 import { usePopupVisibility } from '@hooks/popup'
 import { actions } from '@actions'
 import { WidgetFormPopupMeta } from '@interfaces/widget'
-import styles from './FormPopup.less'
+import styles from './FormPopup.module.less'
 
 export interface FormPopupProps {
     meta: WidgetFormPopupMeta

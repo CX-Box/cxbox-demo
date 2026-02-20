@@ -1,6 +1,6 @@
 import React, { DragEventHandler, ReactNode, useCallback } from 'react'
 import { Icon } from 'antd'
-import styles from './FileUpload.less'
+import styles from './FileUpload.module.less'
 import { getFileUploadEndpoint } from '@utils/api'
 import { useTranslation } from 'react-i18next'
 import { UploadProps } from 'antd/es/upload/interface'

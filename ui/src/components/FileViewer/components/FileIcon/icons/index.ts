@@ -1,6 +1,6 @@
 import * as fullIcon from './full'
 import * as smallIcon from './small'
-import { ReactComponent as eye } from './eye.svg'
+import eye from './eye.svg?react'
 
 export const icons = {
     full: fullIcon,

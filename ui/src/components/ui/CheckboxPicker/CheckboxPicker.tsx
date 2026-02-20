@@ -7,7 +7,7 @@ import { ChangeDataItemPayload } from '@components/Field/Field'
 import { interfaces, actions } from '@cxbox-ui/core'
 import { RootState } from '@store'
 import { buildBcUrl } from '@utils/buildBcUrl'
-import styles from './CheckboxPicker.less'
+import styles from './CheckboxPicker.module.less'
 import cn from 'classnames'
 import { useResizeObserver } from '@hooks/useResizeObserver'
 

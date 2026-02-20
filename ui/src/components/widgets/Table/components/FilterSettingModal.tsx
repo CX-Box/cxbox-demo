@@ -4,7 +4,7 @@ import { ModalProps } from 'antd/lib/modal'
 import Button from '../../../ui/Button/Button'
 import { FormComponentProps } from 'antd/lib/form/Form'
 import { useTranslation } from 'react-i18next'
-import styles from './FilterSettingModal.less'
+import styles from './FilterSettingModal.module.less'
 import { FilterGroup } from '../../../../interfaces/filters'
 import Input from './Input'
 

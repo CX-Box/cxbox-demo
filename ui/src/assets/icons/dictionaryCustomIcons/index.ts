@@ -1,3 +1,3 @@
-export { ReactComponent as test } from './test.svg'
-export { ReactComponent as watermelon } from './watermelon.svg'
-export { ReactComponent as down } from './crab.svg'
+export { default as test } from './test.svg?react'
+export { default as watermelon } from './watermelon.svg?react'
+export { default as down } from './crab.svg?react'

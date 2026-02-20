@@ -8,7 +8,7 @@ import { useAppSelector } from '@store'
 import usePopupWidth from './hooks/usePopupWidth'
 import { interfaces } from '@cxbox-ui/core'
 import { ModalProps } from 'antd/lib/modal'
-import styles from './Popup.less'
+import styles from './Popup.module.less'
 
 export interface PopupProps extends ModalProps {
     onOkHandler?: () => void

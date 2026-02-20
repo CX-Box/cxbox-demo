@@ -8,7 +8,7 @@ import { usePagination } from '@hooks/usePagination'
 import { useAppSelector } from '@store'
 import { PaginationMode } from '@constants/pagination'
 import { AppWidgetMeta } from '@interfaces/widget'
-import styles from './ArrowPagination.less'
+import styles from './ArrowPagination.module.less'
 
 interface ArrowPaginationProps {
     meta: AppWidgetMeta

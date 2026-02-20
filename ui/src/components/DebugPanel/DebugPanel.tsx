@@ -4,7 +4,7 @@ import cn from 'classnames'
 import { interfaces } from '@cxbox-ui/core'
 import FormattedJSON from '../FormattedJSON/FormattedJSON'
 import WidgetInfoLabel from './components/WidgetInfoLabel'
-import styles from './DebugPanel.less'
+import styles from './DebugPanel.module.less'
 import { useAppSelector } from '@store'
 
 interface DebugPanelProps {

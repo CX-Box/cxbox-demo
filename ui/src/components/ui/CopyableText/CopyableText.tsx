@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import { Icon, Input } from 'antd'
 import cn from 'classnames'
-import styles from './CopyableText.less'
+import styles from './CopyableText.module.less'
 
 interface CopyableTextProps {
     text: string

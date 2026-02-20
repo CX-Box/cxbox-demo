@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import styles from './Header.less'
+import styles from './Header.module.less'
 import Button from '@components/ui/Button/Button'
 import { useTranslation } from 'react-i18next'
 import { Icon } from 'antd'

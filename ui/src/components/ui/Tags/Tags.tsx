@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from './Tags.less'
+import styles from './Tags.module.less'
 import { Tooltip } from 'antd'
 import Button from '@components/ui/Button/Button'
 import { useTranslation } from 'react-i18next'

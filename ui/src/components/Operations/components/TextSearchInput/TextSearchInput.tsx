@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import styles from './TextSearchInput.less'
+import styles from './TextSearchInput.module.less'
 import { actions } from '@actions'
 import { useDispatch } from 'react-redux'
 import { useDebouncedTextSearch, useSearchWarning } from '@hooks/search'

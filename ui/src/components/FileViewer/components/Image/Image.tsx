@@ -1,5 +1,5 @@
 import React, { forwardRef, useEffect, useRef, useState } from 'react'
-import styles from '@components/FileViewer/components/Image/Image.less'
+import styles from '@components/FileViewer/components/Image/Image.module.less'
 import Empty from '@components/FileViewer/components/Empty/Empty'
 import { Spin } from 'antd'
 import { useMergeRefs } from '@hooks/useMergeRefs'

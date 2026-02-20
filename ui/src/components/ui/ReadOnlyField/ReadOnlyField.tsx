@@ -4,7 +4,7 @@ import SearchHighlight from '@components/ui/SearchHightlight/SearchHightlight'
 import DrillDown from '@components/ui/DrillDown/DrillDown'
 import { useWidgetHighlightFilter } from '@hooks/useWidgetFilter'
 import { utils, WidgetFieldBase } from '@cxbox-ui/core'
-import styles from './ReadOnlyField.less'
+import styles from './ReadOnlyField.module.less'
 
 export interface ReadOnlyFieldProps {
     /**

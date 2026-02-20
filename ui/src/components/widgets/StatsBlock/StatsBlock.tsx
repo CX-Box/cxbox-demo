@@ -7,7 +7,7 @@ import { getItemPropertyValue, getItemColor } from './utils'
 import { actions } from '@actions'
 import { DataItem } from '@cxbox-ui/core'
 import { AppWidgetTableMeta, EStatsBcCursor } from '@interfaces/widget'
-import styles from './StatsBlock.less'
+import styles from './StatsBlock.module.less'
 import cn from 'classnames'
 
 interface Props {

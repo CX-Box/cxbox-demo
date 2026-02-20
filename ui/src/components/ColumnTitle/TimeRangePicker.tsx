@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { isoLocalFormatter } from '@utils/date'
 import { TimePickerProps } from 'antd/lib/time-picker'
 import { useAppSelector } from '@store'
-import styles from './TimeRangePicker.less'
+import styles from './TimeRangePicker.module.less'
 
 interface TimeRangePickerProps extends Omit<TimePickerProps, 'onChange' | 'value'> {
     onChange: (v: DataValue[]) => void

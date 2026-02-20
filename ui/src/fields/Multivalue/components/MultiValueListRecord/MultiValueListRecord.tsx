@@ -6,7 +6,7 @@ import DrillDown from '@components/ui/DrillDown/DrillDown'
 import { actions, interfaces } from '@cxbox-ui/core'
 import { store } from '@store'
 import { RecordSnapshotState } from '@cxbox-ui/schema'
-import styles from './MultiValueListRecord.less'
+import styles from './MultiValueListRecord.module.less'
 
 const { drillDown } = actions
 

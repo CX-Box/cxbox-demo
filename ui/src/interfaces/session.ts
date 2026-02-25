@@ -16,7 +16,8 @@ export enum EFeatureSettingKey {
     appExportExcelLimit = 'appExportExcelLimit',
     timeoutShowMessage = 'timeoutShowMessage',
     seasonalEffectsEnabled = 'seasonalEffectsEnabled',
-    webSocketNotificationEnabled = 'webSocketNotificationEnabled'
+    webSocketNotificationEnabled = 'webSocketNotificationEnabled',
+    browserNavigationWarnEnabled = 'browserNavigationWarnEnabled'
 }
 
 export type FeatureSetting = {

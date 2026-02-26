@@ -7,7 +7,7 @@
     "type": "standard",
     "menu": [
       {
-        "title": "Clients",
+        "title": "{{ui.clients}}",
         "child": [
           {
             "viewName": "clientlist"

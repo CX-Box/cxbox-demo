@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.cxbox.api.util.i18n.LocalizationFormatter;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.DrillDownType;
@@ -166,7 +167,7 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 						}))
 				)
 				.cancelCreate(ccr -> ccr.text("Cancel").available(bc -> true))
-				.create(crt -> crt.text("Add"))
+				.create(crt -> crt.text(LocalizationFormatter.uiMessage("action.add")))
 				.addGroup(
 						"actions",
 						"Actions",

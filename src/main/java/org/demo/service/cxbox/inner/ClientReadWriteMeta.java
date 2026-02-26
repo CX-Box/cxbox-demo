@@ -15,9 +15,10 @@ import org.demo.dto.cxbox.inner.ClientWriteDTO_;
 import org.demo.entity.enums.ClientEditStep;
 import org.demo.entity.enums.ClientStatus;
 import org.demo.entity.enums.FieldOfActivity;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 
-@SuppressWarnings({"java:S3252","java:S1186"})
+@SuppressWarnings({"java:S3252", "java:S1186"})
 @Service
 public class ClientReadWriteMeta extends FieldMetaBuilder<ClientWriteDTO> {
 
@@ -44,7 +45,9 @@ public class ClientReadWriteMeta extends FieldMetaBuilder<ClientWriteDTO> {
 
 		fields.setDictionaryValues(ClientWriteDTO_.importance);
 
-		fields.setEnumValues(ClientWriteDTO_.editStep, ClientEditStep.values());
+		fields.setEnumValues(
+				ClientWriteDTO_.editStep, ClientEditStep.valuesWithLocale(
+						LocaleContextHolder.getLocale().getLanguage()));
 
 		fields.setEnumValues(ClientWriteDTO_.status, ClientStatus.values());
 
@@ -66,10 +69,11 @@ public class ClientReadWriteMeta extends FieldMetaBuilder<ClientWriteDTO> {
 	public void buildIndependentMeta(FieldsMeta<ClientWriteDTO> fields, InnerBcDescription bcDescription,
 			Long parentId) {
 		fields.enableFilter(ClientWriteDTO_.fieldOfActivity);
-		fields.setConcreteFilterValues(ClientWriteDTO_.fieldOfActivity, Arrays
-				.stream(FieldOfActivity.values())
-				.map(en -> new SimpleDictionary(en.name(), en.getValue()))
-				.collect(Collectors.toList())
+		fields.setConcreteFilterValues(
+				ClientWriteDTO_.fieldOfActivity, Arrays
+						.stream(FieldOfActivity.values())
+						.map(en -> new SimpleDictionary(en.name(), en.getValue()))
+						.collect(Collectors.toList())
 		);
 		fields.enableFilter(ClientWriteDTO_.fullName);
 		fields.enableSort(ClientWriteDTO_.fullName);

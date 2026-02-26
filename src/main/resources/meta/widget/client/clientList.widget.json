@@ -5,33 +5,33 @@
   "bc": "client",
   "fields": [
     {
-      "title": "Client",
+      "title": "{{ui.client.name}}",
       "key": "fullName",
       "type": "input",
       "drillDown": "true",
       "width": 300
     },
     {
-      "title": "Field Of Activity",
+      "title": "{{ui.fieldOfActivity}}",
       "key": "fieldOfActivity",
       "type": "multipleSelect",
       "width": 300
     },
     {
-      "title": "Address",
+      "title": "{{ui.address}}",
       "key": "address",
       "type": "input",
       "width": 300
     },
     {
-      "title": "Importance",
+      "title": "{{ui.importance}}",
       "key": "importance",
       "type": "dictionary",
       "bgColorKey": "color",
       "width": 300
     },
     {
-      "title": "Status",
+      "title": "{{ui.status}}",
       "key": "status",
       "type": "dictionary",
       "width": 300
@@ -40,11 +40,11 @@
   "options": {
     "export": {
       "enabled": true,
-      "title": "client"
+      "title": "{{ui.client}}"
     },
     "fullTextSearch": {
       "enabled": true,
-      "placeholder": "Find by Client or Address"
+      "placeholder": "{{ui.client.find.placeholder}}"
     },
     "filterSetting": {
       "enabled": true

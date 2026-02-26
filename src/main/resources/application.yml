@@ -58,6 +58,9 @@ cxbox:
     global-handler:
       business-exception:
         log-level: debug
+  localization:
+    supported-languages: [ en, fr ]
+
 
 server:
   port: 8080

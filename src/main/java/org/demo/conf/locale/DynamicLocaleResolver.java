@@ -13,26 +13,23 @@ public class DynamicLocaleResolver extends AcceptHeaderLocaleResolver {
 	@NotNull
 	@Override
 	public Locale resolveLocale(@NotNull HttpServletRequest request) {
-		return resolveLocale();
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication == null || !(authentication.getPrincipal() instanceof Jwt jwt)) {
+			return Locale.ENGLISH;
+		}
+		return resolveFromJwt(jwt);
 	}
 
-	public Locale resolveLocale() {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	private Locale resolveFromJwt(Jwt jwt) {
+		String localeClaim = jwt.getClaimAsString("locale");
 
-		if (auth == null) {
-			return null;
-		}
-
-		if (auth.getPrincipal() instanceof Jwt jwt) {
-			String locale = jwt.getClaimAsString("locale");
-			if (locale.endsWith("fr")) {
-				return Locale.FRENCH;
-			}
+		if (localeClaim == null || localeClaim.isBlank()) {
 			return Locale.ENGLISH;
 		}
 
-		return Locale.ENGLISH;
+		return localeClaim.toLowerCase().startsWith("fr")
+				? Locale.FRENCH
+				: Locale.ENGLISH;
 	}
-
 
 }

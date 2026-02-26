@@ -424,6 +424,7 @@ export const forceUpdateRowMeta: RootEpic = (action$, state$, { api }) =>
             const requestId = nanoid()
 
             return concat(
+                of(actions.bcFetchRowMetaByForceActive({ bcName, inProgress: true })),
                 of(actions.addPendingRequest({ request: { requestId, type: 'force-active' } })),
                 api
                     .getRmByForceActive(
@@ -448,6 +449,7 @@ export const forceUpdateRowMeta: RootEpic = (action$, state$, { api }) =>
                                         cursor
                                     })
                                 ),
+                                of(actions.bcFetchRowMetaByForceActive({ bcName, inProgress: false })),
                                 onSuccessAction
                                     ? of({
                                           ...onSuccessAction,
@@ -462,7 +464,11 @@ export const forceUpdateRowMeta: RootEpic = (action$, state$, { api }) =>
                         catchError((e: AxiosError) => {
                             console.error(e)
 
-                            return concat(of(actions.removePendingRequest({ requestId })), utils.createApiErrorObservable(e))
+                            return concat(
+                                of(actions.removePendingRequest({ requestId })),
+                                of(actions.bcFetchRowMetaByForceActive({ bcName, inProgress: false })),
+                                utils.createApiErrorObservable(e)
+                            )
                         })
                     )
             )

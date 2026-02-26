@@ -65,21 +65,12 @@
       <column header="ID" name="ID" type="NUMERIC" defaultValue="${app_seq_next_val}"/>
     </loadUpdateData>
 
-    <sql>
-      insert into dictionary_type
-      select MIN(ID), TYPE
-      from DICTIONARY_ITEM
-      group by TYPE;
-
-      update DICTIONARY_ITEM di
-      set dictionary_type_id = (select dt.id from dictionary_type dt where dt.type = di.type)
-    </sql>
-
-    <sql>
-      insert into DICTIONARY_ITEM_TR (ID, LANGUAGE, VALUE)
-      select ID, 'en' as LANGUAGE, VALUE as VALUE
-      from DICTIONARY_ITEM;
-    </sql>
+    <loadUpdateData tableName="DICTIONARY_ITEM_TR" primaryKey="ID,LANGUAGE,VALUE" encoding="UTF-8" separator=";"
+      quotchar="&quot;" file="db/data/cxbox/DICTIONARY_TR.csv">
+      <column header="LANGUAGE" name="LANGUAGE" type="STRING"/>
+      <column header="VALUE" name="VALUE" type="STRING"/>
+      <column header="ID" name="ID" type="NUMERIC" defaultValue="${app_seq_next_val}"/>
+    </loadUpdateData>
   </changeSet>
 
   <changeSet author="cxbox" id="RESPONSIBILITIES_VIEW" runOnChange="true">

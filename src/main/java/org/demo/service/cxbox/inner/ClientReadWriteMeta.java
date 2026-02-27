@@ -15,7 +15,6 @@ import org.demo.dto.cxbox.inner.ClientWriteDTO_;
 import org.demo.entity.enums.ClientEditStep;
 import org.demo.entity.enums.ClientStatus;
 import org.demo.entity.enums.FieldOfActivity;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S3252", "java:S1186"})
@@ -46,10 +45,9 @@ public class ClientReadWriteMeta extends FieldMetaBuilder<ClientWriteDTO> {
 		fields.setDictionaryValues(ClientWriteDTO_.importance);
 
 		fields.setEnumValues(
-				ClientWriteDTO_.editStep, ClientEditStep.valuesWithLocale(
-						LocaleContextHolder.getLocale().getLanguage()));
+				ClientWriteDTO_.editStep, ClientEditStep.valuesWithLocale());
 
-		fields.setEnumValues(ClientWriteDTO_.status, ClientStatus.values());
+		fields.setEnumValues(ClientWriteDTO_.status, ClientStatus.valuesWithLocale());
 
 		fields.setConcreteValues(
 				ClientWriteDTO_.fieldOfActivity,
@@ -85,7 +83,7 @@ public class ClientReadWriteMeta extends FieldMetaBuilder<ClientWriteDTO> {
 		fields.enableSort(ClientWriteDTO_.importance);
 		fields.enableFilter(ClientWriteDTO_.status);
 		fields.enableSort(ClientWriteDTO_.status);
-		fields.setEnumFilterValues(fields, ClientWriteDTO_.status, ClientStatus.values());
+		fields.setEnumFilterValues(fields, ClientWriteDTO_.status, ClientStatus.valuesWithLocale());
 	}
 
 }

@@ -10,6 +10,7 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 @Getter
 @AllArgsConstructor
@@ -55,19 +56,19 @@ public enum ClientEditStep {
 
 	private final String locale;
 
-	public static ClientEditStep getValueWithLocale(ClientEditStep base, String locale) {
+	public static ClientEditStep getValueWithLocale(ClientEditStep value) {
 		return Arrays.stream(values())
 				.filter(e ->
-						e.name().equals(base.name())
-								&& e.locale.equals(locale)
+						e.name().equals(value.name())
+								&& e.locale.equals(LocaleContextHolder.getLocale().getLanguage())
 				)
 				.findFirst()
-				.orElse(base);
+				.orElse(value);
 	}
-	public static ClientEditStep[] valuesWithLocale(String locale) {
+	public static ClientEditStep[] valuesWithLocale() {
 		return Arrays.stream(values())
 				.filter(e ->
-				e.locale.equals(locale)
+				e.locale.equals(LocaleContextHolder.getLocale().getLanguage())
 				)
 				.toArray(ClientEditStep[]::new);
 	}

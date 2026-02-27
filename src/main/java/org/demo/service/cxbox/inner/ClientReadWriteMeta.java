@@ -45,9 +45,9 @@ public class ClientReadWriteMeta extends FieldMetaBuilder<ClientWriteDTO> {
 		fields.setDictionaryValues(ClientWriteDTO_.importance);
 
 		fields.setEnumValues(
-				ClientWriteDTO_.editStep, ClientEditStep.valuesWithLocale());
+				ClientWriteDTO_.editStep, ClientEditStep.values());
 
-		fields.setEnumValues(ClientWriteDTO_.status, ClientStatus.valuesWithLocale());
+		fields.setEnumValues(ClientWriteDTO_.status, ClientStatus.values());
 
 		fields.setConcreteValues(
 				ClientWriteDTO_.fieldOfActivity,
@@ -83,7 +83,7 @@ public class ClientReadWriteMeta extends FieldMetaBuilder<ClientWriteDTO> {
 		fields.enableSort(ClientWriteDTO_.importance);
 		fields.enableFilter(ClientWriteDTO_.status);
 		fields.enableSort(ClientWriteDTO_.status);
-		fields.setEnumFilterValues(fields, ClientWriteDTO_.status, ClientStatus.valuesWithLocale());
+		fields.setEnumFilterValues(fields, ClientWriteDTO_.status, ClientStatus.values());
 	}
 
 }

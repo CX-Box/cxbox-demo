@@ -1,44 +1,43 @@
 package org.demo.entity.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.util.Arrays;
 import java.util.Locale;
+import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.i18n.LocaleContextHolder;
 
+@Slf4j
 @Getter
 @AllArgsConstructor
 public enum ClientStatus {
-	NEW_FR("Nouvelle",Locale.FRENCH.getLanguage()),
-	NEW("New",Locale.ENGLISH.getLanguage()),
-
-	INACTIVE_FR("Inactive", Locale.FRENCH.getLanguage()),
-	INACTIVE("Inactive", Locale.ENGLISH.getLanguage()),
-
-	IN_PROGRESS_FR("En cours",Locale.FRENCH.getLanguage()),
-	IN_PROGRESS("In progress",Locale.ENGLISH.getLanguage());
+	NEW("New","Nouvelle"),
+	INACTIVE("Inactive","Inactive"),
+	IN_PROGRESS("In progress","En cours");
 
 	@JsonValue
 	private final String value;
 
-	private final String locale;
+	private final String valueFr;
 
-	public static ClientStatus  getValueWithLocale(ClientStatus value) {
-		return Arrays.stream(values())
-				.filter(e ->
-						e.name().equals(value.name())
-								&& e.locale.equals(LocaleContextHolder.getLocale().getLanguage())
-				)
+	@JsonValue
+	public String toValue() {
+		if (Locale.FRENCH.getLanguage().equals(LocaleContextHolder.getLocale().getLanguage())) {
+			return valueFr;
+		}
+		return value;
+	}
+
+	@JsonCreator
+	public static ClientStatus fromValue(String value) {
+		return Stream.of(values())
+				.filter(s -> s.toValue().equalsIgnoreCase(value))
 				.findFirst()
-				.orElse(value);
+				.orElseGet(() -> {
+					log.warn("Unknown SaleStatus: {}", value);
+					return null;
+				});
 	}
-	public static ClientStatus[] valuesWithLocale() {
-		return Arrays.stream(values())
-				.filter(e ->
-						e.locale.equals(LocaleContextHolder.getLocale().getLanguage())
-				)
-				.toArray(ClientStatus[]::new);
-	}
-
 }

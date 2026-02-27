@@ -1,9 +1,10 @@
 package org.demo.entity.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import lombok.extern.slf4j.Slf4j;
 import org.demo.entity.Client;
 import java.util.Arrays;
 import java.util.Optional;
@@ -12,65 +13,55 @@ import lombok.Getter;
 import lombok.NonNull;
 import org.springframework.context.i18n.LocaleContextHolder;
 
+@Slf4j
 @Getter
 @AllArgsConstructor
 public enum ClientEditStep {
 
 	FILL_GENERAL_INFORMATION(
 			"Fill general information",
-			"screen/client/view/clienteditgeneral/",
-			Locale.ENGLISH.getLanguage()
-	),
-	FILL_GENERAL_INFORMATION_FR(
 			"Remplir les informations générales",
-			"screen/client/view/clienteditgeneral/",
-			Locale.FRENCH.getLanguage()
+			"screen/client/view/clienteditgeneral/"
 	),
+
 
 	CREATE_CLIENT_CONTACT(
 			"Add client contact",
-			"screen/client/view/clienteditcontacts/",
-			Locale.ENGLISH.getLanguage()
-	),
-	CREATE_CLIENT_CONTACT_FR(
 			"Ajouter les coordonnées du client",
-			"screen/client/view/clienteditcontacts/",
-			Locale.FRENCH.getLanguage()
+			"screen/client/view/clienteditcontacts/"
 	),
 
 	REVIEW_CLIENT_CARD(
 			"Review client card",
-			"screen/client/view/clienteditoverview/",
-			Locale.ENGLISH.getLanguage()
-	),
-	REVIEW_CLIENT_CARD_FR(
 			"Consulter la fiche client",
-			"screen/client/view/clienteditoverview/",
-			Locale.FRENCH.getLanguage()
+			"screen/client/view/clienteditoverview/"
 	);
 
 	@JsonValue
 	private final String value;
 
+	private final String valueFr;
+
 	private final String editView;
 
-	private final String locale;
 
-	public static ClientEditStep getValueWithLocale(ClientEditStep value) {
-		return Arrays.stream(values())
-				.filter(e ->
-						e.name().equals(value.name())
-								&& e.locale.equals(LocaleContextHolder.getLocale().getLanguage())
-				)
-				.findFirst()
-				.orElse(value);
+	@JsonValue
+	public String toValue() {
+		if (Locale.FRENCH.getLanguage().equals(LocaleContextHolder.getLocale().getLanguage())) {
+			return valueFr;
+		}
+		return value;
 	}
-	public static ClientEditStep[] valuesWithLocale() {
-		return Arrays.stream(values())
-				.filter(e ->
-				e.locale.equals(LocaleContextHolder.getLocale().getLanguage())
-				)
-				.toArray(ClientEditStep[]::new);
+
+	@JsonCreator
+	public static ClientEditStep fromValue(String value) {
+		return Stream.of(values())
+				.filter(s -> s.toValue().equalsIgnoreCase(value))
+				.findFirst()
+				.orElseGet(() -> {
+					log.warn("Unknown SaleStatus: {}", value);
+					return null;
+				});
 	}
 
 	@NonNull

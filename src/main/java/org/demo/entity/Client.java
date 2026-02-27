@@ -50,10 +50,10 @@ public class Client extends BaseEntity {
 	private ClientImportance importance = ClientImportance.LOW;
 
 	@Enumerated(value = EnumType.STRING)
-	private ClientStatus status = ClientStatus.getValueWithLocale(ClientStatus.NEW);
+	private ClientStatus status =  ClientStatus.NEW;
 
 	@Enumerated(value = EnumType.STRING)
-	private ClientEditStep editStep = ClientEditStep.getValueWithLocale(ClientEditStep.FILL_GENERAL_INFORMATION);
+	private ClientEditStep editStep = ClientEditStep.FILL_GENERAL_INFORMATION;
 
 	private String brief;
 

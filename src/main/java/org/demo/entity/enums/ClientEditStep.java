@@ -2,21 +2,20 @@ package org.demo.entity.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.util.Locale;
-import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
+import org.demo.conf.locale.LocalizedEnum;
+import org.demo.conf.locale.LocalizedEnumUtil;
 import org.demo.entity.Client;
 import java.util.Arrays;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
-import org.springframework.context.i18n.LocaleContextHolder;
 
 @Slf4j
 @Getter
 @AllArgsConstructor
-public enum ClientEditStep {
+public enum ClientEditStep implements LocalizedEnum{
 
 	FILL_GENERAL_INFORMATION(
 			"Fill general information",
@@ -47,21 +46,14 @@ public enum ClientEditStep {
 
 	@JsonValue
 	public String toValue() {
-		if (Locale.FRENCH.getLanguage().equals(LocaleContextHolder.getLocale().getLanguage())) {
-			return valueFr;
-		}
-		return value;
+		return LocalizedEnumUtil.toValue(this);
 	}
 
 	@JsonCreator
 	public static ClientEditStep fromValue(String value) {
-		return Stream.of(values())
-				.filter(s -> s.toValue().equalsIgnoreCase(value))
-				.findFirst()
-				.orElseGet(() -> {
-					log.warn("Unknown SaleStatus: {}", value);
-					return null;
-				});
+		return LocalizedEnumUtil
+				.fromValue(ClientEditStep.class, value)
+				.orElse(null);
 	}
 
 	@NonNull

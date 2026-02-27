@@ -2,17 +2,16 @@ package org.demo.entity.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.util.Locale;
-import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.i18n.LocaleContextHolder;
+import org.demo.conf.locale.LocalizedEnum;
+import org.demo.conf.locale.LocalizedEnumUtil;
 
 @Slf4j
 @Getter
 @AllArgsConstructor
-public enum ClientStatus {
+public enum ClientStatus implements LocalizedEnum{
 	NEW("New","Nouvelle"),
 	INACTIVE("Inactive","Inactive"),
 	IN_PROGRESS("In progress","En cours");
@@ -24,20 +23,14 @@ public enum ClientStatus {
 
 	@JsonValue
 	public String toValue() {
-		if (Locale.FRENCH.getLanguage().equals(LocaleContextHolder.getLocale().getLanguage())) {
-			return valueFr;
-		}
-		return value;
+		return LocalizedEnumUtil.toValue(this);
 	}
 
 	@JsonCreator
 	public static ClientStatus fromValue(String value) {
-		return Stream.of(values())
-				.filter(s -> s.toValue().equalsIgnoreCase(value))
-				.findFirst()
-				.orElseGet(() -> {
-					log.warn("Unknown SaleStatus: {}", value);
-					return null;
-				});
+		return LocalizedEnumUtil
+				.fromValue(ClientStatus.class, value)
+				.orElse(null);
 	}
+
 }

@@ -11,10 +11,10 @@ import org.demo.conf.locale.LocalizedEnumUtil;
 @Slf4j
 @Getter
 @AllArgsConstructor
-public enum ClientStatus implements LocalizedEnum{
-	NEW("New","Nouvelle"),
-	INACTIVE("Inactive","Inactive"),
-	IN_PROGRESS("In progress","En cours");
+public enum ClientStatus implements LocalizedEnum {
+	NEW("New", "Nouvelle"),
+	INACTIVE("Inactive", "Inactive"),
+	IN_PROGRESS("In progress", "En cours");
 
 	@JsonValue
 	private final String value;

@@ -52,7 +52,7 @@ public abstract class ClientAbstractDTO extends DataResponseDTO {
 		this.color = Optional.ofNullable(client.getImportance()).map(ClientImportance.colors::get).orElse(null);
 		this.brief = client.getBrief();
 		this.briefId = client.getBriefId();
-		this.editStep =  client.getEditStep();
+		this.editStep = client.getEditStep();
 
 	}
 

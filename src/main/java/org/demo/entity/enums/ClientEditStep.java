@@ -15,7 +15,7 @@ import lombok.NonNull;
 @Slf4j
 @Getter
 @AllArgsConstructor
-public enum ClientEditStep implements LocalizedEnum{
+public enum ClientEditStep implements LocalizedEnum {
 
 	FILL_GENERAL_INFORMATION(
 			"Fill general information",

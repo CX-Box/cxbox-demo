@@ -28,9 +28,7 @@ public enum SaleStatus implements LocalizedEnum {
 
 	@JsonCreator
 	public static SaleStatus fromValue(String value) {
-		return LocalizedEnumUtil
-				.fromValue(SaleStatus.class, value)
-				.orElse(null);
+		return LocalizedEnumUtil.fromValue(SaleStatus.class, value).orElse(null);
 	}
 
 }

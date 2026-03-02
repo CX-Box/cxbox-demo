@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import org.cxbox.api.util.i18n.LocalizationFormatter;
 import org.cxbox.core.controller.param.QueryParameters;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.dao.AnySourceBaseDAO;
@@ -70,27 +71,27 @@ public class ClientStatsDao extends AbstractAnySourceBaseDAO<ClientStatsDTO> imp
 	private List<ClientStatsDTO> getClientStats() {
 		List<ClientStatsDTO> result = new ArrayList<>(ROWS_TOTAL);
 		ClientStatsDTO newClients = new ClientStatsDTO()
-				.setTitle("New Clients")
+				.setTitle(LocalizationFormatter.uiMessage("ui.client.new.clients"))
 				.setValue(clientRepository.count(clientRepository.statusIn(List.of(ClientStatus.NEW))))
 				.setColor("#779FE9")
 				.setIcon("team") //same as in screen.json icon
-				.setDescription("New Clients. Press to filter List below");
+				.setDescription(LocalizationFormatter.uiMessage("ui.client.new.clients"));
 		newClients.setId(NEW_CLIENTS_ID);
 		result.add(newClients);
 		ClientStatsDTO inactiveClients = new ClientStatsDTO()
-				.setTitle("Inactive Clients")
+				.setTitle(LocalizationFormatter.uiMessage("ui.client.inactive.clients"))
 				.setValue(clientRepository.count(clientRepository.statusIn(List.of(ClientStatus.INACTIVE))))
 				.setColor("#5F90EA")
 				.setIcon("calendar") //same as in screen.json icon
-				.setDescription("Inactive Clients. Press to filter List below");
+				.setDescription(LocalizationFormatter.uiMessage("ui.client.inactive.clients"));
 		inactiveClients.setId(INACTIVE_CLIENTS_ID);
 		result.add(inactiveClients);
 		ClientStatsDTO inProgressClients = new ClientStatsDTO()
-				.setTitle("In Progress Clients")
+				.setTitle(LocalizationFormatter.uiMessage("ui.client.inprogress.clients"))
 				.setValue(clientRepository.count(clientRepository.statusIn(List.of(ClientStatus.IN_PROGRESS))))
 				.setColor("#4D83E7")
 				.setIcon("pie-chart") //same as in screen.json icon
-				.setDescription("In Progress Clients. Press to filter List below");
+				.setDescription(LocalizationFormatter.uiMessage("ui.client.inprogress.clients"));
 		inProgressClients.setId(IN_PROGRESS_CLIENTS);
 		result.add(inProgressClients);
 		return result;

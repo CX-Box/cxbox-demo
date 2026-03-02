@@ -1,6 +1,5 @@
 package org.demo.entity.enums;
 
-import lombok.extern.slf4j.Slf4j;
 import org.demo.conf.locale.LocaleEnum;
 import org.demo.entity.Client;
 import java.util.Arrays;
@@ -9,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
 
-@Slf4j
 @Getter
 @AllArgsConstructor
 public enum ClientEditStep  implements LocaleEnum<ClientEditStep> {
@@ -39,7 +37,6 @@ public enum ClientEditStep  implements LocaleEnum<ClientEditStep> {
 	private final String valueFr;
 
 	private final String editView;
-
 
 	@NonNull
 	public static Optional<ClientEditStep> getNextEditStep(Client client) {

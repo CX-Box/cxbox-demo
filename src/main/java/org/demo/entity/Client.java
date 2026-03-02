@@ -2,6 +2,7 @@ package org.demo.entity;
 
 import jakarta.persistence.ManyToMany;
 import lombok.EqualsAndHashCode;
+import org.cxbox.api.data.dto.LocaleAware;
 import org.demo.entity.dictionary.ClientImportance;
 import org.demo.entity.enums.ClientEditStep;
 import org.demo.entity.enums.ClientStatus;
@@ -49,7 +50,7 @@ public class Client extends BaseEntity {
 	private ClientImportance importance = ClientImportance.LOW;
 
 	@Enumerated(value = EnumType.STRING)
-	private ClientStatus status = ClientStatus.NEW;
+	private ClientStatus status =  ClientStatus.NEW;
 
 	@Enumerated(value = EnumType.STRING)
 	private ClientEditStep editStep = ClientEditStep.FILL_GENERAL_INFORMATION;

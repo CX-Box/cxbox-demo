@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.cxbox.api.util.i18n.LocalizationFormatter;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.DrillDownType;
@@ -104,7 +105,7 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 				.save(sv -> sv)
 				.action(act -> act
 								.scope(ActionScope.RECORD)
-								.action("next", "Save and Continue")
+								.action("next",LocalizationFormatter.uiMessage("action.save.and.continue"))
 								.invoker((bc, dto) -> {
 									Client client = clientRepository.getById(bc.getIdAsLong());
 									ClientEditStep nextStep = ClientEditStep.getNextEditStep(client).get();
@@ -129,7 +130,7 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 				)
 				.action(act -> act
 						.scope(ActionScope.RECORD)
-						.action("finish", "Save and Close")
+						.action("finish", LocalizationFormatter.uiMessage("action.save.and.close"))
 						.invoker((bc, dto) -> {
 							Client client = clientRepository.getById(bc.getIdAsLong());
 							ClientEditStep firstStep = Arrays.stream(ClientEditStep.values()).findFirst().get();
@@ -165,15 +166,15 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 							return ClientEditStep.getPreviousEditStep(client).isPresent();
 						}))
 				)
-				.cancelCreate(ccr -> ccr.text("Cancel").available(bc -> true))
-				.create(crt -> crt.text("Add"))
+				.cancelCreate(ccr -> ccr.text(LocalizationFormatter.uiMessage("action.cancel")).available(bc -> true))
+				.create(crt -> crt.text(LocalizationFormatter.uiMessage("action.add")))
 				.addGroup(
 						"actions",
-						"Actions",
+						LocalizationFormatter.uiMessage("action.actions"),
 						3,
 						Actions.<ClientWriteDTO>builder()
 								.action(act -> act
-										.action("edit", "Edit")
+										.action("edit",LocalizationFormatter.uiMessage("action.edit"))
 										.withoutAutoSaveBefore()
 										.invoker((bc, data) -> {
 											Client client = clientRepository.getById(bc.getIdAsLong());
@@ -206,7 +207,7 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 										.available(bc -> false)//TODO>>remove false, after fixing UI error for this drill-down
 								)
 								.action(act -> act
-										.action("deactivate", "Deactivate")
+										.action("deactivate",LocalizationFormatter.uiMessage("action.deactivate"))
 										.withAutoSaveBefore()
 										.withPreAction(bc -> PreAction.confirm("Are You sure You want to deactivate the client?"))
 										.invoker((bc, data) -> {

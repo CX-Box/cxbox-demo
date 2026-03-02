@@ -9,27 +9,27 @@
       "name": "Client",
       "fields": [
         {
-          "label": "Client Name",
+          "label": "{{ui.client.name}}",
           "key": "fullName",
           "type": "input"
         },
         {
-          "label": "Address",
+          "label": "{{ui.address}}",
           "key": "address",
           "type": "input"
         },
         {
-          "label": "Status",
+          "label": "{{ui.status}}",
           "key": "status",
           "type": "dictionary"
         },
         {
-          "label": "Field of Activity",
+          "label": "{{ui.fieldOfActivity}}",
           "key": "fieldOfActivity",
           "type": "multipleSelect"
         },
         {
-          "label": "Importance",
+          "label": "{{ui.importance}}",
           "key": "importance",
           "type": "dictionary",
           "bgColorKey": "color"
@@ -40,7 +40,7 @@
           "type": "hidden"
         },
         {
-          "label": "Brief",
+          "label": "{{ui.brief}}",
           "key": "brief",
           "type": "fileUpload",
           "fileIdKey": "briefId"
@@ -79,14 +79,16 @@
               "span": 12
             }
           ]
-        },{
+        },
+        {
           "cols": [
             {
               "fieldKey": "fieldOfActivity",
               "span": 12
             }
           ]
-        },{
+        },
+        {
           "cols": [
             {
               "fieldKey": "importance",

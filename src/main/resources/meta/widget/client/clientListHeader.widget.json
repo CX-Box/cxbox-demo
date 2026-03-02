@@ -1,6 +1,6 @@
 {
   "name": "clientListHeader",
-  "title": "Client List",
+  "title": "{{ui.client.list}}",
   "type": "HeaderWidget",
   "bc": "client",
   "fields": []

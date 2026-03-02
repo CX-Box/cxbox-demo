@@ -12,6 +12,7 @@ import org.demo.entity.Client;
 import org.demo.entity.dictionary.ClientImportance;
 import org.demo.entity.enums.ClientEditStep;
 import org.demo.entity.enums.ClientStatus;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 @Getter
 @Setter
@@ -47,11 +48,12 @@ public abstract class ClientAbstractDTO extends DataResponseDTO {
 		this.address = client.getAddress();
 		this.fullName = client.getFullName();
 		this.importance = client.getImportance();
-		this.editStep = client.getEditStep();
 		this.status = client.getStatus();
 		this.color = Optional.ofNullable(client.getImportance()).map(ClientImportance.colors::get).orElse(null);
 		this.brief = client.getBrief();
 		this.briefId = client.getBriefId();
+		this.editStep = client.getEditStep();
+
 	}
 
 }

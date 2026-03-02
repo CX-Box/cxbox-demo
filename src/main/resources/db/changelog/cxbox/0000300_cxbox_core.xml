@@ -148,6 +148,7 @@
       <column name="TYPE" remarks="Тип справочника" type="VARCHAR2(255)"/>
       <column name="KEY" remarks="Ключ" type="VARCHAR2(255)"/>
       <column name="VALUE" remarks="Значение по умолчанию" type="VARCHAR2(255)"/>
+      <column name="VALUE_FR" remarks="Значение по умолчанию(французский)" type="VARCHAR2(255)"/>
       <column name="ACTIVE" remarks="Признак активности" type="BOOLEAN"/>
       <column name="DISPLAY_ORDER" remarks="Порядок отображения" type="NUMBER"/>
       <column name="DESCRIPTION" remarks="Описание" type="VARCHAR2(1000)"/>

@@ -2,12 +2,12 @@
   "name": "client",
   "icon": "team",
   "order": 0,
-  "title": "Client",
+  "title": "Création du client",
   "navigation": {
     "type": "standard",
     "menu": [
       {
-        "title": "Clients",
+        "title": "{{ui.clients}}",
         "child": [
           {
             "viewName": "clientlist"

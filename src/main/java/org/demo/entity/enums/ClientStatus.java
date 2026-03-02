@@ -5,13 +5,12 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.demo.conf.locale.LocalizedEnum;
-import org.demo.conf.locale.LocalizedEnumUtil;
+import org.demo.conf.locale.LocaleEnum;
 
 @Slf4j
 @Getter
 @AllArgsConstructor
-public enum ClientStatus implements LocalizedEnum {
+public enum ClientStatus implements LocaleEnum<ClientStatus> {
 	NEW("New", "Nouvelle"),
 	INACTIVE("Inactive", "Inactive"),
 	IN_PROGRESS("In progress", "En cours");
@@ -21,16 +20,5 @@ public enum ClientStatus implements LocalizedEnum {
 
 	private final String valueFr;
 
-	@JsonValue
-	public String toValue() {
-		return LocalizedEnumUtil.toValue(this);
-	}
-
-	@JsonCreator
-	public static ClientStatus fromValue(String value) {
-		return LocalizedEnumUtil
-				.fromValue(ClientStatus.class, value)
-				.orElse(null);
-	}
 
 }

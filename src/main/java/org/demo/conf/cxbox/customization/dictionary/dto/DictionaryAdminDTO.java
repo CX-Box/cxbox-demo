@@ -41,6 +41,9 @@ public class DictionaryAdminDTO extends DataResponseDTO {
 	@SearchParameter
 	private String value;
 
+	@SearchParameter
+	private String valueFr;
+
 	@SearchParameter(provider = BooleanValueProvider.class)
 	private Boolean active;
 

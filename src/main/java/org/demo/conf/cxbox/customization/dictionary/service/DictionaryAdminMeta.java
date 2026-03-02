@@ -38,6 +38,7 @@ public class DictionaryAdminMeta extends FieldMetaBuilder<DictionaryAdminDTO> {
 				dictionaryTypeId,
 				key,
 				value,
+				valueFr,
 				active,
 				displayOrder,
 				description
@@ -46,6 +47,7 @@ public class DictionaryAdminMeta extends FieldMetaBuilder<DictionaryAdminDTO> {
 		fields.setRequired(type);
 		fields.setRequired(key);
 		fields.setRequired(value);
+		fields.setRequired(valueFr);
 		fields.setRequired(active);
 	}
 
@@ -56,6 +58,7 @@ public class DictionaryAdminMeta extends FieldMetaBuilder<DictionaryAdminDTO> {
 				type,
 				key,
 				value,
+				valueFr,
 				active,
 				displayOrder,
 				description
@@ -64,6 +67,7 @@ public class DictionaryAdminMeta extends FieldMetaBuilder<DictionaryAdminDTO> {
 				type,
 				key,
 				value,
+				valueFr,
 				active,
 				displayOrder,
 				description

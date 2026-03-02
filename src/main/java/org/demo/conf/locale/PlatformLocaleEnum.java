@@ -6,9 +6,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public interface PlatformLocaleEnum<E extends Enum<E>> {
+public interface PlatformLocaleEnum<E extends Enum<E> & PlatformLocaleEnum<E>> {
 
-	Map<Locale, Supplier<String>> translations() ;
+	Map<Locale, Supplier<String>> translations();
 
 	@JsonValue
 	default String toValue() {
@@ -17,7 +17,9 @@ public interface PlatformLocaleEnum<E extends Enum<E>> {
 
 	@JsonCreator
 	default E fromValue(String value) {
-		return (E) LocaleEnumUtil.fromValue(this.getClass(), value).orElse(null);
+		return LocaleEnumUtil
+				.fromValue((Class<E>) this.getClass(), value)
+				.orElse(null);
 	}
 
 }

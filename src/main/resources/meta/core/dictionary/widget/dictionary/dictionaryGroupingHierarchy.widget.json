@@ -28,6 +28,12 @@
       "width": 300
     },
     {
+      "title": "Value Fr",
+      "key": "valueFr",
+      "type": "input",
+      "width": 300
+    },
+    {
       "title": "Order",
       "key": "displayOrder",
       "type": "number",

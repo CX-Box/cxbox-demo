@@ -25,6 +25,11 @@
       "type": "input"
     },
     {
+      "label": "Value Fr",
+      "key": "valueFr",
+      "type": "input"
+    },
+    {
       "label": "Order",
       "key": "displayOrder",
       "type": "number"
@@ -61,6 +66,10 @@
             },
             {
               "fieldKey": "value",
+              "span": 4
+            },
+            {
+              "fieldKey": "valueFr",
               "span": 4
             },
             {

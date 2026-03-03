@@ -1,4 +1,4 @@
-package org.demo.conf.locale;
+package org.demo.conf.cxbox.extension.locale;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Locale;

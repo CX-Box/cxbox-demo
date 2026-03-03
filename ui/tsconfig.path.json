@@ -23,7 +23,13 @@
       "@fields": ["./fields"],
       "@fields/*": ["./fields/*"],
       "@selectors/*": ["./selectors/*"],
-      "@selectors": ["./selectors"]
+      "@selectors": ["./selectors"],
+      "@widgets/*": ["./widgets/*"],
+      "@widgets": ["./widgets"],
+      "@layouts/*": ["./layouts/*"],
+      "@layouts": ["./layouts"],
+      "@features/*": ["./features/*"],
+      "@features": ["./features"]
     }
   }
 }

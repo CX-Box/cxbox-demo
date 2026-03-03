@@ -1,5 +1,5 @@
 import React from 'react'
-import Field from '@components/Field/Field'
+import Field from '@features/Field/Field'
 import styles from './HistoryField.less'
 import { diffWords } from 'diff'
 import cn from 'classnames'

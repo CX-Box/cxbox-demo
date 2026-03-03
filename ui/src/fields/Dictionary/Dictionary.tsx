@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useRef } from 'react'
 import { Icon, Select as AntdSelect, Tooltip } from 'antd'
-import { BaseFieldProps } from '@components/Field/Field'
+import { BaseFieldProps } from '@features/Field/Field'
 import { interfaces } from '@cxbox-ui/core'
 import styles from './Dictionary.module.css'
 import { opacitySuffix } from '@constants'

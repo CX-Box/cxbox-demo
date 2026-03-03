@@ -5,11 +5,10 @@ import styles from './InnerWidget.less'
 import DebugWidgetWrapper from '@components/DebugWidgetWrapper/DebugWidgetWrapper'
 import { selectBc, selectBcData, selectBcUrlRowMeta, selectWidget } from '@selectors/selectors'
 import { useWidgetVisibility } from '@hooks/useWidgetVisibility'
-import { customWidgets } from '@components/View/View'
-import { chooseWidgetType } from '@components/Widget/Widget'
 import WidgetTitle from '@components/WidgetTitle/WidgetTitle'
 import { AppWidgetMeta } from '@interfaces/widget'
 import { isDefined } from '@utils/isDefined'
+import Widget from '@features/Widget'
 
 interface InnerWidgetProps {
     widgetName: string | undefined
@@ -58,7 +57,7 @@ const InnerWidget: FunctionComponent<InnerWidgetProps> = ({
         )
 
     const widgetHasBc = widget.bcName !== null && widget.bcName !== ''
-    const widgetElement = bc || !widgetHasBc ? chooseWidgetType(widget, customWidgets, props.children) : null
+    const widgetElement = bc || !widgetHasBc ? <Widget widgetMeta={widget} /> : null
 
     return (
         <DebugWidgetWrapper meta={widget}>

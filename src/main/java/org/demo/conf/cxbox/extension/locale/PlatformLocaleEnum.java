@@ -16,6 +16,7 @@ public interface PlatformLocaleEnum<E extends Enum<E> & PlatformLocaleEnum<E>> {
 	}
 
 	@JsonCreator
+	@SuppressWarnings("unchecked")
 	default E fromValue(@NonNull String value) {
 		return LocaleEnumUtil
 				.fromValue((Class<E>) this.getClass(), value)

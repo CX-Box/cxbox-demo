@@ -28,11 +28,5 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
         }
     }, [currentLanguage, i18n])
 
-    return (
-        <ConfigProvider
-            locale={Lookup.has(SUPPORTED_LANGUAGE, currentLanguage) ? antdResources[currentLanguage] : antdResources[defaultLocale]}
-        >
-            {children}
-        </ConfigProvider>
-    )
+    return <ConfigProvider locale={antdResources[currentLanguage]}>{children}</ConfigProvider>
 }

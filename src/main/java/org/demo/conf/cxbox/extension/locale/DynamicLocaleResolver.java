@@ -27,7 +27,7 @@ public class DynamicLocaleResolver extends AcceptHeaderLocaleResolver {
 			return Locale.ENGLISH;
 		}
 
-		return localeClaim.toLowerCase().startsWith("fr")
+		return Locale.FRENCH.getLanguage().equals(localeClaim.toLowerCase())
 				? Locale.FRENCH
 				: Locale.ENGLISH;
 	}

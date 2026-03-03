@@ -2,7 +2,7 @@
   "name": "client",
   "icon": "team",
   "order": 0,
-  "title": "Création du client",
+  "title": "{{ui.clients}}",
   "navigation": {
     "type": "standard",
     "menu": [

@@ -105,7 +105,7 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 				.save(sv -> sv)
 				.action(act -> act
 								.scope(ActionScope.RECORD)
-								.action("next",LocalizationFormatter.uiMessage("action.save.and.continue"))
+								.action("next", LocalizationFormatter.uiMessage("action.save.and.continue"))
 								.invoker((bc, dto) -> {
 									Client client = clientRepository.getById(bc.getIdAsLong());
 									ClientEditStep nextStep = ClientEditStep.getNextEditStep(client).get();
@@ -142,12 +142,10 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 											"/screen/client"
 									));
 						})
-						.available(ActionAvailableChecker.and(
-								ActionAvailableChecker.NOT_NULL_ID, bc -> {
-									Client client = clientRepository.getById(bc.getIdAsLong());
-									return !ClientEditStep.getNextEditStep(client).isPresent();
-								}
-						))
+						.available(ActionAvailableChecker.and(ActionAvailableChecker.NOT_NULL_ID, bc -> {
+							Client client = clientRepository.getById(bc.getIdAsLong());
+							return !ClientEditStep.getNextEditStep(client).isPresent();
+						}))
 				)
 				.action(act -> act
 						.action("previous", "Back")

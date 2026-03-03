@@ -142,10 +142,12 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 											"/screen/client"
 									));
 						})
-						.available(ActionAvailableChecker.and(ActionAvailableChecker.NOT_NULL_ID, bc -> {
-							Client client = clientRepository.getById(bc.getIdAsLong());
-							return !ClientEditStep.getNextEditStep(client).isPresent();
-						}))
+						.available(ActionAvailableChecker.and(
+								ActionAvailableChecker.NOT_NULL_ID, bc -> {
+									Client client = clientRepository.getById(bc.getIdAsLong());
+									return !ClientEditStep.getNextEditStep(client).isPresent();
+								}
+						))
 				)
 				.action(act -> act
 						.action("previous", "Back")
@@ -174,7 +176,7 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 						3,
 						Actions.<ClientWriteDTO>builder()
 								.action(act -> act
-										.action("edit",LocalizationFormatter.uiMessage("action.edit"))
+										.action("edit", LocalizationFormatter.uiMessage("action.edit"))
 										.withoutAutoSaveBefore()
 										.invoker((bc, data) -> {
 											Client client = clientRepository.getById(bc.getIdAsLong());
@@ -207,7 +209,7 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 										.available(bc -> false)//TODO>>remove false, after fixing UI error for this drill-down
 								)
 								.action(act -> act
-										.action("deactivate",LocalizationFormatter.uiMessage("action.deactivate"))
+										.action("deactivate", LocalizationFormatter.uiMessage("action.deactivate"))
 										.withAutoSaveBefore()
 										.withPreAction(bc -> PreAction.confirm("Are You sure You want to deactivate the client?"))
 										.invoker((bc, data) -> {

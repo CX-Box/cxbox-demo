@@ -6,20 +6,9 @@ import java.util.function.Supplier;
 import org.demo.conf.cxbox.extension.locale.PlatformLocaleEnum;
 
 /**
- * <p>
- * Each enum constant must define a value for every supported {@link Locale}.
- * Localization is configured via the {@link #translations()} map.
- * </p>
- *
- * <h3>Adding support for a new language</h3>
- * <ol>
- *   <li>Add a new getter method for the language value
- *       (for example {@code getValueDe()} for German).</li>
- *   <li>Extend the {@link #translations()} map with the corresponding {@link Locale}
- *       and method reference.</li>
- * </ol>
- *
- * <h4>Example</h4>
+
+ * Adding support for a new language
+ * Example
  * <pre>{@code
  * public interface LocaleEnum<E extends Enum<E> & PlatformLocaleEnum<E>>
  *         extends PlatformLocaleEnum<E> {

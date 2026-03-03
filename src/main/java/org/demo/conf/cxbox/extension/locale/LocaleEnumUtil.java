@@ -5,7 +5,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import lombok.NonNull;
-import org.demo.conf.cxbox.customization.locale.PlatformLocaleEnum;
 import org.springframework.context.i18n.LocaleContextHolder;
 
 public final class LocaleEnumUtil {

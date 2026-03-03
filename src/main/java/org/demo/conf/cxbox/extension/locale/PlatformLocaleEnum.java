@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Locale;
 import java.util.Map;
 import java.util.function.Supplier;
+import lombok.NonNull;
 
 public interface PlatformLocaleEnum<E extends Enum<E> & PlatformLocaleEnum<E>> {
 
@@ -16,7 +17,7 @@ public interface PlatformLocaleEnum<E extends Enum<E> & PlatformLocaleEnum<E>> {
 	}
 
 	@JsonCreator
-	default E fromValue(String value) {
+	default E fromValue(@NonNull String value) {
 		return LocaleEnumUtil
 				.fromValue((Class<E>) this.getClass(), value)
 				.orElse(null);

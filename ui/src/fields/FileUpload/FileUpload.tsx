@@ -13,7 +13,7 @@ import { checkFileFormat } from '@components/Operations/components/FileUpload/Fi
 import { applyParams, getFileUploadEndpoint } from '@utils/api'
 import { useSingleUploadRequest } from '@hooks/useSingleUploadRequest'
 import { actions } from '@actions'
-import { BaseFieldProps } from '@components/Field/Field'
+import { BaseFieldProps } from '@features/Field/Field'
 import { RowMetaField } from '@interfaces/rowMeta'
 import { CustomWidgetTypes, FileUploadFieldMeta } from '@interfaces/widget'
 import { DataValue } from '@cxbox-ui/core'

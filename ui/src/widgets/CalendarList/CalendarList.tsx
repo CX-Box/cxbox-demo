@@ -1,0 +1,114 @@
+import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { AppWidgetTableMeta } from '@interfaces/widget'
+import Operations from '@components/Operations/Operations'
+import { useAppSelector } from '@store'
+import CalendarMonth, { CalendarMonthApiHandle } from '@widgets/CalendarList/components/views/CalendarMonth'
+import { useCheckLimit } from '@hooks/useCheckLimit'
+import { useTranslation } from 'react-i18next'
+import Table from '@components/Table/Table'
+import Filters from '@widgets/CalendarList/components/filters/Filters'
+import { mapRefinerKeyToFieldKey } from '@widgets/CalendarList/constants'
+import { useWidgetOperations } from '@hooks/useWidgetOperations'
+import { selectBcRecordForm } from '@selectors/selectors'
+import { useCalendarMonthDataCheck } from '@widgets/CalendarList/hooks/useCalendarMonthDataCheck'
+import DropdownSetting from '@components/Table/components/DropdownSetting'
+import { Icon, Menu, Tooltip } from 'antd'
+import { WidgetComponentType } from '@features/Widget'
+import NullCard from '@components/NullCard'
+
+const CalendarList: WidgetComponentType = ({ widgetMeta: widget }) => {
+    const calendarRef = useRef<CalendarMonthApiHandle>(null)
+    const prevIsListRef = useRef<boolean>(false)
+    const recordForm = useAppSelector(selectBcRecordForm(widget.bcName))
+
+    const { t } = useTranslation()
+    const operations = useWidgetOperations(widget.name, ['bc', 'mass'])
+    const [isList, setIsList] = useState(false)
+    const { bcPageLimit, isIncorrectLimit, bcCountForShowing } = useCheckLimit(widget.bcName)
+    const { isIncorrectData } = useCalendarMonthDataCheck(widget.name)
+
+    useEffect(() => {
+        if (prevIsListRef.current && !isList) {
+            calendarRef.current?.navigateToDateByFilter()
+        }
+        prevIsListRef.current = isList
+    }, [isList])
+
+    useEffect(() => {
+        if (isIncorrectLimit || recordForm?.create || isIncorrectData) {
+            setIsList(true)
+        }
+    }, [isIncorrectData, isIncorrectLimit, recordForm?.create])
+
+    const enabledMassMode = useAppSelector(state => state.screen.viewerMode[widget.bcName]?.mode === 'mass')
+    const enabledListMode = isList || enabledMassMode
+
+    const togglerErrorMessage = useMemo(() => {
+        if (isIncorrectLimit) {
+            return t(`Warning! Only List mode available for CalendarList`, {
+                limit: bcPageLimit,
+                bcCount: bcCountForShowing
+            })
+        }
+
+        if (isIncorrectData) {
+            return t(`There is incorrect data, only table mode is available`)
+        }
+
+        return undefined
+    }, [bcCountForShowing, bcPageLimit, isIncorrectData, isIncorrectLimit, t])
+
+    const togglerDisabled = isIncorrectLimit || isIncorrectData
+
+    const selectedKeys = useMemo(() => {
+        if (isList) {
+            return ['list']
+        }
+        return ['calendar']
+    }, [isList])
+
+    const listToggleButton = (
+        <DropdownSetting
+            overlay={
+                <Menu selectedKeys={selectedKeys}>
+                    <Menu.ItemGroup key={'mode'} title={t('Mode')}>
+                        <Menu.Item key={'calendar'} onClick={() => setIsList(false)} disabled={togglerDisabled}>
+                            <Tooltip title={togglerErrorMessage}>
+                                <Icon type={'calendar'} />
+                                {t('Calendar')}
+                            </Tooltip>
+                        </Menu.Item>
+                        <Menu.Item key={'list'} onClick={() => setIsList(true)}>
+                            <Icon type={'table'} />
+                            {t('Table')}
+                        </Menu.Item>
+                    </Menu.ItemGroup>
+                </Menu>
+            }
+        />
+    )
+
+    const ignoreFieldNames = useMemo(() => {
+        const refinerKeyToFieldKeyMapper = mapRefinerKeyToFieldKey(widget?.options?.calendar)
+
+        return [refinerKeyToFieldKeyMapper.start, refinerKeyToFieldKeyMapper.end]
+    }, [widget?.options?.calendar])
+
+    return (
+        <NullCard meta={widget}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', color: 'var(--text-color)' }}>
+                {enabledListMode ? (
+                    <Table meta={widget as AppWidgetTableMeta} settingsComponent={listToggleButton} />
+                ) : (
+                    <>
+                        {operations?.length ? <Operations widgetMeta={widget} bcName={widget.bcName} operations={operations} /> : null}
+                        <Filters widgetName={widget.name} ignoreFieldNames={ignoreFieldNames} />
+                        <CalendarMonth ref={calendarRef} meta={widget} toggleButton={listToggleButton} />
+                    </>
+                )}
+            </div>
+        </NullCard>
+    )
+}
+
+export default React.memo(CalendarList)

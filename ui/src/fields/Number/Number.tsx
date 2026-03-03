@@ -12,7 +12,7 @@ interface NumberProps {
     readOnly: boolean
 }
 
-export const Number = ({ value, readOnly, onChange, ...rest }: NumberProps) => {
+const Number = ({ value, readOnly, onChange, ...rest }: NumberProps) => {
     const meta = rest.meta
     const type = meta.type as unknown as NumberTypes
     return (
@@ -30,3 +30,5 @@ export const Number = ({ value, readOnly, onChange, ...rest }: NumberProps) => {
         </div>
     )
 }
+
+export default Number

@@ -9,8 +9,7 @@ import lombok.NonNull;
 
 public interface PlatformLocaleEnum<E extends Enum<E> & PlatformLocaleEnum<E>> {
 
-	Map<Locale, Supplier<String>> translations();
-
+	Map<Locale, Supplier<@NonNull String>> translations();
 	@JsonValue
 	default String toValue() {
 		return LocaleEnumUtil.toValue(this);

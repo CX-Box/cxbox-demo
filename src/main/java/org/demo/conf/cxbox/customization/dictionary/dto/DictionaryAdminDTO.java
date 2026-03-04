@@ -18,7 +18,6 @@ package org.demo.conf.cxbox.customization.dictionary.dto;
 
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
 import org.cxbox.api.data.dto.DataResponseDTO;

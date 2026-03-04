@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Supplier;
 import lombok.NonNull;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -30,8 +29,7 @@ public final class LocaleEnumUtil {
 				.get();
 	}
 
-
-	public static <E extends Enum<E> & PlatformLocaleEnum<E>> Optional<E> fromValue(
+	public static <E extends Enum<E> & PlatformLocaleEnum<E>> E fromValue(
 			@NonNull Class<E> enumClass,
 			@NonNull String value
 	) {
@@ -43,7 +41,7 @@ public final class LocaleEnumUtil {
 				}
 			}
 		}
-		return Optional.ofNullable(map.get(value));
+		return null;
 	}
 
 	/**
@@ -61,9 +59,7 @@ public final class LocaleEnumUtil {
 		@JsonCreator
 		@SuppressWarnings("unchecked")
 		default E fromValue(@NonNull String value) {
-			return LocaleEnumUtil
-					.fromValue((Class<E>) this.getClass(), value)
-					.orElse(null);
+			return LocaleEnumUtil.fromValue((Class<E>) this.getClass(), value);
 		}
 	}
 }

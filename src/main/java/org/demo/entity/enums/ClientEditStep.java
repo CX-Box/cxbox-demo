@@ -1,6 +1,6 @@
 package org.demo.entity.enums;
 
-import org.demo.conf.cxbox.customization.locale.LocaleEnum;
+import org.demo.conf.cxbox.extension.locale.LocaleEnum;
 import org.demo.entity.Client;
 import java.util.Arrays;
 import java.util.Optional;

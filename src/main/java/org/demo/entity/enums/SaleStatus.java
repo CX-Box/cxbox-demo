@@ -2,7 +2,7 @@ package org.demo.entity.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.demo.conf.cxbox.customization.locale.LocaleEnum;
+import org.demo.conf.cxbox.extension.locale.LocaleEnum;
 
 @Getter
 @AllArgsConstructor

@@ -23,10 +23,12 @@ import static org.demo.conf.cxbox.customization.dictionary.dto.DictionaryAdminDT
 import static org.demo.conf.cxbox.customization.dictionary.dto.DictionaryAdminDTO_.key;
 import static org.demo.conf.cxbox.customization.dictionary.dto.DictionaryAdminDTO_.type;
 import static org.demo.conf.cxbox.customization.dictionary.dto.DictionaryAdminDTO_.value;
+import static org.demo.conf.cxbox.customization.dictionary.dto.DictionaryAdminDTO_.valueFr;
 
 import jakarta.persistence.EntityManager;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.Getter;
@@ -89,7 +91,22 @@ public class DictionaryAdminService extends VersionAwareResponseService<Dictiona
 		setIfChanged(data, key, entity::setKey);
 		if (data.isFieldChanged(value)) {
 			entity.setValue(data.getValue());
-			entity.getTranslations().forEach((lang, tr) -> tr.setValue(data.getValue()));
+			entity.getTranslations().entrySet().stream()
+					.filter(entry ->
+							Locale.ENGLISH.getLanguage().equals(entry.getKey())
+					)
+					.forEach(entry ->
+							entry.getValue().setValue(data.getValue())
+					);
+		}
+		if (data.isFieldChanged(valueFr)) {
+			entity.getTranslations().entrySet().stream()
+					.filter(entry ->
+							Locale.FRENCH.getLanguage().equals(entry.getKey())
+					)
+					.forEach(entry ->
+							entry.getValue().setValue(data.getValueFr())
+					);
 		}
 		setIfChanged(data, active, entity::setActive);
 		setIfChanged(data, displayOrder, entity::setDisplayOrder);

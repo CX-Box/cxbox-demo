@@ -16,6 +16,10 @@
 
 package org.demo.conf.cxbox.customization.dictionary.dto;
 
+import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Optional;
 import org.cxbox.api.data.dto.DataResponseDTO;
 import org.cxbox.core.util.filter.SearchParameter;
@@ -28,6 +32,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.cxbox.model.dictionary.entity.DictionaryItemTranslation;
 
 @Getter
 @Setter
@@ -68,6 +73,14 @@ public class DictionaryAdminDTO extends DataResponseDTO {
 		this.type = dictionaryItem.getType();
 		this.displayOrder = dictionaryItem.getDisplayOrder();
 		this.description = dictionaryItem.getDescription();
+		this.valueFr = dictionaryItem.getTranslations().entrySet().stream()
+				.filter(entry -> Locale.FRENCH.getLanguage().equals(entry.getKey()))
+				.map(Map.Entry::getValue)
+				.filter(Objects::nonNull)
+				.map(DictionaryItemTranslation::getValue)
+				.filter(Objects::nonNull)
+				.findFirst()
+				.orElse(null);
 	}
 
 }

@@ -13,7 +13,7 @@ import { useOperationInProgress } from '@hooks/useOperationInProgress'
 import TextSearchInput from '@components/Operations/components/TextSearchInput/TextSearchInput'
 import { FileUpload } from '@components/Operations/components/FileUpload/FileUpload'
 import { actions } from '@actions'
-import { AVAILABLE_MASS_STEPS } from '@components/widgets/Table/massOperations/constants'
+import { AVAILABLE_MASS_STEPS } from '@components/Table/massOperations/constants'
 import { Operation, OperationGroup } from '@interfaces/rowMeta'
 import { useStaleValueWhileRowMetaLoading } from '@hooks/useStaleValueWhileRowMetaLoading'
 

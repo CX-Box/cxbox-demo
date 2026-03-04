@@ -41,7 +41,7 @@ public final class LocaleEnumUtil {
 				}
 			}
 		}
-		return null;
+		return map.get(value);
 	}
 
 	/**

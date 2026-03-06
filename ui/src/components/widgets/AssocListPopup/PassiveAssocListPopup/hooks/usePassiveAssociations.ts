@@ -16,14 +16,17 @@ function useMultivalueValues() {
         const calleePendingData = state.view.pendingDataChanges?.[calleeBcName as string]?.[calleeBc.cursor as string]
         const calleeData = calleeBc && state.data[calleeBc.name]?.find(record => record.id === calleeBc.cursor)
 
-        const selectedItemsFromCalleeData = calleeData?.[associateFieldKey as string] as MultivalueSingleValue[]
-        const selectedItemsFromCalleePendingData = calleePendingData?.[associateFieldKey as string] as MultivalueSingleValue[]
+        const selectedItemsFromCalleeData = calleeData?.[associateFieldKey as string] as MultivalueSingleValue[] | null
+        const selectedItemsFromCalleePendingData = calleePendingData?.[associateFieldKey as string] as
+            | MultivalueSingleValue[]
+            | null
+            | undefined
 
         return { selectedItemsFromCalleePendingData, selectedItemsFromCalleeData }
     }, shallowEqual)
 
     return useMemo(() => {
-        return selectedItemsFromCalleePendingData !== undefined ? selectedItemsFromCalleePendingData : selectedItemsFromCalleeData
+        return (selectedItemsFromCalleePendingData !== undefined ? selectedItemsFromCalleePendingData : selectedItemsFromCalleeData) ?? []
     }, [selectedItemsFromCalleeData, selectedItemsFromCalleePendingData])
 }
 

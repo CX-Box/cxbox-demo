@@ -28,7 +28,6 @@ import static org.demo.conf.cxbox.customization.dictionary.dto.DictionaryAdminDT
 import jakarta.persistence.EntityManager;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.Getter;
@@ -93,7 +92,7 @@ public class DictionaryAdminService extends VersionAwareResponseService<Dictiona
 			entity.setValue(data.getValue());
 			entity.getTranslations().entrySet().stream()
 					.filter(entry ->
-							Locale.ENGLISH.getLanguage().equals(entry.getKey())
+							SupportedLanguages.getDefaultLocale().getLanguage().equals(entry.getKey())
 					)
 					.forEach(entry ->
 							entry.getValue().setValue(data.getValue())
@@ -102,7 +101,7 @@ public class DictionaryAdminService extends VersionAwareResponseService<Dictiona
 		if (data.isFieldChanged(valueFr)) {
 			entity.getTranslations().entrySet().stream()
 					.filter(entry ->
-							Locale.FRENCH.getLanguage().equals(entry.getKey())
+							SupportedLanguages.FRENCH.getLocale().getLanguage().equals(entry.getKey())
 					)
 					.forEach(entry ->
 							entry.getValue().setValue(data.getValueFr())

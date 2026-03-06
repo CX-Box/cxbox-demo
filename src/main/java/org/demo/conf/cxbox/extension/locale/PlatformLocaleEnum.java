@@ -10,6 +10,8 @@ import lombok.NonNull;
 import org.springframework.context.i18n.LocaleContextHolder;
 
 /**
+ * <b>Dont change this class</b>
+ * Candidate to move cxbox core
  * Interface for enums
  */
 public interface PlatformLocaleEnum<E extends Enum<E> & PlatformLocaleEnum<E>> {

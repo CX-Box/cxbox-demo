@@ -29,6 +29,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ConcurrentTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.AsyncSupportConfigurer;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -87,7 +88,7 @@ public class ApplicationConfig {
 	}
 
 	@Primary
-	@Bean
+	@Bean(DispatcherServlet.LOCALE_RESOLVER_BEAN_NAME)
 	public LocaleResolver localeResolver() {
 		return new DynamicLocaleResolver();
 	}

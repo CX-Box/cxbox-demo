@@ -2,6 +2,7 @@ package org.demo.conf.cxbox.extension.locale;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Locale;
+import org.demo.conf.cxbox.customization.dictionary.service.SupportedLanguages;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,7 +16,7 @@ public class DynamicLocaleResolver extends AcceptHeaderLocaleResolver {
 	public Locale resolveLocale(@NotNull HttpServletRequest request) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication == null || !(authentication.getPrincipal() instanceof Jwt jwt)) {
-			return Locale.ENGLISH;
+			return SupportedLanguages.getDefaultLocale();
 		}
 		return resolveFromJwt(jwt);
 	}
@@ -24,12 +25,12 @@ public class DynamicLocaleResolver extends AcceptHeaderLocaleResolver {
 		String localeClaim = jwt.getClaimAsString("locale");
 
 		if (localeClaim == null || localeClaim.isBlank()) {
-			return Locale.ENGLISH;
+			return SupportedLanguages.getDefaultLocale();
 		}
 
-		return Locale.FRENCH.getLanguage().equals(localeClaim.toLowerCase())
-				? Locale.FRENCH
-				: Locale.ENGLISH;
+		return SupportedLanguages.FRENCH.getLocale().getLanguage().equals(localeClaim.toLowerCase()) ?
+				SupportedLanguages.FRENCH.getLocale() :
+				SupportedLanguages.getDefaultLocale();
 	}
 
 }

@@ -48,6 +48,7 @@ public class DictionaryAdminMeta extends FieldMetaBuilder<DictionaryAdminDTO> {
 		fields.setRequired(key);
 		fields.setRequired(value);
 		fields.setRequired(active);
+		fields.setRequired(valueFr);
 	}
 
 	@Override

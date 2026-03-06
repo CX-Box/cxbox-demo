@@ -3,9 +3,9 @@ package org.demo.conf.cxbox.extension.locale;
 import java.util.Locale;
 import java.util.Map;
 import java.util.function.Supplier;
+import org.demo.conf.cxbox.customization.dictionary.service.SupportedLanguages;
 
 /**
-
  * Adding support for a new language
  * Example
  * <pre>{@code
@@ -19,9 +19,9 @@ import java.util.function.Supplier;
  *     @Override
  *     default Map<Locale, Supplier<String>> translations() {
  *         return Map.of(
- *             Locale.ENGLISH, this::getValue,
- *             Locale.FRANCE, this::getValueFr,
- *             Locale.GERMANY, this::getValueDe
+ *             SupportedLanguages.ENGLISH.getLocale(), this::getValue,
+ *             SupportedLanguages.FRENCH.getLocale(), this::getValueFr,
+ *             SupportedLanguages.GERNANY.getLocale(), this::getValueDe
  *         );
  *     }
  * }
@@ -38,9 +38,10 @@ public interface LocaleEnum<E extends Enum<E> & PlatformLocaleEnum<E>>
 
 	@Override
 	default Map<Locale, Supplier<String>> translations() {
-		return  Map.of(
-				Locale.ENGLISH, this::getValue,
-				Locale.FRENCH, this::getValueFr
+		return Map.of(
+				SupportedLanguages.getDefaultLocale(), this::getValue,
+				SupportedLanguages.FRENCH.getLocale(), this::getValueFr
 		);
 	}
+
 }

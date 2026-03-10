@@ -11,6 +11,7 @@ interface Session extends interfaces.Session {
     tableSettings: TableSettingsMap | null
     screens: SessionScreen[]
     featureSettings?: FeatureSetting[]
+    language?: string | null | undefined
 }
 
 const initialState: Session = {

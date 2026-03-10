@@ -25,6 +25,9 @@
       "account" : [ "view-profile", "manage-account" ]
     },
     "notBefore" : 0,
-    "groups" : [ ]
+    "groups" : [ ],
+    "attributes": {
+      "locale": "fr"
+    }
   } ]
 }

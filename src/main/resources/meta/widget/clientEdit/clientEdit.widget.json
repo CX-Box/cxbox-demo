@@ -1,11 +1,11 @@
 {
   "name": "clientEdit",
-  "title": "General information",
+  "title": "{{ui.general.information}}",
   "type": "Form",
   "bc": "clientEdit",
   "fields": [
     {
-      "label": "Client Name",
+      "label": "{{ui.client.name}}",
       "key": "fullName",
       "type": "suggestionPickList",
       "popupBcName": "companySuggestionPickList",
@@ -15,27 +15,27 @@
       }
     },
     {
-      "label": "Importance",
+      "label": "{{ui.importance}}",
       "key": "importance",
       "type": "dictionary"
     },
     {
-      "label": "Address",
+      "label": "{{ui.address}}",
       "key": "address",
       "type": "input"
     },
     {
-      "label": "Status",
+      "label": "{{ui.status}}",
       "key": "status",
       "type": "dictionary"
     },
     {
-      "label": "Field of Activity",
+      "label": "{{ui.fieldOfActivity}}",
       "key": "fieldOfActivity",
       "type": "multipleSelect"
     },
     {
-      "label": "Brief",
+      "label": "{{ui.brief}}",
       "key": "brief",
       "type": "fileUpload",
       "fileIdKey": "briefId",

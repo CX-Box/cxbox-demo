@@ -1,16 +1,19 @@
 package org.demo.entity.enums;
 
-import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.demo.conf.cxbox.extension.locale.LocaleEnum;
 
 @Getter
 @AllArgsConstructor
-public enum ClientStatus {
-	NEW("New"),
-	INACTIVE("Inactive"),
-	IN_PROGRESS("In progress");
+public enum ClientStatus implements LocaleEnum<ClientStatus> {
+	NEW("New", "Nouvelle"),
+	INACTIVE("Inactive", "Inactive"),
+	IN_PROGRESS("In progress", "En cours");
 
-	@JsonValue
 	private final String value;
+
+	private final String valueFr;
+
+
 }

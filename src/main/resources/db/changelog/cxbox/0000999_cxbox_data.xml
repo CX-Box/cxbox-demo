@@ -76,9 +76,10 @@
     </sql>
 
     <sql>
-      insert into DICTIONARY_ITEM_TR (ID, LANGUAGE, VALUE)
-      select ID, 'en' as LANGUAGE, VALUE as VALUE
-      from DICTIONARY_ITEM;
+      insert into dictionary_item_tr (id, language, value)
+      select id, 'en', value from dictionary_item
+      union all
+      select id, 'fr', value_fr from dictionary_item;
     </sql>
   </changeSet>
 

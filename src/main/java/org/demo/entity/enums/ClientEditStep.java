@@ -1,6 +1,6 @@
 package org.demo.entity.enums;
 
-import com.fasterxml.jackson.annotation.JsonValue;
+import org.demo.conf.cxbox.extension.locale.LocaleEnum;
 import org.demo.entity.Client;
 import java.util.Arrays;
 import java.util.Optional;
@@ -10,13 +10,31 @@ import lombok.NonNull;
 
 @Getter
 @AllArgsConstructor
-public enum ClientEditStep {
-	FILL_GENERAL_INFORMATION("Fill general information", "screen/client/view/clienteditgeneral/"),
-	CREATE_CLIENT_CONTACT("Add client contact", "screen/client/view/clienteditcontacts/"),
-	REVIEW_CLIENT_CARD("Review client card", "screen/client/view/clienteditoverview/");
+public enum ClientEditStep  implements LocaleEnum<ClientEditStep> {
 
-	@JsonValue
+	FILL_GENERAL_INFORMATION(
+			"Fill general information",
+			"Remplir les informations générales",
+			"screen/client/view/clienteditgeneral/"
+	),
+
+
+	CREATE_CLIENT_CONTACT(
+			"Add client contact",
+			"Ajouter les coordonnées du client",
+			"screen/client/view/clienteditcontacts/"
+	),
+
+	REVIEW_CLIENT_CARD(
+			"Review client card",
+			"Consulter la fiche client",
+			"screen/client/view/clienteditoverview/"
+	);
+
+
 	private final String value;
+
+	private final String valueFr;
 
 	private final String editView;
 

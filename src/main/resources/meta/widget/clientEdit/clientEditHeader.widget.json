@@ -1,6 +1,6 @@
 {
   "name": "clientEditHeader",
-  "title": "Client Creation",
+  "title": "{{ui.client.creation}}",
   "type": "HeaderWidget",
   "bc": "clientEdit",
   "fields": []

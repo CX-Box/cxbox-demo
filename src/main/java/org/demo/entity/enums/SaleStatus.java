@@ -1,15 +1,18 @@
 package org.demo.entity.enums;
 
-import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.demo.conf.cxbox.extension.locale.LocaleEnum;
 
 @Getter
 @AllArgsConstructor
-public enum SaleStatus {
-	OPEN("Open"),
-	CLOSED("Closed");
+public enum SaleStatus implements LocaleEnum<SaleStatus> {
 
-	@JsonValue
+	OPEN("Open", "Ouvrir"),
+	CLOSED("Closed", "Fermée");
+
 	private final String value;
+
+	private final String valueFr;
+
 }

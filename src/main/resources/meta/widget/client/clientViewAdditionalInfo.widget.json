@@ -1,6 +1,6 @@
 {
   "name": "clientViewAdditionalInfo",
-  "title": "General information",
+  "title": "{{ui.general.information}}",
   "type": "AdditionalInfo",
   "bc": "clientEdit",
   "fields": [

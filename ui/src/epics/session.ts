@@ -45,7 +45,8 @@ const loginEpic: RootEpic = (action$, state$, { api }) =>
                             login: data.login,
                             screens: processScreensOnLogin(data.screens),
                             userId: data.userId,
-                            featureSettings: data.featureSettings
+                            featureSettings: data.featureSettings,
+                            language: data.language
                         })
                     )
                 }),
@@ -105,6 +106,7 @@ export const loginByAnotherRoleEpic: RootEpic = (action$, state$, { api }) =>
                             screens: processScreensOnLogin(data.screens),
                             userId: data.userId,
                             featureSettings: data.featureSettings,
+                            language: data.language,
                             defaultUrl
                         })
                     ])

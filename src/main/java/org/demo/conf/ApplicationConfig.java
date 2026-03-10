@@ -16,6 +16,7 @@ import org.cxbox.meta.MetaApplicationConfig;
 import org.cxbox.meta.metahotreload.conf.MetaHotReloadConfiguration;
 import org.cxbox.model.core.config.PersistenceJPAConfig;
 import org.cxbox.model.core.tx.CxboxJpaTransactionManagerForceActiveAware;
+import org.demo.conf.cxbox.extension.locale.DynamicLocaleResolver;
 import org.demo.util.IntegrationConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -23,10 +24,13 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ConcurrentTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.web.servlet.DispatcherServlet;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.AsyncSupportConfigurer;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -81,6 +85,12 @@ public class ApplicationConfig {
 			final CxboxBeanProperties cxboxBeanProperties,
 			final ITransactionStatus txStatus) {
 		return new CxboxJpaTransactionManagerForceActiveAware(applicationContext, cxboxBeanProperties, txStatus);
+	}
+
+	@Primary
+	@Bean(DispatcherServlet.LOCALE_RESOLVER_BEAN_NAME)
+	public LocaleResolver localeResolver() {
+		return new DynamicLocaleResolver();
 	}
 
 }

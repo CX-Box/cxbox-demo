@@ -48,6 +48,7 @@ interface FieldProps extends FieldOwnProps {
     rowFieldMeta: interfaces.RowMetaField
     metaError: string
     showErrorPopup: boolean
+    disabledByForceActive: boolean
     onChange: (payload: ChangeDataItemPayload) => void
     onDrillDown: (widgetName: string, cursor: string, bcName: string, fieldKey: string) => void
 }
@@ -130,6 +131,7 @@ const Field: FunctionComponent<FieldProps> = ({
     suffixClassName,
     tooltipPlacement,
     customProps,
+    disabledByForceActive,
     onChange,
     onDrillDown
 }) => {
@@ -139,7 +141,7 @@ const Field: FunctionComponent<FieldProps> = ({
 
     const value = forcedValue ? forcedValue : pendingValue !== undefined ? pendingValue : data?.[widgetFieldMeta.key]
 
-    const disabled = rowFieldMeta ? rowFieldMeta.disabled : true
+    const disabled = disabledByForceActive || (rowFieldMeta ? rowFieldMeta.disabled : true)
 
     const placeholder = rowFieldMeta?.placeholder
 
@@ -384,7 +386,8 @@ function mapStateToProps(state: RootState, ownProps: FieldOwnProps) {
         pendingValue,
         rowFieldMeta,
         metaError,
-        showErrorPopup
+        showErrorPopup,
+        disabledByForceActive: state.view.forceActiveInProgress[ownProps.bcName]
     }
 }
 

@@ -34,6 +34,7 @@ export interface LoginResponse extends interfaces.LoginResponse {
     userId: string
     featureSettings?: FeatureSetting[]
     screens: SessionScreen[]
+    language?: string | null | undefined
 }
 
 export interface SessionScreen extends interfaces.SessionScreen {

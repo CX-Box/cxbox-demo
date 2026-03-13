@@ -1,56 +1,40 @@
 package org.demo.conf.cxbox.extension.filtergroup;
 
 import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
-import lombok.AllArgsConstructor;
+import org.cxbox.api.service.tx.TransactionService;
 import org.cxbox.core.exception.BusinessException;
+import org.cxbox.core.util.session.SessionService;
 import org.cxbox.meta.data.FilterGroupDTO;
-import org.cxbox.meta.entity.FilterGroup;
-import org.cxbox.meta.filterGroup.PersonalFilterGroupService;
 import org.cxbox.meta.filterGroup.PersonalFilterGroupServiceImpl;
 import org.cxbox.model.core.dao.JpaDao;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.context.annotation.Primary;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-
 
 @Primary
 @Service
-@AllArgsConstructor
-public class PersonalFilterGroupServiceCustomImpl implements PersonalFilterGroupService {
+public class PersonalFilterGroupServiceCustomImpl extends PersonalFilterGroupServiceImpl {
 
-	private final PersonalFilterGroupServiceImpl personalFilterGroupServiceImpl;
-
-	private final JpaDao jpaDao;
+	public PersonalFilterGroupServiceCustomImpl(JpaDao jpaDao, SessionService service,
+			TransactionService transactionService) {
+		super(jpaDao, service, transactionService);
+	}
 
 	@Override
 	public List<FilterGroupDTO> create(List<FilterGroupDTO> filterGroupDTOList) {
-		FilterGroupDTO dto = filterGroupDTOList.stream()
-				.filter(Objects::nonNull)
-				.findFirst()
-				.orElseThrow(() -> new  IllegalArgumentException("FilterGroupDTO list is empty"));
-
-		if (hasDuplicateName(dto)) {
-			throw new BusinessException().addPopup(
-					"Filter group names must be unique (case-insensitive)"
-			);
+		try {
+			return super.create(filterGroupDTOList);
+		} catch (DataIntegrityViolationException e) {
+			Throwable cause = e.getCause();
+			if (cause instanceof ConstraintViolationException violation) {
+				if ("bc_filter_groups_unique".equals(violation.getConstraintName())) {
+					throw new BusinessException().addPopup(("Названия групп фильтров должны быть уникальными"));
+				}
+			}
+			throw e;
 		}
-
-		return personalFilterGroupServiceImpl.create(filterGroupDTOList);
 	}
 
-	@Override
-	public void delete(List<Long> ids) {
-		personalFilterGroupServiceImpl.delete(ids);
-	}
-
-	private boolean hasDuplicateName(FilterGroupDTO dto) {
-		String name = dto.getName().toLowerCase(Locale.ROOT);
-
-		return jpaDao.getList(FilterGroup.class).stream()
-				.map(FilterGroup::getName)
-				.filter(Objects::nonNull)
-				.anyMatch(n -> n.equalsIgnoreCase(name));
-	}
 
 }

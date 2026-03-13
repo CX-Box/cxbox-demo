@@ -18,7 +18,7 @@ export interface ScreenState extends interfaces.ScreenState {
     menuCollapsed: boolean
     bo: {
         activeBcName: string
-        bc: Record<string, BcMetaState & { defaultLimit?: number; filterGroups?: FilterGroup[] }>
+        bc: Record<string, Omit<BcMetaState, 'filterGroups'> & { defaultLimit?: number; filterGroups?: FilterGroup[] }>
     }
     pagination: { [bcName: string]: { limit?: number } }
     viewerMode: {
@@ -54,7 +54,7 @@ const screenReducerBuilder = reducers
         state.bo.bc[removedFilterGroup.bc] = state.bo.bc[removedFilterGroup.bc] ?? {}
 
         state.bo.bc[removedFilterGroup.bc].filterGroups = state.bo.bc[removedFilterGroup.bc as string].filterGroups?.filter(
-            filterGroup => filterGroup.name !== removedFilterGroup.name
+            filterGroup => filterGroup.id !== removedFilterGroup.id
         )
     })
     .addCase(actions.addFilterGroup, (state, action) => {
@@ -62,12 +62,12 @@ const screenReducerBuilder = reducers
 
         state.bo.bc[newFilterGroup.bc]?.filterGroups?.push(newFilterGroup)
     })
-    .addCase(actions.updateIdForFilterGroup, (state, { payload: newFilterGroup }) => {
-        const newFilterGroupIndex =
-            state.bo.bc[newFilterGroup.bc].filterGroups?.findIndex(filterGroup => filterGroup.name === newFilterGroup.name) ?? -1
+    .addCase(actions.updateIdForFilterGroup, (state, { payload }) => {
+        const { bc: bcName, prevId, newId } = payload
+        const filterGroup = state.bo.bc[bcName].filterGroups?.find(filterGroup => filterGroup.id === prevId)
 
-        if (newFilterGroupIndex !== -1) {
-            ;(state.bo.bc[newFilterGroup.bc].filterGroups as FilterGroup[])[newFilterGroupIndex].id = newFilterGroup.id
+        if (filterGroup) {
+            filterGroup.id = newId
         }
     })
     .addCase(actions.changePageLimit, (state, action) => {

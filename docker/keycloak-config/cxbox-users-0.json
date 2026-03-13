@@ -2,14 +2,14 @@
   "realm" : "cxbox",
   "users" : [ {
     "id" : "f6810c3d-b027-407a-92b3-50dd479b6bb7",
-    "createdTimestamp" : 1631869680337,
     "username" : "demo",
-    "enabled" : true,
-    "totp" : false,
-    "emailVerified" : false,
     "firstName" : "John",
     "lastName" : "Snow",
     "email" : "demo@local.com",
+    "emailVerified" : false,
+    "enabled" : true,
+    "createdTimestamp" : 1631869680337,
+    "totp" : false,
     "credentials" : [ {
       "id" : "646ecbba-567e-4dd9-8043-6e7fd2e581ad",
       "type" : "password",
@@ -24,6 +24,52 @@
       "cxbox-oidc-client" : [ "BUSINESS_ADMIN", "CXBOX_USER" ],
       "account" : [ "view-profile", "manage-account" ]
     },
+    "notBefore" : 0,
+    "groups" : [ ]
+  }, {
+    "id" : "913ce313-f8d2-4e4d-8ac8-0d044aa54521",
+    "username" : "test",
+    "firstName" : "test",
+    "lastName" : "test",
+    "email" : "test@mail.com",
+    "emailVerified" : false,
+    "enabled" : true,
+    "createdTimestamp" : 1773381695611,
+    "totp" : false,
+    "credentials" : [ {
+      "id" : "5cdc4ccc-1c05-43ec-aa69-e4b5ba63ba59",
+      "type" : "password",
+      "userLabel" : "My password",
+      "createdDate" : 1773381704625,
+      "secretData" : "{\"value\":\"sc31fpN5gt7khS4elCPBpc3DkUCZ7G68CwwTidyv69Y=\",\"salt\":\"+asPupaq0mRurVLVx45z6A==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":5,\"algorithm\":\"argon2\",\"additionalParameters\":{\"hashLength\":[\"32\"],\"memory\":[\"7168\"],\"type\":[\"id\"],\"version\":[\"1.3\"],\"parallelism\":[\"1\"]}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-cxbox" ],
+    "notBefore" : 0,
+    "groups" : [ ]
+  }, {
+    "id" : "fd44291e-4f96-4a98-9c2e-fef3e2b8d78d",
+    "username" : "test2",
+    "firstName" : "test2",
+    "lastName" : "test2",
+    "email" : "test2@mail.com",
+    "emailVerified" : false,
+    "enabled" : true,
+    "createdTimestamp" : 1773382531369,
+    "totp" : false,
+    "credentials" : [ {
+      "id" : "ab5aafb0-70b4-4fcc-bbe8-705964a720df",
+      "type" : "password",
+      "userLabel" : "My password",
+      "createdDate" : 1773382541024,
+      "secretData" : "{\"value\":\"X9Lduqg+4a2GoR2+jtVgdhf7rKrL0lCJ1OBL2Pv1rMo=\",\"salt\":\"Krblfn/8Gi610NX1qwrFEg==\",\"additionalParameters\":{}}",
+      "credentialData" : "{\"hashIterations\":5,\"algorithm\":\"argon2\",\"additionalParameters\":{\"hashLength\":[\"32\"],\"memory\":[\"7168\"],\"type\":[\"id\"],\"version\":[\"1.3\"],\"parallelism\":[\"1\"]}}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "default-roles-cxbox" ],
     "notBefore" : 0,
     "groups" : [ ]
   } ]

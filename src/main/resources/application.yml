@@ -2,12 +2,9 @@ app:
   auth-basic:
     enabled: ${AUTH_BASIC_ENABLED:false}
   oidc:
-    realm: cxbox
-    auth-server-url: ${FRONTEND_AUTH_SERVER_URL:http://localhost:9080/auth}
-    ssl-require: none
-    resource: cxbox-oidc-client
-    public-client: true
-    cors: true
+    client_id: cxbox-oidc-client
+    scope: 'openid profile'
+    authority: ${FRONTEND_AUTH_SERVER_URL:http://localhost:9080/auth/}realms/cxbox
   stomp:
     stomp-post: ${STOMP_PORT:61613}
     broker-type: ${BROKER_TYPE:simple}

@@ -14,12 +14,17 @@ export type ViewerModeMass = {
     resultFilterEnabled?: boolean
 }
 
+export interface BcCache {
+    filterGroups?: FilterGroup[]
+}
+
 export interface ScreenState extends interfaces.ScreenState {
     menuCollapsed: boolean
     bo: {
         activeBcName: string
-        bc: Record<string, BcMetaState & { defaultLimit?: number; filterGroups?: FilterGroup[] }>
+        bc: Record<string, Omit<BcMetaState, 'filterGroups'> & { defaultLimit?: number; filterGroups?: FilterGroup[] }>
     }
+    bcCache: { [bcName: string]: BcCache | undefined }
     pagination: { [bcName: string]: { limit?: number } }
     viewerMode: {
         [bcName: string]: ViewerModeMass | undefined
@@ -34,7 +39,8 @@ const initialState: ScreenState = {
     pagination: {},
     viewerMode: {},
     collapsedWidgets: {},
-    alternativePagination: {}
+    alternativePagination: {},
+    bcCache: {}
 }
 
 const screenReducerBuilder = reducers
@@ -54,21 +60,30 @@ const screenReducerBuilder = reducers
         state.bo.bc[removedFilterGroup.bc] = state.bo.bc[removedFilterGroup.bc] ?? {}
 
         state.bo.bc[removedFilterGroup.bc].filterGroups = state.bo.bc[removedFilterGroup.bc as string].filterGroups?.filter(
-            filterGroup => filterGroup.name !== removedFilterGroup.name
+            filterGroup => filterGroup.id !== removedFilterGroup.id
         )
+
+        state.bcCache[removedFilterGroup.bc] = state.bcCache[removedFilterGroup.bc] ?? {}
+        state.bcCache[removedFilterGroup.bc]!.filterGroups = state.bo.bc[removedFilterGroup.bc]?.filterGroups
     })
     .addCase(actions.addFilterGroup, (state, action) => {
         const newFilterGroup = { ...action.payload, personal: true }
 
         state.bo.bc[newFilterGroup.bc]?.filterGroups?.push(newFilterGroup)
-    })
-    .addCase(actions.updateIdForFilterGroup, (state, { payload: newFilterGroup }) => {
-        const newFilterGroupIndex =
-            state.bo.bc[newFilterGroup.bc].filterGroups?.findIndex(filterGroup => filterGroup.name === newFilterGroup.name) ?? -1
 
-        if (newFilterGroupIndex !== -1) {
-            ;(state.bo.bc[newFilterGroup.bc].filterGroups as FilterGroup[])[newFilterGroupIndex].id = newFilterGroup.id
+        state.bcCache[newFilterGroup.bc] = state.bcCache[newFilterGroup.bc] ?? {}
+        state.bcCache[newFilterGroup.bc]!.filterGroups = state.bo.bc[newFilterGroup.bc]?.filterGroups
+    })
+    .addCase(actions.updateIdForFilterGroup, (state, { payload }) => {
+        const { bc: bcName, prevId, newId } = payload
+        const filterGroup = state.bo.bc[bcName].filterGroups?.find(filterGroup => filterGroup.id === prevId)
+
+        if (filterGroup) {
+            filterGroup.id = newId
         }
+
+        state.bcCache[bcName] = state.bcCache[bcName] ?? {}
+        state.bcCache[bcName]!.filterGroups = state.bo.bc[bcName]?.filterGroups
     })
     .addCase(actions.changePageLimit, (state, action) => {
         const { bcName, limit } = action.payload
@@ -173,10 +188,12 @@ const screenReducerBuilder = reducers
     .addMatcher(isAnyOf(actions.selectScreen), (state, action) => {
         state.viewerMode = initialState.viewerMode
         state.collapsedWidgets = initialState.collapsedWidgets
-        // временное решение чтобы сохранялся лимит при сменен экранов
         Object.values(state.bo.bc).forEach(bc => {
+            // временное решение чтобы сохранялся лимит при сменен экранов
             bc.defaultLimit = bc.limit
             bc.limit = state.pagination[bc.name]?.limit ?? bc.limit
+
+            bc.filterGroups = state.bcCache[bc.name]?.filterGroups ?? bc.filterGroups
         })
     })
     .addMatcher(isAnyOf(actions.bcSelectRecord), (state, action) => {

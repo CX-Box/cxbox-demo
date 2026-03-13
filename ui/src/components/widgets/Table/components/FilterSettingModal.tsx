@@ -11,7 +11,7 @@ import Input from './Input'
 interface FilterSettingModalProps extends Pick<ModalProps, 'visible'>, FormComponentProps {
     filtersExist?: boolean
     onSubmit?: (values: { name: string }) => void
-    onDelete?: (name: string, id: string) => void
+    onDelete?: (id: string) => void
     onCancel: () => void
     filterGroups?: FilterGroup[]
 }
@@ -50,7 +50,7 @@ const FilterSettingModal = Form.create<FilterSettingModalProps>({ name: 'filterS
                             <div key={group.name}>
                                 <span>{group.name}</span>{' '}
                                 <Tooltip title={t('remove filter group')}>
-                                    <Icon type="close" onClick={() => group.id && onDelete?.(group.name, group.id)} />
+                                    <Icon type="close" onClick={() => group.id && onDelete?.(group.id)} />
                                 </Tooltip>
                             </div>
                         ))}

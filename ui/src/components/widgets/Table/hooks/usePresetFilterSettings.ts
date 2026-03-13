@@ -4,6 +4,7 @@ import { shallowEqual, useDispatch } from 'react-redux'
 import qs from 'query-string'
 import { useAppSelector } from '@store'
 import { actions } from '@actions'
+import { createFilterGroupTempId } from '@components/widgets/Table/filterGroup'
 
 export function usePresetFilterSettings(bcName: string) {
     const { filterGroups, filters } = useAppSelector(state => {
@@ -58,6 +59,7 @@ export function usePresetFilterSettings(bcName: string) {
     const saveCurrentFiltersAsGroup = useCallback(
         (name: string) => {
             const filterGroup = {
+                id: createFilterGroupTempId(),
                 filters: currentFilters,
                 name,
                 bc: bcName
@@ -69,8 +71,8 @@ export function usePresetFilterSettings(bcName: string) {
     )
 
     const removeFilterGroup = useCallback(
-        (name: string, id: string) => {
-            dispatch(actions.removeFilterGroup({ name, bc: bcName, id }))
+        (id: string) => {
+            dispatch(actions.removeFilterGroup({ bc: bcName, id }))
         },
         [bcName, dispatch]
     )

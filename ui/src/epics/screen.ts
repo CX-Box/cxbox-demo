@@ -10,6 +10,7 @@ import { getDefaultVisibleView } from '@components/ViewNavigation/tab/standard/u
 import { exportTable } from '@utils/export'
 import { EFeatureSettingKey } from '@interfaces/session'
 import { calculateFieldsOrder, calculateHiddenFields, createSettingPath } from '@utils/tableSettings'
+import { isFilterGroupTempId } from '@components/widgets/Table/filterGroup'
 
 const findFormPopupWidget = (operationType: string, widgets: interfaces.WidgetMeta[], calleeBcName: string, widgetName?: string) => {
     const formPopupWidget = widgetName
@@ -89,18 +90,18 @@ export const replaceTemporaryIdOnSavingEpic: RootEpic = action$ =>
 const addFilterGroupEpic: RootEpic = (action$, state$, { api }) =>
     action$.pipe(
         filter(actions.addFilterGroup.match),
-        switchMap(action => {
-            const newFilterGroup = action.payload
+        mergeMap(action => {
+            const filterGroup = action.payload
 
-            return api.saveFilterGroup({ filterGroups: [newFilterGroup] }).pipe(
+            return api.saveFilterGroup({ filterGroups: [filterGroup] }).pipe(
                 switchMap(response =>
                     concat(
                         ...(response.data ?? []).map(({ id }) =>
                             of(
                                 actions.updateIdForFilterGroup({
-                                    id: id,
-                                    bc: newFilterGroup.bc,
-                                    name: newFilterGroup.name
+                                    newId: id,
+                                    bc: filterGroup.bc,
+                                    prevId: filterGroup.id
                                 })
                             )
                         )
@@ -110,7 +111,7 @@ const addFilterGroupEpic: RootEpic = (action$, state$, { api }) =>
                     console.error('addFilterGroup failed')
 
                     return concat(
-                        of(actions.removeFilterGroup({ bc: newFilterGroup.bc, name: newFilterGroup.name })),
+                        of(actions.removeFilterGroup({ bc: filterGroup.bc, id: filterGroup.id })),
                         utils.createApiErrorObservable(error)
                     )
                 })
@@ -121,10 +122,10 @@ const addFilterGroupEpic: RootEpic = (action$, state$, { api }) =>
 const deleteFilterGroupEpic: RootEpic = (action$, state$, { api }) =>
     action$.pipe(
         filter(actions.removeFilterGroup.match),
-        switchMap(action => {
+        mergeMap(action => {
             const { id } = action.payload
 
-            if (id) {
+            if (!isFilterGroupTempId(id)) {
                 api.deleteFilterGroup(+id)
             }
 

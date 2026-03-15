@@ -8,10 +8,10 @@ import { Client } from '@stomp/stompjs'
 import { SocketNotification } from '@interfaces/notification'
 import { createUserSubscribeUrl } from '../utils'
 import { useAppSelector } from '@store'
-import { keycloak, KEYCLOAK_MIN_VALIDITY } from '../../../keycloak'
 import { EFeatureSettingKey } from '@interfaces/session'
 import { EDrillDownTooltipValue } from '@components/ui/DrillDown/constants'
 import { IFrame } from '@stomp/stompjs/src/i-frame'
+import { Auth } from '../../../auth'
 
 const { ApplicationErrorType } = interfaces
 
@@ -22,10 +22,16 @@ const notificationClient = new Client({
     heartbeatOutgoing: heartbeatOutgoing,
     beforeConnect: (): Promise<void> => {
         return new Promise<void>(async (resolve, _) => {
-            await keycloak.updateToken(KEYCLOAK_MIN_VALIDITY).then(() => {
-                notificationClient.brokerURL = brokerURL + '?access_token=' + encodeURI(`${keycloak.token}`)
-            })
-            resolve()
+            try {
+                const user = await Auth.getInstance().getUser()
+                if (user && user.access_token) {
+                    notificationClient.brokerURL = brokerURL + '?access_token=' + encodeURI(user.access_token)
+                }
+                resolve()
+            } catch (error) {
+                console.error('Failed to get access token for WebSocket connection', error)
+                resolve()
+            }
         })
     }
 })

@@ -1,6 +1,5 @@
 import { Api as CXBoxApi, utils } from '@cxbox-ui/core'
 import { BcCountParamsMap, BcCountResponse } from '@interfaces/bcCount'
-import { keycloak, KEYCLOAK_MIN_VALIDITY } from '../keycloak'
 import axios, { AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios'
 import { __API__ } from '@constants'
 import { NotificationCheckNewResponse, NotificationCountResponse, NotificationsResponse } from '@interfaces/notification'
@@ -10,7 +9,8 @@ import { TableSettingsItem } from '@interfaces/tableSettings'
 import { FilterGroup, FilterType } from '@interfaces/filters'
 import { saveAs } from 'file-saver'
 import { getFileNameFromDisposition } from '@utils/getFileNameFromDisposition'
-import { map, Observable } from 'rxjs'
+import { from, lastValueFrom, map, Observable } from 'rxjs'
+import { Auth } from '../auth'
 
 class Api extends CXBoxApi {
     loginByRoleRequest(role: string) {
@@ -27,9 +27,10 @@ class Api extends CXBoxApi {
         const hash = login && btoa(`${login}:${password}`)
         const tzOffset = -new Date().getTimezoneOffset() * 60
         const entrypointUrl = `/${window.location.hash}`
+        const token = from(Auth.getInstance().getUser()).pipe(map(user => user?.access_token))
         const config: AxiosRequestConfig = hash
             ? { headers: { Authorization: `Basic ${hash}` } }
-            : { headers: { Authorization: `Bearer ${keycloak.token}` } }
+            : { headers: { Authorization: `Bearer ${lastValueFrom(token)}` } }
         return this.api$
             .request<LoginResponse>('get', utils.buildUrl`login?_tzoffset=${tzOffset}&_entrypointUrl=${entrypointUrl}`, config)
             .pipe(map(response => response.data))
@@ -185,15 +186,12 @@ class Api extends CXBoxApi {
 }
 
 function tokenInterceptor(rqConfig: InternalAxiosRequestConfig) {
-    return keycloak.updateToken(KEYCLOAK_MIN_VALIDITY).then(() => {
-        return {
-            ...rqConfig,
-            headers: {
-                ...rqConfig.headers,
-                Authorization: `Bearer ${keycloak.token}`
-            }
-        } as InternalAxiosRequestConfig
-    })
+    return Auth.getInstance()
+        .getUser()
+        .then(user => {
+            rqConfig.headers.Authorization = `Bearer ${user?.access_token}`
+            return rqConfig
+        })
 }
 
 const __AJAX_TIMEOUT__ = 900000

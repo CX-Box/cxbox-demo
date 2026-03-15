@@ -1,11 +1,11 @@
 import { loginDone, SSO_AUTH } from '@actions'
 import { AxiosError } from 'axios'
-import { keycloak, keycloakOptions } from '../keycloak'
 import { catchError, concat, EMPTY, filter, from, mergeMap, of, switchMap } from 'rxjs'
 import { processScreensOnLogin } from './utils/processScreensOnLogin'
 import { actions, utils } from '@cxbox-ui/core'
 import { RootEpic } from '@store'
 import { LoginResponse } from '@interfaces/session'
+import { Auth } from '../auth'
 
 const responseStatusMessages: Record<number, string> = {
     401: 'Unauthorized',
@@ -16,10 +16,37 @@ const ssoAuthEpic: RootEpic = action$ =>
     action$.pipe(
         filter(SSO_AUTH.match),
         switchMap(() => {
-            return from(keycloak.init(keycloakOptions)).pipe(
-                switchMap(() => of(actions.login({ login: '', password: '' }))),
-                catchError(() => {
-                    console.error('Authentication failed')
+            return from(Auth.init('/api/v1/auth/oidc.json')).pipe(
+                switchMap(userManager => {
+                    const params = new URLSearchParams(window.location.search)
+                    const signInCallback = params.get('sign_in_callback')
+
+                    if (signInCallback) {
+                        return from(userManager.signinCallback()).pipe(
+                            switchMap(user => {
+                                if (signInCallback === 'redirect') {
+                                    window.history.replaceState(null, '', '/' + window.location.hash)
+                                    return of(actions.login({ login: '', password: '' }))
+                                }
+                                return EMPTY
+                            })
+                        )
+                    }
+
+                    return from(userManager.getUser()).pipe(
+                        switchMap(user => {
+                            if (user && !user.expired) {
+                                window.history.replaceState(null, '', '/' + window.location.hash)
+                                return of(actions.login({ login: '', password: '' }))
+                            } else {
+                                userManager.signinRedirect()
+                                return EMPTY
+                            }
+                        })
+                    )
+                }),
+                catchError(error => {
+                    console.error('Authentication failed', error)
                     return EMPTY
                 })
             )
@@ -124,7 +151,11 @@ const logoutEpic: RootEpic = action$ =>
     action$.pipe(
         filter(actions.logout.match),
         switchMap(() => {
-            keycloak.logout()
+            Auth.getInstance().signoutRedirect()
+            return of(actions.logoutDone(null))
+        }),
+        catchError(error => {
+            console.error('Logout failed', error)
             return of(actions.logoutDone(null))
         })
     )

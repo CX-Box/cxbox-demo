@@ -9,7 +9,7 @@ import { TableSettingsItem } from '@interfaces/tableSettings'
 import { FilterGroup, FilterType } from '@interfaces/filters'
 import { saveAs } from 'file-saver'
 import { getFileNameFromDisposition } from '@utils/getFileNameFromDisposition'
-import { from, lastValueFrom, map, Observable } from 'rxjs'
+import { map, Observable } from 'rxjs'
 import { Auth } from '../auth'
 
 class Api extends CXBoxApi {
@@ -27,10 +27,7 @@ class Api extends CXBoxApi {
         const hash = login && btoa(`${login}:${password}`)
         const tzOffset = -new Date().getTimezoneOffset() * 60
         const entrypointUrl = `/${window.location.hash}`
-        const token = from(Auth.getInstance().getUser()).pipe(map(user => user?.access_token))
-        const config: AxiosRequestConfig = hash
-            ? { headers: { Authorization: `Basic ${hash}` } }
-            : { headers: { Authorization: `Bearer ${lastValueFrom(token)}` } }
+        const config: AxiosRequestConfig = { headers: { Authorization: `Basic ${hash}` } }
         return this.api$
             .request<LoginResponse>('get', utils.buildUrl`login?_tzoffset=${tzOffset}&_entrypointUrl=${entrypointUrl}`, config)
             .pipe(map(response => response.data))

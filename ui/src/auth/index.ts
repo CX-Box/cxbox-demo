@@ -39,29 +39,3 @@ export class Auth {
         return Auth._instance
     }
 }
-
-// let userManager: UserManager | null = null
-//
-// export const initUserManager = async () => {
-//     if (userManager) {
-//         return userManager
-//     }
-//
-//     const { data } = await axios.get('/api/v1/auth/oidc.json')
-//
-//     const appBaseUrl = window.location.origin
-//
-//     const oidcConfig = {
-//         authority: `${data['auth-server-url']}/realms/${data.realm}`,
-//         client_id: data.resource,
-//         redirect_uri: `${appBaseUrl}?sign_in_callback=redirect`,
-//         silent_redirect_uri: `${appBaseUrl}?sign_in_callback=silent`,
-//         post_logout_redirect_uri: appBaseUrl,
-//         silentRequestTimeoutInSeconds: 30,
-//         scope: 'openid profile',
-//         userStore: new WebStorageStateStore({ store: localStorage })
-//     }
-//
-//     userManager = new UserManager(oidcConfig)
-//     return userManager
-// }

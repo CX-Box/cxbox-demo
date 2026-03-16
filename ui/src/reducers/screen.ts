@@ -14,7 +14,7 @@ export type ViewerModeMass = {
     resultFilterEnabled?: boolean
 }
 
-export interface BcCache {
+export interface RetainedBc {
     filterGroups?: FilterGroup[]
 }
 
@@ -24,7 +24,7 @@ export interface ScreenState extends interfaces.ScreenState {
         activeBcName: string
         bc: Record<string, Omit<BcMetaState, 'filterGroups'> & { defaultLimit?: number; filterGroups?: FilterGroup[] }>
     }
-    bcCache: { [bcName: string]: BcCache | undefined }
+    retainedBc: { [bcName: string]: RetainedBc | undefined }
     pagination: { [bcName: string]: { limit?: number } }
     viewerMode: {
         [bcName: string]: ViewerModeMass | undefined
@@ -40,7 +40,7 @@ const initialState: ScreenState = {
     viewerMode: {},
     collapsedWidgets: {},
     alternativePagination: {},
-    bcCache: {}
+    retainedBc: {}
 }
 
 const screenReducerBuilder = reducers
@@ -63,16 +63,16 @@ const screenReducerBuilder = reducers
             filterGroup => filterGroup.id !== removedFilterGroup.id
         )
 
-        state.bcCache[removedFilterGroup.bc] = state.bcCache[removedFilterGroup.bc] ?? {}
-        state.bcCache[removedFilterGroup.bc]!.filterGroups = state.bo.bc[removedFilterGroup.bc]?.filterGroups
+        state.retainedBc[removedFilterGroup.bc] = state.retainedBc[removedFilterGroup.bc] ?? {}
+        state.retainedBc[removedFilterGroup.bc]!.filterGroups = state.bo.bc[removedFilterGroup.bc]?.filterGroups
     })
     .addCase(actions.addFilterGroup, (state, action) => {
         const newFilterGroup = { ...action.payload, personal: true }
 
         state.bo.bc[newFilterGroup.bc]?.filterGroups?.push(newFilterGroup)
 
-        state.bcCache[newFilterGroup.bc] = state.bcCache[newFilterGroup.bc] ?? {}
-        state.bcCache[newFilterGroup.bc]!.filterGroups = state.bo.bc[newFilterGroup.bc]?.filterGroups
+        state.retainedBc[newFilterGroup.bc] = state.retainedBc[newFilterGroup.bc] ?? {}
+        state.retainedBc[newFilterGroup.bc]!.filterGroups = state.bo.bc[newFilterGroup.bc]?.filterGroups
     })
     .addCase(actions.updateIdForFilterGroup, (state, { payload }) => {
         const { bc: bcName, prevId, newId } = payload
@@ -82,8 +82,8 @@ const screenReducerBuilder = reducers
             filterGroup.id = newId
         }
 
-        state.bcCache[bcName] = state.bcCache[bcName] ?? {}
-        state.bcCache[bcName]!.filterGroups = state.bo.bc[bcName]?.filterGroups
+        state.retainedBc[bcName] = state.retainedBc[bcName] ?? {}
+        state.retainedBc[bcName]!.filterGroups = state.bo.bc[bcName]?.filterGroups
     })
     .addCase(actions.changePageLimit, (state, action) => {
         const { bcName, limit } = action.payload
@@ -193,7 +193,7 @@ const screenReducerBuilder = reducers
             bc.defaultLimit = bc.limit
             bc.limit = state.pagination[bc.name]?.limit ?? bc.limit
 
-            bc.filterGroups = state.bcCache[bc.name]?.filterGroups ?? bc.filterGroups
+            bc.filterGroups = state.retainedBc[bc.name]?.filterGroups ?? bc.filterGroups
         })
     })
     .addMatcher(isAnyOf(actions.bcSelectRecord), (state, action) => {

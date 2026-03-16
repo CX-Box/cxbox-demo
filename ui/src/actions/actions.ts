@@ -88,11 +88,11 @@ export const changeTableSettings = createAction<
 
 export const resetTableSettings = createAction<Pick<TableSettingsItem, 'view' | 'widget'>>('resetTableSettings')
 
-export const updateIdForFilterGroup = createAction<{ name: string; bc: string; id: string }>('updateIdForFilterGroup')
+export const updateIdForFilterGroup = createAction<{ bc: string; prevId: string; newId: string }>('updateIdForFilterGroup')
 
-export const addFilterGroup = createAction<FilterGroup & { bc: string }>('addFilterGroup')
+export const addFilterGroup = createAction<FilterGroup & { id: string; bc: string }>('addFilterGroup')
 
-export const removeFilterGroup = createAction<{ name: string; bc: string; id?: string }>('removeFilterGroup')
+export const removeFilterGroup = createAction<{ bc: string; id: string }>('removeFilterGroup')
 
 export const changePageLimit = createAction<{ bcName: string; limit: number }>('changePageLimit')
 /**

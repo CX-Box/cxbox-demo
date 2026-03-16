@@ -19,12 +19,12 @@ export class Auth {
         const oidcConfig = {
             authority: data['authority'] || '',
             client_id: data['client_id'] || '',
-            redirect_uri: data['redirect_uri'] || `${appBaseUrl}?sign_in_callback=redirect`,
-            ...data,
+            redirect_uri: `${appBaseUrl}?sign_in_callback=redirect`,
             silent_redirect_uri: `${appBaseUrl}?sign_in_callback=silent`,
             post_logout_redirect_uri: appBaseUrl,
             silentRequestTimeoutInSeconds: 30,
             scope: 'openid profile',
+            ...data,
             userStore: new WebStorageStateStore({ store: localStorage })
         }
 

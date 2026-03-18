@@ -57,7 +57,6 @@ services:
     restart: always
     depends_on:
       - cxbox_postgres
-      - activemq
 
   cxbox-demo-node-2:
     image: 'cxbox/cxbox-demo:latest'
@@ -96,33 +95,29 @@ services:
     restart: always
     depends_on:
       - cxbox_postgres
-      - activemq
 
   keycloak:
-    image: maxird/keycloak:12.0.4
-    command:
-      [
-        '-b',
-        '0.0.0.0',
-        '-Dkeycloak.migration.action=import',
-        '-Dkeycloak.migration.provider=dir',
-        '-Dkeycloak.migration.dir=/opt/jboss/keycloak/realm-config',
-        '-Dkeycloak.migration.strategy=IGNORE_EXISTING',
-        '-Djboss.socket.binding.port-offset=1000',
-        '-Dkeycloak.profile.feature.upload_scripts=enabled'
-      ]
-    volumes:
-      - ./docker/keycloak-config:/opt/jboss/keycloak/realm-config
+    image: quay.io/keycloak/keycloak:26.4
     environment:
-      - KEYCLOAK_USER=admin
-      - KEYCLOAK_PASSWORD=${CXBOX_DEMO_KEYCLOAK_PASSWORD:-ASfj123214LASJhFLASldkasF3LhDGASF}
-      - DB_VENDOR=h2
-    expose:
-      - 9080
+      KC_DB: dev-file
+      KC_HOSTNAME_STRICT: "false"
+      KC_HOSTNAME_STRICT_HTTPS: "false"
+      KC_HTTP_ENABLED: "true"
+      KC_HTTP_PORT: 9080
+      KC_HTTP_RELATIVE_PATH: /auth
+      KC_PROXY_HEADERS: "xforwarded"
+      KC_LOG_LEVEL: INFO
+      KC_HEALTH_ENABLED: "true"
+      KC_METRICS_ENABLED: "true"
+      COMMENT: "If you get error `HTTPS required` on MacOS. FIX: In Docker Desktop network configuration: Settings → Resources → Network → Port binding behavior  set to: 'Localhost by default' (https://github.com/quarkusio/quarkus/discussions/48905)"
+      KC_BOOTSTRAP_ADMIN_USERNAME: cxbox_admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${CXBOX_DEMO_KEYCLOAK_PASSWORD:-ASfj123214LASJhFLASldkasF3LhDGASF}
+    command: start-dev --import-realm --features=scripts
+    volumes:
+      - ./docker/keycloak-config:/opt/keycloak/data/import/
     ports:
       - "127.0.0.1:9080:9080"
       - "127.0.0.1:9443:9443"
-      - "127.0.0.1:10990:10990"
 
   cxbox_postgres:
     image: postgres:12.0

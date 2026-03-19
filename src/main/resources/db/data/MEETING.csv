@@ -1,9 +1,26 @@
-id,agenda,status,start_date_time,end_date_time,address,notes,result,responsible_id,client_id,contact_id,created_by_user_id,last_upd_by_user_id,region
-1000048,Sale of equipment for production,COMPLETED,2025-11-14 09:00:00.000000,2025-11-18 18:00:00.000000,"Client's office. Moscow, Kotelny proezd, 93",Discussion of the sale of equipment for the production of 100 units.,"Sold 100 units. products, discount applied",1,1000031,1000032,1,1,MOSCOW
-1000049,Sale of equipment for production,IN_PROGRESS,2025-11-15 09:00:00.000000,2025-11-16 18:00:00.000000,"Client's office. Moscow, Kotelny proezd, 93",,,1,1000031,1000032,1,1,SAINT_PETERBURG
-1000050,Identify which campaigns seemed to have the biggest impact,NOT_STARTED,2025-11-17 09:00:00.000000,2025-11-21 18:00:00.000000,"Clients office.
-Moscow, st. Koshkina, 12",,,1,1000033,1000035,1,1,KOSTROMA
-1000051,Review upcoming marketing campaign plan,CANCELLED,2025-11-25 09:00:00.000000,2025-11-25 18:00:00.000000,Meeting Room B. Clients office,,,1,1000024,1000026,1,1,SYKTYVKAR
-1000052,Review of equipment for production,IN_PROGRESS,2025-12-14 11:00:00.000000,2025-12-20 18:00:00.000000,"Client's office. Moscow, Kotelny proezd, 93",,,1,1000031,1000032,1,1,SYKTYVKAR
-1000053,Sale of production,IN_PROGRESS,2025-12-17 09:00:00.000000,2025-12-17 09:00:00.000000,"Client's office. Moscow, Kotelny proezd, 93",,,1,1000031,1000032,1,1,SAINT_PETERBURG
-1000054,Sale of equipment,IN_PROGRESS,2025-12-16 12:00:00.000000,2025-12-25 18:00:00.000000,"Client's office. Moscow, Kotelny proezd, 93",,,1,1000031,1000032,1,1,MOSCOW
+id,agenda,region,status,start_date_time,end_date_time,address,notes,result,responsible_id,client_id,contact_id,additional_contact_primary_id,created_by_user_id,last_upd_by_user_id
+1000048,Sale of equipment for production,MOSCOW,COMPLETED,2025-11-14 09:00:00.000000,2025-11-18 18:00:00.000000,"Client's office. Moscow, Kotelny proezd, 93",Discussion of the sale of equipment for the production of 100 units.,"Sold 100 units. products, discount applied",1,1000031,1000032,,1,1
+1000049,Sale of equipment for production,SAINT_PETERBURG,IN_PROGRESS,2025-11-15 09:00:00.000000,2025-11-16 18:00:00.000000,"Client's office. Moscow, Kotelny proezd, 93","","",1,1000031,1000032,,1,1
+1000050,Identify which campaigns seemed to have the biggest impact,KOSTROMA,NOT_STARTED,2025-11-17 09:00:00.000000,2025-11-21 18:00:00.000000,"Clients office.
+Moscow, st. Koshkina, 12","","",1,1000033,1000035,,1,1
+1000051,Review upcoming marketing campaign plan,SYKTYVKAR,CANCELLED,2025-11-25 09:00:00.000000,2025-11-25 18:00:00.000000,Meeting Room B. Clients office,"","",1,1000024,1000026,,1,1
+1000052,Review of equipment for production,SYKTYVKAR,IN_PROGRESS,2025-12-14 11:00:00.000000,2025-12-20 18:00:00.000000,"Client's office. Moscow, Kotelny proezd, 93","","",1,1000031,1000032,,1,1
+1000053,Sale of production,SAINT_PETERBURG,IN_PROGRESS,2025-12-17 09:00:00.000000,2025-12-17 09:00:00.000000,"Client's office. Moscow, Kotelny proezd, 93","","",1,1000031,1000032,,1,1
+1000054,Sale of equipment,MOSCOW,IN_PROGRESS,2025-12-16 12:00:00.000000,2025-12-25 18:00:00.000000,"Client's office. Moscow, Kotelny proezd, 93","","",1,1000031,1000032,,1,1
+1000055,Annual Conference 2026,MOSCOW,COMPLETED,2000-01-01 00:00:00.000000,2000-01-01 23:59:00.000000,"Client office. Moscow, st. Koshkina, 12",Full day conference,Successful event,1,1000033,1000034,,1,1
+1000056,Strategic Planning Week,SAINT_PETERBURG,COMPLETED,2000-01-01 00:00:00.000000,2000-01-01 23:59:00.000000,"Client office. St. Petersburg, st. Gdovskaya, 6",5-day strategic session,Plan approved,1,1000036,1000035,,1,1
+1000057,Budget Review Q1,MOSCOW,COMPLETED,2000-01-01 10:00:00.000000,2000-01-01 11:30:00.000000,"Client office. Moscow, Polevoy 1st, lane, 72",Q1 budget discussion,Budget approved,1,1000045,1000046,,1,1
+1000058,Technical Workshop,MOSCOW,COMPLETED,2000-01-01 14:00:00.000000,2000-01-01 16:00:00.000000,"Client office. Moscow, Kotelny proezd, 93",Equipment training,Training completed,1,1000031,1000032,,1,1
+1000059,Product Demo,MOSCOW,COMPLETED,2000-01-01 09:30:00.000000,2000-01-01 11:00:00.000000,"Client office. Moscow, st. Makarenko, 57",New product presentation,Client interested,1,1000039,1000040,,1,1
+1000060,Company All-Hands Meeting,MOSCOW,IN_PROGRESS,2000-01-01 00:00:00.000000,2000-01-01 23:59:00.000000,"Client office. Moscow, st. Bagritsky, 3",Annual company meeting,In progress,1,1000017,1000023,,1,1
+1000061,International Partnership Forum,MOSCOW,IN_PROGRESS,2000-01-01 00:00:00.000000,2000-01-01 23:59:00.000000,"Client office. Moscow, st. Nemchinova, 15",5-day international forum,Negotiations ongoing,1,1000019,1000020,,1,1
+1000062,Sprint Planning,SAINT_PETERBURG,IN_PROGRESS,2000-01-01 10:00:00.000000,2000-01-01 12:00:00.000000,"Client office. St. Petersburg, st. Narvskaya, 41",Sprint 12 planning,Backlog finalized,1,1000028,1000029,,1,1
+1000063,IT Security Audit,MOSCOW,NOT_STARTED,2000-01-01 14:30:00.000000,2000-01-01 16:30:00.000000,"Client office. Moscow region, Vidnoe, st. Leninskaya, 9",Security review,Scheduled,1,1000024,1000025,,1,1
+1000064,Quarterly Business Review,MOSCOW,NOT_STARTED,2000-01-01 09:00:00.000000,2000-01-01 11:00:00.000000,"Client office. Moscow, st. Tverskaya, 25",Q1 performance review,Scheduled,1,1000050,1000018,,1,1
+1000065,Marketing Campaign Review,MOSCOW,NOT_STARTED,2000-01-01 15:00:00.000000,2000-01-01 16:30:00.000000,"Client office. Moscow, st. Arbat, 15",Campaign analysis,Scheduled,1,1000052,1000022,,1,1
+1000066,Technology Summit 2026,SAINT_PETERBURG,NOT_STARTED,2000-01-01 00:00:00.000000,2000-01-01 23:59:00.000000,"Client office. St. Petersburg, st. Nevsky, 100",Full day tech summit,Scheduled,1,1000051,1000021,,1,1
+1000067,Digital Transformation Workshop,MOSCOW,NOT_STARTED,2000-01-01 00:00:00.000000,2000-01-01 23:59:00.000000,"Client office. Moscow, Kotelny proezd, 93",5-day workshop,Scheduled,1,1000031,1000038,,1,1
+1000068,Vendor Negotiation,MOSCOW,NOT_STARTED,2000-01-01 10:00:00.000000,2000-01-01 12:00:00.000000,"Client office. Moscow, Polevoy 1st, lane, 72",Contract negotiation,Scheduled,1,1000045,1000047,,1,1
+1000069,Team Building Event,MOSCOW,NOT_STARTED,2000-01-01 13:30:00.000000,2000-01-01 17:30:00.000000,"Client office. Moscow, st. Koshkina, 12",Team building activity,Scheduled,1,1000033,1000037,,1,1
+1000070,System Migration Planning,MOSCOW,NOT_STARTED,2000-01-01 09:30:00.000000,2000-01-01 11:30:00.000000,"Client office. Moscow, st. Makarenko, 57",Migration strategy,Scheduled,1,1000039,1000041,,1,1
+1000071,Compliance Review,MOSCOW,CANCELLED,2000-01-01 14:00:00.000000,2000-01-01 16:00:00.000000,"Client office. Moscow region, Dmitrov, st. Soviet, 14",Compliance audit,Postponed,1,1000042,1000044,,1,1

@@ -13,7 +13,7 @@ services:
       - "5501:5500"
     expose:
       -  1521
-  cxbox_keycloak:
+  keycloak:
     image: quay.io/keycloak/keycloak:26.4
     environment:
       KC_DB: dev-file

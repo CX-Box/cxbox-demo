@@ -1,11 +1,14 @@
-id,created_by_user_id,last_upd_by_user_id,full_name,address,importance,edit_step,status
-1000042,1,1,LLC “SvyazKomGroup”,"Moscow region, Dmitrov, st. Soviet, 14",HIGH,FILL_GENERAL_INFORMATION,IN_PROGRESS
-1000045,1,1,LLC TelemedOperations,"Moscow, Polevoy 1st, lane, 72",MIDDLE,FILL_GENERAL_INFORMATION,NEW
-1000019,1,1,ServiceSet Group JSC,"Moscow, st. Nemchinova, 15",MIDDLE,CREATE_CLIENT_CONTACT,INACTIVE
-1000017,1,1,LLC “Web Project Communication”,"Moscow, st. Bagritsky, 3",LOW,REVIEW_CLIENT_CARD,NEW
-1000024,1,1,LLC “Info Trust”,"Moscow region, Vidnoe, st. Leninskaya, 9",MIDDLE,CREATE_CLIENT_CONTACT,IN_PROGRESS
-1000028,1,1,LLC “Synthesis Technology”,"St. Petersburg, st. Narvskaya, 41",MIDDLE,FILL_GENERAL_INFORMATION,IN_PROGRESS
-1000031,1,1,LLC “TelecomTrade”,"Moscow, Kotelny proezd, 93",HIGH,FILL_GENERAL_INFORMATION,IN_PROGRESS
-1000033,1,1,AllianceConsult JSC,"Moscow, st. Koshkina, 12",HIGH,FILL_GENERAL_INFORMATION,NEW
-1000036,1,1,AcademWeb Holding,"St. Petersburg, st. Gdovskaya, 6",LOW,REVIEW_CLIENT_CARD,IN_PROGRESS
-1000039,1,1,Trade Prof Media LLC,"Moscow, st. Makarenko, 57",LOW,FILL_GENERAL_INFORMATION,NEW
+id,created_by_user_id,last_upd_by_user_id,full_name,address,importance,status,edit_step
+1000042,1,1,LLC “SvyazKomGroup”,"Moscow region, Dmitrov, st. Soviet, 14",HIGH,IN_PROGRESS,FILL_GENERAL_INFORMATION
+1000045,1,1,LLC TelemedOperations,"Moscow, Polevoy 1st, lane, 72",MIDDLE,NEW,FILL_GENERAL_INFORMATION
+1000019,1,1,ServiceSet Group JSC,"Moscow, st. Nemchinova, 15",MIDDLE,INACTIVE,CREATE_CLIENT_CONTACT
+1000017,1,1,LLC “Web Project Communication”,"Moscow, st. Bagritsky, 3",LOW,NEW,REVIEW_CLIENT_CARD
+1000024,1,1,LLC “Info Trust”,"Moscow region, Vidnoe, st. Leninskaya, 9",MIDDLE,IN_PROGRESS,CREATE_CLIENT_CONTACT
+1000028,1,1,LLC “Synthesis Technology”,"St. Petersburg, st. Narvskaya, 41",MIDDLE,IN_PROGRESS,FILL_GENERAL_INFORMATION
+1000031,1,1,LLC “TelecomTrade”,"Moscow, Kotelny proezd, 93",HIGH,IN_PROGRESS,FILL_GENERAL_INFORMATION
+1000033,1,1,AllianceConsult JSC,"Moscow, st. Koshkina, 12",HIGH,NEW,FILL_GENERAL_INFORMATION
+1000036,1,1,AcademWeb Holding,"St. Petersburg, st. Gdovskaya, 6",LOW,IN_PROGRESS,REVIEW_CLIENT_CARD
+1000039,1,1,Trade Prof Media LLC,"Moscow, st. Makarenko, 57",LOW,NEW,FILL_GENERAL_INFORMATION
+1000050,1,1,DataFlow Systems LLC,"Moscow, st. Tverskaya, 25",HIGH,NEW,FILL_GENERAL_INFORMATION
+1000051,1,1,MediaTech Solutions,"St. Petersburg, st. Nevsky, 100",MIDDLE,IN_PROGRESS,CREATE_CLIENT_CONTACT
+1000052,1,1,GlobalTrade Partners,"Moscow, st. Arbat, 15",HIGH,NEW,REVIEW_CLIENT_CARD

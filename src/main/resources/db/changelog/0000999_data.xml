@@ -96,4 +96,63 @@
       relativeToChangelogFile="false"/>
   </changeSet>
 
+  <changeSet id="update_meeting_start_and_end_dates" dbms="postgresql" author="agelfman">
+    <comment>Update start_date_time and end_date_time:
+      start_date_time: current date + (5, 4, 3, 2, 1, 0, -1... days) - (9, 8, 7, 6, 5, 4, 3... hours) with minutes set to 00
+      end_date_time: start_date_time + 2 hours with minutes set to 00
+      Times are adjusted to fall within 9:00 - 20:00 window</comment>
+    <sql>
+      WITH numbered_meetings AS (
+        SELECT
+          id,
+          ROW_NUMBER() OVER (ORDER BY id) as row_num
+        FROM meeting
+      ),
+           calculated_dates AS (
+             SELECT
+               nm.id,
+               DATE_TRUNC('hour', CURRENT_TIMESTAMP) +
+               ((6 - nm.row_num) || ' days')::INTERVAL -
+               ((10 - nm.row_num) || ' hours')::INTERVAL as calculated_start_date,
+
+               DATE_TRUNC('hour', CURRENT_TIMESTAMP) +
+               ((6 - nm.row_num) || ' days')::INTERVAL -
+               ((10 - nm.row_num) || ' hours')::INTERVAL +
+               INTERVAL '2 hours' as calculated_end_date
+
+             FROM numbered_meetings nm
+           ),
+           adjusted_dates AS (
+             SELECT
+               id,
+               calculated_start_date,
+               calculated_end_date,
+               CASE
+                 WHEN EXTRACT(HOUR FROM calculated_start_date) &lt; 9 THEN
+                   DATE_TRUNC('day', calculated_start_date) + INTERVAL '9 hours'
+                 WHEN EXTRACT(HOUR FROM calculated_start_date) &gt;= 20 THEN
+                   DATE_TRUNC('day', calculated_start_date) + INTERVAL '1 day' + INTERVAL '9 hours'
+                 ELSE calculated_start_date
+                 END as new_start_date
+             FROM calculated_dates
+           )
+      UPDATE meeting m
+      SET
+        start_date_time = ad.new_start_date,
+        end_date_time = ad.new_start_date + INTERVAL '2 hours'
+      FROM adjusted_dates ad
+      WHERE m.id = ad.id;
+    </sql>
+
+    <rollback>
+      <sql>
+        UPDATE meeting
+        SET
+        start_date_time = NULL,
+        end_date_time = NULL
+        WHERE start_date_time IS NOT NULL OR end_date_time IS NOT NULL;
+      </sql>
+    </rollback>
+  </changeSet>
+
 </databaseChangeLog>

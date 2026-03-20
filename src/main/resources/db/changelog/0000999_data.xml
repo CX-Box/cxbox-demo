@@ -42,8 +42,6 @@
       file="db/data/MEETING.csv">
       <column header="ID" name="ID" type="STRING"/>
       <column header="agenda" name="agenda" type="STRING"/>
-      <column header="start_date_time" name="start_date_time" type="datetime"/>
-      <column header="end_date_time" name="end_date_time" type="datetime"/>
       <column header="address" name="address" type="STRING"/>
       <column header="notes" name="notes" type="STRING"/>
       <column header="result" name="result" type="STRING"/>
@@ -54,6 +52,7 @@
       <column header="last_upd_by_user_id" name="last_upd_by_user_id" type="STRING"/>
       <column header="region" name="region" type="STRING"/>
     </loadUpdateData>
+
     <loadUpdateData tableName="SALE" primaryKey="ID" encoding="UTF-8" separator="," quotchar="&quot;"
       file="db/data/SALES.csv">
       <column header="ID" name="ID" type="STRING"/>
@@ -63,6 +62,11 @@
       <column header="status" name="status" type="STRING"/>
       <column header="sum" name="sum" type="STRING"/>
     </loadUpdateData>
+  </changeSet>
+
+  <changeSet id="update_meeting_start_and_end_dates" author="agelfman" dbms="postgresql" runOnChange="true">
+    <sqlFile path="db/changelog/sql/postgres/CXBOX_1270_UPDATE_MEETING_START_END_DATE.sql"
+      relativeToChangelogFile="false"/>
   </changeSet>
 
   <changeSet id="create-meetings-views-postgresql" author="myunmgan" dbms="postgresql" runOnChange="true">

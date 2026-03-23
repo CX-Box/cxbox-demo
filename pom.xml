@@ -133,9 +133,9 @@
     </dependency>
     <!--end minio dependencies-->
     <dependency>
-      <groupId>org.postgresql</groupId>
-      <artifactId>postgresql</artifactId>
-      <version>${postgresql.version}</version>
+      <groupId>com.oracle.database.jdbc</groupId>
+      <artifactId>ojdbc10</artifactId>
+      <version>19.21.0.0</version>
     </dependency>
 
     <!--see README_DB.MD

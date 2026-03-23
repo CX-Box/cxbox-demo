@@ -547,9 +547,7 @@
   </changeSet>
 
   <changeSet author="cxbox" id="BC_FILTER_GROUPS INDEXES">
-    <addUniqueConstraint columnNames="NAME, BC" constraintName="BC_FILTER_GROUPS_UNIQUE"
-      tableName="BC_FILTER_GROUPS"/>
-    <createIndex indexName="BC_FILTER_GROUPS_UNIQUE_INDEX" tableName="BC_FILTER_GROUPS">
+    <createIndex indexName="BC_FILTER_GROUPS_UNIQUE_INDEX" tableName="BC_FILTER_GROUPS" unique="true">
       <column name="NAME"/>
       <column name="BC"/>
     </createIndex>
@@ -561,8 +559,7 @@
     </createIndex>
   </changeSet>
   <changeSet author="cxbox" id="BC_PROPERTIES INDEXES">
-    <addUniqueConstraint columnNames="BC" constraintName="BC_PROPERTIES_BC" tableName="BC_PROPERTIES"/>
-    <createIndex indexName="BC_PROPERTIES_BC_INDEX" tableName="BC_PROPERTIES">
+    <createIndex indexName="BC_PROPERTIES_BC_INDEX" tableName="BC_PROPERTIES" unique="true">
       <column name="BC"/>
     </createIndex>
     <createIndex indexName="BC_PROPERTIES_IND1" tableName="BC_PROPERTIES">
@@ -574,9 +571,7 @@
   </changeSet>
 
   <changeSet author="cxbox" id="DICTIONARY_ITEM INDEXES">
-    <addUniqueConstraint columnNames="TYPE, KEY" constraintName="DIC_SELECT_UNIQUE_TYPE_KEY"
-      tableName="DICTIONARY_ITEM"/>
-    <createIndex indexName="DIC_SELECT_UNIQUE_TYPE_KEY_INDEX" tableName="DICTIONARY_ITEM">
+    <createIndex indexName="DIC_SELECT_UNIQUE_TYPE_KEY_INDEX" tableName="DICTIONARY_ITEM" unique="true">
       <column name="TYPE"/>
       <column name="KEY"/>
     </createIndex>
@@ -624,7 +619,6 @@
     </createIndex>
   </changeSet>
   <changeSet author="cxbox" id="USERS INDEXES">
-    <addUniqueConstraint columnNames="LOGIN" constraintName="UK_LOGIN_NAME" tableName="USERS"/>
     <createIndex indexName="UK_LOGIN_NAME_INDEX" tableName="USERS" unique="true">
       <column name="LOGIN"/>
     </createIndex>
@@ -637,8 +631,6 @@
   </changeSet>
 
   <changeSet author="cxbox" id="DICTIONARY_ITEM INDEXES Part 2">
-    <addUniqueConstraint columnNames="TYPE, VALUE" constraintName="DIC_SELECT_UNIQUE_TYPE_VALUE"
-      tableName="DICTIONARY_ITEM"/>
     <createIndex indexName="DIC_SELECT_UNIQUE_TYPE_VALUE_INDEX" tableName="DICTIONARY_ITEM" unique="true">
       <column name="TYPE"/>
       <column name="VALUE"/>
@@ -646,8 +638,6 @@
   </changeSet>
 
   <changeSet author="cxbox" id="USER_ROLE INDEXES">
-    <addUniqueConstraint columnNames="USER_ID, INTERNAL_ROLE_CD" constraintName="USER_ROLE_UNIQUE"
-      tableName="USER_ROLE"/>
     <createIndex indexName="USER_ROLE_UNIQUE_INDEX" tableName="USER_ROLE" unique="true">
       <column name="USER_ID"/>
       <column name="INTERNAL_ROLE_CD"/>

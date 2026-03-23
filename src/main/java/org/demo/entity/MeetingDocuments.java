@@ -25,7 +25,7 @@ public class MeetingDocuments extends BaseEntity {
 
 	private String notes;
 
-	@Column
+	@Column(name = "file_name")
 	private String file;
 
 	@Column

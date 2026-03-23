@@ -9,7 +9,7 @@
 
   <changeSet author="cxbox" id="BC_FILTER_GROUPS TABLE">
     <createTable remarks="Группы фильтров" tableName="BC_FILTER_GROUPS">
-      <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
+      <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)" defaultValueComputed="APP_SEQ.NEXTVAL">
         <constraints primaryKey="true"/>
       </column>
       <column name="NAME" remarks="Имя группы фильтров" type="VARCHAR2(255)">
@@ -142,7 +142,7 @@
 
   <changeSet author="cxbox" id="DICTIONARY_ITEM TABLE">
     <createTable remarks="Значения простых справочников" tableName="DICTIONARY_ITEM">
-      <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
+      <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)" defaultValueComputed="APP_SEQ.NEXTVAL">
         <constraints primaryKey="true"/>
       </column>
       <column name="TYPE" remarks="Тип справочника" type="VARCHAR2(255)"/>
@@ -377,7 +377,7 @@
 
       <column name="INTERNAL_ROLE_CD" type="VARCHAR2(255)"/>
       <column name="ACTION" type="VARCHAR2(255)"/>
-      <column name="VIEW_VALUE" type="VARCHAR2(255)"/>
+      <column name="VIEW_NAME" type="VARCHAR2(255)"/>
       <column name="WIDGET" type="VARCHAR2(255)"/>
 
       <column defaultValueComputed="current_timestamp" name="CREATED_DATE" type="TIMESTAMP(6)">
@@ -471,7 +471,7 @@
         <constraints nullable="false"/>
       </column>
 
-      <column name="MAIN" remarks="Признак основная роль (последняя выбранная роль)" type="NUMBER(1)"  defaultValueNumeric="0">
+      <column name="MAIN_FLG" remarks="Признак основная роль (последняя выбранная роль)" type="NUMBER(1)"  defaultValueNumeric="0">
         <constraints nullable="false"/>
       </column>
 
@@ -506,7 +506,7 @@
       <column name="USER_ID" remarks="Идентификатор пользователя" type="VARCHAR2(255)">
         <constraints nullable="false"/>
       </column>
-      <column name="VIEW_VALUE" remarks="Название VIEW" type="VARCHAR2(255)">
+      <column name="VIEW_NAME" remarks="Название VIEW" type="VARCHAR2(255)">
         <constraints nullable="false"/>
       </column>
       <column name="WIDGET" remarks="Название WIDGET" type="VARCHAR2(255)">

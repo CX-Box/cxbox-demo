@@ -24,9 +24,10 @@
       <column header="USER_ID" name="USER_ID" type="NUMERIC"/>
       <column header="INTERNAL_ROLE_CD" name="INTERNAL_ROLE_CD" type="STRING"/>
       <column header="ACTIVE" name="ACTIVE" type="NUMERIC"/>
-      <column header="MAIN" name="MAIN" type="NUMERIC"/>
+      <column header="MAIN" name="MAIN_FLG" type="NUMERIC"/>
     </loadData>
   </changeSet>
+
 
   <changeSet id="cxbox_bc_filter_groups" author="cxbox" runOnChange="true" context="local">
     <loadUpdateData tableName="bc_filter_groups" primaryKey="ID" encoding="UTF-8" separator=";" quotchar="&quot;"
@@ -34,7 +35,6 @@
       <column header="name" name="name" type="STRING"/>
       <column header="bc" name="bc" type="STRING"/>
       <column header="filters" name="filters" type="STRING"/>
-      <column header="ID" name="ID" type="NUMERIC" defaultValue="${app_seq_next_val}"/>
     </loadUpdateData>
   </changeSet>
 
@@ -61,12 +61,13 @@
       <column header="KEY" name="KEY" type="STRING"/>
       <column header="VALUE" name="VALUE" type="STRING"/>
       <column header="DESCRIPTION" name="DESCRIPTION" type="STRING"/>
-      <column header="ACTIVE" name="ACTIVE" type="NUMERIC" defaultValue="true"/>
-      <column header="ID" name="ID" type="NUMERIC" defaultValue="${app_seq_next_val}"/>
+      <column header="ACTIVE" name="ACTIVE" type="NUMERIC" defaultValue="1"/>
     </loadUpdateData>
+  </changeSet>
 
+  <changeSet author="cxbox" id="DICTIONARIES2" runOnChange="true">
     <sql>
-      insert into dictionary_type
+      insert into dictionary_type (ID, TYPE)
       select MIN(ID), TYPE
       from DICTIONARY_ITEM
       group by TYPE;
@@ -104,11 +105,11 @@
 
   <changeSet author="cxbox" id="RESPONSIBILITIES_ACTION" runOnChange="true">
     <delete tableName="RESPONSIBILITIES_ACTION"/>
-    <loadUpdateData tableName="RESPONSIBILITIES_ACTION" primaryKey="INTERNAL_ROLE_CD,ACTION,VIEW,WIDGET" encoding="UTF-8" separator=";"
+    <loadUpdateData tableName="RESPONSIBILITIES_ACTION" primaryKey="INTERNAL_ROLE_CD,ACTION,VIEW_NAME,WIDGET" encoding="UTF-8" separator=";"
       quotchar="&quot;" file="db/data/cxbox/RESPONSIBILITIES_ACTION.csv">
       <column header="INTERNAL_ROLE_CD" name="INTERNAL_ROLE_CD" type="STRING"/>
       <column header="ACTION" name="ACTION" type="STRING"/>
-      <column header="VIEW" name="VIEW_VALUE" type="STRING"/>
+      <column header="VIEW_NAME" name="VIEW_NAME" type="STRING"/>
       <column header="WIDGET" name="WIDGET" type="STRING"/>
       <column header="ID" name="ID" type="NUMERIC" defaultValue="${meta_seq_next_val}"/>
     </loadUpdateData>

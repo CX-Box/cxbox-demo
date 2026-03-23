@@ -69,6 +69,11 @@
       relativeToChangelogFile="false"/>
   </changeSet>
 
+  <changeSet id="update_meeting_start_and_end_dates_oracle" author="agelfman" dbms="oracle" runOnChange="true">
+    <sqlFile path="db/changelog/sql/oracle/CXBOX_1270_UPDATE_MEETING_START_END_DATE.sql"
+      relativeToChangelogFile="false"/>
+  </changeSet>
+
   <changeSet id="create-meetings-views-postgresql" author="myunmgan" dbms="postgresql" runOnChange="true">
     <sqlFile path="db/changelog/sql/postgres/CXBOX_1101_VIEW_CALENDAR_YEAR.sql"
       relativeToChangelogFile="false"

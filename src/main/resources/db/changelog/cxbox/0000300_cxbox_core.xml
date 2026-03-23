@@ -470,11 +470,9 @@
       <column name="ACTIVE" remarks="Признак активности роли" type="NUMBER(1)"  defaultValueNumeric="0">
         <constraints nullable="false"/>
       </column>
-
       <column name="MAIN_FLG" remarks="Признак основная роль (последняя выбранная роль)" type="NUMBER(1)"  defaultValueNumeric="0">
         <constraints nullable="false"/>
       </column>
-
       <column defaultValueComputed="current_timestamp" name="CREATED_DATE" remarks="Дата создания"
         type="TIMESTAMP(6)">
         <constraints nullable="false"/>
@@ -545,7 +543,12 @@
       </column>
     </addColumn>
   </changeSet>
-
+  <changeSet author="cxbox" id="BC_FILTER_GROUPS UNIQUE_CONSTRAIN_POSTGRESS" dbms="postgresql">
+    <addUniqueConstraint
+      columnNames="NAME, BC"
+      constraintName="BC_FILTER_GROUPS_UNIQUE"
+      tableName="BC_FILTER_GROUPS"/>
+  </changeSet>
   <changeSet author="cxbox" id="BC_FILTER_GROUPS INDEXES">
     <createIndex indexName="BC_FILTER_GROUPS_UNIQUE_INDEX" tableName="BC_FILTER_GROUPS" unique="true">
       <column name="NAME"/>
@@ -557,6 +560,9 @@
     <createIndex indexName="BC_FILTER_GROUPS_IND1" tableName="BC_FILTER_GROUPS">
       <column defaultValueNumeric="1" name="CREATED_BY_USER_ID"/>
     </createIndex>
+  </changeSet>
+  <changeSet author="cxbox" id="BC_PROPERTIES UNIQUE_CONSTRAIN_POSTGRESS" dbms="postgresql">
+    <addUniqueConstraint columnNames="BC" constraintName="BC_PROPERTIES_BC" tableName="BC_PROPERTIES"/>
   </changeSet>
   <changeSet author="cxbox" id="BC_PROPERTIES INDEXES">
     <createIndex indexName="BC_PROPERTIES_BC_INDEX" tableName="BC_PROPERTIES" unique="true">
@@ -570,6 +576,9 @@
     </createIndex>
   </changeSet>
 
+  <changeSet author="cxbox" id="DICTIONARY_ITEM_TYPE_KEY UNIQUE_CONSTRAIN_POSTGRESS" dbms="postgresql">
+    <addUniqueConstraint columnNames="TYPE, KEY" constraintName="DIC_SELECT_UNIQUE_TYPE_KEY"
+      tableName="DICTIONARY_ITEM"/>  </changeSet>
   <changeSet author="cxbox" id="DICTIONARY_ITEM INDEXES">
     <createIndex indexName="DIC_SELECT_UNIQUE_TYPE_KEY_INDEX" tableName="DICTIONARY_ITEM" unique="true">
       <column name="TYPE"/>
@@ -618,6 +627,9 @@
       <column name="VALUE"/>
     </createIndex>
   </changeSet>
+  <changeSet author="cxbox" id="USERS UNIQUE_CONSTRAIN_POSTGRESS" dbms="postgresql">
+    <addUniqueConstraint columnNames="LOGIN" constraintName="UK_LOGIN_NAME" tableName="USERS"/>
+  </changeSet>
   <changeSet author="cxbox" id="USERS INDEXES">
     <createIndex indexName="UK_LOGIN_NAME_INDEX" tableName="USERS" unique="true">
       <column name="LOGIN"/>
@@ -636,7 +648,10 @@
       <column name="VALUE"/>
     </createIndex>
   </changeSet>
-
+  <changeSet author="cxbox" id="USER_ROLE INDEXES POSTGRESS" dbms="postgresql">
+    <addUniqueConstraint columnNames="USER_ID, INTERNAL_ROLE_CD" constraintName="USER_ROLE_UNIQUE"
+      tableName="USER_ROLE"/>
+  </changeSet>
   <changeSet author="cxbox" id="USER_ROLE INDEXES">
     <createIndex indexName="USER_ROLE_UNIQUE_INDEX" tableName="USER_ROLE" unique="true">
       <column name="USER_ID"/>

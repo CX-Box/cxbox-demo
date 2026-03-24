@@ -3,6 +3,7 @@ import { AppWidgetGroupingHierarchyMeta } from '@interfaces/widget'
 import Table from '@components/Table/Table'
 import { BaseWidgetProps, WidgetComponentType } from '@features/Widget'
 import Card from '@components/Card/Card'
+import WidgetLoader from '@components/WidgetLoader'
 
 function assertIsGroupingHierarchyMeta(meta: BaseWidgetProps['widgetMeta']): asserts meta is AppWidgetGroupingHierarchyMeta {
     if (meta.type !== 'GroupingHierarchy') {
@@ -13,9 +14,11 @@ function assertIsGroupingHierarchyMeta(meta: BaseWidgetProps['widgetMeta']): ass
 const GroupingHierarchy: WidgetComponentType = ({ widgetMeta }) => {
     assertIsGroupingHierarchyMeta(widgetMeta)
     return (
-        <Card meta={widgetMeta}>
-            <Table meta={widgetMeta} isGroupingHierarchy={true} disableMassMode={true} />
-        </Card>
+        <WidgetLoader widgetMeta={widgetMeta}>
+            <Card meta={widgetMeta}>
+                <Table meta={widgetMeta} isGroupingHierarchy={true} disableMassMode={true} />
+            </Card>
+        </WidgetLoader>
     )
 }
 

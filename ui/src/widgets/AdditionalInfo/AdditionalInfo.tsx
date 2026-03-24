@@ -6,6 +6,7 @@ import { AdditionalInfoItem } from '@widgets/AdditionalInfo/AdditionalInfoItem'
 import { StandardWrapper } from '@widgets/AdditionalInfo/StandardWrapper'
 import { BaseWidgetProps, WidgetComponentType } from '@features/Widget'
 import EmptyCard from '@components/EmptyCard/EmptyCard'
+import WidgetLoader from '@components/WidgetLoader'
 
 function assertIsAdditionalInfoMeta(meta: BaseWidgetProps['widgetMeta']): asserts meta is AdditionalInfoWidgetMeta {
     if (meta.type !== 'AdditionalInfo') {
@@ -21,11 +22,13 @@ const AdditionalInfo: WidgetComponentType = ({ widgetMeta }) => {
     const rowMeta = useAppSelector(state => state.view.rowMeta[bcName]?.[bcUrl])
 
     return (
-        <EmptyCard meta={widgetMeta}>
-            <StandardWrapper>
-                <AdditionalInfoItem meta={widgetMeta} rowMeta={rowMeta} cursor={bc?.cursor} />
-            </StandardWrapper>
-        </EmptyCard>
+        <WidgetLoader widgetMeta={widgetMeta}>
+            <EmptyCard meta={widgetMeta}>
+                <StandardWrapper>
+                    <AdditionalInfoItem meta={widgetMeta} rowMeta={rowMeta} cursor={bc?.cursor} />
+                </StandardWrapper>
+            </EmptyCard>
+        </WidgetLoader>
     )
 }
 

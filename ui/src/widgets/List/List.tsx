@@ -3,6 +3,7 @@ import { BaseWidgetProps, WidgetComponentType } from '@features/Widget'
 import Table from '@components/Table/Table'
 import { AppWidgetTableMeta } from '@interfaces/widget'
 import Card from '@components/Card/Card'
+import WidgetLoader from '@components/WidgetLoader'
 
 function assertIsTableMeta(meta: BaseWidgetProps['widgetMeta']): asserts meta is AppWidgetTableMeta {
     if (meta.type !== 'List') {
@@ -13,9 +14,11 @@ function assertIsTableMeta(meta: BaseWidgetProps['widgetMeta']): asserts meta is
 const List: WidgetComponentType = ({ widgetMeta }) => {
     assertIsTableMeta(widgetMeta)
     return (
-        <Card meta={widgetMeta}>
-            <Table meta={widgetMeta} />
-        </Card>
+        <WidgetLoader widgetMeta={widgetMeta}>
+            <Card meta={widgetMeta}>
+                <Table meta={widgetMeta} />
+            </Card>
+        </WidgetLoader>
     )
 }
 

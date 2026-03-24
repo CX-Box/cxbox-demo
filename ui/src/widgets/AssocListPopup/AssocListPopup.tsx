@@ -8,10 +8,23 @@ import { WidgetComponentType } from '@features/Widget'
 const AssocListPopup: WidgetComponentType = ({ widgetMeta }) => {
     const { active, isFilter } = useAppSelector(state => state.view.popupData as interfaces.PopupData) || {}
 
-    return isFilter || active ? (
-        <DefaultAssocListPopup meta={widgetMeta as WidgetTableMeta} isFilter={isFilter} />
-    ) : (
-        <PassiveAssocListPopup meta={widgetMeta as WidgetTableMeta} />
+    const popup =
+        isFilter || active ? (
+            <DefaultAssocListPopup meta={widgetMeta as WidgetTableMeta} isFilter={isFilter} />
+        ) : (
+            <PassiveAssocListPopup meta={widgetMeta as WidgetTableMeta} />
+        )
+
+    return (
+        <div
+            data-test="WIDGET"
+            data-test-widget-type={widgetMeta.type}
+            data-test-widget-position={widgetMeta.position}
+            data-test-widget-title={widgetMeta.title}
+            data-test-widget-name={widgetMeta.name}
+        >
+            {popup}
+        </div>
     )
 }
 

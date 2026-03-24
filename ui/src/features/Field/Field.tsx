@@ -205,7 +205,7 @@ const Field: FunctionComponent<FieldProps> = ({
     })
 
     /**
-     * Ф special case that stands out from the other types needs to be reworked
+     * Special case that stands out from the other types needs to be reworked
      */
     const componentTypeName =
         widgetFieldMeta.type !== FieldType.inlinePickList ? capitalizeFirstLetter(widgetFieldMeta.type) : 'InlinePickList'

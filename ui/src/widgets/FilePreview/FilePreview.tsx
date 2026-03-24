@@ -7,6 +7,7 @@ import styles from './FilePreview.module.css'
 import FieldBaseThemeWrapper from '@components/FieldBaseThemeWrapper/FieldBaseThemeWrapper'
 import { WidgetComponentType } from '@features/Widget'
 import FilePreviewCard from '@components/FilePreviewCard/FilePreviewCard'
+import WidgetLoader from '@components/WidgetLoader'
 
 const FilePreview: WidgetComponentType = ({ widgetMeta }) => {
     const cursor = useAppSelector(state => state.screen.bo.bc[widgetMeta.bcName]?.cursor) as string
@@ -21,19 +22,21 @@ const FilePreview: WidgetComponentType = ({ widgetMeta }) => {
     }, [fileField, widgetMeta])
 
     return (
-        <FilePreviewCard meta={widgetMeta}>
-            {!fileField ? null : (
-                <FieldBaseThemeWrapper
-                    className={styles.container}
-                    data-test="FIELD"
-                    data-test-field-type={fileField.type}
-                    data-test-field-title={fileField.title}
-                    data-test-field-key={fileField.key}
-                >
-                    <Field bcName={widgetMeta.bcName} cursor={cursor} widgetName={widgetMeta.name} widgetFieldMeta={fileField} />
-                </FieldBaseThemeWrapper>
-            )}
-        </FilePreviewCard>
+        <WidgetLoader widgetMeta={widgetMeta}>
+            <FilePreviewCard meta={widgetMeta}>
+                {!fileField ? null : (
+                    <FieldBaseThemeWrapper
+                        className={styles.container}
+                        data-test="FIELD"
+                        data-test-field-type={fileField.type}
+                        data-test-field-title={fileField.title}
+                        data-test-field-key={fileField.key}
+                    >
+                        <Field bcName={widgetMeta.bcName} cursor={cursor} widgetName={widgetMeta.name} widgetFieldMeta={fileField} />
+                    </FieldBaseThemeWrapper>
+                )}
+            </FilePreviewCard>
+        </WidgetLoader>
     )
 }
 

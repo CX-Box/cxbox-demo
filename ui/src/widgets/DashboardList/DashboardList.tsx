@@ -3,6 +3,7 @@ import Table from '@components/Table/Table'
 import { AppWidgetTableMeta } from '@interfaces/widget'
 import { BaseWidgetProps, WidgetComponentType } from '@features/Widget'
 import DashboardCard from '@components/DashboardCard/DashboardCard'
+import WidgetLoader from '@components/WidgetLoader'
 
 function assertIsDashboardListMeta(meta: BaseWidgetProps['widgetMeta']): asserts meta is AppWidgetTableMeta {
     if (meta.type !== 'DashboardList') {
@@ -13,11 +14,13 @@ function assertIsDashboardListMeta(meta: BaseWidgetProps['widgetMeta']): asserts
 const DashboardList: WidgetComponentType = ({ widgetMeta }) => {
     assertIsDashboardListMeta(widgetMeta)
     return (
-        <DashboardCard meta={widgetMeta}>
-            <div>
-                <Table meta={widgetMeta} />
-            </div>
-        </DashboardCard>
+        <WidgetLoader widgetMeta={widgetMeta}>
+            <DashboardCard meta={widgetMeta}>
+                <div>
+                    <Table meta={widgetMeta} />
+                </div>
+            </DashboardCard>
+        </WidgetLoader>
     )
 }
 

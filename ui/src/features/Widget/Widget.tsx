@@ -27,8 +27,6 @@ interface WidgetProps extends BaseWidgetProps {
     bc?: ScreenState['bo']['bc'][string]
 }
 
-const skeletonParams = { rows: 5 }
-
 /**
  *
  * @param props
@@ -61,38 +59,7 @@ const Widget: React.FC<WidgetProps> = props => {
             </Suspense>
         ) : null
 
-    if (widgetType.includes('Popup')) {
-        return (
-            <DebugWidgetWrapper meta={props.widgetMeta}>
-                <div
-                    data-test="WIDGET"
-                    data-test-widget-type={props.widgetMeta.type}
-                    data-test-widget-position={props.widgetMeta.position}
-                    data-test-widget-title={props.widgetMeta.title}
-                    data-test-widget-name={props.widgetMeta.name}
-                >
-                    {widgetElement}
-                </div>
-            </DebugWidgetWrapper>
-        )
-    }
-
-    const showSpinner = !!(props.loading && (props.rowMetaExists || props.dataExists))
-    const showSkeleton = props.loading && !showSpinner
-
-    // TODO 2.0.0 delete spinner and skeleton. Spinner and skeleton should be overridden by props.card component
-    const WidgetParts = (
-        <>
-            {showSkeleton && (
-                <div data-test-loading={true}>
-                    <Skeleton loading paragraph={skeletonParams} />
-                </div>
-            )}
-            {!showSkeleton && <Spin spinning={showSpinner}>{widgetElement}</Spin>}
-        </>
-    )
-
-    return <DebugWidgetWrapper meta={props.widgetMeta}>{WidgetParts}</DebugWidgetWrapper>
+    return <DebugWidgetWrapper meta={props.widgetMeta}>{widgetElement}</DebugWidgetWrapper>
 }
 
 function mapStateToProps(state: RootState, ownProps: BaseWidgetProps) {

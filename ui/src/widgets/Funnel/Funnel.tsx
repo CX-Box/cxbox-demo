@@ -7,6 +7,7 @@ import { Label } from '@antv/g2plot/lib/types/label'
 import { interfaces } from '@cxbox-ui/core'
 import { BaseWidgetProps, WidgetComponentType } from '@features/Widget'
 import DashboardCard from '@components/DashboardCard/DashboardCard'
+import WidgetLoader from '@components/WidgetLoader'
 
 function assertIsFunnelMeta(meta: BaseWidgetProps['widgetMeta']): asserts meta is FunnelWidgetMeta {
     if (meta.type !== 'Funnel') {
@@ -44,11 +45,21 @@ const Funnel: WidgetComponentType = ({ widgetMeta }) => {
         }
     }
     return (
-        <DashboardCard meta={widgetMeta}>
-            <div>
-                <AntFunnel data={funnelData} xField="id" yField="value" color={color} conversionTag={false} legend={legend} label={label} />
-            </div>
-        </DashboardCard>
+        <WidgetLoader widgetMeta={widgetMeta}>
+            <DashboardCard meta={widgetMeta}>
+                <div>
+                    <AntFunnel
+                        data={funnelData}
+                        xField="id"
+                        yField="value"
+                        color={color}
+                        conversionTag={false}
+                        legend={legend}
+                        label={label}
+                    />
+                </div>
+            </DashboardCard>
+        </WidgetLoader>
     )
 }
 

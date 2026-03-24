@@ -11,6 +11,7 @@ import styles from './StatsBlock.less'
 import cn from 'classnames'
 import { BaseWidgetProps } from '@features/Widget'
 import EmptyCard from '@components/EmptyCard/EmptyCard'
+import WidgetLoader from '@components/WidgetLoader'
 
 function assertIsStatsBlockMeta(meta: BaseWidgetProps['widgetMeta']): asserts meta is AppWidgetTableMeta {
     if (meta.type !== 'StatsBlock') {
@@ -52,40 +53,42 @@ const StatsBlock: React.FC<BaseWidgetProps> = ({ widgetMeta }) => {
     const isBcCursorShow = !valueField?.drillDown && widgetMeta.options?.stats?.bcCursor === EStatsBcCursor.show
 
     return (
-        <EmptyCard meta={widgetMeta}>
-            {isMainWidget && <WidgetTitle level={2} widgetName={widgetMeta.name} text={widgetMeta.title} />}
+        <WidgetLoader widgetMeta={widgetMeta}>
+            <EmptyCard meta={widgetMeta}>
+                {isMainWidget && <WidgetTitle level={2} widgetName={widgetMeta.name} text={widgetMeta.title} />}
 
-            {!(isMainWidget && isCollapsed) && (
-                <List
-                    dataSource={data}
-                    itemLayout={'horizontal'}
-                    grid={{ gutter: 16, sm: 3, column: 6 }}
-                    renderItem={item => (
-                        <Tooltip title={getItemPropertyValue(item, widgetMeta, 'description')}>
-                            <List.Item
-                                className={cn(styles.itemContainer, { [styles.itemSelected]: isBcCursorShow && item.id === cursor })}
-                                style={{
-                                    backgroundColor: getItemColor(item, widgetMeta)
-                                }}
-                                onClick={() => handleClick(item)}
-                            >
-                                <div className={styles.itemContent}>
-                                    <div style={{ fontSize: 30 }}>{getItemPropertyValue(item, widgetMeta, 'value')}</div>
+                {!(isMainWidget && isCollapsed) && (
+                    <List
+                        dataSource={data}
+                        itemLayout={'horizontal'}
+                        grid={{ gutter: 16, sm: 3, column: 6 }}
+                        renderItem={item => (
+                            <Tooltip title={getItemPropertyValue(item, widgetMeta, 'description')}>
+                                <List.Item
+                                    className={cn(styles.itemContainer, { [styles.itemSelected]: isBcCursorShow && item.id === cursor })}
+                                    style={{
+                                        backgroundColor: getItemColor(item, widgetMeta)
+                                    }}
+                                    onClick={() => handleClick(item)}
+                                >
+                                    <div className={styles.itemContent}>
+                                        <div style={{ fontSize: 30 }}>{getItemPropertyValue(item, widgetMeta, 'value')}</div>
 
-                                    <div>{getItemPropertyValue(item, widgetMeta, 'title')}</div>
-                                </div>
+                                        <div>{getItemPropertyValue(item, widgetMeta, 'title')}</div>
+                                    </div>
 
-                                {(() => {
-                                    const icon = getItemPropertyValue(item, widgetMeta, 'icon')
+                                    {(() => {
+                                        const icon = getItemPropertyValue(item, widgetMeta, 'icon')
 
-                                    return typeof icon === 'string' ? <Icon type={icon} className={styles.itemIcon} /> : null
-                                })()}
-                            </List.Item>
-                        </Tooltip>
-                    )}
-                />
-            )}
-        </EmptyCard>
+                                        return typeof icon === 'string' ? <Icon type={icon} className={styles.itemIcon} /> : null
+                                    })()}
+                                </List.Item>
+                            </Tooltip>
+                        )}
+                    />
+                )}
+            </EmptyCard>
+        </WidgetLoader>
     )
 }
 

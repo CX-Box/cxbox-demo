@@ -13,6 +13,7 @@ import { WidgetListField } from '@cxbox-ui/schema'
 import styles from './AdditionalList.module.css'
 import { BaseWidgetProps, WidgetComponentType } from '@features/Widget'
 import EmptyCard from '@components/EmptyCard/EmptyCard'
+import WidgetLoader from '@components/WidgetLoader'
 
 function assertIsAdditionalList(meta: BaseWidgetProps['widgetMeta']): asserts meta is AdditionalListWidgetMeta {
     if (meta.type !== 'AdditionalList') {
@@ -35,47 +36,49 @@ const AdditionalList: WidgetComponentType = ({ widgetMeta }) => {
     const handleRow = () => ({ onClick: () => {} })
 
     return (
-        <EmptyCard meta={widgetMeta}>
-            <StandardWrapper>
-                <AdditionalInfoHeader meta={widgetMeta} level={2} />
-                {!(isMainWidget && isCollapsed) && (
-                    <>
-                        {additionalInfoMeta && (
-                            <>
-                                {bcData?.length ? (
-                                    bcData.map(dataItem => {
-                                        return (
-                                            <React.Fragment key={dataItem.id}>
-                                                <DebugWidgetWrapper meta={additionalInfoMeta}>
-                                                    <AdditionalInfoItem meta={additionalInfoMeta} cursor={dataItem.id} />
-                                                </DebugWidgetWrapper>
-                                                <Divider className={styles.divider} />
-                                            </React.Fragment>
-                                        )
-                                    })
-                                ) : (
-                                    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                                )}
-                            </>
-                        )}
-                        {!readWidgetName && (
-                            <div className={styles.container}>
-                                <Table
-                                    rowClassName={undefined}
-                                    meta={widgetMeta as AppWidgetTableMeta}
-                                    showHeader={showHeader}
-                                    disablePagination={true}
-                                    hideRowActions={true}
-                                    disableCellEdit={true}
-                                    disableMassMode={true}
-                                    onRow={handleRow}
-                                />
-                            </div>
-                        )}
-                    </>
-                )}
-            </StandardWrapper>
-        </EmptyCard>
+        <WidgetLoader widgetMeta={widgetMeta}>
+            <EmptyCard meta={widgetMeta}>
+                <StandardWrapper>
+                    <AdditionalInfoHeader meta={widgetMeta} level={2} />
+                    {!(isMainWidget && isCollapsed) && (
+                        <>
+                            {additionalInfoMeta && (
+                                <>
+                                    {bcData?.length ? (
+                                        bcData.map(dataItem => {
+                                            return (
+                                                <React.Fragment key={dataItem.id}>
+                                                    <DebugWidgetWrapper meta={additionalInfoMeta}>
+                                                        <AdditionalInfoItem meta={additionalInfoMeta} cursor={dataItem.id} />
+                                                    </DebugWidgetWrapper>
+                                                    <Divider className={styles.divider} />
+                                                </React.Fragment>
+                                            )
+                                        })
+                                    ) : (
+                                        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                                    )}
+                                </>
+                            )}
+                            {!readWidgetName && (
+                                <div className={styles.container}>
+                                    <Table
+                                        rowClassName={undefined}
+                                        meta={widgetMeta as AppWidgetTableMeta}
+                                        showHeader={showHeader}
+                                        disablePagination={true}
+                                        hideRowActions={true}
+                                        disableCellEdit={true}
+                                        disableMassMode={true}
+                                        onRow={handleRow}
+                                    />
+                                </div>
+                            )}
+                        </>
+                    )}
+                </StandardWrapper>
+            </EmptyCard>
+        </WidgetLoader>
     )
 }
 

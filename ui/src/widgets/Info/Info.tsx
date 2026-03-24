@@ -9,6 +9,7 @@ import styles from './Info.less'
 import { useProportionalWidgetGrid } from '@hooks/widgetGrid'
 import { BaseWidgetProps, WidgetComponentType } from '@features/Widget'
 import Card from '@components/Card/Card'
+import WidgetLoader from '@components/WidgetLoader'
 
 function assertIsInfoMeta(meta: BaseWidgetProps['widgetMeta']): asserts meta is AppWidgetInfoMeta {
     if (meta.type !== 'Info') {
@@ -39,20 +40,22 @@ const Info: WidgetComponentType = ({ widgetMeta }) => {
     const { grid, visibleFlattenWidgetFields } = useProportionalWidgetGrid(widgetMeta)
 
     return (
-        <Card meta={widgetMeta}>
-            <Row className={styles.container}>
-                {grid?.map((row, index) => (
-                    <InfoRow
-                        key={index}
-                        meta={widgetMeta}
-                        flattenWidgetFields={visibleFlattenWidgetFields}
-                        onDrillDown={handleDrillDown}
-                        row={row}
-                        cursor={cursor}
-                    />
-                ))}
-            </Row>
-        </Card>
+        <WidgetLoader widgetMeta={widgetMeta}>
+            <Card meta={widgetMeta}>
+                <Row className={styles.container}>
+                    {grid?.map((row, index) => (
+                        <InfoRow
+                            key={index}
+                            meta={widgetMeta}
+                            flattenWidgetFields={visibleFlattenWidgetFields}
+                            onDrillDown={handleDrillDown}
+                            row={row}
+                            cursor={cursor}
+                        />
+                    ))}
+                </Row>
+            </Card>
+        </WidgetLoader>
     )
 }
 

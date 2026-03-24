@@ -6,6 +6,7 @@ import { Statistic, StyleAttr } from '@antv/g2plot/lib/types'
 import { useAppSelector } from '@store'
 import { BaseWidgetProps } from '@features/Widget'
 import DashboardCard from '@components/DashboardCard/DashboardCard'
+import WidgetLoader from '@components/WidgetLoader'
 
 function assertIsRingProgressMeta(meta: BaseWidgetProps['widgetMeta']): asserts meta is RingProgressWidgetMeta {
     if (meta.type !== 'RingProgress') {
@@ -41,26 +42,28 @@ const RingProgress: React.FC<BaseWidgetProps> = ({ widgetMeta }) => {
     }
 
     return (
-        <DashboardCard meta={widgetMeta}>
-            <div>
-                <div className={styles.container}>
-                    <div className={styles.textContainer}>
-                        {text && <p className={styles.textDescription}>{text}</p>}
-                        {numberFieldValue && <p className={styles.textValue}>{numberFieldValue}</p>}
-                        {descriptionFieldValue && <p className={styles.textClarification}>{descriptionFieldValue}</p>}
+        <WidgetLoader widgetMeta={widgetMeta}>
+            <DashboardCard meta={widgetMeta}>
+                <div>
+                    <div className={styles.container}>
+                        <div className={styles.textContainer}>
+                            {text && <p className={styles.textDescription}>{text}</p>}
+                            {numberFieldValue && <p className={styles.textValue}>{numberFieldValue}</p>}
+                            {descriptionFieldValue && <p className={styles.textClarification}>{descriptionFieldValue}</p>}
+                        </div>
+                        <AntRingProgress
+                            percent={percentFieldValue}
+                            color={progressColor}
+                            height={180}
+                            width={180}
+                            progressStyle={progressStyle}
+                            innerRadius={0.7}
+                            statistic={progressStatistic}
+                        />
                     </div>
-                    <AntRingProgress
-                        percent={percentFieldValue}
-                        color={progressColor}
-                        height={180}
-                        width={180}
-                        progressStyle={progressStyle}
-                        innerRadius={0.7}
-                        statistic={progressStatistic}
-                    />
                 </div>
-            </div>
-        </DashboardCard>
+            </DashboardCard>
+        </WidgetLoader>
     )
 }
 

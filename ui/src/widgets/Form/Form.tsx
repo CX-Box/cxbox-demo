@@ -14,6 +14,7 @@ import styles from './Form.less'
 import FieldBaseThemeWrapper from '@components/FieldBaseThemeWrapper/FieldBaseThemeWrapper'
 import { BaseWidgetProps, WidgetComponentType } from '@features/Widget'
 import Card from '@components/Card/Card'
+import WidgetLoader from '@components/WidgetLoader'
 
 function assertIsFormMeta(meta: BaseWidgetProps['widgetMeta']): asserts meta is WidgetFormMeta {
     if (meta.type !== 'Form' && meta.type !== 'FormPopup') {
@@ -94,15 +95,17 @@ const Form: WidgetComponentType<FormProps> = ({ widgetMeta, fields, missingField
     }, [grid, visibleFlattenWidgetFields, missingFields, metaErrors, widgetMeta.name, t, bcName, cursor, name])
 
     return (
-        <Card meta={widgetMeta}>
-            {empty ? null : (
-                <FieldBaseThemeWrapper className={styles.formContainer}>
-                    <AntdForm colon={false} layout="vertical">
-                        {memoizedFields}
-                    </AntdForm>
-                </FieldBaseThemeWrapper>
-            )}
-        </Card>
+        <WidgetLoader widgetMeta={widgetMeta}>
+            <Card meta={widgetMeta}>
+                {empty ? null : (
+                    <FieldBaseThemeWrapper className={styles.formContainer}>
+                        <AntdForm colon={false} layout="vertical">
+                            {memoizedFields}
+                        </AntdForm>
+                    </FieldBaseThemeWrapper>
+                )}
+            </Card>
+        </WidgetLoader>
     )
 }
 

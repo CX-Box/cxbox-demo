@@ -69,32 +69,40 @@ const FormPopup: WidgetComponentType = ({ widgetMeta }) => {
     )
 
     return (
-        <Popup
-            className={styles.popupContainer}
-            title={popupTitle}
-            showed
-            onOkHandler={onSave}
-            onCancelHandler={onClose}
-            bcName={bcName}
-            widgetName={widgetMeta.name}
-            disablePagination={true}
-            getContainer={null}
-            defaultOkText={preInvoke?.yesText}
-            defaultCancelText={preInvoke?.noText}
-            okButtonProps={{
-                loading: isOperationInProgress(popupData?.options?.operation?.operationType)
-            }}
+        <div
+            data-test="WIDGET"
+            data-test-widget-type={widgetMeta.type}
+            data-test-widget-position={widgetMeta.position}
+            data-test-widget-title={widgetMeta.title}
+            data-test-widget-name={widgetMeta.name}
         >
-            {bcLoading || forceUpdateRowMetaPending ? (
-                <div data-test-loading={true}>
-                    <Skeleton loading paragraph={{ rows: 5 }} />
-                </div>
-            ) : (
-                <div className={styles.formPopupModal}>
-                    <Form widgetMeta={widgetMeta} />
-                </div>
-            )}
-        </Popup>
+            <Popup
+                className={styles.popupContainer}
+                title={popupTitle}
+                showed
+                onOkHandler={onSave}
+                onCancelHandler={onClose}
+                bcName={bcName}
+                widgetName={widgetMeta.name}
+                disablePagination={true}
+                getContainer={null}
+                defaultOkText={preInvoke?.yesText}
+                defaultCancelText={preInvoke?.noText}
+                okButtonProps={{
+                    loading: isOperationInProgress(popupData?.options?.operation?.operationType)
+                }}
+            >
+                {bcLoading || forceUpdateRowMetaPending ? (
+                    <div data-test-loading={true}>
+                        <Skeleton loading paragraph={{ rows: 5 }} />
+                    </div>
+                ) : (
+                    <div className={styles.formPopupModal}>
+                        <Form widgetMeta={widgetMeta} />
+                    </div>
+                )}
+            </Popup>
+        </div>
     )
 }
 

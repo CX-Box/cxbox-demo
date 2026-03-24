@@ -75,27 +75,45 @@ const PickListPopup: WidgetComponentType = ({ widgetMeta }) => {
     )
 
     if (showAssocFilter) {
-        return <AssocListPopup widgetMeta={widgetMeta} />
+        return (
+            <div
+                data-test="WIDGET"
+                data-test-widget-type={widgetMeta.type}
+                data-test-widget-position={widgetMeta.position}
+                data-test-widget-title={widgetMeta.title}
+                data-test-widget-name={widgetMeta.name}
+            >
+                <AssocListPopup widgetMeta={widgetMeta} />
+            </div>
+        )
     }
 
     return (
-        <Popup
-            title={<WidgetTitle className={styles.title} level={1} widgetName={widgetMeta.name} text={widgetMeta.title} />}
-            showed
-            onOkHandler={onClose}
-            onCancelHandler={onClose}
-            bcName={widgetMeta.bcName}
-            widgetName={widgetMeta.name}
-            disablePagination={true}
-            footer={null}
-            className={styles.popup}
+        <div
+            data-test="WIDGET"
+            data-test-widget-type={widgetMeta.type}
+            data-test-widget-position={widgetMeta.position}
+            data-test-widget-title={widgetMeta.title}
+            data-test-widget-name={widgetMeta.name}
         >
-            <div className={styles.container}>
-                <Spin spinning={(pending?.length as number) > 0}>
-                    <Table meta={widgetMeta} disableCellEdit={false} disableMassMode={true} onRow={onRow} />
-                </Spin>
-            </div>
-        </Popup>
+            <Popup
+                title={<WidgetTitle className={styles.title} level={1} widgetName={widgetMeta.name} text={widgetMeta.title} />}
+                showed
+                onOkHandler={onClose}
+                onCancelHandler={onClose}
+                bcName={widgetMeta.bcName}
+                widgetName={widgetMeta.name}
+                disablePagination={true}
+                footer={null}
+                className={styles.popup}
+            >
+                <div className={styles.container}>
+                    <Spin spinning={(pending?.length as number) > 0}>
+                        <Table meta={widgetMeta} disableCellEdit={false} disableMassMode={true} onRow={onRow} />
+                    </Spin>
+                </div>
+            </Popup>
+        </div>
     )
 }
 

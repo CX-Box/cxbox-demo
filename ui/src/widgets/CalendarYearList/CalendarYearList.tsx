@@ -15,6 +15,7 @@ import { Icon, Menu, Tooltip } from 'antd'
 import DropdownSetting from '@components/Table/components/DropdownSetting'
 import { WidgetComponentType } from '@features/Widget'
 import NullCard from '@components/NullCard'
+import WidgetLoader from '@components/WidgetLoader'
 
 const CalendarYearList: WidgetComponentType = ({ widgetMeta: widget }) => {
     const calendarRef = useRef<CalendarYearApiHandle>(null)
@@ -95,19 +96,21 @@ const CalendarYearList: WidgetComponentType = ({ widgetMeta: widget }) => {
     }, [widget?.options?.calendar])
 
     return (
-        <NullCard meta={widget}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', color: 'var(--text-color)' }}>
-                {enabledListMode ? (
-                    <Table meta={widget as AppWidgetTableMeta} settingsComponent={listToggleButton} />
-                ) : (
-                    <>
-                        {operations?.length ? <Operations widgetMeta={widget} bcName={widget.bcName} operations={operations} /> : null}
-                        <Filters widgetName={widget.name} ignoreFieldNames={ignoreFieldNames} />
-                        <CalendarYear ref={calendarRef} meta={widget} toggleButton={listToggleButton} />
-                    </>
-                )}
-            </div>
-        </NullCard>
+        <WidgetLoader widgetMeta={widget}>
+            <NullCard meta={widget}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', color: 'var(--text-color)' }}>
+                    {enabledListMode ? (
+                        <Table meta={widget as AppWidgetTableMeta} settingsComponent={listToggleButton} />
+                    ) : (
+                        <>
+                            {operations?.length ? <Operations widgetMeta={widget} bcName={widget.bcName} operations={operations} /> : null}
+                            <Filters widgetName={widget.name} ignoreFieldNames={ignoreFieldNames} />
+                            <CalendarYear ref={calendarRef} meta={widget} toggleButton={listToggleButton} />
+                        </>
+                    )}
+                </div>
+            </NullCard>
+        </WidgetLoader>
     )
 }
 

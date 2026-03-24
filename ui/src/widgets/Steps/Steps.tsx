@@ -9,6 +9,7 @@ import styles from './Steps.less'
 import { shallowEqual } from 'react-redux'
 import { BaseWidgetProps } from '@features/Widget'
 import EmptyCard from '@components/EmptyCard/EmptyCard'
+import WidgetLoader from '@components/WidgetLoader'
 
 function assertIsStepsMeta(meta: BaseWidgetProps['widgetMeta']): asserts meta is StepsWidgetMeta {
     if (meta.type !== 'Steps') {
@@ -42,16 +43,18 @@ const Steps: React.FC<BaseWidgetProps> = ({ widgetMeta }) => {
     })
     const currentIndex = values?.findIndex(i => i.step === stepCurrentValue)
     return (
-        <EmptyCard meta={widgetMeta}>
-            {isMainWidget && <WidgetTitle level={2} widgetName={widgetMeta.name} text={widgetMeta.title} />}
-            {!(isMainWidget && isCollapsed) && (
-                <AntSteps className={styles.container} current={currentIndex}>
-                    {values?.map(i => {
-                        return <Step key={i.step} title={i.step} description={i.description} />
-                    })}
-                </AntSteps>
-            )}
-        </EmptyCard>
+        <WidgetLoader widgetMeta={widgetMeta}>
+            <EmptyCard meta={widgetMeta}>
+                {isMainWidget && <WidgetTitle level={2} widgetName={widgetMeta.name} text={widgetMeta.title} />}
+                {!(isMainWidget && isCollapsed) && (
+                    <AntSteps className={styles.container} current={currentIndex}>
+                        {values?.map(i => {
+                            return <Step key={i.step} title={i.step} description={i.description} />
+                        })}
+                    </AntSteps>
+                )}
+            </EmptyCard>
+        </WidgetLoader>
     )
 }
 

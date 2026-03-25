@@ -110,7 +110,7 @@ public class LoginServiceImpl implements LoginService {
 					.fullName(userEntity.getFullName())
 					.featureSettings(this.getFeatureSettings())
 					.systemUrl(uiProperties.getSystemUrl())
-					.language(LocaleContextHolder.getLocale().getLanguage())
+					.language("ru")
 					.timezone(LocaleContextHolder.getTimeZone().getID())
 					.devPanelEnabled(metaConfigurationProperties.isDevPanelEnabled())
 					.build();

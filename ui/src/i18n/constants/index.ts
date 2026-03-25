@@ -6,4 +6,4 @@ export type SupportedLanguage = LookupValueOf<typeof SUPPORTED_LANGUAGE>
 
 export type AnyLanguage = SupportedLanguage | string
 
-export const defaultLocale = SUPPORTED_LANGUAGE.en
+export const defaultLocale = SUPPORTED_LANGUAGE.ru

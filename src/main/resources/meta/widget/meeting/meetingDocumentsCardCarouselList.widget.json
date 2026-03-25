@@ -1,0 +1,50 @@
+{
+  "name": "meetingDocumentsCardCarouselList",
+  "title": "",
+  "type": "CardCarouselList",
+  "bc": "meetingDocumentEdit",
+  "fields": [
+    {
+      "title": "Status",
+      "key": "id",
+      "type": "dictionary",
+      "bgColor": "#fafafa"
+    },
+    {
+      "title": "File",
+      "key": "file",
+      "type": "fileUpload",
+      "fileIdKey": "fileId",
+      "preview": {
+        "enabled": true,
+        "mode": "inline"
+      },
+      "minRows": 5
+    }
+  ],
+  "options": {
+    "card": {
+      "titleFieldKey": "file",
+      "valueFieldKey": "file"
+    },
+    "read": {
+      "widget": "meetingDocumentPreview"
+    },
+    "create": {
+      "widget": "meetingDocumentsFormForList",
+      "style": "popup"
+    },
+    "edit": {
+      "widget": "meetingDocumentsFormForList",
+      "style": "popup"
+    },
+    "actionGroups": {
+      "include": [
+        "create",
+        "associate",
+        "edit",
+        "delete"
+      ]
+    }
+  }
+}

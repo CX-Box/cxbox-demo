@@ -1,0 +1,33 @@
+{
+  "name": "meetingDocumentPreview",
+  "title": "Title",
+  "type": "Form",
+  "bc": "meetingDocumentEdit",
+  "fields": [
+    {
+      "label": "File",
+      "key": "file",
+      "type": "fileUpload",
+      "fileIdKey": "fileId",
+      "preview": {
+        "enabled": true,
+        "mode": "inline"
+      },
+      "minRows": 5
+    }
+  ],
+  "options": {
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "file",
+              "span": 12
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

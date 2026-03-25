@@ -63,7 +63,7 @@ export const bcSaveDataEpic: RootEpic = (action$, state$, { api, utils: internal
             const bcUrl = buildBcUrl(bcName, true, state) ?? ''
             const widgetName = action.payload.widgetName
             const cursor = state.screen.bo.bc[bcName].cursor as string
-            const dataItem = state.data[bcName].find(item => item.id === cursor)
+            const dataItem = state.data[bcName]?.find(item => item.id === cursor)
             const rowMeta = selectBcUrlRowMeta(state, bcName)
             const options = state.view.widgets.find(widget => widget.name === widgetName)?.options
 

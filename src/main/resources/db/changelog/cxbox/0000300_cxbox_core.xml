@@ -888,6 +888,16 @@
       referencedColumnNames="ID" referencedTableName="USERS" validate="true"/>
   </changeSet>
 
+  <changeSet id="add-default-bc-filter-groups-id-oracle" author="your_name">
+    <preConditions onFail="MARK_RAN">
+      <dbms type="oracle"/>
+    </preConditions>
+    <addDefaultValue
+      tableName="BC_FILTER_GROUPS"
+      columnName="ID"
+      defaultValueComputed="${app_seq_next_val}"/>
+  </changeSet>
+
   <changeSet id="migrate-view-to-view_name-postgres responsibilities_action" author="cxbox">
     <preConditions onFail="MARK_RAN">
       <dbms type="postgresql"/>

@@ -11,7 +11,7 @@ import cn from 'classnames'
 import { useWidgetOperationsOld } from '@hooks/useWidgetOperations'
 import { useOperationInProgress } from '@hooks/useOperationInProgress'
 import TextSearchInput from '@components/Operations/components/TextSearchInput/TextSearchInput'
-import { FileUpload } from '@components/Operations/components/FileUpload/FileUpload'
+import OperationsFileUpload from './components/OperationsFileUpload'
 import { actions } from '@actions'
 import { AVAILABLE_MASS_STEPS } from '@components/widgets/Table/massOperations/constants'
 import { Operation, OperationGroup } from '@interfaces/rowMeta'
@@ -32,7 +32,8 @@ function Operations(props: OperationsProps) {
     })
     const metaInProgress = useAppSelector(state => state.view.metaInProgress[bcName])
 
-    const { defaultOperations, customOperations, isUploadDnDMode, hasOperations } = useWidgetOperationsMode(widgetMeta, operations)
+    const { defaultOperations, customOperations, operationsInfo, isUploadDnDMode, hasOperations, getOperationInfo } =
+        useWidgetOperationsMode(widgetMeta, operations)
 
     const isOperationInProgress = useOperationInProgress(bcName)
 
@@ -78,8 +79,18 @@ function Operations(props: OperationsProps) {
     return (
         <div className={styles.container}>
             {customOperations?.map(customOperation => {
-                if (isUploadDnDMode(customOperation.mode)) {
-                    return <FileUpload key={customOperation.actionKey} widget={widgetMeta} operationInfo={customOperation} mode="drag" />
+                const operationInfo = getOperationInfo(customOperation.type)
+
+                if (isUploadDnDMode(operationInfo?.mode)) {
+                    return (
+                        <OperationsFileUpload
+                            key={customOperation.type}
+                            item={customOperation}
+                            widgetMeta={widgetMeta}
+                            operationInfo={operationInfo!}
+                            mode="drag"
+                        />
+                    )
                 }
 
                 return null
@@ -102,30 +113,24 @@ function Operations(props: OperationsProps) {
                     }
 
                     if (item.subtype === 'multiFileUpload') {
-                        const operationInfo: OperationInfo = widgetMeta.options?.buttons?.find(
-                            button => button.actionKey === item.type
-                        ) ?? {
+                        const operationInfo: OperationInfo = getOperationInfo(item.type) ?? {
                             actionKey: item.type
                         }
 
                         return (
-                            <FileUpload key={item.type} widget={widgetMeta} operationInfo={operationInfo} mode="default">
-                                <Button
-                                    key={item.type}
-                                    data-test-widget-action-item={true}
-                                    type={getButtonType({
-                                        widgetType: widgetMeta.type,
-                                        index,
-                                        bgColor: item.customParameter?.platformBgColor
-                                    })}
-                                    loading={metaInProgress}
-                                    bgColor={item.customParameter?.platformBgColor}
-                                    {...getButtonProps?.(item)}
-                                >
-                                    {item.icon && <Icon type={item.icon} />}
-                                    {item.text}
-                                </Button>
-                            </FileUpload>
+                            <OperationsFileUpload
+                                key={item.type}
+                                item={item}
+                                widgetMeta={widgetMeta}
+                                operationInfo={operationInfo}
+                                buttonType={getButtonType({
+                                    widgetType: widgetMeta.type,
+                                    index,
+                                    bgColor: item.customParameter?.platformBgColor
+                                })}
+                                loading={metaInProgress}
+                                {...getButtonProps?.(item)}
+                            />
                         )
                     }
 
@@ -193,15 +198,19 @@ const CUSTOM_COMBINED_WITH_DEFAULT_MODE: OperationCustomMode[] = ['default-and-f
 const FILE_UPLOAD_DND_MODE: OperationCustomMode[] = ['default-and-file-upload-dnd', 'file-upload-dnd']
 
 const useWidgetOperationsMode = (widget: AppWidgetMeta, operations: (Operation | OperationGroup)[]) => {
-    const customOperations = widget.options?.buttons?.filter(button => button.actionKey && button.mode?.length && button.mode !== 'default')
+    const operationsInfo = widget.options?.buttons?.filter(button => button.actionKey && button.mode?.length)
+    const customOperationsInfo = widget.options?.buttons?.filter(button => button.mode !== 'default')
 
-    const customOperationsWithoutDefaultMode = customOperations
+    const customOperationsKeys = customOperationsInfo?.map(button => button.actionKey)
+    const customOperationsWithoutDefaultModeKeys = customOperationsInfo
         ?.filter(button => !CUSTOM_COMBINED_WITH_DEFAULT_MODE.includes(button.mode as OperationCustomMode))
         .map(button => button.actionKey)
 
-    const defaultOperations = useWidgetOperationsOld(operations, widget).filter(
-        item => !customOperationsWithoutDefaultMode?.includes(item.type as string)
-    )
+    const allOperations = useWidgetOperationsOld(operations, widget)
+    const defaultOperations = allOperations.filter(item => !customOperationsWithoutDefaultModeKeys?.includes(item.type as string))
+    const customOperations = allOperations
+        .flatMap(operationOrGroup => (isOperationGroup(operationOrGroup) ? operationOrGroup.actions : [operationOrGroup]))
+        .filter(item => customOperationsKeys?.includes(item.type as string))
 
     const isUploadDnDMode = (mode?: OperationCustomMode | string) => {
         return FILE_UPLOAD_DND_MODE.includes(mode as OperationCustomMode)
@@ -209,12 +218,17 @@ const useWidgetOperationsMode = (widget: AppWidgetMeta, operations: (Operation |
 
     const cachedDefaultOperations = useStaleValueWhileRowMetaLoading(defaultOperations, widget.bcName)
     const cachedCustomOperations = useStaleValueWhileRowMetaLoading(customOperations, widget.bcName)
+    const cachedOperationsInfo = useStaleValueWhileRowMetaLoading(operationsInfo, widget.bcName)
     const cachedHasOperations = !!(cachedCustomOperations?.length || cachedDefaultOperations?.length)
+
+    const getOperationInfo = (operationType: string | undefined) => cachedOperationsInfo?.find(info => info.actionKey === operationType)
 
     return {
         hasOperations: cachedHasOperations,
         defaultOperations: cachedDefaultOperations,
         customOperations: cachedCustomOperations,
-        isUploadDnDMode
+        operationsInfo: cachedOperationsInfo,
+        isUploadDnDMode,
+        getOperationInfo
     }
 }

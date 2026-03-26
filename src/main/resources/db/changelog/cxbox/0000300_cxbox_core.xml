@@ -888,4 +888,45 @@
       referencedColumnNames="ID" referencedTableName="USERS" validate="true"/>
   </changeSet>
 
+  <changeSet id="migrate-view-to-view_name-postgres responsibilities_action" author="cxbox">
+    <preConditions onFail="MARK_RAN">
+      <dbms type="postgresql"/>
+      <columnExists tableName="responsibilities_action" columnName="view"/>
+      <columnExists tableName="responsibilities_action" columnName="view_name"/>
+    </preConditions>
+    <comment>Move data from column "view" to "view_name"</comment>
+    <sql>
+      UPDATE responsibilities_action
+      SET view_name = "view"
+      WHERE "view" IS NOT NULL AND view_name IS NULL;
+    </sql>
+  </changeSet>
+
+  <changeSet id="migrate-main-to-main_flg-postgres user_role" author="cxbox">
+    <preConditions onFail="MARK_RAN">
+      <dbms type="postgresql"/>
+      <columnExists tableName="user_role" columnName="main"/>
+      <columnExists tableName="user_role" columnName="main_flg"/>
+    </preConditions>
+    <comment>Move data from column "main" to "main_flg"</comment>
+    <sql>
+      UPDATE user_role
+      SET main_flg = "main"
+      WHERE "main" IS NOT NULL;
+    </sql>
+  </changeSet>
+
+  <changeSet id="migrate-file-to-file_name-postgres meeting_documents" author="cxbox">
+    <preConditions onFail="MARK_RAN">
+      <dbms type="postgresql"/>
+      <columnExists tableName="meeting_documents" columnName="file"/>
+      <columnExists tableName="meeting_documents" columnName="file_name"/>
+    </preConditions>
+    <comment>Move data from column "file" to "file_name"</comment>
+    <sql>
+      UPDATE meeting_documents
+      SET file_name = "file"
+      WHERE "file" IS NOT NULL;
+    </sql>
+  </changeSet>
 </databaseChangeLog>

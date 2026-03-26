@@ -9,7 +9,7 @@
 
   <changeSet author="cxbox" id="BC_FILTER_GROUPS TABLE">
     <createTable remarks="Группы фильтров" tableName="BC_FILTER_GROUPS">
-      <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)" defaultValueComputed="APP_SEQ.NEXTVAL">
+      <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
         <constraints primaryKey="true"/>
       </column>
       <column name="NAME" remarks="Имя группы фильтров" type="VARCHAR2(255)">
@@ -142,7 +142,7 @@
 
   <changeSet author="cxbox" id="DICTIONARY_ITEM TABLE">
     <createTable remarks="Значения простых справочников" tableName="DICTIONARY_ITEM">
-      <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)" defaultValueComputed="APP_SEQ.NEXTVAL">
+      <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
         <constraints primaryKey="true"/>
       </column>
       <column name="TYPE" remarks="Тип справочника" type="VARCHAR2(255)"/>
@@ -549,6 +549,7 @@
       constraintName="BC_FILTER_GROUPS_UNIQUE"
       tableName="BC_FILTER_GROUPS"/>
   </changeSet>
+
   <changeSet author="cxbox" id="BC_FILTER_GROUPS INDEXES">
     <createIndex indexName="BC_FILTER_GROUPS_UNIQUE_INDEX" tableName="BC_FILTER_GROUPS" unique="true">
       <column name="NAME"/>
@@ -888,12 +889,16 @@
       referencedColumnNames="ID" referencedTableName="USERS" validate="true"/>
   </changeSet>
 
-  <changeSet id="add-default-bc-filter-groups-id-oracle" author="your_name">
-    <preConditions onFail="MARK_RAN">
-      <dbms type="oracle"/>
-    </preConditions>
+  <changeSet id="add-default-bc-filter-groups-id-oracle" author="cxbox">
     <addDefaultValue
       tableName="BC_FILTER_GROUPS"
+      columnName="ID"
+      defaultValueComputed="${app_seq_next_val}"/>
+  </changeSet>
+
+  <changeSet id="add-default-dictionary-item-id-oracle" author="cxbox">
+    <addDefaultValue
+      tableName="DICTIONARY_ITEM"
       columnName="ID"
       defaultValueComputed="${app_seq_next_val}"/>
   </changeSet>

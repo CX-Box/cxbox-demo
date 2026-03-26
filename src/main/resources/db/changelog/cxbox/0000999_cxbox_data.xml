@@ -50,7 +50,7 @@
     </loadUpdateData>
   </changeSet>
 
-  <changeSet author="cxbox" id="DICTIONARIES" runOnChange="true">
+  <changeSet author="cxbox" id="DICTIONARIES_ORACLE" runOnChange="true" dbms="oracle">
     <delete tableName="DICTIONARY_ITEM_TR"/>
     <delete tableName="DICTIONARY_TYPE"/>
 
@@ -61,7 +61,21 @@
       <column header="KEY" name="KEY" type="STRING"/>
       <column header="VALUE" name="VALUE" type="STRING"/>
       <column header="DESCRIPTION" name="DESCRIPTION" type="STRING"/>
-      <column header="ACTIVE" name="ACTIVE" type="NUMERIC" defaultValue="1"/>
+      <column header="ACTIVE" name="ACTIVE" type="NUMERIC" defaultValueNumeric="1"/>
+    </loadUpdateData>
+  </changeSet>
+
+  <changeSet author="cxbox" id="DICTIONARIES_POSTGRES" runOnChange="true" dbms="postgresql">
+     <delete tableName="DICTIONARY_ITEM_TR"/>
+    <delete tableName="DICTIONARY_TYPE"/>
+    <loadUpdateData tableName="DICTIONARY_ITEM" primaryKey="TYPE,KEY" encoding="UTF-8" separator=";"
+      quotchar="&quot;" file="db/data/cxbox/DICTIONARY.csv">
+      <column header="TYPE" name="TYPE" type="STRING"/>
+      <column header="DISPLAY_ORDER" name="DISPLAY_ORDER" type="NUMERIC"/>
+      <column header="KEY" name="KEY" type="STRING"/>
+      <column header="VALUE" name="VALUE" type="STRING"/>
+      <column header="DESCRIPTION" name="DESCRIPTION" type="STRING"/>
+      <column header="ACTIVE" name="ACTIVE" type="BOOLEAN" defaultValueBoolean="true"/>
     </loadUpdateData>
   </changeSet>
 

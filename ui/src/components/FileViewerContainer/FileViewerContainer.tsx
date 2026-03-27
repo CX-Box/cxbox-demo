@@ -197,7 +197,7 @@ function FileViewerContainer({ isInline, widgetName, fieldKey }: FileViewerConta
                     width={POPUP_WIDTH}
                     className={styles.popup}
                 >
-                    <div style={{ width: VIEWER_WIDTH, height: VIEWER_HEIGHT }}>
+                    <div style={{ width: VIEWER_WIDTH, maxHeight: VIEWER_HEIGHT }}>
                         <FileViewer
                             fileName={fileName}
                             url={downloadUrl}

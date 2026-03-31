@@ -38,6 +38,21 @@
       "widgetName": "meetingDocumentsFormForList",
       "position": 70,
       "gridWidth": 24
+    },
+    {
+      "widgetName": "meetingDocumentsCardList",
+      "position": 80,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "meetingDocumentsCardCarouselList",
+      "position": 90,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "meetingDocumentPreview",
+      "position": 100,
+      "gridWidth": 24
     }
   ],
   "rolesAllowed": [

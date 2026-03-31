@@ -1,0 +1,40 @@
+{
+  "name": "meetingDocumentsCardList",
+  "title": "",
+  "type": "CardList",
+  "bc": "meetingDocumentEdit",
+  "fields": [
+    {
+      "title": "Status",
+      "key": "id",
+      "type": "dictionary",
+      "bgColor": "#fafafa"
+    },
+    {
+      "title": "File",
+      "key": "file",
+      "type": "fileUpload",
+      "fileIdKey": "fileId",
+      "preview": {
+        "enabled": true,
+        "mode": "inline"
+      },
+      "width": 200
+    }
+  ],
+  "options": {
+
+    "edit": {
+      "widget": "meetingDocumentsFormForList",
+      "style": "popup"
+    },
+    "actionGroups": {
+      "include": [
+        "create",
+        "associate",
+        "edit",
+        "delete"
+      ]
+    }
+  }
+}

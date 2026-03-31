@@ -39,11 +39,7 @@
       "position": 70,
       "gridWidth": 24
     },
-    {
-      "widgetName": "meetingDocumentsCardList",
-      "position": 80,
-      "gridWidth": 24
-    },
+
     {
       "widgetName": "meetingDocumentsCardCarouselList",
       "position": 90,

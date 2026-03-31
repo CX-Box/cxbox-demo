@@ -47,6 +47,13 @@
     </addColumn>
   </changeSet>
 
+  <changeSet id="add-default-bc-filter-groups-id-oracle" author="cxbox">
+    <addDefaultValue
+      tableName="BC_FILTER_GROUPS"
+      columnName="ID"
+      defaultValueComputed="${app_seq_next_val}"/>
+  </changeSet>
+
   <changeSet author="cxbox" id="BC_PROPERTIES TABLE">
     <createTable remarks="Поиск по умолчанию" tableName="BC_PROPERTIES">
       <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
@@ -172,6 +179,14 @@
       </column>
     </createTable>
   </changeSet>
+
+  <changeSet id="add-default-dictionary-item-id-oracle" author="cxbox">
+    <addDefaultValue
+      tableName="DICTIONARY_ITEM"
+      columnName="ID"
+      defaultValueComputed="${app_seq_next_val}"/>
+  </changeSet>
+
   <changeSet author="cxbox" id="DICTIONARY_ITEM_TR TABLE">
     <createTable remarks="Переводы простых справочников" tableName="DICTIONARY_ITEM_TR">
       <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)"/>
@@ -663,6 +678,7 @@
       </column>
     </addColumn>
   </changeSet>
+
   <changeSet author="cxbox" id="BC_FILTER_GROUPS INDEXES" dbms="postgresql">
     <addUniqueConstraint columnNames="NAME, BC" constraintName="BC_FILTER_GROUPS_UNIQUE"
       tableName="BC_FILTER_GROUPS"/>
@@ -690,10 +706,19 @@
       <column defaultValueNumeric="1" name="CREATED_BY_USER_ID"/>
     </createIndex>
   </changeSet>
-  <changeSet author="cxbox" id="BC_PROPERTIES UNIQUE_CONSTRAIN_POSTGRESS" dbms="postgresql">
+  <changeSet author="cxbox" id="BC_PROPERTIES INDEXES" dbms="postgresql">
     <addUniqueConstraint columnNames="BC" constraintName="BC_PROPERTIES_BC" tableName="BC_PROPERTIES"/>
+    <createIndex indexName="BC_PROPERTIES_BC_INDEX" tableName="BC_PROPERTIES" unique="true">
+      <column name="BC"/>
+    </createIndex>
+    <createIndex indexName="BC_PROPERTIES_IND1" tableName="BC_PROPERTIES">
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID"/>
+    </createIndex>
+    <createIndex indexName="BC_PROPERTIES_IND2" tableName="BC_PROPERTIES">
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"/>
+    </createIndex>
   </changeSet>
-  <changeSet author="cxbox" id="BC_PROPERTIES INDEXES">
+  <changeSet author="cxbox" id="BC_PROPERTIES INDEXES ORACLE" dbms="oracle">
     <createIndex indexName="BC_PROPERTIES_BC_INDEX" tableName="BC_PROPERTIES" unique="true">
       <column name="BC"/>
     </createIndex>
@@ -744,8 +769,7 @@
       <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"/>
     </createIndex>
   </changeSet>
-
-  <changeSet author="cxbox" id="DICTIONARY_ITEM_TR INDEXES ORACLE" dbms="oracle">
+  <changeSet author="cxbox" id="DICTIONARY_ITEM_TR INDEXES" dbms="oracle">
     <createIndex indexName="DICTIONARY_ITEM_TR_PK" tableName="DICTIONARY_ITEM_TR" unique="true">
       <column name="ID"/>
       <column name="LANGUAGE"/>
@@ -753,7 +777,7 @@
     <addPrimaryKey columnNames="ID, LANGUAGE" constraintName="DICTIONARY_ITEM_TR_PK"
       forIndexName="DICTIONARY_ITEM_TR_PK" tableName="DICTIONARY_ITEM_TR"/>
   </changeSet>
-  <changeSet author="cxbox" id="DICTIONARY_ITEM INDEXES_VALUE oracle" dbms="oracle">
+  <changeSet author="cxbox" id="DICTIONARY_ITEM INDEXES_VALUE" dbms="oracle">
     <createIndex indexName="DICTIONARY_ITEM_TR_VALUE" tableName="DICTIONARY_ITEM_TR" unique="true">
       <column name="ID"/>
       <column name="LANGUAGE"/>
@@ -775,10 +799,8 @@
       <column name="VALUE"/>
     </createIndex>
   </changeSet>
-  <changeSet author="cxbox" id="USERS UNIQUE_CONSTRAIN_POSTGRESS" dbms="postgresql">
+  <changeSet author="cxbox" id="USERS INDEXES" dbms="postgresql">
     <addUniqueConstraint columnNames="LOGIN" constraintName="UK_LOGIN_NAME" tableName="USERS"/>
-  </changeSet>
-  <changeSet author="cxbox" id="USERS INDEXES">
     <createIndex indexName="UK_LOGIN_NAME_INDEX" tableName="USERS" unique="true">
       <column name="LOGIN"/>
     </createIndex>
@@ -790,17 +812,54 @@
     </createIndex>
   </changeSet>
 
-  <changeSet author="cxbox" id="DICTIONARY_ITEM INDEXES Part 2">
+  <changeSet author="cxbox" id="USERS INDEXES ORACLE" dbms="oracle">
+    <createIndex indexName="UK_LOGIN_NAME_INDEX" tableName="USERS" unique="true">
+      <column name="LOGIN"/>
+    </createIndex>
+    <createIndex indexName="USERS_IND1" tableName="USERS">
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID"/>
+    </createIndex>
+    <createIndex indexName="USERS_IND2" tableName="USERS">
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet author="cxbox" id="DICTIONARY_ITEM INDEXES Part 2" dbms="postgresql">
+    <addUniqueConstraint columnNames="TYPE, VALUE" constraintName="DIC_SELECT_UNIQUE_TYPE_VALUE"
+      tableName="DICTIONARY_ITEM"/>
     <createIndex indexName="DIC_SELECT_UNIQUE_TYPE_VALUE_INDEX" tableName="DICTIONARY_ITEM" unique="true">
       <column name="TYPE"/>
       <column name="VALUE"/>
     </createIndex>
   </changeSet>
-  <changeSet author="cxbox" id="USER_ROLE INDEXES POSTGRESS" dbms="postgresql">
+
+  <changeSet author="cxbox" id="DICTIONARY_ITEM INDEXES Part 2 ORACLE" dbms="oracle">
+    <createIndex indexName="DIC_SELECT_UNIQUE_TYPE_VALUE_INDEX" tableName="DICTIONARY_ITEM" unique="true">
+      <column name="TYPE"/>
+      <column name="VALUE"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet author="cxbox" id="USER_ROLE INDEXES" dbms="postgresql">
     <addUniqueConstraint columnNames="USER_ID, INTERNAL_ROLE_CD" constraintName="USER_ROLE_UNIQUE"
       tableName="USER_ROLE"/>
+    <createIndex indexName="USER_ROLE_UNIQUE_INDEX" tableName="USER_ROLE" unique="true">
+      <column name="USER_ID"/>
+      <column name="INTERNAL_ROLE_CD"/>
+    </createIndex>
+
+    <createIndex indexName="USER_ROLE_IND1" tableName="USER_ROLE">
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID"/>
+    </createIndex>
+    <createIndex indexName="USER_ROLE_IND2" tableName="USER_ROLE">
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"/>
+    </createIndex>
+    <createIndex indexName="USER_ROLE_IND3" tableName="USER_ROLE">
+      <column name="USER_ID"/>
+    </createIndex>
   </changeSet>
-  <changeSet author="cxbox" id="USER_ROLE INDEXES">
+
+  <changeSet author="cxbox" id="USER_ROLE INDEXES ORACLE" dbms="oracle">
     <createIndex indexName="USER_ROLE_UNIQUE_INDEX" tableName="USER_ROLE" unique="true">
       <column name="USER_ID"/>
       <column name="INTERNAL_ROLE_CD"/>
@@ -1036,59 +1095,4 @@
       referencedColumnNames="ID" referencedTableName="USERS" validate="true"/>
   </changeSet>
 
-  <changeSet id="add-default-bc-filter-groups-id-oracle" author="cxbox">
-    <addDefaultValue
-      tableName="BC_FILTER_GROUPS"
-      columnName="ID"
-      defaultValueComputed="${app_seq_next_val}"/>
-  </changeSet>
-
-  <changeSet id="add-default-dictionary-item-id-oracle" author="cxbox">
-    <addDefaultValue
-      tableName="DICTIONARY_ITEM"
-      columnName="ID"
-      defaultValueComputed="${app_seq_next_val}"/>
-  </changeSet>
-
-  <changeSet id="migrate-view-to-view_name-postgres responsibilities_action" author="cxbox">
-    <preConditions onFail="MARK_RAN">
-      <dbms type="postgresql"/>
-      <columnExists tableName="responsibilities_action" columnName="view"/>
-      <columnExists tableName="responsibilities_action" columnName="view_name"/>
-    </preConditions>
-    <comment>Move data from column "view" to "view_name"</comment>
-    <sql>
-      UPDATE responsibilities_action
-      SET view_name = "view"
-      WHERE "view" IS NOT NULL AND view_name IS NULL;
-    </sql>
-  </changeSet>
-
-  <changeSet id="migrate-main-to-main_flg-postgres user_role" author="cxbox">
-    <preConditions onFail="MARK_RAN">
-      <dbms type="postgresql"/>
-      <columnExists tableName="user_role" columnName="main"/>
-      <columnExists tableName="user_role" columnName="main_flg"/>
-    </preConditions>
-    <comment>Move data from column "main" to "main_flg"</comment>
-    <sql>
-      UPDATE user_role
-      SET main_flg = "main"
-      WHERE "main" IS NOT NULL;
-    </sql>
-  </changeSet>
-
-  <changeSet id="migrate-file-to-file_name-postgres meeting_documents" author="cxbox">
-    <preConditions onFail="MARK_RAN">
-      <dbms type="postgresql"/>
-      <columnExists tableName="meeting_documents" columnName="file"/>
-      <columnExists tableName="meeting_documents" columnName="file_name"/>
-    </preConditions>
-    <comment>Move data from column "file" to "file_name"</comment>
-    <sql>
-      UPDATE meeting_documents
-      SET file_name = "file"
-      WHERE "file" IS NOT NULL;
-    </sql>
-  </changeSet>
 </databaseChangeLog>

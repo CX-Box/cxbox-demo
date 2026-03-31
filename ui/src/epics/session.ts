@@ -18,14 +18,16 @@ const ssoAuthEpic: RootEpic = action$ =>
         switchMap(() => {
             return from(Auth.init('/api/v1/auth/oidc.json')).pipe(
                 switchMap(userManager => {
-                    const params = new URLSearchParams(window.location.search)
+                    const params = new URLSearchParams(window.location.hash.split('?')[1])
                     const signInCallback = params.get('sign_in_callback')
 
                     if (signInCallback) {
                         return from(userManager.signinCallback()).pipe(
                             switchMap(user => {
                                 if (signInCallback === 'redirect') {
-                                    window.history.replaceState(null, '', '/' + window.location.hash)
+                                    const state = user?.state as Record<string, string | undefined>
+                                    const route = state.route ? state.route : ''
+                                    window.history.replaceState(null, '', route)
                                     return of(actions.login({ login: '', password: '' }))
                                 }
                                 return EMPTY
@@ -36,10 +38,14 @@ const ssoAuthEpic: RootEpic = action$ =>
                     return from(userManager.getUser()).pipe(
                         switchMap(user => {
                             if (user && !user.expired) {
-                                window.history.replaceState(null, '', '/' + window.location.hash)
+                                window.history.replaceState(null, '', window.location.pathname + window.location.hash)
                                 return of(actions.login({ login: '', password: '' }))
                             } else {
-                                userManager.signinRedirect()
+                                userManager.signinRedirect({
+                                    state: {
+                                        route: window.location.pathname + window.location.hash
+                                    }
+                                })
                                 return EMPTY
                             }
                         })

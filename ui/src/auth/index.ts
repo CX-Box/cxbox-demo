@@ -1,4 +1,4 @@
-import { Log, UserManager, WebStorageStateStore } from 'oidc-client-ts'
+import { Log, UserManager, WebStorageStateStore, UserManagerSettings } from 'oidc-client-ts'
 import axios from 'axios'
 
 Log.setLogger(console)
@@ -14,9 +14,9 @@ export class Auth {
         }
         const { data } = await axios.get(url)
 
-        const appBaseUrl = window.location.origin
+        const appBaseUrl = window.location.origin + '/ui/#/'
 
-        const oidcConfig = {
+        const oidcConfig: UserManagerSettings = {
             authority: data['authority'] || '',
             client_id: data['client_id'] || '',
             redirect_uri: `${appBaseUrl}?sign_in_callback=redirect`,

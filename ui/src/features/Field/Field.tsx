@@ -21,7 +21,6 @@ import { RootState } from '@store'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import { useTranslation } from 'react-i18next'
 import FieldErrorPopupWrapper from '@components/FieldErrorPopupWrapper/FieldErrorPopupWrapper'
-import { CustomFieldTypes } from '@interfaces/widget'
 
 interface FieldOwnProps {
     widgetFieldMeta: interfaces.WidgetField
@@ -205,23 +204,8 @@ const Field: FunctionComponent<FieldProps> = ({
     })
 
     /**
-     * Special case that stands out from the other types needs to be reworked
+     * Temporary solution until all fields are reworked to fit the file structure
      */
-    const componentTypeName =
-        widgetFieldMeta.type !== FieldType.inlinePickList ? capitalizeFirstLetter(widgetFieldMeta.type) : 'InlinePickList'
-    const FieldComponent = useMemo(
-        () =>
-            lazy(() =>
-                import(`@fields/${componentTypeName}/index`).catch(() => ({
-                    default: () => <div>Поле {componentTypeName} не найдено</div>
-                }))
-            ),
-        [componentTypeName]
-    )
-
-    if (!historyMode && widgetFieldMeta.snapshotKey && simpleDiffSupportedFieldTypes.includes(widgetFieldMeta.type)) {
-        return <HistoryField fieldMeta={widgetFieldMeta} data={data} bcName={bcName} cursor={cursor} widgetName={widgetName} />
-    }
 
     const showTime = [FieldType.dateTime, FieldType.dateTimeWithSeconds].includes(widgetFieldMeta.type)
     const showSeconds = widgetFieldMeta.type === FieldType.dateTimeWithSeconds
@@ -339,26 +323,31 @@ const Field: FunctionComponent<FieldProps> = ({
     }
 
     /**
-     * Temporary solution until all fields are reworked to fit the file structure
+     * Special case that stands out from the other types needs to be reworked
      */
-    const resultField = [
-        FieldType.dictionary,
-        FieldType.fileUpload,
-        FieldType.inlinePickList,
-        FieldType.money,
-        CustomFieldTypes.MultipleSelect,
-        FieldType.multivalue,
-        FieldType.number,
-        FieldType.percent,
-        FieldType.pickList,
-        CustomFieldTypes.SuggestionPickList,
-        CustomFieldTypes.Time
-    ].includes(widgetFieldMeta.type) ? (
+    const componentTypeName =
+        widgetFieldMeta.type !== FieldType.inlinePickList ? capitalizeFirstLetter(widgetFieldMeta.type) : 'InlinePickList'
+
+    const FieldComponent = useMemo(
+        () =>
+            lazy(() =>
+                import(`@fields/${componentTypeName}/index`).catch(() => ({
+                    default: () => {
+                        return standardField
+                    }
+                }))
+            ),
+        [componentTypeName, standardField]
+    )
+
+    if (!historyMode && widgetFieldMeta.snapshotKey && simpleDiffSupportedFieldTypes.includes(widgetFieldMeta.type)) {
+        return <HistoryField fieldMeta={widgetFieldMeta} data={data} bcName={bcName} cursor={cursor} widgetName={widgetName} />
+    }
+
+    const resultField = (
         <Suspense fallback={<span>Loading...</span>}>
             <FieldComponent {...commonProps} customProps={customProps} value={value} onBlur={handleInputBlur} onChange={handleChange} />
         </Suspense>
-    ) : (
-        standardField
     )
 
     if (metaError && showErrorPopup) {

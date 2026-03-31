@@ -545,6 +545,14 @@
     </createTable>
   </changeSet>
 
+  <changeSet author="cxbox" id="USER_ROLE_RENAME_MAIN_TO_MAIN_FLG" dbms="postgresql">
+    <renameColumn
+      tableName="USER_ROLE"
+      oldColumnName="MAIN"
+      newColumnName="MAIN_FLG"
+      columnDataType="VARCHAR2(255)"/>
+  </changeSet>
+
   <changeSet author="cxbox" id="USER_ROLE TABLE ORACLE" dbms="oracle">
     <createTable remarks="Роли пользователя" tableName="USER_ROLE">
       <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">

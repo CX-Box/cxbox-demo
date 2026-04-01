@@ -47,7 +47,7 @@
     </addColumn>
   </changeSet>
 
-  <changeSet id="add-default-bc-filter-groups-id-oracle" author="cxbox">
+  <changeSet id="add-default-bc-filter-groups-id" author="cxbox">
     <addDefaultValue
       tableName="BC_FILTER_GROUPS"
       columnName="ID"
@@ -180,7 +180,7 @@
     </createTable>
   </changeSet>
 
-  <changeSet id="add-default-dictionary-item-id-oracle" author="cxbox">
+  <changeSet id="add-default-dictionary-item-id" author="cxbox">
     <addDefaultValue
       tableName="DICTIONARY_ITEM"
       columnName="ID"

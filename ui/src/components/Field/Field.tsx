@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
-import { Icon, Input } from 'antd'
+import { Icon, Input, Spin } from 'antd'
 import DatePickerField from '@components/ui/DatePickerField/DatePickerField'
 import TextArea from '@components/ui/TextArea/TextArea'
 import MultiField from '@components/ui/MultiField/MultiField'
@@ -48,6 +48,7 @@ interface FieldProps extends FieldOwnProps {
     rowFieldMeta: interfaces.RowMetaField
     metaError: string
     showErrorPopup: boolean
+    pendingForceActiveFieldKey?: string
     onChange: (payload: ChangeDataItemPayload) => void
     onDrillDown: (widgetName: string, cursor: string, bcName: string, fieldKey: string) => void
 }
@@ -129,6 +130,7 @@ const Field: FunctionComponent<FieldProps> = ({
     showErrorPopup,
     suffixClassName,
     tooltipPlacement,
+    pendingForceActiveFieldKey,
     customProps,
     onChange,
     onDrillDown
@@ -139,7 +141,7 @@ const Field: FunctionComponent<FieldProps> = ({
 
     const value = forcedValue ? forcedValue : pendingValue !== undefined ? pendingValue : data?.[widgetFieldMeta.key]
 
-    const disabled = rowFieldMeta ? rowFieldMeta.disabled : true
+    const disabled = !!pendingForceActiveFieldKey || (rowFieldMeta ? rowFieldMeta.disabled : true)
 
     const placeholder = rowFieldMeta?.placeholder
 
@@ -260,6 +262,7 @@ const Field: FunctionComponent<FieldProps> = ({
                     bcName={bcName}
                     cursor={cursor}
                     readonly={readOnly}
+                    disabled={!!pendingForceActiveFieldKey}
                 />
             )
             break
@@ -324,7 +327,7 @@ const Field: FunctionComponent<FieldProps> = ({
             )
     }
 
-    const resultField = (
+    let resultField = (
         <CustomizationContext.Consumer>
             {context => {
                 const CustomComponent = (customFields as typeof context.customFields)?.[widgetFieldMeta.type]
@@ -345,6 +348,15 @@ const Field: FunctionComponent<FieldProps> = ({
             }}
         </CustomizationContext.Consumer>
     )
+
+    if (pendingForceActiveFieldKey === widgetFieldMeta.key && !readOnly) {
+        resultField = (
+            <div className={styles.spinnerContainer}>
+                {resultField}
+                <Spin className={styles.spinner} spinning={true} size="small" />
+            </div>
+        )
+    }
 
     if (metaError && showErrorPopup) {
         return (
@@ -379,12 +391,14 @@ function mapStateToProps(state: RootState, ownProps: FieldOwnProps) {
     const pendingValue = state.view.pendingDataChanges[ownProps.bcName]?.[ownProps.cursor]?.[ownProps.widgetFieldMeta.key]
     const widget = state.view.widgets.find(item => item.name === ownProps.widgetName)
     const showErrorPopup = widget?.type !== interfaces.WidgetTypes.Form && !ownProps.disableHoverError
+    const pendingForceActiveFieldKey = state.view.pendingForceActiveFieldKeys[ownProps.bcName]?.[ownProps.cursor]
     return {
         data: (ownProps.data || state.data[ownProps.bcName]?.find(item => item.id === ownProps.cursor)) as interfaces.DataItem,
         pendingValue,
         rowFieldMeta,
         metaError,
-        showErrorPopup
+        showErrorPopup,
+        pendingForceActiveFieldKey
     }
 }
 

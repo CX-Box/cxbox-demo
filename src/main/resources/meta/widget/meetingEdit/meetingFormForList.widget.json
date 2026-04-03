@@ -12,7 +12,7 @@
     {
       "label": "Agenda",
       "key": "agenda",
-      "type": "input"
+      "type": "richText"
     },
     {
       "label": "Start Date",

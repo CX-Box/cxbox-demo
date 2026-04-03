@@ -201,6 +201,10 @@ public class LoginServiceImpl implements LoginService {
 						feature(
 								UIProperties.WEB_SOCKET_NOTIFICATION_ENABLED,
 								uiProperties.isWebSocketNotificationEnabled()
+						),
+						feature(
+								UIProperties.BROWSER_NAVIGATION_WARN_ENABLED,
+								uiProperties.isBrowserNavigationWarnEnabled()
 						)
 				)
 				.filter(Objects::nonNull)

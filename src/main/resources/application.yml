@@ -54,6 +54,7 @@ cxbox:
     timeout-show-message: 10_000
     seasonal-effects-enabled: true
     web-socket-notification-enabled: true
+    browser-navigation-warn-enabled: true
   logging:
     global-handler:
       business-exception:

@@ -1,0 +1,44 @@
+{
+  "name": "meetingListMD",
+  "title": "",
+  "type": "List",
+  "bc": "meetingEdit",
+  "fields": [
+    {
+      "title": "Meeting",
+      "key": "id",
+      "type": "input",
+      "drillDown": "true",
+      "width": "10px"
+    },
+    {
+      "title": "Agenda",
+      "key": "agenda",
+      "type": "richText"
+    }
+  ],
+  "options": {
+    "pagination": {
+      "hideLimitOptions": false
+    },
+    "export": {
+      "enabled": true,
+      "title": "meeting"
+    },
+    "additional": {
+      "enabled": true
+    },
+    "actionGroups": {
+      "include": [
+        "create",
+        "edit",
+        "actions",
+        "sendEmail",
+        "sendEmailNextDay",
+        "massEdit",
+        "massSendEmail",
+        "customExportToExcel"
+      ]
+    }
+  }
+}

@@ -45,7 +45,7 @@
             min-height: 0;
             height: auto;
 
-            td {
+            > td {
                 min-height: 0;
                 height: auto;
                 border: none;
@@ -55,7 +55,7 @@
 }
 
 .tableWithRowMenu {
-    tbody td:last-child {
+    tbody > tr > td:last-child {
         padding-right: 45px;
     }
 }
@@ -130,7 +130,7 @@
 
         .ant-table-row:hover,
         .ant-table-row-hover {
-            td {
+            > td {
                 background: #fafafa !important;
             }
         }
@@ -171,11 +171,11 @@
         }
     }
 
-    .tableWithRowMenu thead th:last-child {
+    .tableWithRowMenu thead > tr > th:last-child {
       padding-right: calc(30px + 16px);
     }
 
-    .tableWithRowMenu tbody td:last-child {
+    .tableWithRowMenu tbody > tr > td:last-child {
         padding-right: calc(30px + 4px);
     }
 }
@@ -244,7 +244,7 @@
             overflow-x: auto !important;
 
             @-moz-document url-prefix() {
-                td {
+                > tr > td {
                     overflow: hidden !important;
                 }
             }

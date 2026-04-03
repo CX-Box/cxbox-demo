@@ -8,3 +8,7 @@ export function byType<T extends { type: string }, K extends T['type']>(
         return item.type === expectedType
     }
 }
+
+export function withoutType<T extends { type?: string }>(item: T): item is Exclude<T, { type: string }> {
+    return !('type' in item) || item.type === undefined
+}

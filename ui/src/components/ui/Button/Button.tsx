@@ -10,7 +10,9 @@ export const customTypes = {
     formOperationRed: 'formOperationRed',
     customDefault: 'customDefault',
     bar: 'bar',
-    empty: 'empty'
+    empty: 'empty',
+    mdToolbarButton: 'mdToolbarButton',
+    mdToolbarButtonPrimary: 'mdToolbarButtonPrimary'
 }
 
 export type CustomTypes = keyof typeof customTypes

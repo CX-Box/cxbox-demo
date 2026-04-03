@@ -1,0 +1,25 @@
+:global {
+  .editor {
+    .cm-editor {
+      padding: 1px 5px;
+    }
+
+    .cm-focused {
+      outline: none !important;
+    }
+
+    .markdown-source-editor {
+      height: 100%;
+      overflow-y: auto;
+
+      .cm-content ::selection {
+        background-color: Highlight !important;
+        color: HighlightText !important;
+      }
+
+      .cm-selectionBackground {
+        background-color: transparent !important;
+      }
+    }
+  }
+}

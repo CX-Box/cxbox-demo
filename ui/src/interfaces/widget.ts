@@ -20,7 +20,8 @@ import { SignaturePackage, SignatureType } from '@constants/cadesPlugin'
 export enum CustomFieldTypes {
     MultipleSelect = 'multipleSelect',
     Time = 'time',
-    SuggestionPickList = 'suggestionPickList'
+    SuggestionPickList = 'suggestionPickList',
+    RichText = 'richText'
 }
 
 export enum CustomWidgetTypes {

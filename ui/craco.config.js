@@ -32,6 +32,14 @@ module.exports = {
             const oneOfRule = webpackConfig.module.rules.find(rule => rule.oneOf)
 
             if (oneOfRule) {
+                // Disabling strict verification of ESM extensions
+                oneOfRule.oneOf.unshift({
+                    test: /\.m?js$/,
+                    resolve: {
+                        fullySpecified: false
+                    }
+                })
+
                 // Add our rule for the worker to the very beginning of the 'oneOf'.
                 // This ensures that Webpack will handle the '.worker.min.js' as a resource (just copy),
                 // before it gets to the standard rule for '.js' files that tries to bundle them.

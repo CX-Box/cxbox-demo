@@ -1,16 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import { Icon } from 'antd'
-import { FlowAnalysisGraph as AntFlowAnalysisGraph } from '@ant-design/graphs'
+import { FlowAnalysisGraph as AntFlowAnalysisGraph, IGraph } from '@ant-design/graphs'
 import { useAppDispatch, useAppSelector } from '@store'
-import {
-    collapseNodeRecursively,
-    getEdgeBgColor,
-    getNodeBgColor,
-    hasCycles,
-    hasDuplicateEdges,
-    mapToFlowGraphData,
-    showSubTree
-} from './utils'
+import { useGraphSizeChange } from './hooks/useGraphSizeChange'
+import { collapseNodeRecursively, getEdgeBgColor, getNodeBgColor, hasDuplicateEdges, mapToFlowGraphData, showSubTree } from './utils'
 import { actions } from '@actions'
 import {
     anchorPointsByMode,
@@ -54,6 +47,8 @@ const RelationGraph: React.FC<RelationGraphProps> = ({ meta, setDataValidationEr
     const initialData = useAppSelector(state => state.data[bcName])
     const cursor = useAppSelector(state => state.screen.bo.bc[bcName]?.cursor)
 
+    const containerRef = useRef<HTMLDivElement>(null)
+    const graphRef = useRef<IGraph>()
     const cursorRef = useRef(cursor)
 
     const { mode, dragNode, nodes, edges } = options?.relationGraph || {}
@@ -65,8 +60,6 @@ const RelationGraph: React.FC<RelationGraphProps> = ({ meta, setDataValidationEr
         [initialData, sourceNodeKey, targetNodeKey]
     )
 
-    const hasCycle = useMemo(() => hasCycles(initialData, sourceNodeKey, targetNodeKey), [initialData, sourceNodeKey, targetNodeKey])
-
     const nodeFieldMeta = useMemo(() => {
         return fields.find(field => field.key === targetNodeKey)
     }, [fields, targetNodeKey])
@@ -76,7 +69,7 @@ const RelationGraph: React.FC<RelationGraphProps> = ({ meta, setDataValidationEr
     }, [fields])
 
     const data = useMemo(() => {
-        if (hasDuplicates || hasCycle) {
+        if (hasDuplicates) {
             return null
         }
 
@@ -88,16 +81,7 @@ const RelationGraph: React.FC<RelationGraphProps> = ({ meta, setDataValidationEr
             edges?.labelFieldKeys,
             nodes?.descriptionFieldKeys
         ) as any
-    }, [
-        hasDuplicates,
-        hasCycle,
-        initialData,
-        sourceNodeKey,
-        targetNodeKey,
-        nodeFieldMeta?.width,
-        edges?.labelFieldKeys,
-        nodes?.descriptionFieldKeys
-    ])
+    }, [hasDuplicates, initialData, sourceNodeKey, targetNodeKey, nodeFieldMeta?.width, edges?.labelFieldKeys, nodes?.descriptionFieldKeys])
 
     const onClick = useCallback(
         (itemId: string, valueFieldMeta?: WidgetListField) => {
@@ -247,9 +231,7 @@ const RelationGraph: React.FC<RelationGraphProps> = ({ meta, setDataValidationEr
                     )
                 },
                 onReady: graph => {
-                    graph.on('afterrender', () => {
-                        graph.fitView()
-                    })
+                    graphRef.current = graph
 
                     graph.once('afterlayout', () => {
                         const collapsedNodeItems = graph.getNodes().filter(node => !(node.getModel()?.value as any)?.expanded)
@@ -287,7 +269,6 @@ const RelationGraph: React.FC<RelationGraphProps> = ({ meta, setDataValidationEr
                                 const id = node.getID()
                                 showSubTree(graph, id)
                                 graph.updateItem(id, { collapsed: false })
-                                graph.layout()
                             }
                             return
                         }
@@ -316,16 +297,22 @@ const RelationGraph: React.FC<RelationGraphProps> = ({ meta, setDataValidationEr
     }, [cursor])
 
     useEffect(() => {
-        if (hasDuplicates || hasCycle) {
+        if (hasDuplicates) {
             setDataValidationError()
         }
-    }, [hasCycle, hasDuplicates, setDataValidationError])
+    }, [hasDuplicates, setDataValidationError])
+
+    useGraphSizeChange(containerRef, graphRef)
 
     if (!config) {
         return null
     }
 
-    return <AntFlowAnalysisGraph {...config} />
+    return (
+        <div ref={containerRef}>
+            <AntFlowAnalysisGraph {...config} />
+        </div>
+    )
 }
 
 export default RelationGraph

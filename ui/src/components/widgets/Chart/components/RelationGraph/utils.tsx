@@ -115,66 +115,26 @@ export const hasDuplicateEdges = (data: DataItem[], sourceNodeKey: string, targe
     return false
 }
 
-export const hasCycles = (data: DataItem[], sourceNodeKey: string, targetNodeKey: string) => {
-    const graph = new Map<string, string[]>()
-
-    data.forEach((item: any) => {
-        if (!item[sourceNodeKey]) {
-            return
-        }
-
-        if (!graph.has(item[sourceNodeKey])) {
-            graph.set(item[sourceNodeKey], [])
-        }
-
-        graph.get(item[sourceNodeKey])!.push(item[targetNodeKey])
-    })
-
-    const visited = new Set<string>()
-    const stack = new Set<string>()
-
-    const dfs = (node: string): boolean => {
-        if (stack.has(node)) {
-            return true
-        }
-
-        if (visited.has(node)) {
-            return false
-        }
-
-        visited.add(node)
-        stack.add(node)
-
-        const neighbors = graph.get(node) || []
-        for (const next of neighbors) {
-            if (dfs(next)) {
-                return true
-            }
-        }
-
-        stack.delete(node)
-        return false
+export const collapseNodeRecursively = (graph: IGraph, nodeId: string, visited = new Set<string>()) => {
+    if (visited.has(nodeId)) {
+        return
     }
 
-    for (const node of graph.keys()) {
-        if (dfs(node)) {
-            return true
-        }
-    }
+    visited.add(nodeId)
 
-    return false
-}
-
-export const collapseNodeRecursively = (graph: IGraph, nodeId: string) => {
     const edges = graph.getEdges().filter(edge => edge.getSource().getID() === nodeId)
 
     edges.forEach(edge => {
         const target = edge.getTarget()
 
-        graph.hideItem(edge)
-        graph.hideItem(target)
+        graph.updateItem(edge, {
+            visible: false
+        })
+        graph.updateItem(target, {
+            visible: false
+        })
 
-        collapseNodeRecursively(graph, target.getID())
+        collapseNodeRecursively(graph, target.getID(), visited)
     })
 }
 
@@ -193,8 +153,12 @@ export const showSubTree = (graph: IGraph, nodeId: string) => {
             const { source, target } = (edge as any).getModel()
 
             if (source === current) {
-                graph.showItem(edge)
-                graph.showItem(target)
+                graph.updateItem(edge, {
+                    visible: true
+                })
+                graph.updateItem(target, {
+                    visible: true
+                })
                 graph.updateItem(target, { collapsed: false })
                 queue.push(target)
             }

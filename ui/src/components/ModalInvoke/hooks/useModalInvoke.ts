@@ -1,27 +1,9 @@
 import { useAppSelector } from '@store'
 import { shallowEqual, useDispatch } from 'react-redux'
-import { useTranslation } from 'react-i18next'
 import { actions, OperationPostInvokeConfirmType, OperationPreInvokeType } from '@cxbox-ui/core'
 import { useCallback } from 'react'
 import { AnyAction } from '@reduxjs/toolkit'
-
-type DefaultTextDictionary = {
-    default: string
-    [key: string]: string
-}
-
-const DEFAULT_MESSAGES: DefaultTextDictionary = {
-    [OperationPostInvokeConfirmType.confirm]: 'Perform an additional action?',
-    [OperationPreInvokeType.info]: 'Action has warning',
-    [OperationPreInvokeType.error]: 'Action cannot be performed',
-    default: ''
-}
-
-const DEFAULT_TITLES: DefaultTextDictionary = {
-    [OperationPreInvokeType.info]: '',
-    [OperationPreInvokeType.error]: '',
-    default: 'Are you sure?'
-}
+import { useModalInvokeTexts } from '@components/ModalInvoke/hooks/useModalInvokeTexts'
 
 export const useModalInvoke = (mode: 'mass' | 'default' = 'default') => {
     const { bcName, operationType, widgetName, confirmOperation, confirmOperationType, visible } = useAppSelector(state => {
@@ -39,12 +21,7 @@ export const useModalInvoke = (mode: 'mass' | 'default' = 'default') => {
         }
     }, shallowEqual)
 
-    const { t } = useTranslation()
-
-    const okText = confirmOperation?.okText || t('Ok')
-    const cancelText = confirmOperation?.cancelText || t('Cancel')
-    const message = confirmOperation?.message ?? t(DEFAULT_MESSAGES[confirmOperationType] ?? DEFAULT_MESSAGES.default)
-    const title = confirmOperation?.messageContent ?? t(DEFAULT_TITLES[confirmOperationType] ?? DEFAULT_TITLES.default)
+    const modalInvokeTexts = useModalInvokeTexts(confirmOperationType, confirmOperation)
 
     const dispatch = useDispatch()
 
@@ -66,10 +43,7 @@ export const useModalInvoke = (mode: 'mass' | 'default' = 'default') => {
         operationType,
         widgetName,
         visible,
-        title,
-        message,
-        okText,
-        cancelText,
+        ...modalInvokeTexts,
         confirmOperationType,
         closeModal,
         sendOperation

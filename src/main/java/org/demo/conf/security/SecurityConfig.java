@@ -38,12 +38,15 @@ public class SecurityConfig {
 	private final MetaConfigurationProperties metaConfigurationProperties;
 	private final OidcJwtTokenConverter oidcJwtTokenConverter;
 	private final AuthBasicConfigProperties authBasicConfigProperties;
+	private final NonEmptyRolesAuthorizationManager nonEmptyRolesAuthorizationManager;
 
 	public SecurityConfig(UserService userService, UIProperties uiProperties, MetaConfigurationProperties metaConfigurationProperties, @Qualifier("tokenConverterProperties") TokenConverterProperties properties, CxboxAuthUserRepository cxboxAuthUserRepository,
-			AuthBasicConfigProperties authBasicConfigProperties, UserRoleService userRoleService) {
+			AuthBasicConfigProperties authBasicConfigProperties, UserRoleService userRoleService,
+			NonEmptyRolesAuthorizationManager nonEmptyRolesAuthorizationManager) {
 		this.uiProperties = uiProperties;
 		this.metaConfigurationProperties = metaConfigurationProperties;
 		this.authBasicConfigProperties = authBasicConfigProperties;
+		this.nonEmptyRolesAuthorizationManager = nonEmptyRolesAuthorizationManager;
 		this.oidcJwtTokenConverter = new OidcJwtTokenConverter(new JwtGrantedAuthoritiesConverter(), properties,
 				userService, userRoleService, cxboxAuthUserRepository, uiProperties
 		);
@@ -88,8 +91,7 @@ public class SecurityConfig {
 						.requestMatchers("/v3/api-docs/**").permitAll()
 						.requestMatchers("/api/v1/websocketnotification/**").fullyAuthenticated()
 						.requestMatchers("/api/v1/notification/**").fullyAuthenticated()
-						.requestMatchers("/**").fullyAuthenticated())
-		;
+						.requestMatchers("/**").access(nonEmptyRolesAuthorizationManager));
 		if (Boolean.TRUE.equals(authBasicConfigProperties.getEnabled())) {
 			http.httpBasic(c -> c.authenticationEntryPoint(customBasicAuthenticationEntryPoint()));
 		} else {

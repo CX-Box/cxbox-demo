@@ -764,12 +764,6 @@
       <column name="TYPE"/>
       <column name="KEY"/>
     </createIndex>
-    <!--<addUniqueConstraint columnNames="TYPE, DISPLAY_ORDER" constraintName="DIC_SELECT_UNIQUE_TYPE_ORDER"
-      tableName="DICTIONARY_ITEM"/>-->
-    <!--<createIndex indexName="DIC_SELECT_UNIQUE_TYPE_ORDER_INDEX" tableName="DICTIONARY_ITEM" unique="true">
-      <column name="TYPE"/>
-      <column name="DISPLAY_ORDER"/>
-    </createIndex>-->
     <createIndex indexName="DICTIONARY_ITEM_IND1" tableName="DICTIONARY_ITEM">
       <column defaultValueNumeric="1" name="CREATED_BY_USER_ID"/>
     </createIndex>

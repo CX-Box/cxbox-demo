@@ -29,16 +29,6 @@
       <column header="MAIN" name="MAIN_FLG" type="BOOLEAN"/>
     </loadData>
   </changeSet>
-  <changeSet author="cxbox" id="INITIAL DATA(2) ORACLE"  dbms="oracle">
-    <loadData tableName="USER_ROLE" encoding="UTF-8" separator=";" quotchar="&quot;"
-      file="db/data/cxbox/USER_ROLE_ORACLE.csv">
-      <column header="ID" name="ID" type="NUMERIC"/>
-      <column header="USER_ID" name="USER_ID" type="NUMERIC"/>
-      <column header="INTERNAL_ROLE_CD" name="INTERNAL_ROLE_CD" type="STRING"/>
-      <column header="ACTIVE" name="ACTIVE" type="NUMERIC"/>
-      <column header="MAIN" name="MAIN_FLG" type="NUMERIC"/>
-    </loadData>
-  </changeSet>
 
   <changeSet id="cxbox_bc_filter_groups" author="cxbox" runOnChange="true" context="local">
     <loadUpdateData tableName="bc_filter_groups" primaryKey="ID" encoding="UTF-8" separator=";" quotchar="&quot;"

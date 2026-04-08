@@ -38,7 +38,7 @@ public class MeetingDocuments extends BaseEntity {
 	@Column
 	private Briefings briefing;
 
-	@Column
+	@Column(name = "document_name")
 	@Enumerated(EnumType.STRING)
 	private Documents document;
 

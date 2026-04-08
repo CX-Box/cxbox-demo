@@ -105,11 +105,9 @@ const simpleDiffSupportedFieldTypes = [
 const emptyFieldMeta = [] as any
 
 /**
- *
- * @param props
- * @category Components
+ * @deprecated FOR MIGRATION PURPOSES ONLY
  */
-const Field: FunctionComponent<FieldProps> = ({
+const DeprecatedFields: React.FC<FieldProps> = ({
     bcName,
     widgetName,
     widgetFieldMeta,
@@ -122,18 +120,13 @@ const Field: FunctionComponent<FieldProps> = ({
     className,
     metaError,
     readonly: readOnly,
-    historyMode,
     forceFocus,
-    showErrorPopup,
     suffixClassName,
-    tooltipPlacement,
-    customProps,
     onChange,
     onDrillDown
 }) => {
     const { t } = useTranslation()
     const [localValue, setLocalValue] = React.useState<string | null>(null)
-    let standardField: React.ReactChild | null = null
 
     const value = forcedValue ? forcedValue : pendingValue !== undefined ? pendingValue : data?.[widgetFieldMeta.key]
 
@@ -214,7 +207,7 @@ const Field: FunctionComponent<FieldProps> = ({
         case FieldType.date:
         case FieldType.dateTime:
         case FieldType.dateTimeWithSeconds:
-            standardField = (
+            return (
                 <DatePickerField
                     {...commonProps}
                     onChange={handleChange}
@@ -223,9 +216,8 @@ const Field: FunctionComponent<FieldProps> = ({
                     showSeconds={showSeconds}
                 />
             )
-            break
         case FieldType.text:
-            standardField = (
+            return (
                 <TextArea
                     {...commonProps}
                     maxInput={widgetFieldMeta.maxInput}
@@ -234,9 +226,8 @@ const Field: FunctionComponent<FieldProps> = ({
                     className={cn({ [readOnlyFieldStyles.error]: metaError })}
                 />
             )
-            break
         case FieldType.multifield:
-            standardField = (
+            return (
                 <MultiField
                     {...commonProps}
                     fields={widgetFieldMeta.fields}
@@ -247,9 +238,8 @@ const Field: FunctionComponent<FieldProps> = ({
                     style={widgetFieldMeta.style}
                 />
             )
-            break
         case FieldType.checkbox:
-            standardField = (
+            return (
                 <CheckboxPicker
                     {...commonProps}
                     fieldName={widgetFieldMeta.key}
@@ -260,25 +250,22 @@ const Field: FunctionComponent<FieldProps> = ({
                     readonly={readOnly}
                 />
             )
-            break
         case FieldType.multivalueHover:
-            standardField = (
+            return (
                 <MultivalueHover
                     {...commonProps}
                     data={(value || emptyMultivalue) as interfaces.MultivalueSingleValue[]}
                     displayedValue={widgetFieldMeta.displayedKey && data?.[widgetFieldMeta.displayedKey]}
                 />
             )
-            break
         case FieldType.hint:
-            standardField = (
+            return (
                 <ReadOnlyField {...commonProps} className={cn(className, readOnlyFieldStyles.hint)}>
                     {value}
                 </ReadOnlyField>
             )
-            break
         case FieldType.radio:
-            standardField = (
+            return (
                 <RadioButton
                     {...commonProps}
                     value={value as any}
@@ -286,9 +273,8 @@ const Field: FunctionComponent<FieldProps> = ({
                     onChange={handleChange}
                 />
             )
-            break
         default:
-            standardField = readOnly ? (
+            return readOnly ? (
                 <ReadOnlyField {...commonProps}>{value}</ReadOnlyField>
             ) : (
                 <InteractiveInput
@@ -321,23 +307,114 @@ const Field: FunctionComponent<FieldProps> = ({
                 </InteractiveInput>
             )
     }
+}
+
+/**
+ * @deprecated FOR MIGRATION PURPOSES ONLY
+ */
+const ConnectedDeprecatedFields = connect(mapStateToProps, mapDispatchToProps)(DeprecatedFields)
+
+const Field: FunctionComponent<FieldProps> = props => {
+    const {
+        bcName,
+        widgetName,
+        widgetFieldMeta,
+        cursor,
+        forcedValue,
+        pendingValue,
+        data,
+        rowFieldMeta,
+        disableDrillDown,
+        className,
+        metaError,
+        readonly: readOnly,
+        historyMode,
+        showErrorPopup,
+        tooltipPlacement,
+        customProps,
+        onChange,
+        onDrillDown
+    } = props
+    const { t } = useTranslation()
+    const [localValue, setLocalValue] = React.useState<string | null>(null)
+
+    const value = forcedValue ? forcedValue : pendingValue !== undefined ? pendingValue : data?.[widgetFieldMeta.key]
+
+    const disabled = rowFieldMeta ? rowFieldMeta.disabled : true
+
+    const placeholder = rowFieldMeta?.placeholder
+
+    const handleChange = React.useCallback(
+        eventValue => {
+            const dataItem = { [widgetFieldMeta.key]: eventValue }
+            setLocalValue(null)
+            onChange({ bcName, cursor, dataItem })
+        },
+        [bcName, cursor, widgetFieldMeta.key, onChange]
+    )
+
+    const bgColor = widgetFieldMeta.bgColorKey ? (data?.[widgetFieldMeta.bgColorKey] as string) : widgetFieldMeta.bgColor
+
+    const handleDrilldown = React.useMemo(() => {
+        return !disableDrillDown && widgetFieldMeta.drillDown
+            ? () => {
+                  onDrillDown(widgetName, data?.id, bcName, widgetFieldMeta.key)
+              }
+            : undefined
+    }, [disableDrillDown, widgetFieldMeta.drillDown, widgetFieldMeta.key, onDrillDown, widgetName, data?.id, bcName])
+
+    const handleInputBlur = React.useCallback(() => {
+        if (localValue != null) {
+            handleChange(localValue)
+        }
+    }, [localValue, handleChange])
+
+    const commonProps: BaseFieldProps = {
+        cursor,
+        widgetName,
+        meta: widgetFieldMeta,
+        className: cn(className),
+        metaError: t(metaError),
+        disabled,
+        placeholder,
+        readOnly,
+        backgroundColor: bgColor,
+        onDrillDown: handleDrilldown
+    }
+    const commonInputProps: any = {
+        cursor,
+        meta: widgetFieldMeta,
+        className,
+        disabled,
+        placeholder,
+        readOnly
+    }
+
+    Object.keys(commonProps).forEach(key => {
+        if ((commonProps as Record<string, any>)[key] === undefined) {
+            delete (commonProps as Record<string, any>)[key]
+        }
+    })
+
+    Object.keys(commonInputProps).forEach(key => {
+        if (commonInputProps[key] === undefined) {
+            delete commonInputProps[key]
+        }
+    })
 
     /**
      * Special case that stands out from the other types needs to be reworked
      */
     const componentTypeName =
         widgetFieldMeta.type !== FieldType.inlinePickList ? capitalizeFirstLetter(widgetFieldMeta.type) : 'InlinePickList'
-
     const FieldComponent = useMemo(
         () =>
             lazy(() =>
                 import(`@fields/${componentTypeName}/index`).catch(() => ({
-                    default: () => {
-                        return standardField
-                    }
+                    default: ConnectedDeprecatedFields
                 }))
             ),
-        [componentTypeName, standardField]
+        [componentTypeName]
     )
 
     if (!historyMode && widgetFieldMeta.snapshotKey && simpleDiffSupportedFieldTypes.includes(widgetFieldMeta.type)) {
@@ -346,7 +423,14 @@ const Field: FunctionComponent<FieldProps> = ({
 
     const resultField = (
         <Suspense fallback={<span>Loading...</span>}>
-            <FieldComponent {...commonProps} customProps={customProps} value={value} onBlur={handleInputBlur} onChange={handleChange} />
+            <FieldComponent
+                {...props}
+                {...commonProps}
+                customProps={customProps}
+                value={value}
+                onBlur={handleInputBlur}
+                onChange={handleChange}
+            />
         </Suspense>
     )
 

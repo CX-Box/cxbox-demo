@@ -5,6 +5,16 @@
   "url": "/screen/meeting/view/meetinglist",
   "widgets": [
     {
+      "widgetName": "meetingFormMD",
+      "position": 0,
+      "gridWidth": 18
+    },
+    {
+      "widgetName": "meetingListMD",
+      "position": 0,
+      "gridWidth": 6
+    },
+    {
       "widgetName": "secondLevelMenu",
       "position": 0,
       "gridWidth": 24

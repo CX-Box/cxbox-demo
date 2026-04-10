@@ -51,6 +51,13 @@ interface FieldProps extends FieldOwnProps {
 }
 
 /**
+ * @deprecated
+ */
+interface DeprecatedFieldProps {
+    deprecatedFieldProps: FieldProps
+}
+
+/**
  * Basic set of properties passed to every field type, including custom fields
  */
 export interface BaseFieldProps {
@@ -107,24 +114,25 @@ const emptyFieldMeta = [] as any
 /**
  * @deprecated FOR MIGRATION PURPOSES ONLY
  */
-const DeprecatedFields: React.FC<FieldProps> = ({
-    bcName,
-    widgetName,
-    widgetFieldMeta,
-    cursor,
-    forcedValue,
-    pendingValue,
-    data,
-    rowFieldMeta,
-    disableDrillDown,
-    className,
-    metaError,
-    readonly: readOnly,
-    forceFocus,
-    suffixClassName,
-    onChange,
-    onDrillDown
-}) => {
+const DeprecatedFields: React.FC<DeprecatedFieldProps> = props => {
+    const {
+        bcName,
+        widgetName,
+        widgetFieldMeta,
+        cursor,
+        forcedValue,
+        pendingValue,
+        data,
+        rowFieldMeta,
+        disableDrillDown,
+        className,
+        metaError,
+        readonly: readOnly,
+        forceFocus,
+        suffixClassName,
+        onChange,
+        onDrillDown
+    } = props.deprecatedFieldProps
     const { t } = useTranslation()
     const [localValue, setLocalValue] = React.useState<string | null>(null)
 
@@ -424,12 +432,12 @@ const Field: FunctionComponent<FieldProps> = props => {
     const resultField = (
         <Suspense fallback={<span>Loading...</span>}>
             <FieldComponent
-                {...props}
                 {...commonProps}
                 customProps={customProps}
                 value={value}
                 onBlur={handleInputBlur}
                 onChange={handleChange}
+                deprecatedFieldProps={props}
             />
         </Suspense>
     )

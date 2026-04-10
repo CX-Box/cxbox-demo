@@ -51,8 +51,7 @@
     </loadUpdateData>
   </changeSet>
 
-
-  <changeSet author="cxbox" id="DICTIONARIES" runOnChange="true" dbms="oracle">
+  <changeSet author="cxbox" id="DICTIONARIES" runOnChange="true">
     <delete tableName="DICTIONARY_ITEM_TR"/>
     <delete tableName="DICTIONARY_TYPE"/>
 

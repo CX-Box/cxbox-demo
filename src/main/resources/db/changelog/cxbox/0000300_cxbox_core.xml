@@ -771,13 +771,11 @@
       <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"/>
     </createIndex>
   </changeSet>
-  <changeSet author="cxbox" id="DICTIONARY_ITEM_TR INDEXES" dbms="oracle">
+  <changeSet author="cxbox" id="DICTIONARY_ITEM_TR INDEXES ORACLE" dbms="oracle">
     <createIndex indexName="DICTIONARY_ITEM_TR_PK" tableName="DICTIONARY_ITEM_TR" unique="true">
       <column name="ID"/>
       <column name="LANGUAGE"/>
     </createIndex>
-    <addPrimaryKey columnNames="ID, LANGUAGE" constraintName="DICTIONARY_ITEM_TR_PK"
-      forIndexName="DICTIONARY_ITEM_TR_PK" tableName="DICTIONARY_ITEM_TR"/>
   </changeSet>
   <changeSet author="cxbox" id="DICTIONARY_ITEM INDEXES_VALUE" dbms="oracle">
     <createIndex indexName="DICTIONARY_ITEM_TR_VALUE" tableName="DICTIONARY_ITEM_TR" unique="true">

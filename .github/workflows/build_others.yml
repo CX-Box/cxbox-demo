@@ -120,6 +120,17 @@ jobs:
           esac
                   echo "✅ MR title is valid."
 
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: temurin
+          cache: maven
+
+      - name: Run Oracle integration tests
+        run: mvn -B test -Dtest=OracleTest
+
       - name: Set up JDK ${{ matrix.java }}
         uses: actions/setup-java@v3
         with:

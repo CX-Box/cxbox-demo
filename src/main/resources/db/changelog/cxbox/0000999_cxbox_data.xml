@@ -62,7 +62,7 @@
       <column header="KEY" name="KEY" type="STRING"/>
       <column header="VALUE" name="VALUE" type="STRING"/>
       <column header="DESCRIPTION" name="DESCRIPTION" type="STRING"/>
-      <column header="ACTIVE" name="ACTIVE" type="NUMERIC" defaultValue="${default_value_DI}"/>
+      <column header="ACTIVE" name="ACTIVE" type="BOOLEAN" defaultValue="${default_value_DI}"/>
     </loadUpdateData>
   </changeSet>
 

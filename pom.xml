@@ -138,13 +138,11 @@
       <version>${postgresql.version}</version>
     </dependency>
 
-    <!--see README_DB.MD
     <dependency>
       <groupId>com.oracle.database.jdbc</groupId>
-      <artifactId>ojdbc10</artifactId>
-      <version>19.21.0.0</version>
-    </dependency>-->
-
+      <artifactId>ojdbc11</artifactId>
+      <version>23.3.0.23.09</version>
+    </dependency>
     <!--cxbox dependencies-->
     <dependency>
       <groupId>org.cxbox</groupId>
@@ -163,6 +161,19 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>oracle-xe</artifactId>
+      <version>1.19.8</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>1.19.8</version>
       <scope>test</scope>
     </dependency>
 

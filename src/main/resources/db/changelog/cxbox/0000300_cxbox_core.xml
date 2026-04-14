@@ -47,6 +47,13 @@
     </addColumn>
   </changeSet>
 
+  <changeSet id="add-default-bc-filter-groups-id" author="cxbox">
+    <addDefaultValue
+      tableName="BC_FILTER_GROUPS"
+      columnName="ID"
+      defaultValueComputed="${app_seq_next_val}"/>
+  </changeSet>
+
   <changeSet author="cxbox" id="BC_PROPERTIES TABLE">
     <createTable remarks="Поиск по умолчанию" tableName="BC_PROPERTIES">
       <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
@@ -172,6 +179,14 @@
       </column>
     </createTable>
   </changeSet>
+
+  <changeSet id="add-default-dictionary-item-id" author="cxbox">
+    <addDefaultValue
+      tableName="DICTIONARY_ITEM"
+      columnName="ID"
+      defaultValueComputed="${app_seq_next_val}"/>
+  </changeSet>
+
   <changeSet author="cxbox" id="DICTIONARY_ITEM_TR TABLE">
     <createTable remarks="Переводы простых справочников" tableName="DICTIONARY_ITEM_TR">
       <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)"/>
@@ -369,7 +384,7 @@
     </createTable>
   </changeSet>
 
-  <changeSet author="cxbox" id="RESPONSIBILITIES_ACTION TABLE">
+  <changeSet author="cxbox" id="RESPONSIBILITIES_ACTION TABLE"  dbms="postgresql">
     <createTable remarks="ROLE_ACTION" tableName="RESPONSIBILITIES_ACTION">
       <column name="ID" remarks="ID" type="NUMBER(19, 0)">
         <constraints primaryKey="true"/>
@@ -378,6 +393,43 @@
       <column name="INTERNAL_ROLE_CD" type="VARCHAR2(255)"/>
       <column name="ACTION" type="VARCHAR2(255)"/>
       <column name="VIEW" type="VARCHAR2(255)"/>
+      <column name="WIDGET" type="VARCHAR2(255)"/>
+
+      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="cxbox" id="RENAME_VIEW_TO_VIEW_NAME" dbms="postgresql">
+    <renameColumn
+      tableName="RESPONSIBILITIES_ACTION"
+      oldColumnName="VIEW"
+      newColumnName="VIEW_NAME"
+      columnDataType="VARCHAR2(255)"/>
+  </changeSet>
+
+  <changeSet author="cxbox" id="RESPONSIBILITIES_ACTION TABLE ORACLE"  dbms="oracle">
+    <createTable remarks="ROLE_ACTION" tableName="RESPONSIBILITIES_ACTION">
+      <column name="ID" remarks="ID" type="NUMBER(19, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+
+      <column name="INTERNAL_ROLE_CD" type="VARCHAR2(255)"/>
+      <column name="ACTION" type="VARCHAR2(255)"/>
+      <column name="VIEW_NAME" type="VARCHAR2(255)"/>
       <column name="WIDGET" type="VARCHAR2(255)"/>
 
       <column defaultValueComputed="current_timestamp" name="CREATED_DATE" type="TIMESTAMP(6)">
@@ -457,7 +509,7 @@
     </createTable>
   </changeSet>
 
-  <changeSet author="cxbox" id="USER_ROLE TABLE">
+  <changeSet author="cxbox" id="USER_ROLE TABLE" dbms="postgresql">
     <createTable remarks="Роли пользователя" tableName="USER_ROLE">
       <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
         <constraints primaryKey="true"/>
@@ -493,7 +545,54 @@
     </createTable>
   </changeSet>
 
-  <changeSet author="cxbox" id="ADDITIONAL_FIELDS TABLE">
+  <changeSet author="cxbox" id="USER_ROLE_RENAME_MAIN_TO_MAIN_FLG" dbms="postgresql">
+    <renameColumn
+      tableName="USER_ROLE"
+      oldColumnName="MAIN"
+      newColumnName="MAIN_FLG"
+      columnDataType="VARCHAR2(255)"/>
+  </changeSet>
+
+  <changeSet author="cxbox" id="USER_ROLE TABLE ORACLE" dbms="oracle">
+    <createTable remarks="Роли пользователя" tableName="USER_ROLE">
+      <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="USER_ID" remarks="Идентификатор пользователя" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="INTERNAL_ROLE_CD" remarks="TYPE = INTERNAL_ROLE Внутренняя роль в Системе"
+        type="VARCHAR2(255)"/>
+      <column name="ACTIVE" remarks="Признак активности роли" type="NUMBER(1)"  defaultValueNumeric="0">
+        <constraints nullable="false"/>
+      </column>
+      <column name="MAIN_FLG" remarks="Признак основная роль (последняя выбранная роль)" type="NUMBER(1)"  defaultValueNumeric="0">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="CREATED_DATE" remarks="Дата создания"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" remarks="Дата последнего обновления"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" remarks="Идентификатор пользователя-создателя"
+        type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"
+        remarks="Идентификатор последнего пользователя, обновившего запись" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="DIVISION_ID" remarks="Подразделение" type="NUMBER(19, 0)"/>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="cxbox" id="ADDITIONAL_FIELDS TABLE" dbms="postgresql">
     <createTable remarks="Добавленные поля" tableName="ADDITIONAL_FIELDS">
       <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
         <constraints primaryKey="true"/>
@@ -502,6 +601,53 @@
         <constraints nullable="false"/>
       </column>
       <column name="VIEW" remarks="Название VIEW" type="VARCHAR2(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="WIDGET" remarks="Название WIDGET" type="VARCHAR2(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="ORDER_FIELDS" remarks="Последовательность полей" type="VARCHAR2(400 BYTE)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="ADDED_TO_ADDITIONAL_FIELDS" remarks="Добавленные поля" type="VARCHAR2(4000 BYTE)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="REMOVED_FROM_ADDITIONAL_FIELDS" remarks="Скрытые поля" type="VARCHAR2(4000 BYTE)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueComputed="current_timestamp" name="UPDATED_DATE" remarks="Дата изменения"
+        type="TIMESTAMP(6)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+      <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
+  <changeSet author="cxbox" id="ADDITIONAL_FIELDS_VIEW_NAME" dbms="postgresql">
+    <renameColumn
+      tableName="ADDITIONAL_FIELDS"
+      oldColumnName="VIEW"
+      newColumnName="VIEW_NAME"
+      columnDataType="VARCHAR2(255)"/>
+  </changeSet>
+
+  <changeSet author="cxbox" id="ADDITIONAL_FIELDS TABLE ORACLE"  dbms="oracle">
+    <createTable remarks="Добавленные поля" tableName="ADDITIONAL_FIELDS">
+      <column name="ID" remarks="Идентификатор" type="NUMBER(19, 0)">
+        <constraints primaryKey="true"/>
+      </column>
+      <column name="USER_ID" remarks="Идентификатор пользователя" type="VARCHAR2(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="VIEW_NAME" remarks="Название VIEW" type="VARCHAR2(255)">
         <constraints nullable="false"/>
       </column>
       <column name="WIDGET" remarks="Название WIDGET" type="VARCHAR2(255)">
@@ -541,7 +687,7 @@
     </addColumn>
   </changeSet>
 
-  <changeSet author="cxbox" id="BC_FILTER_GROUPS INDEXES">
+  <changeSet author="cxbox" id="BC_FILTER_GROUPS INDEXES" dbms="postgresql">
     <addUniqueConstraint columnNames="NAME, BC" constraintName="BC_FILTER_GROUPS_UNIQUE"
       tableName="BC_FILTER_GROUPS"/>
     <createIndex indexName="BC_FILTER_GROUPS_UNIQUE_INDEX" tableName="BC_FILTER_GROUPS" unique="true">
@@ -555,7 +701,20 @@
       <column defaultValueNumeric="1" name="CREATED_BY_USER_ID"/>
     </createIndex>
   </changeSet>
-  <changeSet author="cxbox" id="BC_PROPERTIES INDEXES">
+
+  <changeSet author="cxbox" id="BC_FILTER_GROUPS INDEXES ORACLE" dbms="oracle">
+    <createIndex indexName="BC_FILTER_GROUPS_UNIQUE_INDEX" tableName="BC_FILTER_GROUPS" unique="true">
+      <column name="NAME"/>
+      <column name="BC"/>
+    </createIndex>
+    <createIndex indexName="BC_FILTER_GROUPS_IND2" tableName="BC_FILTER_GROUPS">
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"/>
+    </createIndex>
+    <createIndex indexName="BC_FILTER_GROUPS_IND1" tableName="BC_FILTER_GROUPS">
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="cxbox" id="BC_PROPERTIES INDEXES" dbms="postgresql">
     <addUniqueConstraint columnNames="BC" constraintName="BC_PROPERTIES_BC" tableName="BC_PROPERTIES"/>
     <createIndex indexName="BC_PROPERTIES_BC_INDEX" tableName="BC_PROPERTIES" unique="true">
       <column name="BC"/>
@@ -567,8 +726,19 @@
       <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"/>
     </createIndex>
   </changeSet>
+  <changeSet author="cxbox" id="BC_PROPERTIES INDEXES ORACLE" dbms="oracle">
+    <createIndex indexName="BC_PROPERTIES_BC_INDEX" tableName="BC_PROPERTIES" unique="true">
+      <column name="BC"/>
+    </createIndex>
+    <createIndex indexName="BC_PROPERTIES_IND1" tableName="BC_PROPERTIES">
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID"/>
+    </createIndex>
+    <createIndex indexName="BC_PROPERTIES_IND2" tableName="BC_PROPERTIES">
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"/>
+    </createIndex>
+  </changeSet>
 
-  <changeSet author="cxbox" id="DICTIONARY_ITEM INDEXES">
+  <changeSet author="cxbox" id="DICTIONARY_ITEM INDEXES" dbms="postgresql">
     <addUniqueConstraint columnNames="TYPE, KEY" constraintName="DIC_SELECT_UNIQUE_TYPE_KEY"
       tableName="DICTIONARY_ITEM"/>
     <createIndex indexName="DIC_SELECT_UNIQUE_TYPE_KEY_INDEX" tableName="DICTIONARY_ITEM" unique="true">
@@ -588,13 +758,24 @@
       <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"/>
     </createIndex>
   </changeSet>
-  <changeSet author="cxbox" id="DICTIONARY_ITEM_TR INDEXES" dbms="oracle">
+
+  <changeSet author="cxbox" id="DICTIONARY_ITEM INDEXES ORACLE" dbms="oracle">
+    <createIndex indexName="DIC_SELECT_UNIQUE_TYPE_KEY_INDEX" tableName="DICTIONARY_ITEM" unique="true">
+      <column name="TYPE"/>
+      <column name="KEY"/>
+    </createIndex>
+    <createIndex indexName="DICTIONARY_ITEM_IND1" tableName="DICTIONARY_ITEM">
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID"/>
+    </createIndex>
+    <createIndex indexName="DICTIONARY_ITEM_IND2" tableName="DICTIONARY_ITEM">
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="cxbox" id="DICTIONARY_ITEM_TR INDEXES ORACLE" dbms="oracle">
     <createIndex indexName="DICTIONARY_ITEM_TR_PK" tableName="DICTIONARY_ITEM_TR" unique="true">
       <column name="ID"/>
       <column name="LANGUAGE"/>
     </createIndex>
-    <addPrimaryKey columnNames="ID, LANGUAGE" constraintName="DICTIONARY_ITEM_TR_PK"
-      forIndexName="DICTIONARY_ITEM_TR_PK" tableName="DICTIONARY_ITEM_TR"/>
   </changeSet>
   <changeSet author="cxbox" id="DICTIONARY_ITEM INDEXES_VALUE" dbms="oracle">
     <createIndex indexName="DICTIONARY_ITEM_TR_VALUE" tableName="DICTIONARY_ITEM_TR" unique="true">
@@ -618,7 +799,7 @@
       <column name="VALUE"/>
     </createIndex>
   </changeSet>
-  <changeSet author="cxbox" id="USERS INDEXES">
+  <changeSet author="cxbox" id="USERS INDEXES" dbms="postgresql">
     <addUniqueConstraint columnNames="LOGIN" constraintName="UK_LOGIN_NAME" tableName="USERS"/>
     <createIndex indexName="UK_LOGIN_NAME_INDEX" tableName="USERS" unique="true">
       <column name="LOGIN"/>
@@ -631,7 +812,19 @@
     </createIndex>
   </changeSet>
 
-  <changeSet author="cxbox" id="DICTIONARY_ITEM INDEXES Part 2">
+  <changeSet author="cxbox" id="USERS INDEXES ORACLE" dbms="oracle">
+    <createIndex indexName="UK_LOGIN_NAME_INDEX" tableName="USERS" unique="true">
+      <column name="LOGIN"/>
+    </createIndex>
+    <createIndex indexName="USERS_IND1" tableName="USERS">
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID"/>
+    </createIndex>
+    <createIndex indexName="USERS_IND2" tableName="USERS">
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet author="cxbox" id="DICTIONARY_ITEM INDEXES Part 2" dbms="postgresql">
     <addUniqueConstraint columnNames="TYPE, VALUE" constraintName="DIC_SELECT_UNIQUE_TYPE_VALUE"
       tableName="DICTIONARY_ITEM"/>
     <createIndex indexName="DIC_SELECT_UNIQUE_TYPE_VALUE_INDEX" tableName="DICTIONARY_ITEM" unique="true">
@@ -640,9 +833,33 @@
     </createIndex>
   </changeSet>
 
-  <changeSet author="cxbox" id="USER_ROLE INDEXES">
+  <changeSet author="cxbox" id="DICTIONARY_ITEM INDEXES Part 2 ORACLE" dbms="oracle">
+    <createIndex indexName="DIC_SELECT_UNIQUE_TYPE_VALUE_INDEX" tableName="DICTIONARY_ITEM" unique="true">
+      <column name="TYPE"/>
+      <column name="VALUE"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet author="cxbox" id="USER_ROLE INDEXES" dbms="postgresql">
     <addUniqueConstraint columnNames="USER_ID, INTERNAL_ROLE_CD" constraintName="USER_ROLE_UNIQUE"
       tableName="USER_ROLE"/>
+    <createIndex indexName="USER_ROLE_UNIQUE_INDEX" tableName="USER_ROLE" unique="true">
+      <column name="USER_ID"/>
+      <column name="INTERNAL_ROLE_CD"/>
+    </createIndex>
+
+    <createIndex indexName="USER_ROLE_IND1" tableName="USER_ROLE">
+      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID"/>
+    </createIndex>
+    <createIndex indexName="USER_ROLE_IND2" tableName="USER_ROLE">
+      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"/>
+    </createIndex>
+    <createIndex indexName="USER_ROLE_IND3" tableName="USER_ROLE">
+      <column name="USER_ID"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet author="cxbox" id="USER_ROLE INDEXES ORACLE" dbms="oracle">
     <createIndex indexName="USER_ROLE_UNIQUE_INDEX" tableName="USER_ROLE" unique="true">
       <column name="USER_ID"/>
       <column name="INTERNAL_ROLE_CD"/>

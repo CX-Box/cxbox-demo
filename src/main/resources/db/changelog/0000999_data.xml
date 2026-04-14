@@ -88,15 +88,18 @@
   <changeSet id="create-meetings-views-oracle" author="myunmgan" dbms="oracle" runOnChange="true">
     <sqlFile path="db/changelog/sql/oracle/CXBOX_1101_VIEW_CALENDAR_YEAR.sql"
       relativeToChangelogFile="false"
-      splitStatements="false"
-      stripComments="false"/>
+      splitStatements="true"
+      stripComments="true"
+      endDelimiter=";"/>
     <rollback>
-      DROP VIEW v_meetings_clients;
-      DROP VIEW v_meetings_by_day;
+      <sql>
+        DROP VIEW v_meetings_clients;
+        DROP VIEW v_meetings_by_day;
+      </sql>
     </rollback>
   </changeSet>
 
-  <changeSet id="create-indexes-for-views" author="myungman" runOnChange="true">
+  <changeSet id="create-indexes-for-views" author="myungman" dbms="postgresql" runOnChange="true">
     <sqlFile path="db/changelog/sql/CXBOX_1101_CREATE_INDEXES.sql"
       relativeToChangelogFile="false"/>
   </changeSet>

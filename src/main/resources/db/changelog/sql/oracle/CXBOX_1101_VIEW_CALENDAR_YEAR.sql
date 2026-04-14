@@ -15,8 +15,7 @@ FROM (
          SELECT DISTINCT TRUNC(start_date_time) AS day FROM meeting
          UNION
          SELECT DISTINCT TRUNC(end_date_time) AS day FROM meeting
-     ) d
-ORDER BY event_date;
+     ) d;
 
 CREATE OR REPLACE VIEW v_meetings_clients AS
 SELECT DISTINCT
@@ -25,6 +24,6 @@ SELECT DISTINCT
 FROM meeting m
 WHERE m.client_id IS NOT NULL
   AND TRUNC(m.start_date_time) + (LEVEL - 1) <= TRUNC(m.end_date_time)
-    CONNECT BY PRIOR m.meeting_id = m.meeting_id
-       AND LEVEL <= TRUNC(m.end_date_time) - TRUNC(m.start_date_time) + 1
-       AND PRIOR sys_guid() IS NOT NULL;
+    CONNECT BY PRIOR m.ID = m.ID -- Замените на ID, если это PK таблицы meeting
+AND LEVEL <= TRUNC(m.end_date_time) - TRUNC(m.start_date_time) + 1
+AND PRIOR sys_guid() IS NOT NULL;

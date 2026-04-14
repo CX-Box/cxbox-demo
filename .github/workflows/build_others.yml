@@ -9,6 +9,9 @@ on:
     branches-ignore:
       - 'main'
       - 'react_query'
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -155,7 +158,9 @@ jobs:
       # Save image for next builds
       - name: Save Oracle image to cache
         run: |
-          docker save gvenzl/oracle-xe:21-slim -o /tmp/oracle-xe.tar
+          if ! [ -f /tmp/oracle-xe.tar ]; then
+            docker save gvenzl/oracle-xe:21-slim -o /tmp/oracle-xe.tar
+          fi
 
       # Start/stop Oracle docker
       - name: Start Oracle DB

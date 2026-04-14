@@ -157,7 +157,7 @@ jobs:
         run: |
           docker save gvenzl/oracle-xe:21-slim -o /tmp/oracle-xe.tar
 
-      # Start/stop Oracle manually
+      # Start/stop Oracle docker
       - name: Start Oracle DB
         run: |
           docker run -d \

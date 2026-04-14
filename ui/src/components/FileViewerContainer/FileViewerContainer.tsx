@@ -22,6 +22,7 @@ import ImageControlButtons from '@components/FileViewer/components/ImageControlB
 import { useFileFieldData } from '@hooks/useFileFieldData'
 import InnerWidget from '@components/InnerWidget/InnerWidget'
 import Operations from '@components/Operations/Operations'
+import { useFlatFormFields } from '@hooks/useFlatFormFields'
 
 const POPUP_WIDTH = 808
 const VIEWER_WIDTH = 760
@@ -45,7 +46,9 @@ function FileViewerContainer({ isInline, widgetName, fieldKey }: FileViewerConta
     const fileFieldKey = fieldKey || calleeFieldKey
 
     const widget = useAppSelector(selectWidget(widgetName || calleeWidgetName))
-    const widgetField = (widget?.fields as WidgetField[])?.find(field => field.key === fileFieldKey) as FileUploadFieldMeta | undefined
+    const flatFields = useFlatFormFields(widget?.fields || []) as WidgetField[]
+    const widgetField = flatFields.find(field => field.key === fileFieldKey) as FileUploadFieldMeta | undefined
+
     const { fileSource, fileIdKey = '', preview } = widgetField ?? {}
 
     const cursor = useAppSelector(state => selectBc(state, widget?.bcName)?.cursor)

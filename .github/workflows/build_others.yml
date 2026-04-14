@@ -131,7 +131,7 @@ jobs:
           java-version: 17
           cache: maven
 
-      # Cache docker image as tar archive
+      # Cache docker image as tar  archive
       - name: Cache Oracle Docker image
         uses: actions/cache@v4
         with:

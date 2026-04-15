@@ -1,17 +1,16 @@
-import { AppWidgetMeta } from '@interfaces/widget'
+import { WidgetComponentType } from '@features/Widget'
 
-interface NullCardProps {
-    meta: AppWidgetMeta
-}
-
-const NullCard: React.FC<NullCardProps> = ({ meta, children }) => {
+const NullCard: WidgetComponentType = ({ widgetMeta, children, mode }) => {
+    if (mode === 'skip_card' || mode === 'headless') {
+        return <>{children}</>
+    }
     return (
         <div
             data-test="WIDGET"
-            data-test-widget-type={meta.type}
-            data-test-widget-position={meta.position}
-            data-test-widget-title={meta.title}
-            data-test-widget-name={meta.name}
+            data-test-widget-type={widgetMeta.type}
+            data-test-widget-position={widgetMeta.position}
+            data-test-widget-title={widgetMeta.title}
+            data-test-widget-name={widgetMeta.name}
         >
             {children}
         </div>

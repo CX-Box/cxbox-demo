@@ -1,7 +1,7 @@
 import '../../wysiwyg/components/MenuBar.module.less'
 import React from 'react'
 import { ViewMode } from '../../common/types'
-import CommonMenuBar from '@components/RichText/common/components/MenuBar'
+import CommonMenuBar from '@fields/RichText/common/components/MenuBar'
 import { FontCursor, Gear } from '@gravity-ui/icons'
 import { useTranslation } from 'react-i18next'
 

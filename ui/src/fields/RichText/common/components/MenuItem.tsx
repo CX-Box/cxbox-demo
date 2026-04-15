@@ -1,6 +1,6 @@
 import styles from './MenuItem.module.less'
 import { Dropdown, Menu } from 'antd'
-import { MenuActionItem } from '@components/RichText/common/types'
+import { MenuActionItem } from '@fields/RichText/common/types'
 import React from 'react'
 import Button from '@components/ui/Button/Button'
 import { isDefined } from '@utils/isDefined'

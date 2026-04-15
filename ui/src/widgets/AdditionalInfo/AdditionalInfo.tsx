@@ -14,7 +14,7 @@ function assertIsAdditionalInfoMeta(meta: BaseWidgetProps['widgetMeta']): assert
     }
 }
 
-const AdditionalInfo: WidgetComponentType = ({ widgetMeta }) => {
+const AdditionalInfo: WidgetComponentType = ({ widgetMeta, mode }) => {
     assertIsAdditionalInfoMeta(widgetMeta)
     const { bcName } = widgetMeta
     const bcUrl = buildBcUrl(bcName, true)
@@ -22,8 +22,8 @@ const AdditionalInfo: WidgetComponentType = ({ widgetMeta }) => {
     const rowMeta = useAppSelector(state => state.view.rowMeta[bcName]?.[bcUrl])
 
     return (
-        <WidgetLoader widgetMeta={widgetMeta}>
-            <EmptyCard meta={widgetMeta}>
+        <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
+            <EmptyCard widgetMeta={widgetMeta} mode={mode}>
                 <StandardWrapper>
                     <AdditionalInfoItem meta={widgetMeta} rowMeta={rowMeta} cursor={bc?.cursor} />
                 </StandardWrapper>

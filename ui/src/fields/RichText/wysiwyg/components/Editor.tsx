@@ -1,12 +1,12 @@
-import { UniversalEditorProps } from '@components/RichText/types'
+import { UniversalEditorProps } from '@fields/RichText/types'
 import React, { useCallback } from 'react'
 import './Editor.module.less'
-import MenuBar from '@components/RichText/wysiwyg/components/MenuBar'
-import EditorContent from '@components/RichText/wysiwyg/components/EditorContent'
-import { useRichTextEditor } from '@components/RichText/wysiwyg/hooks'
-import { ViewMode } from '@components/RichText/common/types'
+import MenuBar from '@fields/RichText/wysiwyg/components/MenuBar'
+import EditorContent from '@fields/RichText/wysiwyg/components/EditorContent'
+import { useRichTextEditor } from '@fields/RichText/wysiwyg/hooks'
+import { ViewMode } from '@fields/RichText/common/types'
 import cn from 'classnames'
-import { BaseFieldProps } from '@components/Field/Field'
+import { BaseFieldProps } from '@features/Field'
 
 interface Props extends UniversalEditorProps, BaseFieldProps {
     wrapperRef?: (instance: HTMLDivElement | null) => void

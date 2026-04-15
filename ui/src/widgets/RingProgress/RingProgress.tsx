@@ -14,7 +14,7 @@ function assertIsRingProgressMeta(meta: BaseWidgetProps['widgetMeta']): asserts 
     }
 }
 
-const RingProgress: React.FC<BaseWidgetProps> = ({ widgetMeta }) => {
+const RingProgress: React.FC<BaseWidgetProps> = ({ widgetMeta, mode }) => {
     assertIsRingProgressMeta(widgetMeta)
     const { bcName } = widgetMeta
     const text = widgetMeta.options.ringProgressOptions.text
@@ -42,8 +42,8 @@ const RingProgress: React.FC<BaseWidgetProps> = ({ widgetMeta }) => {
     }
 
     return (
-        <WidgetLoader widgetMeta={widgetMeta}>
-            <DashboardCard meta={widgetMeta}>
+        <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
+            <DashboardCard widgetMeta={widgetMeta} mode={mode}>
                 <div>
                     <div className={styles.container}>
                         <div className={styles.textContainer}>

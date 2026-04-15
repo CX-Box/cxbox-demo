@@ -10,11 +10,11 @@ function assertIsRelationGraph(meta: BaseWidgetProps['widgetMeta']): asserts met
     }
 }
 
-const RelationGraph: React.FC<BaseWidgetProps> = ({ widgetMeta }) => {
+const RelationGraph: React.FC<BaseWidgetProps> = ({ widgetMeta, mode }) => {
     assertIsRelationGraph(widgetMeta)
     return (
-        <WidgetLoader widgetMeta={widgetMeta}>
-            <DashboardCard meta={widgetMeta}>
+        <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
+            <DashboardCard widgetMeta={widgetMeta} mode={mode}>
                 <Chart meta={widgetMeta} />
             </DashboardCard>
         </WidgetLoader>

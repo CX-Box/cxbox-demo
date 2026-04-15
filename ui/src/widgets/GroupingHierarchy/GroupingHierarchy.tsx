@@ -11,11 +11,11 @@ function assertIsGroupingHierarchyMeta(meta: BaseWidgetProps['widgetMeta']): ass
     }
 }
 
-const GroupingHierarchy: WidgetComponentType = ({ widgetMeta }) => {
+const GroupingHierarchy: WidgetComponentType = ({ widgetMeta, mode }) => {
     assertIsGroupingHierarchyMeta(widgetMeta)
     return (
-        <WidgetLoader widgetMeta={widgetMeta}>
-            <Card meta={widgetMeta}>
+        <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
+            <Card widgetMeta={widgetMeta} mode={mode}>
                 <Table meta={widgetMeta} isGroupingHierarchy={true} disableMassMode={true} />
             </Card>
         </WidgetLoader>

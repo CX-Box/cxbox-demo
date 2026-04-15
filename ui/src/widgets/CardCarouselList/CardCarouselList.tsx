@@ -3,10 +3,10 @@ import CardCarouselListComponent from '@widgets/CardCarouselList/CardCarouselLis
 import Card from '@components/Card/Card'
 import WidgetLoader from '@components/WidgetLoader'
 
-const CardCarouselList: WidgetComponentType = ({ widgetMeta }) => {
+const CardCarouselList: WidgetComponentType = ({ widgetMeta, mode }) => {
     return (
-        <WidgetLoader widgetMeta={widgetMeta}>
-            <Card meta={widgetMeta}>
+        <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
+            <Card widgetMeta={widgetMeta} mode={mode}>
                 <CardCarouselListComponent widgetMeta={widgetMeta} type={'carousel'} />
             </Card>
         </WidgetLoader>

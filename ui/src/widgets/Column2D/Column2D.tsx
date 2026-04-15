@@ -10,11 +10,11 @@ function assertIsColumn2DMeta(meta: BaseWidgetProps['widgetMeta']): asserts meta
     }
 }
 
-const Column2D: WidgetComponentType = ({ widgetMeta }) => {
+const Column2D: WidgetComponentType = ({ widgetMeta, mode }) => {
     assertIsColumn2DMeta(widgetMeta)
     return (
-        <WidgetLoader widgetMeta={widgetMeta}>
-            <DashboardCard meta={widgetMeta}>
+        <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
+            <DashboardCard widgetMeta={widgetMeta} mode={mode}>
                 <Chart meta={widgetMeta} />
             </DashboardCard>
         </WidgetLoader>

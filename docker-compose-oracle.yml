@@ -14,29 +14,26 @@ services:
     expose:
       -  1521
   keycloak:
-    image: maxird/keycloak:12.0.4
-    command:
-      [
-        '-b',
-        '0.0.0.0',
-        '-Dkeycloak.migration.action=import',
-        '-Dkeycloak.migration.provider=dir',
-        '-Dkeycloak.migration.dir=/opt/jboss/keycloak/realm-config',
-        '-Dkeycloak.migration.strategy=IGNORE_EXISTING',
-        '-Djboss.socket.binding.port-offset=1000',
-        '-Dkeycloak.profile.feature.upload_scripts=enabled'
-      ]
-    volumes:
-      - ./docker/keycloak-config:/opt/jboss/keycloak/realm-config
-      - ./.tmp/keycloak-db:/opt/jboss/keycloak/standalone/data
+    image: quay.io/keycloak/keycloak:26.4
     environment:
-      - KEYCLOAK_USER=admin
-      - KEYCLOAK_PASSWORD=admin
-      - DB_VENDOR=h2
+      KC_DB: dev-file
+      KC_HOSTNAME_STRICT: "false"
+      KC_HOSTNAME_STRICT_HTTPS: "false"
+      KC_HTTP_ENABLED: "true"
+      KC_HTTP_PORT: 9080
+      KC_HTTP_RELATIVE_PATH: /auth
+      KC_PROXY_HEADERS: "xforwarded"
+      KC_LOG_LEVEL: INFO
+      KC_HEALTH_ENABLED: "true"
+      KC_METRICS_ENABLED: "true"
+      COMMENT: "If you get error `HTTPS required` on MacOS. FIX: In Docker Desktop network configuration: Settings → Resources → Network → Port binding behavior  set to: 'Localhost by default' (https://github.com/quarkusio/quarkus/discussions/48905)"
+    command: start-dev --import-realm --features=scripts
+    volumes:
+      - ./docker/keycloak-config:/opt/keycloak/data/import/
+      - ./.tmp/keycloak-db:/opt/keycloak/data/h2
     ports:
       - "9080:9080"
       - "9443:9443"
-      - "10990:10990"
   cxbox_minio:
     image: bitnamilegacy/minio:2022.2.12
     expose:

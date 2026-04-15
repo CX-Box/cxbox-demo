@@ -17,7 +17,7 @@ import { WidgetComponentType } from '@features/Widget'
 import NullCard from '@components/NullCard'
 import WidgetLoader from '@components/WidgetLoader'
 
-const CalendarYearList: WidgetComponentType = ({ widgetMeta: widget }) => {
+const CalendarYearList: WidgetComponentType = ({ widgetMeta: widget, mode }) => {
     const calendarRef = useRef<CalendarYearApiHandle>(null)
     const prevIsListRef = useRef<boolean>(false)
     const recordForm = useAppSelector(selectBcRecordForm(widget.bcName))
@@ -96,8 +96,8 @@ const CalendarYearList: WidgetComponentType = ({ widgetMeta: widget }) => {
     }, [widget?.options?.calendar])
 
     return (
-        <WidgetLoader widgetMeta={widget}>
-            <NullCard meta={widget}>
+        <WidgetLoader widgetMeta={widget} mode={mode}>
+            <NullCard widgetMeta={widget} mode={mode}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', color: 'var(--text-color)' }}>
                     {enabledListMode ? (
                         <Table meta={widget as AppWidgetTableMeta} settingsComponent={listToggleButton} />

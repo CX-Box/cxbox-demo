@@ -4,10 +4,10 @@ import { WidgetComponentType } from '@features/Widget'
 import Card from '@components/Card/Card'
 import WidgetLoader from '@components/WidgetLoader'
 
-const CardList: WidgetComponentType = ({ widgetMeta }) => {
+const CardList: WidgetComponentType = ({ widgetMeta, mode }) => {
     return (
-        <WidgetLoader widgetMeta={widgetMeta}>
-            <Card meta={widgetMeta}>
+        <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
+            <Card widgetMeta={widgetMeta} mode={mode}>
                 <CardCarouselList widgetMeta={widgetMeta} type="list" />
             </Card>
         </WidgetLoader>

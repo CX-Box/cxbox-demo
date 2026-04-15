@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { lazy, Suspense, useCallback, useEffect } from 'react'
 import { Skeleton } from 'antd'
 import { useAppDispatch, useAppSelector } from '@store'
 import { usePopupVisibility } from '@hooks/popup'
@@ -9,13 +9,19 @@ import { WidgetFormMeta } from '@cxbox-ui/core'
 import Button from '@components/ui/Button/Button'
 import styles from './ConfirmWithForm.less'
 import { useTranslation } from 'react-i18next'
-import Widget from '@features/Widget'
+import { WidgetComponentType } from '@features/Widget'
 
 interface ConfirmWithFormProps {
     widgetName: string
 }
 
 const forceUpdateSetting = true // todo temporary enabled for all FormPopup widgets
+
+const FormComponent = lazy<WidgetComponentType>(() =>
+    import(`@widgets/Form/index`).catch(() => ({
+        default: () => <div>Ошибка загрузки</div>
+    }))
+)
 
 function ConfirmWithForm({ widgetName }: ConfirmWithFormProps) {
     const { t } = useTranslation()
@@ -63,7 +69,9 @@ function ConfirmWithForm({ widgetName }: ConfirmWithFormProps) {
                 </div>
             ) : (
                 <div className={styles.formPopupModal}>
-                    <Widget widgetMeta={widget} />
+                    <Suspense fallback={'Loading...'}>
+                        <FormComponent widgetMeta={widget} mode={'headless'} />
+                    </Suspense>
                     <div className={styles.actions}>
                         <Button onClick={onSave}>{preInvoke?.yesText ?? t('Save')}</Button>
                         <Button onClick={onClose} type="formOperation">

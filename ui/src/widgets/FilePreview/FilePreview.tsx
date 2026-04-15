@@ -9,7 +9,7 @@ import { WidgetComponentType } from '@features/Widget'
 import FilePreviewCard from '@components/FilePreviewCard/FilePreviewCard'
 import WidgetLoader from '@components/WidgetLoader'
 
-const FilePreview: WidgetComponentType = ({ widgetMeta }) => {
+const FilePreview: WidgetComponentType = ({ widgetMeta, mode }) => {
     const cursor = useAppSelector(state => state.screen.bo.bc[widgetMeta.bcName]?.cursor) as string
     const fileField = (widgetMeta.fields as FileUploadFieldMeta[]).find(
         field => field.type === FieldType.fileUpload && field.preview?.mode === 'inline'
@@ -22,8 +22,8 @@ const FilePreview: WidgetComponentType = ({ widgetMeta }) => {
     }, [fileField, widgetMeta])
 
     return (
-        <WidgetLoader widgetMeta={widgetMeta}>
-            <FilePreviewCard meta={widgetMeta}>
+        <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
+            <FilePreviewCard widgetMeta={widgetMeta} mode={mode}>
                 {!fileField ? null : (
                     <FieldBaseThemeWrapper
                         className={styles.container}

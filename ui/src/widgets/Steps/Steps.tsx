@@ -17,7 +17,7 @@ function assertIsStepsMeta(meta: BaseWidgetProps['widgetMeta']): asserts meta is
     }
 }
 
-const Steps: React.FC<BaseWidgetProps> = ({ widgetMeta }) => {
+const Steps: React.FC<BaseWidgetProps> = ({ widgetMeta, mode }) => {
     assertIsStepsMeta(widgetMeta)
     const { Step } = AntSteps
     const { bcName, options } = widgetMeta
@@ -43,8 +43,8 @@ const Steps: React.FC<BaseWidgetProps> = ({ widgetMeta }) => {
     })
     const currentIndex = values?.findIndex(i => i.step === stepCurrentValue)
     return (
-        <WidgetLoader widgetMeta={widgetMeta}>
-            <EmptyCard meta={widgetMeta}>
+        <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
+            <EmptyCard widgetMeta={widgetMeta} mode={mode}>
                 {isMainWidget && <WidgetTitle level={2} widgetName={widgetMeta.name} text={widgetMeta.title} />}
                 {!(isMainWidget && isCollapsed) && (
                     <AntSteps className={styles.container} current={currentIndex}>

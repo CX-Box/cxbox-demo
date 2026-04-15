@@ -19,7 +19,7 @@ function assertIsStatsBlockMeta(meta: BaseWidgetProps['widgetMeta']): asserts me
     }
 }
 
-const StatsBlock: React.FC<BaseWidgetProps> = ({ widgetMeta }) => {
+const StatsBlock: React.FC<BaseWidgetProps> = ({ widgetMeta, mode }) => {
     assertIsStatsBlockMeta(widgetMeta)
     const dispatch = useAppDispatch()
 
@@ -53,8 +53,8 @@ const StatsBlock: React.FC<BaseWidgetProps> = ({ widgetMeta }) => {
     const isBcCursorShow = !valueField?.drillDown && widgetMeta.options?.stats?.bcCursor === EStatsBcCursor.show
 
     return (
-        <WidgetLoader widgetMeta={widgetMeta}>
-            <EmptyCard meta={widgetMeta}>
+        <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
+            <EmptyCard widgetMeta={widgetMeta} mode={mode}>
                 {isMainWidget && <WidgetTitle level={2} widgetName={widgetMeta.name} text={widgetMeta.title} />}
 
                 {!(isMainWidget && isCollapsed) && (

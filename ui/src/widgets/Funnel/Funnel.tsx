@@ -15,7 +15,7 @@ function assertIsFunnelMeta(meta: BaseWidgetProps['widgetMeta']): asserts meta i
     }
 }
 
-const Funnel: WidgetComponentType = ({ widgetMeta }) => {
+const Funnel: WidgetComponentType = ({ widgetMeta, mode }) => {
     assertIsFunnelMeta(widgetMeta)
     const { bcName } = widgetMeta
     const data = useAppSelector(state => state.data[bcName])
@@ -45,8 +45,8 @@ const Funnel: WidgetComponentType = ({ widgetMeta }) => {
         }
     }
     return (
-        <WidgetLoader widgetMeta={widgetMeta}>
-            <DashboardCard meta={widgetMeta}>
+        <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
+            <DashboardCard widgetMeta={widgetMeta} mode={mode}>
                 <div>
                     <AntFunnel
                         data={funnelData}

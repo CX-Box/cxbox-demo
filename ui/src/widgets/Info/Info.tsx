@@ -20,10 +20,8 @@ function assertIsInfoMeta(meta: BaseWidgetProps['widgetMeta']): asserts meta is 
 /**
  * Displays data as flat table
  *
- * @param widgetMeta
- * @constructor
  */
-const Info: WidgetComponentType = ({ widgetMeta }) => {
+const Info: WidgetComponentType = ({ widgetMeta, mode }) => {
     assertIsInfoMeta(widgetMeta)
     const { bcName, name: widgetName } = widgetMeta
     const cursor = useAppSelector(state => state.screen.bo.bc[bcName]?.cursor || '')
@@ -40,8 +38,8 @@ const Info: WidgetComponentType = ({ widgetMeta }) => {
     const { grid, visibleFlattenWidgetFields } = useProportionalWidgetGrid(widgetMeta)
 
     return (
-        <WidgetLoader widgetMeta={widgetMeta}>
-            <Card meta={widgetMeta}>
+        <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
+            <Card widgetMeta={widgetMeta} mode={mode}>
                 <Row className={styles.container}>
                     {grid?.map((row, index) => (
                         <InfoRow

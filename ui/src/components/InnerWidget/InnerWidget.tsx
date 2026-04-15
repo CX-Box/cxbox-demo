@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react'
+import React, { FunctionComponent, lazy, Suspense, useMemo } from 'react'
 import { Spin } from 'antd'
 import { useAppSelector } from '@store'
 import styles from './InnerWidget.less'
@@ -8,7 +8,7 @@ import { useWidgetVisibility } from '@hooks/useWidgetVisibility'
 import WidgetTitle from '@components/WidgetTitle/WidgetTitle'
 import { AppWidgetMeta } from '@interfaces/widget'
 import { isDefined } from '@utils/isDefined'
-import Widget from '@features/Widget'
+import { WidgetComponentType } from '@features/Widget'
 
 interface InnerWidgetProps {
     widgetName: string | undefined
@@ -28,6 +28,7 @@ const InnerWidget: FunctionComponent<InnerWidgetProps> = ({
 }) => {
     const widgetVisibility = useWidgetVisibility(widgetName)
     const widget = useAppSelector(selectWidget(widgetName)) as AppWidgetMeta
+    const widgetType = widget.type
     const bc = useAppSelector(selectBc(widget?.bcName))
     const spinning = useAppSelector(state => {
         if (isDefined(externalSpinning)) {
@@ -40,6 +41,16 @@ const InnerWidget: FunctionComponent<InnerWidgetProps> = ({
 
         return !!(currentBc?.loading && (rowMetaExists || dataExists))
     })
+
+    const WidgetComponent = useMemo(
+        () =>
+            lazy<WidgetComponentType>(() =>
+                import(`@widgets/${widgetType}/index`).catch(() => ({
+                    default: () => <div>Виджет {widgetType} не найден</div>
+                }))
+            ),
+        [widgetType]
+    )
 
     if (!widget) {
         return null
@@ -57,7 +68,12 @@ const InnerWidget: FunctionComponent<InnerWidgetProps> = ({
         )
 
     const widgetHasBc = widget.bcName !== null && widget.bcName !== ''
-    const widgetElement = bc || !widgetHasBc ? <Widget widgetMeta={widget} /> : null
+    const widgetElement =
+        bc || !widgetHasBc ? (
+            <Suspense fallback={<span>Loading...</span>}>
+                <WidgetComponent widgetMeta={widget} mode={'headless'} />
+            </Suspense>
+        ) : null
 
     return (
         <DebugWidgetWrapper meta={widget}>

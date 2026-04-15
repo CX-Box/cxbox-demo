@@ -3,10 +3,10 @@ import LevelMenu from '@components/LevelMenu/LevelMenu'
 import EmptyCard from '@components/EmptyCard/EmptyCard'
 import WidgetLoader from '@components/WidgetLoader'
 
-const FourthLevelMenu: WidgetComponentType = ({ widgetMeta }) => {
+const FourthLevelMenu: WidgetComponentType = ({ widgetMeta, mode }) => {
     return (
-        <WidgetLoader widgetMeta={widgetMeta}>
-            <EmptyCard meta={widgetMeta}>
+        <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
+            <EmptyCard widgetMeta={widgetMeta} mode={mode}>
                 <LevelMenu meta={widgetMeta} />
             </EmptyCard>
         </WidgetLoader>

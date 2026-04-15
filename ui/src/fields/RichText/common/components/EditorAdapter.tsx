@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { ViewMode } from '@components/RichText/common/types'
-import WysiwygEditor from '@components/RichText/wysiwyg/components/Editor'
-import SourceEditor from '@components/RichText/source/components/Editor'
-import { EDITOR_MAX_ROWS, EDITOR_MIN_ROWS, TEXTAREA_VERTICAL_PADDING_OFFSET } from '@components/RichText/constants'
-import { useBoundedResizableHeight } from '@components/RichText/wysiwyg/hooks'
-import { RichTextEditorProps } from '@components/RichText/RichTextEditor'
+import { ViewMode } from '@fields/RichText/common/types'
+import WysiwygEditor from '@fields/RichText/wysiwyg/components/Editor'
+import SourceEditor from '@fields/RichText/source/components/Editor'
+import { EDITOR_MAX_ROWS, EDITOR_MIN_ROWS, TEXTAREA_VERTICAL_PADDING_OFFSET } from '@fields/RichText/constants'
+import { useBoundedResizableHeight } from '@fields/RichText/wysiwyg/hooks'
+import { RichTextEditorProps } from '@fields/RichText/RichText'
 
 const EditorAdapter: React.FC<RichTextEditorProps> = ({
     value,

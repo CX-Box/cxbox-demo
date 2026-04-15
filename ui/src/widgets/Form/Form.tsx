@@ -34,7 +34,7 @@ interface FormProps extends BaseWidgetProps {
  * @param props
  * @category Widgets
  */
-const Form: WidgetComponentType<FormProps> = ({ widgetMeta, fields, missingFields, metaErrors, cursor }) => {
+const Form: WidgetComponentType<FormProps> = ({ widgetMeta, fields, missingFields, metaErrors, cursor, mode }) => {
     assertIsFormMeta(widgetMeta)
     const { t } = useTranslation()
     const { bcName, name } = widgetMeta
@@ -95,8 +95,8 @@ const Form: WidgetComponentType<FormProps> = ({ widgetMeta, fields, missingField
     }, [grid, visibleFlattenWidgetFields, missingFields, metaErrors, widgetMeta.name, t, bcName, cursor, name])
 
     return (
-        <WidgetLoader widgetMeta={widgetMeta}>
-            <Card meta={widgetMeta}>
+        <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
+            <Card widgetMeta={widgetMeta} mode={mode}>
                 {empty ? null : (
                     <FieldBaseThemeWrapper className={styles.formContainer}>
                         <AntdForm colon={false} layout="vertical">

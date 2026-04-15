@@ -11,11 +11,11 @@ function assertIsTableMeta(meta: BaseWidgetProps['widgetMeta']): asserts meta is
     }
 }
 
-const List: WidgetComponentType = ({ widgetMeta }) => {
+const List: WidgetComponentType = ({ widgetMeta, mode }) => {
     assertIsTableMeta(widgetMeta)
     return (
-        <WidgetLoader widgetMeta={widgetMeta}>
-            <Card meta={widgetMeta}>
+        <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
+            <Card widgetMeta={widgetMeta} mode={mode}>
                 <Table meta={widgetMeta} />
             </Card>
         </WidgetLoader>

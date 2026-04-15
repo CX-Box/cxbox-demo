@@ -1,7 +1,7 @@
 import { Fragment } from 'react'
 import MenuItem, { MenuBarItem } from './MenuItem'
 import './MenuBar.module.less'
-import { EDITOR_TOOLBAR_HEIGHT_RESERVE, EDITOR_TOOLBAR_WIDTH_RESERVE } from '@components/RichText/constants'
+import { EDITOR_TOOLBAR_HEIGHT_RESERVE, EDITOR_TOOLBAR_WIDTH_RESERVE } from '@fields/RichText/constants'
 
 export interface Props {
     items?: MenuBarItem[]

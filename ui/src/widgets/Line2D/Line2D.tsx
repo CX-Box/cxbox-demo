@@ -10,11 +10,11 @@ function assertIsLine2DMeta(meta: BaseWidgetProps['widgetMeta']): asserts meta i
     }
 }
 
-const Line2D: WidgetComponentType = ({ widgetMeta }) => {
+const Line2D: WidgetComponentType = ({ widgetMeta, mode }) => {
     assertIsLine2DMeta(widgetMeta)
     return (
-        <WidgetLoader widgetMeta={widgetMeta}>
-            <DashboardCard meta={widgetMeta}>
+        <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
+            <DashboardCard widgetMeta={widgetMeta} mode={mode}>
                 <Chart meta={widgetMeta} />
             </DashboardCard>
         </WidgetLoader>

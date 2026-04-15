@@ -21,7 +21,7 @@ function assertIsAdditionalList(meta: BaseWidgetProps['widgetMeta']): asserts me
     }
 }
 
-const AdditionalList: WidgetComponentType = ({ widgetMeta }) => {
+const AdditionalList: WidgetComponentType = ({ widgetMeta, mode }) => {
     assertIsAdditionalList(widgetMeta)
     const readWidgetName = widgetMeta.options?.read?.widget
     const additionalInfoMeta = useAppSelector(state => state.view.widgets.find(widget => widget.name === readWidgetName)) as
@@ -36,8 +36,8 @@ const AdditionalList: WidgetComponentType = ({ widgetMeta }) => {
     const handleRow = () => ({ onClick: () => {} })
 
     return (
-        <WidgetLoader widgetMeta={widgetMeta}>
-            <EmptyCard meta={widgetMeta}>
+        <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
+            <EmptyCard widgetMeta={widgetMeta} mode={mode}>
                 <StandardWrapper>
                     <AdditionalInfoHeader meta={widgetMeta} level={2} />
                     {!(isMainWidget && isCollapsed) && (

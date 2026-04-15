@@ -1,8 +1,8 @@
 import './MenuBar.module.less'
 import { Editor, useEditorState } from '@tiptap/react'
 import { MenuItemType, ViewMode } from '../../common/types'
-import CommonMenuBar from '@components/RichText/common/components/MenuBar'
-import { MenuBarItem } from '@components/RichText/common/components/MenuItem'
+import CommonMenuBar from '@fields/RichText/common/components/MenuBar'
+import { MenuBarItem } from '@fields/RichText/common/components/MenuItem'
 import {
     ArrowUturnCcwLeft,
     ArrowUturnCwRight,

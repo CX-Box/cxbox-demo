@@ -1,6 +1,5 @@
-import React from 'react'
+import React, { PropsWithChildren } from 'react'
 import { connect } from 'react-redux'
-import { Skeleton, Spin } from 'antd'
 import { useWidgetCollapse } from '@hooks/useWidgetCollapse'
 import { PopupWidgetTypes, utils } from '@cxbox-ui/core'
 import { RootState } from '@store'
@@ -11,11 +10,14 @@ import DebugWidgetWrapper from '@components/DebugWidgetWrapper/DebugWidgetWrappe
 import { AppWidgetMeta } from '@interfaces/widget'
 import { lazy, Suspense, useMemo } from 'react'
 
+type Mode = 'default' | 'skip_card' | 'skip_load' | 'headless'
+
 export interface BaseWidgetProps {
     widgetMeta: AppWidgetMeta
+    mode?: Mode
 }
 
-export interface WidgetComponentType<P = BaseWidgetProps> extends React.FC<P> {}
+export type WidgetComponentType<P = {}> = React.FC<PropsWithChildren<P & BaseWidgetProps>>
 
 interface WidgetProps extends BaseWidgetProps {
     debugMode: boolean

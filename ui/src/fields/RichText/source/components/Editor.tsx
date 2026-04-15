@@ -1,11 +1,11 @@
-import { UniversalEditorProps } from '@components/RichText/types'
+import { UniversalEditorProps } from '@fields/RichText/types'
 import React, { useCallback } from 'react'
 import { ReactCodeMirrorRef } from '@uiw/react-codemirror'
 import './Editor.module.less'
-import MenuBar from '@components/RichText/source/components/MenuBar'
-import { ViewMode } from '@components/RichText/common/types'
-import SourceEditor from '@components/RichText/source/components/EditorContent'
-import { BaseFieldProps } from '@components/Field/Field'
+import MenuBar from '@fields/RichText/source/components/MenuBar'
+import { ViewMode } from '@fields/RichText/common/types'
+import SourceEditor from '@fields/RichText/source/components/EditorContent'
+import { BaseFieldProps } from '@features/Field'
 
 interface Props extends UniversalEditorProps, BaseFieldProps {
     wrapperRef?: (instance: HTMLDivElement | null) => void

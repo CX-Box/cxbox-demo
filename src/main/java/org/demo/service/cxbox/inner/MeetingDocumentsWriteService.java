@@ -14,6 +14,7 @@ import org.cxbox.api.data.dto.AssociateDTO;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.DrillDownType;
+import org.cxbox.core.dto.MessageType;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.AssociateResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
@@ -30,6 +31,8 @@ import org.demo.dto.cxbox.inner.MeetingDocumentsDTO_;
 import org.demo.entity.Meeting;
 import org.demo.entity.MeetingDocuments;
 import org.demo.entity.MeetingDocuments_;
+import org.demo.entity.enums.ClientStatus;
+import org.demo.entity.enums.MeetingStatus;
 import org.demo.repository.MeetingDocumentsRepository;
 import org.demo.repository.MeetingRepository;
 import org.springframework.data.jpa.domain.Specification;
@@ -70,6 +73,8 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 	@Override
 	protected ActionResultDTO<MeetingDocumentsDTO> doUpdateEntity(MeetingDocuments entity, MeetingDocumentsDTO data,
 			BusinessComponent bc) {
+		setIfChanged(data, MeetingDocumentsDTO_.employerSignatureFileId, entity::setEmployerSignatureFileId);
+		setIfChanged(data, MeetingDocumentsDTO_.employerSignatureFile, entity::setEmployerSignatureFile);
 		setIfChanged(data, MeetingDocumentsDTO_.priority, entity::setPriority);
 		if (data.isFieldChanged(MeetingDocumentsDTO_.fileId)) {
 			entity.setFileId(data.getFileId());
@@ -144,6 +149,21 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 						.text("Add Files")
 				)
 				.delete(dlt -> dlt)
+				.action(act -> act
+						.action("documentSign", "Document Sign")
+						.scope(ActionScope.RECORD)
+						.available(bc -> {
+							return true;
+						})
+						.invoker((bc, dto) -> {
+							Meeting meeting = meetingRepository.getReferenceById(Long.parseLong(bc.getParentId()));
+							meeting.setStatus(MeetingStatus.SIGN);
+							meetingRepository.save(meeting);
+							return new ActionResultDTO<MeetingDocumentsDTO>()
+									.setAction(PostAction.showMessage(MessageType.INFO, "Action documentSign was invoked"
+									));
+						})
+				)
 				.build();
 	}
 

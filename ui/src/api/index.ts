@@ -182,6 +182,17 @@ class Api extends CXBoxApi {
 
         return response
     }
+
+    getFile(fileId: string) {
+        return this.api$.instance.get('/file', { responseType: 'blob', params: { id: fileId } })
+    }
+
+    uploadFile(file: Blob, fileName: string) {
+        const data = new FormData()
+        data.append('file', file, fileName)
+
+        return this.api$.instance.post('/file', data)
+    }
 }
 
 function tokenInterceptor(rqConfig: InternalAxiosRequestConfig) {

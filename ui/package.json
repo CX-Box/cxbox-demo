@@ -61,7 +61,10 @@
     "rules": {
       "curly": "error",
       "prettier/prettier": "error"
-    }
+    },
+    "ignorePatterns": [
+      "public/cadesplugin_api.js"
+    ]
   },
   "browserslist": {
     "production": [
@@ -78,6 +81,7 @@
   "homepage": ".",
   "devDependencies": {
     "@craco/craco": "7.1.0",
+    "@types/cadesplugin": "^2.1.8",
     "@types/diff": "5.0.3",
     "@types/file-saver": "2.0.5",
     "@types/lodash.debounce": "4.0.9",

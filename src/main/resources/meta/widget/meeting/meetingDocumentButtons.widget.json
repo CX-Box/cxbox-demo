@@ -1,0 +1,28 @@
+{
+  "name": "meetingDocumentButtons",
+  "title": "",
+  "type": "Form",
+  "bc": "meetingDocumentEdit",
+  "fields": [],
+  "options": {
+    "cryptoGenerator": [
+      {
+        "type": "encrypt",
+        "signaturePackage": "any",
+        "signatureType": "CADES_BES",
+        "actionName": "documentSign",
+        "documentFileIdKey": "fileId",
+        "documentFileNameKey": "file",
+        "signatureFileIdKey": "employerSignatureFileId",
+        "signatureFileNameKey": "employerSignatureFile",
+        "encryptedFileIdKey": "employerSignatureFileId",
+        "encryptedFileNameKey": "employerSignatureFile"
+      }
+    ],
+    "actionGroups": {
+      "include": [
+        "documentSign"
+      ]
+    }
+  }
+}

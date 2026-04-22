@@ -687,9 +687,7 @@
     </addColumn>
   </changeSet>
 
-  <changeSet author="cxbox" id="BC_FILTER_GROUPS INDEXES" dbms="postgresql">
-    <addUniqueConstraint columnNames="NAME, BC" constraintName="BC_FILTER_GROUPS_UNIQUE"
-      tableName="BC_FILTER_GROUPS"/>
+  <changeSet author="cxbox" id="BC_FILTER_GROUPS INDEXES">
     <createIndex indexName="BC_FILTER_GROUPS_UNIQUE_INDEX" tableName="BC_FILTER_GROUPS" unique="true">
       <column name="NAME"/>
       <column name="BC"/>
@@ -702,20 +700,7 @@
     </createIndex>
   </changeSet>
 
-  <changeSet author="cxbox" id="BC_FILTER_GROUPS INDEXES ORACLE" dbms="oracle">
-    <createIndex indexName="BC_FILTER_GROUPS_UNIQUE_INDEX" tableName="BC_FILTER_GROUPS" unique="true">
-      <column name="NAME"/>
-      <column name="BC"/>
-    </createIndex>
-    <createIndex indexName="BC_FILTER_GROUPS_IND2" tableName="BC_FILTER_GROUPS">
-      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"/>
-    </createIndex>
-    <createIndex indexName="BC_FILTER_GROUPS_IND1" tableName="BC_FILTER_GROUPS">
-      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID"/>
-    </createIndex>
-  </changeSet>
   <changeSet author="cxbox" id="BC_PROPERTIES INDEXES" dbms="postgresql">
-    <addUniqueConstraint columnNames="BC" constraintName="BC_PROPERTIES_BC" tableName="BC_PROPERTIES"/>
     <createIndex indexName="BC_PROPERTIES_BC_INDEX" tableName="BC_PROPERTIES" unique="true">
       <column name="BC"/>
     </createIndex>
@@ -840,26 +825,7 @@
     </createIndex>
   </changeSet>
 
-  <changeSet author="cxbox" id="USER_ROLE INDEXES" dbms="postgresql">
-    <addUniqueConstraint columnNames="USER_ID, INTERNAL_ROLE_CD" constraintName="USER_ROLE_UNIQUE"
-      tableName="USER_ROLE"/>
-    <createIndex indexName="USER_ROLE_UNIQUE_INDEX" tableName="USER_ROLE" unique="true">
-      <column name="USER_ID"/>
-      <column name="INTERNAL_ROLE_CD"/>
-    </createIndex>
-
-    <createIndex indexName="USER_ROLE_IND1" tableName="USER_ROLE">
-      <column defaultValueNumeric="1" name="CREATED_BY_USER_ID"/>
-    </createIndex>
-    <createIndex indexName="USER_ROLE_IND2" tableName="USER_ROLE">
-      <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID"/>
-    </createIndex>
-    <createIndex indexName="USER_ROLE_IND3" tableName="USER_ROLE">
-      <column name="USER_ID"/>
-    </createIndex>
-  </changeSet>
-
-  <changeSet author="cxbox" id="USER_ROLE INDEXES ORACLE" dbms="oracle">
+  <changeSet author="cxbox" id="USER_ROLE INDEXES">
     <createIndex indexName="USER_ROLE_UNIQUE_INDEX" tableName="USER_ROLE" unique="true">
       <column name="USER_ID"/>
       <column name="INTERNAL_ROLE_CD"/>

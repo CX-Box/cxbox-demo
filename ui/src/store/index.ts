@@ -9,11 +9,11 @@ import { middlewares as ourMiddlewares } from '../middlewares'
 import { catchError } from 'rxjs'
 import { getInternalWidgets } from '@utils/getInternalWidgets'
 import moment from 'moment'
-import { mapRefinerKeyToFieldKey } from '@components/widgets/CalendarList/constants'
+import { mapRefinerKeyToFieldKey } from '@widgets/CalendarList/constants'
 import { selectWidgetByCondition } from '@selectors/selectors'
 import { isCalendarWidget } from '@constants/widget'
 import { AppWidgetMeta, WidgetField } from '@interfaces/widget'
-import { getEventTimeGranularity, isAllDayOrMultiDay } from '@components/widgets/CalendarList/utils'
+import { getEventTimeGranularity, isAllDayOrMultiDay } from '@widgets/CalendarList/utils'
 
 const middlewares = Object.values({ ...coreMiddlewares, ...ourMiddlewares })
 

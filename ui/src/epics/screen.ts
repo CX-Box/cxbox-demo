@@ -10,7 +10,7 @@ import { getDefaultVisibleView } from '@components/ViewNavigation/tab/standard/u
 import { exportTable } from '@utils/export'
 import { EFeatureSettingKey } from '@interfaces/session'
 import { calculateFieldsOrder, calculateHiddenFields, createSettingPath } from '@utils/tableSettings'
-import { isFilterGroupTempId } from '@components/widgets/Table/filterGroup'
+import { isFilterGroupTempId } from '@components/Table/filterGroup'
 
 const findFormPopupWidget = (operationType: string, widgets: interfaces.WidgetMeta[], calleeBcName: string, widgetName?: string) => {
     const formPopupWidget = widgetName

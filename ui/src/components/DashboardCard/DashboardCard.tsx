@@ -1,32 +1,31 @@
 import React from 'react'
 import { Col, Row } from 'antd'
 import { useWidgetCollapse } from '@hooks/useWidgetCollapse'
-import { WidgetMeta } from '@cxbox-ui/core'
 import WidgetTitle from '@components/WidgetTitle/WidgetTitle'
 import styles from './DashboardCard.module.css'
+import { WidgetComponentType } from '@features/Widget'
 
-interface DashboardCardProps {
-    children?: React.ReactNode
-    meta: WidgetMeta
-}
+const DashboardCard: WidgetComponentType = ({ children, widgetMeta, mode }) => {
+    const title = widgetMeta?.title
 
-function DashboardCard({ children, meta }: DashboardCardProps) {
-    const title = meta?.title
+    const { isMainWidget, isCollapsed } = useWidgetCollapse(widgetMeta.name)
 
-    const { isMainWidget, isCollapsed } = useWidgetCollapse(meta.name)
+    if (mode === 'skip_card' || mode === 'headless') {
+        return <>{children}</>
+    }
 
     return (
         <div
             className={styles.container}
             data-test="WIDGET"
-            data-test-widget-type={meta.type}
-            data-test-widget-position={meta.position}
+            data-test-widget-type={widgetMeta.type}
+            data-test-widget-position={widgetMeta.position}
             data-test-widget-title={title}
-            data-test-widget-name={meta.name}
+            data-test-widget-name={widgetMeta.name}
         >
             <Row justify="center">
                 <Col span={24}>
-                    <WidgetTitle className={styles.header} level={2} widgetName={meta.name} text={title} />
+                    <WidgetTitle className={styles.header} level={2} widgetName={widgetMeta.name} text={title} />
                     {!(isMainWidget && isCollapsed) && children}
                 </Col>
             </Row>

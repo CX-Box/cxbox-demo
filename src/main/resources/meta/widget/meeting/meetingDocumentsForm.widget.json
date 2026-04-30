@@ -1,0 +1,78 @@
+{
+  "name": "meetingDocumentsForm",
+  "title": "Form",
+  "type": "Form",
+  "bc": "meetingDocumentEdit",
+  "fields": [
+    {
+      "label": "Document ID",
+      "key": "id",
+      "type": "input",
+      "drillDown": "true"
+    },
+    {
+      "label": "Document",
+      "key": "document",
+      "type": "dictionary"
+    },
+    {
+      "label": "File",
+      "key": "file",
+      "type": "fileUpload",
+      "fileIdKey": "fileId",
+      "preview": {
+        "enabled": true,
+        "mode": "popup"
+      }
+    },
+    {
+      "label": "FileSignatureFile",
+      "key": "employerSignatureFile",
+      "type": "fileUpload",
+      "fileIdKey": "employerSignatureFileId"
+    }
+  ],
+  "options": {
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "id",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "document",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "file",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "employerSignatureFile",
+              "span": 12
+            }
+          ]
+        }
+      ]
+    },
+    "actionGroups": {
+      "include": [
+
+      ]
+    }
+  }
+}

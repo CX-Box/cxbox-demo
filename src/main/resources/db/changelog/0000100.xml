@@ -139,6 +139,8 @@
       <column name="BRIEFING" type="VARCHAR(50)"/>
       <column name="DOCUMENT_NAME" type="VARCHAR(50)"/>
       <column name="MEETING_ID" type="NUMBER(19, 0)"/>
+      <column name="EMPLOYER_SIGNATURE_FILE" type="VARCHAR(255)"/>
+      <column name="EMPLOYER_SIGNATURE_FILE_ID" type="VARCHAR(50)"/>
       <column name="PRIORITY" type="NUMBER(19, 0)"/>
       <column defaultValueComputed="${now}" name="CREATED_DATE" remarks="Creation date"
         type="TIMESTAMP(6)">

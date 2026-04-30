@@ -12,7 +12,7 @@
     {
       "label": "Agenda",
       "key": "agenda",
-      "type": "richText"
+      "type": "input"
     },
     {
       "label": "Start Date",
@@ -58,15 +58,15 @@
         {
           "cols": [
             {
-              "fieldKey": "agenda",
-              "span": 24
+              "fieldKey": "region",
+              "span": 12
             }
           ]
         },
         {
           "cols": [
             {
-              "fieldKey": "region",
+              "fieldKey": "agenda",
               "span": 6
             },
             {

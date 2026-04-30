@@ -18,7 +18,7 @@
     {
       "title": "Agenda",
       "key": "agenda",
-      "type": "richText"
+      "type": "input"
     },
     {
       "title": "Start Date",

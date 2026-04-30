@@ -80,7 +80,7 @@
       <column name="ID" remarks="Identifier" type="NUMBER(19, 0)">
         <constraints primaryKey="true"/>
       </column>
-      <column name="AGENDA" type="TEXT"/>
+      <column name="AGENDA" type="VARCHAR(200)"/>
       <column name="REGION" type="VARCHAR2(255 BYTE)"/>
       <column name="STATUS" type="VARCHAR(200)"/>
       <column name="START_DATE_TIME" type="TIMESTAMP(6)"/>

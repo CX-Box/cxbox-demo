@@ -12,7 +12,18 @@ import org.demo.entity.Meeting;
 @Getter
 @AllArgsConstructor
 public enum MeetingStatus {
-	IN_COMPLETION("In completion", "Complete") {
+	IN_COMPLETION("In completion", "Sign") {
+		@Override
+		public List<MeetingStatus> available(@NonNull Meeting meeting) {
+			return Collections.singletonList(COMPLETED);
+		}
+
+		@Override
+		public void transition(@NonNull MeetingStatus meetingStatus, @NonNull Meeting meeting) {
+			meeting.setStatus(meetingStatus);
+		}
+	},
+	SIGN("Sign", "Complete") {
 		@Override
 		public List<MeetingStatus> available(@NonNull Meeting meeting) {
 			return Collections.singletonList(COMPLETED);

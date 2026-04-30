@@ -1,0 +1,24 @@
+{
+  "name": "meetingDocumentButtons",
+  "title": "",
+  "type": "Form",
+  "bc": "meetingDocumentEdit",
+  "fields": [],
+  "options": {
+    "signGeneration": [
+      {
+        "actionName": "documentSign",
+        "type": "document",
+        "documentFileIdKey": "fileId",
+        "documentFileNameKey": "file",
+        "signatureFileIdKey": "employerSignatureFileId",
+        "signatureFileNameKey": "employerSignatureFile"
+      }
+    ],
+    "actionGroups": {
+      "include": [
+        "documentSign"
+      ]
+    }
+  }
+}

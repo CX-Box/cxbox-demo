@@ -33,6 +33,7 @@ public class MeetingDocumentsWriteMeta extends FieldMetaBuilder<MeetingDocuments
 	@Override
 	public void buildIndependentMeta(FieldsMeta<MeetingDocumentsDTO> fields, InnerBcDescription bcDescription,
 			Long parentId) {
+		fields.enableFilter(MeetingDocumentsDTO_.employerSignatureFile);
 		fields.enableFilter(MeetingDocumentsDTO_.priority);
 		fields.enableFilter(MeetingDocumentsDTO_.file);
 		fields.enableSort(MeetingDocumentsDTO_.file);

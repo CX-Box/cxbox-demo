@@ -4,14 +4,13 @@ import { AxiosError } from 'axios'
 import { actions, interfaces } from '@cxbox-ui/core'
 import showSocketNotification from '../ShowSocketNotification'
 import { brokerURL, heartbeatIncoming, heartbeatOutgoing, reconnectDelay } from '@constants/notification'
-import { Client } from '@stomp/stompjs'
+import { Client, IFrame } from '@stomp/stompjs'
 import { SocketNotification } from '@interfaces/notification'
 import { createUserSubscribeUrl } from '../utils'
 import { useAppSelector } from '@store'
 import { keycloak, KEYCLOAK_MIN_VALIDITY } from '../../../keycloak'
 import { EFeatureSettingKey } from '@interfaces/session'
 import { EDrillDownTooltipValue } from '@components/ui/DrillDown/constants'
-import { IFrame } from '@stomp/stompjs/src/i-frame'
 
 const { ApplicationErrorType } = interfaces
 

@@ -1,12 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import { Icon } from 'antd'
-import { FlowAnalysisGraph as AntFlowAnalysisGraph } from '@ant-design/graphs'
+import { FlowAnalysisGraph as AntFlowAnalysisGraph, IGraph } from '@ant-design/graphs'
 import { useAppDispatch, useAppSelector } from '@store'
+import { useGraphSizeChange } from './hooks/useGraphSizeChange'
 import {
     collapseNodeRecursively,
     getEdgeBgColor,
+    getEdgeType,
     getNodeBgColor,
-    hasCycles,
     hasDuplicateEdges,
     mapToFlowGraphData,
     showSubTree
@@ -54,9 +55,12 @@ const RelationGraph: React.FC<RelationGraphProps> = ({ meta, setDataValidationEr
     const initialData = useAppSelector(state => state.data[bcName])
     const cursor = useAppSelector(state => state.screen.bo.bc[bcName]?.cursor)
 
+    const containerRef = useRef<HTMLDivElement>(null)
+    const graphRef = useRef<IGraph>()
     const cursorRef = useRef(cursor)
 
-    const { mode, dragNode, nodes, edges } = options?.relationGraph || {}
+    const { mode: modeFromOptions, dragNode, nodes, edges } = options?.relationGraph || {}
+    const mode = modeFromOptions || defaultMode
     const sourceNodeKey = nodes?.fieldKeys?.[0] || defaultSourceKey
     const targetNodeKey = nodes?.fieldKeys?.[1] || defaultTargetKey
 
@@ -64,8 +68,6 @@ const RelationGraph: React.FC<RelationGraphProps> = ({ meta, setDataValidationEr
         () => hasDuplicateEdges(initialData, sourceNodeKey, targetNodeKey),
         [initialData, sourceNodeKey, targetNodeKey]
     )
-
-    const hasCycle = useMemo(() => hasCycles(initialData, sourceNodeKey, targetNodeKey), [initialData, sourceNodeKey, targetNodeKey])
 
     const nodeFieldMeta = useMemo(() => {
         return fields.find(field => field.key === targetNodeKey)
@@ -76,7 +78,7 @@ const RelationGraph: React.FC<RelationGraphProps> = ({ meta, setDataValidationEr
     }, [fields])
 
     const data = useMemo(() => {
-        if (hasDuplicates || hasCycle) {
+        if (hasDuplicates) {
             return null
         }
 
@@ -88,16 +90,7 @@ const RelationGraph: React.FC<RelationGraphProps> = ({ meta, setDataValidationEr
             edges?.labelFieldKeys,
             nodes?.descriptionFieldKeys
         ) as any
-    }, [
-        hasDuplicates,
-        hasCycle,
-        initialData,
-        sourceNodeKey,
-        targetNodeKey,
-        nodeFieldMeta?.width,
-        edges?.labelFieldKeys,
-        nodes?.descriptionFieldKeys
-    ])
+    }, [hasDuplicates, initialData, sourceNodeKey, targetNodeKey, nodeFieldMeta?.width, edges?.labelFieldKeys, nodes?.descriptionFieldKeys])
 
     const onClick = useCallback(
         (itemId: string, valueFieldMeta?: WidgetListField) => {
@@ -132,7 +125,7 @@ const RelationGraph: React.FC<RelationGraphProps> = ({ meta, setDataValidationEr
                 className: styles.container,
                 data,
                 layout: {
-                    rankdir: mode || defaultMode,
+                    rankdir: mode,
                     ranksepFunc: () => 25
                 },
                 nodeCfg: {
@@ -146,7 +139,7 @@ const RelationGraph: React.FC<RelationGraphProps> = ({ meta, setDataValidationEr
                         })
                     },
                     padding: [6, 12, 6, 6],
-                    anchorPoints: anchorPointsByMode[mode || defaultMode],
+                    anchorPoints: anchorPointsByMode[mode],
                     nodeStateStyles: {
                         hover: {
                             shadowColor: nodeHoverShadowColor,
@@ -201,7 +194,7 @@ const RelationGraph: React.FC<RelationGraphProps> = ({ meta, setDataValidationEr
                             fontFamily: fontFamily
                         }
                     },
-                    type: edges?.type || (['TB', 'BT'].includes(mode || defaultMode) ? 'cubic-vertical' : 'cubic-horizontal'),
+                    type: edges?.type || getEdgeType(mode, false),
                     endArrow: (edge: IEdge) => ({
                         fill: getEdgeFill(edge.edgeId),
                         size: endArrowSize,
@@ -223,7 +216,7 @@ const RelationGraph: React.FC<RelationGraphProps> = ({ meta, setDataValidationEr
                 },
                 markerCfg: cfg => {
                     return {
-                        position: markerPositionByMode[mode || defaultMode],
+                        position: markerPositionByMode[mode],
                         show: data.edges.find((item: IEdge) => item.source === cfg.id),
                         style: {
                             stroke: markerStrokeColor
@@ -247,9 +240,108 @@ const RelationGraph: React.FC<RelationGraphProps> = ({ meta, setDataValidationEr
                     )
                 },
                 onReady: graph => {
-                    graph.on('afterrender', () => {
-                        graph.fitView()
-                    })
+                    graphRef.current = graph
+
+                    const updateAnchors = () => {
+                        const edges = graph.getEdges()
+
+                        edges.forEach(edge => {
+                            const sourceModel = edge.getSource().getModel()
+                            const targetModel = edge.getTarget().getModel()
+
+                            if (sourceModel?.x && sourceModel?.y && targetModel?.x && targetModel?.y) {
+                                switch (mode) {
+                                    case 'TB':
+                                        if (targetModel.y < sourceModel.y && targetModel.x > sourceModel.x) {
+                                            graph.updateItem(edge, {
+                                                sourceAnchor: 2,
+                                                targetAnchor: 1,
+                                                type: getEdgeType(mode, true)
+                                            })
+                                        } else if (targetModel.y < sourceModel.y && targetModel.x <= sourceModel.x) {
+                                            graph.updateItem(edge, {
+                                                sourceAnchor: 1,
+                                                targetAnchor: 2,
+                                                type: getEdgeType(mode, true)
+                                            })
+                                        } else {
+                                            graph.updateItem(edge, {
+                                                sourceAnchor: 3,
+                                                targetAnchor: 0,
+                                                type: getEdgeType(mode, false)
+                                            })
+                                        }
+                                        break
+
+                                    case 'BT':
+                                        if (targetModel.y > sourceModel.y && targetModel.x > sourceModel.x) {
+                                            graph.updateItem(edge, {
+                                                sourceAnchor: 2,
+                                                targetAnchor: 1,
+                                                type: getEdgeType(mode, true)
+                                            })
+                                        } else if (targetModel.y > sourceModel.y && targetModel.x <= sourceModel.x) {
+                                            graph.updateItem(edge, {
+                                                sourceAnchor: 1,
+                                                targetAnchor: 2,
+                                                type: getEdgeType(mode, true)
+                                            })
+                                        } else {
+                                            graph.updateItem(edge, {
+                                                sourceAnchor: 0,
+                                                targetAnchor: 3,
+                                                type: getEdgeType(mode, false)
+                                            })
+                                        }
+                                        break
+
+                                    case 'LR':
+                                        if (targetModel.y < sourceModel.y && targetModel.x < sourceModel.x) {
+                                            graph.updateItem(edge, {
+                                                sourceAnchor: 2,
+                                                targetAnchor: 1,
+                                                type: getEdgeType(mode, true)
+                                            })
+                                        } else if (targetModel.y > sourceModel.y && targetModel.x < sourceModel.x) {
+                                            graph.updateItem(edge, {
+                                                sourceAnchor: 1,
+                                                targetAnchor: 2,
+                                                type: getEdgeType(mode, true)
+                                            })
+                                        } else {
+                                            graph.updateItem(edge, {
+                                                sourceAnchor: 3,
+                                                targetAnchor: 0,
+                                                type: getEdgeType(mode, false)
+                                            })
+                                        }
+                                        break
+
+                                    case 'RL':
+                                        if (targetModel.y < sourceModel.y && targetModel.x > sourceModel.x) {
+                                            graph.updateItem(edge, {
+                                                sourceAnchor: 2,
+                                                targetAnchor: 1,
+                                                type: getEdgeType(mode, true)
+                                            })
+                                        } else if (targetModel.y > sourceModel.y && targetModel.x > sourceModel.x) {
+                                            graph.updateItem(edge, {
+                                                sourceAnchor: 1,
+                                                targetAnchor: 2,
+                                                type: getEdgeType(mode, true)
+                                            })
+                                        } else {
+                                            graph.updateItem(edge, {
+                                                sourceAnchor: 0,
+                                                targetAnchor: 3,
+                                                type: getEdgeType(mode, false)
+                                            })
+                                        }
+                                        break
+                                }
+                            }
+                        })
+                    }
 
                     graph.once('afterlayout', () => {
                         const collapsedNodeItems = graph.getNodes().filter(node => !(node.getModel()?.value as any)?.expanded)
@@ -287,7 +379,6 @@ const RelationGraph: React.FC<RelationGraphProps> = ({ meta, setDataValidationEr
                                 const id = node.getID()
                                 showSubTree(graph, id)
                                 graph.updateItem(id, { collapsed: false })
-                                graph.layout()
                             }
                             return
                         }
@@ -306,6 +397,10 @@ const RelationGraph: React.FC<RelationGraphProps> = ({ meta, setDataValidationEr
                             onClick(itemId, edgeFieldMeta)
                         }
                     })
+
+                    graph.on('afterlayout', updateAnchors)
+                    graph.on('node:dragend', updateAnchors)
+                    graph.on('node:drag', updateAnchors)
                 }
             },
         [data, dragNode, edgeFieldMeta, edges?.type, getEdgeFill, initialData, mode, nodeFieldMeta, onClick, targetNodeKey]
@@ -316,16 +411,22 @@ const RelationGraph: React.FC<RelationGraphProps> = ({ meta, setDataValidationEr
     }, [cursor])
 
     useEffect(() => {
-        if (hasDuplicates || hasCycle) {
+        if (hasDuplicates) {
             setDataValidationError()
         }
-    }, [hasCycle, hasDuplicates, setDataValidationError])
+    }, [hasDuplicates, setDataValidationError])
+
+    useGraphSizeChange(containerRef, graphRef)
 
     if (!config) {
         return null
     }
 
-    return <AntFlowAnalysisGraph {...config} />
+    return (
+        <div ref={containerRef}>
+            <AntFlowAnalysisGraph {...config} />
+        </div>
+    )
 }
 
 export default RelationGraph

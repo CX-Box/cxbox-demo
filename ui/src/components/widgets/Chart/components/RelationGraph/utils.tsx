@@ -219,3 +219,21 @@ export const formatDescriptionByWidth = (text: string, maxWidthPx: number, maxLi
 
     return lines.slice(0, maxLines).join('\n')
 }
+
+export const getEdgeType = (mode: string, isException: boolean) => {
+    const baseType = ['TB', 'BT'].includes(mode) ? 'cubic-vertical' : 'cubic-horizontal'
+
+    if (!isException) {
+        return baseType
+    }
+
+    if (baseType === 'cubic-vertical') {
+        return 'cubic-horizontal'
+    }
+
+    if (baseType === 'cubic-horizontal') {
+        return 'cubic-vertical'
+    }
+
+    return baseType
+}

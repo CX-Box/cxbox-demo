@@ -42,9 +42,9 @@
     },
     {
       "title": "File Encrypt and Sign",
-      "key": "fileEcnryptAndSign",
+      "key": "fileEncryptAndSign",
       "type": "fileUpload",
-      "fileIdKey": "fileEcnryptAndSignId"
+      "fileIdKey": "fileEncryptAndSignId"
     },
     {
       "title": "File Encrypted",
@@ -86,12 +86,27 @@
     "edit": {
       "widget": "meetingDocumentsFormForList"
     },
+    "cryptoGenerator": [
+      {
+        "type": "encrypt",
+        "signaturePackage": "any",
+        "signatureType": "CADES_BES",
+        "actionName": "documentSign",
+        "documentFileIdKey": "fileId",
+        "documentFileNameKey": "file",
+        "signatureFileIdKey": "fileSignId",
+        "signatureFileNameKey": "fileSign",
+        "encryptedFileIdKey": "fileEncryptId",
+        "encryptedFileNameKey": "fileEncrypt"
+      }
+    ],
     "actionGroups": {
       "include": [
         "create",
         "associate",
         "edit",
-        "delete"
+        "delete",
+        "documentSign"
       ]
     }
   }

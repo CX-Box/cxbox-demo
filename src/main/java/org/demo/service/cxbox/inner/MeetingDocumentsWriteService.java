@@ -76,8 +76,8 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 		setIfChanged(data, MeetingDocumentsDTO_.fileSign, entity::setFileSign);
 		setIfChanged(data, MeetingDocumentsDTO_.fileEncryptId, entity::setFileEncryptId);
 		setIfChanged(data, MeetingDocumentsDTO_.fileEncrypt, entity::setFileEncrypt);
-		setIfChanged(data, MeetingDocumentsDTO_.fileEcnryptAndSignId, entity::setFileEcnryptAndSignId);
-		setIfChanged(data, MeetingDocumentsDTO_.fileEcnryptAndSign, entity::setFileEcnryptAndSign);
+		setIfChanged(data, MeetingDocumentsDTO_.fileEncryptAndSignId, entity::setFileEncryptAndSignId);
+		setIfChanged(data, MeetingDocumentsDTO_.fileEncryptAndSign, entity::setFileEncryptAndSign);
 		setIfChanged(data, MeetingDocumentsDTO_.priority, entity::setPriority);
 		if (data.isFieldChanged(MeetingDocumentsDTO_.fileId)) {
 			entity.setFileId(data.getFileId());

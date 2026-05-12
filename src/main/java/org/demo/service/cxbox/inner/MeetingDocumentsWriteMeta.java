@@ -23,8 +23,8 @@ public class MeetingDocumentsWriteMeta extends FieldMetaBuilder<MeetingDocuments
 		fields.setEnabled(MeetingDocumentsDTO_.fileSign);
 		fields.setEnabled(MeetingDocumentsDTO_.fileEncryptId);
 		fields.setEnabled(MeetingDocumentsDTO_.fileEncrypt);
-		fields.setEnabled(MeetingDocumentsDTO_.fileEcnryptAndSignId);
-		fields.setEnabled(MeetingDocumentsDTO_.fileEcnryptAndSign);
+		fields.setEnabled(MeetingDocumentsDTO_.fileEncryptAndSignId);
+		fields.setEnabled(MeetingDocumentsDTO_.fileEncryptAndSign);
 		fields.setEnabled(MeetingDocumentsDTO_.priority);
 		fields.setEnabled(MeetingDocumentsDTO_.fileId);
 		fields.setEnabled(MeetingDocumentsDTO_.file);
@@ -41,7 +41,7 @@ public class MeetingDocumentsWriteMeta extends FieldMetaBuilder<MeetingDocuments
 			Long parentId) {
 		fields.enableFilter(MeetingDocumentsDTO_.fileSign);
 		fields.enableFilter(MeetingDocumentsDTO_.fileEncrypt);
-		fields.enableFilter(MeetingDocumentsDTO_.fileEcnryptAndSign);
+		fields.enableFilter(MeetingDocumentsDTO_.fileEncryptAndSign);
 		fields.enableFilter(MeetingDocumentsDTO_.priority);
 		fields.enableFilter(MeetingDocumentsDTO_.file);
 		fields.enableSort(MeetingDocumentsDTO_.file);

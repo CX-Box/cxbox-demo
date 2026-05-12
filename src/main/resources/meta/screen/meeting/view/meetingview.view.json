@@ -34,20 +34,13 @@
       "position": 60,
       "gridWidth": 24
     },
-
-    {
-      "widgetName": "meetingDocumentsForm",
-      "position": 70,
-      "gridWidth": 24
-    },
-    {
-      "widgetName": "meetingDocumentButtons",
-      "position": 80,
-      "gridWidth": 24
-    },
     {
       "widgetName": "meetingDocumentsFormForList",
       "position": 90,
+      "gridWidth": 24
+    },   {
+      "widgetName": "meetingDocumentButtons",
+      "position": 100,
       "gridWidth": 24
     }
   ],

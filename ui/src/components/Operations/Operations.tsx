@@ -89,7 +89,7 @@ function Operations(props: OperationsProps) {
         }
     }
 
-    const signModal = useMemo(() => {
+    const cryptoGeneratorModal = useMemo(() => {
         return (
             isOpenSingModal && (
                 <Modal visible onCancel={clearActiveSignOperation} footer={null}>
@@ -105,7 +105,7 @@ function Operations(props: OperationsProps) {
 
     return (
         <div className={styles.container}>
-            {signModal}
+            {cryptoGeneratorModal}
             {customOperations?.map(customOperation => {
                 if (isUploadDnDMode(customOperation.mode)) {
                     return <FileUpload key={customOperation.actionKey} widget={widgetMeta} operationInfo={customOperation} mode="drag" />

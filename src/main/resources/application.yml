@@ -4,7 +4,7 @@ app:
   oidc:
     client_id: cxbox-oidc-client
     scope: 'openid profile'
-    authority: ${FRONTEND_AUTH_SERVER_URL:http://localhost:9080/auth/}realms/cxbox
+    authority: ${FRONTEND_AUTH_SERVER_URL:http://localhost:9080/auth}/realms/cxbox
   stomp:
     stomp-post: ${STOMP_PORT:61613}
     broker-type: ${BROKER_TYPE:simple}

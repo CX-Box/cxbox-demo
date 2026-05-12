@@ -31,7 +31,6 @@ import org.demo.dto.cxbox.inner.MeetingDocumentsDTO_;
 import org.demo.entity.Meeting;
 import org.demo.entity.MeetingDocuments;
 import org.demo.entity.MeetingDocuments_;
-import org.demo.entity.enums.ClientStatus;
 import org.demo.entity.enums.MeetingStatus;
 import org.demo.repository.MeetingDocumentsRepository;
 import org.demo.repository.MeetingRepository;

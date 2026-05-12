@@ -2,14 +2,14 @@
   "realm" : "cxbox",
   "users" : [ {
     "id" : "f6810c3d-b027-407a-92b3-50dd479b6bb7",
-    "createdTimestamp" : 1631869680337,
     "username" : "demo",
-    "enabled" : true,
-    "totp" : false,
-    "emailVerified" : false,
     "firstName" : "John",
     "lastName" : "Snow",
     "email" : "demo@local.com",
+    "emailVerified" : false,
+    "enabled" : true,
+    "createdTimestamp" : 1631869680337,
+    "totp" : false,
     "credentials" : [ {
       "id" : "646ecbba-567e-4dd9-8043-6e7fd2e581ad",
       "type" : "password",

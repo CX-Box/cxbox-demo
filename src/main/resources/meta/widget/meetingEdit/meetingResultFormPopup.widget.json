@@ -7,7 +7,7 @@
     {
       "label": "Notes",
       "key": "notes",
-      "type": "hint"
+      "type": "richText"
     },
     {
       "label": "Results",

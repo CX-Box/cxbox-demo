@@ -35,7 +35,7 @@
     "history": "5.3.0",
     "i18next": "23.4.6",
     "lodash.debounce": "^4.0.8",
-    "oidc-client-ts": "3.5.0",
+    "oidc-client-ts": "2.3.0",
     "pdfjs-dist": "3.11.174",
     "query-string": "5.1.1",
     "rc-select": "14.11.0",

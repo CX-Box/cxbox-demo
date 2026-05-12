@@ -13,10 +13,10 @@
         "actionName": "documentSign",
         "documentFileIdKey": "fileId",
         "documentFileNameKey": "file",
-        "signatureFileIdKey": "employerSignatureFileId",
-        "signatureFileNameKey": "employerSignatureFile",
-        "encryptedFileIdKey": "employerSignatureFileId",
-        "encryptedFileNameKey": "employerSignatureFile"
+        "signatureFileIdKey": "fileSignId",
+        "signatureFileNameKey": "fileSign",
+        "encryptedFileIdKey": "fileEncryptId",
+        "encryptedFileNameKey": "fileEncrypt"
       }
     ],
     "actionGroups": {

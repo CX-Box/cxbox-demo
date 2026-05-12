@@ -46,9 +46,21 @@ public class MeetingDocuments extends BaseEntity {
 	private Long priority;
 
 	@Column
-	private String employerSignatureFile;
+	private String fileEcnryptAndSign;
 
 	@Column
-	private String employerSignatureFileId;
+	private String fileEcnryptAndSignId;
+
+	@Column
+	private String fileEncrypt;
+
+	@Column
+	private String fileEncryptId;
+
+	@Column
+	private String fileSign;
+
+	@Column
+	private String fileSignId;
 
 }

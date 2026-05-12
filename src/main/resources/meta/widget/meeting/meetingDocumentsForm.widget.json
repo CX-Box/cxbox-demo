@@ -24,12 +24,6 @@
         "enabled": true,
         "mode": "popup"
       }
-    },
-    {
-      "label": "FileSignatureFile",
-      "key": "employerSignatureFile",
-      "type": "fileUpload",
-      "fileIdKey": "employerSignatureFileId"
     }
   ],
   "options": {

@@ -19,6 +19,12 @@ public class MeetingDocumentsWriteMeta extends FieldMetaBuilder<MeetingDocuments
 	@Override
 	public void buildRowDependentMeta(RowDependentFieldsMeta<MeetingDocumentsDTO> fields,
 			InnerBcDescription bcDescription, Long id, Long parentId) {
+		fields.setEnabled(MeetingDocumentsDTO_.fileSignId);
+		fields.setEnabled(MeetingDocumentsDTO_.fileSign);
+		fields.setEnabled(MeetingDocumentsDTO_.fileEncryptId);
+		fields.setEnabled(MeetingDocumentsDTO_.fileEncrypt);
+		fields.setEnabled(MeetingDocumentsDTO_.fileEcnryptAndSignId);
+		fields.setEnabled(MeetingDocumentsDTO_.fileEcnryptAndSign);
 		fields.setEnabled(MeetingDocumentsDTO_.priority);
 		fields.setEnabled(MeetingDocumentsDTO_.fileId);
 		fields.setEnabled(MeetingDocumentsDTO_.file);
@@ -33,7 +39,9 @@ public class MeetingDocumentsWriteMeta extends FieldMetaBuilder<MeetingDocuments
 	@Override
 	public void buildIndependentMeta(FieldsMeta<MeetingDocumentsDTO> fields, InnerBcDescription bcDescription,
 			Long parentId) {
-		fields.enableFilter(MeetingDocumentsDTO_.employerSignatureFile);
+		fields.enableFilter(MeetingDocumentsDTO_.fileSign);
+		fields.enableFilter(MeetingDocumentsDTO_.fileEncrypt);
+		fields.enableFilter(MeetingDocumentsDTO_.fileEcnryptAndSign);
 		fields.enableFilter(MeetingDocumentsDTO_.priority);
 		fields.enableFilter(MeetingDocumentsDTO_.file);
 		fields.enableSort(MeetingDocumentsDTO_.file);

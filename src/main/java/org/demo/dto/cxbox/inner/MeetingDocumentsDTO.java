@@ -39,10 +39,20 @@ public class MeetingDocumentsDTO extends DataResponseDTO {
 	@SearchParameter(name = "priority", provider = BigDecimalValueProvider.class)
 	private Long priority;
 
-	@SearchParameter(name = "employerSignatureFile", provider = StringValueProvider.class)
-	private String employerSignatureFile;
+	@SearchParameter(name = "fileEcnryptAndSign", provider = StringValueProvider.class)
+	private String fileEcnryptAndSign;
 
-	private String employerSignatureFileId;
+	private String fileEcnryptAndSignId;
+
+	@SearchParameter(name = "fileEncrypt", provider = StringValueProvider.class)
+	private String fileEncrypt;
+
+	private String fileEncryptId;
+
+	@SearchParameter(name = "fileSign", provider = StringValueProvider.class)
+	private String fileSign;
+
+	private String fileSignId;
 
 	public MeetingDocumentsDTO(MeetingDocuments meeting) {
 		this.id = meeting.getId().toString();
@@ -52,8 +62,12 @@ public class MeetingDocumentsDTO extends DataResponseDTO {
 		this.briefing = meeting.getBriefing();
 		this.document = meeting.getDocument();
 		this.priority = meeting.getPriority();
-		this.employerSignatureFile = meeting.getEmployerSignatureFile();
-		this.employerSignatureFileId = meeting.getEmployerSignatureFileId();
+		this.fileEcnryptAndSign = meeting.getFileEcnryptAndSign();
+		this.fileEcnryptAndSignId = meeting.getFileEcnryptAndSignId();
+		this.fileEncrypt = meeting.getFileEncrypt();
+		this.fileEncryptId = meeting.getFileEncryptId();
+		this.fileSign = meeting.getFileSign();
+		this.fileSignId = meeting.getFileSignId();
 	}
 
 

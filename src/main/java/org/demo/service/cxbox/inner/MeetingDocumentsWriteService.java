@@ -72,8 +72,12 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 	@Override
 	protected ActionResultDTO<MeetingDocumentsDTO> doUpdateEntity(MeetingDocuments entity, MeetingDocumentsDTO data,
 			BusinessComponent bc) {
-		setIfChanged(data, MeetingDocumentsDTO_.employerSignatureFileId, entity::setEmployerSignatureFileId);
-		setIfChanged(data, MeetingDocumentsDTO_.employerSignatureFile, entity::setEmployerSignatureFile);
+		setIfChanged(data, MeetingDocumentsDTO_.fileSignId, entity::setFileSignId);
+		setIfChanged(data, MeetingDocumentsDTO_.fileSign, entity::setFileSign);
+		setIfChanged(data, MeetingDocumentsDTO_.fileEncryptId, entity::setFileEncryptId);
+		setIfChanged(data, MeetingDocumentsDTO_.fileEncrypt, entity::setFileEncrypt);
+		setIfChanged(data, MeetingDocumentsDTO_.fileEcnryptAndSignId, entity::setFileEcnryptAndSignId);
+		setIfChanged(data, MeetingDocumentsDTO_.fileEcnryptAndSign, entity::setFileEcnryptAndSign);
 		setIfChanged(data, MeetingDocumentsDTO_.priority, entity::setPriority);
 		if (data.isFieldChanged(MeetingDocumentsDTO_.fileId)) {
 			entity.setFileId(data.getFileId());
@@ -149,7 +153,7 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 				)
 				.delete(dlt -> dlt)
 				.action(act -> act
-						.action("documentSign", "Document Sign")
+						.action("documentSign", "Encrypt And Sign")
 						.scope(ActionScope.RECORD)
 						.available(bc -> {
 							return true;

@@ -150,6 +150,7 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 	public Actions<MeetingDocumentsDTO> getActions() {
 		return Actions.<MeetingDocumentsDTO>builder()
 				.create(crt -> crt.text("Add"))
+				.delete(crt -> crt.text("Delete"))
 				.save(sv -> sv)
 				.action(act -> act
 						.scope(ActionScope.RECORD)
@@ -166,7 +167,6 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 						.withCustomParameter(Map.of("subtype", "multiFileUpload"))
 						.text("Add Files")
 				)
-				.delete(dlt -> dlt)
 				.action(act -> act
 						.action("documentEncryptSign", "Encrypt And Sign")
 						.scope(ActionScope.RECORD)
@@ -176,7 +176,7 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 						.invoker((bc, dto) -> {
 
 							return new ActionResultDTO<MeetingDocumentsDTO>()
-									.setAction(PostAction.showMessage(MessageType.INFO, "Action documentSign was invoked"
+									.setAction(PostAction.showMessage(MessageType.INFO, "Action Encrypt and Sign was invoked"
 									));
 						})
 				)

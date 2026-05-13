@@ -56,6 +56,10 @@ public class MeetingDocumentsDTO extends DataResponseDTO {
 
 	private String fileSignName;
 
+	public static final String NAME_FILE_OVERRIDE_SIGN = "MySign";
+
+	public static final String NAME_FILE_OVERRIDE_ENCRYPT = "MyEncrypt";
+
 	public MeetingDocumentsDTO(MeetingDocuments meeting) {
 		this.id = meeting.getId().toString();
 		this.notes = meeting.getNotes();
@@ -70,7 +74,6 @@ public class MeetingDocumentsDTO extends DataResponseDTO {
 		this.fileEncryptId = meeting.getFileEncryptId();
 		this.fileSign = meeting.getFileSign();
 		this.fileSignId = meeting.getFileSignId();
-		this.fileSignName = "MySign";
 	}
 
 

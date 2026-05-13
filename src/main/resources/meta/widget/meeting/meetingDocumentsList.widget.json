@@ -43,24 +43,29 @@
     {
       "title": "File Encrypt and Sign",
       "key": "fileEncryptAndSign",
-      "type": "fileUpload",
+      "type": "hidden",
       "fileIdKey": "fileEncryptAndSignId"
     },
     {
       "title": "File Encrypted",
       "key": "fileEncrypt",
-      "type": "hidden",
+      "type": "fileUpload",
       "fileIdKey": "fileEncryptId"
     },
     {
       "title": "File Signed",
       "key": "fileSign",
-      "type": "hidden",
+      "type": "fileUpload",
       "fileIdKey": "fileSignId"
     },
     {
       "title": "File Signed Name",
-      "key": "fileSignName",
+      "key": "NAME_FILE_OVERRIDE_SIGN",
+      "type": "hidden"
+    },
+    {
+      "title": "File Encrypt Name",
+      "key": "NAME_FILE_OVERRIDE_ENCRYPT",
       "type": "hidden"
     }
   ],
@@ -94,7 +99,6 @@
     "cryptoGenerator": [
       {
         "type": "signAndEncrypt",
-        "signaturePackage": "any",
         "signatureType": "CADES_BES",
         "actionName": "documentEncryptSign",
         "documentFileIdKey": "fileId",
@@ -102,7 +106,9 @@
         "signatureFileIdKey": "fileSignId",
         "signatureFileNameKey": "fileSign",
         "encryptedFileIdKey": "fileEncryptId",
-        "encryptedFileNameKey": "fileEncrypt"
+        "encryptedFileNameKey": "fileEncrypt",
+        "encryptedFileBaseNameKey": "NAME_FILE_OVERRIDE_ENCRYPT",
+        "signatureFileBaseNameKey": "NAME_FILE_OVERRIDE_SIGN"
       }
     ],
     "actionGroups": {

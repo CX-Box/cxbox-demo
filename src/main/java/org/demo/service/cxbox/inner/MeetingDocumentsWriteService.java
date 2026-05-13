@@ -2,14 +2,20 @@ package org.demo.service.cxbox.inner;
 
 import static org.demo.dto.cxbox.inner.MeetingDocumentsDTO_.notes;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.cxbox.api.data.dto.AssociateDTO;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
@@ -31,7 +37,6 @@ import org.demo.dto.cxbox.inner.MeetingDocumentsDTO_;
 import org.demo.entity.Meeting;
 import org.demo.entity.MeetingDocuments;
 import org.demo.entity.MeetingDocuments_;
-import org.demo.entity.enums.MeetingStatus;
 import org.demo.repository.MeetingDocumentsRepository;
 import org.demo.repository.MeetingRepository;
 import org.springframework.data.jpa.domain.Specification;
@@ -39,6 +44,7 @@ import org.springframework.stereotype.Service;
 
 
 @SuppressWarnings({"java:S3252", "java:S1186", "java:S1170"})
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MeetingDocumentsWriteService extends VersionAwareResponseService<MeetingDocumentsDTO, MeetingDocuments> {
@@ -92,6 +98,15 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 			entity.setBriefing(data.getBriefing());
 		}
 		setIfChanged(data, notes, entity::setNotes);
+
+		if (data.isFieldChanged(MeetingDocumentsDTO_.fileEncrypt)
+				&& data.isFieldChanged(MeetingDocumentsDTO_.fileSign) &&
+				!data.getFileSign().isEmpty() && !data.getFileEncrypt().isEmpty()) {
+			String zipName = entity.getFile().substring(0, entity.getFile().indexOf('.')) +".zip";
+			String uploadId = createAndUploadZip(data, entity, zipName);
+			entity.setFileEncryptAndSignId(uploadId);
+			entity.setFileEncryptAndSign(zipName);
+		}
 
 		meetingDocumentsRepository.save(entity);
 		return new ActionResultDTO<>(entityToDto(bc, entity));
@@ -153,21 +168,55 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 				)
 				.delete(dlt -> dlt)
 				.action(act -> act
-						.action("documentSign", "Encrypt And Sign")
+						.action("documentEncryptSign", "Encrypt And Sign")
 						.scope(ActionScope.RECORD)
 						.available(bc -> {
 							return true;
 						})
 						.invoker((bc, dto) -> {
-							Meeting meeting = meetingRepository.getReferenceById(Long.parseLong(bc.getParentId()));
-							meeting.setStatus(MeetingStatus.SIGN);
-							meetingRepository.save(meeting);
+
 							return new ActionResultDTO<MeetingDocumentsDTO>()
 									.setAction(PostAction.showMessage(MessageType.INFO, "Action documentSign was invoked"
 									));
 						})
 				)
 				.build();
+	}
+
+	public String createAndUploadZip(MeetingDocumentsDTO dto, MeetingDocuments entity, String zipName) {
+		try {
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ZipOutputStream zipOut = new ZipOutputStream(baos);
+
+			addFile(zipOut, entity.getFile(), entity.getFile().getBytes());
+			addFile(zipOut, dto.getFileSign(), dto.getFileSign().getBytes());
+			addFile(zipOut, dto.getFileEncrypt(), dto.getFileEncrypt().getBytes());
+
+			zipOut.finish();
+			return cxboxFileService.upload(
+					new FileDownloadDto(
+							() -> new ByteArrayInputStream(baos.toByteArray()),
+							baos.toByteArray().length,
+							zipName,
+							"application/zip"
+					),
+					null
+			);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private void addFile(ZipOutputStream zipOut, String fileName, byte[] content) throws IOException {
+		if (content == null || content.length == 0) {
+			return;
+		}
+
+		ZipEntry zipEntry = new ZipEntry(fileName);
+
+		zipOut.putNextEntry(zipEntry);
+		zipOut.write(content);
+		zipOut.closeEntry();
 	}
 
 	private ActionsBuilder<MeetingDocumentsDTO> addEditAction(ActionsBuilder<MeetingDocumentsDTO> builder) {

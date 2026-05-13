@@ -19,6 +19,7 @@ public class MeetingDocumentsWriteMeta extends FieldMetaBuilder<MeetingDocuments
 	@Override
 	public void buildRowDependentMeta(RowDependentFieldsMeta<MeetingDocumentsDTO> fields,
 			InnerBcDescription bcDescription, Long id, Long parentId) {
+
 		fields.setEnabled(MeetingDocumentsDTO_.fileSignId);
 		fields.setEnabled(MeetingDocumentsDTO_.fileSign);
 		fields.setEnabled(MeetingDocumentsDTO_.fileEncryptId);

@@ -38,10 +38,6 @@
       "widgetName": "meetingDocumentsFormForList",
       "position": 90,
       "gridWidth": 24
-    },   {
-      "widgetName": "meetingDocumentButtons",
-      "position": 100,
-      "gridWidth": 24
     }
   ],
   "rolesAllowed": [

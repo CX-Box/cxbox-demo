@@ -54,6 +54,8 @@ public class MeetingDocumentsDTO extends DataResponseDTO {
 
 	private String fileSignId;
 
+	private String fileSignName;
+
 	public MeetingDocumentsDTO(MeetingDocuments meeting) {
 		this.id = meeting.getId().toString();
 		this.notes = meeting.getNotes();
@@ -68,6 +70,7 @@ public class MeetingDocumentsDTO extends DataResponseDTO {
 		this.fileEncryptId = meeting.getFileEncryptId();
 		this.fileSign = meeting.getFileSign();
 		this.fileSignId = meeting.getFileSignId();
+		this.fileSignName = "MySign";
 	}
 
 

@@ -49,14 +49,19 @@
     {
       "title": "File Encrypted",
       "key": "fileEncrypt",
-      "type": "fileUpload",
+      "type": "hidden",
       "fileIdKey": "fileEncryptId"
     },
     {
       "title": "File Signed",
       "key": "fileSign",
-      "type": "fileUpload",
+      "type": "hidden",
       "fileIdKey": "fileSignId"
+    },
+    {
+      "title": "File Signed Name",
+      "key": "fileSignName",
+      "type": "hidden"
     }
   ],
   "options": {
@@ -88,10 +93,10 @@
     },
     "cryptoGenerator": [
       {
-        "type": "encrypt",
+        "type": "signAndEncrypt",
         "signaturePackage": "any",
         "signatureType": "CADES_BES",
-        "actionName": "documentSign",
+        "actionName": "documentEncryptSign",
         "documentFileIdKey": "fileId",
         "documentFileNameKey": "file",
         "signatureFileIdKey": "fileSignId",
@@ -106,7 +111,7 @@
         "associate",
         "edit",
         "delete",
-        "documentSign"
+        "documentEncryptSign"
       ]
     }
   }

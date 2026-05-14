@@ -2,7 +2,7 @@ import React from 'react'
 import ErrorPopupInner from '@components/ui/ErrorPopup/ErrorPopupInner'
 import { ApplicationErrorType } from '@cxbox-ui/core'
 import { Trans } from 'react-i18next'
-import { cryptoProLinks } from '@components/CryptoGeneratorContent/constants'
+import { CRYPTOPRO_LINKS } from '@constants/cadesPlugin'
 
 const BUSINESS_ERROR = { type: ApplicationErrorType.BusinessError }
 
@@ -23,11 +23,7 @@ const CertErrorPopup: React.FC<CertErrorPopupProps> = ({ hasError, onClose }) =>
                 <Trans
                     i18nKey="Failed to get certificate"
                     components={[
-                        <a key="0" href={cryptoProLinks.cryptoproLink} target="_blank" rel="noreferrer">
-                            placeholder
-                        </a>,
-                        <br key="1" />,
-                        <a key="2" href={cryptoProLinks.hdLink} target="_blank" rel="noreferrer">
+                        <a key="0" href={CRYPTOPRO_LINKS.INSTRUCTION_URL} target="_blank" rel="noreferrer">
                             placeholder
                         </a>
                     ]}

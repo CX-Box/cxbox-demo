@@ -14,7 +14,6 @@ import moment from 'moment'
 import CertificateInfo from '@components/CryptoGeneratorContent/CertificateInfo'
 import { Trans, useTranslation } from 'react-i18next'
 import { filterActiveCertificates } from '@utils/cadesPlugin/filterActiveCertificates'
-import { cryptoProLinks } from '@components/CryptoGeneratorContent/constants'
 import { Lookup } from '@utils/Lookup'
 import Switch from '@components/Switch/Switch'
 import Case from '@components/Switch/Case'
@@ -23,7 +22,7 @@ import CertErrorPopup from '@components/CryptoGeneratorContent/CertErrorPopup'
 import { CadesPluginError } from '@utils/cadesPlugin/CadesPluginError'
 import { base64ToPemBlob } from '@utils/cadesPlugin/base64ToPemBlob'
 import { encryptData } from '@utils/cadesPlugin/encryptData'
-import { DEFAULT_SIGNATURE_PACKAGE, SIGNATURE_PACKAGE, SignaturePackage } from '@constants/cadesPlugin'
+import { CRYPTOPRO_LINKS, DEFAULT_SIGNATURE_PACKAGE, SIGNATURE_PACKAGE, SignaturePackage } from '@constants/cadesPlugin'
 import createVerifiedSignature from '@utils/cadesPlugin/createVerifiedSignature'
 import { DataItem } from '@cxbox-ui/schema'
 import FieldBaseThemeWrapper from '@components/FieldBaseThemeWrapper/FieldBaseThemeWrapper'
@@ -361,11 +360,7 @@ function CryptoGeneratorContent({ operationType, meta, onClose }: CryptoGenerato
                         <Trans
                             i18nKey="Cryptopro plugin error"
                             components={[
-                                <a key="0" href={cryptoProLinks.cryptoproInstruction} target="_blank" rel="noreferrer">
-                                    placeholder
-                                </a>,
-                                <br key="1" />,
-                                <a key="2" href={cryptoProLinks.hdLink} target="_blank" rel="noreferrer">
+                                <a key="0" href={CRYPTOPRO_LINKS.INSTRUCTION_URL} target="_blank" rel="noreferrer">
                                     placeholder
                                 </a>
                             ]}
@@ -384,11 +379,7 @@ function CryptoGeneratorContent({ operationType, meta, onClose }: CryptoGenerato
                         <Trans
                             i18nKey="Certificate empty error"
                             components={[
-                                <a key="0" href={cryptoProLinks.instructionLink} target="_blank" rel="noreferrer">
-                                    placeholder
-                                </a>,
-                                <br key="1" />,
-                                <a key="2" href={cryptoProLinks.hdLink} target="_blank" rel="noreferrer">
+                                <a key="0" href={CRYPTOPRO_LINKS.INSTRUCTION_URL} target="_blank" rel="noreferrer">
                                     placeholder
                                 </a>
                             ]}

@@ -102,7 +102,7 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 		if (data.isFieldChanged(MeetingDocumentsDTO_.fileEncrypt)
 				&& data.isFieldChanged(MeetingDocumentsDTO_.fileSign) &&
 				!data.getFileSign().isEmpty() && !data.getFileEncrypt().isEmpty()) {
-			String zipName = entity.getFile().substring(0, entity.getFile().indexOf('.')) +".zip";
+			String zipName = entity.getFile().substring(0, entity.getFile().indexOf('.')) + ".zip";
 			String uploadId = createAndUploadZip(data, entity, zipName);
 			entity.setFileEncryptAndSignId(uploadId);
 			entity.setFileEncryptAndSign(zipName);

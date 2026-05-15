@@ -194,7 +194,7 @@ const RelationGraph: React.FC<RelationGraphProps> = ({ meta, setDataValidationEr
                             fontFamily: fontFamily
                         }
                     },
-                    type: edges?.type || getEdgeType(mode, false),
+                    type: edges?.type || (['TB', 'BT'].includes(mode) ? 'cubic-vertical' : 'cubic-horizontal'),
                     endArrow: (edge: IEdge) => ({
                         fill: getEdgeFill(edge.edgeId),
                         size: endArrowSize,
@@ -250,94 +250,74 @@ const RelationGraph: React.FC<RelationGraphProps> = ({ meta, setDataValidationEr
                             const targetModel = edge.getTarget().getModel()
 
                             if (sourceModel?.x && sourceModel?.y && targetModel?.x && targetModel?.y) {
-                                switch (mode) {
-                                    case 'TB':
-                                        if (targetModel.y < sourceModel.y && targetModel.x > sourceModel.x) {
-                                            graph.updateItem(edge, {
-                                                sourceAnchor: 2,
-                                                targetAnchor: 1,
-                                                type: getEdgeType(mode, true)
-                                            })
-                                        } else if (targetModel.y < sourceModel.y && targetModel.x <= sourceModel.x) {
-                                            graph.updateItem(edge, {
-                                                sourceAnchor: 1,
-                                                targetAnchor: 2,
-                                                type: getEdgeType(mode, true)
-                                            })
-                                        } else {
-                                            graph.updateItem(edge, {
-                                                sourceAnchor: 3,
-                                                targetAnchor: 0,
-                                                type: getEdgeType(mode, false)
-                                            })
-                                        }
-                                        break
-
-                                    case 'BT':
-                                        if (targetModel.y > sourceModel.y && targetModel.x > sourceModel.x) {
-                                            graph.updateItem(edge, {
-                                                sourceAnchor: 2,
-                                                targetAnchor: 1,
-                                                type: getEdgeType(mode, true)
-                                            })
-                                        } else if (targetModel.y > sourceModel.y && targetModel.x <= sourceModel.x) {
-                                            graph.updateItem(edge, {
-                                                sourceAnchor: 1,
-                                                targetAnchor: 2,
-                                                type: getEdgeType(mode, true)
-                                            })
-                                        } else {
-                                            graph.updateItem(edge, {
-                                                sourceAnchor: 0,
-                                                targetAnchor: 3,
-                                                type: getEdgeType(mode, false)
-                                            })
-                                        }
-                                        break
-
-                                    case 'LR':
-                                        if (targetModel.y < sourceModel.y && targetModel.x < sourceModel.x) {
-                                            graph.updateItem(edge, {
-                                                sourceAnchor: 2,
-                                                targetAnchor: 1,
-                                                type: getEdgeType(mode, true)
-                                            })
-                                        } else if (targetModel.y > sourceModel.y && targetModel.x < sourceModel.x) {
-                                            graph.updateItem(edge, {
-                                                sourceAnchor: 1,
-                                                targetAnchor: 2,
-                                                type: getEdgeType(mode, true)
-                                            })
-                                        } else {
-                                            graph.updateItem(edge, {
-                                                sourceAnchor: 3,
-                                                targetAnchor: 0,
-                                                type: getEdgeType(mode, false)
-                                            })
-                                        }
-                                        break
-
-                                    case 'RL':
-                                        if (targetModel.y < sourceModel.y && targetModel.x > sourceModel.x) {
-                                            graph.updateItem(edge, {
-                                                sourceAnchor: 2,
-                                                targetAnchor: 1,
-                                                type: getEdgeType(mode, true)
-                                            })
-                                        } else if (targetModel.y > sourceModel.y && targetModel.x > sourceModel.x) {
-                                            graph.updateItem(edge, {
-                                                sourceAnchor: 1,
-                                                targetAnchor: 2,
-                                                type: getEdgeType(mode, true)
-                                            })
-                                        } else {
-                                            graph.updateItem(edge, {
-                                                sourceAnchor: 0,
-                                                targetAnchor: 3,
-                                                type: getEdgeType(mode, false)
-                                            })
-                                        }
-                                        break
+                                if (mode === 'TB') {
+                                    if (targetModel.y < sourceModel.y && targetModel.x > sourceModel.x) {
+                                        graph.updateItem(edge, {
+                                            sourceAnchor: 5,
+                                            targetAnchor: 4
+                                        })
+                                    } else if (targetModel.y < sourceModel.y && targetModel.x <= sourceModel.x) {
+                                        graph.updateItem(edge, {
+                                            sourceAnchor: 2,
+                                            targetAnchor: 3
+                                        })
+                                    } else {
+                                        graph.updateItem(edge, {
+                                            sourceAnchor: 1,
+                                            targetAnchor: 0
+                                        })
+                                    }
+                                } else if (mode === 'BT') {
+                                    if (targetModel.y > sourceModel.y && targetModel.x > sourceModel.x) {
+                                        graph.updateItem(edge, {
+                                            sourceAnchor: 5,
+                                            targetAnchor: 4
+                                        })
+                                    } else if (targetModel.y > sourceModel.y && targetModel.x <= sourceModel.x) {
+                                        graph.updateItem(edge, {
+                                            sourceAnchor: 2,
+                                            targetAnchor: 3
+                                        })
+                                    } else {
+                                        graph.updateItem(edge, {
+                                            sourceAnchor: 0,
+                                            targetAnchor: 1
+                                        })
+                                    }
+                                } else if (mode === 'LR') {
+                                    if (targetModel.y < sourceModel.y && targetModel.x < sourceModel.x) {
+                                        graph.updateItem(edge, {
+                                            sourceAnchor: 3,
+                                            targetAnchor: 2
+                                        })
+                                    } else if (targetModel.y > sourceModel.y && targetModel.x < sourceModel.x) {
+                                        graph.updateItem(edge, {
+                                            sourceAnchor: 4,
+                                            targetAnchor: 5
+                                        })
+                                    } else {
+                                        graph.updateItem(edge, {
+                                            sourceAnchor: 1,
+                                            targetAnchor: 0
+                                        })
+                                    }
+                                } else if (mode === 'RL') {
+                                    if (targetModel.y < sourceModel.y && targetModel.x > sourceModel.x) {
+                                        graph.updateItem(edge, {
+                                            sourceAnchor: 5,
+                                            targetAnchor: 4
+                                        })
+                                    } else if (targetModel.y > sourceModel.y && targetModel.x > sourceModel.x) {
+                                        graph.updateItem(edge, {
+                                            sourceAnchor: 2,
+                                            targetAnchor: 3
+                                        })
+                                    } else {
+                                        graph.updateItem(edge, {
+                                            sourceAnchor: 0,
+                                            targetAnchor: 1
+                                        })
+                                    }
                                 }
                             }
                         })

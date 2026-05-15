@@ -39,6 +39,34 @@
       "title": "Priority",
       "key": "priority",
       "type": "number"
+    },
+    {
+      "title": "File Encrypt and Sign",
+      "key": "fileEncryptAndSign",
+      "type": "hidden",
+      "fileIdKey": "fileEncryptAndSignId"
+    },
+    {
+      "title": "File Encrypted",
+      "key": "fileEncrypt",
+      "type": "fileUpload",
+      "fileIdKey": "fileEncryptId"
+    },
+    {
+      "title": "File Signed",
+      "key": "fileSign",
+      "type": "fileUpload",
+      "fileIdKey": "fileSignId"
+    },
+    {
+      "title": "File Signed Name",
+      "key": "NAME_FILE_OVERRIDE_SIGN",
+      "type": "hidden"
+    },
+    {
+      "title": "File Encrypt Name",
+      "key": "NAME_FILE_OVERRIDE_ENCRYPT",
+      "type": "hidden"
     }
   ],
   "options": {
@@ -68,12 +96,28 @@
     "edit": {
       "widget": "meetingDocumentsFormForList"
     },
+    "cryptoGenerator": [
+      {
+        "type": "signAndEncrypt",
+        "signatureType": "CADES_BES",
+        "actionName": "documentEncryptSign",
+        "documentFileIdKey": "fileId",
+        "documentFileNameKey": "file",
+        "signatureFileIdKey": "fileSignId",
+        "signatureFileNameKey": "fileSign",
+        "encryptedFileIdKey": "fileEncryptId",
+        "encryptedFileNameKey": "fileEncrypt",
+        "encryptedFileBaseNameKey": "NAME_FILE_OVERRIDE_ENCRYPT",
+        "signatureFileBaseNameKey": "NAME_FILE_OVERRIDE_SIGN"
+      }
+    ],
     "actionGroups": {
       "include": [
         "create",
         "associate",
         "edit",
-        "delete"
+        "delete",
+        "documentEncryptSign"
       ]
     }
   }

@@ -49,7 +49,7 @@ const SingleFileUpload: React.FunctionComponent<SingleFileUploadProps> = ({
 
     const { t } = useTranslation()
 
-    const fileIcon = <FilePreviewIcon fileName={fileName} onFileIconClick={onFileIconClick} />
+    const fileIcon = <FilePreviewIcon key="preview-icon" fileName={fileName} onFileIconClick={onFileIconClick} />
 
     const controls: { [key: string]: React.ReactNode } = {
         deleteButton: (

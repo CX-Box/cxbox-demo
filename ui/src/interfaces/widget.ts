@@ -15,6 +15,7 @@ import { FileUploadFieldMeta as CoreFileUploadFieldMeta, WidgetField as CoreWidg
 import { TableSettingsItem } from '@interfaces/tableSettings'
 import { IAggField, IAggLevel } from '@interfaces/groupingHierarchy'
 import { PaginationMode } from '@constants/pagination'
+import { SignaturePackage, SignatureType } from '@constants/cadesPlugin'
 
 export enum CustomFieldTypes {
     MultipleSelect = 'multipleSelect',
@@ -116,6 +117,23 @@ export type CalendarOption = {
     descriptionFieldKey?: string
 }
 
+export type CryptoGeneratorTypes = 'signAndEncrypt' | 'encryptAndSign' | 'sign' | 'encrypt'
+
+export type CryptoGeneratorItem = {
+    actionName: string
+    type?: CryptoGeneratorTypes
+    documentFileIdKey?: string
+    documentFileNameKey?: string
+    signatureFileIdKey?: string
+    signatureFileNameKey?: string
+    signatureFileBaseNameKey?: string
+    signatureType?: SignatureType
+    signaturePackage?: SignaturePackage | 'any'
+    encryptedFileIdKey?: string
+    encryptedFileNameKey?: string
+    encryptedFileBaseNameKey?: string
+}
+
 export interface AppWidgetMeta extends WidgetMeta {
     personalFields?: TableSettingsItem | null // TODO make mandatory
     options?: WidgetOptions & {
@@ -179,6 +197,7 @@ export interface AppWidgetMeta extends WidgetMeta {
         massOp?: MassOperationOption
 
         calendar?: CalendarOption
+        cryptoGenerator?: CryptoGeneratorItem[]
     }
 }
 

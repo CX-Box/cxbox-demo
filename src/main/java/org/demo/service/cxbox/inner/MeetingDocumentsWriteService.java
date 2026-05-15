@@ -2,18 +2,25 @@ package org.demo.service.cxbox.inner;
 
 import static org.demo.dto.cxbox.inner.MeetingDocumentsDTO_.notes;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.cxbox.api.data.dto.AssociateDTO;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.DrillDownType;
+import org.cxbox.core.dto.MessageType;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.AssociateResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
@@ -37,6 +44,7 @@ import org.springframework.stereotype.Service;
 
 
 @SuppressWarnings({"java:S3252", "java:S1186", "java:S1170"})
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MeetingDocumentsWriteService extends VersionAwareResponseService<MeetingDocumentsDTO, MeetingDocuments> {
@@ -70,6 +78,12 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 	@Override
 	protected ActionResultDTO<MeetingDocumentsDTO> doUpdateEntity(MeetingDocuments entity, MeetingDocumentsDTO data,
 			BusinessComponent bc) {
+		setIfChanged(data, MeetingDocumentsDTO_.fileSignId, entity::setFileSignId);
+		setIfChanged(data, MeetingDocumentsDTO_.fileSign, entity::setFileSign);
+		setIfChanged(data, MeetingDocumentsDTO_.fileEncryptId, entity::setFileEncryptId);
+		setIfChanged(data, MeetingDocumentsDTO_.fileEncrypt, entity::setFileEncrypt);
+		setIfChanged(data, MeetingDocumentsDTO_.fileEncryptAndSignId, entity::setFileEncryptAndSignId);
+		setIfChanged(data, MeetingDocumentsDTO_.fileEncryptAndSign, entity::setFileEncryptAndSign);
 		setIfChanged(data, MeetingDocumentsDTO_.priority, entity::setPriority);
 		if (data.isFieldChanged(MeetingDocumentsDTO_.fileId)) {
 			entity.setFileId(data.getFileId());
@@ -84,6 +98,15 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 			entity.setBriefing(data.getBriefing());
 		}
 		setIfChanged(data, notes, entity::setNotes);
+
+		if (data.isFieldChanged(MeetingDocumentsDTO_.fileEncrypt)
+				&& data.isFieldChanged(MeetingDocumentsDTO_.fileSign) &&
+				!data.getFileSign().isEmpty() && !data.getFileEncrypt().isEmpty()) {
+			String zipName = entity.getFile().substring(0, entity.getFile().indexOf('.')) + ".zip";
+			String uploadId = createAndUploadZip(data, entity, zipName);
+			entity.setFileEncryptAndSignId(uploadId);
+			entity.setFileEncryptAndSign(zipName);
+		}
 
 		meetingDocumentsRepository.save(entity);
 		return new ActionResultDTO<>(entityToDto(bc, entity));
@@ -127,6 +150,7 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 	public Actions<MeetingDocumentsDTO> getActions() {
 		return Actions.<MeetingDocumentsDTO>builder()
 				.create(crt -> crt.text("Add"))
+				.delete(crt -> crt.text("Delete"))
 				.save(sv -> sv)
 				.action(act -> act
 						.scope(ActionScope.RECORD)
@@ -143,8 +167,56 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 						.withCustomParameter(Map.of("subtype", "multiFileUpload"))
 						.text("Add Files")
 				)
-				.delete(dlt -> dlt)
+				.action(act -> act
+						.action("documentEncryptSign", "Encrypt And Sign")
+						.scope(ActionScope.RECORD)
+						.available(bc -> {
+							return true;
+						})
+						.invoker((bc, dto) -> {
+
+							return new ActionResultDTO<MeetingDocumentsDTO>()
+									.setAction(PostAction.showMessage(MessageType.INFO, "Action Encrypt and Sign was invoked"
+									));
+						})
+				)
 				.build();
+	}
+
+	public String createAndUploadZip(MeetingDocumentsDTO dto, MeetingDocuments entity, String zipName) {
+		try {
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ZipOutputStream zipOut = new ZipOutputStream(baos);
+
+			addFile(zipOut, entity.getFile(), entity.getFile().getBytes());
+			addFile(zipOut, dto.getFileSign(), dto.getFileSign().getBytes());
+			addFile(zipOut, dto.getFileEncrypt(), dto.getFileEncrypt().getBytes());
+
+			zipOut.finish();
+			return cxboxFileService.upload(
+					new FileDownloadDto(
+							() -> new ByteArrayInputStream(baos.toByteArray()),
+							baos.toByteArray().length,
+							zipName,
+							"application/zip"
+					),
+					null
+			);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private void addFile(ZipOutputStream zipOut, String fileName, byte[] content) throws IOException {
+		if (content == null || content.length == 0) {
+			return;
+		}
+
+		ZipEntry zipEntry = new ZipEntry(fileName);
+
+		zipOut.putNextEntry(zipEntry);
+		zipOut.write(content);
+		zipOut.closeEntry();
 	}
 
 	private ActionsBuilder<MeetingDocumentsDTO> addEditAction(ActionsBuilder<MeetingDocumentsDTO> builder) {

@@ -1,6 +1,6 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useCallback, useMemo, useState } from 'react'
 import { isOperationGroup, WidgetTypes } from '@cxbox-ui/core'
-import { Icon } from 'antd'
+import { Icon, Modal } from 'antd'
 import { useAppSelector } from '@store'
 import styles from './Operations.less'
 import { useDispatch } from 'react-redux'
@@ -16,6 +16,7 @@ import { actions } from '@actions'
 import { AVAILABLE_MASS_STEPS } from '@components/widgets/Table/massOperations/constants'
 import { Operation, OperationGroup } from '@interfaces/rowMeta'
 import { useStaleValueWhileRowMetaLoading } from '@hooks/useStaleValueWhileRowMetaLoading'
+import CryptoGeneratorContent from '@components/CryptoGeneratorContent/CryptoGeneratorContent'
 
 export interface OperationsProps {
     className?: string
@@ -38,6 +39,21 @@ function Operations(props: OperationsProps) {
 
     const dispatch = useDispatch()
 
+    const isCryptoOperation = useCallback(
+        (operation: Operation) => {
+            return widgetMeta?.options?.cryptoGenerator?.find(generatorOptions => generatorOptions.actionName === operation.type)
+        },
+        [widgetMeta?.options?.cryptoGenerator]
+    )
+
+    const [activeSignOperation, setActiveSignOperation] = useState<string | null>(null)
+
+    const isOpenSingModal = !!activeSignOperation
+
+    const clearActiveSignOperation = useCallback(() => {
+        setActiveSignOperation(null)
+    }, [])
+
     const handleOperationClick = React.useCallback(
         (operation: Operation) => {
             if (operation.scope === 'mass') {
@@ -50,6 +66,8 @@ function Operations(props: OperationsProps) {
                         step: AVAILABLE_MASS_STEPS[0]
                     })
                 )
+            } else if (isCryptoOperation(operation)) {
+                setActiveSignOperation(operation.type)
             } else {
                 dispatch(
                     actions.sendOperation({
@@ -62,7 +80,7 @@ function Operations(props: OperationsProps) {
                 )
             }
         },
-        [dispatch, bcName, widgetMeta]
+        [isCryptoOperation, dispatch, bcName, widgetMeta.name]
     )
 
     const getButtonProps = (operation: Operation) => {
@@ -71,12 +89,23 @@ function Operations(props: OperationsProps) {
         }
     }
 
+    const cryptoGeneratorModal = useMemo(() => {
+        return (
+            isOpenSingModal && (
+                <Modal visible onCancel={clearActiveSignOperation} footer={null}>
+                    <CryptoGeneratorContent meta={widgetMeta} operationType={activeSignOperation} onClose={clearActiveSignOperation} />
+                </Modal>
+            )
+        )
+    }, [activeSignOperation, clearActiveSignOperation, isOpenSingModal, widgetMeta])
+
     if (!hasOperations && !additionalOperations && !widgetMeta.options?.fullTextSearch?.enabled) {
         return null
     }
 
     return (
         <div className={styles.container}>
+            {cryptoGeneratorModal}
             {customOperations?.map(customOperation => {
                 if (isUploadDnDMode(customOperation.mode)) {
                     return <FileUpload key={customOperation.actionKey} widget={widgetMeta} operationInfo={customOperation} mode="drag" />

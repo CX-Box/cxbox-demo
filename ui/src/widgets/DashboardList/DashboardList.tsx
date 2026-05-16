@@ -1,0 +1,27 @@
+import React from 'react'
+import Table from '@components/Table/Table'
+import { AppWidgetTableMeta } from '@interfaces/widget'
+import { BaseWidgetProps, WidgetComponentType } from '@features/Widget'
+import DashboardCard from '@components/DashboardCard/DashboardCard'
+import WidgetLoader from '@components/WidgetLoader'
+
+function assertIsDashboardListMeta(meta: BaseWidgetProps['widgetMeta']): asserts meta is AppWidgetTableMeta {
+    if (meta.type !== 'DashboardList') {
+        throw new Error('Not a DashboardList meta')
+    }
+}
+
+const DashboardList: WidgetComponentType = ({ widgetMeta, mode }) => {
+    assertIsDashboardListMeta(widgetMeta)
+    return (
+        <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
+            <DashboardCard widgetMeta={widgetMeta} mode={mode}>
+                <div>
+                    <Table meta={widgetMeta} />
+                </div>
+            </DashboardCard>
+        </WidgetLoader>
+    )
+}
+
+export default React.memo(DashboardList)

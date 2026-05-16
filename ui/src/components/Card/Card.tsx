@@ -7,24 +7,27 @@ import { useAppSelector } from '@store'
 import { useWidgetCollapse } from '@hooks/useWidgetCollapse'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import WidgetTitle from '@components/WidgetTitle/WidgetTitle'
-import { AppWidgetMeta, CustomWidgetTypes } from '@interfaces/widget'
+import { CustomWidgetTypes } from '@interfaces/widget'
 import styles from './Card.less'
+import { WidgetComponentType } from '@features/Widget'
 
 export interface CardProps {
-    children: React.ReactNode
-    meta: AppWidgetMeta
     className?: string
 }
 
 const showOperations = [WidgetTypes.DataGrid, WidgetTypes.Form, CustomWidgetTypes.CardCarouselList, CustomWidgetTypes.CardList]
 
-function Card({ meta, children, className }: CardProps) {
+const Card: WidgetComponentType<CardProps> = ({ widgetMeta: meta, children, className, mode }) => {
     const { type, bcName } = meta
     const { isMainWidget, isCollapsed } = useWidgetCollapse(meta.name)
 
     const bcUrl = useAppSelector(state => state.screen.bo.bc[bcName] && buildBcUrl(bcName, true))
     const operations = useAppSelector(state => state.view.rowMeta?.[bcName]?.[bcUrl]?.actions)
     const isForm = type === WidgetTypes.Form
+
+    if (mode === 'skip_card' || mode === 'headless') {
+        return <>{children}</>
+    }
 
     return (
         <Row justify="center">

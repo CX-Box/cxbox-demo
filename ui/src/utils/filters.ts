@@ -47,6 +47,7 @@ export function getFilterType(fieldType: string) {
         case FieldType.checkbox: {
             return FilterType.specified
         }
+        case CustomFieldTypes.RichText:
         case CustomFieldTypes.SuggestionPickList:
         case FieldType.inlinePickList:
         case FieldType.pickList:

@@ -112,4 +112,100 @@
             margin: 0;
         }
     }
+
+    &.mdToolbarButton,
+    &.mdToolbarButtonPrimary {
+        &:global(.ant-btn) {
+            --color-text-primary: rgba(0, 0, 0, 0.85);
+            --color-base-simple-hover: rgba(0, 0, 0, 0.05);
+            --color-line-focus: #1890ff;
+
+            --height: 28px;
+            --width: var(--height);
+            --border-radius: 6px;
+            --padding: 6px;
+            --icon-space: 16px;
+            --icon-offset: 8px;
+            --font-size: 14px;
+            --font-weight: 400;
+
+
+            min-width: var(--width);
+            height: var(--height);
+            line-height: var(--height);
+            font-size: var(--font-size);
+            font-weight: var(--font-weight);
+            border-radius: var(--border-radius);
+            padding: 0 var(--padding);
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            background: transparent;
+            color: var(--color-text-primary);
+            border: none;
+            box-shadow: none;
+            cursor: pointer;
+            transition: transform 0.1s ease-out, color 0.15s linear, background-color 0.15s linear !important;
+
+            &:hover, &:focus {
+                background-color: var(--color-base-simple-hover);
+                color: var(--color-text-primary);
+            }
+
+            &:active {
+                transform: scale(0.96);
+            }
+
+            :global(.anticon), .remix {
+                font-size: var(--icon-space);
+                width: var(--icon-space);
+                height: var(--icon-space);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            /* Disable Ant Design wave animation */
+            &::after {
+                display: none !important;
+                animation: none !important;
+            }
+
+            &:disabled,
+            &[disabled] {
+                --color-text-hint: rgba(0, 0, 0, 0.45);
+                --bg-color-disabled: transparent;
+                
+                color: var(--color-text-hint) !important;
+                background-color: var(--bg-color-disabled) !important;
+                border-color: transparent !important;
+                cursor: default !important;
+                pointer-events: none;
+                
+                &:hover, &:focus, &:active {
+                    background-color: var(--bg-color-disabled) !important;
+                    color: var(--color-text-hint) !important;
+                    transform: scale(1);
+                }
+            }
+        }
+    }
+
+    &.mdToolbarButtonPrimary {
+        &:global(.ant-btn) {
+            --color-text-primary: #1890ff;
+            --color-base-selection: rgba(24, 144, 255, 0.1);
+            --color-base-selection-hover: rgba(24, 144, 255, 0.2);
+
+            color: var(--color-text-primary);
+            background-color: var(--color-base-selection);
+
+            &:hover, &:focus {
+                background-color: var(--color-base-selection-hover);
+                color: var(--color-text-primary);
+            }
+        }
+    }
 }

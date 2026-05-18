@@ -460,5 +460,20 @@
     </addColumn>
   </changeSet>
 
+  <changeSet id="CXBOX-628. CHANGE TYPE  MEETING.NOTES  TO TEXT" author="myungman" dbms="postgresql">
+    <modifyDataType tableName="MEETING" columnName="NOTES" newDataType="TEXT"/>
+    <sql>
+      CREATE INDEX MEETING_NOTES_GIN_INDEX
+        ON MEETING USING GIN (notes gin_trgm_ops);
+    </sql>
+  </changeSet>
+
+  <changeSet id="CXBOX-628. CHANGE TYPE MEETING.NOTES TO VARCHAR2(4000) " author="myungman" dbms="oracle">
+    <modifyDataType tableName="MEETING" columnName="NOTES" newDataType="VARCHAR2(4000)"/>
+    <sql>
+      CREATE INDEX MEETING_UPPER_NOTES_INDEX
+        ON MEETING (UPPER(NOTES));
+    </sql>
+  </changeSet>
 
 </databaseChangeLog>

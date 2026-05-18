@@ -7,7 +7,7 @@
     {
       "label": "Notes",
       "key": "notes",
-      "type": "text"
+      "type": "richText"
     }
   ],
   "options": {

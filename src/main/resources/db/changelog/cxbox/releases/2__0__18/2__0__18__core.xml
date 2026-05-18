@@ -1,0 +1,11 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd"
+  logicalFilePath="db/changelog/cxbox/releases/2__0__18/2__0__18__core.xml">
+  <changeSet id="ADD_PG_TRIM_EXTENSION" author="cxbox" dbms="postgresql">
+      <sql>
+        CREATE EXTENSION IF NOT EXISTS pg_trgm;
+      </sql>
+  </changeSet>
+</databaseChangeLog>

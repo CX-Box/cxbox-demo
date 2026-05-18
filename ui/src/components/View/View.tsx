@@ -42,6 +42,7 @@ import FilePreviewCard from '@components/FilePreviewCard/FilePreviewCard'
 import CardList from '@components/widgets/CardList/CardList'
 import CardCarouselList from '@components/widgets/CardCarouselList/CardCarouselList'
 import { CalendarList, CalendarYearList } from '@components/widgets/CalendarList'
+import { RichTextEditor } from '@components/RichText/RichTextEditor'
 
 export const customFields = {
     [FieldType.number]: Number,
@@ -54,7 +55,8 @@ export const customFields = {
     [CustomFieldTypes.MultipleSelect]: MultipleSelectField,
     [FieldType.fileUpload]: FileUpload,
     [CustomFieldTypes.Time]: TimeField,
-    [CustomFieldTypes.SuggestionPickList]: SuggestionPickListField
+    [CustomFieldTypes.SuggestionPickList]: SuggestionPickListField,
+    [CustomFieldTypes.RichText]: RichTextEditor
 }
 
 export const customWidgets: Partial<Record<CustomWidgetTypes | interfaces.WidgetTypes, interfaces.CustomWidgetDescriptor>> = {

@@ -27,22 +27,38 @@ export const markerStrokeColor = '#A9A9A9'
 export const endArrowPath = 'M 0,0 L 4,-6.2 A 15,15 0 0 0 4,6.2 Z'
 export const endArrowSize = 7
 
-export const anchorPointsByMode: Record<string, number[][]> = {
+export const anchorPointsByMode = {
     TB: [
         [0.5, -0.03],
-        [0.5, 1]
+        [0.5, 1],
+        [0.8, 0],
+        [0.8, 1],
+        [0.2, 1],
+        [0.2, 0]
     ],
     BT: [
+        [0.5, 0],
         [0.5, 1.03],
-        [0.5, 0]
+        [0.8, 1],
+        [0.8, 0],
+        [0.2, 0],
+        [0.2, 1]
     ],
     LR: [
+        [-0.01, 0.5],
         [1, 0.5],
-        [-0.01, 0.5]
+        [1, 0.8],
+        [0, 0.8],
+        [0, 0.2],
+        [1, 0.2]
     ],
     RL: [
         [0, 0.5],
-        [1.01, 0.5]
+        [1.01, 0.5],
+        [1, 0.2],
+        [0, 0.2],
+        [0, 0.8],
+        [1, 0.8]
     ]
 }
 

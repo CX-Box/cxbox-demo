@@ -18,7 +18,7 @@
     "@ant-design/plots": "1.2.6",
     "@codemirror/lang-markdown": "^6.5.0",
     "@codemirror/language-data": "^6.5.2",
-    "@cxbox-ui/core": "2.8.1-beta.0",
+    "@cxbox-ui/core": "2.8.1",
     "@fullcalendar/core": "6.1.18",
     "@fullcalendar/daygrid": "6.1.18",
     "@fullcalendar/interaction": "6.1.18",

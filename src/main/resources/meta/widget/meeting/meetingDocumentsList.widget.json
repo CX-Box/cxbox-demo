@@ -43,19 +43,19 @@
     {
       "title": "File Encrypt and Sign",
       "key": "fileEncryptAndSign",
-      "type": "hidden",
+      "type": "fileUpload",
       "fileIdKey": "fileEncryptAndSignId"
     },
     {
       "title": "File Encrypted",
       "key": "fileEncrypt",
-      "type": "fileUpload",
+      "type": "hidden",
       "fileIdKey": "fileEncryptId"
     },
     {
       "title": "File Signed",
       "key": "fileSign",
-      "type": "fileUpload",
+      "type": "hidden",
       "fileIdKey": "fileSignId"
     },
     {

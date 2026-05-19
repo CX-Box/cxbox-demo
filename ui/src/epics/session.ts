@@ -6,6 +6,7 @@ import { actions, utils } from '@cxbox-ui/core'
 import { RootEpic } from '@store'
 import { LoginResponse } from '@interfaces/session'
 import { Auth } from '../auth'
+import { OIDC_CONFIG_URL } from '@constants'
 
 const responseStatusMessages: Record<number, string> = {
     401: 'Unauthorized',
@@ -16,7 +17,7 @@ const ssoAuthEpic: RootEpic = action$ =>
     action$.pipe(
         filter(SSO_AUTH.match),
         switchMap(() => {
-            return from(Auth.init('/api/v1/auth/oidc.json')).pipe(
+            return from(Auth.init(OIDC_CONFIG_URL)).pipe(
                 switchMap(userManager => {
                     const params = new URLSearchParams(window.location.hash.split('?')[1])
                     const signInCallback = params.get('sign_in_callback')

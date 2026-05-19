@@ -19,19 +19,16 @@ const notificationClient = new Client({
     reconnectDelay: reconnectDelay,
     heartbeatIncoming: heartbeatIncoming,
     heartbeatOutgoing: heartbeatOutgoing,
-    beforeConnect: (): Promise<void> => {
-        return new Promise<void>(async (resolve, _) => {
-            try {
-                const user = await Auth.getInstance().getUser()
-                if (user && user.access_token) {
-                    notificationClient.brokerURL = brokerURL + '?access_token=' + encodeURI(user.access_token)
-                }
-                resolve()
-            } catch (error) {
-                console.error('Failed to get access token for WebSocket connection', error)
-                resolve()
+    beforeConnect: async () => {
+        try {
+            const user = await Auth.getInstance().getUser()
+
+            if (user && user.access_token) {
+                notificationClient.brokerURL = brokerURL + '?access_token=' + encodeURI(user.access_token)
             }
-        })
+        } catch (error) {
+            console.error('Failed to get access token for WebSocket connection', error)
+        }
     }
 })
 

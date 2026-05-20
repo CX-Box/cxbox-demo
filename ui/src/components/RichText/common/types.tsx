@@ -5,6 +5,7 @@ export type MenuDivider = {
 }
 
 export type MenuActionItem = {
+    key: string
     type?: never
     icon: React.ReactNode
     title: string

@@ -1,9 +1,10 @@
 import { CadesPluginError } from '@utils/cadesPlugin/CadesPluginError'
 import { validateCadesPlugin } from '@utils/cadesPlugin/validateCadesPlugin'
+import { loadCadesPlugin } from '@utils/cadesPlugin/loadCadesPlugin'
 
 export async function ensureCadesPluginInstalled() {
     try {
-        await window.cadesplugin
+        await loadCadesPlugin()
 
         validateCadesPlugin(window.cadesplugin)
 

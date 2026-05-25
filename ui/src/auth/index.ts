@@ -14,7 +14,8 @@ export class Auth {
         }
         const { data } = await axios.get(url)
 
-        const appBaseUrl = window.location.origin + '/ui/#/'
+        const appBasePath = '/ui/#/'
+        const appBaseUrl = window.location.origin + appBasePath
 
         const oidcConfig: UserManagerSettings = {
             authority: data['authority'] || '',

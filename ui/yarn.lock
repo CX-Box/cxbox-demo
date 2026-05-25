@@ -7371,13 +7371,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"crypto-js@npm:^4.1.1":
-  version: 4.2.0
-  resolution: "crypto-js@npm:4.2.0"
-  checksum: 8fbdf9d56f47aea0794ab87b0eb9833baf80b01a7c5c1b0edc7faf25f662fb69ab18dc2199e2afcac54670ff0cd9607a9045a3f7a80336cccd18d77a55b9fdf0
-  languageName: node
-  linkType: hard
-
 "crypto-random-string@npm:^2.0.0":
   version: 2.0.0
   resolution: "crypto-random-string@npm:2.0.0"
@@ -11697,10 +11690,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jwt-decode@npm:^3.1.2":
-  version: 3.1.2
-  resolution: "jwt-decode@npm:3.1.2"
-  checksum: a951547946b5e8b1d9df818152d6b1dbaf13eebb3a6e6daceedf888968f5d255959852c8188aae2c825dc9104a99d25cb6c23f25d76545d1aa0315b968b6912e
+"jwt-decode@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "jwt-decode@npm:4.0.0"
+  checksum: de75bbf89220746c388cf6a7b71e56080437b77d2edb29bae1c2155048b02c6b8c59a3e5e8d6ccdfd54f0b8bda25226e491a4f1b55ac5f8da04cfbadec4e546c
   languageName: node
   linkType: hard
 
@@ -12801,13 +12794,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"oidc-client-ts@npm:2.3.0":
-  version: 2.3.0
-  resolution: "oidc-client-ts@npm:2.3.0"
+"oidc-client-ts@npm:3.5.0":
+  version: 3.5.0
+  resolution: "oidc-client-ts@npm:3.5.0"
   dependencies:
-    crypto-js: "npm:^4.1.1"
-    jwt-decode: "npm:^3.1.2"
-  checksum: 8ed5a832a3fa1d844e674d7a055bc219b7161be3eaa3a714ef3b2d860f4a6dbb6571d2da2d6e2cff613aea612abc7d8a3ffc6b10bde014b6c6200d9d8c9336b2
+    jwt-decode: "npm:^4.0.0"
+  checksum: 93cbb62adbfeee4bf705199a94e5790217f211b85dd988827e555481d4e605a5263292b740f29765ac01528b99486f57bbd96679ffca53d7ef76d8f7f7c9f979
   languageName: node
   linkType: hard
 
@@ -17355,7 +17347,7 @@ __metadata:
     http-proxy-middleware: "npm:2.0.9"
     i18next: "npm:23.4.6"
     lodash.debounce: "npm:^4.0.8"
-    oidc-client-ts: "npm:2.3.0"
+    oidc-client-ts: "npm:3.5.0"
     pdfjs-dist: "npm:3.11.174"
     prettier: "npm:2.8.8"
     query-string: "npm:5.1.1"

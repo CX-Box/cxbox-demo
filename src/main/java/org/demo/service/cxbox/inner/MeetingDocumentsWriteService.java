@@ -139,7 +139,7 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 	@SneakyThrows
 	private List<MeetingDocuments> fileUpload(BusinessComponent bc, List<AssociateDTO> fileIds) {
 		List<MeetingDocuments> meetingDocumentsList = new ArrayList<>();
-		Optional<Meeting> meeting = meetingRepository.findById(Long.valueOf(bc.getParentIdAsLong()));
+		Optional<Meeting> meeting = meetingRepository.findById(bc.getParentIdAsLong());
 		for (AssociateDTO item : fileIds) {
 			var meetingDocuments = new MeetingDocuments();
 			var fileId = item.getId();

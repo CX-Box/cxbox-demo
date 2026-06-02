@@ -99,7 +99,7 @@ public class MailSendingService {
 						currentUser
 				);
 			}
-			meeting.get().setStatus(MeetingStatus.COMPLETED);
+			meeting.ifPresent(value -> value.setStatus(MeetingStatus.COMPLETED));
 		} else {
 			if (!isMass) {
 				notificationTemplate.saveAndSend(

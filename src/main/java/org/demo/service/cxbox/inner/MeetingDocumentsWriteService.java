@@ -37,6 +37,7 @@ import org.demo.dto.cxbox.inner.MeetingDocumentsDTO_;
 import org.demo.entity.Meeting;
 import org.demo.entity.MeetingDocuments;
 import org.demo.entity.MeetingDocuments_;
+import org.demo.entity.enums.DocumentStatus;
 import org.demo.repository.MeetingDocumentsRepository;
 import org.demo.repository.MeetingRepository;
 import org.springframework.data.jpa.domain.Specification;
@@ -78,6 +79,11 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 	@Override
 	protected ActionResultDTO<MeetingDocumentsDTO> doUpdateEntity(MeetingDocuments entity, MeetingDocumentsDTO data,
 			BusinessComponent bc) {
+		setIfChanged(data, MeetingDocumentsDTO_.fileEncryptROId, entity::setFileEncryptId);
+		setIfChanged(data, MeetingDocumentsDTO_.fileEncryptRO, entity::setFileEncrypt);
+		setIfChanged(data, MeetingDocumentsDTO_.fileSignROId, entity::setFileSignId);
+		setIfChanged(data, MeetingDocumentsDTO_.fileSignRO, entity::setFileSign);
+		setIfChanged(data, MeetingDocumentsDTO_.status, entity::setStatus);
 		setIfChanged(data, MeetingDocumentsDTO_.fileSignId, entity::setFileSignId);
 		setIfChanged(data, MeetingDocumentsDTO_.fileSign, entity::setFileSign);
 		setIfChanged(data, MeetingDocumentsDTO_.fileEncryptId, entity::setFileEncryptId);
@@ -106,6 +112,7 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 			String uploadId = createAndUploadZip(data, entity, zipName);
 			entity.setFileEncryptAndSignId(uploadId);
 			entity.setFileEncryptAndSign(zipName);
+			entity.setStatus(DocumentStatus.ENCRYPTED_SIGNED);
 		}
 
 		meetingDocumentsRepository.save(entity);
@@ -132,7 +139,7 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 	@SneakyThrows
 	private List<MeetingDocuments> fileUpload(BusinessComponent bc, List<AssociateDTO> fileIds) {
 		List<MeetingDocuments> meetingDocumentsList = new ArrayList<>();
-		Optional<Meeting> meeting = meetingRepository.findById(Long.valueOf(bc.getParentIdAsLong()));
+		Optional<Meeting> meeting = meetingRepository.findById(bc.getParentIdAsLong());
 		for (AssociateDTO item : fileIds) {
 			var meetingDocuments = new MeetingDocuments();
 			var fileId = item.getId();
@@ -174,7 +181,6 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 							return true;
 						})
 						.invoker((bc, dto) -> {
-
 							return new ActionResultDTO<MeetingDocumentsDTO>()
 									.setAction(PostAction.showMessage(MessageType.INFO, "Action Encrypt and Sign was invoked"
 									));

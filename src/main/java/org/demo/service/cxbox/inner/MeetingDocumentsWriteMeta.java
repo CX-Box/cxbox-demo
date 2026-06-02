@@ -8,6 +8,7 @@ import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
 import org.demo.dto.cxbox.inner.MeetingDocumentsDTO;
 import org.demo.dto.cxbox.inner.MeetingDocumentsDTO_;
 import org.demo.entity.dictionary.Briefings;
+import org.demo.entity.enums.DocumentStatus;
 import org.demo.entity.enums.Documents;
 import org.springframework.stereotype.Service;
 
@@ -20,12 +21,13 @@ public class MeetingDocumentsWriteMeta extends FieldMetaBuilder<MeetingDocuments
 	public void buildRowDependentMeta(RowDependentFieldsMeta<MeetingDocumentsDTO> fields,
 			InnerBcDescription bcDescription, Long id, Long parentId) {
 
-		fields.setEnabled(MeetingDocumentsDTO_.fileSignId);
 		fields.setEnabled(MeetingDocumentsDTO_.fileSign);
-		fields.setEnabled(MeetingDocumentsDTO_.fileEncryptId);
 		fields.setEnabled(MeetingDocumentsDTO_.fileEncrypt);
-		fields.setEnabled(MeetingDocumentsDTO_.fileEncryptAndSignId);
-		fields.setEnabled(MeetingDocumentsDTO_.fileEncryptAndSign);
+		fields.setEnabled(MeetingDocumentsDTO_.fileSignId);
+		fields.setEnabled(MeetingDocumentsDTO_.fileEncryptId);
+
+		fields.setEnumValues(MeetingDocumentsDTO_.status, DocumentStatus.values());
+		fields.setEnabled(MeetingDocumentsDTO_.status);
 		fields.setEnabled(MeetingDocumentsDTO_.priority);
 		fields.setEnabled(MeetingDocumentsDTO_.fileId);
 		fields.setEnabled(MeetingDocumentsDTO_.file);
@@ -40,6 +42,10 @@ public class MeetingDocumentsWriteMeta extends FieldMetaBuilder<MeetingDocuments
 	@Override
 	public void buildIndependentMeta(FieldsMeta<MeetingDocumentsDTO> fields, InnerBcDescription bcDescription,
 			Long parentId) {
+		fields.enableFilter(MeetingDocumentsDTO_.fileEncryptRO);
+		fields.enableFilter(MeetingDocumentsDTO_.fileSignRO);
+		fields.setEnumFilterValues(fields, MeetingDocumentsDTO_.status, DocumentStatus.values());
+		fields.enableFilter(MeetingDocumentsDTO_.status);
 		fields.enableFilter(MeetingDocumentsDTO_.fileSign);
 		fields.enableFilter(MeetingDocumentsDTO_.fileEncrypt);
 		fields.enableFilter(MeetingDocumentsDTO_.fileEncryptAndSign);

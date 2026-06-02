@@ -5,18 +5,12 @@
   "bc": "meetingDocumentEdit",
   "fields": [
     {
-      "title": "Document ID",
-      "key": "id",
-      "type": "input",
-      "drillDown": "true"
-    },
-    {
-      "title": "Document",
+      "title": "Document Type",
       "key": "document",
       "type": "dictionary"
     },
     {
-      "title": "Briefing",
+      "title": "Department",
       "key": "briefing",
       "type": "dictionary"
     },
@@ -31,20 +25,21 @@
       }
     },
     {
-      "title": "Notes",
-      "key": "notes",
-      "type": "input"
-    },
-    {
-      "title": "Priority",
-      "key": "priority",
-      "type": "number"
-    },
-    {
       "title": "File Encrypt and Sign",
       "key": "fileEncryptAndSign",
       "type": "fileUpload",
       "fileIdKey": "fileEncryptAndSignId"
+    },
+    {
+      "title": "Status",
+      "key": "status",
+      "type": "dictionary",
+      "bgColorKey": "color"
+    },
+    {
+      "title": "Notes",
+      "key": "notes",
+      "type": "input"
     },
     {
       "title": "File Encrypted",
@@ -75,12 +70,6 @@
       "fields": [
         "document",
         "briefing"
-      ],
-      "aggFields": [
-        {
-          "fieldKey": "priority",
-          "func": "min"
-        }
       ]
     },
     "buttons": [
@@ -116,8 +105,7 @@
         "create",
         "associate",
         "edit",
-        "delete",
-        "documentEncryptSign"
+        "delete"
       ]
     }
   }

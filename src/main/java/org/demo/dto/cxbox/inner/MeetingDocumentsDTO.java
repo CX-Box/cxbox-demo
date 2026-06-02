@@ -2,6 +2,7 @@ package org.demo.dto.cxbox.inner;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,6 +13,7 @@ import org.cxbox.core.util.filter.provider.impl.EnumValueProvider;
 import org.cxbox.core.util.filter.provider.impl.StringValueProvider;
 import org.demo.entity.MeetingDocuments;
 import org.demo.entity.dictionary.Briefings;
+import org.demo.entity.enums.DocumentStatus;
 import org.demo.entity.enums.Documents;
 
 @Getter
@@ -56,9 +58,22 @@ public class MeetingDocumentsDTO extends DataResponseDTO {
 
 	private String fileSignName;
 
+	private String color;
+
 	public static final String NAME_FILE_OVERRIDE_SIGN = "MySign";
 
 	public static final String NAME_FILE_OVERRIDE_ENCRYPT = "MyEncrypt";
+
+	@SearchParameter(name = "status", provider = EnumValueProvider.class)
+	private DocumentStatus status;
+
+	private String fileSignRO;
+
+	private String fileSignROId;
+
+	private String fileEncryptRO;
+
+	private String fileEncryptROId;
 
 	public MeetingDocumentsDTO(MeetingDocuments meeting) {
 		this.id = meeting.getId().toString();
@@ -74,6 +89,12 @@ public class MeetingDocumentsDTO extends DataResponseDTO {
 		this.fileEncryptId = meeting.getFileEncryptId();
 		this.fileSign = meeting.getFileSign();
 		this.fileSignId = meeting.getFileSignId();
+		this.status = meeting.getStatus();
+		this.color = Optional.ofNullable(meeting.getStatus()).map(DocumentStatus.colors::get).orElse(null);
+		this.fileSignRO = meeting.getFileSign();
+		this.fileSignROId = meeting.getFileSignId();
+		this.fileEncryptRO = meeting.getFileEncrypt();
+		this.fileEncryptROId = meeting.getFileEncryptId();
 	}
 
 

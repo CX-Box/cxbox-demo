@@ -14,6 +14,7 @@ import lombok.Setter;
 import org.cxbox.model.core.entity.BaseEntity;
 import org.demo.entity.dictionary.Briefings;
 import org.demo.entity.enums.Documents;
+import org.demo.entity.enums.DocumentStatus;
 
 @Entity
 @Table(name = "MEETING_DOCUMENTS")
@@ -62,5 +63,9 @@ public class MeetingDocuments extends BaseEntity {
 
 	@Column
 	private String fileSignId;
+
+	@Enumerated(value = EnumType.STRING)
+	@Column
+	private DocumentStatus status = DocumentStatus.NEW;
 
 }

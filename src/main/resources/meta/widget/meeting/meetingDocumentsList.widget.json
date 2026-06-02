@@ -5,18 +5,12 @@
   "bc": "meetingDocumentEdit",
   "fields": [
     {
-      "title": "Document ID",
-      "key": "id",
-      "type": "input",
-      "drillDown": "true"
-    },
-    {
-      "title": "Document",
+      "title": "Document Type",
       "key": "document",
       "type": "dictionary"
     },
     {
-      "title": "Briefing",
+      "title": "Department",
       "key": "briefing",
       "type": "dictionary"
     },
@@ -31,42 +25,21 @@
       }
     },
     {
-      "title": "Notes",
-      "key": "notes",
-      "type": "input"
-    },
-    {
-      "title": "Priority",
-      "key": "priority",
-      "type": "number"
-    },
-    {
       "title": "File Encrypt and Sign",
       "key": "fileEncryptAndSign",
       "type": "fileUpload",
       "fileIdKey": "fileEncryptAndSignId"
     },
     {
-      "title": "File Encrypted",
-      "key": "fileEncrypt",
-      "type": "hidden",
-      "fileIdKey": "fileEncryptId"
+      "title": "Status",
+      "key": "status",
+      "type": "dictionary",
+      "bgColorKey": "color"
     },
     {
-      "title": "File Signed",
-      "key": "fileSign",
-      "type": "hidden",
-      "fileIdKey": "fileSignId"
-    },
-    {
-      "title": "File Signed Name",
-      "key": "NAME_FILE_OVERRIDE_SIGN",
-      "type": "hidden"
-    },
-    {
-      "title": "File Encrypt Name",
-      "key": "NAME_FILE_OVERRIDE_ENCRYPT",
-      "type": "hidden"
+      "title": "Notes",
+      "key": "notes",
+      "type": "input"
     }
   ],
   "options": {
@@ -75,12 +48,6 @@
       "fields": [
         "document",
         "briefing"
-      ],
-      "aggFields": [
-        {
-          "fieldKey": "priority",
-          "func": "min"
-        }
       ]
     },
     "buttons": [
@@ -96,28 +63,12 @@
     "edit": {
       "widget": "meetingDocumentsFormForList"
     },
-    "cryptoGenerator": [
-      {
-        "type": "signAndEncrypt",
-        "signatureType": "CADES_BES",
-        "actionName": "documentEncryptSign",
-        "documentFileIdKey": "fileId",
-        "documentFileNameKey": "file",
-        "signatureFileIdKey": "fileSignId",
-        "signatureFileNameKey": "fileSign",
-        "encryptedFileIdKey": "fileEncryptId",
-        "encryptedFileNameKey": "fileEncrypt",
-        "encryptedFileBaseNameKey": "NAME_FILE_OVERRIDE_ENCRYPT",
-        "signatureFileBaseNameKey": "NAME_FILE_OVERRIDE_SIGN"
-      }
-    ],
     "actionGroups": {
       "include": [
         "create",
         "associate",
         "edit",
-        "delete",
-        "documentEncryptSign"
+        "delete"
       ]
     }
   }

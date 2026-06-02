@@ -5,36 +5,90 @@
   "bc": "meetingDocumentEdit",
   "fields": [
     {
-      "label": "Document",
+      "label": "Document Type",
       "key": "document",
       "type": "dictionary"
     },
     {
-      "label": "Briefing",
+      "label": "Department",
       "key": "briefing",
       "type": "dictionary"
-    },
-    {
-      "label": "Notes",
-      "key": "notes",
-      "type": "input"
     },
     {
       "label": "File",
       "key": "file",
       "type": "fileUpload",
-      "fileIdKey": "fileId"
+      "fileIdKey": "fileId",
+      "preview": {
+        "enabled": true
+      }
     },
     {
-      "label": "Priority",
-      "key": "priority",
-      "type": "number"
+      "label": "File Encrypt and Sign",
+      "key": "fileEncryptAndSign",
+      "type": "fileUpload",
+      "fileIdKey": "fileEncryptAndSignId"
+    },
+    {
+      "label": "File Encrypted",
+      "key": "fileEncryptRO",
+      "type": "fileUpload",
+      "fileIdKey": "fileEncryptROId"
+    },
+    {
+      "label": "File Signed",
+      "key": "fileSignRO",
+      "type": "fileUpload",
+      "fileIdKey": "fileSignROId"
+    },
+    {
+      "label": "File Encrypted",
+      "key": "fileEncrypt",
+      "type": "hidden",
+      "fileIdKey": "fileEncryptId"
+    },
+    {
+      "label": "File Signed",
+      "key": "fileSign",
+      "type": "hidden",
+      "fileIdKey": "fileSignId"
+    },
+    {
+      "label": "File Signed Name",
+      "key": "NAME_FILE_OVERRIDE_SIGN",
+      "type": "hidden"
+    },
+    {
+      "label": "File Encrypt Name",
+      "key": "NAME_FILE_OVERRIDE_ENCRYPT",
+      "type": "hidden"
+    },
+    {
+      "label": "Notes",
+      "key": "notes",
+      "type": "input"
     }
   ],
   "options": {
+    "cryptoGenerator": [
+      {
+        "type": "signAndEncrypt",
+        "signatureType": "CADES_BES",
+        "actionName": "documentEncryptSign",
+        "documentFileIdKey": "fileId",
+        "documentFileNameKey": "file",
+        "signatureFileIdKey": "fileSignId",
+        "signatureFileNameKey": "fileSign",
+        "encryptedFileIdKey": "fileEncryptId",
+        "encryptedFileNameKey": "fileEncrypt",
+        "encryptedFileBaseNameKey": "NAME_FILE_OVERRIDE_ENCRYPT",
+        "signatureFileBaseNameKey": "NAME_FILE_OVERRIDE_SIGN"
+      }
+    ],
     "actionGroups": {
       "include": [
         "save",
+        "documentEncryptSign",
         "cancel-create"
       ]
     },
@@ -45,11 +99,7 @@
             {
               "fieldKey": "document",
               "span": 12
-            }
-          ]
-        },
-        {
-          "cols": [
+            },
             {
               "fieldKey": "briefing",
               "span": 12
@@ -59,24 +109,28 @@
         {
           "cols": [
             {
-              "fieldKey": "priority",
-              "span": 12
-            }
-          ]
-        },
-        {
-          "cols": [
-            {
               "fieldKey": "file",
               "span": 12
-            }
-          ]
-        },
-        {
-          "cols": [
+            },
             {
               "fieldKey": "notes",
               "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "fileSignRO",
+              "span": 8
+            },
+            {
+              "fieldKey": "fileEncryptRO",
+              "span": 8
+            },
+            {
+              "fieldKey": "fileEncryptAndSign",
+              "span": 8
             }
           ]
         }

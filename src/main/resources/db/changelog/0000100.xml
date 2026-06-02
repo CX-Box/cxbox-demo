@@ -146,6 +146,7 @@
       <column name="FILE_SIGN" type="VARCHAR(255)"/>
       <column name="FILE_SIGN_ID" type="VARCHAR(50)"/>
       <column name="PRIORITY" type="NUMBER(19, 0)"/>
+      <column name="STATUS" type="VARCHAR(50)"/>
       <column defaultValueComputed="${now}" name="CREATED_DATE" remarks="Creation date"
         type="TIMESTAMP(6)">
         <constraints nullable="false"/>

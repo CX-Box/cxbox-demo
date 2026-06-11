@@ -80,6 +80,7 @@ public enum CxboxRestController implements EnumBcIdentifier {
 		clientStatsPie(dashboardFilter, ClientStatsPieService.class),
 		saleStatsProduct(dashboardFilter, SaleStatsProductService.class),
 		saleStatsProductDual(dashboardFilter,SaleStatsProductDualService.class),
+		dashboardClientStats(dashboardFilter, ClientStatsService.class),
 
 	//core administration
 	dictionary(DictionaryAdminService.class),

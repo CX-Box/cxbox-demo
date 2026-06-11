@@ -6,37 +6,42 @@
   "widgets": [
     {
       "widgetName": "dashboardFilter",
-      "position": 4,
+      "position": 0,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "dashboardClientStats",
+      "position": 10,
       "gridWidth": 24
     },
     {
       "widgetName": "dashboardClientActivitiesList",
-      "position": 10,
+      "position": 20,
       "gridWidth": 12
     },
     {
       "widgetName": "dashboardSalesDualAxes2D",
-      "position": 10,
+      "position": 30,
       "gridWidth": 12
     },
     {
       "widgetName": "dashboardClientsPie1D",
-      "position": 20,
+      "position": 40,
       "gridWidth": 12
     },
     {
       "widgetName": "dashboardSalesColumn2D",
-      "position": 20,
+      "position": 50,
       "gridWidth": 12
     },
     {
       "widgetName": "dashboardSalesLine2D",
-      "position": 36,
+      "position": 60,
       "gridWidth": 12
     },
     {
       "widgetName": "dashboardSalesLineColumn2D",
-      "position": 36,
+      "position": 70,
       "gridWidth": 12
     }
   ],

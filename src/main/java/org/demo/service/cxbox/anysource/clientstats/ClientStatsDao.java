@@ -1,15 +1,23 @@
 package org.demo.service.cxbox.anysource.clientstats;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.cxbox.core.controller.param.QueryParameters;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.dao.AnySourceBaseDAO;
 import org.cxbox.core.dao.impl.AbstractAnySourceBaseDAO;
+import org.cxbox.core.external.core.ParentDtoFirstLevelCache;
+import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.anysource.ClientStatsDTO;
+import org.demo.dto.cxbox.inner.DashboardFilterDTO_;
 import org.demo.entity.enums.ClientStatus;
+import org.demo.entity.enums.FieldOfActivity;
 import org.demo.repository.ClientRepository;
 import lombok.NonNull;
 import org.springframework.data.domain.Page;
@@ -30,6 +38,8 @@ public class ClientStatsDao extends AbstractAnySourceBaseDAO<ClientStatsDTO> imp
 	public static final String IN_PROGRESS_CLIENTS = "2";
 
 	private final ClientRepository clientRepository;
+
+	private final ParentDtoFirstLevelCache parentDtoFirstLevelCache;
 
 	@Override
 	public String getId(final ClientStatsDTO entity) {
@@ -53,7 +63,7 @@ public class ClientStatsDao extends AbstractAnySourceBaseDAO<ClientStatsDTO> imp
 
 	@Override
 	public Page<ClientStatsDTO> getList(final BusinessComponent bc, final QueryParameters queryParameters) {
-		return new PageImpl<>(getClientStats());
+		return new PageImpl<>(getClientStats(BusinessComponent bc));
 	}
 
 	@Override
@@ -67,11 +77,24 @@ public class ClientStatsDao extends AbstractAnySourceBaseDAO<ClientStatsDTO> imp
 	}
 
 	@NonNull
-	private List<ClientStatsDTO> getClientStats() {
+	private List<ClientStatsDTO> getClientStats(BusinessComponent bc) {
+		boolean isDashboardClientStatsBC = bc.getName().equals(CxboxRestController.dashboardClientStats.getName());
+		Set<FieldOfActivity> filter = null;
+		if (isDashboardClientStatsBC) {
+			var parentField = parentDtoFirstLevelCache.getParentField(DashboardFilterDTO_.fieldOfActivity, bc);
+			  filter = Optional.ofNullable(parentField)
+					.map(e -> e.getValues().stream()
+							.map(value -> FieldOfActivity.getByValue(value.getValue()))
+							.collect(Collectors.toSet()))
+					.orElse(new HashSet<>());
+			filter = filter.isEmpty() ? null : filter;
+		}
 		List<ClientStatsDTO> result = new ArrayList<>(ROWS_TOTAL);
 		ClientStatsDTO newClients = new ClientStatsDTO()
 				.setTitle("New Clients")
-				.setValue(clientRepository.count(clientRepository.statusIn(List.of(ClientStatus.NEW))))
+				.setValue(isDashboardClientStatsBC ? 
+						clientRepository.count(clientRepository.findAllByFieldOfActivitiesInAndStatusIn(filter,List.of(ClientStatus.NEW))):
+						clientRepository.count(clientRepository.statusIn(List.of(ClientStatus.NEW))))
 				.setColor("#779FE9")
 				.setIcon("team") //same as in screen.json icon
 				.setDescription("New Clients. Press to filter List below");

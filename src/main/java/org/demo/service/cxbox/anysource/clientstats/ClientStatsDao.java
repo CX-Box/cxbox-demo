@@ -20,6 +20,7 @@ import org.demo.entity.enums.ClientStatus;
 import org.demo.entity.enums.FieldOfActivity;
 import org.demo.repository.ClientRepository;
 import lombok.NonNull;
+import org.demo.service.cxbox.anysource.clientstatspie.ClientStatsCount;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,8 @@ public class ClientStatsDao extends AbstractAnySourceBaseDAO<ClientStatsDTO> imp
 	private final ClientRepository clientRepository;
 
 	private final ParentDtoFirstLevelCache parentDtoFirstLevelCache;
+
+	private final ClientStatsCount clientStatsCount;
 
 	@Override
 	public String getId(final ClientStatsDTO entity) {
@@ -82,7 +85,7 @@ public class ClientStatsDao extends AbstractAnySourceBaseDAO<ClientStatsDTO> imp
 		Set<FieldOfActivity> filter = null;
 		if (isDashboardClientStatsBC) {
 			var parentField = parentDtoFirstLevelCache.getParentField(DashboardFilterDTO_.fieldOfActivity, bc);
-			  filter = Optional.ofNullable(parentField)
+			filter = Optional.ofNullable(parentField)
 					.map(e -> e.getValues().stream()
 							.map(value -> FieldOfActivity.getByValue(value.getValue()))
 							.collect(Collectors.toSet()))
@@ -92,8 +95,9 @@ public class ClientStatsDao extends AbstractAnySourceBaseDAO<ClientStatsDTO> imp
 		List<ClientStatsDTO> result = new ArrayList<>(ROWS_TOTAL);
 		ClientStatsDTO newClients = new ClientStatsDTO()
 				.setTitle("New Clients")
-				.setValue(isDashboardClientStatsBC ? 
-						clientRepository.count(clientRepository.findAllByFieldOfActivitiesInAndStatusIn(filter,List.of(ClientStatus.NEW))):
+				.setValue(isDashboardClientStatsBC ? clientStatsCount.countClientsByStatus(
+						filter,
+						ClientStatus.NEW):
 						clientRepository.count(clientRepository.statusIn(List.of(ClientStatus.NEW))))
 				.setColor("#779FE9")
 				.setIcon("team") //same as in screen.json icon

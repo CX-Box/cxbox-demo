@@ -5,6 +5,11 @@
   "url": "/screen/meeting/view/meetingview",
   "widgets": [
     {
+      "widgetName": "meetingDocumentsFormEditForList",
+      "position": 2,
+      "gridWidth": 24
+    },
+    {
       "widgetName": "meetingEditViewHeader",
       "position": 10,
       "gridWidth": 24

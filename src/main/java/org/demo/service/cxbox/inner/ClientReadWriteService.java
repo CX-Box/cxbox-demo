@@ -2,12 +2,8 @@ package org.demo.service.cxbox.inner;
 
 
 import static org.cxbox.api.data.dao.SpecificationUtils.and;
-import static org.demo.controller.CxboxRestController.contactEditAssoc;
 import static org.demo.controller.CxboxRestController.dashboardClient;
-import static org.demo.microservice.core.querylang.springdata.core.QueryLanguageRepositoryImpl.trueSpecification;
 
-import jakarta.persistence.criteria.Join;
-import jakarta.persistence.criteria.JoinType;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -36,9 +32,6 @@ import org.demo.dto.cxbox.inner.ClientWriteDTO;
 import org.demo.dto.cxbox.inner.ClientWriteDTO_;
 import org.demo.dto.cxbox.inner.DashboardFilterDTO_;
 import org.demo.entity.Client;
-import org.demo.entity.Client_;
-import org.demo.entity.DashboardFilter;
-import org.demo.entity.DashboardFilter_;
 import org.demo.entity.Meeting;
 import org.demo.entity.enums.ClientEditStep;
 import org.demo.entity.enums.ClientStatus;
@@ -46,7 +39,6 @@ import org.demo.entity.enums.FieldOfActivity;
 import org.demo.repository.ClientRepository;
 import org.demo.repository.MeetingRepository;
 import org.demo.repository.core.UserRepository;
-import org.demo.service.cxbox.anysource.ClientStatsCount;
 import org.demo.service.mail.MailSendingService;
 import org.jobrunr.scheduling.BackgroundJob;
 import org.springframework.data.jpa.domain.Specification;
@@ -73,7 +65,7 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 	@Override
 	protected Specification<Client> getSpecification(BusinessComponent bc) {
 		if (dashboardClient.isBc(bc)) {
-			return	super.getSpecification(bc).and(getFilterSpecification(bc));
+			return super.getSpecification(bc).and(getFilterSpecification(bc));
 		}
 		var fullTextSearchFilterParam = FullTextSearchExt.getFullTextSearchFilterParam(bc);
 		var specification = super.getSpecification(bc);

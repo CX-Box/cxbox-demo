@@ -45,8 +45,13 @@
       "gridWidth": 24
     },
     {
-      "widgetName": "dashboardClientActivitiesList",
+      "widgetName": "dashboardClientSaleGraph",
       "position": 80,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "dashboardClientActivitiesList",
+      "position": 90,
       "gridWidth": 24
     }
   ],

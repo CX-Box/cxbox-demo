@@ -16,6 +16,7 @@ import { useScrollToTopAfterChangeRoute } from '@hooks/useScrollToTopAfterChange
 import { useSetCssVariable } from '@hooks/useSetCssVariable'
 import { addAlphaToHex } from '@utils/color'
 import { FIELD_DISABLED_COLOR, WHEN_EDITABLE_FIELD_IS_DISABLED_THEN_FONT_OPACITY } from '@constants'
+import { Router } from '@router'
 
 export const AppLayout: React.FC = () => {
     const dispatch = useAppDispatch()
@@ -41,22 +42,24 @@ export const AppLayout: React.FC = () => {
     useScrollToTopAfterChangeRoute(getContentElement)
 
     return sessionActive ? (
-        <Layout className={styles.root}>
-            <Notifications />
-            <Spin wrapperClassName={styles.appSpin} spinning={appSpinning}>
-                <DevPanel />
-                <ErrorPopup />
-                <ModalInvoke />
-                <SystemNotifications />
-                <Layout className={styles.appLayout}>
-                    <AppSide />
-                    <Layout.Content className={styles.mainContent}>
-                        <View />
-                        <AppBar />
-                    </Layout.Content>
-                </Layout>
-            </Spin>
-        </Layout>
+        <Router>
+            <Layout className={styles.root}>
+                <Notifications />
+                <Spin wrapperClassName={styles.appSpin} spinning={appSpinning}>
+                    <DevPanel />
+                    <ErrorPopup />
+                    <ModalInvoke />
+                    <SystemNotifications />
+                    <Layout className={styles.appLayout}>
+                        <AppSide />
+                        <Layout.Content className={styles.mainContent}>
+                            <View />
+                            <AppBar />
+                        </Layout.Content>
+                    </Layout>
+                </Spin>
+            </Layout>
+        </Router>
     ) : (
         <div className={styles.spinContainer}>{noSSO ? <Login /> : <Spin size="large" />}</div>
     )

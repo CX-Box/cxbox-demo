@@ -15,9 +15,9 @@
       "gridWidth": 24
     },
     {
-      "widgetName": "dashboardClientActivitiesList",
+      "widgetName": "dashboardClientsPie1D",
       "position": 20,
-      "gridWidth": 12
+      "gridWidth": 24
     },
     {
       "widgetName": "dashboardSalesDualAxes2D",
@@ -25,24 +25,29 @@
       "gridWidth": 12
     },
     {
-      "widgetName": "dashboardClientsPie1D",
-      "position": 40,
-      "gridWidth": 12
-    },
-    {
       "widgetName": "dashboardSalesColumn2D",
-      "position": 50,
+      "position": 30,
       "gridWidth": 12
     },
     {
       "widgetName": "dashboardSalesLine2D",
-      "position": 60,
+      "position": 50,
       "gridWidth": 12
     },
     {
       "widgetName": "dashboardSalesLineColumn2D",
-      "position": 70,
+      "position": 60,
       "gridWidth": 12
+    },
+    {
+      "widgetName": "dashboardClientHierarchy",
+      "position": 70,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "dashboardClientActivitiesList",
+      "position": 80,
+      "gridWidth": 24
     }
   ],
   "rolesAllowed": [

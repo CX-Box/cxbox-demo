@@ -1,4 +1,4 @@
-package org.demo.service.cxbox.anysource.clientstatspie;
+package org.demo.service.cxbox.anysource;
 
 import java.util.List;
 import java.util.Set;
@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.external.core.ParentDtoFirstLevelCache;
-import org.demo.dto.cxbox.anysource.ClientStatsDTO;
 import org.demo.dto.cxbox.inner.DashboardFilterDTO_;
 import org.demo.entity.enums.ClientStatus;
 import org.demo.entity.enums.FieldOfActivity;
@@ -22,17 +21,6 @@ public class ClientStatsCount   {
 
 	private final ParentDtoFirstLevelCache parentDtoFirstLevelCache;
 
-	private ClientStatsDTO createClientStatsDTO(String title, long value, String color, String icon, String id,
-			String description) {
-		ClientStatsDTO clientStatsDTO = new ClientStatsDTO();
-		clientStatsDTO.setTitle(title)
-				.setValue(value)
-				.setColor(color)
-				.setIcon(icon)
-				.setDescription(description)
-				.setId(id);
-		return clientStatsDTO;
-	}
 
 	public boolean hasFilteredActivities(BusinessComponent bc) {
 		return parentDtoFirstLevelCache.getParentField(DashboardFilterDTO_.fieldOfActivity, bc) != null &&
@@ -49,6 +37,7 @@ public class ClientStatsCount   {
 	public long countClientsByStatus(Set<FieldOfActivity> activities, ClientStatus status) {
 		return clientRepository.findAllByFieldOfActivitiesInAndStatusIn(activities, List.of(status)).size();
 	}
+
 
 	public long countClientsByStatus(ClientStatus status) {
 		return clientRepository.count(clientRepository.statusIn(List.of(status)));

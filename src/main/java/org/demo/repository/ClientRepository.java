@@ -1,12 +1,16 @@
 package org.demo.repository;
 
+import jakarta.persistence.criteria.Join;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import org.cxbox.meta.entity.Responsibilities_;
 import org.demo.entity.Client;
 import org.demo.entity.Client_;
 import org.demo.entity.enums.ClientStatus;
 import org.demo.conf.cxbox.extension.fulltextsearch.FullTextSearchExt;
 import org.demo.entity.enums.FieldOfActivity;
+import org.demo.repository.projection.DashboardSalesByMonthAndStatusPrj;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -33,7 +37,17 @@ public interface ClientRepository extends JpaRepository<Client, Long>, JpaSpecif
 		return (root, query, cb) -> root.get(Client_.status).in(clientStatusList);
 	}
 
-	List<Client> findAllByFieldOfActivitiesInAndStatusIn(Set<FieldOfActivity> fieldOfActivities, List<ClientStatus> status);
+	default Specification<Client> findAllByFieldOfActivities(Set<FieldOfActivity> fieldOfActivities) {
+		return (root, query, cb) -> {
+			if (fieldOfActivities == null || fieldOfActivities.isEmpty()) {
+				return cb.conjunction();
+			}
+			Join<Client, FieldOfActivity> join = root.join(Client_.fieldOfActivities);
+			query.distinct(true);
+			return join.in(fieldOfActivities);
+		};
+	}
 
+	List<Client> findAllByFieldOfActivitiesInAndStatusIn(Set<FieldOfActivity> fieldOfActivities, List<ClientStatus> status);
 
 }

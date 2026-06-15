@@ -15,3 +15,4 @@ saleStatsProductStatusColumn;1000;NULL;NULL;'""';
 calendarYearList;1000;NULL;_sort.0.asc=startDateTime;'""';
 calendarList;1000;NULL;NULL;'""';
 clientSaleGraph;10000;NULL;NULL;'""';
+dashboardClient;10000;NULL;NULL;'""';

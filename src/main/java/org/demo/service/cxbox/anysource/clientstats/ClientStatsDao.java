@@ -20,7 +20,7 @@ import org.demo.entity.enums.ClientStatus;
 import org.demo.entity.enums.FieldOfActivity;
 import org.demo.repository.ClientRepository;
 import lombok.NonNull;
-import org.demo.service.cxbox.anysource.clientstatspie.ClientStatsCount;
+import org.demo.service.cxbox.anysource.ClientStatsCount;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
@@ -56,7 +56,8 @@ public class ClientStatsDao extends AbstractAnySourceBaseDAO<ClientStatsDTO> imp
 
 	@Override
 	public ClientStatsDTO getByIdIgnoringFirstLevelCache(final BusinessComponent bc) {
-		return getClientStats().stream().filter(s -> Objects.equals(s.getId(), bc.getId())).findFirst().orElse(null);
+		return getClientStats(bc).stream()
+				.filter(s -> Objects.equals(s.getId(), bc.getId())).findFirst().orElse(null);
 	}
 
 	@Override
@@ -66,7 +67,7 @@ public class ClientStatsDao extends AbstractAnySourceBaseDAO<ClientStatsDTO> imp
 
 	@Override
 	public Page<ClientStatsDTO> getList(final BusinessComponent bc, final QueryParameters queryParameters) {
-		return new PageImpl<>(getClientStats(BusinessComponent bc));
+		return new PageImpl<>(getClientStats(bc));
 	}
 
 	@Override
@@ -93,34 +94,42 @@ public class ClientStatsDao extends AbstractAnySourceBaseDAO<ClientStatsDTO> imp
 			filter = filter.isEmpty() ? null : filter;
 		}
 		List<ClientStatsDTO> result = new ArrayList<>(ROWS_TOTAL);
-		ClientStatsDTO newClients = new ClientStatsDTO()
-				.setTitle("New Clients")
-				.setValue(isDashboardClientStatsBC ? clientStatsCount.countClientsByStatus(
-						filter,
-						ClientStatus.NEW):
-						clientRepository.count(clientRepository.statusIn(List.of(ClientStatus.NEW))))
-				.setColor("#779FE9")
-				.setIcon("team") //same as in screen.json icon
-				.setDescription("New Clients. Press to filter List below");
+		ClientStatsDTO newClients = createClientStatsDTO(
+				"New Clients", ClientStatus.NEW, "#779FE9", "team",
+				"New Clients. Press to filter List below", filter
+		);
 		newClients.setId(NEW_CLIENTS_ID);
 		result.add(newClients);
-		ClientStatsDTO inactiveClients = new ClientStatsDTO()
-				.setTitle("Inactive Clients")
-				.setValue(clientRepository.count(clientRepository.statusIn(List.of(ClientStatus.INACTIVE))))
-				.setColor("#5F90EA")
-				.setIcon("calendar") //same as in screen.json icon
-				.setDescription("Inactive Clients. Press to filter List below");
+		ClientStatsDTO inactiveClients = createClientStatsDTO(
+				"Inactive Clients", ClientStatus.INACTIVE, "#5F90EA", "calendar",
+				"Inactive Clients. Press to filter List below", filter
+		);
 		inactiveClients.setId(INACTIVE_CLIENTS_ID);
 		result.add(inactiveClients);
-		ClientStatsDTO inProgressClients = new ClientStatsDTO()
-				.setTitle("In Progress Clients")
-				.setValue(clientRepository.count(clientRepository.statusIn(List.of(ClientStatus.IN_PROGRESS))))
-				.setColor("#4D83E7")
-				.setIcon("pie-chart") //same as in screen.json icon
-				.setDescription("In Progress Clients. Press to filter List below");
+		ClientStatsDTO inProgressClients = createClientStatsDTO(
+				"In Progress Clients", ClientStatus.IN_PROGRESS, "#4D83E7", "pie-chart",
+				"In Progress Clients. Press to filter List below", filter
+		);
 		inProgressClients.setId(IN_PROGRESS_CLIENTS);
 		result.add(inProgressClients);
 		return result;
+	}
+
+
+	private ClientStatsDTO createClientStatsDTO(String title, ClientStatus status, String color, String icon,
+			String description, Set<FieldOfActivity> filter) {
+		long value;
+		if (Objects.nonNull(filter)) {
+			value = clientStatsCount.countClientsByStatus(filter, status);
+		} else {
+			value = clientRepository.count(clientRepository.statusIn(List.of(status)));
+		}
+		return new ClientStatsDTO()
+				.setTitle(title)
+				.setValue(value)
+				.setColor(color)
+				.setIcon(icon)
+				.setDescription(description);
 	}
 
 }

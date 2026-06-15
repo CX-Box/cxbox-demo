@@ -4,18 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.cxbox.core.controller.param.QueryParameters;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.dao.AnySourceBaseDAO;
 import org.cxbox.core.dao.impl.AbstractAnySourceBaseDAO;
-import org.cxbox.core.external.core.ParentDtoFirstLevelCache;
 import org.demo.dto.cxbox.anysource.ClientStatsDTO;
-import org.demo.dto.cxbox.inner.DashboardFilterDTO_;
 import org.demo.entity.enums.ClientStatus;
 import org.demo.entity.enums.FieldOfActivity;
-import org.demo.repository.ClientRepository;
+import org.demo.service.cxbox.anysource.ClientStatsCount;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
@@ -33,9 +30,7 @@ public class ClientStatsPieDao extends AbstractAnySourceBaseDAO<ClientStatsDTO> 
 
 	public static final String IN_PROGRESS_CLIENTS = "2";
 
-	private final ClientRepository clientRepository;
-
-	private final ParentDtoFirstLevelCache parentDtoFirstLevelCache;
+	private final ClientStatsCount clientStatsCount;
 
 	@Override
 	public String getId(final ClientStatsDTO entity) {
@@ -77,15 +72,15 @@ public class ClientStatsPieDao extends AbstractAnySourceBaseDAO<ClientStatsDTO> 
 		long statInactiveCount = 0;
 		long statInProgressCount = 0;
 
-		if (hasFilteredActivities(bc)) {
-			Set<FieldOfActivity> filteredActivities = getFilteredActivities(bc);
-			statNewCount = countClientsByStatus(filteredActivities, ClientStatus.NEW);
-			statInactiveCount = countClientsByStatus(filteredActivities, ClientStatus.INACTIVE);
-			statInProgressCount = countClientsByStatus(filteredActivities, ClientStatus.IN_PROGRESS);
+		if (clientStatsCount.hasFilteredActivities(bc)) {
+			Set<FieldOfActivity> filteredActivities = clientStatsCount.getFilteredActivities(bc);
+			statNewCount = clientStatsCount.countClientsByStatus(filteredActivities, ClientStatus.NEW);
+			statInactiveCount = clientStatsCount.countClientsByStatus(filteredActivities, ClientStatus.INACTIVE);
+			statInProgressCount = clientStatsCount.countClientsByStatus(filteredActivities, ClientStatus.IN_PROGRESS);
 		} else {
-			statNewCount = countClientsByStatus(ClientStatus.NEW);
-			statInactiveCount = countClientsByStatus(ClientStatus.INACTIVE);
-			statInProgressCount = countClientsByStatus(ClientStatus.IN_PROGRESS);
+			statNewCount = clientStatsCount.countClientsByStatus(ClientStatus.NEW);
+			statInactiveCount = clientStatsCount.countClientsByStatus(ClientStatus.INACTIVE);
+			statInProgressCount = clientStatsCount.countClientsByStatus(ClientStatus.IN_PROGRESS);
 		}
 
 		return createClientStatsList(statNewCount, statInactiveCount, statInProgressCount);
@@ -137,26 +132,6 @@ public class ClientStatsPieDao extends AbstractAnySourceBaseDAO<ClientStatsDTO> 
 				.setDescription(description)
 				.setId(id);
 		return clientStatsDTO;
-	}
-
-	private boolean hasFilteredActivities(BusinessComponent bc) {
-		return parentDtoFirstLevelCache.getParentField(DashboardFilterDTO_.fieldOfActivity, bc) != null &&
-				!parentDtoFirstLevelCache.getParentField(DashboardFilterDTO_.fieldOfActivity, bc).getValues().isEmpty();
-	}
-
-	private Set<FieldOfActivity> getFilteredActivities(BusinessComponent bc) {
-		return parentDtoFirstLevelCache.getParentField(DashboardFilterDTO_.fieldOfActivity, bc)
-				.getValues().stream()
-				.map(v -> FieldOfActivity.getByValue(v.getValue()))
-				.collect(Collectors.toSet());
-	}
-
-	private long countClientsByStatus(Set<FieldOfActivity> activities, ClientStatus status) {
-		return clientRepository.findAllByFieldOfActivitiesInAndStatusIn(activities, List.of(status)).size();
-	}
-
-	private long countClientsByStatus(ClientStatus status) {
-		return clientRepository.count(clientRepository.statusIn(List.of(status)));
 	}
 
 }

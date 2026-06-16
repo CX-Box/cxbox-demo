@@ -112,7 +112,7 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 			String uploadId = createAndUploadZip(data, entity, zipName);
 			entity.setFileEncryptAndSignId(uploadId);
 			entity.setFileEncryptAndSign(zipName);
-			entity.setStatus(DocumentStatus.ENCRYPTED_SIGNED);
+			entity.setStatus(DocumentStatus.SIGNED);
 		}
 
 		meetingDocumentsRepository.save(entity);

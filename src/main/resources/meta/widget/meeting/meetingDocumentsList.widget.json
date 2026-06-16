@@ -83,7 +83,7 @@
       "widget": "meetingDocumentsFormForList"
     },
     "edit": {
-      "widget": "meetingDocumentsFormForList"
+      "widget": "meetingDocumentsFormEditForList"
     },
     "cryptoGenerator": [
       {

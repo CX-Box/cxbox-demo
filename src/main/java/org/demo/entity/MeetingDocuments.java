@@ -66,6 +66,6 @@ public class MeetingDocuments extends BaseEntity {
 
 	@Enumerated(value = EnumType.STRING)
 	@Column
-	private DocumentStatus status = DocumentStatus.NEW;
+	private DocumentStatus status = DocumentStatus.NOT_SIGNED;
 
 }

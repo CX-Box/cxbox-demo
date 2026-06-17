@@ -10,7 +10,7 @@
   <parent>
     <groupId>org.cxbox</groupId>
     <artifactId>cxbox-starter-parent</artifactId>
-    <version>4.0.0-M24</version><!-- based on spring-boot-starter-parent 3.5.7!-->
+    <version>4.0.0-M25-CXBOX-1319-3.5.15-SNAPSHOT</version><!-- based on spring-boot-starter-parent 3.5.15!-->
     <relativePath/><!-- lookup parent from repository -->
   </parent>
   <repositories>
@@ -31,15 +31,14 @@
     <java.version>17</java.version>
 
     <!-- override org.springframework.boot/spring-boot-dependencies properties here-->
-    <hibernate.version>6.4.10.Final</hibernate.version> <!--Do not change. BaseEntity redesign needed due to 6.5.* annotation checks changes -->
     <commons-lang3.version>3.18.0</commons-lang3.version> <!-- 07/11/2025. due to  CVE-2025-48924-->
 
-    <springdoc-openapi-starter-webmvc-ui.version>2.8.14</springdoc-openapi-starter-webmvc-ui.version> <!--based on spring-boot 3.5.7, e.g. synced to cxbox-starter-parent-->
+    <springdoc-openapi-starter-webmvc-ui.version>2.8.17</springdoc-openapi-starter-webmvc-ui.version> <!--based on spring-boot 3.5.7, e.g. synced to cxbox-starter-parent-->
     <!-- dependencies versions-->
-    <jobrunr-spring-boot-3-starter.version>8.3.0</jobrunr-spring-boot-3-starter.version> <!--based on spring-boot 3.5.7, e.g. synced to cxbox-starter-parent-->
-    <minio.version>8.6.0</minio.version>
+    <jobrunr-spring-boot-3-starter.version>8.7.1</jobrunr-spring-boot-3-starter.version> <!--based on spring-boot 3.5.15, e.g. synced to cxbox-starter-parent-->
+    <minio.version>9.0.3</minio.version>
     <okhttp.version>4.12.0</okhttp.version>
-    <postgresql.version>42.7.7</postgresql.version>
+    <postgresql.version>42.7.11</postgresql.version>
   </properties>
 
   <dependencies>
@@ -119,17 +118,11 @@
       <groupId>io.minio</groupId>
       <artifactId>minio</artifactId>
       <version>${minio.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>com.squareup.okhttp3</groupId>
-          <artifactId>okhttp</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.squareup.okhttp3</groupId>
-      <artifactId>okhttp</artifactId>
-      <version>${okhttp.version}</version>
+      <artifactId>okhttp-jvm</artifactId>
+      <version>5.3.2</version>
     </dependency>
     <!--end minio dependencies-->
     <dependency>

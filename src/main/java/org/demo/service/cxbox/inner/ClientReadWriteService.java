@@ -4,9 +4,11 @@ package org.demo.service.cxbox.inner;
 import static org.cxbox.api.data.dao.SpecificationUtils.and;
 import static org.demo.controller.CxboxRestController.dashboardClient;
 
+import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -16,6 +18,7 @@ import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.DrillDownType;
 import org.cxbox.core.dto.MessageType;
+import org.cxbox.core.dto.multivalue.MultivalueFieldSingleValue;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.cxbox.core.dto.rowmeta.PostAction;
@@ -33,6 +36,7 @@ import org.demo.dto.cxbox.inner.ClientWriteDTO_;
 import org.demo.dto.cxbox.inner.DashboardFilterDTO_;
 import org.demo.entity.Client;
 import org.demo.entity.Meeting;
+import org.demo.entity.Sale;
 import org.demo.entity.enums.ClientEditStep;
 import org.demo.entity.enums.ClientStatus;
 import org.demo.entity.enums.FieldOfActivity;
@@ -41,6 +45,7 @@ import org.demo.repository.MeetingRepository;
 import org.demo.repository.core.UserRepository;
 import org.demo.service.mail.MailSendingService;
 import org.jobrunr.scheduling.BackgroundJob;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -61,6 +66,9 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 
 	@Getter(onMethod_ = @Override)
 	private final Class<ClientReadWriteMeta> meta = ClientReadWriteMeta.class;
+
+	@Autowired
+	private EntityManager entityManager;
 
 	@Override
 	protected Specification<Client> getSpecification(BusinessComponent bc) {
@@ -97,6 +105,15 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 
 	@Override
 	protected ActionResultDTO<ClientWriteDTO> doUpdateEntity(Client entity, ClientWriteDTO data, BusinessComponent bc) {
+		if (data.isFieldChanged(ClientWriteDTO_.salesClient)) {
+			entity.getSalesClientList().clear();
+			entity.getSalesClientList().addAll(data.getSalesClient().getValues().stream()
+					.map(MultivalueFieldSingleValue::getId)
+					.filter(Objects::nonNull)
+					.map(Long::parseLong)
+					.map(e -> entityManager.getReference(Sale.class, e))
+					.collect(Collectors.toList()));
+		}
 		setIfChanged(data, ClientWriteDTO_.fullName, entity::setFullName);
 		if (data.isFieldChanged(ClientWriteDTO_.fieldOfActivity)) {
 			entity.setFieldOfActivities(
@@ -238,7 +255,8 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 								.action(act -> act
 										.action("deactivate", "Deactivate")
 										.withAutoSaveBefore()
-										.withPreAction(bc -> PreAction.confirm("Are You sure You want to deactivate the client?"))
+										.withPreAction(PreAction.confirm(
+												cf -> cf.text("Are You sure You want to deactivate the client?")))
 										.invoker((bc, data) -> {
 											Client client = clientRepository.getById(bc.getIdAsLong());
 											client.setStatus(ClientStatus.INACTIVE);

@@ -9,6 +9,7 @@ import org.demo.conf.cxbox.customization.responsibilitiesAction.service.Responsi
 import org.demo.conf.cxbox.extension.jobRunr.service.state.JobStatsService;
 import org.demo.service.cxbox.anysource.clientstats.ClientStatsService;
 import org.demo.conf.cxbox.extension.jobRunr.service.job.JobAdminService;
+import org.demo.service.cxbox.anysource.clientstatsline.ClientSaleLineStatsService;
 import org.demo.service.cxbox.anysource.clientstatspie.ClientStatsPieService;
 import org.demo.service.cxbox.anysource.dadatacompany.CompanyService;
 import org.demo.service.cxbox.anysource.clientSaleGraph.ClientSalesGraphService;
@@ -83,6 +84,8 @@ public enum CxboxRestController implements EnumBcIdentifier {
 		dashboardClientStats(dashboardFilter, ClientStatsService.class),
 		dashboardClient(dashboardFilter,ClientReadWriteService.class),
 			dashboardClientSaleGraph(dashboardClient,ClientSalesGraphService.class),
+				dashboardSaleClient(dashboardClientSaleGraph, SaleClientService.class),
+		dashboardClientSaleLine(dashboardFilter, ClientSaleLineStatsService.class),
 
 	//core administration
 	dictionary(DictionaryAdminService.class),

@@ -17,16 +17,16 @@
     {
       "widgetName": "dashboardClientsPie1D",
       "position": 20,
-      "gridWidth": 24
+      "gridWidth": 12
     },
     {
       "widgetName": "dashboardSalesDualAxes2D",
       "position": 30,
-      "gridWidth": 12
+      "gridWidth": 24
     },
     {
       "widgetName": "dashboardSalesColumn2D",
-      "position": 30,
+      "position": 20,
       "gridWidth": 12
     },
     {
@@ -50,7 +50,7 @@
       "gridWidth": 24
     },
     {
-      "widgetName": "dashboardClientActivitiesList",
+      "widgetName": "dashboardSaleViewList",
       "position": 90,
       "gridWidth": 24
     }

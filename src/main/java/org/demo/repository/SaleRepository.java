@@ -8,6 +8,7 @@ import org.cxbox.model.core.entity.BaseEntity_;
 import org.demo.entity.Sale;
 import org.demo.entity.Sale_;
 import org.demo.entity.enums.FieldOfActivity;
+import org.demo.repository.projection.DashboardSalesByMonthAndClientPrj;
 import org.demo.repository.projection.DashboardSalesByMonthAndProductPrj;
 import org.demo.repository.projection.DashboardSalesByMonthAndStatusPrj;
 import org.demo.repository.projection.DashboardSalesProductPrj;
@@ -58,6 +59,22 @@ public interface SaleRepository extends JpaRepository<Sale, Long>, JpaSpecificat
 			ORDER BY year, month, s.product
 			""")
 	List<DashboardSalesByMonthAndProductPrj> getSalesByMonthAndProduct(Set<FieldOfActivity> fieldOfActivities);
+
+	@Query("""
+			SELECT new org.demo.repository.projection.DashboardSalesByMonthAndClientPrj(
+			CONCAT(MONTH(s.createdDate), '-', YEAR(s.createdDate), '-', s.id) as id,
+			MONTH(s.createdDate) as month,
+			YEAR(s.createdDate) as year,
+			c.fullName as fullName,
+			sum(s.sum) as sum
+			)
+			FROM Sale s JOIN s.client c
+			WHERE (:fieldOfActivities IS NULL OR EXISTS (SELECT 1 FROM c.fieldOfActivities fa WHERE fa IN :fieldOfActivities))
+			GROUP BY MONTH(s.createdDate), YEAR(s.createdDate), c.id
+			ORDER BY year, month  
+			""")
+	List<DashboardSalesByMonthAndClientPrj> getSalesStatsByMonthAndClient(Set<FieldOfActivity> fieldOfActivities);
+
 
 	default Specification<Sale> findSaleByTargetIdAndSellerId(@NonNull Long targetId, @Nullable Long sourceId) {
 		return (root, cq, cb) -> cb.and(

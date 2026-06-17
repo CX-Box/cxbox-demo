@@ -17,13 +17,14 @@ import org.demo.entity.enums.ClientStatus;
 import org.demo.entity.enums.FieldOfActivity;
 import org.springframework.stereotype.Service;
 
-@SuppressWarnings({"java:S3252","java:S1186"})
+@SuppressWarnings({"java:S3252", "java:S1186"})
 @Service
 public class ClientReadWriteMeta extends FieldMetaBuilder<ClientWriteDTO> {
 
 	@Override
 	public void buildRowDependentMeta(RowDependentFieldsMeta<ClientWriteDTO> fields, InnerBcDescription bcDescription,
 			Long id, Long parentId) {
+		fields.setEnabled(ClientWriteDTO_.salesClient);
 		fields.setEnabled(
 				ClientWriteDTO_.fullName,
 				ClientWriteDTO_.address,
@@ -65,11 +66,13 @@ public class ClientReadWriteMeta extends FieldMetaBuilder<ClientWriteDTO> {
 	@Override
 	public void buildIndependentMeta(FieldsMeta<ClientWriteDTO> fields, InnerBcDescription bcDescription,
 			Long parentId) {
+		fields.enableFilter(ClientWriteDTO_.salesClient);
 		fields.enableFilter(ClientWriteDTO_.fieldOfActivity);
-		fields.setConcreteFilterValues(ClientWriteDTO_.fieldOfActivity, Arrays
-				.stream(FieldOfActivity.values())
-				.map(en -> new SimpleDictionary(en.name(), en.getValue()))
-				.collect(Collectors.toList())
+		fields.setConcreteFilterValues(
+				ClientWriteDTO_.fieldOfActivity, Arrays
+						.stream(FieldOfActivity.values())
+						.map(en -> new SimpleDictionary(en.name(), en.getValue()))
+						.collect(Collectors.toList())
 		);
 		fields.enableFilter(ClientWriteDTO_.fullName);
 		fields.enableSort(ClientWriteDTO_.fullName);

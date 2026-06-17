@@ -38,7 +38,6 @@ public class ClientStatsCount   {
 		return clientRepository.findAllByFieldOfActivitiesInAndStatusIn(activities, List.of(status)).size();
 	}
 
-
 	public long countClientsByStatus(ClientStatus status) {
 		return clientRepository.count(clientRepository.statusIn(List.of(status)));
 	}

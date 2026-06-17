@@ -47,4 +47,6 @@ public interface ClientRepository extends JpaRepository<Client, Long>, JpaSpecif
 
 	List<Client> findAllByFieldOfActivitiesInAndStatusIn(Set<FieldOfActivity> fieldOfActivities, List<ClientStatus> status);
 
+	List<Client> findAllByFieldOfActivitiesIn(Set<FieldOfActivity> fieldOfActivities);
+
 }

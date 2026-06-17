@@ -18,17 +18,16 @@
       "width": 200
     },
     {
-      "title": "Address",
-      "key": "address",
-      "type": "input",
-      "width": 200
-    },
-    {
       "title": "Importance",
       "key": "importance",
       "type": "dictionary",
       "bgColorKey": "color",
       "width": 200
+    },
+    {
+      "title": "salesSumClient",
+      "key": "salesSumClient",
+      "type": "number"
     }
   ],
   "options": {
@@ -36,7 +35,7 @@
       "fields": ["importance"],
       "aggFields": [
         {
-          "fieldKey": "countClients",
+          "fieldKey": "salesSumClient",
           "func": "sum"
         }
       ]

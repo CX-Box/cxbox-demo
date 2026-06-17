@@ -1,6 +1,8 @@
 package org.demo.entity;
 
 import jakarta.persistence.ManyToMany;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.EqualsAndHashCode;
 import org.demo.entity.dictionary.ClientImportance;
 import org.demo.entity.enums.ClientEditStep;
@@ -57,5 +59,8 @@ public class Client extends BaseEntity {
 	private String brief;
 
 	private String briefId;
+
+	@OneToMany(mappedBy = "client")
+	private List<Sale> salesClientList = new ArrayList<>();
 
 }

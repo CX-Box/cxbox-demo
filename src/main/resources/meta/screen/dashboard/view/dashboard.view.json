@@ -50,7 +50,7 @@
       "gridWidth": 24
     },
     {
-      "widgetName": "dashboardSaleViewList",
+      "widgetName": "dashboardClientSaleLine",
       "position": 90,
       "gridWidth": 24
     }

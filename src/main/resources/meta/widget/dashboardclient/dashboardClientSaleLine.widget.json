@@ -6,7 +6,7 @@
   "fields": [
     {
       "title": "client",
-      "key": "client",
+      "key": "fullName",
       "type": "input"
     },
     {
@@ -34,8 +34,9 @@
   ],
   "options": {
     "chart2D": {
-      "xValueFieldKey": "dateCreatedSales",
+      "xValueFieldKey": "date",
       "yValueFieldKey": "sum",
-      "groupFieldKey": "clientName"
+      "groupFieldKey": "fullName"
     }
-  },
+  }
+}

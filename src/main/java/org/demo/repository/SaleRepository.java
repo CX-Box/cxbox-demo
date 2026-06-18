@@ -62,19 +62,21 @@ public interface SaleRepository extends JpaRepository<Sale, Long>, JpaSpecificat
 
 	@Query("""
 			SELECT new org.demo.repository.projection.DashboardSalesByMonthAndClientPrj(
-			CONCAT(MONTH(s.createdDate), '-', YEAR(s.createdDate), '-', s.id) as id,
+			CONCAT(MONTH(s.createdDate), '-', YEAR(s.createdDate), '-', s.id)as id,
 			MONTH(s.createdDate) as month,
-			YEAR(s.createdDate) as year,
+			YEAR(s.createdDate)as year,
 			c.fullName as fullName,
 			sum(s.sum) as sum
 			)
 			FROM Sale s JOIN s.client c
-			WHERE (:fieldOfActivities IS NULL OR EXISTS (SELECT 1 FROM c.fieldOfActivities fa WHERE fa IN :fieldOfActivities))
-			GROUP BY MONTH(s.createdDate), YEAR(s.createdDate), c.id
-			ORDER BY year, month  
+			WHERE (:fieldOfActivities IS NULL OR EXISTS (
+					SELECT 1 FROM c.fieldOfActivities fa WHERE fa IN :fieldOfActivities
+			))
+			GROUP BY MONTH(s.createdDate), YEAR(s.createdDate), s.id
+						,c.fullName
+			ORDER BY YEAR(s.createdDate), MONTH(s.createdDate)
 			""")
 	List<DashboardSalesByMonthAndClientPrj> getSalesStatsByMonthAndClient(Set<FieldOfActivity> fieldOfActivities);
-
 
 	default Specification<Sale> findSaleByTargetIdAndSellerId(@NonNull Long targetId, @Nullable Long sourceId) {
 		return (root, cq, cb) -> cb.and(

@@ -1,9 +1,5 @@
 package org.demo.service.cxbox.anysource.clientstatspie;
 
-import static org.demo.service.cxbox.anysource.clientstats.ClientStatsDao.INACTIVE_CLIENTS_ID;
-import static org.demo.service.cxbox.anysource.clientstats.ClientStatsDao.IN_PROGRESS_CLIENTS;
-import static org.demo.service.cxbox.anysource.clientstats.ClientStatsDao.NEW_CLIENTS_ID;
-
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.cxbox.core.crudma.bc.impl.BcDescription;
@@ -54,12 +50,7 @@ public class ClientStatsPieMeta extends AnySourceFieldMetaBuilder<ClientStatsDTO
 	}
 
 	private ClientStatus getStatusFilterValues(@NonNull String id) {
-		return switch (id) {
-			case NEW_CLIENTS_ID -> ClientStatus.NEW;
-			case INACTIVE_CLIENTS_ID -> ClientStatus.INACTIVE;
-			case IN_PROGRESS_CLIENTS -> ClientStatus.IN_PROGRESS;
-			default -> throw new IllegalStateException("Unexpected value: " + id);
-		};
+		return ClientStatus.getById(id);
 	}
 
 }

@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 import lombok.RequiredArgsConstructor;
 import org.cxbox.core.controller.param.QueryParameters;
 import org.cxbox.core.crudma.bc.BusinessComponent;
@@ -61,15 +60,13 @@ public class ClientStatsPieDao extends AbstractAnySourceBaseDAO<ClientStatsDTO> 
 	}
 
 	public List<ClientStatsDTO> getClientStatistics(BusinessComponent bc) {
-		AtomicInteger order = new AtomicInteger(1);
-
 		return Arrays.stream(ClientStatus.values())
 				.map(status -> createClientStatsDTO(
 						status.getValue(),
 						countClientStats(bc, status),
-						ClientStatus.colorsStatistic.get(status),
-						ClientStatus.iconPie.get(status),
-						String.valueOf(order.getAndIncrement()),
+						status.getColor(),
+						status.getIcon(),
+						status.getId(),
 						status.getValue() + ". Press to filter List below"
 				))
 				.filter(dto -> dto.getValue() != 0)

@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.cxbox.core.controller.param.QueryParameters;
@@ -20,7 +19,6 @@ import org.demo.dto.cxbox.inner.DashboardFilterDTO_;
 import org.demo.entity.enums.ClientStatus;
 import org.demo.entity.enums.FieldOfActivity;
 import org.demo.repository.ClientRepository;
-import lombok.NonNull;
 import org.demo.service.cxbox.anysource.StatisticUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -30,14 +28,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ClientStatsDao extends AbstractAnySourceBaseDAO<ClientStatsDTO> implements
 		AnySourceBaseDAO<ClientStatsDTO> {
-
-	public static final int ROWS_TOTAL = 3;
-
-	public static final String NEW_CLIENTS_ID = "0";
-
-	public static final String INACTIVE_CLIENTS_ID = "1";
-
-	public static final String IN_PROGRESS_CLIENTS = "2";
 
 	private final ClientRepository clientRepository;
 
@@ -82,14 +72,13 @@ public class ClientStatsDao extends AbstractAnySourceBaseDAO<ClientStatsDTO> imp
 	}
 
 	public List<ClientStatsDTO> getClientStats(BusinessComponent bc) {
-		AtomicInteger order = new AtomicInteger(1);
 		return Arrays.stream(ClientStatus.values())
 				.map(status -> createClientStatsDTO(
 						status.getValue(),
 						status,
-						ClientStatus.colorsStatistic.get(status),
-						ClientStatus.iconPie.get(status),
-						String.valueOf(order.getAndIncrement()),
+						status.getColor(),
+						status.getIcon(),
+						status.getId(),
 						status.getValue() + ". Press to filter List below",
 						bc
 				))
@@ -119,12 +108,14 @@ public class ClientStatsDao extends AbstractAnySourceBaseDAO<ClientStatsDTO> imp
 		} else {
 			value = clientRepository.count(clientRepository.statusIn(List.of(status)));
 		}
-		return new ClientStatsDTO()
-				.setTitle(title)
+		ClientStatsDTO clientStatsDTO = new ClientStatsDTO();
+		clientStatsDTO.setTitle(title)
 				.setValue(value)
 				.setColor(color)
 				.setIcon(icon)
-				.setDescription(description);
+				.setDescription(description)
+				.setId(id);
+		return clientStatsDTO;
 	}
 
 }

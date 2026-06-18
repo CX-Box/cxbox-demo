@@ -1,7 +1,7 @@
 package org.demo.service.cxbox.anysource.meetingsstats;
 
+import java.util.Arrays;
 import java.util.Objects;
-import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import org.cxbox.core.controller.param.QueryParameters;
 import org.cxbox.core.crudma.bc.BusinessComponent;
@@ -19,21 +19,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MeetingStatsDAO extends AbstractAnySourceBaseDAO<MeetingStatsDTO> {
 
-	private final MeetingRepository meetingRepository;
-
-	public static final String ALL = "1";
-
-	public static final String NOT_STARTED = "2";
-
-	public static final String IN_COMPLETION = "3";
-
-	public static final String IN_PROGRESS = "4";
-
-	public static final String COMPLETED = "5";
-
-	public static final String CANCELLED = "6";
+	public static final String ALL = "0";
 
 	public static final String COLOR = "#5F90EA";
+
+	private final MeetingRepository meetingRepository;
 
 	@Override
 	public String getId(final MeetingStatsDTO entity) {
@@ -72,50 +62,19 @@ public class MeetingStatsDAO extends AbstractAnySourceBaseDAO<MeetingStatsDTO> {
 
 	public List<MeetingStatsDTO> getMeetingStatistics() {
 		long allCount = meetingRepository.count();
-		long notStartedCount = countByStatus(MeetingStatus.NOT_STARTED);
-		long inCompletionCount = countByStatus(MeetingStatus.IN_COMPLETION);
-		long inProgressCount = countByStatus(MeetingStatus.IN_PROGRESS);
-		long completedCount = countByStatus(MeetingStatus.COMPLETED);
-		long cancelledCount = countByStatus(MeetingStatus.CANCELLED);
-
-		return createMeetingStatsList(
-				allCount, notStartedCount, inCompletionCount,
-				inProgressCount, completedCount, cancelledCount
-		);
-	}
-
-	private long countByStatus(MeetingStatus status) {
-		return meetingRepository.findByStatus(status).size();
-	}
-
-	private List<MeetingStatsDTO> createMeetingStatsList(
-			long allCount, long notStartedCount, long inCompletionCount,
-			long inProgressCount, long completedCount, long cancelledCount) {
-
-		return Stream.of(
-						createMeetingStatsDTO("All Meetings", allCount, COLOR, "team", ALL, "All meetings"),
-						createMeetingStatsDTO(
-								"Not Started",
-								notStartedCount,
-								COLOR,
-								"calendar",
-								NOT_STARTED,
-								"Not started meetings"
-						),
-						createMeetingStatsDTO(
-								"In Completion",
-								inCompletionCount,
-								COLOR,
-								"pie-chart",
-								IN_COMPLETION,
-								"Meetings in completion"
-						),
-						createMeetingStatsDTO("In Progress", inProgressCount, COLOR, "plus-circle", IN_PROGRESS, "Meetings in progress"),
-						createMeetingStatsDTO("Completed", completedCount, COLOR, "check", COMPLETED, "Completed meetings"),
-						createMeetingStatsDTO("Cancelled", cancelledCount, COLOR, "stop", CANCELLED, "Cancelled meetings")
-				)
-				.filter(dto -> dto.getValue() > 0)
-				.toList();
+		List<MeetingStatsDTO> list = new java.util.ArrayList<>(Arrays.stream(MeetingStatus.values())
+				.map(status -> createMeetingStatsDTO(
+						status.getValue(),
+						meetingRepository.findByStatus(status).size(),
+						COLOR,
+						MeetingStatus.iconStatistic.get(status),
+						MeetingStatus.idStatistic.get(status),
+						"Meetings " + status.getValue()
+				))
+				.filter(dto -> dto.getValue() != 0)
+				.toList());
+		list.add(createMeetingStatsDTO("All Meetings", allCount, COLOR, "team", ALL, "All meetings"));
+		return list;
 	}
 
 	private MeetingStatsDTO createMeetingStatsDTO(String title, long value, String color,

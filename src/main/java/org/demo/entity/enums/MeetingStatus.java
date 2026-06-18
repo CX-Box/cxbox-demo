@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
@@ -78,4 +79,21 @@ public enum MeetingStatus {
 	public abstract List<MeetingStatus> available(@NonNull Meeting meeting);
 
 	public abstract void transition(@NonNull MeetingStatus meetingStatus, @NonNull Meeting meeting);
+
+	public static final Map<MeetingStatus, String> iconStatistic = Map.of(
+			IN_COMPLETION, "pie-chart",
+			COMPLETED, "check",
+			IN_PROGRESS, "plus-circle",
+			NOT_STARTED,"calendar",
+			CANCELLED,""
+	);
+
+	public static final Map<MeetingStatus, String> idStatistic = Map.of(
+			IN_COMPLETION, "1",
+			COMPLETED, "2",
+			IN_PROGRESS, "3",
+			NOT_STARTED,"4",
+			CANCELLED,"5"
+	);
+
 }

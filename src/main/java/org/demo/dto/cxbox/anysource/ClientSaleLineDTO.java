@@ -18,9 +18,11 @@ public class ClientSaleLineDTO extends DataResponseDTO {
 
 	private Integer year;
 
-	private String dateCreatedSales;
+	private String dateSales;
 
 	private String fullName;
+
+	private String clientId;
 
 	private Long sum;
 
@@ -32,7 +34,7 @@ public class ClientSaleLineDTO extends DataResponseDTO {
 		return month + "/" + year;
 	}
 
-	public String getDateCreatedSales() {
+	public String getDateSales() {
 		return monthYearString(month, year);
 	}
 

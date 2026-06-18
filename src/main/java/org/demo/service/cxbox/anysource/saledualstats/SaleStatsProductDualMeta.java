@@ -1,6 +1,5 @@
 package org.demo.service.cxbox.anysource.saledualstats;
 
-import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.cxbox.core.crudma.PlatformRequest;
 import org.cxbox.core.crudma.bc.impl.BcDescription;
@@ -15,25 +14,18 @@ import org.demo.dto.cxbox.anysource.SaleProductDualDTO_;
 import org.demo.dto.cxbox.inner.DashboardFilterDTO_;
 import org.demo.dto.cxbox.inner.SaleDTO;
 import org.demo.dto.cxbox.inner.SaleDTO_;
+import org.demo.service.cxbox.anysource.StatisticUtils;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class SaleStatsProductDualMeta extends AnySourceFieldMetaBuilder<SaleProductDualDTO> {
 
-
 	private final PlatformRequest platformRequest;
 
 	private final ParentDtoFirstLevelCache parentDtoFirstLevelCache;
 
-	public static LocalDate firstDay(Integer month, Integer year) {
-		return (month == null || year == null) ? null : LocalDate.of(year, month, 1);
-	}
-
-	public static LocalDate lastDay(Integer month, Integer year) {
-		return (month == null || year == null) ? null
-				: LocalDate.of(year, month, 1).withDayOfMonth(LocalDate.of(year, month, 1).lengthOfMonth());
-	}
+	private final StatisticUtils statisticUtils;
 
 	public void buildRowDependentMeta(RowDependentFieldsMeta<SaleProductDualDTO> fields, BcDescription bc,
 			String id, String parentId) {
@@ -45,8 +37,8 @@ public class SaleStatsProductDualMeta extends AnySourceFieldMetaBuilder<SaleProd
 			String parentId) {
 		var month = fields.getCurrentValue(SaleProductDualDTO_.month).orElse(null);
 		var year = fields.getCurrentValue(SaleProductDualDTO_.year).orElse(null);
-		var dateFrom = firstDay(month, year);
-		var dateTo = lastDay(month, year);
+		var dateFrom = statisticUtils.firstDay(month, year);
+		var dateTo = statisticUtils.lastDay(month, year);
 		var activity = parentDtoFirstLevelCache.getParentField(
 				DashboardFilterDTO_.fieldOfActivity,
 				platformRequest.getBc()
@@ -58,7 +50,7 @@ public class SaleStatsProductDualMeta extends AnySourceFieldMetaBuilder<SaleProd
 				"screen/sale/view/salelist",
 				fc -> fc
 						.add(CxboxRestController.sale, SaleDTO.class, fb -> fb
-								.dateFromTo(SaleDTO_.createdDate, dateFrom, dateTo)
+								.dateFromTo(SaleDTO_.saleDate, dateFrom, dateTo)
 								.dictionary(SaleDTO_.product, fields.getCurrentValue(SaleProductDualDTO_.productType).orElse(null))
 								.dictionaryEnum(SaleDTO_.status, fields.getCurrentValue(SaleProductDualDTO_.saleStatus).orElse(null))
 								.multipleSelect(SaleDTO_.fieldOfActivity, activity)

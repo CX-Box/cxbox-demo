@@ -108,7 +108,7 @@ public class ClientSaleLineStatsDao extends AbstractAnySourceBaseDAO<ClientSaleL
 							.month(stat.month())
 							.year(stat.year())
 							.sum(stat.sum())
-							.dateCreatedSales(monthYearString(stat.month(), stat.year()))
+							.dateSales(monthYearString(stat.month(), stat.year()))
 							.fullName(stat.fullName())
 							.color(COLOR_LIST.get(index))
 							.vstamp(0L)

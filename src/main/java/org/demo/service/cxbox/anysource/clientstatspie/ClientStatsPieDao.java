@@ -1,9 +1,13 @@
 package org.demo.service.cxbox.anysource.clientstatspie;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.cxbox.core.controller.param.QueryParameters;
 import org.cxbox.core.crudma.bc.BusinessComponent;
@@ -12,7 +16,7 @@ import org.cxbox.core.dao.impl.AbstractAnySourceBaseDAO;
 import org.demo.dto.cxbox.anysource.ClientStatsDTO;
 import org.demo.entity.enums.ClientStatus;
 import org.demo.entity.enums.FieldOfActivity;
-import org.demo.service.cxbox.anysource.ClientStatsCount;
+import org.demo.service.cxbox.anysource.StatisticUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
@@ -24,13 +28,7 @@ public class ClientStatsPieDao extends AbstractAnySourceBaseDAO<ClientStatsDTO> 
 
 	public static final int ROWS_TOTAL = 3;
 
-	public static final String NEW_CLIENTS_ID = "0";
-
-	public static final String INACTIVE_CLIENTS_ID = "1";
-
-	public static final String IN_PROGRESS_CLIENTS = "2";
-
-	private final ClientStatsCount clientStatsCount;
+	private final StatisticUtils statisticUtils;
 
 	@Override
 	public String getId(final ClientStatsDTO entity) {
@@ -68,58 +66,27 @@ public class ClientStatsPieDao extends AbstractAnySourceBaseDAO<ClientStatsDTO> 
 	}
 
 	public List<ClientStatsDTO> getClientStatistics(BusinessComponent bc) {
-		long statNewCount = 0;
-		long statInactiveCount = 0;
-		long statInProgressCount = 0;
+		AtomicInteger order = new AtomicInteger(1);
 
-		if (clientStatsCount.hasFilteredActivities(bc)) {
-			Set<FieldOfActivity> filteredActivities = clientStatsCount.getFilteredActivities(bc);
-			statNewCount = clientStatsCount.countClientsByStatus(filteredActivities, ClientStatus.NEW);
-			statInactiveCount = clientStatsCount.countClientsByStatus(filteredActivities, ClientStatus.INACTIVE);
-			statInProgressCount = clientStatsCount.countClientsByStatus(filteredActivities, ClientStatus.IN_PROGRESS);
-		} else {
-			statNewCount = clientStatsCount.countClientsByStatus(ClientStatus.NEW);
-			statInactiveCount = clientStatsCount.countClientsByStatus(ClientStatus.INACTIVE);
-			statInProgressCount = clientStatsCount.countClientsByStatus(ClientStatus.IN_PROGRESS);
-		}
-
-		return createClientStatsList(statNewCount, statInactiveCount, statInProgressCount);
+		return Arrays.stream(ClientStatus.values())
+				.map(status -> createClientStatsDTO(
+						status.getValue(),
+						countClientStats(bc, status),
+						ClientStatus.colorsPie.get(status),
+						ClientStatus.iconPie.get(status),
+						String.valueOf(order.getAndIncrement()),
+						status.getValue() + ". Press to filter List below"
+				))
+				.filter(dto -> dto.getValue() != 0)
+				.toList();
 	}
 
-	private List<ClientStatsDTO> createClientStatsList(long newCount, long inactiveCount, long inProgressCount) {
-		List<ClientStatsDTO> result = new ArrayList<>(ROWS_TOTAL);
-		if (newCount != 0) {
-			result.add(createClientStatsDTO(
-					"New Clients",
-					newCount,
-					"#779FE9",
-					"team",
-					NEW_CLIENTS_ID,
-					"New Clients. Press to filter List below"
-			));
+	private long countClientStats(BusinessComponent bc, ClientStatus status) {
+		if (statisticUtils.hasFilteredActivities(bc)) {
+			Set<FieldOfActivity> filteredActivities = statisticUtils.getFilteredActivities(bc);
+			return statisticUtils.countClientsByStatus(filteredActivities, status);
 		}
-		if (inactiveCount != 0) {
-			result.add(createClientStatsDTO(
-					"Inactive Clients",
-					inactiveCount,
-					"#5F90EA",
-					"calendar",
-					INACTIVE_CLIENTS_ID,
-					"Inactive Clients. Press to filter List below"
-			));
-		}
-		if (inProgressCount != 0) {
-			result.add(createClientStatsDTO(
-					"In Progress Clients",
-					inProgressCount,
-					"#4D83E7",
-					"pie-chart",
-					IN_PROGRESS_CLIENTS,
-					"In Progress Clients. Press to filter List below"
-			));
-		}
-
-		return result;
+		return statisticUtils.countClientsByStatus(status);
 	}
 
 	private ClientStatsDTO createClientStatsDTO(String title, long value, String color, String icon, String id,

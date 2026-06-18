@@ -1,6 +1,5 @@
 package org.demo.dto.cxbox.inner;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import lombok.Getter;
@@ -52,7 +51,7 @@ public class SaleDTO extends DataResponseDTO {
 	private String color;
 
 	@SearchParameter(name = "saleDate", provider = DateTimeValueProvider.class)
-	private LocalDate saleDate;
+	private LocalDateTime saleDate;
 
 	@SearchParameter(name = "createdDate", provider = DateTimeValueProvider.class)
 	private LocalDateTime createdDate;

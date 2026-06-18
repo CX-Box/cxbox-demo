@@ -11,7 +11,7 @@
     },
     {
       "title": "Date",
-      "key": "dateCreatedSales",
+      "key": "dateSales",
       "type": "input",
       "drillDown": true,
       "bgColorKey": "color"
@@ -34,7 +34,7 @@
   ],
   "options": {
     "chart2D": {
-      "xValueFieldKey": "dateCreatedSales",
+      "xValueFieldKey": "dateSales",
       "yValueFieldKey": "sum",
       "groupFieldKey": "fullName"
     }

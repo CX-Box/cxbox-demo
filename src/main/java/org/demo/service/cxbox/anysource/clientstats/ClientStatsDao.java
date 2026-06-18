@@ -20,7 +20,7 @@ import org.demo.entity.enums.ClientStatus;
 import org.demo.entity.enums.FieldOfActivity;
 import org.demo.repository.ClientRepository;
 import lombok.NonNull;
-import org.demo.service.cxbox.anysource.ClientStatsCount;
+import org.demo.service.cxbox.anysource.StatisticUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
@@ -42,7 +42,7 @@ public class ClientStatsDao extends AbstractAnySourceBaseDAO<ClientStatsDTO> imp
 
 	private final ParentDtoFirstLevelCache parentDtoFirstLevelCache;
 
-	private final ClientStatsCount clientStatsCount;
+	private final StatisticUtils statisticUtils;
 
 	@Override
 	public String getId(final ClientStatsDTO entity) {
@@ -120,7 +120,7 @@ public class ClientStatsDao extends AbstractAnySourceBaseDAO<ClientStatsDTO> imp
 			String description, Set<FieldOfActivity> filter) {
 		long value;
 		if (Objects.nonNull(filter)) {
-			value = clientStatsCount.countClientsByStatus(filter, status);
+			value = statisticUtils.countClientsByStatus(filter, status);
 		} else {
 			value = clientRepository.count(clientRepository.statusIn(List.of(status)));
 		}

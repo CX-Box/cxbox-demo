@@ -1,5 +1,6 @@
 package org.demo.service.cxbox.anysource;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class ClientStatsCount   {
+public class StatisticUtils {
 
 
 	private final ClientRepository clientRepository;
@@ -40,6 +41,15 @@ public class ClientStatsCount   {
 
 	public long countClientsByStatus(ClientStatus status) {
 		return clientRepository.count(clientRepository.statusIn(List.of(status)));
+	}
+
+	public LocalDate firstDay(Integer month, Integer year) {
+		return (month == null || year == null) ? null : LocalDate.of(year, month, 1);
+	}
+
+	public LocalDate lastDay(Integer month, Integer year) {
+		return (month == null || year == null) ? null
+				: LocalDate.of(year, month, 1).withDayOfMonth(LocalDate.of(year, month, 1).lengthOfMonth());
 	}
 
 }

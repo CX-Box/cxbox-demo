@@ -15,7 +15,7 @@ public enum ClientStatus {
 	@JsonValue
 	private final String value;
 
-	public static final Map<ClientStatus, String> colorsPie = Map.of(
+	public static final Map<ClientStatus, String> colorsStatistic = Map.of(
 			NEW, "#779FE9",
 			INACTIVE, "#5F90EA",
 			IN_PROGRESS, "#4D83E7"
@@ -25,4 +25,4 @@ public enum ClientStatus {
 			INACTIVE, "calendar",
 			IN_PROGRESS, "pie-chart"
 	);
-}
+}  

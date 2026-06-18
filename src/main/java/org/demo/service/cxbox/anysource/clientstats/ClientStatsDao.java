@@ -1,11 +1,12 @@
 package org.demo.service.cxbox.anysource.clientstats;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.cxbox.core.controller.param.QueryParameters;
@@ -80,45 +81,39 @@ public class ClientStatsDao extends AbstractAnySourceBaseDAO<ClientStatsDTO> imp
 		throw new IllegalStateException();
 	}
 
-	@NonNull
-	private List<ClientStatsDTO> getClientStats(BusinessComponent bc) {
-		boolean isDashboardClientStatsBC = bc.getName().equals(CxboxRestController.dashboardClientStats.getName());
+	public List<ClientStatsDTO> getClientStats(BusinessComponent bc) {
+		AtomicInteger order = new AtomicInteger(1);
+		return Arrays.stream(ClientStatus.values())
+				.map(status -> createClientStatsDTO(
+						status.getValue(),
+						status,
+						ClientStatus.colorsStatistic.get(status),
+						ClientStatus.iconPie.get(status),
+						String.valueOf(order.getAndIncrement()),
+						status.getValue() + ". Press to filter List below",
+						bc
+				))
+				.filter(dto -> dto.getValue() != 0)
+				.toList();
+	}
+
+ 	private ClientStatsDTO createClientStatsDTO(String title, ClientStatus status, String color, String icon,
+			String id, String description, BusinessComponent bc) {
+
 		Set<FieldOfActivity> filter = null;
+		long value;
+		boolean isDashboardClientStatsBC = bc.getName().equals(CxboxRestController.dashboardClientStats.getName());
+
 		if (isDashboardClientStatsBC) {
 			var parentField = parentDtoFirstLevelCache.getParentField(DashboardFilterDTO_.fieldOfActivity, bc);
 			filter = Optional.ofNullable(parentField)
 					.map(e -> e.getValues().stream()
-							.map(value -> FieldOfActivity.getByValue(value.getValue()))
+							.map(v -> FieldOfActivity.getByValue(v.getValue()))
 							.collect(Collectors.toSet()))
 					.orElse(new HashSet<>());
 			filter = filter.isEmpty() ? null : filter;
 		}
-		List<ClientStatsDTO> result = new ArrayList<>(ROWS_TOTAL);
-		ClientStatsDTO newClients = createClientStatsDTO(
-				"New Clients", ClientStatus.NEW, "#779FE9", "team",
-				"New Clients. Press to filter List below", filter
-		);
-		newClients.setId(NEW_CLIENTS_ID);
-		result.add(newClients);
-		ClientStatsDTO inactiveClients = createClientStatsDTO(
-				"Inactive Clients", ClientStatus.INACTIVE, "#5F90EA", "calendar",
-				"Inactive Clients. Press to filter List below", filter
-		);
-		inactiveClients.setId(INACTIVE_CLIENTS_ID);
-		result.add(inactiveClients);
-		ClientStatsDTO inProgressClients = createClientStatsDTO(
-				"In Progress Clients", ClientStatus.IN_PROGRESS, "#4D83E7", "pie-chart",
-				"In Progress Clients. Press to filter List below", filter
-		);
-		inProgressClients.setId(IN_PROGRESS_CLIENTS);
-		result.add(inProgressClients);
-		return result;
-	}
 
-
-	private ClientStatsDTO createClientStatsDTO(String title, ClientStatus status, String color, String icon,
-			String description, Set<FieldOfActivity> filter) {
-		long value;
 		if (Objects.nonNull(filter)) {
 			value = statisticUtils.countClientsByStatus(filter, status);
 		} else {

@@ -1,13 +1,10 @@
 package org.demo.service.cxbox.anysource.clientstatspie;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.cxbox.core.controller.param.QueryParameters;
 import org.cxbox.core.crudma.bc.BusinessComponent;
@@ -25,8 +22,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ClientStatsPieDao extends AbstractAnySourceBaseDAO<ClientStatsDTO> implements
 		AnySourceBaseDAO<ClientStatsDTO> {
-
-	public static final int ROWS_TOTAL = 3;
 
 	private final StatisticUtils statisticUtils;
 
@@ -72,7 +67,7 @@ public class ClientStatsPieDao extends AbstractAnySourceBaseDAO<ClientStatsDTO> 
 				.map(status -> createClientStatsDTO(
 						status.getValue(),
 						countClientStats(bc, status),
-						ClientStatus.colorsPie.get(status),
+						ClientStatus.colorsStatistic.get(status),
 						ClientStatus.iconPie.get(status),
 						String.valueOf(order.getAndIncrement()),
 						status.getValue() + ". Press to filter List below"

@@ -7,6 +7,7 @@ import { RootEpic } from '@store'
 import { LoginResponse } from '@interfaces/session'
 import { Auth } from '../auth'
 import { OIDC_CONFIG_URL } from '@constants'
+import { getNormalizedAppRouteFromUrl } from '@utils/api'
 
 const responseStatusMessages: Record<number, string> = {
     401: 'Unauthorized',
@@ -19,13 +20,10 @@ const ssoAuthEpic: RootEpic = action$ =>
         switchMap(() => {
             return from(Auth.init(OIDC_CONFIG_URL)).pipe(
                 switchMap(userManager => {
-                    const params = new URLSearchParams(window.location.hash.split('?')[1])
-                    const signInCallback = params.get('sign_in_callback')
-
-                    if (signInCallback) {
+                    if (Auth.signInCallbackParam) {
                         return from(userManager.signinCallback()).pipe(
                             switchMap(user => {
-                                if (signInCallback === 'redirect') {
+                                if (Auth.signInCallbackParam === 'redirect') {
                                     const state = user?.state as Record<string, string | undefined>
                                     const route = state.route ? state.route : ''
                                     window.history.replaceState(null, '', route)
@@ -39,12 +37,12 @@ const ssoAuthEpic: RootEpic = action$ =>
                     return from(userManager.getUser()).pipe(
                         switchMap(user => {
                             if (user && !user.expired) {
-                                window.history.replaceState(null, '', window.location.pathname + window.location.hash)
+                                window.history.replaceState(null, '', getNormalizedAppRouteFromUrl())
                                 return of(actions.login({ login: '', password: '' }))
                             } else {
                                 userManager.signinRedirect({
                                     state: {
-                                        route: window.location.pathname + window.location.hash
+                                        route: getNormalizedAppRouteFromUrl()
                                     }
                                 })
                                 return EMPTY

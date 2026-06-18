@@ -74,3 +74,21 @@ export function joinPaths(...paths: string[]): string {
         })
         .join('/')
 }
+
+/**
+ * Returns the normalized app route.
+ *
+ * @param url (default window.location.href)
+ * @param appendTrailingSlash This is necessary for beautiful display (for example, so that /ui/#/ is formed instead of /ui#/). Defaults to true.
+ * @returns (pathname + hash)
+ */
+
+export function getNormalizedAppRouteFromUrl(url: string = window.location.href, appendTrailingSlash: boolean = true): string {
+    const currentUrl = new URL(url)
+
+    if (appendTrailingSlash && !currentUrl.pathname.endsWith('/')) {
+        currentUrl.pathname = currentUrl.pathname + '/'
+    }
+
+    return currentUrl.pathname + currentUrl.hash
+}

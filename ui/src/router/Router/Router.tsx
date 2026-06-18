@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useMemo } from 'react'
 import { useDispatch } from 'react-redux'
 import { createHashHistory } from 'history'
 import { useAppSelector } from '@store'
@@ -6,44 +6,48 @@ import { getRouteFromString } from '../index'
 import { actions } from '@actions'
 import { backButtonConfirmMessage, forwardButtonConfirmMessage } from '@constants/navigationGuard'
 import { EFeatureSettingKey } from '@interfaces/session'
+import { useFeatureSettingFlag } from '@hooks/featureSetting'
 
 interface ILocationState {
     _index: number
 }
 
-const historyObj = createHashHistory()
-
 export const Router: React.FC = ({ children }) => {
+    const historyObj = useMemo(() => {
+        return createHashHistory()
+    }, [])
+
     const path = useAppSelector(state => state.router.path)
     const search = useAppSelector(state => state.router.search)
-    const browserNavigationWarnEnabled =
-        useAppSelector(state =>
-            state.session.featureSettings?.find(featureSetting => featureSetting.key === EFeatureSettingKey.browserNavigationWarnEnabled)
-        )?.value === 'true'
+    const browserNavigationWarnEnabled = useFeatureSettingFlag(EFeatureSettingKey.browserNavigationWarnEnabled)
 
     const pathRef = useRef(path)
     const historyIndexRef = useRef(0)
 
+    // Initializing the History Index
     useEffect(() => {
         const state = historyObj.location.state as ILocationState | undefined
 
         if (typeof state?._index !== 'number') {
-            historyObj.replace(historyObj.location.pathname + historyObj.location.search, { _index: ++historyIndexRef.current })
+            historyObj.replace(
+                { pathname: historyObj.location.pathname, search: historyObj.location.search },
+                { _index: ++historyIndexRef.current }
+            )
         }
-    }, [])
+    }, [historyObj])
 
-    // Changes location when the state changes
+    // Redux -> History synchronization (location changes from within the application)
     useEffect(() => {
         pathRef.current = path
 
         if (path !== '/' && path.length !== 0 && (path !== historyObj.location.pathname || search !== historyObj.location.search)) {
-            historyObj.push(path + search, { _index: ++historyIndexRef.current })
+            historyObj.push({ pathname: path, search: search }, { _index: ++historyIndexRef.current })
         }
-    }, [path, search])
+    }, [path, search, historyObj])
 
     const dispatch = useDispatch()
 
-    // Updates the state when the location changes from outside
+    // Synchronization History -> Redux (external transitions and browser buttons)
     useEffect(() => {
         const unlistenHistory = historyObj.listen(({ location, action }) => {
             if (browserNavigationWarnEnabled) {
@@ -68,7 +72,7 @@ export const Router: React.FC = ({ children }) => {
                 if (hasIndex) {
                     historyIndexRef.current = currentIndex
                 } else {
-                    historyObj.replace(historyObj.location.pathname + historyObj.location.search, { _index: ++historyIndexRef.current })
+                    historyObj.replace({ pathname: location.pathname, search: location.search }, { _index: ++historyIndexRef.current })
                 }
             }
 
@@ -80,7 +84,7 @@ export const Router: React.FC = ({ children }) => {
         return () => {
             unlistenHistory()
         }
-    }, [dispatch, browserNavigationWarnEnabled, path, search])
+    }, [dispatch, browserNavigationWarnEnabled, historyObj])
 
     return <>{children}</>
 }

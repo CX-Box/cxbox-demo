@@ -39,4 +39,21 @@ export class Auth {
         }
         return Auth._instance
     }
+
+    public static get signInCallbackParam(): string | null {
+        let params = new URLSearchParams(window.location.search)
+        let param = params.get('sign_in_callback')
+
+        if (param) {
+            return param
+        }
+
+        const hashQueryString = window.location.hash.split('?')[1] as string | undefined
+        if (hashQueryString?.length) {
+            params = new URLSearchParams(hashQueryString)
+            param = params.get('sign_in_callback')
+        }
+
+        return param
+    }
 }

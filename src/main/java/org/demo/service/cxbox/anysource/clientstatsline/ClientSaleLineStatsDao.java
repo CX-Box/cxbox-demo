@@ -1,9 +1,13 @@
 package org.demo.service.cxbox.anysource.clientstatsline;
 
+import static org.demo.dto.cxbox.anysource.ClientSaleLineDTO.monthYearString;
+
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +28,24 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ClientSaleLineStatsDao extends AbstractAnySourceBaseDAO<ClientSaleLineDTO> implements
 		AnySourceBaseDAO<ClientSaleLineDTO> {
+
+	public static final Map<Number, String> COLOR_LIST = Map.ofEntries(
+			Map.entry(1, "#56dee8"),
+			Map.entry(2, "#56d2e8"),
+			Map.entry(3, "#56c6e8"),
+			Map.entry(4, "#56bae8"),
+			Map.entry(5, "#56aee8"),
+			Map.entry(6, "#56a1e8"),
+			Map.entry(7, "#5695e8"),
+			Map.entry(8, "#5689e8"),
+			Map.entry(9, "#567de8"),
+			Map.entry(10, "#5671e8"),
+			Map.entry(11, "#5665e8"),
+			Map.entry(12, "#5658e8"),
+			Map.entry(13, "#6056e8"),
+			Map.entry(14, "#6c56e8"),
+			Map.entry(15, "#7856e8")
+	);
 
 	private final SaleRepository saleRepository;
 
@@ -73,15 +95,25 @@ public class ClientSaleLineStatsDao extends AbstractAnySourceBaseDAO<ClientSaleL
 						.collect(Collectors.toSet()))
 				.orElse(new HashSet<>());
 		filter = filter.isEmpty() ? null : filter;
+		AtomicInteger num = new AtomicInteger(1);
+
 		return saleRepository.getSalesStatsByMonthAndClient(filter).stream()
-				.<ClientSaleLineDTO>map(stat -> ClientSaleLineDTO.builder()
-						.id(stat.id())
-						.month(stat.month())
-						.year(stat.year())
-						.sum(stat.sum())
-						.fullName(stat.fullName())
-						.vstamp(0L)
-						.build())
+				.<ClientSaleLineDTO>map(stat -> {
+					int index = num.getAndIncrement() % COLOR_LIST.size();
+					if (index > 15) {
+						index = 1;
+					}
+					return ClientSaleLineDTO.builder()
+							.id(stat.id())
+							.month(stat.month())
+							.year(stat.year())
+							.sum(stat.sum())
+							.dateCreatedSales(monthYearString(stat.month(), stat.year()))
+							.fullName(stat.fullName())
+							.color(COLOR_LIST.get(index))
+							.vstamp(0L)
+							.build();
+				})
 				.toList();
 	}
 

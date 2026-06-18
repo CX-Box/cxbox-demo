@@ -477,4 +477,11 @@
     </sql>
   </changeSet>
 
+  <changeSet id="CXBOX-1309 ADD COLUMN TO SALE" author="cxbox">
+    <addColumn tableName="SALE">
+      <column name="SALE_DATE" type = "TIMESTAMP(6)">
+      </column>
+    </addColumn>
+  </changeSet>
+
 </databaseChangeLog>

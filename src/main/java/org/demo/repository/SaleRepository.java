@@ -32,39 +32,39 @@ public interface SaleRepository extends JpaRepository<Sale, Long>, JpaSpecificat
 
 	@Query("""
 			SELECT new org.demo.repository.projection.DashboardSalesByMonthAndStatusPrj(
-			CONCAT(MONTH(s.createdDate), '-', YEAR(s.createdDate), '-', s.status) as id,
-			MONTH(s.createdDate) as month,
-			YEAR(s.createdDate) as year,
+			CONCAT(MONTH(s.saleDate), '-', YEAR(s.saleDate), '-', s.status) as id,
+			MONTH(s.saleDate) as month,
+			YEAR(s.saleDate) as year,
 			s.status as status,
 			COUNT(s.id) as count
 			)
 			FROM Sale s JOIN s.client c
 			WHERE (:fieldOfActivities IS NULL OR EXISTS (SELECT 1 FROM c.fieldOfActivities fa WHERE fa IN :fieldOfActivities))
-			GROUP BY MONTH(s.createdDate), YEAR(s.createdDate), s.status
+			GROUP BY MONTH(s.saleDate), YEAR(s.saleDate), s.status
 			ORDER BY year, month, s.status
 			""")
 	List<DashboardSalesByMonthAndStatusPrj> getSalesStatsByMonthAndStatus(Set<FieldOfActivity> fieldOfActivities);
 
 	@Query("""
 			SELECT new org.demo.repository.projection.DashboardSalesByMonthAndProductPrj(
-			CONCAT(MONTH(s.createdDate), '-', YEAR(s.createdDate), '-', s.product) as id,
-			MONTH(s.createdDate) as month,
-			YEAR(s.createdDate) as year,
+			CONCAT(MONTH(s.saleDate), '-', YEAR(s.saleDate), '-', s.product) as id,
+			MONTH(s.saleDate) as month,
+			YEAR(s.saleDate) as year,
 			s.product as product,
 			SUM(s.sum) as sum
 			)
 			FROM Sale s JOIN s.client c
 			WHERE (:fieldOfActivities IS NULL OR EXISTS (SELECT 1 FROM c.fieldOfActivities fa WHERE fa IN :fieldOfActivities))
-			GROUP BY MONTH(s.createdDate), YEAR(s.createdDate), s.product
+			GROUP BY MONTH(s.saleDate), YEAR(s.saleDate), s.product
 			ORDER BY year, month, s.product
 			""")
 	List<DashboardSalesByMonthAndProductPrj> getSalesByMonthAndProduct(Set<FieldOfActivity> fieldOfActivities);
 
 	@Query("""
 			SELECT new org.demo.repository.projection.DashboardSalesByMonthAndClientPrj(
-			CONCAT(MONTH(s.createdDate), '-', YEAR(s.createdDate), '-', s.id)as id,
-			MONTH(s.createdDate) as month,
-			YEAR(s.createdDate)as year,
+			CONCAT(MONTH(s.saleDate), '-', YEAR(s.saleDate), '-',c.fullName) as id,
+			MONTH(s.saleDate) as month,
+			YEAR(s.saleDate) as year,
 			c.fullName as fullName,
 			sum(s.sum) as sum
 			)
@@ -72,9 +72,8 @@ public interface SaleRepository extends JpaRepository<Sale, Long>, JpaSpecificat
 			WHERE (:fieldOfActivities IS NULL OR EXISTS (
 					SELECT 1 FROM c.fieldOfActivities fa WHERE fa IN :fieldOfActivities
 			))
-			GROUP BY MONTH(s.createdDate), YEAR(s.createdDate), s.id
-						,c.fullName
-			ORDER BY YEAR(s.createdDate), MONTH(s.createdDate)
+			GROUP BY year, month, c.fullName
+			ORDER BY year, month, c.fullName
 			""")
 	List<DashboardSalesByMonthAndClientPrj> getSalesStatsByMonthAndClient(Set<FieldOfActivity> fieldOfActivities);
 

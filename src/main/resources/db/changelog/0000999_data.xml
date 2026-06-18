@@ -53,15 +53,6 @@
       <column header="region" name="region" type="STRING"/>
     </loadUpdateData>
 
-    <loadUpdateData tableName="SALE" primaryKey="ID" encoding="UTF-8" separator="," quotchar="&quot;"
-      file="db/data/SALES.csv">
-      <column header="ID" name="ID" type="STRING"/>
-      <column header="client_id" name="client_id" type="STRING"/>
-      <column header="client_seller_id" name="client_seller_id" type="STRING"/>
-      <column header="product" name="product" type="STRING"/>
-      <column header="status" name="status" type="STRING"/>
-      <column header="sum" name="sum" type="STRING"/>
-    </loadUpdateData>
   </changeSet>
 
   <changeSet id="update_meeting_start_and_end_dates" author="agelfman" dbms="postgresql" runOnChange="true">
@@ -101,6 +92,11 @@
 
   <changeSet id="create-indexes-for-views" author="myungman" dbms="postgresql" runOnChange="true">
     <sqlFile path="db/changelog/sql/CXBOX_1101_CREATE_INDEXES.sql"
+      relativeToChangelogFile="false"/>
+  </changeSet>
+
+  <changeSet id="update_sal_dates" author="agelfman" dbms="postgresql" runOnChange="true">
+    <sqlFile path="db/changelog/sql/postgres/CXBOX_1309_INSERT_SALES.sql"
       relativeToChangelogFile="false"/>
   </changeSet>
 

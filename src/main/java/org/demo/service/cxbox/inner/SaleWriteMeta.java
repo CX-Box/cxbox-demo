@@ -42,7 +42,7 @@ public class SaleWriteMeta extends FieldMetaBuilder<SaleDTO> {
 		);
 		fields.setDictionaryValues(SaleDTO_.product);
 		fields.setEnumValues(SaleDTO_.status, SaleStatus.values());
-
+		fields.setEnabled(SaleDTO_.saleDate);
 		fields.setDrilldown(
 				SaleDTO_.clientName,
 				DrillDownType.INNER,

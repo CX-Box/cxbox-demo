@@ -20,13 +20,18 @@
       "gridWidth": 12
     },
     {
-      "widgetName": "dashboardSalesDualAxes2D",
-      "position": 30,
-      "gridWidth": 24
+      "widgetName": "dashboardClientSaleLine",
+      "position": 20,
+      "gridWidth": 12
     },
     {
       "widgetName": "dashboardSalesColumn2D",
-      "position": 20,
+      "position": 30,
+      "gridWidth": 12
+    },
+    {
+      "widgetName": "dashboardSalesDualAxes2D",
+      "position": 30,
       "gridWidth": 12
     },
     {
@@ -47,11 +52,6 @@
     {
       "widgetName": "dashboardClientSaleGraph",
       "position": 80,
-      "gridWidth": 24
-    },
-    {
-      "widgetName": "dashboardClientSaleLine",
-      "position": 90,
       "gridWidth": 24
     }
   ],

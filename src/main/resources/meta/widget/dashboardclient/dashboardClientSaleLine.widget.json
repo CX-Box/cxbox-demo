@@ -1,6 +1,6 @@
 {
   "name": "dashboardClientSaleLine",
-  "title": "",
+  "title": "Sales sum per clients",
   "type": "Line2D",
   "bc": "dashboardClientSaleLine",
   "fields": [
@@ -34,7 +34,7 @@
   ],
   "options": {
     "chart2D": {
-      "xValueFieldKey": "date",
+      "xValueFieldKey": "dateCreatedSales",
       "yValueFieldKey": "sum",
       "groupFieldKey": "fullName"
     }

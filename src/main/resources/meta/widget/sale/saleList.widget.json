@@ -36,8 +36,8 @@
       "type": "number"
     },
     {
-      "title": "Created",
-      "key": "createdDate",
+      "title": "Sale date",
+      "key": "saleDate",
       "type": "date"
     }
   ],

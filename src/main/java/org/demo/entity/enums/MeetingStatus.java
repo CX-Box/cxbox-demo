@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
@@ -13,7 +12,8 @@ import org.demo.entity.Meeting;
 @Getter
 @AllArgsConstructor
 public enum MeetingStatus {
-	IN_COMPLETION("In completion", "Complete") {
+
+	IN_COMPLETION("In completion", "Complete", "pie-chart", "2") {
 		@Override
 		public List<MeetingStatus> available(@NonNull Meeting meeting) {
 			return Collections.singletonList(COMPLETED);
@@ -25,7 +25,7 @@ public enum MeetingStatus {
 		}
 	},
 
-	COMPLETED("Completed", "Finish") {
+	COMPLETED("Completed", "Finish", "check", "3") {
 		@Override
 		public List<MeetingStatus> available(@NonNull Meeting meeting) {
 			return Collections.singletonList(IN_PROGRESS);
@@ -37,7 +37,7 @@ public enum MeetingStatus {
 		}
 	},
 
-	IN_PROGRESS("In progress", "Start Meeting") {
+	IN_PROGRESS("In progress", "Start Meeting", "plus-circle", "4") {
 		@Override
 		public List<MeetingStatus> available(@NonNull Meeting meeting) {
 			return Arrays.asList(IN_COMPLETION, CANCELLED);
@@ -48,7 +48,8 @@ public enum MeetingStatus {
 			meeting.setStatus(meetingStatus);
 		}
 	},
-	NOT_STARTED("Not started", "") {
+
+	NOT_STARTED("Not started", "", "calendar", "5") {
 		@Override
 		public List<MeetingStatus> available(@NonNull Meeting meeting) {
 			return Arrays.asList(CANCELLED, IN_PROGRESS);
@@ -59,7 +60,8 @@ public enum MeetingStatus {
 			meeting.setStatus(meetingStatus);
 		}
 	},
-	CANCELLED("Cancelled", "Cancel Meeting") {
+
+	CANCELLED("Cancelled", "Cancel Meeting", "stop", "6") {
 		@Override
 		public List<MeetingStatus> available(@NonNull Meeting meeting) {
 			return Collections.singletonList(IN_PROGRESS);
@@ -76,24 +78,20 @@ public enum MeetingStatus {
 
 	private final String button;
 
+	private final String icon;
+
+	private final String id;
+
 	public abstract List<MeetingStatus> available(@NonNull Meeting meeting);
 
 	public abstract void transition(@NonNull MeetingStatus meetingStatus, @NonNull Meeting meeting);
 
-	public static final Map<MeetingStatus, String> iconStatistic = Map.of(
-			IN_COMPLETION, "pie-chart",
-			COMPLETED, "check",
-			IN_PROGRESS, "plus-circle",
-			NOT_STARTED,"calendar",
-			CANCELLED,""
-	);
-
-	public static final Map<MeetingStatus, String> idStatistic = Map.of(
-			IN_COMPLETION, "1",
-			COMPLETED, "2",
-			IN_PROGRESS, "3",
-			NOT_STARTED,"4",
-			CANCELLED,"5"
-	);
-
+	public static MeetingStatus getById(String id) {
+		return Arrays.stream(values())
+				.filter(status -> status.id.equals(id))
+				.findFirst()
+				.orElseThrow(() -> new IllegalArgumentException(
+						"Unknown meeting status id: " + id
+				));
+	}
 }

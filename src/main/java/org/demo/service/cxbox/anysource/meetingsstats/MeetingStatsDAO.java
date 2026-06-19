@@ -1,6 +1,7 @@
 package org.demo.service.cxbox.anysource.meetingsstats;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.cxbox.core.controller.param.QueryParameters;
@@ -19,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MeetingStatsDAO extends AbstractAnySourceBaseDAO<MeetingStatsDTO> {
 
-	public static final String ALL = "0";
+	public static final String ALL = "1";
 
 	public static final String COLOR = "#5F90EA";
 
@@ -67,13 +68,14 @@ public class MeetingStatsDAO extends AbstractAnySourceBaseDAO<MeetingStatsDTO> {
 						status.getValue(),
 						meetingRepository.findByStatus(status).size(),
 						COLOR,
-						MeetingStatus.iconStatistic.get(status),
-						MeetingStatus.idStatistic.get(status),
+						status.getIcon(),
+						status.getId(),
 						"Meetings " + status.getValue()
 				))
 				.filter(dto -> dto.getValue() != 0)
 				.toList());
 		list.add(createMeetingStatsDTO("All Meetings", allCount, COLOR, "team", ALL, "All meetings"));
+		list.sort(Comparator.comparing(MeetingStatsDTO::getId));
 		return list;
 	}
 

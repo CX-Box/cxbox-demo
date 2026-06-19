@@ -78,7 +78,7 @@ public enum CxboxRestController implements EnumBcIdentifier {
 		clientSalePickListPopup(saleEdit, ClientPickListService.class),
 	dashboardFilter(DashboardFilterService.class),
 		dashboardClientActivities(dashboardFilter, DashboardClientActivitiesService.class),
-		clientStatsPie(dashboardFilter, ClientStatsPieService.class),
+		clientStatsPie(dashboardFilter, ClientStatsService.class),
 		saleStatsProduct(dashboardFilter, SaleStatsProductService.class),
 		saleStatsProductDual(dashboardFilter,SaleStatsProductDualService.class),
 		dashboardClientStats(dashboardFilter, ClientStatsService.class),

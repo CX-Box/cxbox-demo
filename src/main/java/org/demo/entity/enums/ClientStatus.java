@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
 @Getter
 @AllArgsConstructor
 public enum ClientStatus {
@@ -21,10 +22,6 @@ public enum ClientStatus {
 
 	private final String icon;
 
-	public String getDescription() {
-		return value + ". Press to filter List below";
-	}
-
 	public static ClientStatus getById(String id) {
 		return Arrays.stream(values())
 				.filter(status -> status.id.equals(id))
@@ -32,6 +29,10 @@ public enum ClientStatus {
 				.orElseThrow(() -> new IllegalArgumentException(
 						"Unknown client status id: " + id
 				));
+	}
+
+	public String getDescription() {
+		return value + ". Press to filter List below";
 	}
 
 }

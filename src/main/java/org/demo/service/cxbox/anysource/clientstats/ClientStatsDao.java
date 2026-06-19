@@ -1,12 +1,10 @@
 package org.demo.service.cxbox.anysource.clientstats;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.cxbox.core.controller.param.QueryParameters;
 import org.cxbox.core.crudma.bc.BusinessComponent;
@@ -14,8 +12,7 @@ import org.cxbox.core.dao.AnySourceBaseDAO;
 import org.cxbox.core.dao.impl.AbstractAnySourceBaseDAO;
 import org.cxbox.core.external.core.ParentDtoFirstLevelCache;
 import org.demo.controller.CxboxRestController;
-import org.demo.dto.cxbox.anysource.ClientStatsDTO;
-import org.demo.dto.cxbox.inner.DashboardFilterDTO_;
+import org.demo.dto.cxbox.anysource.BaseStatsDTO;
 import org.demo.entity.enums.ClientStatus;
 import org.demo.entity.enums.FieldOfActivity;
 import org.demo.repository.ClientRepository;
@@ -26,8 +23,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class ClientStatsDao extends AbstractAnySourceBaseDAO<ClientStatsDTO> implements
-		AnySourceBaseDAO<ClientStatsDTO> {
+public class ClientStatsDao extends AbstractAnySourceBaseDAO<BaseStatsDTO> implements
+		AnySourceBaseDAO<BaseStatsDTO> {
 
 	private final ClientRepository clientRepository;
 
@@ -36,17 +33,17 @@ public class ClientStatsDao extends AbstractAnySourceBaseDAO<ClientStatsDTO> imp
 	private final StatisticUtils statisticUtils;
 
 	@Override
-	public String getId(final ClientStatsDTO entity) {
+	public String getId(final BaseStatsDTO entity) {
 		return entity.getId();
 	}
 
 	@Override
-	public void setId(final String id, final ClientStatsDTO entity) {
+	public void setId(final String id, final BaseStatsDTO entity) {
 		entity.setId(id);
 	}
 
 	@Override
-	public ClientStatsDTO getByIdIgnoringFirstLevelCache(final BusinessComponent bc) {
+	public BaseStatsDTO getByIdIgnoringFirstLevelCache(final BusinessComponent bc) {
 		return getClientStats(bc).stream()
 				.filter(s -> Objects.equals(s.getId(), bc.getId())).findFirst().orElse(null);
 	}
@@ -57,65 +54,48 @@ public class ClientStatsDao extends AbstractAnySourceBaseDAO<ClientStatsDTO> imp
 	}
 
 	@Override
-	public Page<ClientStatsDTO> getList(final BusinessComponent bc, final QueryParameters queryParameters) {
+	public Page<BaseStatsDTO> getList(final BusinessComponent bc, final QueryParameters queryParameters) {
 		return new PageImpl<>(getClientStats(bc));
 	}
 
 	@Override
-	public ClientStatsDTO update(BusinessComponent bc, ClientStatsDTO entity) {
+	public BaseStatsDTO update(BusinessComponent bc, BaseStatsDTO entity) {
 		throw new IllegalStateException();
 	}
 
 	@Override
-	public ClientStatsDTO create(final BusinessComponent bc, final ClientStatsDTO entity) {
+	public BaseStatsDTO create(final BusinessComponent bc, final BaseStatsDTO entity) {
 		throw new IllegalStateException();
 	}
 
-	public List<ClientStatsDTO> getClientStats(BusinessComponent bc) {
+	public List<BaseStatsDTO> getClientStats(BusinessComponent bc) {
+
+		Set<FieldOfActivity> filter = null;
+		if (bc.getName().equals(CxboxRestController.dashboardClientStats.getName())) {
+			filter = statisticUtils.getFilteredActivities(bc);
+		}
+
+		Map<ClientStatus, Long> stats = filter != null
+				? StatisticUtils.toEnumCountMap(
+				clientRepository.countGroupedByStatus(filter),
+				ClientStatus.class
+		)
+				: StatisticUtils.toEnumCountMap(
+						clientRepository.countGroupedByStatus(),
+						ClientStatus.class
+				);
+
 		return Arrays.stream(ClientStatus.values())
-				.map(status -> createClientStatsDTO(
+				.map(status -> statisticUtils.createStatsDTO(
 						status.getValue(),
-						status,
+						stats.getOrDefault(status, 0L),
 						status.getColor(),
 						status.getIcon(),
 						status.getId(),
-						status.getValue() + ". Press to filter List below",
-						bc
+						status.getValue() + ". Press to filter List below"
 				))
-				.filter(dto -> dto.getValue() != 0)
 				.toList();
-	}
 
- 	private ClientStatsDTO createClientStatsDTO(String title, ClientStatus status, String color, String icon,
-			String id, String description, BusinessComponent bc) {
-
-		Set<FieldOfActivity> filter = null;
-		long value;
-		boolean isDashboardClientStatsBC = bc.getName().equals(CxboxRestController.dashboardClientStats.getName());
-
-		if (isDashboardClientStatsBC) {
-			var parentField = parentDtoFirstLevelCache.getParentField(DashboardFilterDTO_.fieldOfActivity, bc);
-			filter = Optional.ofNullable(parentField)
-					.map(e -> e.getValues().stream()
-							.map(v -> FieldOfActivity.getByValue(v.getValue()))
-							.collect(Collectors.toSet()))
-					.orElse(new HashSet<>());
-			filter = filter.isEmpty() ? null : filter;
-		}
-
-		if (Objects.nonNull(filter)) {
-			value = statisticUtils.countClientsByStatus(filter, status);
-		} else {
-			value = clientRepository.count(clientRepository.statusIn(List.of(status)));
-		}
-		ClientStatsDTO clientStatsDTO = new ClientStatsDTO();
-		clientStatsDTO.setTitle(title)
-				.setValue(value)
-				.setColor(color)
-				.setIcon(icon)
-				.setDescription(description)
-				.setId(id);
-		return clientStatsDTO;
 	}
 
 }

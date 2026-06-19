@@ -36,6 +36,7 @@ public interface ClientRepository extends JpaRepository<Client, Long>, JpaSpecif
 				return cb.conjunction();
 			}
 			Join<Client, FieldOfActivity> join = root.join(Client_.fieldOfActivities);
+			assert query != null;
 			query.distinct(true);
 			return join.in(fieldOfActivities);
 		};

@@ -11,8 +11,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MeetingRepository extends JpaRepository<Meeting, Long>, JpaSpecificationExecutor<Meeting> {
 
-	List<Meeting> findByStatus(MeetingStatus status);
-
 	@Query("""
 	SELECT m.status, COUNT(m)
 	FROM Meeting m

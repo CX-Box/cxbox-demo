@@ -28,8 +28,6 @@ public class ClientStatsDao extends AbstractAnySourceBaseDAO<BaseStatsDTO> imple
 
 	private final ClientRepository clientRepository;
 
-	private final ParentDtoFirstLevelCache parentDtoFirstLevelCache;
-
 	private final StatisticUtils statisticUtils;
 
 	@Override

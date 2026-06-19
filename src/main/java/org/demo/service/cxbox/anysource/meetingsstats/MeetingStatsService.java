@@ -8,14 +8,14 @@ import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.cxbox.core.dto.rowmeta.PostAction;
 import org.cxbox.core.service.action.Actions;
-import org.demo.dto.cxbox.anysource.MeetingStatsDTO;
+import org.demo.dto.cxbox.anysource.BaseStatsDTO;
 import org.springframework.stereotype.Service;
 
 
 @Getter
 @Service
 @RequiredArgsConstructor
-public class MeetingStatsService extends AnySourceVersionAwareResponseService<MeetingStatsDTO, MeetingStatsDTO> {
+public class MeetingStatsService extends AnySourceVersionAwareResponseService<BaseStatsDTO, BaseStatsDTO> {
 
 	@Getter(onMethod_ = @Override)
 	private final Class<MeetingStatsMetaBuilder> meta = MeetingStatsMetaBuilder.class;
@@ -24,21 +24,21 @@ public class MeetingStatsService extends AnySourceVersionAwareResponseService<Me
 	private final Class<MeetingStatsDAO> dao = MeetingStatsDAO.class;
 
 	@Override
-	protected CreateResult<MeetingStatsDTO> doCreateEntity(MeetingStatsDTO entity, BusinessComponent bc) {
+	protected CreateResult<BaseStatsDTO> doCreateEntity(BaseStatsDTO entity, BusinessComponent bc) {
 		return new CreateResult<>(entityToDto(bc, getBaseDao().create(bc, entity)))
 				.setAction(PostAction.refreshBc(bc));
 	}
 
 	@Override
-	protected ActionResultDTO<MeetingStatsDTO> doUpdateEntity(MeetingStatsDTO entity, MeetingStatsDTO data,
+	protected ActionResultDTO<BaseStatsDTO> doUpdateEntity(BaseStatsDTO entity, BaseStatsDTO data,
 			BusinessComponent bc) {
 		return new ActionResultDTO<>(entityToDto(bc, getBaseDao().create(bc, entity)))
 				.setAction(PostAction.refreshBc(bc));
 	}
 
 	@Override
-	public Actions<MeetingStatsDTO> getActions() {
-		return Actions.<MeetingStatsDTO>builder()
+	public Actions<BaseStatsDTO> getActions() {
+		return Actions.<BaseStatsDTO>builder()
 				.create(crt -> crt.text("Create"))
 				.delete(dlt -> dlt.text("Delete"))
 				.save(sv -> sv.text("Save"))

@@ -95,8 +95,13 @@
       relativeToChangelogFile="false"/>
   </changeSet>
 
-  <changeSet id="update_sal_dates" author="agelfman" dbms="postgresql" runOnChange="true">
+  <changeSet id="insert_sal_dates" author="agelfman" dbms="postgresql" runOnChange="true">
     <sqlFile path="db/changelog/sql/postgres/CXBOX_1309_INSERT_SALES.sql"
+      relativeToChangelogFile="false"/>
+  </changeSet>
+
+  <changeSet id="insert_sal_dates_oracle" author="agelfman" dbms="oracle" runOnChange="true">
+    <sqlFile path="db/changelog/sql/oracle/CXBOX_1309_INSERT_SALES.sql"
       relativeToChangelogFile="false"/>
   </changeSet>
 

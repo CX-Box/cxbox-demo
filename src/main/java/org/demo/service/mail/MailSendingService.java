@@ -22,7 +22,7 @@ import org.demo.entity.Contact;
 import org.demo.entity.Meeting;
 import org.demo.entity.enums.MeetingStatus;
 import org.jobrunr.jobs.annotations.Job;
-import org.springframework.boot.autoconfigure.mail.MailProperties;
+import org.springframework.boot.mail.autoconfigure.MailProperties;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailParseException;
 import org.springframework.mail.MailPreparationException;

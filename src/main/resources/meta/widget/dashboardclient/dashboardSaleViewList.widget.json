@@ -1,8 +1,8 @@
 {
-  "name": "saleList",
+  "name": "dashboardSaleViewList",
   "title": "",
   "type": "List",
-  "bc": "sale",
+  "bc": "dashboardSaleClient",
   "fields": [
     {
       "title": "Client",
@@ -36,8 +36,8 @@
       "type": "number"
     },
     {
-      "title": "Sale date",
-      "key": "saleDate",
+      "title": "Created",
+      "key": "createdDate",
       "type": "date"
     }
   ],
@@ -50,11 +50,8 @@
       "meeting": "sale"
     },
     "actionGroups": {
-      "include": [
-        "create",
-        "edit",
-        "delete"
-      ]
+      "include": []
     }
   }
 }
+

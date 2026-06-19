@@ -1,0 +1,39 @@
+{
+  "name": "dashboardClientStats",
+  "title": "",
+  "type": "StatsBlock",
+  "bc": "dashboardClientStats",
+  "fields": [
+    {
+      "title": "value",
+      "key": "value",
+      "type": "number",
+      "drillDown": true,
+      "bgColorKey": "color"
+    },
+    {
+      "title": "title",
+      "key": "title",
+      "type": "input"
+    },
+    {
+      "title": "icon",
+      "key": "icon",
+      "type": "input"
+    },
+    {
+      "title": "description",
+      "key": "description",
+      "type": "hint"
+    }
+  ],
+  "options": {
+    "stats": {
+      "valueFieldKey": "value",
+      "titleFieldKey": "title",
+      "iconFieldKey": "icon",
+      "descriptionFieldKey": "description"
+    }
+  }
+}
+

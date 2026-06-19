@@ -2,9 +2,15 @@ package org.demo.service.cxbox.inner;
 
 
 import static org.cxbox.api.data.dao.SpecificationUtils.and;
+import static org.demo.controller.CxboxRestController.dashboardClient;
 
+import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -12,10 +18,12 @@ import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.DrillDownType;
 import org.cxbox.core.dto.MessageType;
+import org.cxbox.core.dto.multivalue.MultivalueFieldSingleValue;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.cxbox.core.dto.rowmeta.PostAction;
 import org.cxbox.core.dto.rowmeta.PreAction;
+import org.cxbox.core.external.core.ParentDtoFirstLevelCache;
 import org.cxbox.core.service.action.ActionAvailableChecker;
 import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
@@ -25,8 +33,10 @@ import org.demo.conf.cxbox.extension.fulltextsearch.FullTextSearchExt;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.inner.ClientWriteDTO;
 import org.demo.dto.cxbox.inner.ClientWriteDTO_;
+import org.demo.dto.cxbox.inner.DashboardFilterDTO_;
 import org.demo.entity.Client;
 import org.demo.entity.Meeting;
+import org.demo.entity.Sale;
 import org.demo.entity.enums.ClientEditStep;
 import org.demo.entity.enums.ClientStatus;
 import org.demo.entity.enums.FieldOfActivity;
@@ -35,6 +45,7 @@ import org.demo.repository.MeetingRepository;
 import org.demo.repository.core.UserRepository;
 import org.demo.service.mail.MailSendingService;
 import org.jobrunr.scheduling.BackgroundJob;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -51,14 +62,35 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 
 	private final SessionService sessionService;
 
+	private final ParentDtoFirstLevelCache parentDtoFirstLevelCache;
+
 	@Getter(onMethod_ = @Override)
 	private final Class<ClientReadWriteMeta> meta = ClientReadWriteMeta.class;
 
+	@Autowired
+	private EntityManager entityManager;
+
 	@Override
 	protected Specification<Client> getSpecification(BusinessComponent bc) {
+		if (dashboardClient.isBc(bc)) {
+			return super.getSpecification(bc).and(getFilterSpecification(bc));
+		}
 		var fullTextSearchFilterParam = FullTextSearchExt.getFullTextSearchFilterParam(bc);
 		var specification = super.getSpecification(bc);
-		return fullTextSearchFilterParam.map(e -> and(clientRepository.getFullTextSearchSpecification(e), specification)).orElse(specification);
+		return fullTextSearchFilterParam.map(e -> and(clientRepository.getFullTextSearchSpecification(e), specification))
+				.orElse(specification);
+	}
+
+	private Specification<Client> getFilterSpecification(BusinessComponent bc) {
+		var parentField = parentDtoFirstLevelCache.getParentField(DashboardFilterDTO_.fieldOfActivity, bc);
+		Set<FieldOfActivity> filter = Optional.ofNullable(parentField)
+				.map(e -> e.getValues().stream()
+						.map(value -> FieldOfActivity.getByValue(value.getValue()))
+						.collect(Collectors.toSet()))
+				.orElse(new HashSet<>());
+		return filter.isEmpty() ?
+				(root, cq, cb) -> cb.and() :
+				clientRepository.findAllByFieldOfActivities(filter);
 	}
 
 	@Override
@@ -73,6 +105,15 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 
 	@Override
 	protected ActionResultDTO<ClientWriteDTO> doUpdateEntity(Client entity, ClientWriteDTO data, BusinessComponent bc) {
+		if (data.isFieldChanged(ClientWriteDTO_.salesClient)) {
+			entity.getSalesClientList().clear();
+			entity.getSalesClientList().addAll(data.getSalesClient().getValues().stream()
+					.map(MultivalueFieldSingleValue::getId)
+					.filter(Objects::nonNull)
+					.map(Long::parseLong)
+					.map(e -> entityManager.getReference(Sale.class, e))
+					.collect(Collectors.toList()));
+		}
 		setIfChanged(data, ClientWriteDTO_.fullName, entity::setFullName);
 		if (data.isFieldChanged(ClientWriteDTO_.fieldOfActivity)) {
 			entity.setFieldOfActivities(
@@ -103,29 +144,31 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 		return Actions.<ClientWriteDTO>builder()
 				.save(sv -> sv)
 				.action(act -> act
-								.scope(ActionScope.RECORD)
-								.action("next", "Save and Continue")
-								.invoker((bc, dto) -> {
-									Client client = clientRepository.getById(bc.getIdAsLong());
-									ClientEditStep nextStep = ClientEditStep.getNextEditStep(client).get();
-									client.setEditStep(nextStep);
-									clientRepository.save(client);
+						.scope(ActionScope.RECORD)
+						.action("next", "Save and Continue")
+						.invoker((bc, dto) -> {
+							Client client = clientRepository.getById(bc.getIdAsLong());
+							ClientEditStep nextStep = ClientEditStep.getNextEditStep(client).get();
+							client.setEditStep(nextStep);
+							clientRepository.save(client);
 
-									BackgroundJob.<MailSendingService>schedule(
-											LocalDateTime.now().plusHours(5),
-											x -> x.stats("save pressed job")
-									);
+							BackgroundJob.<MailSendingService>schedule(
+									LocalDateTime.now().plusHours(5),
+									x -> x.stats("save pressed job")
+							);
 
-									return new ActionResultDTO<ClientWriteDTO>().setAction(
-											PostAction.drillDown(
-													DrillDownType.INNER,
-													nextStep.getEditView() + CxboxRestController.clientEdit + "/" + bc.getId()
-											));
-								})
-								.available(ActionAvailableChecker.and(ActionAvailableChecker.NOT_NULL_ID, bc -> {
+							return new ActionResultDTO<ClientWriteDTO>().setAction(
+									PostAction.drillDown(
+											DrillDownType.INNER,
+											nextStep.getEditView() + CxboxRestController.clientEdit + "/" + bc.getId()
+									));
+						})
+						.available(ActionAvailableChecker.and(
+								ActionAvailableChecker.NOT_NULL_ID, bc -> {
 									Client client = clientRepository.getById(bc.getIdAsLong());
 									return ClientEditStep.getNextEditStep(client).isPresent();
-								}))
+								}
+						))
 				)
 				.action(act -> act
 						.scope(ActionScope.RECORD)
@@ -141,10 +184,12 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 											"/screen/client"
 									));
 						})
-						.available(ActionAvailableChecker.and(ActionAvailableChecker.NOT_NULL_ID, bc -> {
-							Client client = clientRepository.getById(bc.getIdAsLong());
-							return !ClientEditStep.getNextEditStep(client).isPresent();
-						}))
+						.available(ActionAvailableChecker.and(
+								ActionAvailableChecker.NOT_NULL_ID, bc -> {
+									Client client = clientRepository.getById(bc.getIdAsLong());
+									return !ClientEditStep.getNextEditStep(client).isPresent();
+								}
+						))
 				)
 				.action(act -> act
 						.action("previous", "Back")
@@ -160,10 +205,12 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 											previousStep.getEditView() + CxboxRestController.clientEdit + "/" + bc.getId()
 									));
 						})
-						.available(ActionAvailableChecker.and(ActionAvailableChecker.NOT_NULL_ID, bc -> {
-							Client client = clientRepository.getById(bc.getIdAsLong());
-							return ClientEditStep.getPreviousEditStep(client).isPresent();
-						}))
+						.available(ActionAvailableChecker.and(
+								ActionAvailableChecker.NOT_NULL_ID, bc -> {
+									Client client = clientRepository.getById(bc.getIdAsLong());
+									return ClientEditStep.getPreviousEditStep(client).isPresent();
+								}
+						))
 				)
 				.cancelCreate(ccr -> ccr.text("Cancel").available(bc -> true))
 				.create(crt -> crt.text("Add"))
@@ -208,7 +255,8 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 								.action(act -> act
 										.action("deactivate", "Deactivate")
 										.withAutoSaveBefore()
-										.withPreAction(bc -> PreAction.confirm("Are You sure You want to deactivate the client?"))
+										.withPreAction(PreAction.confirm(
+												cf -> cf.text("Are You sure You want to deactivate the client?")))
 										.invoker((bc, data) -> {
 											Client client = clientRepository.getById(bc.getIdAsLong());
 											client.setStatus(ClientStatus.INACTIVE);
@@ -221,7 +269,6 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 				).withIcon(ActionIcon.MENU, false)
 				.build();
 	}
-
 
 
 }

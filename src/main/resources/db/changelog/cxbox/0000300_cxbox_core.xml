@@ -785,7 +785,6 @@
     </createIndex>
   </changeSet>
   <changeSet author="cxbox" id="USERS INDEXES" dbms="postgresql">
-    <addUniqueConstraint columnNames="LOGIN" constraintName="UK_LOGIN_NAME" tableName="USERS"/>
     <createIndex indexName="UK_LOGIN_NAME_INDEX" tableName="USERS" unique="true">
       <column name="LOGIN"/>
     </createIndex>

@@ -1,0 +1,48 @@
+{
+  "name": "dashboardClientHierarchy",
+  "title": "Client Statistics",
+  "type": "GroupingHierarchy",
+  "bc": "dashboardClient",
+  "fields": [
+    {
+      "title": "Client",
+      "key": "fullName",
+      "type": "input",
+      "drillDown": "true",
+      "width": 200
+    },
+    {
+      "title": "Field Of Activity",
+      "key": "fieldOfActivity",
+      "type": "multipleSelect",
+      "width": 200
+    },
+    {
+      "title": "Importance",
+      "key": "importance",
+      "type": "dictionary",
+      "bgColorKey": "color",
+      "width": 200
+    },
+    {
+      "title": "salesSumClient",
+      "key": "salesSumClient",
+      "type": "number"
+    }
+  ],
+  "options": {
+    "groupingHierarchy": {
+      "fields": ["importance"],
+      "aggFields": [
+        {
+          "fieldKey": "salesSumClient",
+          "func": "sum"
+        }
+      ]
+    },
+    "actionGroups": {
+      "include": [
+      ]
+    }
+  }
+}

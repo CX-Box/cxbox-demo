@@ -1,14 +1,18 @@
 package org.demo.service.cxbox.anysource.meetingsstats;
 
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import org.cxbox.core.controller.param.QueryParameters;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.dao.impl.AbstractAnySourceBaseDAO;
-import org.demo.dto.cxbox.anysource.MeetingStatsDTO;
+import org.demo.dto.cxbox.anysource.BaseStatsDTO;
 import org.demo.entity.enums.MeetingStatus;
 import org.demo.repository.MeetingRepository;
+import org.demo.service.cxbox.anysource.StatisticUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
@@ -17,36 +21,28 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class MeetingStatsDAO extends AbstractAnySourceBaseDAO<MeetingStatsDTO> {
-
-	private final MeetingRepository meetingRepository;
+public class MeetingStatsDAO extends AbstractAnySourceBaseDAO<BaseStatsDTO> {
 
 	public static final String ALL = "1";
 
-	public static final String NOT_STARTED = "2";
-
-	public static final String IN_COMPLETION = "3";
-
-	public static final String IN_PROGRESS = "4";
-
-	public static final String COMPLETED = "5";
-
-	public static final String CANCELLED = "6";
-
 	public static final String COLOR = "#5F90EA";
 
+	private final MeetingRepository meetingRepository;
+
+	private final StatisticUtils statisticUtils;
+
 	@Override
-	public String getId(final MeetingStatsDTO entity) {
+	public String getId(final BaseStatsDTO entity) {
 		return entity.getId();
 	}
 
 	@Override
-	public void setId(final String id, final MeetingStatsDTO entity) {
+	public void setId(final String id, final BaseStatsDTO entity) {
 		entity.setId(id);
 	}
 
 	@Override
-	public MeetingStatsDTO getByIdIgnoringFirstLevelCache(final BusinessComponent bc) {
+	public BaseStatsDTO getByIdIgnoringFirstLevelCache(final BusinessComponent bc) {
 		return getMeetingStatistics().stream().filter(s -> Objects.equals(s.getId(), bc.getId())).findFirst().orElse(null);
 	}
 
@@ -56,79 +52,58 @@ public class MeetingStatsDAO extends AbstractAnySourceBaseDAO<MeetingStatsDTO> {
 	}
 
 	@Override
-	public Page<MeetingStatsDTO> getList(final BusinessComponent bc, final QueryParameters queryParameters) {
+	public Page<BaseStatsDTO> getList(final BusinessComponent bc, final QueryParameters queryParameters) {
 		return new PageImpl<>(getMeetingStatistics());
 	}
 
 	@Override
-	public MeetingStatsDTO update(BusinessComponent bc, MeetingStatsDTO entity) {
+	public BaseStatsDTO update(BusinessComponent bc, BaseStatsDTO entity) {
 		throw new IllegalStateException();
 	}
 
 	@Override
-	public MeetingStatsDTO create(final BusinessComponent bc, final MeetingStatsDTO entity) {
+	public BaseStatsDTO create(final BusinessComponent bc, final BaseStatsDTO entity) {
 		throw new IllegalStateException();
 	}
 
-	public List<MeetingStatsDTO> getMeetingStatistics() {
-		long allCount = meetingRepository.count();
-		long notStartedCount = countByStatus(MeetingStatus.NOT_STARTED);
-		long inCompletionCount = countByStatus(MeetingStatus.IN_COMPLETION);
-		long inProgressCount = countByStatus(MeetingStatus.IN_PROGRESS);
-		long completedCount = countByStatus(MeetingStatus.COMPLETED);
-		long cancelledCount = countByStatus(MeetingStatus.CANCELLED);
+	public List<BaseStatsDTO> getMeetingStatistics() {
 
-		return createMeetingStatsList(
-				allCount, notStartedCount, inCompletionCount,
-				inProgressCount, completedCount, cancelledCount
-		);
-	}
+		Map<MeetingStatus, Long> stats =
+				StatisticUtils.toEnumCountMap(
+						meetingRepository.countGroupedByStatus(),
+						MeetingStatus.class
+				);
 
-	private long countByStatus(MeetingStatus status) {
-		return meetingRepository.findByStatus(status).size();
-	}
-
-	private List<MeetingStatsDTO> createMeetingStatsList(
-			long allCount, long notStartedCount, long inCompletionCount,
-			long inProgressCount, long completedCount, long cancelledCount) {
-
-		return Stream.of(
-						createMeetingStatsDTO("All Meetings", allCount, COLOR, "team", ALL, "All meetings"),
-						createMeetingStatsDTO(
-								"Not Started",
-								notStartedCount,
-								COLOR,
-								"calendar",
-								NOT_STARTED,
-								"Not started meetings"
-						),
-						createMeetingStatsDTO(
-								"In Completion",
-								inCompletionCount,
-								COLOR,
-								"pie-chart",
-								IN_COMPLETION,
-								"Meetings in completion"
-						),
-						createMeetingStatsDTO("In Progress", inProgressCount, COLOR, "plus-circle", IN_PROGRESS, "Meetings in progress"),
-						createMeetingStatsDTO("Completed", completedCount, COLOR, "check", COMPLETED, "Completed meetings"),
-						createMeetingStatsDTO("Cancelled", cancelledCount, COLOR, "stop", CANCELLED, "Cancelled meetings")
+		return Stream.concat(
+						Arrays.stream(MeetingStatus.values())
+								.map(status -> statisticUtils.createStatsDTO(
+										status.getValue(),
+										stats.getOrDefault(status, 0L),
+										COLOR,
+										status.getIcon(),
+										status.getId(),
+										"Meetings " + status.getValue()
+								)),
+						Stream.of(buildAllMeetings(stats))
 				)
-				.filter(dto -> dto.getValue() > 0)
+				.sorted(Comparator.comparing(BaseStatsDTO::getId))
 				.toList();
 	}
 
-	private MeetingStatsDTO createMeetingStatsDTO(String title, long value, String color,
-			String icon, String id, String description) {
-		MeetingStatsDTO meetingStatsDTO = new MeetingStatsDTO();
+	private BaseStatsDTO buildAllMeetings(Map<MeetingStatus, Long> stats) {
+
+		BaseStatsDTO meetingStatsDTO = new BaseStatsDTO();
 		meetingStatsDTO
-				.setTitle(title)
-				.setValue(value)
-				.setColor(color)
-				.setIcon(icon)
-				.setDescription(description)
-				.setId(id);
+				.setTitle("All Meetings")
+				.setValue(stats.values().stream()
+						.mapToLong(Long::longValue)
+						.sum())
+				.setColor(COLOR)
+				.setIcon("team")
+				.setDescription("All meetings")
+				.setId(ALL);
 		return meetingStatsDTO;
 	}
+
 
 }

@@ -1,4 +1,4 @@
-package org.demo.service.cxbox.anysource.saledualstats;
+package org.demo.service.cxbox.anysource.clientstatsline;
 
 import lombok.RequiredArgsConstructor;
 import org.cxbox.core.crudma.PlatformRequest;
@@ -9,8 +9,8 @@ import org.cxbox.core.dto.rowmeta.RowDependentFieldsMeta;
 import org.cxbox.core.external.core.ParentDtoFirstLevelCache;
 import org.cxbox.core.service.rowmeta.AnySourceFieldMetaBuilder;
 import org.demo.controller.CxboxRestController;
-import org.demo.dto.cxbox.anysource.SaleProductDualDTO;
-import org.demo.dto.cxbox.anysource.SaleProductDualDTO_;
+import org.demo.dto.cxbox.anysource.ClientSaleLineDTO;
+import org.demo.dto.cxbox.anysource.ClientSaleLineDTO_;
 import org.demo.dto.cxbox.inner.DashboardFilterDTO_;
 import org.demo.dto.cxbox.inner.SaleDTO;
 import org.demo.dto.cxbox.inner.SaleDTO_;
@@ -19,24 +19,20 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class SaleStatsProductDualMeta extends AnySourceFieldMetaBuilder<SaleProductDualDTO> {
-
-	private final PlatformRequest platformRequest;
+public class ClientSaleLineStatsMeta extends AnySourceFieldMetaBuilder<ClientSaleLineDTO> {
 
 	private final ParentDtoFirstLevelCache parentDtoFirstLevelCache;
 
 	private final StatisticUtils statisticUtils;
 
-	public void buildRowDependentMeta(RowDependentFieldsMeta<SaleProductDualDTO> fields, BcDescription bc,
-			String id, String parentId) {
-		//do nothing
-	}
+	private final PlatformRequest platformRequest;
 
-	@Override
-	public void buildIndependentMeta(FieldsMeta<SaleProductDualDTO> fields, BcDescription bcDescription,
-			String parentId) {
-		var month = fields.getCurrentValue(SaleProductDualDTO_.month).orElse(null);
-		var year = fields.getCurrentValue(SaleProductDualDTO_.year).orElse(null);
+	public void buildRowDependentMeta(RowDependentFieldsMeta<ClientSaleLineDTO> fields, BcDescription bc,
+			String id, String parentId) {
+
+		var month = fields.getCurrentValue(ClientSaleLineDTO_.month).orElse(null);
+		var year = fields.getCurrentValue(ClientSaleLineDTO_.year).orElse(null);
+		var clientName = fields.getCurrentValue(ClientSaleLineDTO_.fullName).orElse(null);
 		var dateFrom = statisticUtils.firstDay(month, year);
 		var dateTo = statisticUtils.lastDay(month, year);
 		var activity = parentDtoFirstLevelCache.getParentField(
@@ -45,18 +41,22 @@ public class SaleStatsProductDualMeta extends AnySourceFieldMetaBuilder<SaleProd
 		);
 
 		fields.setDrilldownWithFilter(
-				SaleProductDualDTO_.dateCreatedSales,
+				ClientSaleLineDTO_.dateSales,
 				DrillDownType.INNER,
 				"screen/sale/view/salelist",
 				fc -> fc
 						.add(CxboxRestController.sale, SaleDTO.class, fb -> fb
 								.dateFromTo(SaleDTO_.saleDate, dateFrom, dateTo)
-								.dictionary(SaleDTO_.product, fields.getCurrentValue(SaleProductDualDTO_.productType).orElse(null))
-								.dictionaryEnum(SaleDTO_.status, fields.getCurrentValue(SaleProductDualDTO_.saleStatus).orElse(null))
+								.input(SaleDTO_.clientName, clientName)
 								.multipleSelect(SaleDTO_.fieldOfActivity, activity)
 						)
 		);
 	}
 
+	@Override
+	public void buildIndependentMeta(FieldsMeta<ClientSaleLineDTO> fields, BcDescription bcDescription,
+			String parentId) {
+		// do nothing
+	}
 
 }

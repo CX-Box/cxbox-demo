@@ -1,0 +1,69 @@
+{
+  "name": "dashboardClientSaleGraph",
+  "title": "Sales",
+  "type": "RelationGraph",
+  "bc": "dashboardClientSaleGraph",
+  "fields": [
+    {
+      "title": "Id",
+      "key": "id",
+      "type": "input"
+    },
+    {
+      "title": "Source Node Id",
+      "key": "sourceNodeId",
+      "type": "input"
+    },
+    {
+      "title": "Target Node Id",
+      "key": "targetNodeId",
+      "type": "input",
+      "width": 200,
+      "bgColorKey": "targetNodeColor"
+    },
+    {
+      "title": "Target Node Type",
+      "key": "targetNodeType",
+      "type": "input"
+    },
+    {
+      "title": "Target Node Name",
+      "key": "targetNodeName",
+      "type": "input"
+    },
+    {
+      "title": "Target Node Description",
+      "key": "targetNodeDescription",
+      "type": "input"
+    },
+    {
+      "title": "Edge Value",
+      "key": "edgeValue",
+      "type": "input",
+      "bgColorKey": "edgeColor"
+    },
+    {
+      "title": "Edge Description",
+      "key": "edgeDescription",
+      "type": "input"
+    },
+    {
+      "title": "Target Node Expanded",
+      "key": "targetNodeExpanded",
+      "type": "hidden"
+    }
+  ],
+  "options": {
+    "relationGraph": {
+      "dragNode": true,
+      "nodes": {
+        "fieldKeys": ["sourceNodeId", "targetNodeId"],
+        "descriptionFieldKeys": ["targetNodeName", "targetNodeDescription"]
+      },
+      "edges": {
+        "labelFieldKeys": ["edgeDescription", "edgeValue"]
+      }
+    }
+  }
+}
+

@@ -9,7 +9,7 @@ import org.demo.conf.cxbox.customization.responsibilitiesAction.service.Responsi
 import org.demo.conf.cxbox.extension.jobRunr.service.state.JobStatsService;
 import org.demo.service.cxbox.anysource.clientstats.ClientStatsService;
 import org.demo.conf.cxbox.extension.jobRunr.service.job.JobAdminService;
-import org.demo.service.cxbox.anysource.clientstatspie.ClientStatsPieService;
+import org.demo.service.cxbox.anysource.clientstatsline.ClientSaleLineStatsService;
 import org.demo.service.cxbox.anysource.dadatacompany.CompanyService;
 import org.demo.service.cxbox.anysource.clientSaleGraph.ClientSalesGraphService;
 import org.demo.service.cxbox.anysource.sale.SaleClientService;
@@ -77,9 +77,14 @@ public enum CxboxRestController implements EnumBcIdentifier {
 		clientSalePickListPopup(saleEdit, ClientPickListService.class),
 	dashboardFilter(DashboardFilterService.class),
 		dashboardClientActivities(dashboardFilter, DashboardClientActivitiesService.class),
-		clientStatsPie(dashboardFilter, ClientStatsPieService.class),
+		clientStatsPie(dashboardFilter, ClientStatsService.class),
 		saleStatsProduct(dashboardFilter, SaleStatsProductService.class),
 		saleStatsProductDual(dashboardFilter,SaleStatsProductDualService.class),
+		dashboardClientStats(dashboardFilter, ClientStatsService.class),
+		dashboardClient(dashboardFilter,ClientReadWriteService.class),
+			dashboardClientSaleGraph(dashboardClient,ClientSalesGraphService.class),
+				dashboardSaleClient(dashboardClientSaleGraph, SaleClientService.class),
+		dashboardClientSaleLine(dashboardFilter, ClientSaleLineStatsService.class),
 
 	//core administration
 	dictionary(DictionaryAdminService.class),
@@ -116,10 +121,6 @@ public enum CxboxRestController implements EnumBcIdentifier {
 		this.bcDescription = buildDescription(parentName, serviceClass, refresh);
 	}
 
-	CxboxRestController(String parentName, Class<?> serviceClass) {
-		this(parentName, serviceClass, false);
-	}
-
 	CxboxRestController(BcIdentifier parent, Class<?> serviceClass, boolean refresh) {
 		this(parent == null ? null : parent.getName(), serviceClass, refresh);
 	}
@@ -128,9 +129,6 @@ public enum CxboxRestController implements EnumBcIdentifier {
 		this(parent, serviceClass, false);
 	}
 
-	CxboxRestController(Class<?> serviceClass, boolean refresh) {
-		this((String) null, serviceClass, refresh);
-	}
 
 	CxboxRestController(Class<?> serviceClass) {
 		this((String) null, serviceClass, false);

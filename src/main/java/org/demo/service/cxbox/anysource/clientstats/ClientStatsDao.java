@@ -1,49 +1,48 @@
 package org.demo.service.cxbox.anysource.clientstats;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.cxbox.core.controller.param.QueryParameters;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.dao.AnySourceBaseDAO;
 import org.cxbox.core.dao.impl.AbstractAnySourceBaseDAO;
-import org.demo.dto.cxbox.anysource.ClientStatsDTO;
+import org.demo.controller.CxboxRestController;
+import org.demo.dto.cxbox.anysource.BaseStatsDTO;
 import org.demo.entity.enums.ClientStatus;
+import org.demo.entity.enums.FieldOfActivity;
 import org.demo.repository.ClientRepository;
-import lombok.NonNull;
+import org.demo.service.cxbox.anysource.StatisticUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class ClientStatsDao extends AbstractAnySourceBaseDAO<ClientStatsDTO> implements
-		AnySourceBaseDAO<ClientStatsDTO> {
-
-	public static final int ROWS_TOTAL = 3;
-
-	public static final String NEW_CLIENTS_ID = "0";
-
-	public static final String INACTIVE_CLIENTS_ID = "1";
-
-	public static final String IN_PROGRESS_CLIENTS = "2";
+public class ClientStatsDao extends AbstractAnySourceBaseDAO<BaseStatsDTO> implements
+		AnySourceBaseDAO<BaseStatsDTO> {
 
 	private final ClientRepository clientRepository;
 
+	private final StatisticUtils statisticUtils;
+
 	@Override
-	public String getId(final ClientStatsDTO entity) {
+	public String getId(final BaseStatsDTO entity) {
 		return entity.getId();
 	}
 
 	@Override
-	public void setId(final String id, final ClientStatsDTO entity) {
+	public void setId(final String id, final BaseStatsDTO entity) {
 		entity.setId(id);
 	}
 
 	@Override
-	public ClientStatsDTO getByIdIgnoringFirstLevelCache(final BusinessComponent bc) {
-		return getClientStats().stream().filter(s -> Objects.equals(s.getId(), bc.getId())).findFirst().orElse(null);
+	public BaseStatsDTO getByIdIgnoringFirstLevelCache(final BusinessComponent bc) {
+		return getClientStats(bc).stream()
+				.filter(s -> Objects.equals(s.getId(), bc.getId())).findFirst().orElse(null);
 	}
 
 	@Override
@@ -52,48 +51,48 @@ public class ClientStatsDao extends AbstractAnySourceBaseDAO<ClientStatsDTO> imp
 	}
 
 	@Override
-	public Page<ClientStatsDTO> getList(final BusinessComponent bc, final QueryParameters queryParameters) {
-		return new PageImpl<>(getClientStats());
+	public Page<BaseStatsDTO> getList(final BusinessComponent bc, final QueryParameters queryParameters) {
+		return new PageImpl<>(getClientStats(bc));
 	}
 
 	@Override
-	public ClientStatsDTO update(BusinessComponent bc, ClientStatsDTO entity) {
+	public BaseStatsDTO update(BusinessComponent bc, BaseStatsDTO entity) {
 		throw new IllegalStateException();
 	}
 
 	@Override
-	public ClientStatsDTO create(final BusinessComponent bc, final ClientStatsDTO entity) {
+	public BaseStatsDTO create(final BusinessComponent bc, final BaseStatsDTO entity) {
 		throw new IllegalStateException();
 	}
 
-	@NonNull
-	private List<ClientStatsDTO> getClientStats() {
-		List<ClientStatsDTO> result = new ArrayList<>(ROWS_TOTAL);
-		ClientStatsDTO newClients = new ClientStatsDTO()
-				.setTitle("New Clients")
-				.setValue(clientRepository.count(clientRepository.statusIn(List.of(ClientStatus.NEW))))
-				.setColor("#779FE9")
-				.setIcon("team") //same as in screen.json icon
-				.setDescription("New Clients. Press to filter List below");
-		newClients.setId(NEW_CLIENTS_ID);
-		result.add(newClients);
-		ClientStatsDTO inactiveClients = new ClientStatsDTO()
-				.setTitle("Inactive Clients")
-				.setValue(clientRepository.count(clientRepository.statusIn(List.of(ClientStatus.INACTIVE))))
-				.setColor("#5F90EA")
-				.setIcon("calendar") //same as in screen.json icon
-				.setDescription("Inactive Clients. Press to filter List below");
-		inactiveClients.setId(INACTIVE_CLIENTS_ID);
-		result.add(inactiveClients);
-		ClientStatsDTO inProgressClients = new ClientStatsDTO()
-				.setTitle("In Progress Clients")
-				.setValue(clientRepository.count(clientRepository.statusIn(List.of(ClientStatus.IN_PROGRESS))))
-				.setColor("#4D83E7")
-				.setIcon("pie-chart") //same as in screen.json icon
-				.setDescription("In Progress Clients. Press to filter List below");
-		inProgressClients.setId(IN_PROGRESS_CLIENTS);
-		result.add(inProgressClients);
-		return result;
+	public List<BaseStatsDTO> getClientStats(BusinessComponent bc) {
+
+		Set<FieldOfActivity> filter = null;
+		if (bc.getName().equals(CxboxRestController.dashboardClientStats.getName())) {
+			filter = statisticUtils.getFilteredActivities(bc);
+		}
+
+		Map<ClientStatus, Long> stats = filter != null
+				? StatisticUtils.toEnumCountMap(
+				clientRepository.countGroupedByStatus(filter),
+				ClientStatus.class
+		)
+				: StatisticUtils.toEnumCountMap(
+						clientRepository.countGroupedByStatus(),
+						ClientStatus.class
+				);
+
+		return Arrays.stream(ClientStatus.values())
+				.map(status -> statisticUtils.createStatsDTO(
+						status.getValue(),
+						stats.getOrDefault(status, 0L),
+						status.getColor(),
+						status.getIcon(),
+						status.getId(),
+						status.getValue() + ". Press to filter List below"
+				))
+				.toList();
+
 	}
 
 }

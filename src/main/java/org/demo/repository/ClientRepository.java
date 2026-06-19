@@ -1,15 +1,17 @@
 package org.demo.repository;
 
+import jakarta.persistence.criteria.Join;
 import java.util.List;
 import java.util.Set;
 import org.demo.entity.Client;
 import org.demo.entity.Client_;
-import org.demo.entity.enums.ClientStatus;
 import org.demo.conf.cxbox.extension.fulltextsearch.FullTextSearchExt;
 import org.demo.entity.enums.FieldOfActivity;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -24,16 +26,38 @@ public interface ClientRepository extends JpaRepository<Client, Long>, JpaSpecif
 		return (root, query, cb) -> FullTextSearchExt.likeIgnoreCase(value, cb, root.get(Client_.fullName));
 	}
 
-
 	default Specification<Client> getAddressLikeIgnoreCaseSpecification(String value) {
 		return (root, query, cb) -> FullTextSearchExt.likeIgnoreCase(value, cb, root.get(Client_.address));
 	}
 
-	default Specification<Client> statusIn(List<ClientStatus> clientStatusList) {
-		return (root, query, cb) -> root.get(Client_.status).in(clientStatusList);
+	default Specification<Client> findAllByFieldOfActivities(Set<FieldOfActivity> fieldOfActivities) {
+		return (root, query, cb) -> {
+			if (fieldOfActivities == null || fieldOfActivities.isEmpty()) {
+				return cb.conjunction();
+			}
+			Join<Client, FieldOfActivity> join = root.join(Client_.fieldOfActivities);
+			assert query != null;
+			query.distinct(true);
+			return join.in(fieldOfActivities);
+		};
 	}
 
-	List<Client> findAllByFieldOfActivitiesInAndStatusIn(Set<FieldOfActivity> fieldOfActivities, List<ClientStatus> status);
+	@Query("""
+	SELECT c.status, COUNT(c)
+	FROM Client c
+	GROUP BY c.status
+	""")
+	List<Object[]> countGroupedByStatus();
 
+	@Query("""
+	SELECT c.status, COUNT(DISTINCT c)
+	FROM Client c
+	JOIN c.fieldOfActivities f
+	WHERE (f IN :fieldOfActivities)
+	GROUP BY c.status
+	""")
+	List<Object[]> countGroupedByStatus(
+			@Param("fieldOfActivities") Set<FieldOfActivity> fieldOfActivities
+	);
 
 }

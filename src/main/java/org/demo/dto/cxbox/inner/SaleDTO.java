@@ -50,6 +50,9 @@ public class SaleDTO extends DataResponseDTO {
 
 	private String color;
 
+	@SearchParameter(name = "saleDate", provider = DateTimeValueProvider.class)
+	private LocalDateTime saleDate;
+
 	@SearchParameter(name = "createdDate", provider = DateTimeValueProvider.class)
 	private LocalDateTime createdDate;
 
@@ -59,6 +62,7 @@ public class SaleDTO extends DataResponseDTO {
 		this.product = sale.getProduct();
 		this.status = sale.getStatus();
 		this.sum = sale.getSum();
+		this.saleDate = sale.getSaleDate();
 		this.color = "#edaa";
 		this.fieldOfActivity = sale.getClient() == null ? null : sale.getClient().getFieldOfActivities()
 				.stream()

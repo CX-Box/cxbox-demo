@@ -106,9 +106,9 @@ public class MeetingWriteService extends VersionAwareResponseService<MeetingDTO,
 
 		if (Objects.equals(bc.getParentName(), CxboxRestController.meetingStats.getName())) {
 			// 1 = All Records
-			  if (!bc.getParentId().isEmpty()&& !Objects.equals(bc.getParentId(), "1")) {
-					return createStatusSpecification(bc, MeetingStatus.getById(bc.getParentId()));
-				}
+			if (!bc.getParentId().isEmpty() && !Objects.equals(bc.getParentId(), "1")) {
+				return createStatusSpecification(bc, MeetingStatus.getById(bc.getParentId()));
+			}
 		}
 		return (root, cq, cb) -> cb.and();
 	}

@@ -43,21 +43,6 @@
       "widgetName": "dashboardSalesLineColumn2D",
       "position": 60,
       "gridWidth": 12
-    },
-    {
-      "widgetName": "dashboardClientHierarchy",
-      "position": 70,
-      "gridWidth": 24
-    },
-    {
-      "widgetName": "dashboardClientSaleGraph",
-      "position": 80,
-      "gridWidth": 24
-    },
-    {
-      "widgetName": "dashboardSaleViewList",
-      "position": 90,
-      "gridWidth": 24
     }
   ],
   "rolesAllowed": [

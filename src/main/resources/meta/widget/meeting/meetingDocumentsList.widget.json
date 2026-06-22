@@ -105,7 +105,8 @@
         "create",
         "associate",
         "edit",
-        "delete"
+        "delete",
+        "documentEncryptSign"
       ]
     }
   }

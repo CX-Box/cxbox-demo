@@ -1,0 +1,2 @@
+id,briefing,document_name,meeting_id,file_encrypt_and_sign,file_encrypt_and_sign_id,file_encrypt,file_encrypt_id,file_sign,file_sign_id,priority,status,created_by_user_id,last_upd_by_user_id,vstamp
+1,PROJECT,REFERENCE,1000068,,,,,,,,NOT_SIGNED,1,1,1

@@ -10,6 +10,7 @@ import org.demo.entity.MeetingDocuments;
 import org.demo.entity.enums.DocumentStatus;
 import org.demo.repository.MeetingDocumentsRepository;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,7 @@ public class PdfUploadMeetingDocuments {
 
 	private final MeetingDocumentsRepository meetingDocumentsRepository;
 
+	@Profile("!oracle-test")
 	@EventListener(ApplicationReadyEvent.class)
 	public void uploadPdf() {
 		try {

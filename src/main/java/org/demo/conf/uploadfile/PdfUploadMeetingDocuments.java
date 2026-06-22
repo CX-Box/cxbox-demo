@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.cxbox.core.file.dto.FileDownloadDto;
 import org.demo.conf.cxbox.customization.file.FileService;
 import org.demo.entity.MeetingDocuments;
@@ -46,17 +47,13 @@ public class PdfUploadMeetingDocuments {
 		}
 	}
 
+	@SneakyThrows
 	private String getFileId(String objectName, String type) throws IOException {
+
 		ClassPathResource resource = new ClassPathResource("signdoc/" + objectName);
 
 		FileDownloadDto file = new FileDownloadDto(
-				() -> {
-					try {
-						return new FileInputStream(resource.getFile());
-					} catch (IOException e) {
-						throw new RuntimeException(e);
-					}
-				},
+				resource::getInputStream,
 				resource.contentLength(),
 				objectName,
 				type

@@ -1,5 +1,7 @@
 package org.demo.test.oracle;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -29,7 +31,6 @@ class OracleTest {
 
 	@Test
 	void contextStarts() {
-		//startContext
+		assertNotNull(oracle);
 	}
-
 }

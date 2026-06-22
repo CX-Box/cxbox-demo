@@ -53,6 +53,28 @@
       <column header="region" name="region" type="STRING"/>
     </loadUpdateData>
 
+    <loadUpdateData tableName="MEETING_DOCUMENTS" primaryKey="ID" encoding="UTF-8"
+      separator="," quotchar="&quot;"
+      file="db/data/MEETING_DOCUMENT.csv">
+
+      <column header="id" name="ID" type="STRING"/>
+      <column header="briefing" name="briefing" type="STRING"/>
+      <column header="document_name" name="document_name" type="STRING"/>
+      <column header="meeting_id" name="meeting_id" type="STRING"/>
+      <column header="file_encrypt_and_sign" name="file_encrypt_and_sign" type="STRING"/>
+      <column header="file_encrypt_and_sign_id" name="file_encrypt_and_sign_id" type="STRING"/>
+      <column header="file_encrypt" name="file_encrypt" type="STRING"/>
+      <column header="file_encrypt_id" name="file_encrypt_id" type="STRING"/>
+      <column header="file_sign" name="file_sign" type="STRING"/>
+      <column header="file_sign_id" name="file_sign_id" type="STRING"/>
+      <column header="priority" name="priority" type="NUMERIC"/>
+      <column header="status" name="status" type="STRING"/>
+      <column header="created_by_user_id" name="created_by_user_id" type="STRING"/>
+      <column header="last_upd_by_user_id" name="last_upd_by_user_id" type="STRING"/>
+      <column header="vstamp" name="vstamp" type="STRING"/>
+
+    </loadUpdateData>
+
   </changeSet>
 
   <changeSet id="update_meeting_start_and_end_dates" author="agelfman" dbms="postgresql" runOnChange="true">

@@ -9,9 +9,6 @@ import org.demo.conf.cxbox.customization.file.FileService;
 import org.demo.entity.MeetingDocuments;
 import org.demo.entity.enums.DocumentStatus;
 import org.demo.repository.MeetingDocumentsRepository;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.annotation.Profile;
-import org.springframework.context.event.EventListener;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
@@ -23,11 +20,9 @@ public class PdfUploadMeetingDocuments {
 
 	private final MeetingDocumentsRepository meetingDocumentsRepository;
 
-	@Profile("!oracle-test")
-	@EventListener(ApplicationReadyEvent.class)
-	public void uploadPdf() {
+	public void uploadPdf(Long meetingDocumentId) throws IOException {
 		try {
-			Optional<MeetingDocuments> meetingDocuments = meetingDocumentsRepository.findById(1L);
+			Optional<MeetingDocuments> meetingDocuments = meetingDocumentsRepository.findById(meetingDocumentId);
 			if (meetingDocuments.isPresent()) {
 				meetingDocuments.get().setFile("meeting.pdf");
 				meetingDocuments.get().setFileId(getFileId("meeting.pdf", "application/pdf"));

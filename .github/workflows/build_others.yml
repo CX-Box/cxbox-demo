@@ -124,7 +124,7 @@ jobs:
     strategy:
       matrix:
         java: ['17']
-    needs: [validate-title, oracle-test]
+    needs: [validate-title]
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK ${{ matrix.java }}

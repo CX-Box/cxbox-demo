@@ -26,7 +26,6 @@ class OracleTest {
 		r.add("spring.datasource.username", oracle::getUsername);
 		r.add("spring.datasource.password", oracle::getPassword);
 		r.add("spring.datasource.driver-class-name", oracle::getDriverClassName);
-
 	}
 
 	@Test

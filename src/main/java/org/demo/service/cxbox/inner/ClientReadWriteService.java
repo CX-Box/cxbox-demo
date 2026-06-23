@@ -267,6 +267,20 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 								)
 								.build()
 				).withIcon(ActionIcon.MENU, false)
+				.action(act -> act
+						.action("refresh", "Refresh")
+						.scope(ActionScope.BC)
+						.available(bc -> {
+							return true;
+						})
+						.invoker((bc, dto) -> {
+							return new ActionResultDTO<ClientWriteDTO>()
+									.setAction(PostAction.showMessage(
+											MessageType.INFO, "Action refresh was invoked"
+									));
+						}
+						)
+				)
 				.build();
 	}
 

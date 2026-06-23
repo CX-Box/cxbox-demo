@@ -12,22 +12,143 @@
       "width": 200
     },
     {
-      "title": "salesClient",
+      "title": "Seller",
       "key": "sellerName",
       "type": "input",
       "drillDown": "true",
       "width": 200
     },
     {
-      "title": "salesSumClient",
+      "title": "Deals Count",
+      "key": "saleCount",
+      "type": "number"
+    },
+    {
+      "title": "Total GMV, $",
       "key": "sum",
       "type": "number"
+    },
+    {
+      "title": "Confirmed Revenue, $",
+      "key": "confirmedRevenue",
+      "type": "number"
+    },
+    {
+      "title": "Open Pipeline, $",
+      "key": "openPipeline",
+      "type": "number"
+    },
+    {
+      "title": "Avg B2B Deal, $",
+      "key": "avgB2bDeal",
+      "type": "number"
+    },
+    {
+      "title": "Max Contract, $",
+      "key": "maxContract",
+      "type": "number"
+    },
+    {
+      "title": "First Sale Date",
+      "key": "firstSaleDate",
+      "type": "date"
+    },
+    {
+      "title": "Last Activity Date",
+      "key": "lastActivityDate",
+      "type": "date"
     }
   ],
   "options": {
     "groupingHierarchy": {
       "fields": [
         "clientName"
+      ],
+      "aggLevels": [
+        {
+          "level": 0,
+          "aggFields": [
+            {
+              "fieldKey": "sum",
+              "func": "sum"
+            }
+          ]
+        },
+        {
+          "level": 1,
+          "aggFields": [
+            {
+              "fieldKey": "saleCount",
+              "func": "sum",
+              "argFieldKeys": [
+                "saleCount"
+              ],
+              "description": ""
+            },
+            {
+              "fieldKey": "sum",
+              "func": "sum",
+              "argFieldKeys": [
+                "sum"
+              ],
+              "description": "$"
+            },
+            {
+              "fieldKey": "confirmedRevenue",
+              "func": "sum",
+              "argFieldKeys": [
+                "confirmedRevenue"
+              ],
+              "description": "$"
+            },
+            {
+              "fieldKey": "openPipeline",
+              "func": "sum",
+              "argFieldKeys": [
+                "openPipeline"
+              ],
+              "description": "$"
+            },
+            {
+              "fieldKey": "avgB2bDeal",
+              "func": "sum",
+              "argFieldKeys": [
+                "avgB2bDeal"
+              ],
+              "description": "$"
+            },
+            {
+              "fieldKey": "maxContract",
+              "func": "sum",
+              "argFieldKeys": [
+                "maxContract"
+              ],
+              "description": "$"
+            },
+            {
+              "fieldKey": "maxContract",
+              "func": "sum",
+              "argFieldKeys": [
+                "maxContract"
+              ],
+              "description": "$"
+            },
+            {
+              "fieldKey": "firstSaleDate",
+              "func": "min",
+              "argFieldKeys": [
+                "firstSaleDate"
+              ]
+            },
+            {
+              "fieldKey": "lastActivityDate",
+              "func": "max",
+              "argFieldKeys": [
+                "lastActivityDate"
+              ]
+            }
+          ]
+        }
       ]
     },
     "actionGroups": {

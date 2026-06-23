@@ -75,6 +75,14 @@ public class SaleClientSellerStatsDao extends AbstractAnySourceBaseDAO<SaleSelle
 									SaleSellerStatsDTO saleSeller = new SaleSellerStatsDTO()
 											.setSellerName(entity.sellerName())
 											.setClientName(entity.clientName())
+											.setSaleCount(entity.saleCount())
+											.setFirstSaleDate(entity.firstSaleDate())
+											.setStatus(entity.status())
+											.setAvgB2bDeal(entity.avgB2bDeal())
+											.setConfirmedRevenue(entity.confirmedRevenue())
+											.setLastActivityDate(entity.lastActivityDate())
+											.setMaxContract(entity.maxContract())
+											.setOpenPipeline(entity.openPipeline())
 											.setSum(entity.sum());
 									saleSeller.setId(entity.id());
 									return saleSeller;

@@ -1,12 +1,16 @@
 package org.demo.repository;
 
 import jakarta.persistence.criteria.Join;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import org.demo.entity.Client;
 import org.demo.entity.Client_;
 import org.demo.conf.cxbox.extension.fulltextsearch.FullTextSearchExt;
 import org.demo.entity.enums.FieldOfActivity;
+import org.demo.repository.projection.DashboardSalesClientPrj;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -60,4 +64,41 @@ public interface ClientRepository extends JpaRepository<Client, Long>, JpaSpecif
 			@Param("fieldOfActivities") Set<FieldOfActivity> fieldOfActivities
 	);
 
+	@Query("""
+    SELECT new org.demo.repository.projection.DashboardSalesClientPrj(
+        CONCAT(min(c.id), '-', min(seller.id)),
+        c.fullName,
+        seller.fullName,
+
+        SUM(s.sum),
+        COUNT(s.id),
+
+        MAX(s.status),
+
+        MIN(s.saleDate),
+        MAX(s.saleDate),
+
+        ROUND(AVG(s.sum), 0),
+
+        MAX(s.sum),
+
+        SUM(CASE WHEN s.status = 'CLOSED' THEN s.sum ELSE 0 END),
+
+        SUM(CASE WHEN s.status = 'OPEN' THEN s.sum ELSE 0 END)
+    )
+    FROM Client c
+    JOIN c.salesClientList s
+    JOIN s.clientSeller seller
+    WHERE (:fieldOfActivities IS NULL OR EXISTS (
+        SELECT 1
+        FROM c.fieldOfActivities fa
+        WHERE fa IN :fieldOfActivities
+    ))
+    GROUP BY
+        c.fullName,
+        seller.fullName
+""")
+	List<DashboardSalesClientPrj> getSalesClientByFieldOfActivity(
+			@Param("fieldOfActivities") Set<FieldOfActivity> fieldOfActivities
+	);
 }

@@ -6,38 +6,28 @@
   "fields": [
     {
       "title": "Client",
-      "key": "fullName",
+      "key": "clientName",
       "type": "input",
       "drillDown": "true",
       "width": 200
     },
     {
-      "title": "Field Of Activity",
-      "key": "fieldOfActivity",
-      "type": "multipleSelect",
-      "width": 200
-    },
-    {
-      "title": "Importance",
-      "key": "importance",
-      "type": "dictionary",
-      "bgColorKey": "color",
+      "title": "salesClient",
+      "key": "sellerName",
+      "type": "input",
+      "drillDown": "true",
       "width": 200
     },
     {
       "title": "salesSumClient",
-      "key": "salesSumClient",
+      "key": "sum",
       "type": "number"
     }
   ],
   "options": {
     "groupingHierarchy": {
-      "fields": ["importance"],
-      "aggFields": [
-        {
-          "fieldKey": "salesSumClient",
-          "func": "sum"
-        }
+      "fields": [
+        "clientName"
       ]
     },
     "actionGroups": {

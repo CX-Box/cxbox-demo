@@ -13,6 +13,7 @@ import org.demo.service.cxbox.anysource.clientstatsline.ClientSaleLineStatsServi
 import org.demo.service.cxbox.anysource.dadatacompany.CompanyService;
 import org.demo.service.cxbox.anysource.clientSaleGraph.ClientSalesGraphService;
 import org.demo.service.cxbox.anysource.sale.SaleClientService;
+import org.demo.service.cxbox.anysource.saleseller.SaleClientSellerStatsService;
 import org.demo.service.cxbox.inner.calendar.CalendarYearMeetingService;
 import org.demo.service.cxbox.anysource.meetingsstats.MeetingStatsService;
 import org.demo.service.cxbox.anysource.lov.LovReadService;
@@ -81,7 +82,7 @@ public enum CxboxRestController implements EnumBcIdentifier {
 		saleStatsProduct(dashboardFilter, SaleStatsProductService.class),
 		saleStatsProductDual(dashboardFilter,SaleStatsProductDualService.class),
 		dashboardClientStats(dashboardFilter, ClientStatsService.class),
-		dashboardClient(dashboardFilter,ClientReadWriteService.class),
+		dashboardClient(dashboardFilter,SaleClientSellerStatsService.class),
 			dashboardClientSaleGraph(dashboardClient,ClientSalesGraphService.class),
 				dashboardSaleClient(dashboardClientSaleGraph, SaleClientService.class),
 		dashboardClientSaleLine(dashboardFilter, ClientSaleLineStatsService.class),

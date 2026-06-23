@@ -7,9 +7,13 @@
   "options": {
     "actionGroups": {
       "include": [
-        "actions",
-        "sendEmail",
-        "sendEmailNextDay"
+        "refresh",
+        "postActionDDWork",
+        "postActionDD2Work",
+
+        "refreshNoWork",
+        "postActionDD",
+        "postActionDD2"
       ]
     }
   }

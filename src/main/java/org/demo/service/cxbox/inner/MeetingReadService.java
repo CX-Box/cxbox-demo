@@ -11,6 +11,7 @@ import org.cxbox.core.dto.MessageType;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.cxbox.core.dto.rowmeta.PostAction;
+import org.cxbox.core.service.action.ActionInvoker;
 import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
 import org.cxbox.core.service.action.ActionsBuilder;
@@ -32,6 +33,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MeetingReadService extends VersionAwareResponseService<MeetingDTO, Meeting> {
 
+	private static final String MESSAGE_TEMPLATE = "Status: %s; \nMeeting Result: %s";
+
 	private final MeetingRepository meetingRepository;
 
 	private final UserRepository userRepository;
@@ -41,8 +44,6 @@ public class MeetingReadService extends VersionAwareResponseService<MeetingDTO, 
 	private final MeetingStatusModelActionProvider statusModelActionProvider;
 
 	private final MailSendingService mailSendingService;
-
-	private static final String MESSAGE_TEMPLATE = "Status: %s; \nMeeting Result: %s";
 
 	@Getter(onMethod_ = @Override)
 	private final Class<MeetingReadMeta> meta = MeetingReadMeta.class;
@@ -98,6 +99,114 @@ public class MeetingReadService extends VersionAwareResponseService<MeetingDTO, 
 							return new ActionResultDTO<MeetingDTO>()
 									.setAction(PostAction.showMessage(MessageType.INFO, "The email will be dispatched tomorrow."));
 						})
+				)
+
+				.action(act -> act
+						.action("postActionDD", "Post Action DD Meeting No Work")
+						.scope(ActionScope.BC)
+						.available(bc -> {
+							// TODO: Write action availability condition here
+							return true;
+						})
+						.invoker((bc, dto) -> {
+
+							return new ActionResultDTO<MeetingDTO>()
+									.setAction(PostAction.drillDown(
+											DrillDownType.INNER,
+											"/screen/meeting/view/meeting/"
+													+ CxboxRestController.meetingEdit + "/"
+													+ bc.getId()
+									));
+						})
+				)
+				.action(act -> act
+						.action("postActionDD2", "Post Action DD Client No Work")
+						.scope(ActionScope.BC)
+						.available(bc -> {
+							// TODO: Write action availability condition here
+							return true;
+						})
+						.invoker((bc, dto) -> {
+							// TODO: Write action processing code here
+							Meeting meeting = meetingRepository.getReferenceById(Long.parseLong(bc.getId()));
+							return new ActionResultDTO<MeetingDTO>()
+									.setAction(PostAction.drillDown(
+											DrillDownType.INNER,
+											"/screen/client/view/clientview/"
+													+ CxboxRestController.clientEdit + "/"
+													+ meeting.getClient().getId()
+									));
+						})
+				)
+				.action(act -> act
+						.action("refreshNoWork", "Refresh No Work")
+						.scope(ActionScope.BC)
+						.available(bc -> {
+							// TODO: Write action availability condition here
+							return true;
+						})
+						.invoker((bc, dto) -> {
+							// TODO: Write action processing code here
+							return new ActionResultDTO<MeetingDTO>()
+									.setAction(PostAction.refreshBc(CxboxRestController.meeting)
+									);
+						})
+				)
+				.action(act -> act
+						.action("refresh", "Refresh Work")
+						.scope(ActionScope.BC)
+						.available(bc -> {
+							return true;
+						})
+						.invoker((bc, dto) -> {
+							// TODO: Write action processing code here
+							return new ActionResultDTO<MeetingDTO>()
+									.setAction(PostAction.refreshBc(CxboxRestController.meeting)
+									);
+						})
+						.updateRequired(false)
+
+				)
+				.action(act -> act
+						.action("postActionDDWork", "Post Action DD Meeting Work")
+						.scope(ActionScope.BC)
+						.available(bc -> {
+							// TODO: Write action availability condition here
+							return true;
+						})
+						.invoker((bc, dto) -> {
+							// TODO: Write action processing code here
+							Meeting meeting = meetingRepository.getReferenceById(Long.parseLong(bc.getId()));
+							return new ActionResultDTO<MeetingDTO>()
+									.setAction(PostAction.drillDown(
+											DrillDownType.INNER,
+											"/screen/client/view/clientview/"
+													+ CxboxRestController.clientEdit + "/"
+													+ meeting.getClient().getId()
+									));
+						})
+						.updateRequired(false)
+
+				)
+				.action(act -> act
+						.action("postActionDD2Work", "Post Action DD 2 Client Work")
+						.scope(ActionScope.BC)
+						.available(bc -> {
+							// TODO: Write action availability condition here
+							return true;
+						})
+						.invoker((bc, dto) -> {
+							// TODO: Write action processing code here
+							Meeting meeting = meetingRepository.getReferenceById(Long.parseLong(bc.getId()));
+							return new ActionResultDTO<MeetingDTO>()
+									.setAction(PostAction.drillDown(
+											DrillDownType.INNER,
+											"/screen/client/view/clientview/"
+													+ CxboxRestController.clientEdit + "/"
+													+ meeting.getClient().getId()
+									));
+						})
+						.updateRequired(false)
 				)
 				.build();
 	}

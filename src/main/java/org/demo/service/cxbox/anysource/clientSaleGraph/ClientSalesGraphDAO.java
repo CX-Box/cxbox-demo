@@ -29,7 +29,7 @@ public class ClientSalesGraphDAO extends AbstractAnySourceBaseDAO<GraphEdgeDTO> 
 
 	private static final String COLOR_RED = "#DD0A34";
 
-	private static final Long MAX_SUM = 1000L;
+	private static final Long MAX_SUM = 10000L;
 
 	private final ClientSalesGraphRepository clientSalesGraphRepository;
 

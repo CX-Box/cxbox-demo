@@ -10,14 +10,14 @@
       "type": "input"
     },
     {
-      "title": "clientName",
+      "title": "Client",
       "key": "clientName",
       "type": "input",
       "drillDown": true,
       "bgColorKey": "color"
     },
     {
-      "title": "sum",
+      "title": "Sum,$",
       "key": "sum",
       "type": "number"
     }

@@ -18,7 +18,7 @@ public enum ClientStatus {
 	@JsonValue
 	private final String value;
 
-	private final String color;
+	private final String colorStat;
 
 	private final String icon;
 

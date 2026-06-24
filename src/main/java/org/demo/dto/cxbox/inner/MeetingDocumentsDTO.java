@@ -90,7 +90,7 @@ public class MeetingDocumentsDTO extends DataResponseDTO {
 		this.fileSign = meeting.getFileSign();
 		this.fileSignId = meeting.getFileSignId();
 		this.status = meeting.getStatus();
-		this.color = Optional.ofNullable(meeting.getStatus()).map(DocumentStatus.colors::get).orElse(null);
+		this.color =meeting.getStatus().getColor();
 		this.fileSignRO = meeting.getFileSign();
 		this.fileSignROId = meeting.getFileSignId();
 		this.fileEncryptRO = meeting.getFileEncrypt();

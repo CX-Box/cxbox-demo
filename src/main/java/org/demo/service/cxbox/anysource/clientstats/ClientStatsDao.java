@@ -86,7 +86,7 @@ public class ClientStatsDao extends AbstractAnySourceBaseDAO<BaseStatsDTO> imple
 				.map(status -> statisticUtils.createStatsDTO(
 						status.getValue(),
 						stats.getOrDefault(status, 0L),
-						status.getColor(),
+						status.getColorStat(),
 						status.getIcon(),
 						status.getId(),
 						status.getValue() + ". Press to filter List below"

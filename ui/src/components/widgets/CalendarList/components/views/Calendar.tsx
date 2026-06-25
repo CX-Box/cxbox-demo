@@ -6,7 +6,7 @@ import styles from './Calendar.less'
 import { useCalendarCellAspectRatio } from '@components/widgets/CalendarList/hooks'
 import { CALENDAR_GRID } from '@components/widgets/CalendarList/constants'
 import { DatesSetArg } from '@fullcalendar/core'
-import { useDebouncedWidthResize } from '@components/widgets/CalendarList/hooks/useDebouncedWidthResize'
+import { useDebouncedWidthResize } from '@hooks/useDebouncedWidthResize'
 
 export interface FullCalendarProps extends React.ComponentProps<typeof FullCalendar> {}
 

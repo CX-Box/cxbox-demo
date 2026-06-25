@@ -49,6 +49,7 @@ import FieldBaseThemeWrapper from '@components/FieldBaseThemeWrapper/FieldBaseTh
 import ResultColumnCell from '@components/widgets/Table/massOperations/ResultColumnCell'
 import Button from '@components/ui/Button/Button'
 import { ReactComponent as HierarchySVG } from '@assets/icons/hierarchy.svg'
+import StickyTable from '@components/widgets/Table/StickyTable'
 
 const ROW_KEY = FIELDS.TECHNICAL.ID
 
@@ -686,8 +687,12 @@ function Table<T extends CustomDataItem>({
         return [...controlColumnsLeft, ...columns, ...controlColumnsRight]
     }, [columns, controlColumns])
 
+    const stickyWithHorizontalScroll = enabledGrouping && !!dataSource?.length
+
+    const TableComponent = stickyWithHorizontalScroll ? StickyTable : StandardTable
+
     const tableElement = (
-        <StandardTable<T>
+        <TableComponent<T>
             operationsRef={operationsRef as any}
             wrapperRef={parentRef as any}
             widgetName={widgetName}
@@ -703,7 +708,6 @@ function Table<T extends CustomDataItem>({
             expandedRowRender={enabledMassMode ? undefined : expandedRowRender}
             onExpand={onExpand}
             hideRowActions={hideRowActions}
-            stickyWithHorizontalScroll={enabledGrouping && !!dataSource?.length}
             hidePagination={disablePagination || enabledGrouping}
             settingsRender={settings}
             {...rest}

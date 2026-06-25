@@ -1,7 +1,6 @@
 package org.demo.service.cxbox.anysource.saleproductstats;
 
 import lombok.RequiredArgsConstructor;
-import org.cxbox.core.crudma.PlatformRequest;
 import org.cxbox.core.crudma.bc.impl.BcDescription;
 import org.cxbox.core.dto.DrillDownType;
 import org.cxbox.core.dto.rowmeta.FieldsMeta;
@@ -20,15 +19,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class SaleStatsProductMeta extends AnySourceFieldMetaBuilder<DashboardSalesProductDTO> {
 
-	private final PlatformRequest platformRequest;
-
 	private final ParentDtoFirstLevelCache parentDtoFirstLevelCache;
 
 	public void buildRowDependentMeta(RowDependentFieldsMeta<DashboardSalesProductDTO> fields, BcDescription bc,
 			String id, String parentId) {
 		var activity = parentDtoFirstLevelCache.getParentField(
 				DashboardFilterDTO_.fieldOfActivity,
-				platformRequest.getBc()
+				getBc()
 		);
 
 		fields.setDrilldownWithFilter(
@@ -38,7 +35,10 @@ public class SaleStatsProductMeta extends AnySourceFieldMetaBuilder<DashboardSal
 				fc -> fc
 						.add(
 								CxboxRestController.sale, SaleDTO.class, fb -> fb
-										.input(SaleDTO_.clientName, fields.getCurrentValue(DashboardSalesProductDTO_.clientName).orElse(null))
+										.input(
+												SaleDTO_.clientName,
+												fields.getCurrentValue(DashboardSalesProductDTO_.clientName).orElse(null)
+										)
 										.dictionary(
 												SaleDTO_.product,
 												fields.getCurrentValue(DashboardSalesProductDTO_.productName).orElse(null)

@@ -31,9 +31,7 @@ public class SaleClientSellerStatsMeta extends AnySourceFieldMetaBuilder<SaleSel
 				fc -> fc.add(
 						CxboxRestController.client, ClientReadDTO.class,
 						fb -> {
-
 							var activity = parentDtoFirstLevelCache.getParentField(DashboardFilterDTO_.fieldOfActivity, getBc());
-
 							if (activity != null) {
 								fb.multipleSelect(ClientReadDTO_.fieldOfActivity, activity);
 							}

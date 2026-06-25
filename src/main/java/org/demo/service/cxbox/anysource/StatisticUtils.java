@@ -1,12 +1,15 @@
 package org.demo.service.cxbox.anysource;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.cxbox.core.crudma.bc.BusinessComponent;
+import org.cxbox.core.dto.multivalue.MultivalueField;
 import org.cxbox.core.external.core.ParentDtoFirstLevelCache;
 import org.demo.dto.cxbox.anysource.BaseStatsDTO;
 import org.demo.dto.cxbox.inner.DashboardFilterDTO_;
@@ -17,7 +20,31 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class StatisticUtils {
 
+	public static final Map<Number, String> COLOR_LIST = Map.ofEntries(
+			Map.entry(1, "#5689e8"),
+			Map.entry(2, "#e856d2"),
+			Map.entry(3, "#e8b556"),
+			Map.entry(4, "#56e86c"),
+			Map.entry(5, "#89e856"),
+			Map.entry(6, "#e85689"),
+
+			Map.entry(7, "#3dbe95"),
+			Map.entry(8, "#553dbe"),
+			Map.entry(9, "#be3d66"),
+			Map.entry(10, "#a6be3d"),
+			Map.entry(11, "#be953d"),
+			Map.entry(12, "#953dbe"),
+
+			Map.entry(13, "#5689e8"),
+			Map.entry(14, "#e856d2"),
+			Map.entry(15, "#e8b556")
+	);
+
 	private final ParentDtoFirstLevelCache parentDtoFirstLevelCache;
+
+	public MultivalueField getMultivalueFieldSingleValues(BusinessComponent bc) {
+		return parentDtoFirstLevelCache.getParentField(DashboardFilterDTO_.fieldOfActivity, bc);
+	}
 
 	public static <E extends Enum<E>> Map<E, Long> toEnumCountMap(List<Object[]> rows, Class<E> enumClass) {
 		return rows.stream()
@@ -28,7 +55,7 @@ public class StatisticUtils {
 	}
 
 	public Set<FieldOfActivity> getFilteredActivities(BusinessComponent bc) {
-		return hasFilteredActivities(bc) ? parentDtoFirstLevelCache.getParentField(DashboardFilterDTO_.fieldOfActivity, bc)
+		return hasFilteredActivities(bc) ? getMultivalueFieldSingleValues(bc)
 				.getValues().stream()
 				.map(v -> FieldOfActivity.getByValue(v.getValue()))
 				.collect(Collectors.toSet())
@@ -36,8 +63,8 @@ public class StatisticUtils {
 	}
 
 	private boolean hasFilteredActivities(BusinessComponent bc) {
-		return parentDtoFirstLevelCache.getParentField(DashboardFilterDTO_.fieldOfActivity, bc) != null &&
-				!parentDtoFirstLevelCache.getParentField(DashboardFilterDTO_.fieldOfActivity, bc).getValues().isEmpty();
+		return getMultivalueFieldSingleValues(bc)!= null &&
+				!getMultivalueFieldSingleValues(bc).getValues().isEmpty();
 	}
 
 	public LocalDate firstDay(Integer month, Integer year) {

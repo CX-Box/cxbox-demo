@@ -1,10 +1,8 @@
 package org.demo.service.cxbox.anysource.saledualstats;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.Set;
 import java.util.stream.Stream;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -14,11 +12,11 @@ import org.cxbox.core.dao.AnySourceBaseDAO;
 import org.cxbox.core.dao.impl.AbstractAnySourceBaseDAO;
 import org.cxbox.core.external.core.ParentDtoFirstLevelCache;
 import org.demo.dto.cxbox.anysource.SaleProductDualDTO;
-import org.demo.dto.cxbox.inner.DashboardFilterDTO_;
 import org.demo.entity.dictionary.Product;
 import org.demo.entity.enums.FieldOfActivity;
 import org.demo.entity.enums.SaleStatus;
 import org.demo.repository.SaleRepository;
+import org.demo.service.cxbox.anysource.StatisticUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
@@ -28,7 +26,7 @@ import org.springframework.stereotype.Service;
 public class SaleStatsProductDualDao extends AbstractAnySourceBaseDAO<SaleProductDualDTO> implements
 		AnySourceBaseDAO<SaleProductDualDTO> {
 
-	private final ParentDtoFirstLevelCache parentDtoFirstLevelCache;
+	private final StatisticUtils statisticUtils;
 
 	private final SaleRepository saleRepository;
 
@@ -69,13 +67,7 @@ public class SaleStatsProductDualDao extends AbstractAnySourceBaseDAO<SaleProduc
 
 	@NonNull
 	private List<SaleProductDualDTO> getStats(BusinessComponent bc) {
-		var parentField = parentDtoFirstLevelCache.getParentField(DashboardFilterDTO_.fieldOfActivity, bc);
-		var filter = Optional.ofNullable(parentField)
-				.map(e -> e.getValues().stream()
-						.map(value -> FieldOfActivity.getByValue(value.getValue()))
-						.collect(Collectors.toSet()))
-				.orElse(new HashSet<>());
-		filter = filter.isEmpty() ? null : filter;
+		Set<FieldOfActivity> filter = statisticUtils.getFilteredActivities(bc);
 		var first = saleRepository.getSalesStatsByMonthAndStatus(filter).stream()
 				.<SaleProductDualDTO>map(stat -> SaleProductDualDTO.builder()
 						.id(stat.id())

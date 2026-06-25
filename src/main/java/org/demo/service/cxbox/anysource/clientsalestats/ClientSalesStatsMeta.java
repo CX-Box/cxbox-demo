@@ -1,6 +1,5 @@
 package org.demo.service.cxbox.anysource.clientsalestats;
 
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.cxbox.core.crudma.bc.impl.BcDescription;
 import org.cxbox.core.dto.DrillDownType;
@@ -14,7 +13,6 @@ import org.demo.dto.cxbox.anysource.BaseStatsDTO_;
 import org.demo.dto.cxbox.inner.DashboardFilterDTO_;
 import org.demo.dto.cxbox.inner.SaleDTO;
 import org.demo.dto.cxbox.inner.SaleDTO_;
-import org.demo.entity.enums.ClientStatus;
 import org.springframework.stereotype.Service;
 
 @Service

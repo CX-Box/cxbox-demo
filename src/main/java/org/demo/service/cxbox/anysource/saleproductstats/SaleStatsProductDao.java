@@ -1,23 +1,19 @@
 package org.demo.service.cxbox.anysource.saleproductstats;
 
-
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.Set;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.cxbox.core.controller.param.QueryParameters;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.dao.AnySourceBaseDAO;
 import org.cxbox.core.dao.impl.AbstractAnySourceBaseDAO;
-import org.cxbox.core.external.core.ParentDtoFirstLevelCache;
 import org.demo.dto.cxbox.anysource.DashboardSalesProductDTO;
-import org.demo.dto.cxbox.inner.DashboardFilterDTO_;
 import org.demo.entity.dictionary.Product;
 import org.demo.entity.enums.FieldOfActivity;
 import org.demo.repository.SaleRepository;
+import org.demo.service.cxbox.anysource.StatisticUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
@@ -29,7 +25,7 @@ public class SaleStatsProductDao extends AbstractAnySourceBaseDAO<DashboardSales
 
 	private final SaleRepository saleRepository;
 
-	private final ParentDtoFirstLevelCache parentDtoFirstLevelCache;
+	private final StatisticUtils statisticUtils;
 
 	@Override
 	public String getId(final DashboardSalesProductDTO entity) {
@@ -68,13 +64,7 @@ public class SaleStatsProductDao extends AbstractAnySourceBaseDAO<DashboardSales
 
 	@NonNull
 	private List<DashboardSalesProductDTO> getStats(BusinessComponent bc) {
-		var parentField = parentDtoFirstLevelCache.getParentField(DashboardFilterDTO_.fieldOfActivity, bc);
-		var filter = Optional.ofNullable(parentField)
-				.map(e -> e.getValues().stream()
-						.map(value -> FieldOfActivity.getByValue(value.getValue()))
-						.collect(Collectors.toSet()))
-				.orElse(new HashSet<>());
-		filter = filter.isEmpty() ? null : filter;
+		Set<FieldOfActivity> filter = statisticUtils.getFilteredActivities(bc);
 		var salesStats = saleRepository.getSalesStatsByFieldOfActivity(filter);
 		return salesStats.stream()
 				.<DashboardSalesProductDTO>map(stat -> DashboardSalesProductDTO.builder()

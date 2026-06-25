@@ -12,7 +12,6 @@ import org.cxbox.core.dao.AnySourceBaseDAO;
 import org.cxbox.core.dao.impl.AbstractAnySourceBaseDAO;
 import org.cxbox.model.core.entity.BaseEntity;
 import org.demo.conf.cxbox.extension.relationGraph.dto.GraphEdgeDTO;
-import org.demo.controller.CxboxRestController;
 import org.demo.entity.enums.TargetNodeType;
 import org.demo.repository.ClientRepository;
 import org.demo.repository.ClientSalesGraphRepository;

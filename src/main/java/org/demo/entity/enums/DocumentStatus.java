@@ -1,6 +1,5 @@
 package org.demo.entity.enums;
 
-import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import com.fasterxml.jackson.annotation.JsonValue;

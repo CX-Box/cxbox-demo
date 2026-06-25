@@ -1,10 +1,8 @@
 package org.demo.service.cxbox.anysource;
 
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -42,16 +40,16 @@ public class StatisticUtils {
 
 	private final ParentDtoFirstLevelCache parentDtoFirstLevelCache;
 
-	public MultivalueField getMultivalueFieldSingleValues(BusinessComponent bc) {
-		return parentDtoFirstLevelCache.getParentField(DashboardFilterDTO_.fieldOfActivity, bc);
-	}
-
 	public static <E extends Enum<E>> Map<E, Long> toEnumCountMap(List<Object[]> rows, Class<E> enumClass) {
 		return rows.stream()
 				.collect(Collectors.toMap(
 						row -> enumClass.cast(row[0]),
 						row -> (Long) row[1]
 				));
+	}
+
+	public MultivalueField getMultivalueFieldSingleValues(BusinessComponent bc) {
+		return parentDtoFirstLevelCache.getParentField(DashboardFilterDTO_.fieldOfActivity, bc);
 	}
 
 	public Set<FieldOfActivity> getFilteredActivities(BusinessComponent bc) {
@@ -63,7 +61,7 @@ public class StatisticUtils {
 	}
 
 	private boolean hasFilteredActivities(BusinessComponent bc) {
-		return getMultivalueFieldSingleValues(bc)!= null &&
+		return getMultivalueFieldSingleValues(bc) != null &&
 				!getMultivalueFieldSingleValues(bc).getValues().isEmpty();
 	}
 

@@ -10,7 +10,6 @@ import org.cxbox.core.controller.param.QueryParameters;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.dao.AnySourceBaseDAO;
 import org.cxbox.core.dao.impl.AbstractAnySourceBaseDAO;
-import org.cxbox.core.external.core.ParentDtoFirstLevelCache;
 import org.demo.dto.cxbox.anysource.SaleProductDualDTO;
 import org.demo.entity.dictionary.Product;
 import org.demo.entity.enums.FieldOfActivity;

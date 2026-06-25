@@ -9,7 +9,7 @@ import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.dao.AnySourceBaseDAO;
 import org.cxbox.core.dao.impl.AbstractAnySourceBaseDAO;
 import org.demo.controller.CxboxRestController;
-import org.demo.dto.cxbox.inner.SaleSellerStatsDTO;
+import org.demo.dto.cxbox.anysource.SaleSellerStatsDTO;
 import org.demo.entity.enums.FieldOfActivity;
 import org.demo.repository.ClientRepository;
 import org.demo.service.cxbox.anysource.StatisticUtils;
@@ -83,7 +83,9 @@ public class SaleClientSellerStatsDao extends AbstractAnySourceBaseDAO<SaleSelle
 											.setLastActivityDate(entity.lastActivityDate())
 											.setMaxContract(entity.maxContract())
 											.setOpenPipeline(entity.openPipeline())
+											.setSellerCount(1L)
 											.setSum(entity.sum());
+
 									saleSeller.setId(entity.id());
 									return saleSeller;
 								}

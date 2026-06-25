@@ -11,8 +11,8 @@ import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.inner.ClientReadDTO;
 import org.demo.dto.cxbox.inner.ClientReadDTO_;
 import org.demo.dto.cxbox.inner.DashboardFilterDTO_;
-import org.demo.dto.cxbox.inner.SaleSellerStatsDTO;
-import org.demo.dto.cxbox.inner.SaleSellerStatsDTO_;
+import org.demo.dto.cxbox.anysource.SaleSellerStatsDTO;
+import org.demo.dto.cxbox.anysource.SaleSellerStatsDTO_;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,7 +25,7 @@ public class SaleClientSellerStatsMeta extends AnySourceFieldMetaBuilder<SaleSel
 	public void buildRowDependentMeta(RowDependentFieldsMeta<SaleSellerStatsDTO> fields, BcDescription bc,
 			String id, String parentId) {
 		fields.setDrilldownWithFilter(
-				SaleSellerStatsDTO_.clientName,
+				SaleSellerStatsDTO_.sellerName,
 				DrillDownType.INNER,
 				"/screen/client/view/clientlist",
 				fc -> fc.add(
@@ -35,7 +35,7 @@ public class SaleClientSellerStatsMeta extends AnySourceFieldMetaBuilder<SaleSel
 							if (activity != null) {
 								fb.multipleSelect(ClientReadDTO_.fieldOfActivity, activity);
 							}
-							fb.input(ClientReadDTO_.fullName, fields.getCurrentValue(SaleSellerStatsDTO_.clientName).orElse(null));
+							fb.input(ClientReadDTO_.fullName, fields.getCurrentValue(SaleSellerStatsDTO_.sellerName).orElse(null));
 						}
 				)
 		);

@@ -16,4 +16,6 @@ public record DashboardSalesClientPrj(
 		Long maxContract,
 		Long confirmedRevenue,
 		Long openPipeline
-) {}
+		) {
+
+}

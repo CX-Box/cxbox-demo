@@ -1,4 +1,4 @@
-package org.demo.dto.cxbox.inner;
+package org.demo.dto.cxbox.anysource;
 
 import java.time.LocalDateTime;
 import lombok.Getter;
@@ -23,5 +23,6 @@ public class SaleSellerStatsDTO extends DataResponseDTO {
 	private Long maxContract;
 	private Long confirmedRevenue;
 	private Long openPipeline;
+	private Long sellerCount;
 
 }

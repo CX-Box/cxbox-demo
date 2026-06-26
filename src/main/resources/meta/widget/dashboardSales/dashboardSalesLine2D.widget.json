@@ -1,7 +1,7 @@
 {
   "name": "dashboardSalesLine2D",
   "title": "Sales by Product Type: saleStatsProductDual",
-  "type": "Line2D",
+  "type": "Column2D",
   "bc": "saleStatsProductDual",
   "fields": [
     {

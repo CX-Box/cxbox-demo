@@ -101,11 +101,6 @@ public interface ClientRepository extends JpaRepository<Client, Long>, JpaSpecif
 			FROM Client c
 			JOIN c.salesClientList s
 			JOIN s.clientSeller seller
-			WHERE (:fieldOfActivities IS NULL OR EXISTS (
-					SELECT 1
-					FROM c.fieldOfActivities fa
-					WHERE fa IN :fieldOfActivities
-			))
 			GROUP BY
 					c.fullName,
 					seller.fullName

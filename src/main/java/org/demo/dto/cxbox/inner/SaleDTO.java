@@ -39,7 +39,7 @@ public class SaleDTO extends DataResponseDTO {
 	private Product product;
 
 	@SearchParameter(name = "status", provider = EnumValueProvider.class)
-	private SaleStatus status;
+	private SaleStatus status = SaleStatus.OPEN;
 
 	@BaseEnum(FieldOfActivity.class)
 	@SearchParameter(name = "client.fieldOfActivities", provider = MultiFieldValueProvider.class, multiFieldKey = EnumValueProvider.class)

@@ -64,10 +64,7 @@ public class SaleClientSellerStatsDao extends AbstractAnySourceBaseDAO<SaleSelle
 
 	public List<SaleSellerStatsDTO> getClientStats(BusinessComponent bc) {
 
-		Set<FieldOfActivity> filter = null;
-		if (bc.getName().equals(CxboxRestController.dashboardClientStats.getName())) {
-			filter = statisticUtils.getFilteredActivities(bc);
-		}
+		Set<FieldOfActivity> filter = statisticUtils.getFilteredActivities(bc);
 
 		return
 				clientRepository.getSalesClientByFieldOfActivity(filter).stream()
@@ -85,7 +82,6 @@ public class SaleClientSellerStatsDao extends AbstractAnySourceBaseDAO<SaleSelle
 											.setOpenPipeline(entity.openPipeline())
 											.setSellerCount(1L)
 											.setSum(entity.sum());
-
 									saleSeller.setId(entity.id());
 									return saleSeller;
 								}

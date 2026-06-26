@@ -75,7 +75,7 @@ public class SaleStatsProductDualDao extends AbstractAnySourceBaseDAO<SaleProduc
 						.count(stat.count())
 						.saleStatus(stat.status())
 						.vstamp(0L)
-						.color(SaleStatus.CLOSED.equals(stat.status()) ? "#4D83E7" : "#30BA8F")
+						.color(SaleStatus.CLOSED.equals(stat.status()) ? "#5D7092" : "#70925d")
 						.build())
 				.toList();
 		var second = saleRepository.getSalesByMonthAndProduct(filter).stream()
@@ -86,7 +86,7 @@ public class SaleStatsProductDualDao extends AbstractAnySourceBaseDAO<SaleProduc
 						.sum(stat.sum())
 						.productType((Product) stat.product())
 						.vstamp(0L)
-						.color(Product.EXPERTISE.equals(stat.product()) ? "#5D7092" : "#70925d")
+						.color(Product.EXPERTISE.equals(stat.product()) ? "#4D83E7" : "#30BA8F")
 						.build())
 				.toList();
 		return Stream.concat(first.stream(), second.stream()).toList();

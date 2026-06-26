@@ -24,6 +24,7 @@ public class SaleClientSellerStatsMeta extends AnySourceFieldMetaBuilder<SaleSel
 	@Override
 	public void buildRowDependentMeta(RowDependentFieldsMeta<SaleSellerStatsDTO> fields, BcDescription bc,
 			String id, String parentId) {
+
 		fields.setDrilldownWithFilter(
 				SaleSellerStatsDTO_.sellerName,
 				DrillDownType.INNER,
@@ -31,10 +32,6 @@ public class SaleClientSellerStatsMeta extends AnySourceFieldMetaBuilder<SaleSel
 				fc -> fc.add(
 						CxboxRestController.client, ClientReadDTO.class,
 						fb -> {
-							var activity = parentDtoFirstLevelCache.getParentField(DashboardFilterDTO_.fieldOfActivity, getBc());
-							if (activity != null) {
-								fb.multipleSelect(ClientReadDTO_.fieldOfActivity, activity);
-							}
 							fb.input(ClientReadDTO_.fullName, fields.getCurrentValue(SaleSellerStatsDTO_.sellerName).orElse(null));
 						}
 				)

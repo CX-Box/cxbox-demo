@@ -24,5 +24,5 @@ public class SaleSellerStatsDTO extends DataResponseDTO {
 	private Long confirmedRevenue;
 	private Long openPipeline;
 	private Long sellerCount;
-
+	private String customFieldColor = "#edaa";
 }

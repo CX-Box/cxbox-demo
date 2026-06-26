@@ -16,6 +16,7 @@
       "type": "input",
       "drillDown": "true",
       "width": 200
+
     },
     {
       "title": "Deals Count",
@@ -48,22 +49,15 @@
       "type": "number"
     },
     {
-      "title": "First Sale Date",
-      "key": "firstSaleDate",
-      "type": "date"
-    },
-    {
-      "title": "Last Activity Date",
-      "key": "lastActivityDate",
-      "type": "date"
-    },
-    {
-      "title": "Last Activity Date",
+      "title": "sellerCount",
       "key": "sellerCount",
       "type": "hidden"
     }
   ],
   "options": {
+    "edit": {
+      "style": "none"
+    },
     "groupingHierarchy": {
       "fields": [
         "clientName"
@@ -87,7 +81,7 @@
               "argFieldKeys": [
                 "sellerCount"
               ],
-              "description": ""
+              "description": "count Sellers"
             },
             {
               "fieldKey": "saleCount",
@@ -95,7 +89,7 @@
               "argFieldKeys": [
                 "saleCount"
               ],
-              "description": ""
+              "description": "sum, $"
             },
             {
               "fieldKey": "sum",
@@ -103,7 +97,7 @@
               "argFieldKeys": [
                 "sum"
               ],
-              "description": "$"
+              "description": "sum, $"
             },
             {
               "fieldKey": "confirmedRevenue",
@@ -111,7 +105,7 @@
               "argFieldKeys": [
                 "confirmedRevenue"
               ],
-              "description": "$"
+              "description": "sum, $"
             },
             {
               "fieldKey": "openPipeline",
@@ -119,7 +113,7 @@
               "argFieldKeys": [
                 "openPipeline"
               ],
-              "description": "$"
+              "description": "sum, $"
             },
             {
               "fieldKey": "avgB2bDeal",
@@ -127,7 +121,7 @@
               "argFieldKeys": [
                 "avgB2bDeal"
               ],
-              "description": "$"
+              "description": "sum, $"
             },
             {
               "fieldKey": "maxContract",
@@ -135,7 +129,7 @@
               "argFieldKeys": [
                 "maxContract"
               ],
-              "description": "$"
+              "description": "sum, $"
             },
             {
               "fieldKey": "maxContract",
@@ -143,21 +137,7 @@
               "argFieldKeys": [
                 "maxContract"
               ],
-              "description": "$"
-            },
-            {
-              "fieldKey": "firstSaleDate",
-              "func": "min",
-              "argFieldKeys": [
-                "firstSaleDate"
-              ]
-            },
-            {
-              "fieldKey": "lastActivityDate",
-              "func": "max",
-              "argFieldKeys": [
-                "lastActivityDate"
-              ]
+              "description": "sum, $"
             }
           ]
         }

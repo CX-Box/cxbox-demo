@@ -26,7 +26,7 @@ const Editor: React.FC<Props> = ({
     onFocus,
     onViewModeChange
 }) => {
-    const { editor } = useRichTextEditor({ value, onChange, readOnly, onBlur, onFocus })
+    const { editor } = useRichTextEditor({ value, onChange, readOnly, disabled, onBlur, onFocus })
 
     const handleViewModeChange = useCallback(
         (mode: ViewMode) => {

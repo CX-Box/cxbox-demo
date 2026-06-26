@@ -64,18 +64,21 @@ interface UseRichTextEditorProps {
     value: string
     onChange: (markdown: string) => void
     readOnly?: boolean
+    disabled?: boolean
     onBlur?: () => void
     onFocus?: () => void
 }
 
 const DEBOUNCE_MS = 120
 
-export const useRichTextEditor = ({ value, onChange, readOnly = false, onBlur, onFocus }: UseRichTextEditorProps) => {
+export const useRichTextEditor = ({ value, onChange, readOnly = false, disabled = false, onBlur, onFocus }: UseRichTextEditorProps) => {
     const extensions = useMemo(() => getExtensions(), [])
 
     const lastEmittedRef = useRef(value)
     const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
     const onChangeRef = useRef(onChange)
+
+    const isEditable = readOnly ? false : !disabled
 
     useEffect(() => {
         onChangeRef.current = onChange
@@ -85,10 +88,18 @@ export const useRichTextEditor = ({ value, onChange, readOnly = false, onBlur, o
         extensions,
         content: value,
         contentType: 'markdown',
-        editable: !readOnly,
+        editable: isEditable,
         onBlur,
         onFocus
     })
+
+    useEffect(() => {
+        if (!editor || editor.isDestroyed) {
+            return
+        }
+
+        editor.setEditable(isEditable)
+    }, [editor, isEditable])
 
     useEffect(() => {
         if (!editor) {

@@ -10,7 +10,6 @@ import org.cxbox.core.service.rowmeta.AnySourceFieldMetaBuilder;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.inner.ClientReadDTO;
 import org.demo.dto.cxbox.inner.ClientReadDTO_;
-import org.demo.dto.cxbox.inner.DashboardFilterDTO_;
 import org.demo.dto.cxbox.anysource.SaleSellerStatsDTO;
 import org.demo.dto.cxbox.anysource.SaleSellerStatsDTO_;
 import org.springframework.stereotype.Service;

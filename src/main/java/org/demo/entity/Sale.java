@@ -33,7 +33,7 @@ public class Sale extends BaseEntity {
 
 	@Column
 	@Enumerated(EnumType.STRING)
-	private SaleStatus status = SaleStatus.OPEN ;
+	private SaleStatus status = SaleStatus.OPEN;
 
 	private Long sum;
 

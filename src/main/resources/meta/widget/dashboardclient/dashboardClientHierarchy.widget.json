@@ -51,6 +51,11 @@
       "title": "sellerCount",
       "key": "sellerCount",
       "type": "hidden"
+    },
+    {
+      "title": "sellerAll",
+      "key": "sellerALlCountDistinct",
+      "type": "hidden"
     }
   ],
   "options": {
@@ -66,10 +71,69 @@
           "level": 0,
           "aggFields": [
             {
+              "fieldKey": "sellerName",
+              "func": "min",
+              "argFieldKeys": [
+                "sellerALlCountDistinct"
+              ],
+              "description": "count distinct sellers"
+            },
+            {
+              "fieldKey": "saleCount",
+              "func": "sum",
+              "argFieldKeys": [
+                "saleCount"
+              ],
+              "description": "sum, $"
+            },
+            {
               "fieldKey": "sum",
-              "func": "sum"
-            }
-          ]
+              "func": "sum",
+              "argFieldKeys": [
+                "sum"
+              ],
+              "description": "sum, $"
+            },
+            {
+              "fieldKey": "confirmedRevenue",
+              "func": "sum",
+              "argFieldKeys": [
+                "confirmedRevenue"
+              ],
+              "description": "sum, $"
+            },
+            {
+              "fieldKey": "openPipeline",
+              "func": "sum",
+              "argFieldKeys": [
+                "openPipeline"
+              ],
+              "description": "sum, $"
+            },
+            {
+              "fieldKey": "avgB2bDeal",
+              "func": "sum",
+              "argFieldKeys": [
+                "avgB2bDeal"
+              ],
+              "description": "sum, $"
+            },
+            {
+              "fieldKey": "maxContract",
+              "func": "sum",
+              "argFieldKeys": [
+                "maxContract"
+              ],
+              "description": "sum, $"
+            },
+            {
+              "fieldKey": "maxContract",
+              "func": "sum",
+              "argFieldKeys": [
+                "maxContract"
+              ],
+              "description": "sum, $"
+            }          ]
         },
         {
           "level": 1,

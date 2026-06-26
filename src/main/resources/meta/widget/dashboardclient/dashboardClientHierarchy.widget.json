@@ -14,9 +14,8 @@
       "title": "Seller",
       "key": "sellerName",
       "type": "input",
-      "drillDown": "true",
+      "drillDownKey": "drillDownKey",
       "width": 200
-
     },
     {
       "title": "Deals Count",

@@ -25,4 +25,5 @@ public class SaleSellerStatsDTO extends DataResponseDTO {
 	private Long openPipeline;
 	private Long sellerCount;
 	private String customFieldColor = "#edaa";
+	private String drillDownKey;
 }

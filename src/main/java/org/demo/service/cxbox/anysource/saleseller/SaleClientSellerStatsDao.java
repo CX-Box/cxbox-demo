@@ -2,17 +2,26 @@ package org.demo.service.cxbox.anysource.saleseller;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.cxbox.core.controller.param.QueryParameters;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.dao.AnySourceBaseDAO;
 import org.cxbox.core.dao.impl.AbstractAnySourceBaseDAO;
+import org.cxbox.core.dto.DrillDownType;
+import org.cxbox.core.service.drilldown.PlatformDrilldownService;
+import org.cxbox.core.service.drilldown.filter.FC;
+import org.cxbox.core.util.SpringBeanUtils;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.anysource.SaleSellerStatsDTO;
+import org.demo.dto.cxbox.anysource.SaleSellerStatsDTO_;
+import org.demo.dto.cxbox.inner.ClientReadDTO;
+import org.demo.dto.cxbox.inner.ClientReadDTO_;
 import org.demo.entity.enums.FieldOfActivity;
 import org.demo.repository.ClientRepository;
 import org.demo.service.cxbox.anysource.StatisticUtils;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
@@ -81,12 +90,33 @@ public class SaleClientSellerStatsDao extends AbstractAnySourceBaseDAO<SaleSelle
 											.setMaxContract(entity.maxContract())
 											.setOpenPipeline(entity.openPipeline())
 											.setSellerCount(1L)
+											.setDrillDownKey(getDrilldownLink(entity.sellerName()))
 											.setSum(entity.sum());
 									saleSeller.setId(entity.id());
 									return saleSeller;
 								}
 						)
 						.toList();
+	}
+
+	@NotNull
+	private static String getDrilldownLink(String sellerName) {
+		FC fcInstance = new FC()
+				.add(
+						CxboxRestController.client,
+						ClientReadDTO.class,
+						fb -> fb.input(
+								ClientReadDTO_.fullName,
+								sellerName
+						)
+				);
+
+		var platformDrilldownService = SpringBeanUtils.getBean(PlatformDrilldownService.class);
+
+		return "/screen/client/view/clientlist" +
+				Optional.ofNullable(platformDrilldownService.formUrlFilterPart(fcInstance))
+						.map(fp -> "?" + fp)
+						.orElse("");
 	}
 
 }

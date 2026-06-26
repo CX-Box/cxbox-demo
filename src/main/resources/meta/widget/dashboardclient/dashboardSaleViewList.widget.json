@@ -7,12 +7,14 @@
     {
       "title": "Client",
       "key": "clientName",
-      "type": "input"
+      "type": "input",
+      "drillDown": true
     },
     {
       "title": "Seller",
       "key": "clientSellerName",
-      "type": "input"
+      "type": "input",
+      "drillDown": true
     },
     {
       "title": "Field Of Activity",
@@ -28,7 +30,8 @@
     {
       "title": "Status",
       "key": "status",
-      "type": "dictionary"
+      "type": "dictionary",
+      "bgColorKey": "colorStatus"
     },
     {
       "title": "Sum, $",

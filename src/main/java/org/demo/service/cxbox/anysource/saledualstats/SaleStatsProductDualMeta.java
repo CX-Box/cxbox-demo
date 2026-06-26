@@ -1,7 +1,6 @@
 package org.demo.service.cxbox.anysource.saledualstats;
 
 import lombok.RequiredArgsConstructor;
-import org.cxbox.core.crudma.PlatformRequest;
 import org.cxbox.core.crudma.bc.impl.BcDescription;
 import org.cxbox.core.dto.DrillDownType;
 import org.cxbox.core.dto.rowmeta.FieldsMeta;
@@ -21,8 +20,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class SaleStatsProductDualMeta extends AnySourceFieldMetaBuilder<SaleProductDualDTO> {
 
-	private final PlatformRequest platformRequest;
-
 	private final ParentDtoFirstLevelCache parentDtoFirstLevelCache;
 
 	private final StatisticUtils statisticUtils;
@@ -41,7 +38,7 @@ public class SaleStatsProductDualMeta extends AnySourceFieldMetaBuilder<SaleProd
 		var dateTo = statisticUtils.lastDay(month, year);
 		var activity = parentDtoFirstLevelCache.getParentField(
 				DashboardFilterDTO_.fieldOfActivity,
-				platformRequest.getBc()
+				getBc()
 		);
 
 		fields.setDrilldownWithFilter(

@@ -1,18 +1,17 @@
-package org.demo.service.cxbox.anysource.clientstats;
+package org.demo.service.cxbox.anysource.clientsalestats;
 
-import java.util.Arrays;
+import static org.demo.service.cxbox.anysource.StatisticUtils.COLOR_LIST;
+
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import lombok.RequiredArgsConstructor;
 import org.cxbox.core.controller.param.QueryParameters;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.dao.AnySourceBaseDAO;
 import org.cxbox.core.dao.impl.AbstractAnySourceBaseDAO;
-import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.anysource.BaseStatsDTO;
-import org.demo.entity.enums.ClientStatus;
 import org.demo.entity.enums.FieldOfActivity;
 import org.demo.repository.ClientRepository;
 import org.demo.service.cxbox.anysource.StatisticUtils;
@@ -22,7 +21,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class ClientStatsDao extends AbstractAnySourceBaseDAO<BaseStatsDTO> implements
+public class ClientSalesStatsDao extends AbstractAnySourceBaseDAO<BaseStatsDTO> implements
 		AnySourceBaseDAO<BaseStatsDTO> {
 
 	private final ClientRepository clientRepository;
@@ -67,32 +66,25 @@ public class ClientStatsDao extends AbstractAnySourceBaseDAO<BaseStatsDTO> imple
 
 	public List<BaseStatsDTO> getClientStats(BusinessComponent bc) {
 
-		Set<FieldOfActivity> filter = null;
-		if (bc.getName().equals(CxboxRestController.dashboardClientStats.getName())) {
-			filter = statisticUtils.getFilteredActivities(bc);
-		}
+		Set<FieldOfActivity> filter = statisticUtils.getFilteredActivities(bc);
 
-		Map<ClientStatus, Long> stats = filter != null
-				? StatisticUtils.toEnumCountMap(
-				clientRepository.countGroupedByStatus(filter),
-				ClientStatus.class
-		)
-				: StatisticUtils.toEnumCountMap(
-						clientRepository.countGroupedByStatus(),
-						ClientStatus.class
-				);
-
-		return Arrays.stream(ClientStatus.values())
-				.map(status -> statisticUtils.createStatsDTO(
-						status.getValue(),
-						stats.getOrDefault(status, 0L),
-						status.getColorStat(),
-						status.getIcon(),
-						status.getId(),
-						status.getValue() + ". Press to filter List below"
-				))
+		AtomicInteger num = new AtomicInteger(1);
+		return clientRepository.countGroupedBySales(filter).stream()
+				.map(stat -> {
+					int index = num.getAndIncrement() % COLOR_LIST.size();
+					if (index > 15) {
+						index = 1;
+					}
+					return statisticUtils.createStatsDTO(
+							stat.clientName(),
+							stat.countSale(),
+							COLOR_LIST.get(index),
+							null,
+							stat.clientId().toString(),
+							"Press to filter List below"
+					);
+				})
 				.toList();
-
 	}
 
 }

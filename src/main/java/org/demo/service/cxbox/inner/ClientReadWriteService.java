@@ -7,9 +7,7 @@ import static org.demo.controller.CxboxRestController.dashboardClient;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.Getter;
@@ -23,7 +21,6 @@ import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
 import org.cxbox.core.dto.rowmeta.PostAction;
 import org.cxbox.core.dto.rowmeta.PreAction;
-import org.cxbox.core.external.core.ParentDtoFirstLevelCache;
 import org.cxbox.core.service.action.ActionAvailableChecker;
 import org.cxbox.core.service.action.ActionScope;
 import org.cxbox.core.service.action.Actions;
@@ -33,7 +30,6 @@ import org.demo.conf.cxbox.extension.fulltextsearch.FullTextSearchExt;
 import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.inner.ClientWriteDTO;
 import org.demo.dto.cxbox.inner.ClientWriteDTO_;
-import org.demo.dto.cxbox.inner.DashboardFilterDTO_;
 import org.demo.entity.Client;
 import org.demo.entity.Meeting;
 import org.demo.entity.Sale;
@@ -43,6 +39,7 @@ import org.demo.entity.enums.FieldOfActivity;
 import org.demo.repository.ClientRepository;
 import org.demo.repository.MeetingRepository;
 import org.demo.repository.core.UserRepository;
+import org.demo.service.cxbox.anysource.StatisticUtils;
 import org.demo.service.mail.MailSendingService;
 import org.jobrunr.scheduling.BackgroundJob;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,7 +59,7 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 
 	private final SessionService sessionService;
 
-	private final ParentDtoFirstLevelCache parentDtoFirstLevelCache;
+	private final StatisticUtils statisticUtils;
 
 	@Getter(onMethod_ = @Override)
 	private final Class<ClientReadWriteMeta> meta = ClientReadWriteMeta.class;
@@ -82,12 +79,7 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 	}
 
 	private Specification<Client> getFilterSpecification(BusinessComponent bc) {
-		var parentField = parentDtoFirstLevelCache.getParentField(DashboardFilterDTO_.fieldOfActivity, bc);
-		Set<FieldOfActivity> filter = Optional.ofNullable(parentField)
-				.map(e -> e.getValues().stream()
-						.map(value -> FieldOfActivity.getByValue(value.getValue()))
-						.collect(Collectors.toSet()))
-				.orElse(new HashSet<>());
+		Set<FieldOfActivity> filter = statisticUtils.getFilteredActivities(bc);
 		return filter.isEmpty() ?
 				(root, cq, cb) -> cb.and() :
 				clientRepository.findAllByFieldOfActivities(filter);

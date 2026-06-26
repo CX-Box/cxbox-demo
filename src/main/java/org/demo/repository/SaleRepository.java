@@ -73,7 +73,7 @@ public interface SaleRepository extends JpaRepository<Sale, Long>, JpaSpecificat
 					SELECT 1 FROM c.fieldOfActivities fa WHERE fa IN :fieldOfActivities
 			))
 			GROUP BY year, month, c.fullName
-			ORDER BY year, month, c.fullName
+			ORDER BY year, month, sum(s.sum)
 			""")
 	List<DashboardSalesByMonthAndClientPrj> getSalesStatsByMonthAndClient(Set<FieldOfActivity> fieldOfActivities);
 

@@ -7,9 +7,11 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum SaleStatus {
-	OPEN("Open"),
-	CLOSED("Closed");
+	OPEN("Open", "#ec3f3f"),
+	CLOSED("Closed", "#008C3E");
 
 	@JsonValue
 	private final String value;
+
+	private final String color;
 }

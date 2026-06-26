@@ -28,7 +28,7 @@ public class ClientSalesGraphDAO extends AbstractAnySourceBaseDAO<GraphEdgeDTO> 
 
 	private static final String COLOR_RED = "#DD0A34";
 
-	private static final Long MAX_SUM = 1000L;
+	private static final Long MAX_SUM = 10000L;
 
 	private final ClientSalesGraphRepository clientSalesGraphRepository;
 
@@ -72,7 +72,13 @@ public class ClientSalesGraphDAO extends AbstractAnySourceBaseDAO<GraphEdgeDTO> 
 	}
 
 	private List<GraphEdgeDTO> getGraphEdgesList(BusinessComponent bc) {
-		var edges = clientSalesGraphRepository.findGraphEdges(bc.getParentIdAsLong());
+
+		String parentIdString = bc.getParentId();
+		long parentId = Long.parseLong(parentIdString.contains("-")
+				? parentIdString.substring(0, parentIdString.indexOf('-')) // parentBc = dashboardClientSaleGraph
+				: parentIdString);
+
+		var edges = clientSalesGraphRepository.findGraphEdges(parentId);
 		RelationGraphUtils.enrichWithRootEdges(edges);
 		var nodes = clientRepository.findAllById(edges.stream().map(GraphEdgePrj::targetNodeId).toList())
 				.stream()
@@ -88,9 +94,10 @@ public class ClientSalesGraphDAO extends AbstractAnySourceBaseDAO<GraphEdgeDTO> 
 					//node params (must be same for all target nodes!)
 					.targetNodeExpanded(true)
 					.targetNodeName(nodes.get(edge.targetNodeId()).getFullName())
-					.targetNodeType(Objects.equals(edge.targetNodeId(), bc.getParentIdAsLong()) ? TargetNodeType.MAIN : null)
+					.targetNodeType(Objects.equals(edge.targetNodeId(), parentId) ? TargetNodeType.MAIN : null)
 					.targetNodeDescription(nodes.get(edge.targetNodeId()).getAddress())
-					.targetNodeColor(Optional.ofNullable(edge.value()).map(value -> value > MAX_SUM ? COLOR_RED : null).orElse(null))
+					.targetNodeColor(Optional.ofNullable(edge.value()).map(value -> value > MAX_SUM ? COLOR_RED : null)
+							.orElse(null))
 					.build()
 			);
 		}

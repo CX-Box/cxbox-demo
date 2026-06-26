@@ -1,7 +1,6 @@
 package org.demo.service.cxbox.anysource.clientstatsline;
 
 import lombok.RequiredArgsConstructor;
-import org.cxbox.core.crudma.PlatformRequest;
 import org.cxbox.core.crudma.bc.impl.BcDescription;
 import org.cxbox.core.dto.DrillDownType;
 import org.cxbox.core.dto.rowmeta.FieldsMeta;
@@ -25,8 +24,6 @@ public class ClientSaleLineStatsMeta extends AnySourceFieldMetaBuilder<ClientSal
 
 	private final StatisticUtils statisticUtils;
 
-	private final PlatformRequest platformRequest;
-
 	public void buildRowDependentMeta(RowDependentFieldsMeta<ClientSaleLineDTO> fields, BcDescription bc,
 			String id, String parentId) {
 
@@ -37,7 +34,7 @@ public class ClientSaleLineStatsMeta extends AnySourceFieldMetaBuilder<ClientSal
 		var dateTo = statisticUtils.lastDay(month, year);
 		var activity = parentDtoFirstLevelCache.getParentField(
 				DashboardFilterDTO_.fieldOfActivity,
-				platformRequest.getBc()
+				getBc()
 		);
 
 		fields.setDrilldownWithFilter(

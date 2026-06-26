@@ -7,12 +7,14 @@ import org.cxbox.core.crudma.bc.impl.AbstractEnumBcSupplier;
 import org.cxbox.core.crudma.bc.impl.BcDescription;
 import org.demo.conf.cxbox.customization.responsibilitiesAction.service.ResponsibilitiesActionAdminService;
 import org.demo.conf.cxbox.extension.jobRunr.service.state.JobStatsService;
+import org.demo.service.cxbox.anysource.clientsalestats.ClientSalesStatsService;
 import org.demo.service.cxbox.anysource.clientstats.ClientStatsService;
 import org.demo.conf.cxbox.extension.jobRunr.service.job.JobAdminService;
 import org.demo.service.cxbox.anysource.clientstatsline.ClientSaleLineStatsService;
 import org.demo.service.cxbox.anysource.dadatacompany.CompanyService;
 import org.demo.service.cxbox.anysource.clientSaleGraph.ClientSalesGraphService;
 import org.demo.service.cxbox.anysource.sale.SaleClientService;
+import org.demo.service.cxbox.anysource.saleseller.SaleClientSellerStatsService;
 import org.demo.service.cxbox.inner.calendar.CalendarYearMeetingService;
 import org.demo.service.cxbox.anysource.meetingsstats.MeetingStatsService;
 import org.demo.service.cxbox.anysource.lov.LovReadService;
@@ -77,11 +79,11 @@ public enum CxboxRestController implements EnumBcIdentifier {
 		clientSalePickListPopup(saleEdit, ClientPickListService.class),
 	dashboardFilter(DashboardFilterService.class),
 		dashboardClientActivities(dashboardFilter, DashboardClientActivitiesService.class),
-		clientStatsPie(dashboardFilter, ClientStatsService.class),
+		clientStatsPie(dashboardFilter, ClientSalesStatsService.class),
 		saleStatsProduct(dashboardFilter, SaleStatsProductService.class),
 		saleStatsProductDual(dashboardFilter,SaleStatsProductDualService.class),
 		dashboardClientStats(dashboardFilter, ClientStatsService.class),
-		dashboardClient(dashboardFilter,ClientReadWriteService.class),
+		dashboardClient(dashboardFilter,SaleClientSellerStatsService.class),
 			dashboardClientSaleGraph(dashboardClient,ClientSalesGraphService.class),
 				dashboardSaleClient(dashboardClientSaleGraph, SaleClientService.class),
 		dashboardClientSaleLine(dashboardFilter, ClientSaleLineStatsService.class),

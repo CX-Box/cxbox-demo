@@ -39,7 +39,7 @@ public class SaleDTO extends DataResponseDTO {
 	private Product product;
 
 	@SearchParameter(name = "status", provider = EnumValueProvider.class)
-	private SaleStatus status;
+	private SaleStatus status = SaleStatus.OPEN;
 
 	@BaseEnum(FieldOfActivity.class)
 	@SearchParameter(name = "client.fieldOfActivities", provider = MultiFieldValueProvider.class, multiFieldKey = EnumValueProvider.class)
@@ -49,6 +49,8 @@ public class SaleDTO extends DataResponseDTO {
 	private Long sum;
 
 	private String color;
+
+	private String colorStatus;
 
 	@SearchParameter(name = "saleDate", provider = DateTimeValueProvider.class)
 	private LocalDateTime saleDate;
@@ -64,6 +66,7 @@ public class SaleDTO extends DataResponseDTO {
 		this.sum = sale.getSum();
 		this.saleDate = sale.getSaleDate();
 		this.color = "#edaa";
+		this.colorStatus = status == null ? null : status.getColor();
 		this.fieldOfActivity = sale.getClient() == null ? null : sale.getClient().getFieldOfActivities()
 				.stream()
 				.collect(MultivalueField.toMultivalueField(

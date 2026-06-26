@@ -1,0 +1,126 @@
+package org.demo.service.cxbox.anysource.saleseller;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import lombok.RequiredArgsConstructor;
+import org.cxbox.core.controller.param.QueryParameters;
+import org.cxbox.core.crudma.bc.BusinessComponent;
+import org.cxbox.core.dao.AnySourceBaseDAO;
+import org.cxbox.core.dao.impl.AbstractAnySourceBaseDAO;
+import org.cxbox.core.service.drilldown.PlatformDrilldownService;
+import org.cxbox.core.service.drilldown.filter.FC;
+import org.cxbox.core.util.SpringBeanUtils;
+import org.demo.controller.CxboxRestController;
+import org.demo.dto.cxbox.anysource.SaleSellerStatsDTO;
+import org.demo.dto.cxbox.inner.ClientReadDTO;
+import org.demo.dto.cxbox.inner.ClientReadDTO_;
+import org.demo.entity.enums.FieldOfActivity;
+import org.demo.repository.ClientRepository;
+import org.demo.repository.projection.DashboardSalesClientPrj;
+import org.demo.service.cxbox.anysource.StatisticUtils;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class SaleClientSellerStatsDao extends AbstractAnySourceBaseDAO<SaleSellerStatsDTO> implements
+		AnySourceBaseDAO<SaleSellerStatsDTO> {
+
+	private final ClientRepository clientRepository;
+
+	private final StatisticUtils statisticUtils;
+
+	@NotNull
+	private static String getDrilldownLink(String sellerName) {
+		FC fcInstance = new FC()
+				.add(
+						CxboxRestController.client,
+						ClientReadDTO.class,
+						fb -> fb.input(
+								ClientReadDTO_.fullName,
+								sellerName
+						)
+				);
+
+		var platformDrilldownService = SpringBeanUtils.getBean(PlatformDrilldownService.class);
+
+		return "/screen/client/view/clientlist" +
+				Optional.ofNullable(platformDrilldownService.formUrlFilterPart(fcInstance))
+						.map(fp -> "?" + fp)
+						.orElse("");
+	}
+
+	@Override
+	public String getId(final SaleSellerStatsDTO entity) {
+		return entity.getId();
+	}
+
+	@Override
+	public void setId(final String id, final SaleSellerStatsDTO entity) {
+		entity.setId(id);
+	}
+
+	@Override
+	public SaleSellerStatsDTO getByIdIgnoringFirstLevelCache(final BusinessComponent bc) {
+		return getClientStats(bc).stream()
+				.filter(s -> Objects.equals(s.getId(), bc.getId())).findFirst().orElse(null);
+	}
+
+	@Override
+	public void delete(final BusinessComponent bc) {
+		throw new IllegalStateException();
+	}
+
+	@Override
+	public Page<SaleSellerStatsDTO> getList(final BusinessComponent bc, final QueryParameters queryParameters) {
+		return new PageImpl<>(getClientStats(bc));
+	}
+
+	@Override
+	public SaleSellerStatsDTO update(BusinessComponent bc, SaleSellerStatsDTO entity) {
+		throw new IllegalStateException();
+	}
+
+	@Override
+	public SaleSellerStatsDTO create(final BusinessComponent bc, final SaleSellerStatsDTO entity) {
+		throw new IllegalStateException();
+	}
+
+	public List<SaleSellerStatsDTO> getClientStats(BusinessComponent bc) {
+
+		Set<FieldOfActivity> filter = statisticUtils.getFilteredActivities(bc);
+		List<DashboardSalesClientPrj> dashboardSalesClientPrjsList = clientRepository.getSalesClientByFieldOfActivity(filter);
+		long allCountSeller = dashboardSalesClientPrjsList.stream()
+				.map(DashboardSalesClientPrj::sellerName)
+				.distinct()
+				.count();
+		return
+				dashboardSalesClientPrjsList.stream()
+						.map(entity -> {
+									SaleSellerStatsDTO saleSeller = new SaleSellerStatsDTO()
+											.setSellerName(entity.sellerName())
+											.setClientName(entity.clientName())
+											.setSaleCount(entity.saleCount())
+											.setFirstSaleDate(entity.firstSaleDate())
+											.setStatus(entity.status())
+											.setAvgB2bDeal(entity.avgB2bDeal())
+											.setConfirmedRevenue(entity.confirmedRevenue())
+											.setLastActivityDate(entity.lastActivityDate())
+											.setMaxContract(entity.maxContract())
+											.setOpenPipeline(entity.openPipeline())
+											.setSellerCount(1L)
+											.setSellerALlCountDistinct(allCountSeller)
+											.setDrillDownKey(getDrilldownLink(entity.sellerName()))
+											.setSum(entity.sum());
+									saleSeller.setId(entity.id());
+									return saleSeller;
+								}
+						)
+						.toList();
+	}
+
+}

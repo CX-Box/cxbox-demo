@@ -6,37 +6,203 @@
   "fields": [
     {
       "title": "Client",
-      "key": "fullName",
+      "key": "clientName",
       "type": "input",
-      "drillDown": "true",
       "width": 200
     },
     {
-      "title": "Field Of Activity",
-      "key": "fieldOfActivity",
-      "type": "multipleSelect",
+      "title": "Seller",
+      "key": "sellerName",
+      "type": "input",
+      "drillDownKey": "drillDownKey",
       "width": 200
     },
     {
-      "title": "Importance",
-      "key": "importance",
-      "type": "dictionary",
-      "bgColorKey": "color",
-      "width": 200
-    },
-    {
-      "title": "salesSumClient",
-      "key": "salesSumClient",
+      "title": "Deals Count",
+      "key": "saleCount",
       "type": "number"
+    },
+    {
+      "title": "Total GMV, $",
+      "key": "sum",
+      "type": "number"
+    },
+    {
+      "title": "Confirmed Revenue, $",
+      "key": "confirmedRevenue",
+      "type": "number"
+    },
+    {
+      "title": "Open Pipeline, $",
+      "key": "openPipeline",
+      "type": "number"
+    },
+    {
+      "title": "Avg B2B Deal, $",
+      "key": "avgB2bDeal",
+      "type": "number"
+    },
+    {
+      "title": "Max Contract, $",
+      "key": "maxContract",
+      "type": "number"
+    },
+    {
+      "title": "sellerCount",
+      "key": "sellerCount",
+      "type": "hidden"
+    },
+    {
+      "title": "sellerAll",
+      "key": "sellerALlCountDistinct",
+      "type": "hidden"
     }
   ],
   "options": {
+    "edit": {
+      "style": "none"
+    },
     "groupingHierarchy": {
-      "fields": ["importance"],
-      "aggFields": [
+      "fields": [
+        "clientName"
+      ],
+      "aggLevels": [
         {
-          "fieldKey": "salesSumClient",
-          "func": "sum"
+          "level": 0,
+          "aggFields": [
+            {
+              "fieldKey": "sellerName",
+              "func": "min",
+              "argFieldKeys": [
+                "sellerALlCountDistinct"
+              ],
+              "description": "count distinct sellers"
+            },
+            {
+              "fieldKey": "saleCount",
+              "func": "sum",
+              "argFieldKeys": [
+                "saleCount"
+              ],
+              "description": "sum, $"
+            },
+            {
+              "fieldKey": "sum",
+              "func": "sum",
+              "argFieldKeys": [
+                "sum"
+              ],
+              "description": "sum, $"
+            },
+            {
+              "fieldKey": "confirmedRevenue",
+              "func": "sum",
+              "argFieldKeys": [
+                "confirmedRevenue"
+              ],
+              "description": "sum, $"
+            },
+            {
+              "fieldKey": "openPipeline",
+              "func": "sum",
+              "argFieldKeys": [
+                "openPipeline"
+              ],
+              "description": "sum, $"
+            },
+            {
+              "fieldKey": "avgB2bDeal",
+              "func": "sum",
+              "argFieldKeys": [
+                "avgB2bDeal"
+              ],
+              "description": "sum, $"
+            },
+            {
+              "fieldKey": "maxContract",
+              "func": "sum",
+              "argFieldKeys": [
+                "maxContract"
+              ],
+              "description": "sum, $"
+            },
+            {
+              "fieldKey": "maxContract",
+              "func": "sum",
+              "argFieldKeys": [
+                "maxContract"
+              ],
+              "description": "sum, $"
+            }          ]
+        },
+        {
+          "level": 1,
+          "aggFields": [
+            {
+              "fieldKey": "sellerName",
+              "func": "sum",
+              "argFieldKeys": [
+                "sellerCount"
+              ],
+              "description": "count Sellers"
+            },
+            {
+              "fieldKey": "saleCount",
+              "func": "sum",
+              "argFieldKeys": [
+                "saleCount"
+              ],
+              "description": "sum, $"
+            },
+            {
+              "fieldKey": "sum",
+              "func": "sum",
+              "argFieldKeys": [
+                "sum"
+              ],
+              "description": "sum, $"
+            },
+            {
+              "fieldKey": "confirmedRevenue",
+              "func": "sum",
+              "argFieldKeys": [
+                "confirmedRevenue"
+              ],
+              "description": "sum, $"
+            },
+            {
+              "fieldKey": "openPipeline",
+              "func": "sum",
+              "argFieldKeys": [
+                "openPipeline"
+              ],
+              "description": "sum, $"
+            },
+            {
+              "fieldKey": "avgB2bDeal",
+              "func": "sum",
+              "argFieldKeys": [
+                "avgB2bDeal"
+              ],
+              "description": "sum, $"
+            },
+            {
+              "fieldKey": "maxContract",
+              "func": "sum",
+              "argFieldKeys": [
+                "maxContract"
+              ],
+              "description": "sum, $"
+            },
+            {
+              "fieldKey": "maxContract",
+              "func": "sum",
+              "argFieldKeys": [
+                "maxContract"
+              ],
+              "description": "sum, $"
+            }
+          ]
         }
       ]
     },

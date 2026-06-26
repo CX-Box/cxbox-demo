@@ -16,7 +16,6 @@
       "type": "input",
       "drillDownKey": "drillDownKey",
       "width": 200
-
     },
     {
       "title": "Deals Count",

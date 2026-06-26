@@ -4,9 +4,13 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 import org.cxbox.api.data.dictionary.SimpleDictionary;
 import org.cxbox.core.crudma.bc.impl.InnerBcDescription;
+import org.cxbox.core.dto.DrillDownType;
 import org.cxbox.core.dto.rowmeta.FieldsMeta;
 import org.cxbox.core.dto.rowmeta.RowDependentFieldsMeta;
 import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
+import org.demo.controller.CxboxRestController;
+import org.demo.dto.cxbox.inner.ClientReadDTO;
+import org.demo.dto.cxbox.inner.ClientReadDTO_;
 import org.demo.dto.cxbox.inner.SaleDTO;
 import org.demo.dto.cxbox.inner.SaleDTO_;
 import org.demo.entity.enums.FieldOfActivity;
@@ -22,6 +26,30 @@ public class SaleReadMeta extends FieldMetaBuilder<SaleDTO> {
 			Long id, Long parentId) {
 		fields.setDictionaryValues(SaleDTO_.product);
 		fields.setEnumValues(SaleDTO_.status);
+		fields.setRequired(SaleDTO_.status);
+		fields.setDrilldownWithFilter(
+				SaleDTO_.clientName,
+				DrillDownType.INNER,
+				"/screen/client/view/clientlist",
+				fc -> fc.add(
+						CxboxRestController.client, ClientReadDTO.class,
+						fb -> {
+							fb.input(ClientReadDTO_.fullName, fields.getCurrentValue(SaleDTO_.clientName).orElse(null));
+						}
+				)
+		);
+		fields.setDrilldownWithFilter(
+				SaleDTO_.clientSellerName,
+				DrillDownType.INNER,
+				"/screen/client/view/clientlist",
+				fc -> fc.add(
+						CxboxRestController.client, ClientReadDTO.class,
+						fb -> {
+							fb.input(ClientReadDTO_.fullName, fields.getCurrentValue(SaleDTO_.clientSellerName).orElse(null));
+						}
+				)
+		);
+
 	}
 
 	@Override

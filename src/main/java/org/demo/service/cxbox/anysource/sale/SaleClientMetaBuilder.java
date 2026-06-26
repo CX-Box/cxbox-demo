@@ -6,7 +6,6 @@ import org.cxbox.core.dto.rowmeta.FieldsMeta;
 import org.cxbox.core.dto.rowmeta.RowDependentFieldsMeta;
 import org.cxbox.core.service.rowmeta.AnySourceFieldMetaBuilder;
 import org.demo.controller.CxboxRestController;
-import org.demo.dto.cxbox.anysource.SaleSellerStatsDTO_;
 import org.demo.dto.cxbox.inner.ClientReadDTO;
 import org.demo.dto.cxbox.inner.ClientReadDTO_;
 import org.demo.dto.cxbox.inner.SaleDTO;
@@ -20,9 +19,7 @@ public class SaleClientMetaBuilder extends AnySourceFieldMetaBuilder<SaleDTO> {
 	public void buildRowDependentMeta(RowDependentFieldsMeta<SaleDTO> fields, BcDescription bc,
 			String id,
 			String parentId) {
-		boolean isDashboard = bc.getName().equals(CxboxRestController.dashboardSaleClient.getName());
 
-		if (isDashboard){
 			fields.setDrilldownWithFilter(
 					SaleDTO_.clientName,
 					DrillDownType.INNER,
@@ -45,8 +42,8 @@ public class SaleClientMetaBuilder extends AnySourceFieldMetaBuilder<SaleDTO> {
 							}
 					)
 			);
-		}
-		//do nothing
+
+		fields.setRequired(SaleDTO_.status);
 	}
 
 	@Override

@@ -66,7 +66,7 @@ public class SaleDTO extends DataResponseDTO {
 		this.sum = sale.getSum();
 		this.saleDate = sale.getSaleDate();
 		this.color = "#edaa";
-		this.colorStatus = status.getColor();
+		this.colorStatus = status == null ? null : status.getColor();
 		this.fieldOfActivity = sale.getClient() == null ? null : sale.getClient().getFieldOfActivities()
 				.stream()
 				.collect(MultivalueField.toMultivalueField(

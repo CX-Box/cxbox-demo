@@ -23,6 +23,7 @@ public class SaleStatsProductMeta extends AnySourceFieldMetaBuilder<DashboardSal
 
 	public void buildRowDependentMeta(RowDependentFieldsMeta<DashboardSalesProductDTO> fields, BcDescription bc,
 			String id, String parentId) {
+
 		var activity = parentDtoFirstLevelCache.getParentField(
 				DashboardFilterDTO_.fieldOfActivity,
 				getBc()

@@ -8,11 +8,11 @@ const HeaderWidget: WidgetComponentType = ({ widgetMeta, mode }) => {
     const { title, name, options } = widgetMeta
 
     return (
-        <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
-            <EmptyCard widgetMeta={widgetMeta} mode={mode}>
+        <EmptyCard widgetMeta={widgetMeta} mode={mode}>
+            <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
                 <WidgetTitle level={1} widgetName={name} text={title} bcColor={options?.title?.bgColor} />
-            </EmptyCard>
-        </WidgetLoader>
+            </WidgetLoader>
+        </EmptyCard>
     )
 }
 

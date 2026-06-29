@@ -49,7 +49,7 @@ import FieldBaseThemeWrapper from '@components/FieldBaseThemeWrapper/FieldBaseTh
 import ResultColumnCell from '@components/Table/massOperations/ResultColumnCell'
 import Button from '@components/ui/Button/Button'
 import { ReactComponent as HierarchySVG } from '@assets/icons/hierarchy.svg'
-import StickyTable from '@components/widgets/Table/StickyTable'
+import StickyTable from '@components/Table/StickyTable'
 
 const ROW_KEY = FIELDS.TECHNICAL.ID
 

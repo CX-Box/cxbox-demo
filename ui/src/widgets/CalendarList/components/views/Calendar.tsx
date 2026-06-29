@@ -1,10 +1,10 @@
 import React, { useCallback, useRef, useState } from 'react'
 import FullCalendar from '@fullcalendar/react'
-import { getFirstDay } from '@components/widgets/CalendarList/utils'
+import { getFirstDay } from '@widgets/CalendarList/utils'
 import { useTranslation } from 'react-i18next'
 import styles from './Calendar.less'
-import { useCalendarCellAspectRatio } from '@components/widgets/CalendarList/hooks'
-import { CALENDAR_GRID } from '@components/widgets/CalendarList/constants'
+import { useCalendarCellAspectRatio } from '@widgets/CalendarList/hooks'
+import { CALENDAR_GRID } from '@widgets/CalendarList/constants'
 import { DatesSetArg } from '@fullcalendar/core'
 import { useDebouncedWidthResize } from '@hooks/useDebouncedWidthResize'
 

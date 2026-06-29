@@ -6,7 +6,6 @@ import { buildBcUrl } from '@utils/buildBcUrl'
 import WidgetTitle from '@components/WidgetTitle/WidgetTitle'
 import { StepsWidgetMeta } from '@interfaces/widget'
 import styles from './Steps.less'
-import { shallowEqual } from 'react-redux'
 import { BaseWidgetProps } from '@features/Widget'
 import EmptyCard from '@components/EmptyCard/EmptyCard'
 import WidgetLoader from '@components/WidgetLoader'
@@ -33,7 +32,7 @@ const Steps: React.FC<BaseWidgetProps> = ({ widgetMeta, mode }) => {
             stepsDescriptions: stepsDescriptions?.values,
             stepCurrentValue: stepsField?.currentValue
         }
-    }, shallowEqual)
+    })
     const { isMainWidget, isCollapsed } = useWidgetCollapse(widgetMeta.name)
     const values = stepsValues?.map((val, index) => {
         return {
@@ -43,8 +42,8 @@ const Steps: React.FC<BaseWidgetProps> = ({ widgetMeta, mode }) => {
     })
     const currentIndex = values?.findIndex(i => i.step === stepCurrentValue)
     return (
-        <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
-            <EmptyCard widgetMeta={widgetMeta} mode={mode}>
+        <EmptyCard widgetMeta={widgetMeta} mode={mode}>
+            <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
                 {isMainWidget && <WidgetTitle level={2} widgetName={widgetMeta.name} text={widgetMeta.title} />}
                 {!(isMainWidget && isCollapsed) && (
                     <AntSteps className={styles.container} current={currentIndex}>
@@ -53,8 +52,8 @@ const Steps: React.FC<BaseWidgetProps> = ({ widgetMeta, mode }) => {
                         })}
                     </AntSteps>
                 )}
-            </EmptyCard>
-        </WidgetLoader>
+            </WidgetLoader>
+        </EmptyCard>
     )
 }
 

@@ -13,11 +13,11 @@ function assertIsPie1DMeta(meta: BaseWidgetProps['widgetMeta']): asserts meta is
 const Pie1D: React.FC<BaseWidgetProps> = ({ widgetMeta, mode }) => {
     assertIsPie1DMeta(widgetMeta)
     return (
-        <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
-            <DashboardCard widgetMeta={widgetMeta} mode={mode}>
+        <DashboardCard widgetMeta={widgetMeta} mode={mode}>
+            <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
                 <Chart meta={widgetMeta} />
-            </DashboardCard>
-        </WidgetLoader>
+            </WidgetLoader>
+        </DashboardCard>
     )
 }
 

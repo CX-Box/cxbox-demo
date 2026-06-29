@@ -95,8 +95,8 @@ const Form: WidgetComponentType<FormProps> = ({ widgetMeta, fields, missingField
     }, [grid, visibleFlattenWidgetFields, missingFields, metaErrors, widgetMeta.name, t, bcName, cursor, name])
 
     return (
-        <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
-            <Card widgetMeta={widgetMeta} mode={mode}>
+        <Card widgetMeta={widgetMeta} mode={mode}>
+            <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
                 {empty ? null : (
                     <FieldBaseThemeWrapper className={styles.formContainer}>
                         <AntdForm colon={false} layout="vertical">
@@ -104,8 +104,8 @@ const Form: WidgetComponentType<FormProps> = ({ widgetMeta, fields, missingField
                         </AntdForm>
                     </FieldBaseThemeWrapper>
                 )}
-            </Card>
-        </WidgetLoader>
+            </WidgetLoader>
+        </Card>
     )
 }
 

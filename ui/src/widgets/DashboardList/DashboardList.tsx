@@ -14,13 +14,13 @@ function assertIsDashboardListMeta(meta: BaseWidgetProps['widgetMeta']): asserts
 const DashboardList: WidgetComponentType = ({ widgetMeta, mode }) => {
     assertIsDashboardListMeta(widgetMeta)
     return (
-        <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
-            <DashboardCard widgetMeta={widgetMeta} mode={mode}>
+        <DashboardCard widgetMeta={widgetMeta} mode={mode}>
+            <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
                 <div>
                     <Table meta={widgetMeta} />
                 </div>
-            </DashboardCard>
-        </WidgetLoader>
+            </WidgetLoader>
+        </DashboardCard>
     )
 }
 

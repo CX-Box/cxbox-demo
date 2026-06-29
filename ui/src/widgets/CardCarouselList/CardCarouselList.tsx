@@ -5,11 +5,11 @@ import WidgetLoader from '@components/WidgetLoader'
 
 const CardCarouselList: WidgetComponentType = ({ widgetMeta, mode }) => {
     return (
-        <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
-            <Card widgetMeta={widgetMeta} mode={mode}>
+        <Card widgetMeta={widgetMeta} mode={mode}>
+            <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
                 <CardCarouselListComponent widgetMeta={widgetMeta} type={'carousel'} />
-            </Card>
-        </WidgetLoader>
+            </WidgetLoader>
+        </Card>
     )
 }
 

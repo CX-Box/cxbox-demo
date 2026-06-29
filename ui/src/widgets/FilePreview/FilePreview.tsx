@@ -22,8 +22,8 @@ const FilePreview: WidgetComponentType = ({ widgetMeta, mode }) => {
     }, [fileField, widgetMeta])
 
     return (
-        <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
-            <FilePreviewCard widgetMeta={widgetMeta} mode={mode}>
+        <FilePreviewCard widgetMeta={widgetMeta} mode={mode}>
+            <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
                 {!fileField ? null : (
                     <FieldBaseThemeWrapper
                         className={styles.container}
@@ -35,8 +35,8 @@ const FilePreview: WidgetComponentType = ({ widgetMeta, mode }) => {
                         <Field bcName={widgetMeta.bcName} cursor={cursor} widgetName={widgetMeta.name} widgetFieldMeta={fileField} />
                     </FieldBaseThemeWrapper>
                 )}
-            </FilePreviewCard>
-        </WidgetLoader>
+            </WidgetLoader>
+        </FilePreviewCard>
     )
 }
 

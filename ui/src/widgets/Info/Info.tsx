@@ -38,8 +38,8 @@ const Info: WidgetComponentType = ({ widgetMeta, mode }) => {
     const { grid, visibleFlattenWidgetFields } = useProportionalWidgetGrid(widgetMeta)
 
     return (
-        <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
-            <Card widgetMeta={widgetMeta} mode={mode}>
+        <Card widgetMeta={widgetMeta} mode={mode}>
+            <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
                 <Row className={styles.container}>
                     {grid?.map((row, index) => (
                         <InfoRow
@@ -52,8 +52,8 @@ const Info: WidgetComponentType = ({ widgetMeta, mode }) => {
                         />
                     ))}
                 </Row>
-            </Card>
-        </WidgetLoader>
+            </WidgetLoader>
+        </Card>
     )
 }
 

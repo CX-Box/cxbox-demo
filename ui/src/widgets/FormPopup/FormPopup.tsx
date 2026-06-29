@@ -98,7 +98,7 @@ const FormPopup: WidgetComponentType = ({ widgetMeta }) => {
                     </div>
                 ) : (
                     <div className={styles.formPopupModal}>
-                        <Form widgetMeta={widgetMeta} />
+                        <Form widgetMeta={widgetMeta} mode={'skip_card'} />
                     </div>
                 )}
             </Popup>

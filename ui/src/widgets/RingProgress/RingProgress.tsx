@@ -42,8 +42,8 @@ const RingProgress: React.FC<BaseWidgetProps> = ({ widgetMeta, mode }) => {
     }
 
     return (
-        <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
-            <DashboardCard widgetMeta={widgetMeta} mode={mode}>
+        <DashboardCard widgetMeta={widgetMeta} mode={mode}>
+            <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
                 <div>
                     <div className={styles.container}>
                         <div className={styles.textContainer}>
@@ -62,8 +62,8 @@ const RingProgress: React.FC<BaseWidgetProps> = ({ widgetMeta, mode }) => {
                         />
                     </div>
                 </div>
-            </DashboardCard>
-        </WidgetLoader>
+            </WidgetLoader>
+        </DashboardCard>
     )
 }
 

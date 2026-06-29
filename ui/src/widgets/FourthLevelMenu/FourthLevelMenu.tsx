@@ -5,11 +5,11 @@ import WidgetLoader from '@components/WidgetLoader'
 
 const FourthLevelMenu: WidgetComponentType = ({ widgetMeta, mode }) => {
     return (
-        <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
-            <EmptyCard widgetMeta={widgetMeta} mode={mode}>
+        <EmptyCard widgetMeta={widgetMeta} mode={mode}>
+            <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
                 <LevelMenu meta={widgetMeta} />
-            </EmptyCard>
-        </WidgetLoader>
+            </WidgetLoader>
+        </EmptyCard>
     )
 }
 

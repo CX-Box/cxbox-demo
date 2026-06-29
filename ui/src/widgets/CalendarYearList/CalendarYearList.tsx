@@ -96,8 +96,8 @@ const CalendarYearList: WidgetComponentType = ({ widgetMeta: widget, mode }) => 
     }, [widget?.options?.calendar])
 
     return (
-        <WidgetLoader widgetMeta={widget} mode={mode}>
-            <NullCard widgetMeta={widget} mode={mode}>
+        <NullCard widgetMeta={widget} mode={mode}>
+            <WidgetLoader widgetMeta={widget} mode={mode}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', color: 'var(--text-color)' }}>
                     {enabledListMode ? (
                         <Table meta={widget as AppWidgetTableMeta} settingsComponent={listToggleButton} />
@@ -109,8 +109,8 @@ const CalendarYearList: WidgetComponentType = ({ widgetMeta: widget, mode }) => 
                         </>
                     )}
                 </div>
-            </NullCard>
-        </WidgetLoader>
+            </WidgetLoader>
+        </NullCard>
     )
 }
 

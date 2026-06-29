@@ -53,8 +53,8 @@ const StatsBlock: React.FC<BaseWidgetProps> = ({ widgetMeta, mode }) => {
     const isBcCursorShow = !valueField?.drillDown && widgetMeta.options?.stats?.bcCursor === EStatsBcCursor.show
 
     return (
-        <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
-            <EmptyCard widgetMeta={widgetMeta} mode={mode}>
+        <EmptyCard widgetMeta={widgetMeta} mode={mode}>
+            <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
                 {isMainWidget && <WidgetTitle level={2} widgetName={widgetMeta.name} text={widgetMeta.title} />}
 
                 {!(isMainWidget && isCollapsed) && (
@@ -87,8 +87,8 @@ const StatsBlock: React.FC<BaseWidgetProps> = ({ widgetMeta, mode }) => {
                         )}
                     />
                 )}
-            </EmptyCard>
-        </WidgetLoader>
+            </WidgetLoader>
+        </EmptyCard>
     )
 }
 

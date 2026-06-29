@@ -36,8 +36,8 @@ const AdditionalList: WidgetComponentType = ({ widgetMeta, mode }) => {
     const handleRow = () => ({ onClick: () => {} })
 
     return (
-        <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
-            <EmptyCard widgetMeta={widgetMeta} mode={mode}>
+        <EmptyCard widgetMeta={widgetMeta} mode={mode}>
+            <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
                 <StandardWrapper>
                     <AdditionalInfoHeader meta={widgetMeta} level={2} />
                     {!(isMainWidget && isCollapsed) && (
@@ -77,8 +77,8 @@ const AdditionalList: WidgetComponentType = ({ widgetMeta, mode }) => {
                         </>
                     )}
                 </StandardWrapper>
-            </EmptyCard>
-        </WidgetLoader>
+            </WidgetLoader>
+        </EmptyCard>
     )
 }
 

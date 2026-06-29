@@ -1,0 +1,13 @@
+.container {
+    background-color: white;
+    border-radius: 2px;
+    margin: 16px 16px;
+    padding: 24px 24px;
+}
+
+.title {
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 1.56;
+    color: #595959;
+}

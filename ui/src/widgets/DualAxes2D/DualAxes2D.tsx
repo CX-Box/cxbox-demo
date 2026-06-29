@@ -13,11 +13,11 @@ function assertIsDualAxes2DMeta(meta: BaseWidgetProps['widgetMeta']): asserts me
 const DualAxes2D: WidgetComponentType = ({ widgetMeta, mode }) => {
     assertIsDualAxes2DMeta(widgetMeta)
     return (
-        <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
-            <DashboardCard widgetMeta={widgetMeta} mode={mode}>
+        <DashboardCard widgetMeta={widgetMeta} mode={mode}>
+            <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
                 <Chart meta={widgetMeta} />
-            </DashboardCard>
-        </WidgetLoader>
+            </WidgetLoader>
+        </DashboardCard>
     )
 }
 

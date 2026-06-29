@@ -22,13 +22,13 @@ const AdditionalInfo: WidgetComponentType = ({ widgetMeta, mode }) => {
     const rowMeta = useAppSelector(state => state.view.rowMeta[bcName]?.[bcUrl])
 
     return (
-        <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
-            <EmptyCard widgetMeta={widgetMeta} mode={mode}>
+        <EmptyCard widgetMeta={widgetMeta} mode={mode}>
+            <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
                 <StandardWrapper>
                     <AdditionalInfoItem meta={widgetMeta} rowMeta={rowMeta} cursor={bc?.cursor} />
                 </StandardWrapper>
-            </EmptyCard>
-        </WidgetLoader>
+            </WidgetLoader>
+        </EmptyCard>
     )
 }
 

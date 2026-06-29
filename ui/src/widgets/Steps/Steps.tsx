@@ -43,8 +43,8 @@ const Steps: React.FC<BaseWidgetProps> = ({ widgetMeta, mode }) => {
     })
     const currentIndex = values?.findIndex(i => i.step === stepCurrentValue)
     return (
-        <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
-            <EmptyCard widgetMeta={widgetMeta} mode={mode}>
+        <EmptyCard widgetMeta={widgetMeta} mode={mode}>
+            <WidgetLoader widgetMeta={widgetMeta} mode={mode}>
                 {isMainWidget && <WidgetTitle level={2} widgetName={widgetMeta.name} text={widgetMeta.title} />}
                 {!(isMainWidget && isCollapsed) && (
                     <AntSteps className={styles.container} current={currentIndex}>
@@ -53,8 +53,8 @@ const Steps: React.FC<BaseWidgetProps> = ({ widgetMeta, mode }) => {
                         })}
                     </AntSteps>
                 )}
-            </EmptyCard>
-        </WidgetLoader>
+            </WidgetLoader>
+        </EmptyCard>
     )
 }
 

@@ -28,7 +28,7 @@ const InnerWidget: FunctionComponent<InnerWidgetProps> = ({
 }) => {
     const widgetVisibility = useWidgetVisibility(widgetName)
     const widget = useAppSelector(selectWidget(widgetName)) as AppWidgetMeta
-    const widgetType = widget.type
+    const widgetType = widget?.type
     const bc = useAppSelector(selectBc(widget?.bcName))
     const spinning = useAppSelector(state => {
         if (isDefined(externalSpinning)) {

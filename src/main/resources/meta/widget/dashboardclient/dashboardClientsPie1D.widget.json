@@ -1,6 +1,6 @@
 {
   "name": "dashboardClientsPie1D",
-  "title": "Clients count per status",
+  "title": "Sales count per client",
   "type": "Pie1D",
   "bc": "clientStatsPie",
   "fields": [

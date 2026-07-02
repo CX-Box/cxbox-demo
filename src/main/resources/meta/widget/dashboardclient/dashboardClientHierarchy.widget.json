@@ -84,7 +84,7 @@
               "argFieldKeys": [
                 "saleCount"
               ],
-              "description": "sum, $"
+              "description": "count sales"
             },
             {
               "fieldKey": "sum",
@@ -92,7 +92,7 @@
               "argFieldKeys": [
                 "sum"
               ],
-              "description": "sum, $"
+              "description": "sum"
             },
             {
               "fieldKey": "confirmedRevenue",
@@ -100,7 +100,7 @@
               "argFieldKeys": [
                 "confirmedRevenue"
               ],
-              "description": "sum, $"
+              "description": "sum where status = Closed"
             },
             {
               "fieldKey": "openPipeline",
@@ -108,15 +108,15 @@
               "argFieldKeys": [
                 "openPipeline"
               ],
-              "description": "sum, $"
+              "description": "sum where status = Open"
             },
             {
               "fieldKey": "avgB2bDeal",
-              "func": "sum",
+              "func": "avg",
               "argFieldKeys": [
                 "avgB2bDeal"
               ],
-              "description": "sum, $"
+              "description": "avg"
             },
             {
               "fieldKey": "maxContract",
@@ -128,23 +128,24 @@
             },
             {
               "fieldKey": "maxContract",
-              "func": "sum",
+              "func": "max",
               "argFieldKeys": [
                 "maxContract"
               ],
-              "description": "sum, $"
-            }          ]
+              "description": "max"
+            }
+          ]
         },
         {
           "level": 1,
           "aggFields": [
             {
               "fieldKey": "sellerName",
-              "func": "sum",
+              "func": "min",
               "argFieldKeys": [
-                "sellerCount"
+                "sellerALlCountDistinct"
               ],
-              "description": "count Sellers"
+              "description": "count distinct sellers"
             },
             {
               "fieldKey": "saleCount",
@@ -152,7 +153,7 @@
               "argFieldKeys": [
                 "saleCount"
               ],
-              "description": "sum, $"
+              "description": "count sales"
             },
             {
               "fieldKey": "sum",
@@ -160,7 +161,7 @@
               "argFieldKeys": [
                 "sum"
               ],
-              "description": "sum, $"
+              "description": "sum"
             },
             {
               "fieldKey": "confirmedRevenue",
@@ -168,7 +169,7 @@
               "argFieldKeys": [
                 "confirmedRevenue"
               ],
-              "description": "sum, $"
+              "description": "sum where status = Closed"
             },
             {
               "fieldKey": "openPipeline",
@@ -176,15 +177,15 @@
               "argFieldKeys": [
                 "openPipeline"
               ],
-              "description": "sum, $"
+              "description": "sum where status = Open"
             },
             {
               "fieldKey": "avgB2bDeal",
-              "func": "sum",
+              "func": "avg",
               "argFieldKeys": [
                 "avgB2bDeal"
               ],
-              "description": "sum, $"
+              "description": "avg"
             },
             {
               "fieldKey": "maxContract",
@@ -196,11 +197,11 @@
             },
             {
               "fieldKey": "maxContract",
-              "func": "sum",
+              "func": "max",
               "argFieldKeys": [
                 "maxContract"
               ],
-              "description": "sum, $"
+              "description": "max"
             }
           ]
         }

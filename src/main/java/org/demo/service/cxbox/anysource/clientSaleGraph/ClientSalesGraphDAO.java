@@ -75,11 +75,11 @@ public class ClientSalesGraphDAO extends AbstractAnySourceBaseDAO<GraphEdgeDTO> 
 	private List<GraphEdgeDTO> getGraphEdgesList(BusinessComponent bc) {
 
 		String parentIdString = bc.getParentId();
-		long parentId = Long.parseLong(parentIdString.contains("-")
+		Long parentId = Long.parseLong(parentIdString.contains("-")
 				? parentIdString.substring(0, parentIdString.indexOf('-')) // parentBc = dashboardClientSaleGraph
 				: parentIdString);
 
-		long childId = parentIdString.contains("-")
+		Long childId = parentIdString.contains("-")
 				? Long.parseLong(parentIdString.substring(parentIdString.indexOf('-') + 1))
 				: null;
 

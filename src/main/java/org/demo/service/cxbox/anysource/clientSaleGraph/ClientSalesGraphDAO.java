@@ -83,7 +83,7 @@ public class ClientSalesGraphDAO extends AbstractAnySourceBaseDAO<GraphEdgeDTO> 
 				? Long.parseLong(parentIdString.substring(parentIdString.indexOf('-') + 1))
 				: null;
 
-		var edges = clientSalesGraphRepository.findGraphEdges(parentId).stream().filter(Objects::nonNull).toList();
+		var edges = clientSalesGraphRepository.findGraphEdges(parentId);
 		RelationGraphUtils.enrichWithRootEdges(edges);
 		var nodes = clientRepository.findAllById(edges.stream().map(GraphEdgePrj::targetNodeId).toList())
 				.stream()

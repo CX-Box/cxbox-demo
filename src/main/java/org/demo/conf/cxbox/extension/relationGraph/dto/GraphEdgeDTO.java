@@ -38,6 +38,8 @@ public class GraphEdgeDTO extends DataResponseDTO {
 
 	private String targetNodeColor;
 
+	private int orderByGraph;
+
 	@Builder.Default
 	private Boolean targetNodeExpanded = true;
 

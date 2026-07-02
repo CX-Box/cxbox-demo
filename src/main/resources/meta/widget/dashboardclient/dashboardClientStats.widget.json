@@ -1,6 +1,6 @@
 {
   "name": "dashboardClientStats",
-  "title": "",
+  "title": "Clients count per status",
   "type": "StatsBlock",
   "bc": "dashboardClientStats",
   "fields": [

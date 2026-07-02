@@ -1,6 +1,7 @@
 package org.demo.service.cxbox.anysource.clientSaleGraph;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -78,6 +79,10 @@ public class ClientSalesGraphDAO extends AbstractAnySourceBaseDAO<GraphEdgeDTO> 
 				? parentIdString.substring(0, parentIdString.indexOf('-')) // parentBc = dashboardClientSaleGraph
 				: parentIdString);
 
+		long childId = parentIdString.contains("-")
+				? Long.parseLong(parentIdString.substring(parentIdString.indexOf('-') + 1))
+				: null;
+
 		var edges = clientSalesGraphRepository.findGraphEdges(parentId);
 		RelationGraphUtils.enrichWithRootEdges(edges);
 		var nodes = clientRepository.findAllById(edges.stream().map(GraphEdgePrj::targetNodeId).toList())
@@ -98,9 +103,14 @@ public class ClientSalesGraphDAO extends AbstractAnySourceBaseDAO<GraphEdgeDTO> 
 					.targetNodeDescription(nodes.get(edge.targetNodeId()).getAddress())
 					.targetNodeColor(Optional.ofNullable(edge.value()).map(value -> value > MAX_SUM ? COLOR_RED : null)
 							.orElse(null))
+					.orderByGraph(
+							Objects.equals(edge.targetNodeId(), parentId)
+							&& Objects.equals(edge.sourceNodeId(), childId)
+									? 1 : 0)
 					.build()
 			);
 		}
+		result.sort(Comparator.comparing(GraphEdgeDTO::getOrderByGraph).reversed());
 		return result;
 	}
 

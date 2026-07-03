@@ -11,13 +11,13 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class IntegrationURLBuilder {
 
 	public String getURLWithParams(final BusinessComponent bc, final String baseURL) {
-		final var builder = UriComponentsBuilder.fromHttpUrl(baseURL);
+		final var builder = UriComponentsBuilder.fromUriString(baseURL);
 		Arrays.stream(IntegrationURLRules.values()).forEach(rule -> rule.getBuildURLFunc().accept(bc, builder));
 		return builder.encode().toUriString();
 	}
 
 	public UriComponentsBuilder getURLWithQueryParams(final BusinessComponent bc, final String baseURL) {
-		final UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseURL);
+		final var builder = UriComponentsBuilder.fromUriString(baseURL);
 		Arrays.stream(IntegrationURLRules.values()).forEach(rule -> rule.getBuildURLFunc().accept(bc, builder));
 		return builder;
 	}

@@ -2,7 +2,7 @@ package org.demo.conf.dadata.config;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import org.demo.conf.dadata.DadataClient;
-import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.boot.restclient.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -10,6 +10,7 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
 @Configuration()
+@SuppressWarnings("removal")
 public class DadataConfig {
 
 	@Bean

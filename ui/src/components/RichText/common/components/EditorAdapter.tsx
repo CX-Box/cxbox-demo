@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { ViewMode } from '@components/RichText/common/types'
 import WysiwygEditor from '@components/RichText/wysiwyg/components/Editor'
 import SourceEditor from '@components/RichText/source/components/Editor'
-import { EDITOR_MAX_ROWS, EDITOR_MIN_ROWS, TEXTAREA_VERTICAL_PADDING_OFFSET } from '@components/RichText/constants'
+import { TEXTAREA_VERTICAL_PADDING_OFFSET } from '@components/RichText/constants'
 import { useBoundedResizableHeight } from '@components/RichText/wysiwyg/hooks'
 import { RichTextEditorProps } from '@components/RichText/RichTextEditor'
+import TextClampWrapper from '@components/TextClampWrapper/TextClampWrapper'
+import { richTextEditMaxRows, richTextEditMinRows, richTextMaxRows, richTextMinRows } from '@components/ui/RichText/constants'
 
 const EditorAdapter: React.FC<RichTextEditorProps> = ({
     value,
@@ -14,8 +16,8 @@ const EditorAdapter: React.FC<RichTextEditorProps> = ({
     onFocus,
     disabled,
     placeholder,
-    minRows = EDITOR_MIN_ROWS,
-    maxRows = EDITOR_MAX_ROWS
+    minRows = richTextEditMinRows,
+    maxRows = richTextEditMaxRows
 }) => {
     const [viewMode, setViewMode] = useState<ViewMode>('wysiwyg')
 
@@ -35,14 +37,16 @@ const EditorAdapter: React.FC<RichTextEditorProps> = ({
 
     if (readOnly) {
         return (
-            <WysiwygEditor
-                onViewModeChange={setViewMode}
-                value={value}
-                onChange={onChange}
-                onBlur={onBlur}
-                onFocus={onFocus}
-                readOnly={readOnly}
-            />
+            <TextClampWrapper minRows={richTextMinRows} maxRows={richTextMaxRows}>
+                <WysiwygEditor
+                    onViewModeChange={setViewMode}
+                    value={value}
+                    onChange={onChange}
+                    onBlur={onBlur}
+                    onFocus={onFocus}
+                    readOnly={readOnly}
+                />
+            </TextClampWrapper>
         )
     }
 

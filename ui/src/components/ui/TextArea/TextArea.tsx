@@ -3,9 +3,10 @@ import { Input, Popover, Button, Input as InputRef } from 'antd'
 import AntdTextArea, { TextAreaProps as AntdTextAreaProps } from 'antd/lib/input/TextArea'
 import { BaseFieldProps } from '@components/Field/Field'
 import ReadOnlyField from '@components/ui/ReadOnlyField/ReadOnlyField'
-import { text_maxDisplayed } from '@components/ui/TextArea/constants'
+import { text_maxDisplayed, textEditMaxRows, textEditMinRows, textMaxRows, textMinRows } from '@components/ui/TextArea/constants'
 import styles from './TextArea.less'
 import cn from 'classnames'
+import TextClampWrapper from '@components/TextClampWrapper/TextClampWrapper'
 
 type AdditionalAntdTextAreaProps = Partial<Omit<AntdTextAreaProps, 'onChange'>>
 
@@ -27,13 +28,14 @@ const TextArea: React.FunctionComponent<TextAreaProps> = ({
     disabled,
     readOnly,
     style,
-    minRows = 5,
-    maxRows = 10,
+    minRows = textEditMinRows,
+    maxRows = textEditMaxRows,
     className,
     backgroundColor,
     widgetName,
     meta,
     onDrillDown,
+    metaError,
     ...rest
 }) => {
     const inputRef = React.useRef<InputRef>(null)
@@ -81,32 +83,34 @@ const TextArea: React.FunctionComponent<TextAreaProps> = ({
         const processedValue = needToTrimValue ? defaultValue.slice(0, text_maxDisplayed) : defaultValue
 
         return (
-            <ReadOnlyField
-                widgetName={widgetName}
-                meta={meta}
-                className={className}
-                backgroundColor={backgroundColor}
-                cursor={rest.cursor}
-                extraContent={
-                    needToTrimValue ? (
-                        <Popover
-                            overlayClassName={styles.popoverOverlay}
-                            placement="bottom"
-                            getTooltipContainer={trigger => trigger.parentElement as HTMLElement}
-                            content={
-                                <ReadOnlyField widgetName={widgetName} meta={meta}>
-                                    {defaultValue}
-                                </ReadOnlyField>
-                            }
-                        >
-                            <span className={styles.pointer}>...</span>
-                        </Popover>
-                    ) : null
-                }
-                onDrillDown={onDrillDown}
-            >
-                {processedValue}
-            </ReadOnlyField>
+            <TextClampWrapper minRows={textMinRows} maxRows={textMaxRows}>
+                <ReadOnlyField
+                    widgetName={widgetName}
+                    meta={meta}
+                    className={className}
+                    backgroundColor={backgroundColor}
+                    cursor={rest.cursor}
+                    extraContent={
+                        needToTrimValue ? (
+                            <Popover
+                                overlayClassName={styles.popoverOverlay}
+                                placement="bottom"
+                                getTooltipContainer={trigger => trigger.parentElement as HTMLElement}
+                                content={
+                                    <ReadOnlyField widgetName={widgetName} meta={meta}>
+                                        {defaultValue}
+                                    </ReadOnlyField>
+                                }
+                            >
+                                <span className={styles.pointer}>...</span>
+                            </Popover>
+                        ) : null
+                    }
+                    onDrillDown={onDrillDown}
+                >
+                    {processedValue}
+                </ReadOnlyField>
+            </TextClampWrapper>
         )
     }
 

@@ -4,6 +4,7 @@ import { ViewMode } from '../../common/types'
 import CommonMenuBar from '@components/RichText/common/components/MenuBar'
 import { FontCursor, Gear } from '@gravity-ui/icons'
 import { useTranslation } from 'react-i18next'
+import { useToolbarStableWidthProps } from '@components/RichText/source/hooks/useToolbarStableWidthProps'
 
 interface Props {
     toolbarDisabled?: boolean
@@ -12,9 +13,11 @@ interface Props {
 
 export default function MenuBar({ onViewModeChange, toolbarDisabled }: Props) {
     const { t } = useTranslation()
+    const stableWidthProps = useToolbarStableWidthProps()
 
     return (
         <CommonMenuBar
+            {...stableWidthProps}
             toolbarDisabled={toolbarDisabled}
             rightButton={{
                 key: 'Settings',

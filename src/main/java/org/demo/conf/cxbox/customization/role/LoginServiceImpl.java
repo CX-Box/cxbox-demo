@@ -19,6 +19,7 @@ package org.demo.conf.cxbox.customization.role;
 import static org.cxbox.core.dto.LoggedUser.feature;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -42,8 +43,13 @@ import org.demo.repository.core.UserRepository;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.lang.Nullable;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestClient;
 
 
 @Slf4j
@@ -71,6 +77,8 @@ public class LoginServiceImpl implements LoginService {
 	private final CxboxBeanProperties cxboxBeanProperties;
 
 	private final ApplicationEventPublisher eventPublisher;
+
+
 
 	/**
 	 * Build info for active session user for specific role
@@ -122,6 +130,7 @@ public class LoginServiceImpl implements LoginService {
 			eventPublisher.publishEvent(new LoginEvent<>(this, result, exception));
 		}
 	}
+
 
 	public void setSessionUserInternalRole(Set<String> roles) {
 		var userDetails = coreSessionService.getSessionUserDetails(true);

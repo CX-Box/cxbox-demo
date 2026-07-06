@@ -67,7 +67,7 @@ public class OidcJwtTokenConverter implements Converter<Jwt, OidcAuthenticationT
 				login,
 				roles.stream().map(SimpleGrantedAuthority::getAuthority).collect(Collectors.toSet())
 		);
-		invokeUserInfo(jwt);
+		//invokeUserInfo(jwt);
 		CxboxUserDetailsInterface userDetails = userService.createUserDetails(
 				user,
 				uiProperties.isMultiRoleEnabled()
@@ -77,7 +77,7 @@ public class OidcJwtTokenConverter implements Converter<Jwt, OidcAuthenticationT
 		return new OidcAuthenticationToken(jwt, authorities, login, userDetails);
 	}
 
-	private Map<String, Object> invokeUserInfo(final Jwt jwt) {
+	private static Map<String, Object> invokeUserInfo(final Jwt jwt) {
 		RestClient restClient = RestClient.create();
 		String userInfoEndpoint = jwt.getIssuer()
 				+ "/protocol/openid-connect/userinfo";

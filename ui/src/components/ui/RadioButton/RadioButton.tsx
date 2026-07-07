@@ -1,7 +1,7 @@
 import React from 'react'
 import { Radio } from 'antd'
 import { RadioChangeEvent } from 'antd/es/radio'
-import { BaseFieldProps } from '@components/Field/Field'
+import { BaseFieldProps } from '@features/Field/Field'
 import ReadOnlyField from '@components/ui/ReadOnlyField/ReadOnlyField'
 import { getIconByParams } from '@fields/Dictionary/Dictionary'
 

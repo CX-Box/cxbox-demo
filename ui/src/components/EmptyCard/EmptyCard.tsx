@@ -1,22 +1,20 @@
 import React from 'react'
 import { Col, Row } from 'antd'
 import styles from './EmptyCard.module.css'
-import { WidgetMeta } from '@cxbox-ui/core'
+import { WidgetComponentType } from '@features/Widget'
 
-interface EmptyCardProps {
-    children?: React.ReactNode
-    meta: WidgetMeta
-}
-
-function EmptyCard({ children, meta }: EmptyCardProps) {
+const EmptyCard: WidgetComponentType = ({ children, widgetMeta, mode }) => {
+    if (mode === 'headless' || mode === 'skip_card') {
+        return <>{children}</>
+    }
     return (
         <Row
             className={styles.container}
             data-test="WIDGET"
-            data-test-widget-type={meta.type}
-            data-test-widget-position={meta.position}
-            data-test-widget-title={meta.title}
-            data-test-widget-name={meta.name}
+            data-test-widget-type={widgetMeta.type}
+            data-test-widget-position={widgetMeta.position}
+            data-test-widget-title={widgetMeta.title}
+            data-test-widget-name={widgetMeta.name}
             justify="center"
         >
             <Col span={24}>{children}</Col>

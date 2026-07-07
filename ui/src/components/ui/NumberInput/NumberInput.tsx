@@ -1,7 +1,7 @@
 import React, { RefAttributes } from 'react'
 import { Input } from 'antd'
 import cn from 'classnames'
-import { BaseFieldProps } from '@components/Field/Field'
+import { BaseFieldProps } from '@features/Field/Field'
 import ReadOnlyField from '@components/ui/ReadOnlyField/ReadOnlyField'
 import { fractionsRound, NumberInputFormat, NumberTypes } from './formaters'
 import { InputProps } from 'antd/es/input'

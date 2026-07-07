@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from './MultiField.less'
-import Field from '@components/Field/Field'
+import Field from '@features/Field/Field'
 import cn from 'classnames'
 import { DataItem } from '@cxbox-ui/core'
 import { WidgetField } from '@interfaces/widget'

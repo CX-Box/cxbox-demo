@@ -3,10 +3,12 @@ import { Input, Popover, Button, Input as InputRef } from 'antd'
 import AntdTextArea, { TextAreaProps as AntdTextAreaProps } from 'antd/lib/input/TextArea'
 import { BaseFieldProps } from '@components/Field/Field'
 import ReadOnlyField from '@components/ui/ReadOnlyField/ReadOnlyField'
-import { text_maxDisplayed, textEditMaxRows, textEditMinRows, textMaxRows, textMinRows } from '@components/ui/TextArea/constants'
+import { text_maxDisplayed } from '@components/ui/TextArea/constants'
 import styles from './TextArea.less'
 import cn from 'classnames'
 import TextClampWrapper from '@components/TextClampWrapper/TextClampWrapper'
+import { AppTextWidgetField } from '@interfaces/widget'
+import { getTextRowsConfig } from '@components/ui/TextArea/utils'
 
 type AdditionalAntdTextAreaProps = Partial<Omit<AntdTextAreaProps, 'onChange'>>
 
@@ -16,8 +18,6 @@ export interface TextAreaProps extends BaseFieldProps, AdditionalAntdTextAreaPro
     onChange?: (value: string) => void
     popover?: boolean
     style?: React.CSSProperties
-    minRows?: number
-    maxRows?: number
 }
 
 const TextArea: React.FunctionComponent<TextAreaProps> = ({
@@ -28,8 +28,6 @@ const TextArea: React.FunctionComponent<TextAreaProps> = ({
     disabled,
     readOnly,
     style,
-    minRows = textEditMinRows,
-    maxRows = textEditMaxRows,
     className,
     backgroundColor,
     widgetName,
@@ -38,6 +36,9 @@ const TextArea: React.FunctionComponent<TextAreaProps> = ({
     metaError,
     ...rest
 }) => {
+    const fieldMeta = meta as AppTextWidgetField | undefined
+    const { minRows, maxRows, editMinRows, editMaxRows } = getTextRowsConfig({ ...fieldMeta })
+
     const inputRef = React.useRef<InputRef>(null)
     const textAreaRef = React.useRef<AntdTextArea>(null)
 
@@ -75,15 +76,15 @@ const TextArea: React.FunctionComponent<TextAreaProps> = ({
         textAreaRef.current?.setValue(defaultValue ?? '')
     }, [defaultValue])
     const autosize = React.useMemo(() => {
-        return { minRows, maxRows }
-    }, [minRows, maxRows])
+        return { minRows: editMinRows, maxRows: editMaxRows }
+    }, [editMinRows, editMaxRows])
 
     if (readOnly) {
         const needToTrimValue = defaultValue?.length && defaultValue.length > text_maxDisplayed
         const processedValue = needToTrimValue ? defaultValue.slice(0, text_maxDisplayed) : defaultValue
 
         return (
-            <TextClampWrapper minRows={textMinRows} maxRows={textMaxRows}>
+            <TextClampWrapper minRows={minRows} maxRows={maxRows}>
                 <ReadOnlyField
                     widgetName={widgetName}
                     meta={meta}

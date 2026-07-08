@@ -3,6 +3,23 @@
     display: flex;
     flex-direction: column;
 
+    &.oneRow &__menu-bar {
+      width: 75px;
+      border-bottom: none;
+    }
+
+    &.oneRow .markdown-source-editor {
+      height: var(--field-inner-height, 30px);
+    }
+
+    &.source.oneRow &__menu-bar {
+      width: 47px;
+    }
+
+    &.oneRow {
+      flex-direction: row-reverse;
+    }
+
     .cm-editor {
       padding: 1px 5px;
       display: flex;

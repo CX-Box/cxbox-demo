@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react'
 import MenuItem, { MenuBarItem } from './MenuItem'
 import './MenuBar.module.less'
-import { EDITOR_TOOLBAR_HEIGHT_RESERVE } from '@components/RichText/constants'
 import ToolbarOverflowWrapper from './ToolbarOverflowWrapper'
 import { Icon } from 'antd'
+import cn from 'classnames'
 
 export interface Props {
     items?: MenuBarItem[]
@@ -49,17 +49,7 @@ export default function MenuBar({ toolbarDisabled, items = [], rightButton, clas
     )
 
     return (
-        <div
-            className={`editor__header ${className}`}
-            style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                flexWrap: 'nowrap',
-                minHeight: EDITOR_TOOLBAR_HEIGHT_RESERVE,
-                ...style
-            }}
-        >
+        <div className={cn('editor__header', className)} style={style}>
             <ToolbarOverflowWrapper
                 items={items}
                 renderItem={renderItem}
@@ -67,7 +57,7 @@ export default function MenuBar({ toolbarDisabled, items = [], rightButton, clas
                 height={hideMainButtons ? 0 : undefined}
             />
 
-            <div style={{ marginLeft: 'auto', paddingRight: '8px' }}>
+            <div className="editor__rightButton">
                 <MenuItem
                     icon={rightButton.icon}
                     title={rightButton.title}

@@ -260,6 +260,15 @@ export type FileUploadFieldMeta = CoreFileUploadFieldMeta & {
 
 export type WidgetField = CoreWidgetField | FileUploadFieldMeta
 
+export type AppTextWidgetField = WidgetField & {
+    minRows?: number
+    maxRows?: number
+    editMinRows?: number
+    editMaxRows?: number
+}
+
+export type AppRichTextWidgetField = AppTextWidgetField
+
 export type AppNumberFieldMeta = NumberFieldMeta & {
     currency?: string
 }

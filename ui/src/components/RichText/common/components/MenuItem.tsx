@@ -75,12 +75,8 @@ export default function MenuItem({ icon, title, action, isActive = null, style, 
                 }
 
                 const itemContent = (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        {subItem.icon && (
-                            <span style={{ width: 16, height: 16, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                {subItem.icon}
-                            </span>
-                        )}
+                    <div className={styles.itemContent}>
+                        {subItem.icon && <span className={styles.itemIcon}>{subItem.icon}</span>}
                         <span>{subItem.title}</span>
                     </div>
                 )

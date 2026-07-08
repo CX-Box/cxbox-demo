@@ -1,6 +1,7 @@
 import React, { useState, useRef, useLayoutEffect, useCallback, Fragment } from 'react'
 import { MenuBarItem } from './MenuItem'
 import { useDebouncedWidthResize } from '@hooks/useDebouncedWidthResize'
+import styles from './ToolbarOverflowWrapper.module.less'
 
 export interface ToolbarOverflowWrapperProps {
     items: MenuBarItem[]
@@ -8,8 +9,6 @@ export interface ToolbarOverflowWrapperProps {
     renderMoreButton: (hiddenItems: MenuBarItem[]) => React.ReactNode
     height?: number
 }
-
-const GAP_SIZE = 4
 
 const ToolbarOverflowWrapper: React.FC<ToolbarOverflowWrapperProps> = ({ items, renderItem, renderMoreButton, height }) => {
     const containerRef = useRef<HTMLDivElement>(null)
@@ -90,23 +89,7 @@ const ToolbarOverflowWrapper: React.FC<ToolbarOverflowWrapperProps> = ({ items, 
 
     const measureBlock = React.useMemo(
         () => (
-            <div
-                ref={measureRef}
-                style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    visibility: 'hidden',
-                    pointerEvents: 'none',
-                    opacity: 0,
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: GAP_SIZE,
-                    width: 'max-content',
-                    zIndex: -1
-                }}
-                aria-hidden="true"
-            >
+            <div ref={measureRef} className={styles.measureBlock} aria-hidden="true">
                 {renderMenuItems(items, 'measure')}
                 {renderMoreButton([])}
             </div>
@@ -115,21 +98,7 @@ const ToolbarOverflowWrapper: React.FC<ToolbarOverflowWrapperProps> = ({ items, 
     )
 
     return (
-        <div
-            ref={containerRef}
-            style={{
-                position: 'relative',
-                display: 'flex',
-                flexWrap: 'nowrap',
-                alignItems: 'center',
-                flex: 1,
-                minWidth: 0,
-                width: '100%',
-                overflow: 'hidden',
-                gap: GAP_SIZE,
-                height
-            }}
-        >
+        <div ref={containerRef} className={styles.container} style={{ height }}>
             {renderMenuItems(visibleItems, 'visible')}
 
             {hiddenItems.length > 0 && renderMoreButton(hiddenItems)}

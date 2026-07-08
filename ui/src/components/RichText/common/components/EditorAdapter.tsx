@@ -6,7 +6,6 @@ import { TEXTAREA_VERTICAL_PADDING_OFFSET } from '@components/RichText/constants
 import { useBoundedResizableHeight } from '@components/RichText/wysiwyg/hooks'
 import { RichTextEditorProps } from '@components/RichText/RichTextEditor'
 import TextClampWrapper from '@components/TextClampWrapper/TextClampWrapper'
-import { richTextEditMaxRows, richTextEditMinRows, richTextMaxRows, richTextMinRows } from '@components/ui/RichText/constants'
 
 const EditorAdapter: React.FC<RichTextEditorProps> = ({
     value,
@@ -16,14 +15,16 @@ const EditorAdapter: React.FC<RichTextEditorProps> = ({
     onFocus,
     disabled,
     placeholder,
-    minRows = richTextEditMinRows,
-    maxRows = richTextEditMaxRows
+    minRows,
+    maxRows,
+    editMinRows,
+    editMaxRows
 }) => {
     const [viewMode, setViewMode] = useState<ViewMode>('wysiwyg')
 
     const { ref: editorWrapperRef, style: wrapperStyle } = useBoundedResizableHeight({
-        minRows,
-        maxRows,
+        minRows: editMinRows,
+        maxRows: editMaxRows,
         heightOffset: TEXTAREA_VERTICAL_PADDING_OFFSET,
         readOnly
     })
@@ -37,7 +38,7 @@ const EditorAdapter: React.FC<RichTextEditorProps> = ({
 
     if (readOnly) {
         return (
-            <TextClampWrapper minRows={richTextMinRows} maxRows={richTextMaxRows}>
+            <TextClampWrapper minRows={minRows} maxRows={maxRows}>
                 <WysiwygEditor
                     onViewModeChange={setViewMode}
                     value={value}
@@ -49,6 +50,8 @@ const EditorAdapter: React.FC<RichTextEditorProps> = ({
             </TextClampWrapper>
         )
     }
+
+    const onlyOneRow = editMinRows === editMaxRows && editMinRows === 1
 
     if (viewMode === 'source') {
         return (
@@ -63,6 +66,7 @@ const EditorAdapter: React.FC<RichTextEditorProps> = ({
                 onBlur={onBlur}
                 onFocus={onFocus}
                 readOnly={readOnly}
+                onlyOneRow={onlyOneRow}
             />
         )
     }
@@ -80,6 +84,7 @@ const EditorAdapter: React.FC<RichTextEditorProps> = ({
                 onBlur={onBlur}
                 onFocus={onFocus}
                 readOnly={readOnly}
+                onlyOneRow={onlyOneRow}
             />
         )
     }

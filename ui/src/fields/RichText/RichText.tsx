@@ -1,7 +1,7 @@
 import React from 'react'
 import { RichTextEditor, RichTextEditorProps } from '@components/RichText/RichTextEditor'
 import { AppRichTextWidgetField } from '@interfaces/widget'
-import { getRichTextRowsConfig } from '@components/ui/RichText/utils'
+import { getRichTextRowsConfig } from '@fields/RichText/utils'
 
 export interface RichTextProps extends Omit<RichTextEditorProps, 'minRows' | 'maxRows' | 'editMinRows' | 'editMaxRows'> {}
 

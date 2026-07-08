@@ -42,7 +42,7 @@ import FilePreviewCard from '@components/FilePreviewCard/FilePreviewCard'
 import CardList from '@components/widgets/CardList/CardList'
 import CardCarouselList from '@components/widgets/CardCarouselList/CardCarouselList'
 import { CalendarList, CalendarYearList } from '@components/widgets/CalendarList'
-import RichText from '@components/ui/RichText/RichText'
+import RichText from '@fields/RichText/RichText'
 
 export const customFields = {
     [FieldType.number]: Number,

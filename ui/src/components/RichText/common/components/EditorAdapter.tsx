@@ -18,7 +18,8 @@ const EditorAdapter: React.FC<RichTextEditorProps> = ({
     minRows,
     maxRows,
     editMinRows,
-    editMaxRows
+    editMaxRows,
+    meta
 }) => {
     const [viewMode, setViewMode] = useState<ViewMode>('wysiwyg')
 
@@ -59,7 +60,7 @@ const EditorAdapter: React.FC<RichTextEditorProps> = ({
                 disabled={disabled}
                 placeholder={placeholder}
                 wrapperRef={editorWrapperRef}
-                wrapperStyle={wrapperStyle}
+                wrapperStyle={{ width: (meta as any)?.width, ...wrapperStyle }}
                 onViewModeChange={setViewMode}
                 value={value}
                 onChange={onChange}
@@ -77,7 +78,7 @@ const EditorAdapter: React.FC<RichTextEditorProps> = ({
                 disabled={disabled}
                 placeholder={placeholder}
                 wrapperRef={editorWrapperRef}
-                wrapperStyle={wrapperStyle}
+                wrapperStyle={{ width: (meta as any)?.width, ...wrapperStyle }}
                 onViewModeChange={setViewMode}
                 value={value}
                 onChange={onChange}

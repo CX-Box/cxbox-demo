@@ -1,6 +1,6 @@
 {
   "name": "dashboardClientHierarchy",
-  "title": "Client Statistics",
+  "title": "Top 5 Clients Statistics",
   "type": "GroupingHierarchy",
   "bc": "dashboardClient",
   "fields": [
@@ -141,11 +141,11 @@
           "aggFields": [
             {
               "fieldKey": "sellerName",
-              "func": "min",
+              "func": "sum",
               "argFieldKeys": [
-                "sellerALlCountDistinct"
+                "sellerCount"
               ],
-              "description": "count distinct sellers"
+              "description": "count Sellers"
             },
             {
               "fieldKey": "saleCount",

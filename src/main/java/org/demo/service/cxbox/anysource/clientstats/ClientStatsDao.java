@@ -84,7 +84,8 @@ public class ClientStatsDao extends AbstractAnySourceBaseDAO<BaseStatsDTO> imple
 
 		return Arrays.stream(ClientStatus.values())
 				.map(status -> statisticUtils.createStatsDTO(
-						status.getValue(),
+						status.getValue() + (bc.getName().equals(CxboxRestController.dashboardClientStats.getName()) ? " Client"
+								: ""),
 						stats.getOrDefault(status, 0L),
 						status.getColorStat(),
 						status.getIcon(),

@@ -104,6 +104,8 @@ public interface ClientRepository extends JpaRepository<Client, Long>, JpaSpecif
 			GROUP BY
 					c.fullName,
 					seller.fullName
+			ORDER BY SUM(s.sum) DESC
+			LIMIT 5
 			""")
 	List<DashboardSalesClientPrj> getSalesClientByFieldOfActivity(
 			@Param("fieldOfActivities") Set<FieldOfActivity> fieldOfActivities

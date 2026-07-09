@@ -1,6 +1,6 @@
 {
   "name": "dashboardClientHierarchy",
-  "title": "Top 5 Clients Statistics",
+  "title": "Top 5 Client Statistics",
   "type": "GroupingHierarchy",
   "bc": "dashboardClient",
   "fields": [

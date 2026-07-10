@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ViewMode } from '@components/RichText/common/types'
 import WysiwygEditor from '@components/RichText/wysiwyg/components/Editor'
 import SourceEditor from '@components/RichText/source/components/Editor'
@@ -6,7 +6,6 @@ import { TEXTAREA_VERTICAL_PADDING_OFFSET } from '@components/RichText/constants
 import { useBoundedResizableHeight } from '@components/RichText/wysiwyg/hooks'
 import { RichTextEditorProps } from '@components/RichText/RichTextEditor'
 import TextClampWrapper from '@components/TextClampWrapper/TextClampWrapper'
-import { AppTextWidgetField } from '@interfaces/widget'
 
 const EditorAdapter: React.FC<RichTextEditorProps> = ({
     value,
@@ -24,7 +23,7 @@ const EditorAdapter: React.FC<RichTextEditorProps> = ({
 }) => {
     const [viewMode, setViewMode] = useState<ViewMode>('wysiwyg')
 
-    const { ref: editorWrapperRef, style: resizableHeightStyle } = useBoundedResizableHeight({
+    const { ref: editorWrapperRef, style: wrapperStyle } = useBoundedResizableHeight({
         minRows: editMinRows,
         maxRows: editMaxRows,
         heightOffset: TEXTAREA_VERTICAL_PADDING_OFFSET,
@@ -37,15 +36,6 @@ const EditorAdapter: React.FC<RichTextEditorProps> = ({
         }
         setViewMode(prev => (prev === 'source' ? 'wysiwyg' : prev))
     }, [disabled, setViewMode])
-
-    const fieldMeta = meta as AppTextWidgetField | undefined
-    const wrapperStyle = useMemo(
-        () => ({
-            width: fieldMeta?.width,
-            ...resizableHeightStyle
-        }),
-        [fieldMeta?.width, resizableHeightStyle]
-    )
 
     if (readOnly) {
         return (

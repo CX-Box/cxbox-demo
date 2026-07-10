@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { ViewMode } from '@components/RichText/common/types'
 import WysiwygEditor from '@components/RichText/wysiwyg/components/Editor'
 import SourceEditor from '@components/RichText/source/components/Editor'
-import { EDITOR_MAX_ROWS, EDITOR_MIN_ROWS, TEXTAREA_VERTICAL_PADDING_OFFSET } from '@components/RichText/constants'
+import { ONE_ROW_TEXTAREA_VERTICAL_PADDING_OFFSET, COMMON_TEXTAREA_VERTICAL_PADDING_OFFSET } from '@components/RichText/constants'
 import { useBoundedResizableHeight } from '@components/RichText/wysiwyg/hooks'
 import { RichTextEditorProps } from '@components/RichText/RichTextEditor'
+import TextClampWrapper from '@components/TextClampWrapper/TextClampWrapper'
 
 const EditorAdapter: React.FC<RichTextEditorProps> = ({
     value,
@@ -14,15 +15,17 @@ const EditorAdapter: React.FC<RichTextEditorProps> = ({
     onFocus,
     disabled,
     placeholder,
-    minRows = EDITOR_MIN_ROWS,
-    maxRows = EDITOR_MAX_ROWS
+    minRows,
+    maxRows,
+    editMinRows,
+    editMaxRows
 }) => {
     const [viewMode, setViewMode] = useState<ViewMode>('wysiwyg')
-
+    const onlyOneRow = editMinRows === editMaxRows && editMinRows === 1
     const { ref: editorWrapperRef, style: wrapperStyle } = useBoundedResizableHeight({
-        minRows,
-        maxRows,
-        heightOffset: TEXTAREA_VERTICAL_PADDING_OFFSET,
+        minRows: editMinRows,
+        maxRows: editMaxRows,
+        heightOffset: onlyOneRow ? ONE_ROW_TEXTAREA_VERTICAL_PADDING_OFFSET : COMMON_TEXTAREA_VERTICAL_PADDING_OFFSET,
         readOnly
     })
     // Force to wysiwyg in disabled mode
@@ -35,14 +38,16 @@ const EditorAdapter: React.FC<RichTextEditorProps> = ({
 
     if (readOnly) {
         return (
-            <WysiwygEditor
-                onViewModeChange={setViewMode}
-                value={value}
-                onChange={onChange}
-                onBlur={onBlur}
-                onFocus={onFocus}
-                readOnly={readOnly}
-            />
+            <TextClampWrapper minRows={minRows} maxRows={maxRows}>
+                <WysiwygEditor
+                    onViewModeChange={setViewMode}
+                    value={value}
+                    onChange={onChange}
+                    onBlur={onBlur}
+                    onFocus={onFocus}
+                    readOnly={readOnly}
+                />
+            </TextClampWrapper>
         )
     }
 
@@ -59,6 +64,7 @@ const EditorAdapter: React.FC<RichTextEditorProps> = ({
                 onBlur={onBlur}
                 onFocus={onFocus}
                 readOnly={readOnly}
+                onlyOneRow={onlyOneRow}
             />
         )
     }
@@ -76,6 +82,7 @@ const EditorAdapter: React.FC<RichTextEditorProps> = ({
                 onBlur={onBlur}
                 onFocus={onFocus}
                 readOnly={readOnly}
+                onlyOneRow={onlyOneRow}
             />
         )
     }

@@ -1,13 +1,5 @@
-export const TEXTAREA_VERTICAL_PADDING_OFFSET = 8
+const VERTICAL_PADDING = 4
+const TOOLBAR_HEIGHT = 30
 
-/**
- * Width reserve for the toolbar in Source mode, so that when switching modes
- * the width of the column in the table did not "jump".
- */
-export const EDITOR_TOOLBAR_WIDTH_RESERVE = 468
-
-export const EDITOR_TOOLBAR_HEIGHT_RESERVE = 41
-
-export const EDITOR_MIN_ROWS = 5
-
-export const EDITOR_MAX_ROWS = 10
+export const ONE_ROW_TEXTAREA_VERTICAL_PADDING_OFFSET = 2 * VERTICAL_PADDING
+export const COMMON_TEXTAREA_VERTICAL_PADDING_OFFSET = ONE_ROW_TEXTAREA_VERTICAL_PADDING_OFFSET - TOOLBAR_HEIGHT

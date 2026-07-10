@@ -19,7 +19,7 @@ import RingProgress from '../widgets/RingProgress/RingProgress'
 import DashboardCard from '../DashboardCard/DashboardCard'
 import DashboardList from '../widgets/DashboardList/DashboardList'
 import LevelMenu from '../widgets/LevelMenu/LevelMenu'
-import { Number } from '../../fields/Number/Number'
+import { Number } from '@fields/Number/Number'
 import { FormPopup } from '../widgets/FormPopup/FormPopup'
 import MultivalueField from '../../fields/Multivalue/MultivalueField'
 import InlinePickList from '../../fields/InlinePickList/InlinePickList'
@@ -42,7 +42,7 @@ import FilePreviewCard from '@components/FilePreviewCard/FilePreviewCard'
 import CardList from '@components/widgets/CardList/CardList'
 import CardCarouselList from '@components/widgets/CardCarouselList/CardCarouselList'
 import { CalendarList, CalendarYearList } from '@components/widgets/CalendarList'
-import { RichTextEditor } from '@components/RichText/RichTextEditor'
+import RichText from '@fields/RichText/RichText'
 
 export const customFields = {
     [FieldType.number]: Number,
@@ -56,7 +56,7 @@ export const customFields = {
     [FieldType.fileUpload]: FileUpload,
     [CustomFieldTypes.Time]: TimeField,
     [CustomFieldTypes.SuggestionPickList]: SuggestionPickListField,
-    [CustomFieldTypes.RichText]: RichTextEditor
+    [CustomFieldTypes.RichText]: RichText
 }
 
 export const customWidgets: Partial<Record<CustomWidgetTypes | interfaces.WidgetTypes, interfaces.CustomWidgetDescriptor>> = {

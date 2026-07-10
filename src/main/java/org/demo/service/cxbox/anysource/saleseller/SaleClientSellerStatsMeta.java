@@ -40,7 +40,14 @@ public class SaleClientSellerStatsMeta extends AnySourceFieldMetaBuilder<SaleSel
 	@Override
 	public void buildIndependentMeta(FieldsMeta<SaleSellerStatsDTO> fields, BcDescription bcDescription,
 			String parentId) {
-		//do nothing
+		fields.enableSort(SaleSellerStatsDTO_.sellerName);
+		fields.enableSort(SaleSellerStatsDTO_.clientName);
+		fields.enableSort(SaleSellerStatsDTO_.saleCount);
+		fields.enableSort(SaleSellerStatsDTO_.sum);
+		fields.enableSort(SaleSellerStatsDTO_.confirmedRevenue);
+		fields.enableSort(SaleSellerStatsDTO_.avgB2bDeal);
+		fields.enableSort(SaleSellerStatsDTO_.maxContract);
+
 	}
 
 }

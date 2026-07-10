@@ -101,14 +101,14 @@ public interface ClientRepository extends JpaRepository<Client, Long>, JpaSpecif
 			FROM Client c
 			JOIN c.salesClientList s
 			JOIN s.clientSeller seller
+			WHERE (c.id IN :topClientIds)
 			GROUP BY
 					c.fullName,
 					seller.fullName
 			ORDER BY SUM(s.sum) DESC
-			LIMIT 5
 			""")
-	List<DashboardSalesClientPrj> getSalesClientByFieldOfActivity(
-			@Param("fieldOfActivities") Set<FieldOfActivity> fieldOfActivities
+	List<DashboardSalesClientPrj> getSalesClient(
+			@Param("topClientIds") List<Long> topClientIds
 	);
 
 }

@@ -18,6 +18,7 @@ import org.demo.dto.cxbox.inner.ClientReadDTO;
 import org.demo.dto.cxbox.inner.ClientReadDTO_;
 import org.demo.entity.enums.FieldOfActivity;
 import org.demo.repository.ClientRepository;
+import org.demo.repository.SaleRepository;
 import org.demo.repository.projection.DashboardSalesClientPrj;
 import org.demo.service.cxbox.anysource.StatisticUtils;
 import org.jetbrains.annotations.NotNull;
@@ -31,7 +32,7 @@ public class SaleClientSellerStatsDao extends AbstractAnySourceBaseDAO<SaleSelle
 		AnySourceBaseDAO<SaleSellerStatsDTO> {
 
 	private final ClientRepository clientRepository;
-
+	private final SaleRepository saleRepository;
 	private final StatisticUtils statisticUtils;
 
 	@NotNull
@@ -93,7 +94,9 @@ public class SaleClientSellerStatsDao extends AbstractAnySourceBaseDAO<SaleSelle
 	public List<SaleSellerStatsDTO> getClientStats(BusinessComponent bc) {
 
 		Set<FieldOfActivity> filter = statisticUtils.getFilteredActivities(bc);
-		List<DashboardSalesClientPrj> dashboardSalesClientPrjsList = clientRepository.getSalesClientByFieldOfActivity(filter);
+		List<Long> topClientIds = saleRepository.findTopClientSellerIds(filter);
+
+		List<DashboardSalesClientPrj> dashboardSalesClientPrjsList = clientRepository.getSalesClient(topClientIds);
 		long allCountSeller = dashboardSalesClientPrjsList.stream()
 				.map(DashboardSalesClientPrj::sellerName)
 				.distinct()

@@ -16,6 +16,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -76,6 +77,18 @@ public interface SaleRepository extends JpaRepository<Sale, Long>, JpaSpecificat
 			ORDER BY year, month, sum(s.sum)
 			""")
 	List<DashboardSalesByMonthAndClientPrj> getSalesStatsByMonthAndClient(Set<FieldOfActivity> fieldOfActivities);
+
+	@Query("""
+		SELECT c.id
+		FROM Sale s JOIN s.client c
+		WHERE (:fieldOfActivities IS NULL OR EXISTS (
+					SELECT 1 FROM c.fieldOfActivities fa WHERE fa IN :fieldOfActivities
+			))
+		GROUP BY c.id
+		ORDER BY SUM(s.sum) DESC
+		LIMIT 5
+		""")
+	List<Long> findTopClientSellerIds(@Param("fieldOfActivities") Set<FieldOfActivity> fieldOfActivities);
 
 	default Specification<Sale> findSaleByTargetIdAndSellerId(@NonNull Long targetId, @Nullable Long sourceId) {
 		return (root, cq, cb) -> cb.and(

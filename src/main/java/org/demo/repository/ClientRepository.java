@@ -107,7 +107,7 @@ public interface ClientRepository extends JpaRepository<Client, Long>, JpaSpecif
 					seller.fullName
 			ORDER BY SUM(s.sum) DESC
 			""")
-	List<DashboardSalesClientPrj> getSalesClient(
+	List<DashboardSalesClientPrj> getSalesTopClient(
 			@Param("topClientIds") List<Long> topClientIds
 	);
 

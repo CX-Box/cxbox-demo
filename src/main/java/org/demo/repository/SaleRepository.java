@@ -88,7 +88,7 @@ public interface SaleRepository extends JpaRepository<Sale, Long>, JpaSpecificat
 		ORDER BY SUM(s.sum) DESC
 		LIMIT 5
 		""")
-	List<Long> findTopClientSellerIds(@Param("fieldOfActivities") Set<FieldOfActivity> fieldOfActivities);
+	List<Long> findTopClientSellerIdsByFieldOfActivity(@Param("fieldOfActivities") Set<FieldOfActivity> fieldOfActivities);
 
 	default Specification<Sale> findSaleByTargetIdAndSellerId(@NonNull Long targetId, @Nullable Long sourceId) {
 		return (root, cq, cb) -> cb.and(

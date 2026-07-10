@@ -94,9 +94,9 @@ public class SaleClientSellerStatsDao extends AbstractAnySourceBaseDAO<SaleSelle
 	public List<SaleSellerStatsDTO> getClientStats(BusinessComponent bc) {
 
 		Set<FieldOfActivity> filter = statisticUtils.getFilteredActivities(bc);
-		List<Long> topClientIds = saleRepository.findTopClientSellerIds(filter);
+		List<Long> topClientIds = saleRepository.findTopClientSellerIdsByFieldOfActivity(filter);
 
-		List<DashboardSalesClientPrj> dashboardSalesClientPrjsList = clientRepository.getSalesClient(topClientIds);
+		List<DashboardSalesClientPrj> dashboardSalesClientPrjsList = clientRepository.getSalesTopClient(topClientIds);
 		long allCountSeller = dashboardSalesClientPrjsList.stream()
 				.map(DashboardSalesClientPrj::sellerName)
 				.distinct()

@@ -36,7 +36,11 @@ const Editor: React.FC<Props> = ({
     )
 
     return (
-        <div ref={wrapperRef} className={cn('editor', 'source', { oneRow: onlyOneRow })} style={wrapperStyle}>
+        <div
+            ref={wrapperRef}
+            className={cn('editor', 'source', { oneRow: onlyOneRow, disabled: readOnly || disabled })}
+            style={wrapperStyle}
+        >
             <MenuBar className={'editor__menu-bar'} onViewModeChange={handleViewModeChange} toolbarDisabled={readOnly || disabled} />
             <SourceEditor ref={cmRef} value={value} readOnly={readOnly} onChange={onChange} placeholder={placeholder} disabled={disabled} />
         </div>

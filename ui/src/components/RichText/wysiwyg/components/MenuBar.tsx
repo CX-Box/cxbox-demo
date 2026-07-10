@@ -355,6 +355,7 @@ export default function MenuBar({ editor, onViewModeChange, toolbarDisabled, cla
         <CommonMenuBar
             className={className}
             toolbarDisabled={toolbarDisabled}
+            settingDisabled={false}
             items={menuItems}
             rightButton={{
                 key: 'Settings',

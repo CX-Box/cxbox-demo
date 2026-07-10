@@ -20,6 +20,7 @@ export default function MenuBar({ onViewModeChange, toolbarDisabled, className }
         <CommonMenuBar
             className={className}
             {...stableWidthProps}
+            settingDisabled={false}
             toolbarDisabled={toolbarDisabled}
             rightButton={{
                 key: 'Settings',

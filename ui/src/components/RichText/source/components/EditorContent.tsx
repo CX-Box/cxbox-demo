@@ -82,6 +82,8 @@ const EditorContent: ForwardRefRenderFunction<ReactCodeMirrorRef, Props> = ({ va
         }
     ])
 
+    const editable = !(disabled || readOnly)
+
     return (
         <CodeMirror
             ref={setRefs}
@@ -90,7 +92,8 @@ const EditorContent: ForwardRefRenderFunction<ReactCodeMirrorRef, Props> = ({ va
             height="100%"
             extensions={[markdown({ base: markdownLanguage, completeHTMLTags: false }), EditorView.lineWrapping]}
             onChange={handleEditorChange}
-            readOnly={disabled || readOnly}
+            readOnly={!editable}
+            editable={editable}
             className="markdown-source-editor"
             basicSetup={{
                 lineNumbers: false,

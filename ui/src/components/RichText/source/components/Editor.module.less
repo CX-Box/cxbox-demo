@@ -71,4 +71,14 @@
       }
     }
   }
+
+  .editor.disabled {
+    background: var(--field-disabled-bg-color);
+    color: var(--field-disabled-color);
+    cursor: not-allowed;
+
+    .cm-editor {
+      background: var(--field-disabled-bg-color);
+    }
+  }
 }

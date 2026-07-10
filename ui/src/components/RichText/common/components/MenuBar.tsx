@@ -11,10 +11,19 @@ export interface Props {
     className?: string
     style?: React.CSSProperties
     toolbarDisabled?: boolean
+    settingDisabled?: boolean
     hideMainButtons?: boolean
 }
 
-export default function MenuBar({ toolbarDisabled, items = [], rightButton, className = '', style = {}, hideMainButtons }: Props) {
+export default function MenuBar({
+    toolbarDisabled,
+    settingDisabled,
+    items = [],
+    rightButton,
+    className = '',
+    style = {},
+    hideMainButtons
+}: Props) {
     const renderItem = useCallback(
         item => {
             if (item.type === 'divider') {
@@ -64,7 +73,7 @@ export default function MenuBar({ toolbarDisabled, items = [], rightButton, clas
                     action={rightButton.action}
                     style={rightButton.style}
                     items={rightButton.items}
-                    disabled={toolbarDisabled || rightButton.disabled}
+                    disabled={(settingDisabled ?? toolbarDisabled) || rightButton.disabled}
                     hideArrow={true}
                 />
             </div>

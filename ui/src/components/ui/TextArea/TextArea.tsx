@@ -84,7 +84,15 @@ const TextArea: React.FunctionComponent<TextAreaProps> = ({
         const processedValue = needToTrimValue ? defaultValue.slice(0, text_maxDisplayed) : defaultValue
 
         return (
-            <TextClampWrapper minRows={minRows} maxRows={maxRows}>
+            <TextClampWrapper
+                minRows={minRows}
+                maxRows={maxRows}
+                popoverContent={
+                    <ReadOnlyField widgetName={widgetName} meta={meta}>
+                        {defaultValue}
+                    </ReadOnlyField>
+                }
+            >
                 <ReadOnlyField
                     widgetName={widgetName}
                     meta={meta}

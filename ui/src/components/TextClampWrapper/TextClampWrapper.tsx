@@ -14,6 +14,7 @@ export interface TextClampWrapperProps {
     className?: string
     tooltipClassName?: string
     style?: React.CSSProperties
+    popoverContent?: React.ReactNode
 }
 
 const DEFAULT_MIN_ROWS = 1
@@ -26,7 +27,8 @@ const TextClampWrapper: React.FC<TextClampWrapperProps> = ({
     maxRows = DEFAULT_MAX_ROWS,
     className,
     tooltipClassName,
-    style
+    style,
+    popoverContent
 }) => {
     const { t } = useTranslation()
 
@@ -111,7 +113,7 @@ const TextClampWrapper: React.FC<TextClampWrapperProps> = ({
                 <>
                     <div className={styles.gradient} />
                     <Popover
-                        content={<div className={styles.popoverContent}>{children}</div>}
+                        content={<div className={styles.popoverContent}>{popoverContent ?? children}</div>}
                         trigger="hover"
                         placement="topLeft"
                         overlayClassName={tooltipClassName}

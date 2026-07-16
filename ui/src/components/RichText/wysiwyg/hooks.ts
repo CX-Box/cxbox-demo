@@ -7,6 +7,10 @@ import Link from '@tiptap/extension-link'
 import { Markdown } from '@tiptap/markdown'
 import HardBreak from '@tiptap/extension-hard-break'
 import { Colorify } from '@components/RichText/wysiwyg/extensions/Colorify'
+import { HardBreakMarkFix } from '@components/RichText/wysiwyg/extensions/HardBreakMarkFix'
+import { CrossedMarkReopenFix } from '@components/RichText/wysiwyg/extensions/CrossedMarkReopenFix'
+import { BoldItalicOverlapFix } from '@components/RichText/wysiwyg/extensions/BoldItalicOverlapFix'
+import { MarkNestingOrderFix } from '@components/RichText/wysiwyg/extensions/MarkNestingOrderFix'
 import { Bold } from '@tiptap/extension-bold'
 import { Italic } from '@tiptap/extension-italic'
 import { Code } from '@tiptap/extension-code'
@@ -23,6 +27,16 @@ import { Gapcursor, TrailingNode, UndoRedo } from '@tiptap/extensions'
 import { ListKeymap } from '@tiptap/extension-list'
 import { Text } from '@tiptap/extension-text'
 import { isDefined } from '@utils/isDefined'
+import { marked } from 'marked'
+
+marked.use({
+    tokenizer: {
+        // Don't treat indented text (4 spaces / tab) as a code block; fenced ``` still works.
+        code() {
+            return undefined
+        }
+    }
+})
 
 const getExtensions = () => [
     Document,
@@ -46,6 +60,10 @@ const getExtensions = () => [
     CustomStrike,
     Underline,
     HardBreak,
+    HardBreakMarkFix,
+    CrossedMarkReopenFix,
+    BoldItalicOverlapFix,
+    MarkNestingOrderFix,
     Image.configure({ inline: true, allowBase64: true }),
     Link.configure({
         openOnClick: false,
@@ -53,6 +71,7 @@ const getExtensions = () => [
         protocols: ['http', 'https', 'mailto']
     }),
     Markdown.configure({
+        marked,
         markedOptions: {
             gfm: false,
             breaks: true

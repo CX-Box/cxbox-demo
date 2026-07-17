@@ -12,7 +12,7 @@ import { TableProps } from 'antd/es/table'
 import RowOperationsButton, { RowOperationsButtonInstance } from '@components/RowOperations/RowOperationsButton'
 import { useMergeRefs } from '@hooks/useMergeRefs'
 
-export interface BaseTableProps<T> extends Omit<TableProps<T>, 'scroll' | 'pagination' | 'className' | 'rowClassName'> {
+export interface BaseTableProps<T> extends Omit<TableProps<T>, 'scroll' | 'pagination' | 'className'> {
     widgetName: string
     wrapperRef: MutableRefObject<HTMLDivElement>
     operationsRef?: MutableRefObject<RowOperationsButtonInstance>
@@ -35,6 +35,7 @@ function BaseTable<T extends { id: unknown }>({
     rowKey,
     dataSource,
     onRow,
+    rowClassName,
     onHeaderRow,
     expandedRowKeys,
     expandedRowRender,
@@ -79,7 +80,9 @@ function BaseTable<T extends { id: unknown }>({
                     pagination={false}
                     onRow={onRow}
                     onHeaderRow={onHeaderRow}
-                    rowClassName={record => (record.id === bc?.cursor ? 'ant-table-row-selected' : '')}
+                    rowClassName={(record, index) =>
+                        cn(record.id === bc?.cursor && 'ant-table-row-selected', rowClassName?.(record, index))
+                    }
                     expandedRowKeys={expandedRowKeys}
                     expandIconColumnIndex={expandIconColumnIndex}
                     expandIconAsCell={false}

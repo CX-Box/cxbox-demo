@@ -76,3 +76,11 @@ export const selectBcNameFromPopupData = createUniversalSelector((state: RootSta
         return state.view.widgets.find(widget => widget.name === widgetName)?.bcName
     }
 })
+
+export const selectBcTree = createUniversalSelector((state: RootState, bcName: string | undefined) => {
+    return bcName ? state.tree[bcName] : undefined
+})
+
+export const selectHasBcTree = createUniversalSelector((state: RootState, bcName: string | undefined) => {
+    return !!selectBcTree(state, bcName)
+})

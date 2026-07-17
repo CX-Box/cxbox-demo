@@ -15,7 +15,7 @@ import { buildBcUrl } from '@utils/buildBcUrl'
 import { isPopupWidgetFamily } from '@utils/isPopupWidgetFamily'
 import { ReactComponent as folder } from '../../assets/icons/folder.svg'
 import styles from './InlinePickList.less'
-import { AppWidgetMeta } from '@interfaces/widget'
+import { AppWidgetMeta, CustomWidgetTypes } from '@interfaces/widget'
 
 interface Props extends Omit<BaseFieldProps, 'meta'> {
     meta: InlinePickListFieldMeta
@@ -64,7 +64,9 @@ const InlinePickList: React.FunctionComponent<Props> = ({
     const data = useAppSelector(state => (bcName && popupBcName && state.data[popupBcName]) || emptyData)
 
     const popupWidget = useAppSelector(state =>
-        state.view.widgets.find(i => i.bcName === popupBcName && i.type === WidgetTypes.PickListPopup)
+        state.view.widgets.find(
+            i => i.bcName === popupBcName && (i.type === WidgetTypes.PickListPopup || i.type === CustomWidgetTypes.PickTreePopup)
+        )
     )
 
     const processedSearchSpec = searchSpec || pickMap[fieldName]

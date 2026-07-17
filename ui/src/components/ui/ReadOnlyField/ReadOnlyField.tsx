@@ -3,8 +3,9 @@ import cn from 'classnames'
 import SearchHighlight from '@components/ui/SearchHightlight/SearchHightlight'
 import DrillDown from '@components/ui/DrillDown/DrillDown'
 import { useWidgetHighlightFilter } from '@hooks/useWidgetFilter'
-import { utils, WidgetFieldBase } from '@cxbox-ui/core'
+import { WidgetFieldBase } from '@cxbox-ui/core'
 import styles from './ReadOnlyField.less'
+import { getFieldHighlightSearch } from '@utils/filterMatch'
 
 export interface ReadOnlyFieldProps {
     /**
@@ -30,14 +31,12 @@ export interface ReadOnlyFieldProps {
  */
 const ReadOnlyField: React.FunctionComponent<ReadOnlyFieldProps> = props => {
     const filter = useWidgetHighlightFilter(props.widgetName as string, props.meta?.key as string)
+    const source = (props.children || '').toString()
+    const highlightSearch = getFieldHighlightSearch(source, filter, props.meta?.type)
     const displayedValue = (
         <>
-            {filter ? (
-                <SearchHighlight
-                    source={(props.children || '').toString()}
-                    search={utils.escapedSrc(filter.value?.toString() as string)}
-                    match={formatString => <b>{formatString}</b>}
-                />
+            {highlightSearch ? (
+                <SearchHighlight source={source} search={highlightSearch} match={formatString => <b>{formatString}</b>} />
             ) : (
                 props.children
             )}

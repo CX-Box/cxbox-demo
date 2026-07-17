@@ -10,6 +10,7 @@ import { actions, DataItem, interfaces, WidgetTypes } from '@cxbox-ui/core'
 import { DataValue } from '@cxbox-ui/schema'
 import styles from './MultivalueField.less'
 import cn from 'classnames'
+import { CustomWidgetTypes } from '@interfaces/widget'
 
 export interface MultivalueFieldOwnProps extends BaseFieldProps {
     cursor: string
@@ -50,7 +51,9 @@ const MultivalueField: FunctionComponent<MultivalueFieldProps> = props => {
     // TODO 2.0.0: assocWidget should be found by widgetName
     const assocWidget = useAppSelector(state =>
         state.view.widgets.find(
-            (widget: interfaces.WidgetMeta) => widget.bcName === props.popupBcName && widget.type === WidgetTypes.AssocListPopup
+            (widget: interfaces.WidgetMeta) =>
+                widget.bcName === props.popupBcName &&
+                (widget.type === WidgetTypes.AssocListPopup || widget.type === CustomWidgetTypes.AssocTreePopup)
         )
     )
 

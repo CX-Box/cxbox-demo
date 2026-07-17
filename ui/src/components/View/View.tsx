@@ -43,6 +43,9 @@ import CardList from '@components/widgets/CardList/CardList'
 import CardCarouselList from '@components/widgets/CardCarouselList/CardCarouselList'
 import { CalendarList, CalendarYearList } from '@components/widgets/CalendarList'
 import RichText from '@fields/RichText/RichText'
+import TreeTable from '../widgets/Table/TreeTable'
+import AssocTreePopup from '../widgets/AssocTreePopup/AssocTreePopup'
+import PickTreePopup from '@components/widgets/PickTreePopup/PickTreePopup'
 
 export const customFields = {
     [FieldType.number]: Number,
@@ -87,7 +90,10 @@ export const customWidgets: Partial<Record<CustomWidgetTypes | interfaces.Widget
     [CustomWidgetTypes.CalendarYearList]: { component: CalendarYearList, card: null },
     [CustomWidgetTypes.CardList]: { component: CardList },
     [CustomWidgetTypes.CardCarouselList]: { component: CardCarouselList },
-    [CustomWidgetTypes.RelationGraph]: { component: Chart, card: DashboardCard }
+    [CustomWidgetTypes.RelationGraph]: { component: Chart, card: DashboardCard },
+    [CustomWidgetTypes.Tree]: { component: TreeTable, card: DashboardCard },
+    [CustomWidgetTypes.AssocTreePopup]: { component: AssocTreePopup, isPopup: true, card: null },
+    [CustomWidgetTypes.PickTreePopup]: { component: PickTreePopup, isPopup: true, card: null }
 }
 
 utils.extendPopupWidgetTypes(customWidgets)

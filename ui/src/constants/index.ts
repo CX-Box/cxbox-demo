@@ -14,6 +14,9 @@ export const FIELDS = {
     MASS_OPERATION: {
         ERROR_MESSAGE: 'errorMessage',
         MASS_IDS: 'massIds_'
+    },
+    TREE: {
+        PARENT_ID: 'parentId'
     }
 } as const
 

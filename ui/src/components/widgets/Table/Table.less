@@ -134,6 +134,13 @@
                 background: #fafafa !important;
             }
         }
+      // Disabled highlighting for pseudo tree rows
+      .ant-table-row:hover:has([data-pseudo-row]),
+      .ant-table-row-hover:has([data-pseudo-row]) {
+        > td {
+          background: transparent !important;
+        }
+      }
 
         .filtersContainer {
             display: flex;
@@ -329,5 +336,24 @@
     color: #f5222d;
     &:global(.anticon-warning) {
         font-size: 10px;
+    }
+}
+
+.implicitCheckboxMuted {
+  :global(.ant-checkbox-checked .ant-checkbox-inner) {
+    background-color: #75c0fe;
+    border-color: #75c0fe;
+  }
+
+  :global(.ant-checkbox-indeterminate .ant-checkbox-inner::after) {
+    background-color: #75c0fe;
+  }
+}
+
+.treeFilterMatch:global(.ant-table-row) > td,
+.treeFilterMatch:global(.ant-table-row):hover > td {}
+.tableContainer {
+    tr[data-record-type="show-more"] td {
+        padding-top: var(--tree-show-more-padding-top, 20px);
     }
 }

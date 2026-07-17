@@ -1,32 +1,18 @@
 import { useAppSelector } from '@store'
-import { getBcPaginationTypes } from '@components/ui/Pagination/utils'
-import { selectBc } from '@selectors/selectors'
+import { usePaginationState } from '@features/pagination/hooks/usePaginationState'
+import { useBcPaginationModes } from '@features/pagination/hooks/useBcPaginationModes'
+import { getPaginationLimitValidation } from '@features/pagination/utils/getPaginationLimitValidation'
 
 export const useCheckLimit = (bcName: string) => {
-    const bc = useAppSelector(selectBc(bcName))
     const bcCount = useAppSelector(state => state.view.bcRecordsCount[bcName]?.count ?? state.data[bcName]?.length)
-    const widgets = useAppSelector(state => state.view.widgets)
-    const alternativePagination = useAppSelector(state => state.screen.alternativePagination)
-    const paginationTypes = getBcPaginationTypes(bcName, widgets, alternativePagination)
-
-    let isIncorrectLimit: boolean
-    let bcCountForShowing: string | number
-
-    if (paginationTypes.has('nextAndPreviousWithCount')) {
-        isIncorrectLimit = bc?.limit != null && bcCount != null && bcCount > bc?.limit
-        bcCountForShowing = bcCount
-    } else if (paginationTypes.has('nextAndPreviousWithHasNext')) {
-        isIncorrectLimit = bc?.hasNext || bc?.page !== 1
-        bcCountForShowing = `${bc?.limit}+`
-    } else {
-        isIncorrectLimit = (!!bc?.limit && bcCount >= bc?.limit) || Boolean(bc?.hasNext) || bc?.page !== 1
-        bcCountForShowing = bcCount
-    }
+    const pagination = usePaginationState(bcName)
+    const modes = useBcPaginationModes(bcName)
+    const validation = getPaginationLimitValidation({ ...pagination, modes, count: bcCount })
 
     return {
-        bcPageLimit: bc?.limit,
+        bcPageLimit: pagination.limit,
         bcCount,
-        isIncorrectLimit,
-        bcCountForShowing: String(bcCountForShowing)
+        isIncorrectLimit: validation.incorrect,
+        bcCountForShowing: validation.countLabel
     }
 }

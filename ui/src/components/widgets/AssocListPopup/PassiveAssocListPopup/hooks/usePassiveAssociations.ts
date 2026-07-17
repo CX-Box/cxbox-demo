@@ -5,7 +5,7 @@ import { shallowEqual, useDispatch } from 'react-redux'
 import { actions, interfaces } from '@cxbox-ui/core'
 import { buildBcUrl } from '@utils/buildBcUrl'
 
-function useMultivalueValues() {
+export function useMultivalueValues() {
     const { selectedItemsFromCalleePendingData, selectedItemsFromCalleeData } = useAppSelector(state => {
         const popupData = state.view.popupData
 
@@ -30,7 +30,7 @@ function useMultivalueValues() {
     }, [selectedItemsFromCalleeData, selectedItemsFromCalleePendingData])
 }
 
-function useMultivalueHandlers(currentValues: MultivalueSingleValue[]) {
+export function useMultivalueHandlers(currentValues: MultivalueSingleValue[]) {
     const { bcName, cursor, associateFieldKey, assocValueKey } = useAppSelector(state => {
         const { calleeBCName = '', associateFieldKey = '', assocValueKey = '' } = state.view.popupData as interfaces.PopupData
         const calleeBc = state.screen.bo.bc[calleeBCName]
@@ -123,6 +123,7 @@ function useMultivalueHandlers(currentValues: MultivalueSingleValue[]) {
     )
 
     return {
+        changeDataItem,
         changeItem,
         selectItem,
         selectAllItems,

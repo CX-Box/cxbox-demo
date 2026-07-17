@@ -1,6 +1,8 @@
 import { EAggFunction } from '@constants/aggregation'
 import {
     DictionaryFieldMeta,
+    FieldType,
+    MultivalueFieldMeta,
     NumberFieldMeta,
     PickListFieldMeta,
     WidgetFormMeta,
@@ -16,12 +18,25 @@ import { TableSettingsItem } from '@interfaces/tableSettings'
 import { IAggField, IAggLevel } from '@interfaces/groupingHierarchy'
 import { PaginationMode } from '@constants/pagination'
 import { SignaturePackage, SignatureType } from '@constants/cadesPlugin'
+import { TREE_EXPANDED_STATE_AFTER_FILTERS, TREE_SEARCH_MODES } from '@constants/tree'
 
 export enum CustomFieldTypes {
     MultipleSelect = 'multipleSelect',
     Time = 'time',
     SuggestionPickList = 'suggestionPickList',
-    RichText = 'richText'
+    RichText = 'richText',
+    multivalueTree = 'multivalueTree',
+    pickTree = 'pickTree',
+    inlinePickTree = 'inline-pickTree'
+}
+
+export type AppMultivalueFieldMeta = Omit<MultivalueFieldMeta, 'type'> & {
+    type: FieldType.multivalue | CustomFieldTypes.multivalueTree
+}
+
+export type AppPickFieldMeta = Omit<PickListFieldMeta, 'type'> & {
+    type: FieldType.pickList | FieldType.inlinePickList | CustomFieldTypes.pickTree | CustomFieldTypes.inlinePickTree
+    searchSpec?: string
 }
 
 export enum CustomWidgetTypes {
@@ -44,14 +59,20 @@ export enum CustomWidgetTypes {
     CalendarList = 'CalendarList',
     CalendarYearList = 'CalendarYearList',
     CardList = 'CardList',
-    CardCarouselList = 'CardCarouselList'
+    CardCarouselList = 'CardCarouselList',
+    Tree = 'Tree',
+    AssocTreePopup = 'AssocTreePopup',
+    PickTreePopup = 'PickTreePopup'
 }
 
 export const removeRecordOperationWidgets: Array<WidgetTypes | string> = [
     WidgetTypes.List,
+    CustomWidgetTypes.Tree,
     CustomWidgetTypes.GroupingHierarchy,
     WidgetTypes.PickListPopup,
+    CustomWidgetTypes.PickTreePopup,
     WidgetTypes.AssocListPopup,
+    CustomWidgetTypes.AssocTreePopup,
     CustomWidgetTypes.CalendarList,
     CustomWidgetTypes.CalendarYearList,
     CustomWidgetTypes.CardList,
@@ -135,6 +156,9 @@ export type CryptoGeneratorItem = {
     encryptedFileBaseNameKey?: string
 }
 
+export type TreeSearchModes = ValueOf<typeof TREE_SEARCH_MODES> | string
+export type TreeExpandedStateAfterFilter = ValueOf<typeof TREE_EXPANDED_STATE_AFTER_FILTERS>
+
 export interface AppWidgetMeta extends WidgetMeta {
     personalFields?: TableSettingsItem | null // TODO make mandatory
     options?: WidgetOptions & {
@@ -160,6 +184,9 @@ export interface AppWidgetMeta extends WidgetMeta {
         fullTextSearch?: {
             enabled?: boolean
             placeholder?: string
+            highLight?: {
+                fieldKeys?: string[]
+            }
         }
 
         additional?: {
@@ -199,6 +226,15 @@ export interface AppWidgetMeta extends WidgetMeta {
 
         calendar?: CalendarOption
         cryptoGenerator?: CryptoGeneratorItem[]
+        tree?: {
+            parentFieldKey?: string // default: parentId
+            isLeafFieldKey?: string // default: isLeaf
+            searchModes?: TreeSearchModes[]
+            onFilterApplyNestLevel?: number
+            insertPosition?: 'start' | 'end'
+            selection?: 'node' | 'nodeAndLeaf' | 'leaf'
+            confirms?: ('paginationUnselect' | 'paginationSelect')[]
+        }
     }
 }
 

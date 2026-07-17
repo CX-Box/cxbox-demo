@@ -7,7 +7,7 @@ export function getRGBFromColor(color: string) {
     document.body.appendChild(dummyElement)
 
     const computedStyle = window.getComputedStyle(dummyElement)
-    const rgbString = computedStyle.color // get the color in rgb(r, g, b) оr rgba(r, g, b, a) format
+    const rgbString = computedStyle.color // get the color in rgb(r, g, b) or rgba(r, g, b, a) format
 
     document.body.removeChild(dummyElement)
 

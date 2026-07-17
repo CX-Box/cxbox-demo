@@ -2,14 +2,11 @@ import { useAppSelector } from '@store'
 import { useCallback } from 'react'
 import { useDispatch } from 'react-redux'
 import { actions } from '@actions'
+import { usePaginationState } from '@features/pagination/hooks/usePaginationState'
 
 export function usePagination(widgetName: string) {
     const bcName = useAppSelector(state => state.view.widgets.find(item => item.name === widgetName)?.bcName) as string
-    const hasNext = useAppSelector(state => state.screen.bo.bc[bcName]?.hasNext)
-    const page = useAppSelector(state => state.screen.bo.bc[bcName]?.page) as number
-    const limit = useAppSelector(state => state.screen.bo.bc[bcName]?.limit) as number
-    const defaultLimit = useAppSelector(state => state.screen.bo.bc[bcName]?.defaultLimit) as number
-    const total = useAppSelector(state => state.view.bcRecordsCount[bcName]?.count)
+    const paginationState = usePaginationState(bcName)
 
     const dispatch = useDispatch()
 
@@ -21,25 +18,17 @@ export function usePagination(widgetName: string) {
     )
 
     const prevPage = useCallback(() => {
-        const newPage = page - 1
-
-        changePage(newPage)
-    }, [page, changePage])
+        changePage(paginationState.page - 1)
+    }, [paginationState.page, changePage])
 
     const nextPage = useCallback(() => {
-        const newPage = page + 1
-
-        changePage(newPage)
-    }, [page, changePage])
+        changePage(paginationState.page + 1)
+    }, [paginationState.page, changePage])
 
     return {
         nextPage,
         prevPage,
-        hasNext,
-        page,
-        changePage,
-        limit,
-        defaultLimit,
-        total
+        ...paginationState,
+        changePage
     }
 }

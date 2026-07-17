@@ -1,13 +1,13 @@
 import React from 'react'
-import { shallowEqual } from 'react-redux'
 import { Button } from 'antd'
 import Limit from './components/Limit'
 import AlternativePaginationButton from './components/AlternativePaginationButton/AlternativePaginationButton'
-import { useWidgetPaginationLimit } from './hooks/useWidgetPaginationLimit'
+import { useWidgetPaginationLimit } from '@features/pagination/hooks/useWidgetPaginationLimit'
 import { usePagination } from '@hooks/usePagination'
 import { useAppSelector } from '@store'
-import { PaginationMode } from '@constants/pagination'
+import { PAGINATION_MODES, PaginationMode } from '@constants/pagination'
 import { AppWidgetMeta } from '@interfaces/widget'
+import { usePaginationControls } from '@features/pagination/hooks/usePaginationControls'
 import styles from './ArrowPagination.less'
 
 interface ArrowPaginationProps {
@@ -24,23 +24,17 @@ const ArrowPagination: React.FC<ArrowPaginationProps> = ({ meta, alternativeType
 
     const { changePageLimit, hideLimitOptions, value: pageLimit, options } = useWidgetPaginationLimit(meta)
 
-    const { hidePagination, disabledNextButton } = useAppSelector(state => {
-        const data = state.data[meta.bcName]
+    const loadedCount = useAppSelector(state => state.data[meta.bcName]?.length ?? 0)
+    const controls = usePaginationControls({
+        type: mode === 'smart' ? PAGINATION_MODES.nextAndPreviousSmart : PAGINATION_MODES.nextAndPreviousWithHasNext,
+        page: bcPage,
+        limit,
+        defaultLimit,
+        loadedCount,
+        hasNext
+    })
 
-        if (mode === 'smart') {
-            return {
-                hidePagination: data?.length < limit && data?.length < defaultLimit && bcPage === 1,
-                disabledNextButton: data?.length < limit
-            }
-        } else {
-            return {
-                hidePagination: !hasNext && data?.length <= defaultLimit && bcPage === 1,
-                disabledNextButton: !hasNext
-            }
-        }
-    }, shallowEqual)
-
-    if (hidePagination) {
+    if (!controls.visible) {
         return null
     }
 
@@ -49,13 +43,13 @@ const ArrowPagination: React.FC<ArrowPaginationProps> = ({ meta, alternativeType
             <div className={styles.arrows}>
                 <Button
                     className={styles.prevButton}
-                    disabled={bcPage < 2}
+                    disabled={controls.previousDisabled}
                     icon="left"
                     data-test-widget-list-pagination-prev={true}
                     onClick={prevPage}
                 />
 
-                <Button disabled={disabledNextButton} icon="right" data-test-widget-list-pagination-next={true} onClick={nextPage} />
+                <Button disabled={controls.nextDisabled} icon="right" data-test-widget-list-pagination-next={true} onClick={nextPage} />
             </div>
 
             {!hideLimitOptions && (

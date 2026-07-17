@@ -6,6 +6,8 @@ import { AxiosError } from 'axios'
 import { AnyAction } from '@reduxjs/toolkit'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import { selectBcNameFromPopupData, selectBcUrlRowMeta } from '@selectors/selectors'
+import { bcFetchDataEpic } from './data/bcFetchDataEpic'
+import { postInvokeHasRefreshBc } from '@utils/postInvokeHasRefreshBc'
 
 // TODO update this epic in the kernel to the current implementation
 /**
@@ -80,9 +82,9 @@ export const bcSaveDataEpic: RootEpic = (action$, state$, { api, utils: internal
                 .filter(entry => {
                     const [childBcName] = entry
                     // Solves the problem of calling data for rows that can be changed/deleted in the next action
-                    const bkForNextAction = action.payload.onSuccessAction?.payload?.bcName
+                    const bcForNextAction = action.payload.onSuccessAction?.payload?.bcName
 
-                    return bkForNextAction ? bkForNextAction !== childBcName : true
+                    return bcForNextAction ? bcForNextAction !== childBcName : true
                 })
                 .map(entry => {
                     const [childBcName, widgetNames] = entry
@@ -93,13 +95,14 @@ export const bcSaveDataEpic: RootEpic = (action$, state$, { api, utils: internal
             return api.saveBcData(state.screen.screenName, bcUrl, { ...pendingChanges, vstamp: dataItem?.vstamp as number }, context).pipe(
                 mergeMap(data => {
                     const postInvoke = data.postActions?.[0]
+                    const withoutBcForceUpdate = postInvokeHasRefreshBc(bcName, postInvoke)
                     const responseDataItem = data.record
                     return concat(
                         of(actions.setOperationFinished({ bcName, operationType: OperationTypeCrud.save })),
                         of(actions.bcSaveDataSuccess({ bcName, cursor, dataItem: responseDataItem })),
                         of(actions.bcFetchRowMeta({ widgetName, bcName })),
                         of(actions.deselectTableRow()),
-                        of(...fetchChildrenBcData),
+                        withoutBcForceUpdate ? EMPTY : of(...fetchChildrenBcData), // Solves the problem of duplicate requests
                         postInvoke
                             ? of(
                                   actions.processPostInvoke({
@@ -153,5 +156,6 @@ export const bcSaveDataEpic: RootEpic = (action$, state$, { api, utils: internal
     )
 
 export const dataEpics = {
-    bcSaveDataEpic
+    bcSaveDataEpic,
+    bcFetchDataEpic // customized core epic
 }

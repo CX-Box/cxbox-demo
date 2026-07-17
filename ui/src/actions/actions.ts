@@ -101,6 +101,7 @@ export const changePageLimit = createAction<{ bcName: string; limit: number }>('
 export const bcSaveDataSuccess = createAction<ReturnType<typeof actions.bcSaveDataSuccess>['payload'] & { sortedGroupKeys?: string[] }>(
     'bcSaveDataSuccess'
 )
+export const bcForceUpdate = createAction<ReturnType<typeof actions.bcForceUpdate>['payload'] & { nodeId?: string }>('bcForceUpdate')
 /**
  * sortedGroupKeys - responsible for sorting fields after updating a record for GroupingHierarchy widget
  */

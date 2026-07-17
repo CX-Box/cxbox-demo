@@ -10,7 +10,8 @@ import {
     OperationTypeCrud,
     PendingValidationFailsFormat,
     PopupWidgetTypes,
-    utils
+    utils,
+    WidgetMeta
 } from '@cxbox-ui/core'
 import { EMPTY_ARRAY, FIELDS } from '@constants'
 import { actions, sendOperationSuccess, setBcCount } from '@actions'
@@ -21,15 +22,20 @@ import { AppWidgetGroupingHierarchyMeta, AppWidgetMeta } from '@interfaces/widge
 import { getGroupingHierarchyWidget } from '@utils/groupingHierarchy'
 import { DataItem } from '@cxbox-ui/schema'
 import { postInvokeHasRefreshBc } from '@utils/postInvokeHasRefreshBc'
-import { findWidgetHasCount } from '@components/ui/Pagination/utils'
 import { getInternalWidgets } from '@utils/getInternalWidgets'
 import { closePopupRules } from './utils/closePopup'
 import { isDefined } from '@utils/isDefined'
 import { SECONDARY_DEFAULT_PAGINATION_TYPE_WITH_COUNT } from '@constants/pagination'
+import { findWidgetHasCount } from '@features/pagination/utils/common'
+import { treeActions } from '@slices/tree'
+import { FilterType } from '@interfaces/filters'
+import { isTreeWidget } from '@constants/widget'
+import { DEFAULT_TREE_PARENT_FIELD_KEY } from '@utils/tree'
+import { selectBcFilters } from '@selectors/selectors'
 
 const getWidgetsForRowMetaUpdate = (state: RootState, activeBcName: string) => {
     const { widgets, pendingDataChanges } = state.view
-    const bcDictionary: { [bcName: string]: AppWidgetMeta } = {}
+    const bcDictionary: { [bcName: string]: WidgetMeta } = {}
 
     widgets.forEach(widget => {
         if (
@@ -72,12 +78,20 @@ export const updateRowMetaForRelatedBcEpic: RootEpic = (action$, state$) =>
 
 const bcFetchCountEpic: RootEpic = (action$, state$, { api }) =>
     action$.pipe(
-        filter(isAnyOf(actions.bcFetchDataSuccess, actions.selectView, actions.setAlternativePaginationType)),
+        filter(
+            isAnyOf(
+                actions.bcFetchDataSuccess,
+                actions.selectView,
+                actions.setAlternativePaginationType,
+                treeActions.fetchChildNodeDataSuccess,
+                treeActions.applyFilterSuccess
+            )
+        ),
         mergeMap(action => {
             const state = state$.value
 
             if (actions.selectView.match(action)) {
-                const widgets = state.view.widgets
+                const widgets = state.view.widgets as AppWidgetMeta[]
                 const alternativePagination = state.screen.alternativePagination
                 const data = state.data
                 const bcList = [...new Set(widgets.map(widget => widget.bcName))]
@@ -97,17 +111,75 @@ const bcFetchCountEpic: RootEpic = (action$, state$, { api }) =>
                 )
             }
 
+            const widgets = state.view.widgets as AppWidgetMeta[]
+            const screenName = state.screen.screenName
+
+            if (treeActions.applyFilterSuccess.match(action)) {
+                const { bcName } = action.payload
+                const widgetWithCount = findWidgetHasCount(bcName, widgets, state.screen.alternativePagination)
+                const treeState = state.tree[bcName]
+
+                if (!widgetWithCount || treeState?.filterPagination.count !== undefined) {
+                    return EMPTY
+                }
+
+                const parentFieldKey =
+                    (widgets.find(widget => widget.bcName === bcName && isTreeWidget(widget)) as AppWidgetMeta | undefined)?.options?.tree
+                        ?.parentFieldKey ?? DEFAULT_TREE_PARENT_FIELD_KEY
+                const userFilters = selectBcFilters(state, bcName)?.filter(filter => filter.fieldName !== parentFieldKey) ?? []
+                const bcUrl = buildBcUrl(bcName)
+
+                return api.fetchBcCount(screenName, bcUrl, utils.getFilters(userFilters)).pipe(
+                    mergeMap(({ data: count }) => of(treeActions.setFilterCount({ bcName, count }))),
+                    catchError((error: AxiosError) => utils.createApiErrorObservable(error))
+                )
+            }
+
+            if (treeActions.fetchChildNodeDataSuccess.match(action)) {
+                const { bcName, parentId } = action.payload
+                if (parentId === undefined) {
+                    return EMPTY
+                }
+
+                const widgetWithCount = findWidgetHasCount(action.payload.bcName, widgets, state.screen.alternativePagination)
+                const treeWidgets = widgets.filter(widget => isTreeWidget(widget)) as AppWidgetMeta[] | undefined
+                const parentFieldKey =
+                    treeWidgets?.find(widget => isDefined(widget.options?.tree?.parentFieldKey))?.options?.tree?.parentFieldKey ??
+                    DEFAULT_TREE_PARENT_FIELD_KEY
+                if (widgetWithCount) {
+                    const parentFilter = {
+                        fieldName: parentFieldKey,
+                        type: parentId === null ? FilterType.specified : FilterType.equals,
+                        value: parentId === null ? false : parentId
+                    }
+
+                    const filters = utils.getFilters([parentFilter])
+                    const bcUrl = buildBcUrl(bcName)
+                    return api.fetchBcCount(screenName, bcUrl, filters).pipe(
+                        mergeMap(({ data: count }) => {
+                            return concat(
+                                parentId === null ? of(setBcCount({ bcName, count })) : EMPTY,
+                                of(treeActions.setTreeChildCount({ parentId, bcName, count }))
+                            )
+                        }),
+                        catchError((error: AxiosError) => utils.createApiErrorObservable(error))
+                    )
+                }
+
+                return EMPTY
+            }
+
             let widgetWithCount = null
+            // TODO add the logic for working with AlternativePagination for the tree
             if (
                 actions.setAlternativePaginationType.match(action) &&
                 action.payload.type === SECONDARY_DEFAULT_PAGINATION_TYPE_WITH_COUNT
             ) {
-                const widgets: AppWidgetMeta[] = state.view.widgets
                 widgetWithCount = widgets?.find(item => item.name === action.payload.widgetName)
             }
 
             if (actions.bcFetchDataSuccess.match(action)) {
-                widgetWithCount = findWidgetHasCount(action.payload.bcName, state.view.widgets, state.screen.alternativePagination)
+                widgetWithCount = findWidgetHasCount(action.payload.bcName, widgets, state.screen.alternativePagination)
             }
 
             if (widgetWithCount) {
@@ -168,6 +240,7 @@ export const sendOperationEpic: RootEpic = (action$, state$, { api }) =>
                       )
                     : undefined
             const isMassOperation = currentOperationScope === 'mass'
+            const treeEnabled = state.view.widgets?.some(widget => widget.bcName === bcName && isTreeWidget(widget))
 
             const pendingChanges = utils.removeDisabledFields(state.view.pendingDataChanges[bcName]?.[bc?.cursor as string], rowMeta)
 
@@ -200,7 +273,10 @@ export const sendOperationEpic: RootEpic = (action$, state$, { api }) =>
                     // TODO: Remove in 2.0.0 in favor of postInvokeConfirm (is this todo needed?)
                     const preInvoke = response.preInvoke as OperationPreInvoke
                     const responseIds = response[FIELDS.MASS_OPERATION.MASS_IDS]
-                    const withoutBcForceUpdate = postInvokeHasRefreshBc(bcName, postInvoke) || isMassOperation
+                    const hasDataItem = !!dataItem && isDefined(dataItem[FIELDS.TECHNICAL.ID])
+                    const refreshNodeId = treeEnabled && !hasDataItem ? cursor ?? undefined : undefined
+                    const withoutBcForceUpdate =
+                        postInvokeHasRefreshBc(bcName, postInvoke) || isMassOperation || (treeEnabled && hasDataItem)
 
                     // defaultSaveOperation mean that executed custom autosave and postAction will be ignored
                     // drop pendingChanges and onSuccessAction execute instead
@@ -215,7 +291,7 @@ export const sendOperationEpic: RootEpic = (action$, state$, { api }) =>
                                   isMassOperation && action.payload.onSuccessAction ? of(action.payload.onSuccessAction) : EMPTY,
                                   isMassOperation && responseIds ? of(actions.clearSelectedRows({ bcName })) : EMPTY,
                                   isMassOperation && responseIds ? of(actions.selectRows({ bcName, dataItems: responseIds })) : EMPTY,
-                                  withoutBcForceUpdate ? EMPTY : of(actions.bcForceUpdate({ bcName })),
+                                  withoutBcForceUpdate ? EMPTY : of(actions.bcForceUpdate({ bcName, nodeId: refreshNodeId })),
                                   ...(isMassOperation
                                       ? [of(actions.setPendingPostInvoke({ bcName, operationType, postInvoke }))]
                                       : postOperationRoutine(widgetName, postInvoke, preInvoke, operationType, bcName))
@@ -391,6 +467,38 @@ const bcDeleteDataEpic: RootEpic = (action$, state$, { api }) =>
                         )
                     }
 
+                    const treeEnabled =
+                        !!state.tree[bcName] && state.view.widgets.some(widget => widget.bcName === bcName && isTreeWidget(widget))
+                    if (treeEnabled) {
+                        const tree = state.tree[bcName]
+                        const node = tree?.nodes[cursor]
+                        const parentIdValueFromNode = node?.[tree?.parentFieldKey ?? DEFAULT_TREE_PARENT_FIELD_KEY]
+                        const parentId = isDefined(parentIdValueFromNode) ? String(parentIdValueFromNode) : String(null)
+                        const siblings = tree?.childIdsByParent[parentId] ?? []
+                        const nodeIndex = siblings.indexOf(cursor)
+                        const previousCursor =
+                            siblings[nodeIndex - 1] ??
+                            siblings[nodeIndex + 1] ??
+                            (parentId !== String(null) && tree?.nodes[parentId] ? parentId : undefined) ??
+                            tree?.childIdsByParent[String(null)]?.find(id => id !== cursor) ??
+                            null
+
+                        return concat(
+                            of(actions.setOperationFinished({ bcName, operationType: OperationTypeCrud.delete })),
+                            isTargetFormatPVF ? of(actions.bcCancelPendingChanges({ bcNames: [bcName] })) : EMPTY,
+                            of(
+                                treeActions.removeNode({
+                                    bcName,
+                                    nodeId: cursor,
+                                    limit: widget?.limit || state.screen.bo.bc[bcName]?.limit
+                                })
+                            ),
+                            of(actions.bcChangeCursors({ cursorsMap: { [bcName]: previousCursor } })),
+                            of(actions.bcFetchRowMeta({ widgetName, bcName })),
+                            postInvoke ? of(actions.processPostInvoke({ bcName, postInvoke, cursor, widgetName })) : EMPTY
+                        )
+                    }
+
                     return concat(
                         of(actions.setOperationFinished({ bcName, operationType: OperationTypeCrud.delete })),
                         isTargetFormatPVF ? of(actions.bcCancelPendingChanges({ bcNames: [bcName] })) : EMPTY,
@@ -505,7 +613,7 @@ const checkWidgetsEpic: RootEpic = (action$, state$, { api }) =>
     action$.pipe(
         filter(actions.selectView.match),
         mergeMap(() => {
-            const widgets = state$.value.view.widgets
+            const widgets = state$.value.view.widgets as AppWidgetMeta[]
             const widgetsMap = widgets.reduce((acc, widget) => {
                 acc[widget.name] = widget
                 return acc

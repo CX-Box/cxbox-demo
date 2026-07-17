@@ -10,13 +10,14 @@ import { actions, DataItem, interfaces, WidgetTypes } from '@cxbox-ui/core'
 import { DataValue } from '@cxbox-ui/schema'
 import styles from './MultivalueField.less'
 import cn from 'classnames'
+import { AppMultivalueFieldMeta, CustomFieldTypes, CustomWidgetTypes } from '@interfaces/widget'
 
-export interface MultivalueFieldOwnProps extends BaseFieldProps {
+export interface MultivalueFieldOwnProps extends Omit<BaseFieldProps, 'meta'> {
     cursor: string
     disabled?: boolean
     metaError?: string
     placeholder?: string
-    meta: interfaces.MultivalueFieldMeta
+    meta: AppMultivalueFieldMeta
     widgetName?: string
     value: DataValue
 }
@@ -34,8 +35,8 @@ export interface MultivalueFieldProps extends MultivalueFieldOwnProps {
         newValue: interfaces.MultivalueSingleValue[],
         removedItem: interfaces.MultivalueSingleValue
     ) => void
-    onMultivalueAssocOpen: (bcName: string, widgetFieldMeta: interfaces.MultivalueFieldMeta, page: number, widgetName?: string) => void
-    widgetFieldMeta: interfaces.MultivalueFieldMeta
+    onMultivalueAssocOpen: (bcName: string, widgetFieldMeta: AppMultivalueFieldMeta, page: number, widgetName?: string) => void
+    widgetFieldMeta: AppMultivalueFieldMeta
     bcName: string
     defaultValue: interfaces.MultivalueSingleValue[]
     dataItem?: DataItem
@@ -50,9 +51,23 @@ const MultivalueField: FunctionComponent<MultivalueFieldProps> = props => {
     // TODO 2.0.0: assocWidget should be found by widgetName
     const assocWidget = useAppSelector(state =>
         state.view.widgets.find(
-            (widget: interfaces.WidgetMeta) => widget.bcName === props.popupBcName && widget.type === WidgetTypes.AssocListPopup
+            (widget: interfaces.WidgetMeta) =>
+                widget.bcName === props.popupBcName &&
+                (widget.type === WidgetTypes.AssocListPopup || widget.type === CustomWidgetTypes.AssocTreePopup)
         )
     )
+    const expectedPopupType =
+        props.widgetFieldMeta.type === CustomFieldTypes.multivalueTree ? CustomWidgetTypes.AssocTreePopup : WidgetTypes.AssocListPopup
+
+    const handlePopupOpen = (bcName: string, widgetFieldMeta: AppMultivalueFieldMeta, page: number, widgetName?: string) => {
+        if (assocWidget?.type !== expectedPopupType) {
+            console.error(
+                `Field "${props.fieldKey}": type "${props.widgetFieldMeta.type}" only supports "${expectedPopupType}" widget type in the popup.`
+            )
+            return
+        }
+        props.onMultivalueAssocOpen(bcName, widgetFieldMeta, page, widgetName)
+    }
 
     const onRemove = (newValue: interfaces.MultivalueSingleValue[], removedItem: interfaces.MultivalueSingleValue) => {
         props.onRemove(props.bcName, props.popupBcName, props.cursor, props.fieldKey, newValue, removedItem)
@@ -63,7 +78,12 @@ const MultivalueField: FunctionComponent<MultivalueFieldProps> = props => {
         const displayedValue = props.meta.displayedKey ? props.dataItem?.[props.meta.displayedKey] : undefined
 
         return !props.ignoreDisplayedKey && displayedValue ? (
-            <MultivalueHover {...props} data={multiValueData} displayedValue={displayedValue} />
+            <MultivalueHover
+                {...props}
+                meta={props.meta as interfaces.MultivalueFieldMeta}
+                data={multiValueData}
+                displayedValue={displayedValue}
+            />
         ) : (
             <span
                 className={cn(styles.multiValueList, { [styles.coloredField]: props.backgroundColor })}
@@ -79,7 +99,7 @@ const MultivalueField: FunctionComponent<MultivalueFieldProps> = props => {
     return (
         <MultivalueTag
             widgetName={assocWidget?.name}
-            onPopupOpen={props.onMultivalueAssocOpen}
+            onPopupOpen={handlePopupOpen}
             onChange={onRemove}
             value={props.defaultValue}
             disabled={!!props.disabled}
@@ -115,7 +135,7 @@ function mapStateToProps(state: RootState, { value, ...ownProps }: MultivalueFie
 
 function mapDispatchToProps(dispatch: Dispatch) {
     return {
-        onMultivalueAssocOpen: (bcName: string, widgetFieldMeta: interfaces.MultivalueFieldMeta, page: number, widgetName?: string) => {
+        onMultivalueAssocOpen: (bcName: string, widgetFieldMeta: AppMultivalueFieldMeta, page: number, widgetName?: string) => {
             dispatch(
                 actions.showViewPopup({
                     assocValueKey: widgetFieldMeta.assocValueKey,

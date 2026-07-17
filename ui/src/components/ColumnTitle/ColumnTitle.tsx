@@ -3,13 +3,13 @@ import { Icon } from 'antd'
 import cn from 'classnames'
 import ColumnSort from './ColumnSort'
 import TemplatedTitle from '@components/TemplatedTitle/TemplatedTitle'
-import ColumnFilter from './ColumnFilter'
+import ColumnFilter from './ColumnFilter/ColumnFilter'
 import Button from '../ui/Button/Button'
 import { useAppSelector } from '@store'
 import { numberFieldTypes } from '@constants/field'
 import { interfaces } from '@cxbox-ui/core'
 import { EFeatureSettingKey } from '@interfaces/session'
-import { CustomFieldTypes } from '@interfaces/widget'
+import { notSortableFields } from '@constants/sorter'
 import { RowMetaField } from '@interfaces/rowMeta'
 import styles from './ColumnTitle.less'
 
@@ -23,17 +23,6 @@ interface ColumnTitleProps {
     disableFilter?: boolean
     className?: string
 }
-
-const { FieldType } = interfaces
-
-export const notSortableFields: readonly (interfaces.FieldType | CustomFieldTypes)[] = [
-    CustomFieldTypes.MultipleSelect,
-    FieldType.multivalue,
-    FieldType.multivalueHover,
-    FieldType.multifield,
-    FieldType.hidden,
-    FieldType.hint
-]
 
 const ColumnTitle = ({
     className,

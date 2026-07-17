@@ -5,7 +5,7 @@ import { Icon, Select as AntdSelect } from 'antd'
 import cn from 'classnames'
 import Select from '@components/ui/Select/Select'
 import { DataValue, WidgetTypes } from '@cxbox-ui/schema'
-import { actions, FieldType, InlinePickListFieldMeta, interfaces, PopupWidgetTypes } from '@cxbox-ui/core'
+import { actions, interfaces, PopupWidgetTypes } from '@cxbox-ui/core'
 import { useDebounce } from '@hooks/useDebounce'
 import ReadOnlyField from '../../components/ui/ReadOnlyField/ReadOnlyField'
 import { RootState, useAppSelector } from '@store'
@@ -14,11 +14,12 @@ import { BaseFieldProps } from '@components/Field/Field'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import { isPopupWidgetFamily } from '@utils/isPopupWidgetFamily'
 import { ReactComponent as folder } from '../../assets/icons/folder.svg'
-import styles from './InlinePickList.less'
-import { AppWidgetMeta } from '@interfaces/widget'
+import styles from './PickField.less'
+import { AppPickFieldMeta, AppWidgetMeta, CustomFieldTypes, CustomWidgetTypes } from '@interfaces/widget'
 
-interface Props extends Omit<BaseFieldProps, 'meta'> {
-    meta: InlinePickListFieldMeta
+export interface PickFieldProps extends Omit<BaseFieldProps, 'meta'> {
+    meta: AppPickFieldMeta
+    inline: boolean
     value?: string
     placeholder?: string
 }
@@ -36,7 +37,7 @@ const isPopupDisabled = (state: RootState, widgetName: string | undefined, widge
     return isPopupWidgetFamily(widgetType) || (popupIsActive && currentWidgetIsInnerPopupWidget)
 }
 
-const InlinePickList: React.FunctionComponent<Props> = ({
+const PickField: React.FunctionComponent<PickFieldProps> = ({
     widgetName,
     disabled,
     cursor,
@@ -46,14 +47,15 @@ const InlinePickList: React.FunctionComponent<Props> = ({
     backgroundColor,
     value,
     placeholder,
-    onDrillDown
+    onDrillDown,
+    inline
 }) => {
     const dispatch = useDispatch()
     const { t } = useTranslation()
 
     const selectRef = useRef<AntdSelect<string>>(null)
 
-    const neededSearch = meta.type === FieldType.inlinePickList
+    const neededSearch = inline
     const getUniqueDataTestAttr = (postfix: string) => {
         return { [`data-test-field-${meta.type?.toLowerCase()?.replace(/-/g, '')}-${postfix}`]: true }
     }
@@ -64,8 +66,12 @@ const InlinePickList: React.FunctionComponent<Props> = ({
     const data = useAppSelector(state => (bcName && popupBcName && state.data[popupBcName]) || emptyData)
 
     const popupWidget = useAppSelector(state =>
-        state.view.widgets.find(i => i.bcName === popupBcName && i.type === WidgetTypes.PickListPopup)
+        state.view.widgets.find(
+            i => i.bcName === popupBcName && (i.type === WidgetTypes.PickListPopup || i.type === CustomWidgetTypes.PickTreePopup)
+        )
     )
+    const treeField = meta.type === CustomFieldTypes.pickTree || meta.type === CustomFieldTypes.inlinePickTree
+    const expectedPopupType = treeField ? CustomWidgetTypes.PickTreePopup : WidgetTypes.PickListPopup
 
     const processedSearchSpec = searchSpec || pickMap[fieldName]
     useEffect(() => {
@@ -115,9 +121,13 @@ const InlinePickList: React.FunctionComponent<Props> = ({
 
     const handleClick = useCallback(() => {
         if (!disabled) {
+            if (popupWidget?.type !== expectedPopupType) {
+                console.error(`Field "${fieldName}": type "${meta.type}" only supports "${expectedPopupType}" widget type in the popup.`)
+                return
+            }
             onClick(popupBcName, pickMap, popupWidget?.name)
         }
-    }, [disabled, popupBcName, pickMap, onClick, popupWidget])
+    }, [disabled, expectedPopupType, fieldName, meta.type, popupBcName, pickMap, onClick, popupWidget])
 
     const onChange = useCallback(
         (valueKey: string) => {
@@ -146,7 +156,7 @@ const InlinePickList: React.FunctionComponent<Props> = ({
         return (
             <ReadOnlyField
                 widgetName={widgetName}
-                meta={meta}
+                meta={meta as BaseFieldProps['meta']}
                 className={className}
                 backgroundColor={backgroundColor}
                 cursor={cursor}
@@ -205,4 +215,4 @@ const InlinePickList: React.FunctionComponent<Props> = ({
     )
 }
 
-export default React.memo(InlinePickList)
+export default React.memo(PickField)

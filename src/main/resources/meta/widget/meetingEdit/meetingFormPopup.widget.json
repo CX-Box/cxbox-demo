@@ -12,7 +12,9 @@
     {
       "label": "Agenda",
       "key": "agenda",
-      "type": "input"
+      "type": "richText",
+      "minRows": 2,
+      "maxRows": 5
     }
   ],
   "options": {

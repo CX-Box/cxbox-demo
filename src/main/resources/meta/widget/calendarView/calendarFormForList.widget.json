@@ -7,7 +7,9 @@
     {
       "label": "Agenda",
       "key": "agenda",
-      "type": "input"
+      "type": "richText",
+      "minRows": 3,
+      "maxRows": 5
     },
     {
       "label": "Start Date Time",

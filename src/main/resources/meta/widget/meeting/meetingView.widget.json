@@ -11,7 +11,8 @@
         {
           "label": "Agenda",
           "key": "agenda",
-          "type": "input"
+          "type": "richText",
+          "maxRows": 1
         },
         {
           "label": "Date and time",
@@ -26,7 +27,8 @@
         {
           "label": "Address",
           "key": "address",
-          "type": "input"
+          "type": "text",
+          "maxRows": 1
         },
         {
           "label": "Responsible",

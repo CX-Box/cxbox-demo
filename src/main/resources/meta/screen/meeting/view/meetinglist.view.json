@@ -32,7 +32,7 @@
     {
       "widgetName": "meetingFormPopup",
       "position": 50,
-      "gridWidth": 24
+      "gridWidth": 12
     },
     {
       "widgetName": "clientPickListPopup",

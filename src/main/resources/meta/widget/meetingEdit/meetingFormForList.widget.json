@@ -12,7 +12,9 @@
     {
       "label": "Agenda",
       "key": "agenda",
-      "type": "input"
+      "type": "richText",
+      "minRows": 2,
+      "maxRows": 5
     },
     {
       "label": "Start Date",
@@ -59,6 +61,26 @@
           "cols": [
             {
               "fieldKey": "region",
+              "span": 8
+            },
+            {
+              "fieldKey": "startDateTime",
+              "span": 8
+            },
+            {
+              "fieldKey": "endDateTime",
+              "span": 8
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "clientName",
+              "span": 12
+            },
+            {
+              "fieldKey": "contactName",
               "span": 12
             }
           ]
@@ -67,27 +89,7 @@
           "cols": [
             {
               "fieldKey": "agenda",
-              "span": 6
-            },
-            {
-              "fieldKey": "startDateTime",
-              "span": 6
-            },
-            {
-              "fieldKey": "endDateTime",
-              "span": 6
-            },
-            {
-              "fieldKey": "clientName",
-              "span": 6
-            }
-          ]
-        },
-        {
-          "cols": [
-            {
-              "fieldKey": "contactName",
-              "span": 6
+              "span": 12
             }
           ]
         }

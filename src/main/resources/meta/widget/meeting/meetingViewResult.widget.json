@@ -11,12 +11,14 @@
         {
           "label": "Notes",
           "key": "notes",
-          "type": "richText"
+          "type": "richText",
+          "maxRows": 2
         },
         {
           "label": "Result",
           "key": "result",
-          "type": "input"
+          "type": "text",
+          "maxRows": 2
         }
       ]
     }

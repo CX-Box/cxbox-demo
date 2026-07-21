@@ -52,7 +52,7 @@
     {
       "widgetName": "meetingResultFormPopup",
       "position": 80,
-      "gridWidth": 24
+      "gridWidth": 12
     }
   ],
   "rolesAllowed": [

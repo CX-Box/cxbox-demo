@@ -7,8 +7,9 @@
     {
       "title": "Agenda",
       "key": "agenda",
-      "type": "input",
-      "drillDown": true
+      "type": "richText",
+      "drillDown": true,
+      "maxRows": 1
     },
     {
       "title": "Start Date Time",

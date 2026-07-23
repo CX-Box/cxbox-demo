@@ -5,12 +5,6 @@
   "bc": "calendarList",
   "fields": [
     {
-      "label": "Meeting",
-      "key": "id",
-      "type": "input",
-      "drillDown": "true"
-    },
-    {
       "label": "Agenda",
       "key": "agenda",
       "type": "richText",
@@ -31,14 +25,6 @@
   "options": {
     "layout": {
       "rows": [
-        {
-          "cols": [
-            {
-              "fieldKey": "id",
-              "span": 12
-            }
-          ]
-        },
         {
           "cols": [
             {

@@ -5,6 +5,12 @@
   "bc": "calendarList",
   "fields": [
     {
+      "title": "Meeting",
+      "key": "id",
+      "type": "input",
+      "drillDown": "true"
+    },
+    {
       "title": "Agenda",
       "key": "agenda",
       "type": "richText",

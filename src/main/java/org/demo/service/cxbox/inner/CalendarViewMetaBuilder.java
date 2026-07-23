@@ -5,6 +5,7 @@ import org.cxbox.core.dto.DrillDownType;
 import org.cxbox.core.dto.rowmeta.FieldsMeta;
 import org.cxbox.core.dto.rowmeta.RowDependentFieldsMeta;
 import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
+import org.demo.controller.CxboxRestController;
 import org.demo.dto.cxbox.inner.MeetingDTO;
 import org.demo.dto.cxbox.inner.MeetingDTO_;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,11 @@ public class CalendarViewMetaBuilder extends FieldMetaBuilder<MeetingDTO> {
 	@Override
 	public void buildRowDependentMeta(RowDependentFieldsMeta<MeetingDTO> fields, InnerBcDescription bcDescription,
 			Long id, Long parentId) {
+		fields.setDrilldown(
+				MeetingDTO_.id,
+				DrillDownType.INNER,
+				"/screen/meeting/view/meetingview/" + CxboxRestController.meeting + "/" + id
+		);
 		fields.setDrilldown(
 				MeetingDTO_.agenda,
 				DrillDownType.INNER,

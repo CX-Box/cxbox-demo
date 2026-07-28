@@ -53,7 +53,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       - name: Login to Docker Hub
         if: matrix.java == '17'
-        uses: docker/login-action@49ed152c8eca782a232dede0303416e8f356c37b
+        uses: docker/login-action@465a07811f14bebb1938fbed4728c6a1ff8901fc
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -68,7 +68,7 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/cxbox-rqdemo:latest
       - name: prepare - stop all containers from previous deploy
         if: matrix.java == '17'
-        uses: appleboy/ssh-action@25ce8cbbcb08177468c7ff7ec5cbfa236f9341e1
+        uses: appleboy/ssh-action@55dabf81b49d4120609345970c91507e2d734799
         with:
           host: 188.124.37.74
           username: ${{ secrets.CXBOX_DEMO_SSH_USER }}
@@ -96,7 +96,7 @@ jobs:
           target: /home/cxbox/rqdemo
           rm: true
       - name: prepare - add docker env varialbes populated from secrets
-        uses: appleboy/ssh-action@25ce8cbbcb08177468c7ff7ec5cbfa236f9341e1
+        uses: appleboy/ssh-action@55dabf81b49d4120609345970c91507e2d734799
         env:
           MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
         with:
@@ -112,7 +112,7 @@ jobs:
             echo "MAIL_PASSWORD=$MAIL_PASSWORD" > '.env'
       - name: start
         if: matrix.java == '17'
-        uses: appleboy/ssh-action@25ce8cbbcb08177468c7ff7ec5cbfa236f9341e1
+        uses: appleboy/ssh-action@55dabf81b49d4120609345970c91507e2d734799
         with:
           host: 188.124.37.74
           username: ${{ secrets.CXBOX_DEMO_SSH_USER }}

@@ -27,6 +27,6 @@ jobs:
       - name: Build with Maven
         run: mvn clean install -U
       - name: 'Qodana Scan'
-        uses: JetBrains/qodana-action@v2025.3
+        uses: JetBrains/qodana-action@119d0a737348511148d0e9e30092c9631be95d36
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}

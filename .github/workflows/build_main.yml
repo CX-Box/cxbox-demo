@@ -60,12 +60,12 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       - name: Login to Docker Hub
         if: matrix.java == '17'
-        uses: docker/login-action@v2
+        uses: docker/login-action@49ed152c8eca782a232dede0303416e8f356c37b
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@5b9cf3909b54a280b6df6eee035755eb1f2fd611
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
@@ -75,7 +75,7 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/cxbox-demo:latest
       - name: prepare - stop all containers from previous deploy
         if: matrix.java == '17'
-        uses: appleboy/ssh-action@v0.1.10
+        uses: appleboy/ssh-action@25ce8cbbcb08177468c7ff7ec5cbfa236f9341e1
         with:
           host: 188.124.37.74
           username: ${{ secrets.CXBOX_DEMO_SSH_USER }}
@@ -93,7 +93,7 @@ jobs:
             sudo docker ps
       - name: prepare - copy files from new release and delete old files
         if: matrix.java == '17'
-        uses: appleboy/scp-action@v0.1.4
+        uses: appleboy/scp-action@8a92fcdb1eb4ffbf538b2fa286739760aac8a95b
         with:
           host: 188.124.37.74
           username:  ${{ secrets.CXBOX_DEMO_SSH_USER }}
@@ -104,7 +104,7 @@ jobs:
           rm: true
       - name: prepare - add docker env varialbes populated from secrets
         if: matrix.java == '17'
-        uses: appleboy/ssh-action@v1.0.0
+        uses: appleboy/ssh-action@25ce8cbbcb08177468c7ff7ec5cbfa236f9341e1
         env:
           MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
         with:
@@ -120,7 +120,7 @@ jobs:
             echo "MAIL_PASSWORD=$MAIL_PASSWORD" > '.env'
       - name: start
         if: matrix.java == '17'
-        uses: appleboy/ssh-action@v1.0.0
+        uses: appleboy/ssh-action@25ce8cbbcb08177468c7ff7ec5cbfa236f9341e1
         with:
           host: 188.124.37.74
           username: ${{ secrets.CXBOX_DEMO_SSH_USER }}

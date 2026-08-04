@@ -11,14 +11,11 @@ import org.cxbox.core.dto.rowmeta.FieldsMeta;
 import org.cxbox.core.dto.rowmeta.RowDependentFieldsMeta;
 import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
 import org.demo.controller.CxboxRestController;
-import org.demo.dto.cxbox.inner.ClientReadDTO;
-import org.demo.dto.cxbox.inner.ClientReadDTO_;
 import org.demo.dto.cxbox.inner.SaleDTO;
 import org.demo.dto.cxbox.inner.SaleDTO_;
 import org.demo.entity.Sale;
 import org.demo.entity.enums.FieldOfActivity;
 import org.demo.entity.enums.SaleStatus;
-import org.demo.repository.ClientRepository;
 import org.demo.repository.SaleRepository;
 import org.springframework.stereotype.Service;
 

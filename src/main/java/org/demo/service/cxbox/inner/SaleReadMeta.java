@@ -27,28 +27,18 @@ public class SaleReadMeta extends FieldMetaBuilder<SaleDTO> {
 		fields.setDictionaryValues(SaleDTO_.product);
 		fields.setEnumValues(SaleDTO_.status);
 		fields.setRequired(SaleDTO_.status);
-		fields.setDrilldownWithFilter(
+
+		fields.setDrilldown(
 				SaleDTO_.clientName,
 				DrillDownType.INNER,
-				"/screen/client/view/clientlist",
-				fc -> fc.add(
-						CxboxRestController.client, ClientReadDTO.class,
-						fb -> {
-							fb.input(ClientReadDTO_.fullName, fields.getCurrentValue(SaleDTO_.clientName).orElse(null));
-						}
-				)
-		);
-		fields.setDrilldownWithFilter(
+				"/screen/client/view/clientview/" + CxboxRestController.clientEdit + "/"
+						+ id);
+
+		fields.setDrilldown(
 				SaleDTO_.clientSellerName,
 				DrillDownType.INNER,
-				"/screen/client/view/clientlist",
-				fc -> fc.add(
-						CxboxRestController.client, ClientReadDTO.class,
-						fb -> {
-							fb.input(ClientReadDTO_.fullName, fields.getCurrentValue(SaleDTO_.clientSellerName).orElse(null));
-						}
-				)
-		);
+				"/screen/client/view/clientview/" + CxboxRestController.clientEdit + "/"
+						+ 	fields.getCurrentValue(SaleDTO_.clientSellerId).orElse(null));
 
 	}
 

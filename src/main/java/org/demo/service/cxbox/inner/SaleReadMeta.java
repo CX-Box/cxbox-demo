@@ -1,7 +1,9 @@
 package org.demo.service.cxbox.inner;
 
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import org.cxbox.api.data.dictionary.SimpleDictionary;
 import org.cxbox.core.crudma.bc.impl.InnerBcDescription;
 import org.cxbox.core.dto.DrillDownType;
@@ -9,47 +11,50 @@ import org.cxbox.core.dto.rowmeta.FieldsMeta;
 import org.cxbox.core.dto.rowmeta.RowDependentFieldsMeta;
 import org.cxbox.core.service.rowmeta.FieldMetaBuilder;
 import org.demo.controller.CxboxRestController;
-import org.demo.dto.cxbox.inner.ClientReadDTO;
-import org.demo.dto.cxbox.inner.ClientReadDTO_;
 import org.demo.dto.cxbox.inner.SaleDTO;
 import org.demo.dto.cxbox.inner.SaleDTO_;
+import org.demo.entity.Sale;
 import org.demo.entity.enums.FieldOfActivity;
 import org.demo.entity.enums.SaleStatus;
+import org.demo.repository.SaleRepository;
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings({"java:S3252", "java:S1186"})
 @Service
+@RequiredArgsConstructor
 public class SaleReadMeta extends FieldMetaBuilder<SaleDTO> {
+
+	private final SaleRepository repository;
 
 	@Override
 	public void buildRowDependentMeta(RowDependentFieldsMeta<SaleDTO> fields, InnerBcDescription bcDescription,
 			Long id, Long parentId) {
+		Optional<Sale> sale = repository.findById(id);
+
 		fields.setDictionaryValues(SaleDTO_.product);
 		fields.setEnumValues(SaleDTO_.status);
 		fields.setRequired(SaleDTO_.status);
-		fields.setDrilldownWithFilter(
-				SaleDTO_.clientName,
-				DrillDownType.INNER,
-				"/screen/client/view/clientlist",
-				fc -> fc.add(
-						CxboxRestController.client, ClientReadDTO.class,
-						fb -> {
-							fb.input(ClientReadDTO_.fullName, fields.getCurrentValue(SaleDTO_.clientName).orElse(null));
-						}
-				)
-		);
-		fields.setDrilldownWithFilter(
-				SaleDTO_.clientSellerName,
-				DrillDownType.INNER,
-				"/screen/client/view/clientlist",
-				fc -> fc.add(
-						CxboxRestController.client, ClientReadDTO.class,
-						fb -> {
-							fb.input(ClientReadDTO_.fullName, fields.getCurrentValue(SaleDTO_.clientSellerName).orElse(null));
-						}
-				)
-		);
 
+		sale.ifPresent(value -> {
+
+			if (value.getClient() != null) {
+				fields.setDrilldown(
+						SaleDTO_.clientName,
+						DrillDownType.INNER,
+						"/screen/client/view/clientview/" + CxboxRestController.clientEdit + "/"
+								+ value.getClient().getId()
+				);
+			}
+
+			if (value.getClientSeller() != null) {
+				fields.setDrilldown(
+						SaleDTO_.clientSellerName,
+						DrillDownType.INNER,
+						"/screen/client/view/clientview/" + CxboxRestController.clientEdit + "/"
+								+ value.getClientSeller().getId()
+				);
+			}
+		});
 	}
 
 	@Override
@@ -66,16 +71,17 @@ public class SaleReadMeta extends FieldMetaBuilder<SaleDTO> {
 		fields.enableFilter(SaleDTO_.sum);
 		fields.enableFilter(SaleDTO_.saleDate);
 		fields.enableFilter(SaleDTO_.status);
-		fields.setEnumFilterValues(fields,SaleDTO_.status, SaleStatus.values());
+		fields.setEnumFilterValues(fields, SaleDTO_.status, SaleStatus.values());
 		fields.enableFilter(SaleDTO_.clientName);
 		fields.enableFilter(SaleDTO_.clientSellerName);
 		fields.enableFilter(SaleDTO_.product);
 		fields.setDictionaryFilterValues(SaleDTO_.product);
 		fields.enableFilter(SaleDTO_.fieldOfActivity);
-		fields.setConcreteFilterValues(SaleDTO_.fieldOfActivity, Arrays
-				.stream(FieldOfActivity.values())
-				.map(en -> new SimpleDictionary(en.name(), en.getValue()))
-				.collect(Collectors.toList())
+		fields.setConcreteFilterValues(
+				SaleDTO_.fieldOfActivity, Arrays
+						.stream(FieldOfActivity.values())
+						.map(en -> new SimpleDictionary(en.name(), en.getValue()))
+						.collect(Collectors.toList())
 		);
 	}
 

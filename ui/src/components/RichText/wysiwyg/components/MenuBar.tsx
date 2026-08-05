@@ -28,13 +28,12 @@ import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 interface Props {
-    className?: string
     editor: Editor
     onViewModeChange: (mode: ViewMode) => void
     toolbarDisabled?: boolean
 }
 
-export default function MenuBar({ editor, onViewModeChange, toolbarDisabled, className }: Props) {
+export default function MenuBar({ editor, onViewModeChange, toolbarDisabled }: Props) {
     const { t } = useTranslation()
 
     const items: readonly MenuItemType[] = useMemo(
@@ -353,9 +352,7 @@ export default function MenuBar({ editor, onViewModeChange, toolbarDisabled, cla
 
     return (
         <CommonMenuBar
-            className={className}
             toolbarDisabled={toolbarDisabled}
-            settingDisabled={false}
             items={menuItems}
             rightButton={{
                 key: 'Settings',

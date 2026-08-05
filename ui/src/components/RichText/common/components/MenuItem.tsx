@@ -3,6 +3,7 @@ import { Dropdown, Menu } from 'antd'
 import { MenuActionItem } from '@components/RichText/common/types'
 import React from 'react'
 import Button from '@components/ui/Button/Button'
+import { isDefined } from '@utils/isDefined'
 import { ChevronDown } from '@gravity-ui/icons'
 
 export interface MenuBarItem extends Partial<Omit<MenuActionItem, 'type' | 'action' | 'items' | 'icon'>> {
@@ -33,7 +34,7 @@ export default function MenuItem({ icon, title, action, isActive = null, style, 
         <Button
             type={isActive ? 'mdToolbarButtonPrimary' : 'mdToolbarButton'}
             className={`menu-item`}
-            style={{ flexShrink: 0, ...style }}
+            style={style}
             onClick={action}
             disabled={disabled}
             onMouseDown={e => {
@@ -50,82 +51,30 @@ export default function MenuItem({ icon, title, action, isActive = null, style, 
     )
 
     if (hasItems) {
-        const getSelectedKeys = (currentItems: MenuBarItem[], prefix = ''): string[] => {
-            let keys: string[] = []
-            currentItems.forEach((subItem, index) => {
-                const key = prefix ? `${prefix}-${index}` : String(index)
-                if (subItem.isActive) {
-                    keys.push(key)
-                }
-                if (subItem.items) {
-                    keys = keys.concat(getSelectedKeys(subItem.items, key))
-                }
-            })
-            return keys
-        }
-
-        const selectedKeys = getSelectedKeys(items)
-
-        const renderMenuContent = (currentItems: MenuBarItem[], prefix = '') => {
-            return currentItems.map((subItem, index) => {
-                const key = prefix ? `${prefix}-${index}` : String(index)
-
-                if (subItem.type === 'divider') {
-                    return <Menu.Divider key={key} />
-                }
-
-                const itemContent = (
-                    <div className={styles.itemContent}>
-                        {subItem.icon && <span className={styles.itemIcon}>{subItem.icon}</span>}
-                        <span>{subItem.title}</span>
-                    </div>
-                )
-
-                if (subItem.items && subItem.items.length > 0) {
-                    const subMenuChildren = renderMenuContent(subItem.items, key)
-
-                    return (
-                        <Menu.SubMenu key={key} title={itemContent} disabled={subItem.disabled}>
-                            {subItem.groupName ? (
-                                <Menu.ItemGroup title={subItem.groupName}>{subMenuChildren}</Menu.ItemGroup>
-                            ) : (
-                                subMenuChildren
-                            )}
-                        </Menu.SubMenu>
-                    )
-                }
-
-                return (
-                    <Menu.Item key={key} onClick={subItem.action} title={subItem.title} disabled={subItem.disabled}>
-                        {itemContent}
-                    </Menu.Item>
-                )
-            })
-        }
-
-        const menuContent = renderMenuContent(items)
+        const selectedKeys = items?.map((subItem, index) => (subItem.isActive ? String(index) : null)).filter(isDefined)
+        const menuItems = items.map((subItem, index) => (
+            <Menu.Item key={String(index)} onClick={subItem.action} title={subItem.title} disabled={subItem.disabled}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    {subItem.icon && <span style={{ width: 16, height: 16, display: 'flex' }}>{subItem.icon}</span>}
+                    <span>{subItem.title}</span>
+                </div>
+            </Menu.Item>
+        ))
 
         const menu = (
             <Menu selectedKeys={selectedKeys}>
                 {groupName ? (
                     <Menu.ItemGroup title={groupName} className={styles.itemGroup}>
-                        {menuContent}
+                        {menuItems}
                     </Menu.ItemGroup>
                 ) : (
-                    menuContent
+                    menuItems
                 )}
             </Menu>
         )
 
         return (
-            <Dropdown
-                overlay={menu}
-                trigger={['click']}
-                placement="bottomLeft"
-                disabled={disabled}
-                overlayClassName={styles.dropdown}
-                overlayStyle={{ flexShrink: 0 }}
-            >
+            <Dropdown overlay={menu} trigger={['click']} placement="bottomLeft" disabled={disabled}>
                 {button}
             </Dropdown>
         )

@@ -1,9 +1,7 @@
-import React, { useCallback } from 'react'
+import { Fragment } from 'react'
 import MenuItem, { MenuBarItem } from './MenuItem'
 import './MenuBar.module.less'
-import ToolbarOverflowWrapper from './ToolbarOverflowWrapper'
-import { Icon } from 'antd'
-import cn from 'classnames'
+import { EDITOR_TOOLBAR_HEIGHT_RESERVE, EDITOR_TOOLBAR_WIDTH_RESERVE } from '@components/RichText/constants'
 
 export interface Props {
     items?: MenuBarItem[]
@@ -11,69 +9,48 @@ export interface Props {
     className?: string
     style?: React.CSSProperties
     toolbarDisabled?: boolean
-    settingDisabled?: boolean
-    hideMainButtons?: boolean
 }
 
-export default function MenuBar({
-    toolbarDisabled,
-    settingDisabled,
-    items = [],
-    rightButton,
-    className = '',
-    style = {},
-    hideMainButtons
-}: Props) {
-    const renderItem = useCallback(
-        item => {
-            if (item.type === 'divider') {
-                return <div className="divider" />
-            }
-            return (
-                <MenuItem
-                    icon={item.icon}
-                    title={item.title}
-                    style={item.style}
-                    isActive={item.isActive ?? false}
-                    items={item.items}
-                    groupName={item.groupName}
-                    action={item.action}
-                    disabled={toolbarDisabled || item.disabled}
-                />
-            )
-        },
-        [toolbarDisabled]
-    )
-
-    const renderMoreButton = useCallback(
-        hiddenItems => (
-            <MenuItem
-                icon={<Icon type="ellipsis" />}
-                hideArrow={true}
-                items={hiddenItems.length > 0 ? hiddenItems : undefined}
-                disabled={toolbarDisabled || hiddenItems.length === 0}
-            />
-        ),
-        [toolbarDisabled]
-    )
-
+export default function MenuBar({ toolbarDisabled, items = [], rightButton, className = '', style = {} }: Props) {
     return (
-        <div className={cn('editor__header', className)} style={style}>
-            <ToolbarOverflowWrapper
-                items={items}
-                renderItem={renderItem}
-                renderMoreButton={renderMoreButton}
-                height={hideMainButtons ? 0 : undefined}
-            />
-
-            <div className="editor__rightButton">
+        <div
+            className={`editor__header ${className}`}
+            style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                minHeight: EDITOR_TOOLBAR_HEIGHT_RESERVE,
+                ...style
+            }}
+        >
+            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', minWidth: EDITOR_TOOLBAR_WIDTH_RESERVE }}>
+                {items.map((item, idx) => (
+                    <Fragment key={idx}>
+                        {item.type === 'divider' ? (
+                            <div className="divider" />
+                        ) : (
+                            <MenuItem
+                                icon={item.icon!}
+                                title={item.title!}
+                                action={item.action}
+                                isActive={item.isActive ?? false}
+                                style={item.style}
+                                items={item.items}
+                                disabled={toolbarDisabled || item.disabled}
+                                groupName={item.groupName}
+                            />
+                        )}
+                    </Fragment>
+                ))}
+            </div>
+            <div style={{ marginLeft: 'auto', paddingRight: '8px' }}>
                 <MenuItem
                     icon={rightButton.icon}
                     title={rightButton.title}
                     action={rightButton.action}
                     style={rightButton.style}
                     items={rightButton.items}
-                    disabled={(settingDisabled ?? toolbarDisabled) || rightButton.disabled}
+                    disabled={toolbarDisabled || rightButton.disabled}
                     hideArrow={true}
                 />
             </div>

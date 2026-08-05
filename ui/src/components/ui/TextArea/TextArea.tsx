@@ -6,6 +6,9 @@ import ReadOnlyField from '@components/ui/ReadOnlyField/ReadOnlyField'
 import { text_maxDisplayed } from '@components/ui/TextArea/constants'
 import styles from './TextArea.less'
 import cn from 'classnames'
+import TextClampWrapper from '@components/TextClampWrapper/TextClampWrapper'
+import { AppTextWidgetField } from '@interfaces/widget'
+import { getTextRowsConfig } from '@components/ui/TextArea/utils'
 
 type AdditionalAntdTextAreaProps = Partial<Omit<AntdTextAreaProps, 'onChange'>>
 
@@ -15,8 +18,6 @@ export interface TextAreaProps extends BaseFieldProps, AdditionalAntdTextAreaPro
     onChange?: (value: string) => void
     popover?: boolean
     style?: React.CSSProperties
-    minRows?: number
-    maxRows?: number
 }
 
 const TextArea: React.FunctionComponent<TextAreaProps> = ({
@@ -27,15 +28,17 @@ const TextArea: React.FunctionComponent<TextAreaProps> = ({
     disabled,
     readOnly,
     style,
-    minRows = 5,
-    maxRows = 10,
     className,
     backgroundColor,
     widgetName,
     meta,
     onDrillDown,
+    metaError,
     ...rest
 }) => {
+    const fieldMeta = meta as AppTextWidgetField | undefined
+    const { minRows, maxRows, editMinRows, editMaxRows } = getTextRowsConfig({ ...fieldMeta })
+
     const inputRef = React.useRef<InputRef>(null)
     const textAreaRef = React.useRef<AntdTextArea>(null)
 
@@ -73,40 +76,50 @@ const TextArea: React.FunctionComponent<TextAreaProps> = ({
         textAreaRef.current?.setValue(defaultValue ?? '')
     }, [defaultValue])
     const autosize = React.useMemo(() => {
-        return { minRows, maxRows }
-    }, [minRows, maxRows])
+        return { minRows: editMinRows, maxRows: editMaxRows }
+    }, [editMinRows, editMaxRows])
 
     if (readOnly) {
         const needToTrimValue = defaultValue?.length && defaultValue.length > text_maxDisplayed
         const processedValue = needToTrimValue ? defaultValue.slice(0, text_maxDisplayed) : defaultValue
 
         return (
-            <ReadOnlyField
-                widgetName={widgetName}
-                meta={meta}
-                className={className}
-                backgroundColor={backgroundColor}
-                cursor={rest.cursor}
-                extraContent={
-                    needToTrimValue ? (
-                        <Popover
-                            overlayClassName={styles.popoverOverlay}
-                            placement="bottom"
-                            getTooltipContainer={trigger => trigger.parentElement as HTMLElement}
-                            content={
-                                <ReadOnlyField widgetName={widgetName} meta={meta}>
-                                    {defaultValue}
-                                </ReadOnlyField>
-                            }
-                        >
-                            <span className={styles.pointer}>...</span>
-                        </Popover>
-                    ) : null
+            <TextClampWrapper
+                minRows={minRows}
+                maxRows={maxRows}
+                popoverContent={
+                    <ReadOnlyField widgetName={widgetName} meta={meta}>
+                        {defaultValue}
+                    </ReadOnlyField>
                 }
-                onDrillDown={onDrillDown}
             >
-                {processedValue}
-            </ReadOnlyField>
+                <ReadOnlyField
+                    widgetName={widgetName}
+                    meta={meta}
+                    className={className}
+                    backgroundColor={backgroundColor}
+                    cursor={rest.cursor}
+                    extraContent={
+                        needToTrimValue ? (
+                            <Popover
+                                overlayClassName={styles.popoverOverlay}
+                                placement="bottom"
+                                getTooltipContainer={trigger => trigger.parentElement as HTMLElement}
+                                content={
+                                    <ReadOnlyField widgetName={widgetName} meta={meta}>
+                                        {defaultValue}
+                                    </ReadOnlyField>
+                                }
+                            >
+                                <span className={styles.pointer}>...</span>
+                            </Popover>
+                        ) : null
+                    }
+                    onDrillDown={onDrillDown}
+                >
+                    {processedValue}
+                </ReadOnlyField>
+            </TextClampWrapper>
         )
     }
 

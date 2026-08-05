@@ -7,8 +7,6 @@ const EditorLazy = React.lazy(() => import('./common/index'))
 export interface RichTextEditorProps extends UniversalEditorProps, BaseFieldProps {
     minRows?: number
     maxRows?: number
-    editMinRows?: number
-    editMaxRows?: number
 }
 
 export const RichTextEditor: React.FC<RichTextEditorProps> = props => {

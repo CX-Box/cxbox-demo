@@ -12,7 +12,6 @@ interface Props extends UniversalEditorProps, BaseFieldProps {
     wrapperRef?: (instance: HTMLDivElement | null) => void
     wrapperStyle?: React.CSSProperties
     onViewModeChange: (mode: ViewMode) => void
-    onlyOneRow?: boolean
 }
 
 const Editor: React.FC<Props> = ({
@@ -25,8 +24,7 @@ const Editor: React.FC<Props> = ({
     readOnly,
     onBlur,
     onFocus,
-    onViewModeChange,
-    onlyOneRow
+    onViewModeChange
 }) => {
     const { editor } = useRichTextEditor({ value, onChange, readOnly, disabled, onBlur, onFocus })
 
@@ -45,8 +43,8 @@ const Editor: React.FC<Props> = ({
     }
 
     return (
-        <div ref={wrapperRef} style={wrapperStyle} className={cn('editor', { oneRow: onlyOneRow, readOnly })}>
-            <MenuBar className={'editor__menu-bar'} editor={editor} onViewModeChange={handleViewModeChange} toolbarDisabled={disabled} />
+        <div ref={wrapperRef} style={wrapperStyle} className={cn('editor', { readOnly })}>
+            <MenuBar editor={editor} onViewModeChange={handleViewModeChange} toolbarDisabled={disabled} />
             <EditorContent editor={editor} disabled={disabled} placeholder={placeholder} />
         </div>
     )

@@ -4,8 +4,7 @@ import { useResizeObserver } from '@hooks/useResizeObserver'
 export const useDebouncedWidthResize = (
     ref: RefObject<HTMLElement>,
     onResize: (width: number, entry: ResizeObserverEntry) => void,
-    delay: number = 100,
-    tolerance: number = 1
+    delay: number = 100
 ) => {
     const prevWidth = useRef<number>(0)
     const resizeTimer = useRef<ReturnType<typeof setTimeout>>()
@@ -26,7 +25,7 @@ export const useDebouncedWidthResize = (
             const width = entry.contentRect.width
 
             // Ignore changes if the width has not changed.
-            if (Math.abs(prevWidth.current - width) < tolerance) {
+            if (Math.abs(prevWidth.current - width) < 1) {
                 return
             }
 
@@ -42,7 +41,7 @@ export const useDebouncedWidthResize = (
                 })
             }, delay)
         },
-        [delay, tolerance]
+        [delay]
     )
 
     useResizeObserver(ref, handleResize)

@@ -2,6 +2,35 @@
   .editor {
     display: flex;
     flex-direction: column;
+    // So that the toolbar does not stretch the field
+    &:not(.oneRow) {
+      position: relative;
+      padding-top: 30px;
+
+      .editor__menu-bar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+      }
+    }
+
+    &.oneRow &__menu-bar {
+      width: 75px;
+      border-bottom: none;
+    }
+
+    &.oneRow .markdown-source-editor {
+      height: var(--field-inner-height, 30px);
+    }
+
+    &.source.oneRow &__menu-bar {
+      width: 47px;
+    }
+
+    &.oneRow {
+      flex-direction: row-reverse;
+    }
 
     .cm-editor {
       padding: 1px 5px;
@@ -40,6 +69,16 @@
       .cm-selectionBackground {
         background-color: transparent !important;
       }
+    }
+  }
+
+  .editor.disabled {
+    background: var(--field-disabled-bg-color);
+    color: var(--field-disabled-color);
+    cursor: not-allowed;
+
+    .cm-editor {
+      background: var(--field-disabled-bg-color);
     }
   }
 }

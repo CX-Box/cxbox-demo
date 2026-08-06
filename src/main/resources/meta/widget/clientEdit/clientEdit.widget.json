@@ -22,7 +22,7 @@
     {
       "label": "Address",
       "key": "address",
-      "type": "input"
+      "type": "richText"
     },
     {
       "label": "Status",

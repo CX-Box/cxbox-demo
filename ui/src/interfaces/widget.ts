@@ -16,6 +16,7 @@ import { TableSettingsItem } from '@interfaces/tableSettings'
 import { IAggField, IAggLevel } from '@interfaces/groupingHierarchy'
 import { PaginationMode } from '@constants/pagination'
 import { SignaturePackage, SignatureType } from '@constants/cadesPlugin'
+import { TREE_EXPANDED_STATE_AFTER_FILTERS, TREE_SEARCH_MODES } from '@constants/tree'
 
 export enum CustomFieldTypes {
     MultipleSelect = 'multipleSelect',
@@ -44,7 +45,10 @@ export enum CustomWidgetTypes {
     CalendarList = 'CalendarList',
     CalendarYearList = 'CalendarYearList',
     CardList = 'CardList',
-    CardCarouselList = 'CardCarouselList'
+    CardCarouselList = 'CardCarouselList',
+    Tree = 'Tree',
+    AssocTreePopup = 'AssocTreePopup',
+    PickTreePopup = 'PickTreePopup'
 }
 
 export const removeRecordOperationWidgets: Array<WidgetTypes | string> = [
@@ -52,6 +56,8 @@ export const removeRecordOperationWidgets: Array<WidgetTypes | string> = [
     CustomWidgetTypes.GroupingHierarchy,
     WidgetTypes.PickListPopup,
     WidgetTypes.AssocListPopup,
+    CustomWidgetTypes.PickTreePopup,
+    CustomWidgetTypes.AssocTreePopup,
     CustomWidgetTypes.CalendarList,
     CustomWidgetTypes.CalendarYearList,
     CustomWidgetTypes.CardList,
@@ -135,6 +141,9 @@ export type CryptoGeneratorItem = {
     encryptedFileBaseNameKey?: string
 }
 
+export type TreeSearchModes = ValueOf<typeof TREE_SEARCH_MODES>
+export type TreeExpandedStateAfterFilter = ValueOf<typeof TREE_EXPANDED_STATE_AFTER_FILTERS>
+
 export interface AppWidgetMeta extends WidgetMeta {
     personalFields?: TableSettingsItem | null // TODO make mandatory
     options?: WidgetOptions & {
@@ -160,6 +169,9 @@ export interface AppWidgetMeta extends WidgetMeta {
         fullTextSearch?: {
             enabled?: boolean
             placeholder?: string
+            highLight?: {
+                fieldKeys?: ['department']
+            }
         }
 
         additional?: {
@@ -199,6 +211,15 @@ export interface AppWidgetMeta extends WidgetMeta {
 
         calendar?: CalendarOption
         cryptoGenerator?: CryptoGeneratorItem[]
+        tree?: {
+            parentFieldKey?: string // default: parentId
+            isLeafFieldKey?: string // default: isLeaf
+            searchMode?: TreeSearchModes
+            treePathRestoreMaxRequestsBeforeFiltration?: number // TODO-DEV rename
+            treePathRestoreMaxRequestsAfterFiltration?: number // TODO-DEV rename
+            selection?: 'node' | 'nodeAndLeaf' | 'leaf'
+            dataLossWarning?: 'hiddenOnly' | 'always' | 'never'
+        }
     }
 }
 

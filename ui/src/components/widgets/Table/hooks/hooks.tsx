@@ -4,7 +4,8 @@ import { useCallback, useEffect, useState } from 'react'
 import { actions } from '@actions'
 import { utils } from '@cxbox-ui/core'
 import { FIELDS } from '@constants'
-import { selectBc, selectBcFilters } from '@selectors/selectors'
+import { selectBc, selectBcFilters, selectHasBcTree } from '@selectors/selectors'
+import { treeActions } from '../../../../slices/tree'
 
 function useFiltersGroupName<T>(filtersExist: boolean) {
     const [filterGroupName, setFilterGroupName] = useState<T | null>(null)
@@ -41,6 +42,7 @@ export const useFilterGroups = (bcName: string = '') => {
             filtersCount: enabledMassMode && filterById && !resultFilterEnabled ? filtersLength - 1 : filtersLength
         }
     }, shallowEqual)
+    const hasBcTree = useAppSelector(selectHasBcTree(bcName))
 
     const { filterGroupName, setFilterGroupName } = useFiltersGroupName<string>(filtersExist)
 
@@ -48,8 +50,13 @@ export const useFilterGroups = (bcName: string = '') => {
 
     const clearAllFilters = useCallback(() => {
         dispatch(actions.bcRemoveAllFilters({ bcName }))
-        dispatch(actions.bcForceUpdate({ bcName }))
-    }, [dispatch, bcName])
+
+        if (hasBcTree) {
+            dispatch(treeActions.applyFilter({ bcName: bcName as string }))
+        } else {
+            dispatch(actions.bcForceUpdate({ bcName }))
+        }
+    }, [dispatch, bcName, hasBcTree])
 
     const applyFilterGroup = useCallback(
         (value: string) => {
@@ -59,9 +66,13 @@ export const useFilterGroups = (bcName: string = '') => {
             setFilterGroupName(filterGroup?.name ?? null)
             dispatch(actions.bcRemoveAllFilters({ bcName }))
             parsedFilters.forEach(filter => dispatch(actions.bcAddFilter({ bcName, filter })))
-            dispatch(actions.bcForceUpdate({ bcName }))
+            if (hasBcTree) {
+                dispatch(treeActions.applyFilter({ bcName }))
+            } else {
+                dispatch(actions.bcForceUpdate({ bcName }))
+            }
         },
-        [bcName, dispatch, filterGroups, setFilterGroupName]
+        [bcName, dispatch, filterGroups, hasBcTree, setFilterGroupName]
     )
 
     return {

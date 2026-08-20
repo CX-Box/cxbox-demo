@@ -1,5 +1,5 @@
 import React from 'react'
-import { utils } from '@cxbox-ui/core'
+import { getSearchHighlightTokens, isSearchHighlightTokenMatched } from '@utils/searchHighlight'
 
 interface SearchHighlightProps {
     source: string
@@ -14,18 +14,16 @@ interface SearchHighlightProps {
  * @category Components
  */
 const SearchHighlight: React.FC<SearchHighlightProps> = props => {
-    const tokens = utils.splitIntoTokens(props.source, props.search)
+    const tokens = getSearchHighlightTokens(props.source, props.search)
     return (
         <>
-            {tokens
-                .filter(item => !!item)
-                .map((item, index) => {
-                    const isMatch = props.search instanceof RegExp ? props.search.test(item) : item === props.search
-                    if (isMatch) {
-                        return <React.Fragment key={index}>{props.match?.(item) || defaultHighlighter(item)}</React.Fragment>
-                    }
-                    return <React.Fragment key={index}>{props.notMatch?.(item) || item}</React.Fragment>
-                })}
+            {tokens.map((item, index) => {
+                const isMatch = isSearchHighlightTokenMatched(item, props.search)
+                if (isMatch) {
+                    return <React.Fragment key={index}>{props.match?.(item) || defaultHighlighter(item)}</React.Fragment>
+                }
+                return <React.Fragment key={index}>{props.notMatch?.(item) || item}</React.Fragment>
+            })}
         </>
     )
 }

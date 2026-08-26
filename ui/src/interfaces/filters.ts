@@ -6,6 +6,7 @@ export interface FilterGroup extends interfaces.FilterGroup {
     id?: string
     personal?: boolean
     bc?: string
+    defaultFilter?: boolean
 }
 
 export enum FilterType {

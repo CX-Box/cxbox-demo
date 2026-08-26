@@ -4,6 +4,7 @@ import { createReducer, isAnyOf } from '@reduxjs/toolkit'
 import { FilterGroup } from '@interfaces/filters'
 import { MassStepType } from '@components/widgets/Table/massOperations/constants'
 import { PaginationMode } from '@constants/pagination'
+import { isDefined } from '@utils/isDefined'
 
 export type ViewerModeMass = {
     mode: 'mass'
@@ -31,6 +32,7 @@ export interface ScreenState extends interfaces.ScreenState {
     }
     collapsedWidgets: { [viewName: string]: string[] }
     alternativePagination: { [widgetName: string]: PaginationMode }
+    appliedFilterGroup: { [bcName: string]: string | undefined }
 }
 
 const initialState: ScreenState = {
@@ -40,7 +42,8 @@ const initialState: ScreenState = {
     viewerMode: {},
     collapsedWidgets: {},
     alternativePagination: {},
-    retainedBc: {}
+    retainedBc: {},
+    appliedFilterGroup: {}
 }
 
 const screenReducerBuilder = reducers
@@ -185,15 +188,41 @@ const screenReducerBuilder = reducers
             filters: { ...state.filters, ...bcFilters }
         })
     })
+    .addCase(actions.setFilterGroup, (state, action) => {
+        const { bcName, filterGroupName } = action.payload
+        const bc = state.bo.bc[bcName]
+
+        if (bc && filterGroupName?.length) {
+            state.appliedFilterGroup[bcName] = filterGroupName
+
+            const filtersGroup = bc.filterGroups?.find(filtersGroup => filtersGroup.name === filterGroupName)
+
+            state.filters[bcName] = utils.parseFilters(filtersGroup?.filters)
+        } else if (!filterGroupName && isDefined(state.appliedFilterGroup[bcName])) {
+            delete state.appliedFilterGroup[bcName]
+            delete state.filters[bcName]
+        }
+    })
     .addMatcher(isAnyOf(actions.selectScreen), (state, action) => {
         state.viewerMode = initialState.viewerMode
         state.collapsedWidgets = initialState.collapsedWidgets
+
         Object.values(state.bo.bc).forEach(bc => {
-            // временное решение чтобы сохранялся лимит при сменен экранов
+            // A temporary solution to maintain the limit when changing screens
             bc.defaultLimit = bc.limit
             bc.limit = state.pagination[bc.name]?.limit ?? bc.limit
 
             bc.filterGroups = state.retainedBc[bc.name]?.filterGroups ?? bc.filterGroups
+
+            // Applying filterGroup by default
+            const bcHasDefaultFilter = !!bc.defaultFilter?.length
+            const bcHasAppliedFilter = state.filters[bc.name]?.length
+            const defaultFilterGroup = bc.filterGroups?.find(filterGroup => filterGroup.defaultFilter)
+
+            if (!bcHasDefaultFilter && !bcHasAppliedFilter && defaultFilterGroup) {
+                state.appliedFilterGroup[bc.name] = defaultFilterGroup.name
+                state.filters[bc.name] = utils.parseFilters(defaultFilterGroup.filters)
+            }
         })
     })
     .addMatcher(isAnyOf(actions.bcSelectRecord), (state, action) => {
@@ -226,6 +255,12 @@ const screenReducerBuilder = reducers
              */
             state.bo.bc[action.payload.bcName].cursor = newCursor
             state.cachedBc[action.payload.bcName] = `${action.payload.bcName}/${newCursor}`
+        }
+    })
+    .addMatcher(isAnyOf(actions.bcRemoveAllFilters, actions.bcRemoveFilter, actions.bcAddFilter), (state, action) => {
+        const bcName = action.payload.bcName
+        if (bcName && state.appliedFilterGroup[bcName]?.length) {
+            delete state.appliedFilterGroup[bcName]
         }
     }).builder
 

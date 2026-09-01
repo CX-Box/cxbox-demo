@@ -2,11 +2,13 @@
 <databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd"
-  logicalFilePath="db/changelog/cxbox/releases/3__0__1/3__0__1__core.xml">
-  <changeSet id="BC_FILTER_GROUPS TABLE_USER" author="cxbox">
+  logicalFilePath="db/changelog/cxbox/3__0__1__core.xml">
+
+  <changeSet id="BC_FILTER_GROUPS_DEFAULT_FILTER" author="cxbox">
     <addColumn tableName="BC_FILTER_GROUPS">
-      <column name="DEFAULT_FILTER" type="BOOLEAN" remarks="The filter is default" defaultValue="false">
+      <column name="default_filter" type="BOOLEAN" remarks="The filter is default" defaultValue="false">
       </column>
     </addColumn>
   </changeSet>
+
 </databaseChangeLog>

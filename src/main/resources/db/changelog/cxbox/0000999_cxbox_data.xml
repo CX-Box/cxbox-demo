@@ -36,6 +36,7 @@
       <column header="name" name="name" type="STRING"/>
       <column header="bc" name="bc" type="STRING"/>
       <column header="filters" name="filters" type="STRING"/>
+      <column header="default_filter" name="default_filter" type="BOOLEAN"/>
     </loadUpdateData>
   </changeSet>
 

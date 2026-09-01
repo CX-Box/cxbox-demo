@@ -1,3 +1,4 @@
-﻿name;bc;filters
-First priority;client;importance.equalsOneOf=%5B%22High%22%5D&status.equalsOneOf=%5B%22In+progress%22%5D
-LLC only;client;fullName.contains=LLC
+﻿name;bc;filters;default_filter
+First priority;client;importance.equalsOneOf=%5B%22High%22%5D&status.equalsOneOf=%5B%22In+progress%22%5D;false
+LLC only;client;fullName.contains=LLC;false
+Status = new;client;status.equals=New;true

@@ -226,10 +226,11 @@ function CryptoGeneratorContent({ operationType, meta, onClose }: CryptoGenerato
                         if (!encryptedBase64) {
                             return {}
                         }
+                        const encryptedBlob = base64ToPemBlob(encryptedBase64)
 
                         return {
                             encryptedBase64,
-                            signatureBase64: await sign(encryptedBase64)
+                            signatureBase64: await sign(encryptedBlob)
                         }
                     }
                 }

@@ -3,7 +3,13 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd"
   logicalFilePath="db/db.changelog-master.xml">
-  <includeAll path="changelog/cxbox" relativeToChangelogFile="true"/>
+
+  <include file="db/changelog/cxbox/0000100_cxbox_db_prepare.xml"/>
+  <include file="db/changelog/cxbox/0000200_cxbox_sequences.xml"/>
+  <include file="db/changelog/cxbox/0000300_cxbox_core.xml"/>
+  <includeAll path="/changelog/cxbox/releases/2__0__18" relativeToChangelogFile="true"/>
+  <includeAll path="/changelog/cxbox/releases/3__0__1" relativeToChangelogFile="true"/>
+  <include file="db/changelog/cxbox/0000999_cxbox_data.xml"/>
   <include file="db/changelog/0000100.xml"/>
   <include file="db/changelog/0000999_data.xml"/>
 </databaseChangeLog>

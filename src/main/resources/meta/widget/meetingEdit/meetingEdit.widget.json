@@ -5,14 +5,6 @@
   "bc": "meetingEdit",
   "fields": [
     {
-      "label": "Additional Contacts",
-      "key": "additionalContacts",
-      "displayedKey": "additionalContactsDisplayedKey",
-      "type": "multivalue",
-      "popupBcName": "contactAssocListPopup",
-      "assocValueKey": "fullName"
-    },
-    {
       "label": "Agenda",
       "key": "agenda",
       "type": "input"
@@ -36,16 +28,6 @@
       "label": "Address",
       "key": "address",
       "type": "text"
-    },
-    {
-      "label": "Responsible",
-      "key": "responsibleName",
-      "type": "pickList",
-      "popupBcName": "responsiblePickListPopup",
-      "pickMap": {
-        "responsibleName": "name",
-        "responsibleId": "id"
-      }
     }
   ],
   "options": {
@@ -79,22 +61,6 @@
           "cols": [
             {
               "fieldKey": "address",
-              "span": 12
-            }
-          ]
-        },
-        {
-          "cols": [
-            {
-              "fieldKey": "responsibleName",
-              "span": 12
-            }
-          ]
-        },
-        {
-          "cols": [
-            {
-              "fieldKey": "additionalContacts",
               "span": 12
             }
           ]

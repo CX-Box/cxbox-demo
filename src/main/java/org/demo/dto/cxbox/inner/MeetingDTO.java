@@ -26,7 +26,6 @@ import org.demo.conf.cxbox.extension.multivaluePrimary.MultivalueExt;
 import org.demo.entity.Client;
 import org.demo.entity.Contact;
 import org.demo.entity.Meeting;
-import org.demo.entity.core.User;
 import org.demo.entity.dictionary.Regions;
 import org.demo.entity.enums.MeetingStatus;
 
@@ -96,8 +95,6 @@ public class MeetingDTO extends DataResponseDTO {
 		this.status = meeting.getStatus();
 		this.notes = meeting.getNotes();
 		this.result = meeting.getResult();
-		this.responsibleName = ofNullable(meeting.getResponsible()).map(User::getFullName).orElse(null);
-		this.responsibleId = ofNullable(meeting.getResponsible()).map(User::getId).orElse(null);
 		this.clientName = ofNullable(meeting.getClient()).map(Client::getFullName).orElse(null);
 		this.clientId = ofNullable(meeting.getClient()).map(BaseEntity::getId).orElse(null);
 		this.contactId = ofNullable(meeting.getContact()).map(BaseEntity::getId).orElse(null);

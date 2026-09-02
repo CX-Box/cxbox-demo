@@ -484,4 +484,41 @@
     </addColumn>
   </changeSet>
 
+  <changeSet id="DEPT_PARENT_ID CXBOX-1341" author="cxbox">
+    <addColumn tableName="DEPT">
+      <column name="PARENT_ID" type="NUMERIC">
+      </column>
+    </addColumn>
+  </changeSet>
+
+  <changeSet id="CREATE_LNK_DEPT_USER CXBOX-1341" author="cxbox">
+  <createTable tableName="LNK_DEPT_USER">
+    <column name="ID" remarks="Identifier" type="NUMBER(19, 0)">
+      <constraints primaryKey="true"/>
+    </column>
+    <column defaultValueComputed="${now}" name="CREATED_DATE" remarks="Creation date"
+      type="TIMESTAMP(6)">
+      <constraints nullable="false"/>
+    </column>
+    <column defaultValueComputed="${now}" name="UPDATED_DATE" remarks="Last updated date"
+      type="TIMESTAMP(6)">
+      <constraints nullable="false"/>
+    </column>
+    <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
+      <constraints nullable="false" foreignKeyName="CONTACT_CREATED_BY" references="USERS"/>
+    </column>
+    <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
+      <constraints nullable="false" foreignKeyName="CONTACT_LAST_UPD_BY" references="USERS"/>
+    </column>
+    <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
+      <constraints nullable="false"/>
+    </column>
+    <column name="DEPT_ID" type="NUMBER(19, 0)">
+      <constraints foreignKeyName="DEPT_REF_USER" references="DEPT"/>
+    </column>
+    <column name="USER_ID" type="NUMBER(19, 0)">
+      <constraints foreignKeyName="USER_REF_DEPT" references="USERS"/>
+    </column>
+  </createTable>
+  </changeSet>
 </databaseChangeLog>

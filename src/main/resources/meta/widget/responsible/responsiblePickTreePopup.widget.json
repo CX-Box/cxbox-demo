@@ -1,0 +1,30 @@
+{
+  "name": "responsiblePickTreePopup",
+  "title": "List of users",
+  "type": "PickTreePopup",
+  "bc": "responsiblePickTreePopup",
+  "fields": [
+    {
+       "title": "Department Name",
+       "key": "departmentName",
+       "type": "input"
+     },
+    {
+      "title": "User Name",
+      "key": "fullName",
+      "type": "input"
+    },
+    {
+      "key": "parentId",
+      "type": "hidden"
+    },
+    {
+      "key": "isLeaf",
+      "type": "hidden"
+    },
+    {
+      "key": "lnkUserDeptId",
+      "type": "hidden"
+    }
+  ]
+}

@@ -134,6 +134,13 @@
                 background: #fafafa !important;
             }
         }
+      // Disabled highlighting for pseudo tree rows
+      .ant-table-row:hover:has([data-pseudo-row]),
+      .ant-table-row-hover:has([data-pseudo-row]) {
+        > td {
+          background: transparent !important;
+        }
+      }
 
         .filtersContainer {
             display: flex;
@@ -329,5 +336,90 @@
     color: #f5222d;
     &:global(.anticon-warning) {
         font-size: 10px;
+    }
+}
+
+.implicitCheckboxMuted {
+  :global(.ant-checkbox-checked .ant-checkbox-inner) {
+    background-color: #75c0fe;
+    border-color: #75c0fe;
+  }
+
+  :global(.ant-checkbox-indeterminate .ant-checkbox-inner::after) {
+    background-color: #75c0fe;
+  }
+}
+
+.treeFilterMatch:global(.ant-table-row) > td,
+.treeFilterMatch:global(.ant-table-row):hover > td {}
+
+.tableContainer {
+    .treeLevelCell {
+        position: relative;
+
+        &::before,
+        &::after {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 10.5px;
+            width: calc(var(--tree-level) * 20px + 1px);
+            pointer-events: none;
+            content: '';
+            background: repeating-linear-gradient(
+                    to right,
+                    #dcdcdc 0,
+                    #dcdcdc 1px,
+                    transparent 1px,
+                    transparent 20px
+            );
+        }
+
+        &::after {
+            display: none;
+        }
+    }
+
+    tr:first-child .treeLevelCell::before {
+        top: 25%;
+    }
+
+    tr[data-record-type='show-more'] .treeLevelCell {
+        &::before {
+            bottom: 75%;
+        }
+
+        &::after {
+            display: block;
+            width: var(--tree-continuing-guides-width);
+        }
+    }
+
+    tr[data-record-type='restore-ancestors'] .treeLevelCell,
+    tr[data-record-type='unallocated-nodes'] .treeLevelCell {
+        &::before, &::after {
+            content: none;
+        }
+    }
+}
+// Hidden pseudo container rows
+tr[data-record-type='unallocated-nodes'],
+tr[data-hidden-tree-row='true'] {
+    height: 0!important;
+    td {
+        padding: 0!important;
+        height: 0!important;
+
+        div {
+            visibility: hidden;
+            height: 0!important;
+            overflow: hidden;
+        }
+    }
+}
+
+.tableContainer {
+    tr[data-record-type="show-more"] td {
+        padding-top: var(--tree-show-more-padding-top, 20px);
     }
 }

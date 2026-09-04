@@ -3,12 +3,13 @@ import cn from 'classnames'
 import Tag from '@components/ui/Tag/Tag'
 import { interfaces } from '@cxbox-ui/core'
 import styles from './MultivalueTag.less'
+import { AppMultivalueFieldMeta } from '@interfaces/widget'
 
 export interface MultivalueTagProps {
     disabled: boolean
     placeholder?: string
     value: interfaces.MultivalueSingleValue[]
-    widgetFieldMeta: interfaces.MultivalueFieldMeta
+    widgetFieldMeta: AppMultivalueFieldMeta
     /**
      * @deprecated TODO: Remove in 2.0.0 in favor of `widgetName`
      */
@@ -17,7 +18,7 @@ export interface MultivalueTagProps {
     loading?: boolean
     page: number
     metaError: string
-    onPopupOpen: (bcName: string, widgetFieldMeta: interfaces.MultivalueFieldMeta, page: number, widgetName?: string) => void
+    onPopupOpen: (bcName: string, widgetFieldMeta: AppMultivalueFieldMeta, page: number, widgetName?: string) => void
     onChange: (newValue: interfaces.MultivalueSingleValue[], removedValue: interfaces.MultivalueSingleValue) => void
 }
 

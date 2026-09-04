@@ -6,6 +6,8 @@ import styles from './ColumnSort.less'
 import { actions, BcSorter } from '@cxbox-ui/core'
 import { useAppSelector } from '@store'
 import { AppWidgetTableMeta } from '@interfaces/widget'
+import { selectHasBcTree } from '@selectors/selectors'
+import { treeActions } from '../../slices/tree'
 
 export interface ColumnSortProps {
     className?: string
@@ -49,6 +51,7 @@ export function useSorter(widgetName: string, fieldKey: string) {
         const defaultSort = state.screen.bo.bc[bcName]?.defaultSort
         return { bcName, infinitePagination, sorters, page, permanentSorterFields, defaultSort }
     }, shallowEqual)
+    const needApplyTreeSorter = useAppSelector(selectHasBcTree(bcName))
 
     const fieldSorter = sorters?.find(item => item.fieldName === fieldKey)
 
@@ -58,23 +61,27 @@ export function useSorter(widgetName: string, fieldKey: string) {
         (newSorter: BcSorter | BcSorter[]) => {
             dispatch(actions.bcAddSorter({ bcName, sorter: newSorter }))
 
-            infinitePagination
-                ? dispatch(
-                      actions.bcFetchDataPages({
-                          bcName,
-                          widgetName,
-                          from: 1,
-                          to: page
-                      })
-                  )
-                : dispatch(
-                      actions.bcForceUpdate({
-                          bcName,
-                          widgetName
-                      })
-                  )
+            if (needApplyTreeSorter) {
+                dispatch(treeActions.applySorter({ bcName }))
+            } else {
+                infinitePagination
+                    ? dispatch(
+                          actions.bcFetchDataPages({
+                              bcName,
+                              widgetName,
+                              from: 1,
+                              to: page
+                          })
+                      )
+                    : dispatch(
+                          actions.bcForceUpdate({
+                              bcName,
+                              widgetName
+                          })
+                      )
+            }
         },
-        [bcName, dispatch, infinitePagination, page, widgetName]
+        [bcName, dispatch, infinitePagination, needApplyTreeSorter, page, widgetName]
     )
 
     const toggleSort = useCallback(() => {

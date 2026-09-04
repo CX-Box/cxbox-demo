@@ -1,0 +1,14 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd"
+  logicalFilePath="db/changelog/cxbox/3__0__1__core.xml">
+
+  <changeSet id="BC_FILTER_GROUPS_DEFAULT_FILTER" author="cxbox">
+    <addColumn tableName="BC_FILTER_GROUPS">
+      <column name="default_filter" type="BOOLEAN" remarks="The filter is default" defaultValue="false">
+      </column>
+    </addColumn>
+  </changeSet>
+
+</databaseChangeLog>

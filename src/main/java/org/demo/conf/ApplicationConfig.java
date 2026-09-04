@@ -39,8 +39,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 		MetaApplicationConfig.class,
 		CoreApplicationConfig.class,
 		PersistenceJPAConfig.class,
-		UIConfig.class,
-		APIConfig.class,
+		UIConfig.class, //does not have @EnableWebMvc anymore - recommended for springboot
+		APIConfig.class, //does not have @EnableWebMvc anymore - recommended for springboot
 		LocalizationConfig.class,
 		JacksonConfig.class
 })

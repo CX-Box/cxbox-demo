@@ -37,7 +37,7 @@
     <jobrunr-spring-boot-4-starter.version>8.6.1</jobrunr-spring-boot-4-starter.version>
     <minio.version>9.0.3</minio.version>  <!--due to CVE-2025-14813 -->
     <okhttp.version>5.3.2</okhttp.version> <!-- synced with minio lib version -->
-    <postgresql.version>42.7.11</postgresql.version> <!-- due to CVE-2026-42198 -->
+    <postgresql.version>42.7.13</postgresql.version> <!-- due to CVE-2026-42198 -->
   </properties>
 
   <dependencies>

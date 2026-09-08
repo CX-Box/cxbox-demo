@@ -1064,4 +1064,10 @@
       CREATE EXTENSION IF NOT EXISTS pg_trgm;
     </sql>
   </changeSet>
+  <changeSet id="BC_FILTER_GROUPS_DEFAULT_FILTER" author="cxbox">
+    <addColumn tableName="BC_FILTER_GROUPS">
+      <column name="default_filter" type="BOOLEAN" remarks="The filter is default" defaultValue="false">
+      </column>
+    </addColumn>
+  </changeSet>
 </databaseChangeLog>

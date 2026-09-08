@@ -1059,5 +1059,9 @@
       initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT"
       referencedColumnNames="ID" referencedTableName="USERS" validate="true"/>
   </changeSet>
-
+  <changeSet id="ADD_PG_TRIM_EXTENSION" author="cxbox" dbms="postgresql">
+    <sql>
+      CREATE EXTENSION IF NOT EXISTS pg_trgm;
+    </sql>
+  </changeSet>
 </databaseChangeLog>

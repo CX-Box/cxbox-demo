@@ -131,19 +131,21 @@
     <loadData tableName="DEPT" encoding="UTF-8" separator=";" quotchar="&quot;"
       file="db/data/DEPT.csv">
       <column header="ID" name="ID" type="NUMERIC"/>
-      <column header="PARENT_ID" name="PARENT_ID" type="NUMERIC"/>
       <column header="FULL_NAME" name="FULL_NAME" type="STRING"/>
       <column header="CODE" name="CODE" type="STRING"/>
       <column header="SHORT_NAME" name="SHORT_NAME" type="STRING"/>
     </loadData>
   </changeSet>
 
-  <changeSet author="cxbox" id="LNK_DEPT_USER CXBOX-1341">
-    <loadData tableName="LNK_DEPT_USER" encoding="UTF-8" separator=";" quotchar="&quot;"
-      file="db/data/DEPT_USER.csv">
+  <changeSet author="cxbox" id="ORG_STRUCTURE CXBOX-1341">
+    <loadData tableName="ORG_STRUCTURE" encoding="UTF-8" separator=";" quotchar="&quot;"
+      file="db/data/ORG_STRUCTURE.csv">
       <column header="ID" name="ID" type="NUMERIC"/>
+      <column header="PARENT_ID" name="PARENT_ID" type="NUMERIC"/>
+      <column header="TYPE" name="TYPE" type="STRING"/>
       <column header="DEPT_ID" name="DEPT_ID" type="NUMERIC"/>
       <column header="USER_ID" name="USER_ID" type="NUMERIC"/>
+      <column header="FULL_NAME" name="FULL_NAME" type="STRING"/>
     </loadData>
   </changeSet>
 

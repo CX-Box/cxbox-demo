@@ -16,15 +16,9 @@
 
 package org.demo.entity.core;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.cxbox.model.core.entity.BaseEntity;
@@ -33,24 +27,13 @@ import org.cxbox.model.core.entity.BaseEntity;
 @Table(name = "dept")
 @Getter
 @Setter
-public class Department extends BaseEntity {
+public class Dept extends BaseEntity {
 
 	private String code;
 
 	private String shortName;
 
 	@Column(name = "full_name")
-	private String departmentName;
+	private String fullName;
 
-	private Long parentId;
-
-
-	@JoinTable(name = "LNK_DEPT_USER",
-			joinColumns = @JoinColumn(name = "DEPT_ID"),
-			inverseJoinColumns = @JoinColumn(name = "USER_ID")
-	)
-	@ManyToMany(cascade =
-			{CascadeType.PERSIST,
-					CascadeType.MERGE})
-	private List<User> userList = new ArrayList<>();
 }

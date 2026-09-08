@@ -6,7 +6,7 @@
 
   <changeSet id="BC_FILTER_GROUPS_DEFAULT_FILTER" author="cxbox">
     <addColumn tableName="BC_FILTER_GROUPS">
-      <column name="DEFAULT_FILTER" type="BOOLEAN" remarks="The filter is default" defaultValue="false">
+      <column name="DEFAULT_FILTER" type="BOOLEAN" remarks="The filter is default" defaultValueBoolean="false">
       </column>
     </addColumn>
   </changeSet>

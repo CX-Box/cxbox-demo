@@ -1,18 +1,13 @@
 {
-  "name": "meetingEditResponsible",
+  "name": "meetingResponsibleInfo",
   "title": "Responsible Information",
-  "type": "Form",
-  "bc": "meetingEdit",
+  "type": "Info",
+  "bc": "meeting",
   "fields": [
     {
       "label": "Responsible",
       "key": "responsibleName",
-      "type": "pickTree",
-      "popupBcName": "responsiblePickTreePopup",
-      "pickMap": {
-        "responsibleName": "fullName",
-        "responsibleId": "userId"
-      }
+      "type": "input"
     }
   ],
   "options": {

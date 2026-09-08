@@ -484,15 +484,8 @@
     </addColumn>
   </changeSet>
 
-  <changeSet id="DEPT_PARENT_ID CXBOX-1341" author="cxbox">
-    <addColumn tableName="DEPT">
-      <column name="PARENT_ID" type="NUMERIC">
-      </column>
-    </addColumn>
-  </changeSet>
-
-  <changeSet id="CREATE_LNK_DEPT_USER CXBOX-1341" author="cxbox">
-  <createTable tableName="LNK_DEPT_USER">
+  <changeSet id="CREATE_ORG_STRUCTURE CXBOX-1341" author="cxbox">
+  <createTable tableName="ORG_STRUCTURE">
     <column name="ID" remarks="Identifier" type="NUMBER(19, 0)">
       <constraints primaryKey="true"/>
     </column>
@@ -505,20 +498,51 @@
       <constraints nullable="false"/>
     </column>
     <column defaultValueNumeric="1" name="CREATED_BY_USER_ID" type="NUMBER(19, 0)">
-      <constraints nullable="false" foreignKeyName="CONTACT_CREATED_BY" references="USERS"/>
+      <constraints nullable="false" foreignKeyName="ORG_STRUCTURE_CREATED_BY" references="USERS"/>
     </column>
     <column defaultValueNumeric="1" name="LAST_UPD_BY_USER_ID" type="NUMBER(19, 0)">
-      <constraints nullable="false" foreignKeyName="CONTACT_LAST_UPD_BY" references="USERS"/>
+      <constraints nullable="false" foreignKeyName="ORG_STRUCTURE_LAST_UPD_BY" references="USERS"/>
     </column>
     <column defaultValueNumeric="0" name="VSTAMP" type="NUMBER(19, 0)">
       <constraints nullable="false"/>
     </column>
     <column name="DEPT_ID" type="NUMBER(19, 0)">
-      <constraints foreignKeyName="DEPT_REF_USER" references="DEPT"/>
+      <constraints foreignKeyName="ORG_STRUCTURE_REF_DEPT" references="DEPT"/>
     </column>
     <column name="USER_ID" type="NUMBER(19, 0)">
-      <constraints foreignKeyName="USER_REF_DEPT" references="USERS"/>
+      <constraints foreignKeyName="ORG_STRUCTURE_REF_USER" references="USERS"/>
     </column>
+    <column name="PARENT_ID" remarks="Parent node of the org structure" type="NUMBER(19, 0)"/>
+    <column name="TYPE" remarks="Node type: DEPT or USER" type="VARCHAR(20)"/>
+    <column name="FULL_NAME" remarks="Denormalized name of the referenced department or user" type="VARCHAR(300)"/>
   </createTable>
+  </changeSet>
+
+  <changeSet id="ORG_STRUCTURE_REFERENCE_INDEXES" author="cxbox">
+    <createIndex tableName="ORG_STRUCTURE" indexName="ORG_STRUCTURE_DEPT_ID_INDEX">
+      <column name="DEPT_ID"/>
+    </createIndex>
+    <createIndex tableName="ORG_STRUCTURE" indexName="ORG_STRUCTURE_USER_ID_INDEX">
+      <column name="USER_ID"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="ORG_STRUCTURE_NAME_SORT_INDEX" author="cxbox">
+    <createIndex tableName="ORG_STRUCTURE" indexName="ORG_STRUCTURE_FULL_NAME_SORT_INDEX">
+      <column name="FULL_NAME"/>
+    </createIndex>
+  </changeSet>
+
+  <changeSet id="ORG_STRUCTURE_NAME_SEARCH_INDEX" author="cxbox" dbms="postgresql">
+    <sql>
+      CREATE INDEX ORG_STRUCTURE_FULL_NAME_SEARCH_INDEX ON ORG_STRUCTURE
+        USING GIN (lower(full_name) gin_trgm_ops);
+    </sql>
+  </changeSet>
+
+  <changeSet id="ORG_STRUCTURE_NAME_SEARCH_INDEX_ORACLE" author="cxbox" dbms="oracle">
+    <sql>
+      CREATE INDEX ORG_STRUCTURE_FULL_NAME_SEARCH_INDEX ON ORG_STRUCTURE (LOWER(FULL_NAME));
+    </sql>
   </changeSet>
 </databaseChangeLog>

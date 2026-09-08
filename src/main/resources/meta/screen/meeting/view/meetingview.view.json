@@ -30,6 +30,11 @@
       "gridWidth": 24
     },
     {
+      "widgetName": "meetingResponsibleInfo",
+      "position": 45,
+      "gridWidth": 24
+    },
+    {
       "widgetName": "meetingViewResult",
       "position": 50,
       "gridWidth": 24

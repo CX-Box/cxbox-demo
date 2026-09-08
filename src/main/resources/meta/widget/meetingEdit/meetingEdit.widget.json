@@ -44,11 +44,11 @@
     {
       "label": "Responsible",
       "key": "responsibleName",
-      "type": "pickList",
-      "popupBcName": "responsiblePickListPopup",
+      "type": "pickTree",
+      "popupBcName": "responsiblePickTreePopup",
       "pickMap": {
-        "responsibleName": "name",
-        "responsibleId": "id"
+        "responsibleName": "fullName",
+        "responsibleId": "userId"
       }
     }
   ],

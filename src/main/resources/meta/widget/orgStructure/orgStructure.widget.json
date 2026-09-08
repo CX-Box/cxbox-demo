@@ -1,0 +1,51 @@
+{
+  "name": "orgStructure",
+  "title": "Org Structure",
+  "type": "Tree",
+  "bc": "orgStructure",
+  "fields": [
+    {
+      "title": "Name",
+      "key": "fullName",
+      "type": "input"
+    },
+    {
+      "title": "Type",
+      "key": "type",
+      "type": "dictionary"
+    },
+    {
+      "title": "Dept Code",
+      "key": "deptCode",
+      "type": "input"
+    },
+    {
+      "title": "User Login",
+      "key": "userLogin",
+      "type": "input"
+    },
+    {
+      "key": "parentId",
+      "type": "hidden"
+    },
+    {
+      "key": "isLeaf",
+      "type": "hidden"
+    }
+  ],
+  "options": {
+    "actionGroups": {
+      "include": [
+        "create"
+      ]
+    },
+    "create": {
+      "widget": "orgStructureCreateForm",
+      "style": "inlineForm"
+    },
+    "edit": {
+      "widget": "orgStructureEditForm",
+      "style": "inlineForm"
+    }
+  }
+}

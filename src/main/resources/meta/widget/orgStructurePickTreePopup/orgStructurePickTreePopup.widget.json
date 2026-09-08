@@ -1,0 +1,41 @@
+{
+  "name": "orgStructurePickTreePopup",
+  "title": "Select Parent",
+  "type": "PickTreePopup",
+  "bc": "orgStructurePickTreePopup",
+  "fields": [
+    {
+      "title": "Name",
+      "key": "fullName",
+      "type": "input"
+    },
+    {
+      "title": "Type",
+      "key": "type",
+      "type": "dictionary"
+    },
+    {
+      "title": "Dept Code",
+      "key": "deptCode",
+      "type": "input"
+    },
+    {
+      "title": "User Login",
+      "key": "userLogin",
+      "type": "input"
+    },
+    {
+      "key": "parentId",
+      "type": "hidden"
+    },
+    {
+      "key": "isLeaf",
+      "type": "hidden"
+    }
+  ],
+  "options": {
+    "tree": {
+      "selection": "node"
+    }
+  }
+}

@@ -28,6 +28,7 @@ import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.Setter;
 import org.cxbox.model.core.entity.BaseEntity;
+import org.hibernate.annotations.Formula;
 import org.hibernate.envers.NotAudited;
 
 @Entity
@@ -43,6 +44,10 @@ public class User extends BaseEntity {
 	private String firstName;
 
 	private String lastName;
+
+	/** Calculated by the database, so that filtration and sorting work on it without a subquery. */
+	@Formula("trim(coalesce(last_name, '') || ' ' || coalesce(first_name, ''))")
+	private String fullName;
 
 	@NotAudited
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")

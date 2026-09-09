@@ -23,6 +23,14 @@
         "contactName": "fullName",
         "contactId": "id"
       }
+    },
+    {
+      "label": "Additional Contacts",
+      "key": "additionalContacts",
+      "displayedKey": "additionalContactsDisplayedKey",
+      "type": "multivalue",
+      "popupBcName": "contactAssocListPopup",
+      "assocValueKey": "fullName"
     }
   ],
   "options": {
@@ -44,6 +52,14 @@
           "cols": [
             {
               "fieldKey": "contactName",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "additionalContacts",
               "span": 12
             }
           ]

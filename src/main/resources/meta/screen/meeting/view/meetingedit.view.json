@@ -15,7 +15,7 @@
       "gridWidth": 24
     },
     {
-      "widgetName": "responsiblePickListPopup",
+      "widgetName": "responsiblePickTreePopup",
       "position": 20,
       "gridWidth": 24
     },
@@ -42,6 +42,11 @@
     {
       "widgetName": "meetingEditClientInfo",
       "position": 60,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "meetingEditResponsible",
+      "position": 65,
       "gridWidth": 24
     },
     {

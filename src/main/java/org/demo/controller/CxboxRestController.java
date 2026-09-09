@@ -7,6 +7,10 @@ import org.cxbox.core.crudma.bc.impl.AbstractEnumBcSupplier;
 import org.cxbox.core.crudma.bc.impl.BcDescription;
 import org.demo.conf.cxbox.customization.responsibilitiesAction.service.ResponsibilitiesActionAdminService;
 import org.demo.conf.cxbox.extension.jobRunr.service.state.JobStatsService;
+import org.demo.service.cxbox.inner.DeptPickService;
+import org.demo.service.cxbox.inner.OrgStructureReadService;
+import org.demo.service.cxbox.inner.OrgStructureWriteService;
+import org.demo.service.cxbox.inner.UserPickService;
 import org.demo.service.cxbox.anysource.clientsalestats.ClientSalesStatsService;
 import org.demo.service.cxbox.anysource.clientstats.ClientStatsService;
 import org.demo.conf.cxbox.extension.jobRunr.service.job.JobAdminService;
@@ -34,7 +38,6 @@ import org.demo.service.cxbox.inner.MeetingDocumentsWriteService;
 import org.demo.service.cxbox.inner.MeetingReadService;
 import org.demo.service.cxbox.inner.MeetingWriteService;
 import org.demo.conf.cxbox.customization.responsibilities.service.ResponsibilitiesAdminService;
-import org.demo.service.cxbox.inner.ResponsiblePickListService;
 
 import org.demo.service.cxbox.inner.SaleReadService;
 import org.demo.service.cxbox.inner.SaleWriteService;
@@ -68,8 +71,8 @@ public enum CxboxRestController implements EnumBcIdentifier {
 	meetingStats(MeetingStatsService.class),
 
 	meetingEdit(meetingStats,MeetingWriteService.class),
-	contactAssocListPopup(meetingEdit, ContactMultivalueService.class),
-		responsiblePickListPopup(meetingEdit, ResponsiblePickListService.class),
+		contactAssocListPopup(meetingEdit, ContactMultivalueService.class),
+		responsiblePickTreePopup(meetingEdit, OrgStructureReadService.class),
 		clientPickListPopup(meetingEdit, ClientPickListService.class),
 		contactPickListPopup(meetingEdit, ContactPickListService.class),
 
@@ -105,11 +108,16 @@ public enum CxboxRestController implements EnumBcIdentifier {
 		deletedJobs(jobsStats, JobAdminService.class),
 	lovExternal(LovReadService.class),
 
+	orgStructure(OrgStructureWriteService.class),
+		orgStructurePickTreePopup(orgStructure, OrgStructureReadService.class),
+		deptPickListPopup(orgStructure, DeptPickService.class),
+		userPickListPopup(orgStructure, UserPickService.class),
+
 	calendarList(CalendarService.class),
 	calendarYearList(CalendarYearMeetingService.class),
 		calendarYearMeeting(calendarYearList, MeetingWriteService.class),
 			clientCalendarPickListPopup(calendarYearMeeting, ClientPickListService.class),
-			contactCalendarPickListPopup(calendarYearMeeting, ContactPickListService.class)
+			contactCalendarPickListPopup(calendarYearMeeting, ContactPickListService.class),
 	;
 
 

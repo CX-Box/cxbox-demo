@@ -1,0 +1,13 @@
+ID;PARENT_ID;TYPE;DEPT_ID;USER_ID;FULL_NAME
+1;null;DEPT;1;null;IT Department
+2;1;DEPT;2;null;Development team
+3;1;DEPT;3;null;QA team
+4;1;DEPT;4;null;Support team
+5;null;DEPT;5;null;Finance Department
+6;5;DEPT;6;null;Accounting team
+7;2;USER;null;101;Smith John
+8;2;USER;null;102;Brown Peter
+9;3;USER;null;103;White Anna
+10;4;USER;null;104;Foster Kim
+11;6;USER;null;105;Clark Robert
+12;6;USER;null;106;Lopez Maria

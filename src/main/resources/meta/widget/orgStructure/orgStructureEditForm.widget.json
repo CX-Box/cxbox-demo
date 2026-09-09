@@ -1,0 +1,80 @@
+{
+  "name": "orgStructureEditForm",
+  "title": "Node",
+  "type": "Form",
+  "bc": "orgStructure",
+  "fields": [
+    {
+      "label": "Parent",
+      "key": "parentName",
+      "type": "pickTree",
+      "popupBcName": "orgStructurePickTreePopup",
+      "pickMap": {
+        "parentName": "fullName",
+        "parentId": "id"
+      }
+    },
+    {
+      "label": "Type",
+      "key": "type",
+      "type": "dictionary"
+    },
+    {
+      "label": "Dept",
+      "key": "deptFullName",
+      "type": "inline-pickList",
+      "popupBcName": "deptPickListPopup",
+      "pickMap": {
+        "deptFullName": "fullName",
+        "deptId": "id"
+      }
+    },
+    {
+      "label": "User",
+      "key": "userFullName",
+      "type": "inline-pickList",
+      "popupBcName": "userPickListPopup",
+      "pickMap": {
+        "userFullName": "fullName",
+        "userId": "id"
+      }
+    }
+  ],
+  "options": {
+    "actionGroups": {
+      "include": [
+        "save",
+        "delete",
+        "cancel-create"
+      ]
+    },
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "parentName",
+              "span": 14
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "type",
+              "span": 4
+            },
+            {
+              "fieldKey": "deptFullName",
+              "span": 10
+            },
+            {
+              "fieldKey": "userFullName",
+              "span": 10
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

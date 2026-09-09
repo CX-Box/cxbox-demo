@@ -1,0 +1,18 @@
+{
+  "name": "deptPickListPopup",
+  "title": "Select Dept",
+  "type": "PickListPopup",
+  "bc": "deptPickListPopup",
+  "fields": [
+    {
+      "title": "Dept",
+      "key": "fullName",
+      "type": "input"
+    },
+    {
+      "title": "Code",
+      "key": "code",
+      "type": "input"
+    }
+  ]
+}

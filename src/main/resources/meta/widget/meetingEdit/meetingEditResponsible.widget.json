@@ -1,0 +1,36 @@
+{
+  "name": "meetingEditResponsible",
+  "title": "Responsible Information",
+  "type": "Form",
+  "bc": "meetingEdit",
+  "fields": [
+    {
+      "label": "Responsible",
+      "key": "responsibleName",
+      "type": "pickTree",
+      "popupBcName": "responsiblePickTreePopup",
+      "pickMap": {
+        "responsibleName": "fullName",
+        "responsibleId": "userId"
+      }
+    }
+  ],
+  "options": {
+    "actionGroups": {
+      "include": [
+      ]
+    },
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "responsibleName",
+              "span": 12
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

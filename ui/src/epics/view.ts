@@ -27,11 +27,12 @@ import { closePopupRules } from './utils/closePopup'
 import { isDefined } from '@utils/isDefined'
 import { SECONDARY_DEFAULT_PAGINATION_TYPE_WITH_COUNT } from '@constants/pagination'
 import { findWidgetHasCount } from '@features/pagination/utils/common'
-import { treeActions } from '@slices/tree'
+import { treeActions, BcTreeState } from '@slices/tree'
 import { FilterType } from '@interfaces/filters'
 import { isTreeWidget } from '@constants/widget'
-import { DEFAULT_TREE_PARENT_FIELD_KEY } from '@utils/tree'
+import { DEFAULT_TREE_PARENT_FIELD_KEY, normalizeNodeId } from '@utils/tree'
 import { selectBcFilters } from '@selectors/selectors'
+import { TREE_ROOT_ID } from '@constants/tree'
 
 const getWidgetsForRowMetaUpdate = (state: RootState, activeBcName: string) => {
     const { widgets, pendingDataChanges } = state.view
@@ -123,10 +124,10 @@ const bcFetchCountEpic: RootEpic = (action$, state$, { api }) =>
                     return EMPTY
                 }
 
-                const parentFieldKey =
+                const parentIdFieldKey =
                     (widgets.find(widget => widget.bcName === bcName && isTreeWidget(widget)) as AppWidgetMeta | undefined)?.options?.tree
-                        ?.parentFieldKey ?? DEFAULT_TREE_PARENT_FIELD_KEY
-                const userFilters = selectBcFilters(state, bcName)?.filter(filter => filter.fieldName !== parentFieldKey) ?? []
+                        ?.parentIdFieldKey ?? DEFAULT_TREE_PARENT_FIELD_KEY
+                const userFilters = selectBcFilters(state, bcName)?.filter(filter => filter.fieldName !== parentIdFieldKey) ?? []
                 const bcUrl = buildBcUrl(bcName)
 
                 return api.fetchBcCount(screenName, bcUrl, utils.getFilters(userFilters)).pipe(
@@ -143,12 +144,12 @@ const bcFetchCountEpic: RootEpic = (action$, state$, { api }) =>
 
                 const widgetWithCount = findWidgetHasCount(action.payload.bcName, widgets, state.screen.alternativePagination)
                 const treeWidgets = widgets.filter(widget => isTreeWidget(widget)) as AppWidgetMeta[] | undefined
-                const parentFieldKey =
-                    treeWidgets?.find(widget => isDefined(widget.options?.tree?.parentFieldKey))?.options?.tree?.parentFieldKey ??
+                const parentIdFieldKey =
+                    treeWidgets?.find(widget => isDefined(widget.options?.tree?.parentIdFieldKey))?.options?.tree?.parentIdFieldKey ??
                     DEFAULT_TREE_PARENT_FIELD_KEY
                 if (widgetWithCount) {
                     const parentFilter = {
-                        fieldName: parentFieldKey,
+                        fieldName: parentIdFieldKey,
                         type: parentId === null ? FilterType.specified : FilterType.equals,
                         value: parentId === null ? false : parentId
                     }
@@ -291,6 +292,7 @@ export const sendOperationEpic: RootEpic = (action$, state$, { api }) =>
                                   isMassOperation && action.payload.onSuccessAction ? of(action.payload.onSuccessAction) : EMPTY,
                                   isMassOperation && responseIds ? of(actions.clearSelectedRows({ bcName })) : EMPTY,
                                   isMassOperation && responseIds ? of(actions.selectRows({ bcName, dataItems: responseIds })) : EMPTY,
+                                  isMassOperation ? EMPTY : of(actions.deselectTableRow()),
                                   withoutBcForceUpdate ? EMPTY : of(actions.bcForceUpdate({ bcName, nodeId: refreshNodeId })),
                                   ...(isMassOperation
                                       ? [of(actions.setPendingPostInvoke({ bcName, operationType, postInvoke }))]
@@ -420,7 +422,29 @@ const getCursor = (data: DataItem[], prevCursor: string | null) => {
     return cursorShouldChange ? newCursor : prevCursor
 }
 
-const bcDeleteDataEpic: RootEpic = (action$, state$, { api }) =>
+export const getTreeDeleteCursor = (tree: BcTreeState | undefined, cursor: string): string | null => {
+    if (!tree) {
+        return null
+    }
+
+    const node = tree.nodes[cursor]
+    const parentId = normalizeNodeId(node?.[tree.parentIdFieldKey ?? DEFAULT_TREE_PARENT_FIELD_KEY])
+    const rawSiblings = tree.childIdsByParent[parentId] ?? []
+    const visibleNodeIds = tree.filterActive ? new Set(tree.visibleNodeIdsForHidden) : null
+    const siblings = visibleNodeIds ? rawSiblings.filter(id => visibleNodeIds.has(String(id))) : rawSiblings
+    const nodeIndex = siblings.indexOf(cursor)
+
+    return (
+        siblings[nodeIndex - 1] ??
+        siblings[nodeIndex + 1] ??
+        (parentId !== TREE_ROOT_ID && tree.nodes[parentId] && (!visibleNodeIds || visibleNodeIds.has(parentId)) ? parentId : undefined) ??
+        tree.childIdsByParent[TREE_ROOT_ID]?.find(id => id !== cursor && (!visibleNodeIds || visibleNodeIds.has(String(id)))) ??
+        (visibleNodeIds ? tree.visibleNodeIdsForHidden?.find(id => id !== cursor && !!tree.nodes[id]) : undefined) ??
+        null
+    )
+}
+
+export const bcDeleteDataEpic: RootEpic = (action$, state$, { api }) =>
     action$.pipe(
         filter(actions.sendOperation.match),
         filter(action => utils.matchOperationRole(OperationTypeCrud.delete, action.payload, state$.value as any)),
@@ -471,17 +495,7 @@ const bcDeleteDataEpic: RootEpic = (action$, state$, { api }) =>
                         !!state.tree[bcName] && state.view.widgets.some(widget => widget.bcName === bcName && isTreeWidget(widget))
                     if (treeEnabled) {
                         const tree = state.tree[bcName]
-                        const node = tree?.nodes[cursor]
-                        const parentIdValueFromNode = node?.[tree?.parentFieldKey ?? DEFAULT_TREE_PARENT_FIELD_KEY]
-                        const parentId = isDefined(parentIdValueFromNode) ? String(parentIdValueFromNode) : String(null)
-                        const siblings = tree?.childIdsByParent[parentId] ?? []
-                        const nodeIndex = siblings.indexOf(cursor)
-                        const previousCursor =
-                            siblings[nodeIndex - 1] ??
-                            siblings[nodeIndex + 1] ??
-                            (parentId !== String(null) && tree?.nodes[parentId] ? parentId : undefined) ??
-                            tree?.childIdsByParent[String(null)]?.find(id => id !== cursor) ??
-                            null
+                        const newCursor = getTreeDeleteCursor(tree, cursor)
 
                         return concat(
                             of(actions.setOperationFinished({ bcName, operationType: OperationTypeCrud.delete })),
@@ -493,7 +507,7 @@ const bcDeleteDataEpic: RootEpic = (action$, state$, { api }) =>
                                     limit: widget?.limit || state.screen.bo.bc[bcName]?.limit
                                 })
                             ),
-                            of(actions.bcChangeCursors({ cursorsMap: { [bcName]: previousCursor } })),
+                            of(actions.bcChangeCursors({ cursorsMap: { [bcName]: newCursor! } })),
                             of(actions.bcFetchRowMeta({ widgetName, bcName })),
                             postInvoke ? of(actions.processPostInvoke({ bcName, postInvoke, cursor, widgetName })) : EMPTY
                         )

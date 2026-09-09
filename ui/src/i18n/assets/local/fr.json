@@ -49,6 +49,8 @@
         "There is no connection to the server": "Aucune connexion au serveur",
         "Load more": "Charger plus",
         "Load more and show count": "Charger plus et afficher le nombre",
+        "Show unfiltered sibling and count": "Show unfiltered sibling and count",
+        "Show unfiltered sibling": "Show unfiltered sibling",
         "Refresh meta": "Actualiser les métadonnées",
         "Refresh page": "Actualiser la page",
         "Required fields are missing": "Des champs obligatoires sont manquants",
@@ -198,6 +200,7 @@
         "Collapse": "Réduire",
         "Hide": "Masquer",
         "More {{n}}": "{{n}} de plus",
+        "Other {{n}}": "Прочее {{n}}",
         "shown {{n}}": "{{n}} affichés",
         "No Data": "Aucune donnée"
     }

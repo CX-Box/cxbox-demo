@@ -227,7 +227,7 @@ export interface AppWidgetMeta extends WidgetMeta {
         calendar?: CalendarOption
         cryptoGenerator?: CryptoGeneratorItem[]
         tree?: {
-            parentFieldKey?: string // default: parentId
+            parentIdFieldKey?: string // default: parentId
             isLeafFieldKey?: string // default: isLeaf
             searchModes?: TreeSearchModes[]
             onFilterApplyNestLevel?: number

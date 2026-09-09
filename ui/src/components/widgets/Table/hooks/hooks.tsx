@@ -9,10 +9,9 @@ import { AppWidgetMeta, CustomWidgetTypes } from '@interfaces/widget'
 import {
     getBcDefaultFilters,
     areFiltersEqual,
-    mergeFilters,
     getBcDefaultFilterGroupName,
-    DEFAULT_ASSOC_ID_FILTER_PARAMS,
-    getResetFilterTitleKey
+    getResetFilterTitleKey,
+    getWidgetDefaultFilters
 } from '@utils/defaultFilters'
 import { getAssocTreeSelectedNodeIds } from '@utils/getAssocTreeSelectedNodeIds'
 
@@ -56,12 +55,7 @@ export const useFilterGroups = (meta?: AppWidgetMeta) => {
             !!bcFilters?.length &&
             (bcFilters.length > 1 || !filterById || (Array.isArray(filterById.value) && !!selectedRows?.length && resultFilterEnabled))
         const selectedNodeIds = getAssocTreeSelectedNodeIds(state, state.view.popupData, meta)
-        const resolvedDefaultFilters = mergeFilters(
-            getBcDefaultFilters(bc),
-            meta?.type === CustomWidgetTypes.AssocTreePopup && selectedNodeIds.length
-                ? [{ ...DEFAULT_ASSOC_ID_FILTER_PARAMS, value: selectedNodeIds }]
-                : undefined
-        )
+        const resolvedDefaultFilters = getWidgetDefaultFilters(meta, bc, { selectedNodeIds })
         const hasDefaultFilters = (getBcDefaultFilters(bc)?.length ?? 0) > 0
         const hasSelectedRowsFilter = meta?.type === CustomWidgetTypes.AssocTreePopup && selectedNodeIds.length > 0
         const resetButtonTitleKey = getResetFilterTitleKey({ hasDefaultFilters, hasSelectedRowsFilter })

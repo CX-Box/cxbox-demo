@@ -1,6 +1,6 @@
 import { BcFilter, FieldType, utils, WidgetFieldBase } from '@cxbox-ui/core'
 import { FilterType } from '@interfaces/filters'
-import { CustomFieldTypes } from '@interfaces/widget'
+import { AppWidgetMeta, CustomFieldTypes } from '@interfaces/widget'
 import { containsSearchHighlightMatch } from '@utils/searchHighlight'
 
 const TEXT_FIELD_TYPES = new Set<string>([
@@ -115,12 +115,25 @@ export const getFieldHighlightSearch = (source: string, filter: BcFilter | undef
     return undefined
 }
 
-export const isDataItemMatchedByFilters = (dataItem: Record<string, unknown>, filters: BcFilter[], fields: WidgetFieldBase[] = []) => {
-    const filtersWithFieldMeta = filters
-        .map(filter => ({ filter, field: fields.find(item => item.key === filter.fieldName) }))
-        .filter(item => !!item.field)
-
-    return filtersWithFieldMeta.every(({ filter, field }) => {
-        return isFieldValueMatchedByFilter(dataItem[filter.fieldName], filter, field?.type)
+export const isDataItemMatchedByFilters = (
+    dataItem: Record<string, unknown>,
+    filters: BcFilter[],
+    fields: WidgetFieldBase[] = [],
+    widgetMeta?: AppWidgetMeta
+): boolean => {
+    if (!filters.length) {
+        return true
+    }
+    return filters.every(filter => {
+        if (filter.type === FilterType.fullTextSearch) {
+            const highlightKeys = widgetMeta?.options?.fullTextSearch?.highLight?.fieldKeys
+            const targetFields = highlightKeys ? fields.filter(f => highlightKeys.includes(f.key)) : fields
+            return targetFields.some(field => isFieldValueMatchedByFilter(dataItem[field.key], filter, field.type))
+        }
+        const field = fields.find(item => item.key === filter.fieldName)
+        if (!field) {
+            return true
+        }
+        return isFieldValueMatchedByFilter(dataItem[filter.fieldName], filter, field.type)
     })
 }

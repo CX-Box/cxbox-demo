@@ -23,7 +23,7 @@ import { PopupData } from '@interfaces/view'
 import { cancelRequestActionTypes, cancelRequestEpic } from '@utils/cancelRequestEpic'
 import { RootEpic, RootState } from '@store'
 import { buildBcUrl } from '@utils/buildBcUrl'
-import { treeActions } from '@slices/tree'
+import { createDictionaryFrom, treeActions } from '@slices/tree'
 import { isTreeWidget } from '@constants/widget'
 import { DEFAULT_PAGE, DEFAULT_PAGE_LIMIT } from '@constants/pagination'
 import { FilterType } from '@interfaces/filters'
@@ -32,6 +32,7 @@ import { getBcDefaultFilters, mergeFilters } from '@utils/defaultFilters'
 import { CustomWidgetTypes } from '@interfaces/widget'
 import { getAssocTreeSelectedNodeIds } from '@utils/getAssocTreeSelectedNodeIds'
 import { selectBcFilters } from '@selectors/selectors'
+import { getAllDataFromTree } from '@utils/tree'
 
 const {
     checkShowCondition,
@@ -113,8 +114,11 @@ export const getBcFetchSideEffects = ({ action, state, data, bcName, widgetName,
     const anyHierarchyWidget = state.view.widgets?.find(item => {
         return item.bcName === widget.bcName && item.type === WidgetTypes.AssocListPopup && isHierarchyWidget(item)
     })
+    const isTree = isTreeWidget(widget) || !!state.tree?.[bcName]
+    const fullData = isTree ? [...getAllDataFromTree(state, bcName), ...(data ?? [])] : data
+
     const cursorSelectionStrategy = (items: DataItem[], prevCursor: string | undefined) =>
-        (internalUtils?.cursorStrategyManager ?? cursorStrategyManager).get(bc.cursorSelectionStrategy)(
+        (internalUtils?.cursorStrategyManager ?? cursorStrategyManager).get(bc?.cursorSelectionStrategy)(
             items,
             prevCursor,
             bcName,
@@ -132,14 +136,14 @@ export const getBcFetchSideEffects = ({ action, state, data, bcName, widgetName,
                 return true
             }
         }
-        const dataToCheck = bcName === widget.showCondition?.bcName ? data : state.data[widget.showCondition?.bcName as string]
+        const dataToCheck = bcName === widget.showCondition?.bcName ? fullData : state.data[widget.showCondition?.bcName as string]
         const currentCursor = dataToCheck
             ? cursorSelectionStrategy(dataToCheck, state.screen.bo.bc[widget.showCondition?.bcName as string]?.cursor!)
             : null
 
         return checkShowCondition(widget.showCondition, currentCursor!, dataToCheck, state.view.pendingDataChanges)
     }
-    const cursorChange = getCursorChange(action, data, bc.cursor!, !!anyHierarchyWidget, cursorSelectionStrategy)
+    const cursorChange = getCursorChange(action, fullData, bc?.cursor, !!anyHierarchyWidget, cursorSelectionStrategy)
     const fetchRowMeta = of(bcFetchRowMeta({ widgetName, bcName }))
     const fetchChildren = data.length
         ? getChildrenData(
@@ -205,6 +209,10 @@ export const bcFetchDataEpic: RootEpic = (action$, state$, { api, utils }) =>
             }
 
             if (treeEnabled) {
+                if (bcForceUpdate.match(action) && action.payload.nodeId !== undefined) {
+                    return EMPTY
+                }
+
                 const resetTree = bcForceUpdate.match(action) || bcChangePage.match(action) || showViewPopup.match(action)
                 const withBcDataSideEffects = bcFetchDataRequest.match(action) || resetTree
 
@@ -352,27 +360,31 @@ function isHierarchyWidget(widget: WidgetMeta) {
     return widget.options?.hierarchy || widget.options?.hierarchyFull
 }
 
-const getCursorChange = (
+export const getCursorChange = (
     action: AnyAction,
     data: DataItem[],
-    prevCursor: string,
+    prevCursor: string | null | undefined,
     isHierarchy: boolean,
     strategy: (data: DataItem[], prevCursor: string | undefined) => string | null | undefined
 ) => {
     const { bcName } = action.payload
     const keepDelta = bcFetchDataRequest.match(action) ? action.payload.keepDelta : undefined
-    const updatedCursor = !prevCursor || !data?.some(i => i.id === prevCursor)
+    const updatedCursor = !prevCursor || !data?.some(i => String(i.id) === String(prevCursor))
 
-    return updatedCursor
-        ? of(
-              bcChangeCursors({
-                  cursorsMap: {
-                      [bcName as string]: strategy(data, prevCursor)!
-                  },
-                  keepDelta: isHierarchy || keepDelta
-              })
-          )
-        : EMPTY
+    if (!updatedCursor) {
+        return EMPTY
+    }
+
+    const newCursor = strategy(data, prevCursor!)
+
+    return of(
+        bcChangeCursors({
+            cursorsMap: {
+                [bcName as string]: newCursor!
+            },
+            keepDelta: isHierarchy || keepDelta
+        })
+    )
 }
 
 const isPopupWidget = (type: string) => PopupWidgetTypes.includes(type)

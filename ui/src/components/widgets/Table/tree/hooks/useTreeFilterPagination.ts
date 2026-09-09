@@ -6,8 +6,7 @@ import { treeActions } from '@slices/tree'
 import { getPaginationControlsState } from '@features/pagination/utils/paginationControls'
 import { useTreePagination } from './useTreePagination'
 import { selectBcFilters } from '@selectors/selectors'
-import { FilterType } from '@interfaces/filters'
-import { getFieldHighlightSearch } from '@utils/filterMatch'
+import { isDataItemMatchedByFilters } from '@utils/filterMatch'
 import { WidgetFieldBase } from '@cxbox-ui/core'
 import { TREE_SEARCH_MODES, TREE_SHOW_MORE_AUTO_FETCH_ENABLED, TREE_SHOW_MORE_AUTO_FETCH_MAX_REQUESTS } from '@constants/tree'
 import { Lookup } from '@utils/Lookup'
@@ -50,7 +49,7 @@ export const useTreeFilterPagination = (widgetMeta?: AppWidgetMeta) => {
                 return false
             }
 
-            const parentId = node[treeState.parentFieldKey]
+            const parentId = node[treeState.parentIdFieldKey]
             const normalizedParentId = parentId == null ? undefined : String(parentId)
             const displayed =
                 !normalizedParentId ||
@@ -61,25 +60,19 @@ export const useTreeFilterPagination = (widgetMeta?: AppWidgetMeta) => {
 
             return displayed
         }
-        const bcFilters = filters ?? []
+        const userFilters = filters ?? []
+        if (!userFilters.length) {
+            return highlightedIds
+        }
+
+        const fields = (widgetMeta?.fields ?? []) as WidgetFieldBase[]
 
         Object.values(treeState?.nodes ?? {}).forEach(node => {
             if (!isDisplayed(String(node.id))) {
                 return
             }
 
-            const highlighted = ((widgetMeta?.fields ?? []) as WidgetFieldBase[]).some(field => {
-                const filter = bcFilters.find(
-                    item =>
-                        item.fieldName === field.key ||
-                        (item.type === FilterType.fullTextSearch &&
-                            widgetMeta?.options?.fullTextSearch?.highLight?.fieldKeys?.includes(field.key))
-                )
-
-                return !!getFieldHighlightSearch(String(node[field.key] ?? ''), filter, field.type)
-            })
-
-            if (highlighted) {
+            if (isDataItemMatchedByFilters(node, userFilters, fields, widgetMeta)) {
                 highlightedIds.add(String(node.id))
             }
         })

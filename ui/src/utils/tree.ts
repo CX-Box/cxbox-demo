@@ -3,6 +3,8 @@ import { FIELDS } from '@constants'
 import { AppWidgetMeta } from '@interfaces/widget'
 import { TREE_ROOT_ID } from '@constants/tree'
 import { isDefined } from '@utils/isDefined'
+import { RootState } from '@store'
+import { TreeNode } from '@slices/tree'
 
 export const DEFAULT_TREE_PARENT_FIELD_KEY = FIELDS.TREE.PARENT_ID
 export const DEFAULT_TREE_IS_LEAF_FIELD_KEY = 'isLeaf'
@@ -16,11 +18,11 @@ export interface CollectSubtreeOptions {
 }
 
 export const getTreeFieldKeys = (widget?: WidgetMeta | AppWidgetMeta) => ({
-    parentFieldKey: (widget as AppWidgetMeta | undefined)?.options?.tree?.parentFieldKey ?? DEFAULT_TREE_PARENT_FIELD_KEY,
+    parentIdFieldKey: (widget as AppWidgetMeta | undefined)?.options?.tree?.parentIdFieldKey ?? DEFAULT_TREE_PARENT_FIELD_KEY,
     isLeafFieldKey: (widget as AppWidgetMeta | undefined)?.options?.tree?.isLeafFieldKey ?? DEFAULT_TREE_IS_LEAF_FIELD_KEY
 })
 
-export const getTreeNodeParentId = (node: Record<string, any> | undefined, parentFieldKey: string) => node?.[parentFieldKey]
+export const getTreeNodeParentId = (node: Record<string, any> | undefined, parentIdFieldKey: string) => node?.[parentIdFieldKey]
 
 export const getTreeNodeIsLeaf = (node: Record<string, any> | undefined, isLeafFieldKey: string) => node?.[isLeafFieldKey] === true
 
@@ -33,7 +35,7 @@ export const extractNodeIds = <T extends { id: unknown }>(items: T[] = [], idKey
 export const getAncestorNodeIds = (
     nodeId: unknown,
     getNode: (nodeId: string) => Record<string, any> | undefined,
-    parentFieldKey: string,
+    parentIdFieldKey: string,
     options?: GetAncestorNodeIdsOptions
 ): string[] => {
     const ancestorIds: string[] = []
@@ -51,7 +53,7 @@ export const getAncestorNodeIds = (
             break
         }
 
-        const rawParentId = getTreeNodeParentId(node, parentFieldKey)
+        const rawParentId = getTreeNodeParentId(node, parentIdFieldKey)
         if (!isDefined(rawParentId)) {
             if (options?.includeRoot) {
                 ancestorIds.push(TREE_ROOT_ID)
@@ -109,7 +111,7 @@ export const collectSubtreeNodeIds = (
     return subtreeIds
 }
 
-export const collectRootConnectedNodeIds = (nodes: Record<string, Record<string, any>>, parentFieldKey: string): Set<string> => {
+export const collectRootConnectedNodeIds = (nodes: Record<string, Record<string, any>>, parentIdFieldKey: string): Set<string> => {
     const connectedNodeIds = new Set<string>()
 
     Object.keys(nodes).forEach(nodeId => {
@@ -125,7 +127,7 @@ export const collectRootConnectedNodeIds = (nodes: Record<string, Record<string,
 
             visited.add(currentId)
             path.push(currentId)
-            const parentId = getTreeNodeParentId(nodes[currentId], parentFieldKey)
+            const parentId = getTreeNodeParentId(nodes[currentId], parentIdFieldKey)
 
             if (!isDefined(parentId) || normalizeNodeId(parentId) === TREE_ROOT_ID) {
                 path.forEach(id => connectedNodeIds.add(id))
@@ -137,4 +139,48 @@ export const collectRootConnectedNodeIds = (nodes: Record<string, Record<string,
     })
 
     return connectedNodeIds
+}
+
+export const getAllDataFromTree = (state: RootState, bcName: string) => {
+    const treeState = state?.tree?.[bcName]
+    const nodes = treeState?.nodes
+    if (!nodes) {
+        return []
+    }
+
+    const childIdsByParent = treeState?.childIdsByParent ?? {}
+    const remainingNodes = { ...nodes }
+    const allData: TreeNode[] = []
+    const visited = new Set<string>()
+
+    const traverse = (parentId: string) => {
+        const childIds = childIdsByParent[parentId]
+        if (!childIds || !childIds.length) {
+            return
+        }
+
+        for (const rawChildId of childIds) {
+            const childId = String(rawChildId)
+            if (visited.has(childId)) {
+                continue
+            }
+            visited.add(childId)
+
+            if (remainingNodes[childId]) {
+                allData.push(remainingNodes[childId])
+                delete remainingNodes[childId]
+            }
+
+            traverse(childId)
+        }
+    }
+
+    traverse(TREE_ROOT_ID)
+
+    const leftoverNodes = Object.values(remainingNodes)
+    if (leftoverNodes.length > 0) {
+        allData.push(...leftoverNodes)
+    }
+
+    return allData
 }

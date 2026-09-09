@@ -16,6 +16,7 @@ export type TableTreeNode = TreeNode & {
     _branchType?: 'restore-ancestors' | 'unallocated-nodes' | string
     _treeParentId?: string | null
     _remainingNumberOfRecords?: string | number | undefined
+    _showMoreTitle?: string
     _countInfoMessage?: string
     _treeIsLeaf?: boolean
     _nestingLevel?: number
@@ -98,6 +99,7 @@ export const useTreeDataSource = (
                         parentId: parentId,
                         name: 'show-more',
                         _remainingNumberOfRecords: count,
+                        _showMoreTitle: bcTreeState?.filterActive ? 'Other {{n}}' : undefined,
                         _countInfoMessage: countInfoMessage,
                         _recordType: 'show-more',
                         _disabled: disabled || isLoading,
@@ -146,7 +148,7 @@ export const useTreeDataSource = (
                     return null
                 }
 
-                const parentId = node[bcTreeState?.parentFieldKey ?? 'parentId'] as string | null | undefined
+                const parentId = node[bcTreeState?.parentIdFieldKey ?? 'parentId'] as string | null | undefined
                 const isLeaf = node[bcTreeState?.isLeafFieldKey ?? 'isLeaf'] === true
                 const childNodes = getChildNodesWithPseudoNodes(nodeId, buildTreeNode, currentLevel + 1, branchType)
                 const hasActualChildren = childNodes.some(child => child._recordType === 'node')
@@ -177,7 +179,7 @@ export const useTreeDataSource = (
 
             const orphanRootIds = Object.values(nodesById)
                 .filter(node => {
-                    const parentId = node[bcTreeState?.parentFieldKey ?? 'parentId']
+                    const parentId = node[bcTreeState?.parentIdFieldKey ?? 'parentId']
 
                     return (
                         !unallocatedNodeIds.has(String(node.id)) &&
@@ -255,7 +257,7 @@ export const useTreeDataSource = (
             bcTreeState?.filterActive,
             bcTreeState?.filterPagination.loading,
             bcTreeState?.isLeafFieldKey,
-            bcTreeState?.parentFieldKey,
+            bcTreeState?.parentIdFieldKey,
             bcTreeState?.unallocatedNodeIds,
             bcTreeState?.expandedParents,
             calculateShowMoreState,

@@ -39,9 +39,9 @@ export const useTreeShowMore = (widgetMeta?: AppWidgetMeta) => {
             let countInfoMessage: string | undefined
 
             if (isUnknownCount) {
-                countInfoMessage = t('Load more and show count')
+                countInfoMessage = t('Show unfiltered sibling and count')
             } else if (isRemainingCountZero) {
-                countInfoMessage = t('Load more')
+                countInfoMessage = t('Show unfiltered sibling')
             }
 
             const remainingCount = calculatedRemainingCount || ''

@@ -206,7 +206,7 @@ export const useTreeRowSelection = (widgetName: string, selectionSource?: TreeRo
                 return []
             }
 
-            return getAncestorNodeIds(nodeId, id => treeState.nodes[id], treeState.parentFieldKey, { includeRoot: true })
+            return getAncestorNodeIds(nodeId, id => treeState.nodes[id], treeState.parentIdFieldKey, { includeRoot: true })
         },
         [treeState]
     )

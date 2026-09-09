@@ -1,5 +1,7 @@
-import { BcFilter, BcMeta, FilterType, utils } from '@cxbox-ui/core'
+import { BcFilter, FilterType, utils, WidgetMeta } from '@cxbox-ui/core'
 import { FIELDS } from '@constants'
+import { CustomWidgetTypes } from '@interfaces/widget'
+import { BcMeta } from '@interfaces/bc'
 
 export const DEFAULT_ASSOC_ID_FILTER_PARAMS = {
     type: FilterType.equalsOneOf,
@@ -25,7 +27,7 @@ export const getBcDefaultFilters = (bc?: BcMeta): BcFilter[] => {
         return utils.parseFilters(bc.defaultFilter) ?? []
     }
 
-    const defaultFilterGroup = bc?.filterGroups?.find(group => (group as typeof group & { defaultFilter?: boolean }).defaultFilter)
+    const defaultFilterGroup = bc?.filterGroups?.find(group => group.defaultFilter)
     return utils.parseFilters(defaultFilterGroup?.filters) ?? []
 }
 
@@ -34,7 +36,7 @@ export const getBcDefaultFilterGroupName = (bc?: BcMeta): string | null => {
         return null
     }
 
-    const defaultFilterGroup = bc?.filterGroups?.find(group => (group as typeof group & { defaultFilter?: boolean }).defaultFilter)
+    const defaultFilterGroup = bc?.filterGroups?.find(group => group.defaultFilter)
     return defaultFilterGroup?.name ?? null
 }
 
@@ -45,6 +47,17 @@ export const mergeFilters = (filters: BcFilter[], secondFilters?: BcFilter[]): B
     }
 
     return filters
+}
+
+export const getWidgetDefaultFilters = (widget?: WidgetMeta, bc?: BcMeta, options?: { selectedNodeIds?: string[] }): BcFilter[] => {
+    const { selectedNodeIds } = options || {}
+
+    return mergeFilters(
+        getBcDefaultFilters(bc),
+        widget?.type === CustomWidgetTypes.AssocTreePopup && selectedNodeIds?.length
+            ? [{ ...DEFAULT_ASSOC_ID_FILTER_PARAMS, value: selectedNodeIds }]
+            : undefined
+    )
 }
 
 export const areFiltersEqual = (left: BcFilter[] = [], right: BcFilter[] = []) => {

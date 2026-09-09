@@ -57,7 +57,7 @@ export function buildTreeTableColumns<T extends CustomDataItem>({
     const isGroupingHierarchy = (widget.type as string) === CustomWidgetTypes.GroupingHierarchy
     const continuingGuidesWidthById = buildContinuingGuidesWidthById(dataSource, expandedRowKeys)
 
-    const columnsLength = (fields?.length ?? 0) + controlColumns.length
+    const columnsLength = fields?.length ?? 0
     const dataColumns =
         fields?.map((field, index) => {
             const listField = field as WidgetListField

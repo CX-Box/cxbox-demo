@@ -61,7 +61,7 @@ export function TreeTablePseudoRow({
                         onClick={createFetchNodesHandler(dataItem.parentId, true)}
                         style={{ border: 'none', color: '#40a9ff', fontSize: 'var(--field-read-font-size)' }}
                     >
-                        {t('More {{n}}', { n: dataItem._remainingNumberOfRecords ?? '' })}
+                        {t(dataItem._showMoreTitle ?? 'More {{n}}', { n: dataItem._remainingNumberOfRecords ?? '' })}
                         {dataItem._countInfoMessage && <Icon type="info-circle" style={{ fontSize: 12, marginLeft: 3 }} />}
                     </Button>
                 </Tooltip>

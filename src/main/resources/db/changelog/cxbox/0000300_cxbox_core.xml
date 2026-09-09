@@ -1066,7 +1066,7 @@
   </changeSet>
   <changeSet id="BC_FILTER_GROUPS_DEFAULT_FILTER" author="cxbox">
     <addColumn tableName="BC_FILTER_GROUPS">
-      <column name="default_filter" type="BOOLEAN" remarks="The filter is default" defaultValue="false">
+      <column name="default_filter" type="BOOLEAN" remarks="The filter is default"  defaultValueNumeric="0">
       </column>
     </addColumn>
   </changeSet>

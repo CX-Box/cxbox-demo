@@ -39,6 +39,7 @@ export default function MenuBar({
                     groupName={item.groupName}
                     action={item.action}
                     disabled={toolbarDisabled || item.disabled}
+                    actionKey={item.key}
                 />
             )
         },
@@ -52,6 +53,7 @@ export default function MenuBar({
                 hideArrow={true}
                 items={hiddenItems.length > 0 ? hiddenItems : undefined}
                 disabled={toolbarDisabled || hiddenItems.length === 0}
+                actionKey="More"
             />
         ),
         [toolbarDisabled]
@@ -75,6 +77,7 @@ export default function MenuBar({
                     items={rightButton.items}
                     disabled={(settingDisabled ?? toolbarDisabled) || rightButton.disabled}
                     hideArrow={true}
+                    actionKey={rightButton.key}
                 />
             </div>
         </div>

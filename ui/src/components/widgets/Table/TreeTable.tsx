@@ -14,7 +14,7 @@ import { useWidgetPaginationLimit } from '@features/pagination/hooks/useWidgetPa
 import { useRowMetaWithCache } from '@hooks/useRowMetaWithCache'
 import { AppWidgetGroupingHierarchyMeta, AppWidgetTableMeta } from '@interfaces/widget'
 import type { TreeSearchModes } from '@interfaces/widget'
-import { selectBcTree } from '@selectors/selectors'
+import { selectBc, selectBcTree } from '@selectors/selectors'
 import { useAppSelector } from '@store'
 import { useDispatch } from 'react-redux'
 import styles from './Table.less'
@@ -29,6 +29,37 @@ import { treeActions } from '@slices/tree'
 import { normalizeTreeSearchModes } from '@constants/tree'
 import { isDefined } from '@utils/isDefined'
 import { isRestoreAncestorsBranch, isUnallocatedNodesBranch } from '@components/widgets/Table/tree/hooks/useTreeDataSource'
+
+const findNodeAndParent = (
+    nodes: TableTreeNode[],
+    id: string | number | null | undefined,
+    parent?: TableTreeNode
+): { node: TableTreeNode; parent?: TableTreeNode } | undefined => {
+    if (id == null) {
+        return undefined
+    }
+    for (const node of nodes) {
+        if (String(node.id) === String(id)) {
+            return { node, parent }
+        }
+        if (node.children?.length) {
+            const found = findNodeAndParent(node.children, id, node)
+            if (found) {
+                return found
+            }
+        }
+    }
+    return undefined
+}
+
+const collectDescendantIds = (node: TableTreeNode, targetSet: Set<string>) => {
+    targetSet.add(String(node.id))
+    if (node.children?.length) {
+        for (const child of node.children) {
+            collectDescendantIds(child, targetSet)
+        }
+    }
+}
 
 interface TreeTableProps<T extends CustomDataItem> extends AntdTableProps<T> {
     meta: AppWidgetTableMeta | AppWidgetGroupingHierarchyMeta
@@ -54,6 +85,7 @@ function TreeTable<T extends CustomDataItem>({
     const { bcName, name: widgetName } = widget
     const dispatch = useDispatch()
     const bcRowMeta = useRowMetaWithCache(bcName, true)
+    const cursor = useAppSelector(state => selectBc(state, bcName))?.cursor
     const searchModes = useMemo(() => normalizeTreeSearchModes(widget.options?.tree?.searchModes), [widget.options?.tree?.searchModes])
     const currentSearchMode = useAppSelector(state => selectBcTree(state, bcName)?.searchMode) ?? searchModes[0]
 
@@ -75,6 +107,71 @@ function TreeTable<T extends CustomDataItem>({
         restoreAncestorPaths,
         filterActive
     } = useTableTree(widget, expandedRowId)
+
+    const activeNodeInfo = useMemo(() => findNodeAndParent(treeDataSource, cursor), [treeDataSource, cursor])
+
+    const { activeGuideLevel, activeDescendantIds, isActiveInRestoreBranch } = useMemo(() => {
+        const descendantIds = new Set<string>()
+        if (!activeNodeInfo) {
+            return {
+                activeGuideLevel: undefined,
+                activeDescendantIds: descendantIds,
+                isActiveInRestoreBranch: false
+            }
+        }
+
+        const { node: activeNode, parent: parentNode } = activeNodeInfo
+        const isRestore = isRestoreAncestorsBranch(activeNode)
+        const isUnallocated = isUnallocatedNodesBranch(activeNode)
+
+        if (isUnallocated) {
+            return {
+                activeGuideLevel: undefined,
+                activeDescendantIds: descendantIds,
+                isActiveInRestoreBranch: false
+            }
+        }
+
+        let guideLevel: number
+        let isRestoreBranchActive = false
+
+        if (isRestore) {
+            if (activeNode._level === 0 || !parentNode || parentNode._recordType === 'restore-ancestors') {
+                return {
+                    activeGuideLevel: undefined,
+                    activeDescendantIds: descendantIds,
+                    isActiveInRestoreBranch: true
+                }
+            }
+            guideLevel = activeNode._level ?? 0
+            const guideParentNode = parentNode
+            collectDescendantIds(guideParentNode, descendantIds)
+            isRestoreBranchActive = true
+        } else {
+            const activeLevel = activeNode._level ?? 0
+            guideLevel = activeLevel
+            if (activeLevel === 0) {
+                treeDataSource.forEach(node => {
+                    if (!isRestoreAncestorsBranch(node) && !isUnallocatedNodesBranch(node)) {
+                        collectDescendantIds(node, descendantIds)
+                    }
+                })
+            } else {
+                const guideParentNode = parentNode
+                if (guideParentNode) {
+                    collectDescendantIds(guideParentNode, descendantIds)
+                }
+            }
+            isRestoreBranchActive = false
+        }
+
+        return {
+            activeGuideLevel: guideLevel,
+            activeDescendantIds: descendantIds,
+            isActiveInRestoreBranch: isRestoreBranchActive
+        }
+    }, [activeNodeInfo, treeDataSource])
+
     const defaultTreeRowSelection = useTreeRowSelection(widgetName)
     const { selectNode, getNodeSelectionState } = treeRowSelection ?? defaultTreeRowSelection
     const { changePageLimit, hideLimitOptions, value: pageLimit, options } = useWidgetPaginationLimit(widget)
@@ -98,6 +195,24 @@ function TreeTable<T extends CustomDataItem>({
     const treeOnRow = useCallback(
         (record: T, index: number) => {
             const treeRecord = record as T & TableTreeNode
+            const isRestoreBranch = isRestoreAncestorsBranch(treeRecord)
+            const isUnallocatedBranch = isUnallocatedNodesBranch(treeRecord)
+
+            const isRowInActiveGuideBranch =
+                activeGuideLevel !== undefined && !isUnallocatedBranch && (isActiveInRestoreBranch ? isRestoreBranch : !isRestoreBranch)
+
+            const isDescendant = activeDescendantIds.has(String(treeRecord.id))
+
+            const isRowGuideAllowed =
+                treeRecord._recordType === 'node' ||
+                treeRecord._recordType === 'show-more' ||
+                treeRecord._recordType === 'loading' ||
+                treeRecord._recordType === 'empty'
+
+            const hasActiveLevelGuide =
+                isRowInActiveGuideBranch && isRowGuideAllowed && isDescendant && (treeRecord._level ?? 0) >= activeGuideLevel
+
+            const isActiveGuideEnd = hasActiveLevelGuide && treeRecord._recordType === 'show-more' && treeRecord._level === activeGuideLevel
 
             return {
                 ...onRow?.(record, index),
@@ -106,11 +221,14 @@ function TreeTable<T extends CustomDataItem>({
                 'data-test-widget-tree-row-parent-id': String((isNode(record) ? treeRecord._treeParentId : treeRecord.parentId) ?? null),
                 'data-record-type': treeRecord._recordType,
                 'data-hidden-tree-row': treeRecord._recordType === 'restore-ancestors' && !treeRecord._separatorText,
-                'data-restore-ancestors-branch': isRestoreAncestorsBranch(treeRecord) ? 'true' : undefined,
-                'data-unallocated-nodes-branch': isUnallocatedNodesBranch(treeRecord) ? 'true' : undefined
+                'data-restore-ancestors-branch': isRestoreBranch ? 'true' : undefined,
+                'data-unallocated-nodes-branch': isUnallocatedBranch ? 'true' : undefined,
+                'data-active-row': String(record.id) === String(cursor) ? 'true' : undefined,
+                'data-active-level-guide': hasActiveLevelGuide ? 'true' : undefined,
+                'data-active-guide-end': isActiveGuideEnd ? 'true' : undefined
             }
         },
-        [isNode, onRow]
+        [activeDescendantIds, activeGuideLevel, cursor, isActiveInRestoreBranch, isNode, onRow]
     )
     const getGroupingRowKeyByRecordId = useCallback(() => undefined, [])
     const needRowSelectRecord = !expandable && widget.options?.readOnly !== true && widget.options?.edit?.style !== 'none'
@@ -236,6 +354,7 @@ function TreeTable<T extends CustomDataItem>({
     const columns = React.useMemo(
         () =>
             buildTreeTableColumns<T>({
+                activeLevel: activeGuideLevel,
                 disableRowExpand: currentSearchMode === 'hide' && filterActive,
                 dataSource: treeDataSource as TableTreeNode[],
                 showCloseButton: closeButton.visibility,
@@ -255,6 +374,7 @@ function TreeTable<T extends CustomDataItem>({
                 expandedRowRender
             }),
         [
+            activeGuideLevel,
             bcRowMeta?.fields,
             closeButton.visibility,
             createFetchNodesHandler,

@@ -384,6 +384,10 @@
         top: 25%;
     }
 
+    tr:first-child[data-active-level-guide='true'] .treeLevelCell::after {
+        top: 25%;
+    }
+
     tr[data-restore-ancestors-branch='true'] .treeLevelCell {
         &::before,
         &::after {
@@ -392,14 +396,60 @@
         }
     }
 
+    tr[data-active-level-guide='true'] .treeLevelCell {
+        &::after {
+            display: block;
+            top: 0;
+            bottom: 0;
+            left: calc(10.5px + (var(--tree-active-level)) * 20px);
+            width: 2px;
+            background: #898989;
+            z-index: 1;
+        }
+    }
+
+    tr[data-active-level-guide='true'][data-active-guide-end='true'] .treeLevelCell {
+        &::after {
+            bottom: 75%;
+        }
+    }
+
+    tr[data-active-level-guide='true'][data-restore-ancestors-branch='true'] .treeLevelCell {
+        &::after {
+            left: calc(66.5px + (var(--tree-active-level) - 1) * 20px);
+        }
+
+        &:has([data-restore-path-button='true'])::after {
+            content: none;
+        }
+    }
+
     tr[data-record-type='show-more'] .treeLevelCell {
         &::before {
             bottom: 75%;
         }
 
-        &::after {
-            display: block;
+        [data-pseudo-row]::before {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 10.5px;
             width: var(--tree-continuing-guides-width);
+            pointer-events: none;
+            content: '';
+            background: repeating-linear-gradient(
+                    to right,
+                    #dcdcdc 0,
+                    #dcdcdc 1px,
+                    transparent 1px,
+                    transparent 20px
+            );
+        }
+    }
+
+    tr[data-record-type='show-more'][data-restore-ancestors-branch='true'] .treeLevelCell {
+        [data-pseudo-row]::before {
+            left: 66.5px;
         }
     }
 

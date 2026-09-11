@@ -111,6 +111,7 @@ export function TreeTableCell<T extends CustomDataItem>({
             <span style={{ paddingLeft, display: 'flex', alignItems: 'center' }}>
                 {dataItem._restorePath && isDefined(dataItem._treeParentId) && (
                     <Button
+                        data-restore-path-button={true}
                         type="Link"
                         size="small"
                         removeIndentation={true}

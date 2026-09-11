@@ -1,0 +1,90 @@
+@import '../../assets/styles/theme';
+
+.container {
+    :global(.ant-modal-content) {
+        border-radius: 5px;
+    }
+
+    :global(.ant-modal-header) {
+        padding: 20px 24px 12px;
+        border-bottom: none;
+        border-radius: 5px 5px 0 0;
+    }
+
+    :global(.ant-modal-body) {
+        padding: 0 24px 12px;
+    }
+
+    :global(.ant-modal-footer) {
+        padding: 4px 24px 20px;
+        border-top: none;
+    }
+
+    :global(.ant-collapse-borderless) {
+        background: none;
+    }
+
+    :global(.ant-collapse-borderless > .ant-collapse-item) {
+        border: none;
+    }
+
+    :global(.ant-collapse-content > .ant-collapse-content-box) {
+        padding-left: 0;
+    }
+
+    :global(.ant-collapse > .ant-collapse-item > .ant-collapse-header) {
+        padding-left: 24px;
+        color: @cerulean;
+    }
+
+    :global(.ant-collapse > .ant-collapse-item > .ant-collapse-header .ant-collapse-arrow) {
+        left: 0;
+    }
+
+    // same footer buttons as ModalInvoke: red primary "Yes", text-like "No"
+    :global(.ant-modal-footer .ant-btn) {
+        display: inline-flex;
+        align-items: flex-start;
+        height: 40px;
+        border: solid 1px @primary-red;
+        padding: 10px;
+        font-size: 14px;
+        font-weight: normal;
+        line-height: 1.57;
+        color: white;
+        border-radius: 2px;
+        background-color: @primary-red;
+    }
+
+    :global(.ant-modal-footer .ant-btn:not(.ant-btn-primary)) {
+        border-color: transparent;
+        border-radius: 4px;
+        background: none;
+        color: @cerulean;
+        box-shadow: none;
+
+        &:hover,
+        &:focus,
+        &:active {
+            border-color: transparent;
+            background: none;
+            color: @cerulean;
+        }
+    }
+}
+
+.header {
+    display: flex;
+    align-items: center;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #595959;
+}
+
+.hint {
+    margin: 0 0 16px;
+    color: #8c8c8c;
+}

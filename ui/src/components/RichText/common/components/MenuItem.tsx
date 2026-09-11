@@ -24,9 +24,23 @@ export interface MenuItemProps {
     items?: MenuBarItem[]
     hideArrow?: boolean
     disabled?: boolean
+    // Stable, non-localized identifier (the item's `key`) for e2e tests. Exposed as
+    // `data-test-rich-text-action` on the button so tests never rely on translated titles.
+    actionKey?: string
 }
 
-export default function MenuItem({ icon, title, action, isActive = null, style, items, hideArrow, groupName, disabled }: MenuItemProps) {
+export default function MenuItem({
+    icon,
+    title,
+    action,
+    isActive = null,
+    style,
+    items,
+    hideArrow,
+    groupName,
+    disabled,
+    actionKey
+}: MenuItemProps) {
     const hasItems = items && items.length > 0
 
     const button = (
@@ -36,6 +50,7 @@ export default function MenuItem({ icon, title, action, isActive = null, style, 
             style={{ flexShrink: 0, ...style }}
             onClick={action}
             disabled={disabled}
+            data-test-rich-text-action={actionKey}
             onMouseDown={e => {
                 if (!hasItems) {
                     e.preventDefault()
@@ -85,7 +100,7 @@ export default function MenuItem({ icon, title, action, isActive = null, style, 
                     const subMenuChildren = renderMenuContent(subItem.items, key)
 
                     return (
-                        <Menu.SubMenu key={key} title={itemContent} disabled={subItem.disabled}>
+                        <Menu.SubMenu key={key} title={itemContent} disabled={subItem.disabled} data-test-rich-text-action={subItem.key}>
                             {subItem.groupName ? (
                                 <Menu.ItemGroup title={subItem.groupName}>{subMenuChildren}</Menu.ItemGroup>
                             ) : (
@@ -96,7 +111,13 @@ export default function MenuItem({ icon, title, action, isActive = null, style, 
                 }
 
                 return (
-                    <Menu.Item key={key} onClick={subItem.action} title={subItem.title} disabled={subItem.disabled}>
+                    <Menu.Item
+                        key={key}
+                        onClick={subItem.action}
+                        title={subItem.title}
+                        disabled={subItem.disabled}
+                        data-test-rich-text-action={subItem.key}
+                    >
                         {itemContent}
                     </Menu.Item>
                 )

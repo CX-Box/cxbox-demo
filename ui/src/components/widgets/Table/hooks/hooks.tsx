@@ -1,19 +1,21 @@
 import { useAppSelector } from '@store'
 import { shallowEqual, useDispatch } from 'react-redux'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback } from 'react'
 import { actions } from '@actions'
-import { utils } from '@cxbox-ui/core'
 import { FIELDS } from '@constants'
 import { selectBc, selectBcFilters } from '@selectors/selectors'
 
-function useFiltersGroupName<T>(filtersExist: boolean) {
-    const [filterGroupName, setFilterGroupName] = useState<T | null>(null)
+function useFiltersGroupName(bcName: string | undefined) {
+    const filterGroupName = useAppSelector(state => state.screen.appliedFilterGroup[bcName!] ?? null)
 
-    useEffect(() => {
-        if (!filtersExist) {
-            setFilterGroupName(null)
-        }
-    }, [filtersExist])
+    const dispatch = useDispatch()
+
+    const setFilterGroupName = useCallback(
+        (name: string | null) => {
+            dispatch(actions.setFilterGroup({ bcName: bcName!, filterGroupName: name }))
+        },
+        [bcName, dispatch]
+    )
 
     return { filterGroupName, setFilterGroupName }
 }
@@ -42,7 +44,7 @@ export const useFilterGroups = (bcName: string = '') => {
         }
     }, shallowEqual)
 
-    const { filterGroupName, setFilterGroupName } = useFiltersGroupName<string>(filtersExist)
+    const { filterGroupName, setFilterGroupName } = useFiltersGroupName(bcName)
 
     const dispatch = useDispatch()
 
@@ -53,15 +55,10 @@ export const useFilterGroups = (bcName: string = '') => {
 
     const applyFilterGroup = useCallback(
         (value: string) => {
-            const filterGroup = filterGroups?.find(item => item.name === value)
-            const parsedFilters = utils.parseFilters(filterGroup?.filters)
-
-            setFilterGroupName(filterGroup?.name ?? null)
-            dispatch(actions.bcRemoveAllFilters({ bcName }))
-            parsedFilters.forEach(filter => dispatch(actions.bcAddFilter({ bcName, filter })))
+            setFilterGroupName(value ?? null)
             dispatch(actions.bcForceUpdate({ bcName }))
         },
-        [bcName, dispatch, filterGroups, setFilterGroupName]
+        [bcName, dispatch, setFilterGroupName]
     )
 
     return {

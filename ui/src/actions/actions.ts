@@ -144,3 +144,5 @@ export const setMassResultFilterEnabled = createAction<{
 }>('setMassResultFilterEnabled')
 
 export const setAlternativePaginationType = createAction<{ widgetName: string; type: PaginationMode }>('setAlternativePaginationType')
+
+export const setFilterGroup = createAction<{ bcName: string; filterGroupName: string | null }>('setFilterGroup')

@@ -384,11 +384,10 @@
         top: 25%;
     }
 
-    tr[data-restore-ancestors-branch='true'] .treeLevelCell,
-    tr[data-unallocated-nodes-branch='true'] .treeLevelCell {
+    tr[data-restore-ancestors-branch='true'] .treeLevelCell {
         &::before,
         &::after {
-            left: 30.5px;
+            left: 66.5px;
             width: calc((var(--tree-level) - 1) * 20px + 1px);
         }
     }
@@ -411,7 +410,7 @@
             padding: 16px;
         }
     }
-
+    tr[data-unallocated-nodes-branch="true"] .treeLevelCell,
     tr[data-record-type='expanded-row'] .treeLevelCell,
     tr[data-record-type='restore-ancestors'] .treeLevelCell,
     tr[data-record-type='unallocated-nodes'] .treeLevelCell {

@@ -13,6 +13,7 @@ import { isDefined } from '@utils/isDefined'
 import { TREE_INDENT_SIZE } from '@components/widgets/Table/constants'
 import { ReactComponent as ListDotSvg } from '@assets/icons/listDot.svg'
 import { ReactComponent as RightWithEllipseSvg } from '@assets/icons/rightWithEllipse.svg'
+import { isRestoreAncestorsBranch } from '@components/widgets/Table/tree/hooks/useTreeDataSource'
 
 const EXPAND_ICON_WIDTH = 22
 export const PSEUDO_ROW_TYPES: Array<TableTreeNode['_recordType']> = [
@@ -61,7 +62,10 @@ export function TreeTableCell<T extends CustomDataItem>({
     isEditMode,
     expandedRowRender
 }: TreeTableCellProps<T>) {
-    const paddingLeft = (dataItem._level ?? 0) * TREE_INDENT_SIZE + TREE_INDENT_SIZE
+    const paddingLeft =
+        (dataItem._level ?? 0) * TREE_INDENT_SIZE +
+        TREE_INDENT_SIZE +
+        (isRestoreAncestorsBranch(dataItem) && !(dataItem._restorePath && isDefined(dataItem._treeParentId)) ? 36 : 0)
 
     if (PSEUDO_ROW_TYPES.includes(dataItem._recordType)) {
         return isFirstColumn ? (

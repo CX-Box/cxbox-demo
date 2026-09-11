@@ -47,7 +47,7 @@ export function TreeTableColumnTitle({
             <Icon
                 type={isExpanded ? 'down' : 'right'}
                 data-test-widget-tree-header-expand={true}
-                style={{ marginRight: 8, cursor: 'pointer' }}
+                style={{ marginLeft: -12, marginRight: 8, cursor: 'pointer' }}
                 onClick={event => {
                     event.stopPropagation()
                     handleExpand(!isExpanded, { id: null as any } as CustomDataItem)

@@ -1,0 +1,66 @@
+@import '../../../assets/styles/theme';
+
+.root {
+    margin-top: 0;
+}
+
+.links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    line-height: 22px;
+}
+
+// selectors are kept more specific than the ones in ErrorPopup.less (it paints every .anticon inside its modal red and 24px)
+.root .link {
+    cursor: pointer;
+    color: @cerulean;
+    user-select: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
+
+    :global(.anticon) {
+        font-size: 12px;
+        margin-right: 6px;
+        color: inherit;
+    }
+}
+
+.root .toggle :global(.anticon) {
+    margin-right: 0;
+}
+
+.arrow {
+    transition: transform 0.2s;
+}
+
+.arrowExpanded {
+    transform: rotate(90deg);
+}
+
+.content {
+    padding-top: 8px;
+}
+
+.details {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    column-gap: 16px;
+    row-gap: 2px;
+    margin: 0 0 8px;
+    font-size: 12px;
+
+    dt {
+        color: #595959;
+        opacity: 50%;
+    }
+
+    dd {
+        margin: 0;
+        font-family: monospace;
+        word-break: break-all;
+    }
+}

@@ -1,7 +1,7 @@
 import { Api as CXBoxApi, utils } from '@cxbox-ui/core'
 import { BcCountParamsMap, BcCountResponse } from '@interfaces/bcCount'
-import axios, { AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios'
-import { __API__ } from '@constants'
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios'
+import { __API__, AUTH_ERROR_MODE } from '@constants'
 import { NotificationCheckNewResponse, NotificationCountResponse, NotificationsResponse } from '@interfaces/notification'
 import { fileControllerMapping } from '@constants/notification'
 import { LoginResponse } from '@interfaces/session'
@@ -11,6 +11,7 @@ import { saveAs } from 'file-saver'
 import { getFileNameFromDisposition } from '@utils/getFileNameFromDisposition'
 import { map, Observable } from 'rxjs'
 import { Auth } from '../auth'
+import { freshUser } from '../auth/tokenRenewal'
 
 class Api extends CXBoxApi {
     loginByRoleRequest(role: string) {
@@ -193,7 +194,10 @@ class Api extends CXBoxApi {
     }
 }
 
-function tokenInterceptor(rqConfig: InternalAxiosRequestConfig) {
+/**
+ * Behavior before 3.0.2 (`AUTH_ERROR_MODE = 'legacy'`): the stored token as is, even an expired one; renewal only by the library's timer
+ */
+function legacyTokenInterceptor(rqConfig: InternalAxiosRequestConfig) {
     return Auth.getInstance()
         .getUser()
         .then(user => {
@@ -202,8 +206,46 @@ function tokenInterceptor(rqConfig: InternalAxiosRequestConfig) {
         })
 }
 
+/**
+ * Token check before every request (as `keycloak.updateToken(5)` did): renewal only when needed, shared by all callers and tabs,
+ * see `auth/tokenRenewal.ts`. A renewal that fails for good becomes a synthetic 401 for AuthErrorPopup.
+ */
+function tokenInterceptor(rqConfig: InternalAxiosRequestConfig) {
+    if (AUTH_ERROR_MODE === 'legacy') {
+        return legacyTokenInterceptor(rqConfig)
+    }
+
+    return freshUser()
+        .then(user => {
+            rqConfig.headers.Authorization = `Bearer ${user?.access_token}`
+            return rqConfig
+        })
+        .catch(() => {
+            throw new AxiosError('Session has expired: token refresh failed', AxiosError.ERR_BAD_REQUEST, rqConfig, undefined, {
+                status: 401,
+                statusText: 'Unauthorized',
+                data: null,
+                headers: {},
+                config: rqConfig
+            } as AxiosResponse)
+        })
+}
+
 const __AJAX_TIMEOUT__ = 900000
 const __CLIENT_ID__: number = Date.now()
+
+/**
+ * Per-tab client id sent as `ClientId` header with every request; also written to the copied error details
+ */
+export const CLIENT_ID = __CLIENT_ID__
+
+export interface TimedRequestConfig extends InternalAxiosRequestConfig {
+    /**
+     * Timestamps taken around the request (before the token refresh started and when the error arrived); used by error popup details
+     */
+    requestStartedAt?: number
+    requestFinishedAt?: number
+}
 
 const HEADERS = { Pragma: 'no-cache', 'Cache-Control': 'no-cache, no-store, must-revalidate' }
 
@@ -220,5 +262,22 @@ const instance = axios.create({
 if (!process.env['REACT_APP_NO_SSO']) {
     instance.interceptors.request.use(tokenInterceptor, () => Promise.reject())
 }
+
+// registered last, so it runs first (request interceptors are applied in reverse order): the timestamp is taken before the token refresh
+instance.interceptors.request.use(config => {
+    ;(config as TimedRequestConfig).requestStartedAt = Date.now()
+    return config
+})
+
+instance.interceptors.response.use(
+    response => response,
+    error => {
+        // also reached by the synthetic 401 thrown from `tokenInterceptor`: request interceptor rejections flow through this chain
+        if (error?.config) {
+            ;(error.config as TimedRequestConfig).requestFinishedAt = Date.now()
+        }
+        return Promise.reject(error)
+    }
+)
 
 export const CxBoxApiInstance = new Api(instance, Infinity, Object.values(FilterType))

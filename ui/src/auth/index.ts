@@ -1,5 +1,6 @@
 import { Log, UserManager, WebStorageStateStore, UserManagerSettings } from 'oidc-client-ts'
 import axios from 'axios'
+import { AUTH_ERROR_MODE } from '@constants'
 
 Log.setLogger(console)
 
@@ -25,6 +26,9 @@ export class Auth {
             post_logout_redirect_uri: appBaseUrl,
             silentRequestTimeoutInSeconds: 30,
             scope: 'openid profile',
+            // off on purpose: the library renews in every tab at once with one refresh token (https://github.com/authts/oidc-client-ts/issues/430),
+            // keepTokenFresh() in auth/tokenRenewal.ts does it once for all tabs instead
+            automaticSilentRenew: AUTH_ERROR_MODE === 'legacy',
             ...data,
             userStore: new WebStorageStateStore({ store: localStorage })
         }

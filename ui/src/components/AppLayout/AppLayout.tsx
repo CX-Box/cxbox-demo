@@ -9,13 +9,14 @@ import View from '../View/View'
 import ModalInvoke from '../ModalInvoke/ModalInvoke'
 import SystemNotifications from '../SystemNotifications/SystemNotifications'
 import ErrorPopup from '../containers/ErrorPopup/ErrorPopup'
+import AuthErrorPopup from '@components/AuthErrorPopup/AuthErrorPopup'
 import { useAppDispatch, useAppSelector } from '@store'
 import Notifications from '@components/Notifications/Notifications'
 import { Login } from '../Login/Login'
 import { useScrollToTopAfterChangeRoute } from '@hooks/useScrollToTopAfterChangeRoute'
 import { useSetCssVariable } from '@hooks/useSetCssVariable'
 import { addAlphaToHex } from '@utils/color'
-import { FIELD_DISABLED_COLOR, WHEN_EDITABLE_FIELD_IS_DISABLED_THEN_FONT_OPACITY } from '@constants'
+import { AUTH_ERROR_MODE, FIELD_DISABLED_COLOR, WHEN_EDITABLE_FIELD_IS_DISABLED_THEN_FONT_OPACITY } from '@constants'
 import { Router } from '@router'
 
 export const AppLayout: React.FC = () => {
@@ -48,6 +49,7 @@ export const AppLayout: React.FC = () => {
                 <Spin wrapperClassName={styles.appSpin} spinning={appSpinning}>
                     <DevPanel />
                     <ErrorPopup />
+                    {AUTH_ERROR_MODE !== 'legacy' && <AuthErrorPopup />}
                     <ModalInvoke />
                     <SystemNotifications />
                     <Layout className={styles.appLayout}>
@@ -61,7 +63,10 @@ export const AppLayout: React.FC = () => {
             </Layout>
         </Router>
     ) : (
-        <div className={styles.spinContainer}>{noSSO ? <Login /> : <Spin size="large" />}</div>
+        <div className={styles.spinContainer}>
+            {noSSO ? <Login /> : <Spin size="large" />}
+            {AUTH_ERROR_MODE !== 'legacy' && <AuthErrorPopup />}
+        </div>
     )
 }
 

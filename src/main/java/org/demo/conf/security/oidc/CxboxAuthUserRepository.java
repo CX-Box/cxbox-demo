@@ -28,6 +28,8 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+// S5804: a missing user is reported the way Spring Security expects, the login page never shows the reason
+@SuppressWarnings("java:S5804")
 public class CxboxAuthUserRepository {
 
 	private final UserRepository userRepository;
@@ -59,7 +61,7 @@ public class CxboxAuthUserRepository {
 			user = userService.getUserByLogin(login.toUpperCase());
 			List<UserRole> userRoleList = user.getUserRoleList();
 			Set<String> currentRoles = userRoleList != null
-					? userRoleList.stream().map(UserRole::getInternalRoleCd).collect(Collectors.toSet())
+					? userRoleList.stream().filter(userRole -> Boolean.TRUE.equals(userRole.getActive())).map(UserRole::getInternalRoleCd).collect(Collectors.toSet())
 					: new HashSet<>();
 			if (!(currentRoles.containsAll(roles) && roles.containsAll(currentRoles))) {
 				authService.loginAs(authService.createAuthentication(VANILLA));

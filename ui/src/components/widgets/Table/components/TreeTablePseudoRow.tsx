@@ -16,6 +16,7 @@ interface TreeTablePseudoRowProps {
     getNodeSelectionState: ReturnType<typeof useTreeRowSelection>['getNodeSelectionState']
     createFetchNodesHandler: ReturnType<typeof useTableTree>['createFetchNodesHandler']
     restoreAncestorPaths: ReturnType<typeof useTableTree>['restoreAncestorPaths']
+    expandedRowRender?: (record: any) => React.ReactNode
 }
 
 export function TreeTablePseudoRow({
@@ -25,10 +26,20 @@ export function TreeTablePseudoRow({
     selectNode,
     getNodeSelectionState,
     createFetchNodesHandler,
-    restoreAncestorPaths
+    restoreAncestorPaths,
+    expandedRowRender
 }: TreeTablePseudoRowProps) {
     const { t } = useTranslation()
     const selectionState = getNodeSelectionState(dataItem)
+
+    if (dataItem._recordType === 'expanded-row') {
+        const parentRecord = dataItem._parentNode ?? dataItem
+        return (
+            <div style={{ width: '100%' }} data-pseudo-row={true}>
+                {expandedRowRender?.(parentRecord) ?? null}
+            </div>
+        )
+    }
 
     let content: React.ReactNode = null
 

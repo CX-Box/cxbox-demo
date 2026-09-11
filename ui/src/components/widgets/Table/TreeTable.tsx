@@ -58,14 +58,6 @@ function TreeTable<T extends CustomDataItem>({
     const currentSearchMode = useAppSelector(state => selectBcTree(state, bcName)?.searchMode) ?? searchModes[0]
 
     const {
-        dataSource: treeDataSource,
-        handleExpand: handleTreeExpandBase,
-        expandedRowKeys: treeExpandedRowKeys,
-        createFetchNodesHandler,
-        restoreAncestorPaths,
-        filterActive
-    } = useTableTree(widget)
-    const {
         expandable,
         onExpand: onFormExpand,
         expandIcon,
@@ -74,6 +66,15 @@ function TreeTable<T extends CustomDataItem>({
         expandedRowRender,
         expandedRowId
     } = useExpandableForm<T>(widget)
+
+    const {
+        dataSource: treeDataSource,
+        handleExpand: handleTreeExpand,
+        expandedRowKeys: treeExpandedRowKeys,
+        createFetchNodesHandler,
+        restoreAncestorPaths,
+        filterActive
+    } = useTableTree(widget, expandedRowId)
     const defaultTreeRowSelection = useTreeRowSelection(widgetName)
     const { selectNode, getNodeSelectionState } = treeRowSelection ?? defaultTreeRowSelection
     const { changePageLimit, hideLimitOptions, value: pageLimit, options } = useWidgetPaginationLimit(widget)
@@ -133,16 +134,6 @@ function TreeTable<T extends CustomDataItem>({
         onRow: treeOnRow,
         isInteractiveRow: isNode
     })
-
-    const handleTreeExpand = useCallback(
-        (expanded: boolean, record: CustomDataItem) => {
-            if (!expanded && record.id === expandedRowId) {
-                onFormExpand?.(false, record as T)
-            }
-            handleTreeExpandBase(expanded, record)
-        },
-        [expandedRowId, handleTreeExpandBase, onFormExpand]
-    )
 
     const handleHeaderRow = useCallback(() => {
         return {
@@ -252,7 +243,7 @@ function TreeTable<T extends CustomDataItem>({
                 fields: resultedFields,
                 widget,
                 rowMetaFields: bcRowMeta?.fields,
-                expandedRowKeys,
+                expandedRowKeys: treeExpandedRowKeys,
                 showSelection: !disableRowSelection,
                 selectNode,
                 getNodeSelectionState,
@@ -260,7 +251,8 @@ function TreeTable<T extends CustomDataItem>({
                 createFetchNodesHandler,
                 restoreAncestorPaths,
                 controlColumns,
-                isEditMode
+                isEditMode,
+                expandedRowRender
             }),
         [
             bcRowMeta?.fields,
@@ -269,7 +261,8 @@ function TreeTable<T extends CustomDataItem>({
             currentSearchMode,
             controlColumns,
             disableRowSelection,
-            expandedRowKeys,
+            treeExpandedRowKeys,
+            expandedRowRender,
             filterActive,
             getNodeSelectionState,
             handleTreeExpand,
@@ -309,7 +302,6 @@ function TreeTable<T extends CustomDataItem>({
                 rowKey={ROW_KEY}
                 expandIconColumnIndex={getExpandIconColumnIndex(controlColumns, resultedFields, rowSelection?.type)}
                 expandIcon={resultExpandIcon}
-                expandedRowRender={record => (isNode(record) ? expandedRowRender?.(record) : null)}
                 onExpand={(expanded, record) => {
                     if (isNode(record)) {
                         onFormExpand?.(expanded, record)

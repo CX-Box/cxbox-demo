@@ -20,7 +20,8 @@ export const PSEUDO_ROW_TYPES: Array<TableTreeNode['_recordType']> = [
     'show-more',
     'empty',
     'restore-ancestors',
-    'unallocated-nodes'
+    'unallocated-nodes',
+    'expanded-row'
 ]
 const EXPANDED_ICON_TYPE = 'down'
 const COLLAPSED_ICON_TYPE = 'right'
@@ -40,6 +41,7 @@ interface TreeTableCellProps<T extends CustomDataItem> {
     restoreAncestorPaths: ReturnType<typeof useTableTree>['restoreAncestorPaths']
     disableRowExpand?: boolean
     isEditMode: (record: T) => boolean
+    expandedRowRender?: (record: T) => React.ReactNode
 }
 
 export function TreeTableCell<T extends CustomDataItem>({
@@ -56,7 +58,8 @@ export function TreeTableCell<T extends CustomDataItem>({
     createFetchNodesHandler,
     restoreAncestorPaths,
     disableRowExpand,
-    isEditMode
+    isEditMode,
+    expandedRowRender
 }: TreeTableCellProps<T>) {
     const paddingLeft = (dataItem._level ?? 0) * TREE_INDENT_SIZE + TREE_INDENT_SIZE
 
@@ -70,6 +73,7 @@ export function TreeTableCell<T extends CustomDataItem>({
                 getNodeSelectionState={getNodeSelectionState}
                 createFetchNodesHandler={createFetchNodesHandler}
                 restoreAncestorPaths={restoreAncestorPaths}
+                expandedRowRender={expandedRowRender}
             />
         ) : null
     }

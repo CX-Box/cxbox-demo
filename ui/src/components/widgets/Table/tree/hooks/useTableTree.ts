@@ -15,7 +15,7 @@ import { TREE_SEARCH_MODES } from '@constants/tree'
 
 export type { TableTreeNode }
 
-export const useTableTree = (widgetMeta: AppWidgetMeta | undefined) => {
+export const useTableTree = (widgetMeta: AppWidgetMeta | undefined, expandedRowId?: string | number) => {
     const bcName = widgetMeta?.bcName
     const bcTreeState = useAppSelector(state => state.tree[bcName!])
     const { limit, defaultLimit, paginationType } = useTreePagination(bcName, widgetMeta)
@@ -28,7 +28,8 @@ export const useTableTree = (widgetMeta: AppWidgetMeta | undefined) => {
         bcTreeState,
         calculateShowMoreState,
         'end',
-        !(bcTreeState?.filterActive && bcTreeState.searchMode === 'hide')
+        !(bcTreeState?.filterActive && bcTreeState.searchMode === 'hide'),
+        expandedRowId
     )
 
     const expandedRowKeys = useAppSelector(state => selectBcTree(state, bcName)?.expandedParents) ?? []

@@ -7,7 +7,7 @@ export type RestoreAncestorsPosition = 'start' | 'end'
 
 export type TableTreeNode = TreeNode & {
     children?: TableTreeNode[]
-    _recordType?: 'node' | 'show-more' | 'loading' | 'error' | 'empty' | 'restore-ancestors' | 'unallocated-nodes'
+    _recordType?: 'node' | 'show-more' | 'loading' | 'error' | 'empty' | 'restore-ancestors' | 'unallocated-nodes' | 'expanded-row'
     _disabled?: boolean
     _loading?: boolean
     _level: number
@@ -21,6 +21,7 @@ export type TableTreeNode = TreeNode & {
     _treeIsLeaf?: boolean
     _nestingLevel?: number
     _separatorText?: string
+    _parentNode?: TableTreeNode | TreeNode
 }
 
 export const isRestoreAncestorsBranch = ({ _branchType }: Pick<TableTreeNode, '_branchType'>) => {
@@ -53,7 +54,8 @@ export const useTreeDataSource = (
         countInfoMessage?: string
     },
     restoreAncestorsPosition: RestoreAncestorsPosition = 'end',
-    showBranchPagination = true
+    showBranchPagination = true,
+    expandedRowId?: string | number
 ) => {
     const convertTreeStateToDataSource = useCallback(
         (
@@ -158,6 +160,30 @@ export const useTreeDataSource = (
                     console.error(`Tree node "${nodeId}" is marked as leaf but has children`)
                 }
 
+                const isExpandedRow = expandedRowId != null && String(node.id) === String(expandedRowId)
+                const expandedRowNode: TableTreeNode = {
+                    id: `expanded-row-${nodeId}`,
+                    vstamp: 0,
+                    parentId: nodeId,
+                    name: 'expanded-row',
+                    _recordType: 'expanded-row',
+                    _level: currentLevel + 1,
+                    _parentNode: node,
+                    _branchType: branchType
+                }
+
+                const isNodeTreeExpanded = bcTreeState?.expandedParents ? bcTreeState.expandedParents.includes(String(nodeId)) : false
+
+                let children: TableTreeNode[] | undefined
+
+                if (technicalIsLeaf) {
+                    children = isExpandedRow ? [expandedRowNode] : undefined
+                } else if (isExpandedRow) {
+                    children = isNodeTreeExpanded ? [expandedRowNode, ...childNodes] : [expandedRowNode]
+                } else {
+                    children = childNodes
+                }
+
                 return {
                     ...node,
                     _recordType: 'node',
@@ -166,7 +192,7 @@ export const useTreeDataSource = (
                     _treeParentId: parentId,
                     _treeIsLeaf: technicalIsLeaf,
                     _branchType: branchType,
-                    children: technicalIsLeaf ? undefined : childNodes
+                    children
                 }
             }
 
@@ -261,6 +287,7 @@ export const useTreeDataSource = (
             bcTreeState?.unallocatedNodeIds,
             bcTreeState?.expandedParents,
             calculateShowMoreState,
+            expandedRowId,
             restoreAncestorsPosition,
             showBranchPagination
         ]

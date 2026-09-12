@@ -16,6 +16,8 @@ import { useFilterRecords } from '@components/widgets/AssocListPopup/DefaultAsso
 import { TreeRowSelectionSource, useTreeRowSelection } from '@components/widgets/Table/tree/hooks/useTreeRowSelection'
 import { useOperationInProgress } from '@hooks/useOperationInProgress'
 import styles from './AssocTreePopup.module.less'
+import { selectHasBcTree } from '@selectors/selectors'
+import { treeActions } from '@slices/tree'
 
 interface AssocTreePopupProps {
     meta: AppWidgetTableMeta
@@ -141,6 +143,8 @@ function FilterAssocTreePopup({ meta }: AssocTreePopupProps) {
                 filter: bcFilters.find(filterItem => filterItem.fieldName === associateFieldKey)
             }
         }, shallowEqual)
+    const needUpdateTreeByFilter = useAppSelector(selectHasBcTree(calleeBCName))
+
     const { selectedFilterRecords, handleDeleteTag, handleSelectAll } = useFilterRecords(filter)
 
     const selectItems = useCallback(
@@ -185,10 +189,18 @@ function FilterAssocTreePopup({ meta }: AssocTreePopupProps) {
                     }
                 })
             )
-            dispatch(actions.bcForceUpdate({ bcName: calleeBCName }))
+            if (needUpdateTreeByFilter) {
+                dispatch(treeActions.applyFilter({ bcName: calleeBCName }))
+            } else {
+                dispatch(actions.bcForceUpdate({ bcName: calleeBCName }))
+            }
         } else if (associateFieldKey && calleeBCName && filter) {
             dispatch(actions.bcRemoveFilter({ bcName: calleeBCName, filter }))
-            dispatch(actions.bcForceUpdate({ bcName: calleeBCName, widgetName: filter.widgetName }))
+            if (needUpdateTreeByFilter) {
+                dispatch(treeActions.applyFilter({ bcName: calleeBCName }))
+            } else {
+                dispatch(actions.bcForceUpdate({ bcName: calleeBCName, widgetName: filter.widgetName }))
+            }
         }
 
         onClose()

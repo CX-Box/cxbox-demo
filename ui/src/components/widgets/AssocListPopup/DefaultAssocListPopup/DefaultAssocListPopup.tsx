@@ -16,6 +16,8 @@ import { EMPTY_ARRAY } from '@constants'
 import { actions, BcFilter, interfaces, PendingValidationFailsFormat, WidgetTableMeta } from '@cxbox-ui/core'
 import { FilterType } from '@interfaces/filters'
 import styles from '@components/widgets/AssocListPopup/AssocListPopup.less'
+import { selectHasBcTree } from '@selectors/selectors'
+import { treeActions } from '@slices/tree'
 
 interface DefaultAssocListPopupProps {
     meta: WidgetTableMeta
@@ -55,6 +57,8 @@ function DefaultAssocListPopup({ meta, isFilter }: DefaultAssocListPopupProps) {
                 filter
             }
         }, shallowEqual)
+    const calleeBcIsTree = useAppSelector(selectHasBcTree(calleeBCName))
+    const needUpdateTreeByFilter = calleeBcIsTree && isFilter
 
     const dispatch = useAppDispatch()
 
@@ -72,17 +76,25 @@ function DefaultAssocListPopup({ meta, isFilter }: DefaultAssocListPopupProps) {
     const onFilter = useCallback(
         (bcName: string, filter: BcFilter) => {
             dispatch(actions.bcAddFilter({ bcName, filter }))
-            dispatch(actions.bcForceUpdate({ bcName }))
+            if (needUpdateTreeByFilter && bcName === calleeBCName) {
+                dispatch(treeActions.applyFilter({ bcName }))
+            } else {
+                dispatch(actions.bcForceUpdate({ bcName }))
+            }
         },
-        [dispatch]
+        [calleeBCName, dispatch, needUpdateTreeByFilter]
     )
 
     const onRemoveFilter = useCallback(
         (bcName: string, filter: BcFilter) => {
             dispatch(actions.bcRemoveFilter({ bcName, filter }))
-            dispatch(actions.bcForceUpdate({ bcName, widgetName: filter.widgetName }))
+            if (needUpdateTreeByFilter && bcName === calleeBCName) {
+                dispatch(treeActions.applyFilter({ bcName }))
+            } else {
+                dispatch(actions.bcForceUpdate({ bcName, widgetName: filter.widgetName }))
+            }
         },
-        [dispatch]
+        [calleeBCName, dispatch, needUpdateTreeByFilter]
     )
 
     const onSave = useCallback(

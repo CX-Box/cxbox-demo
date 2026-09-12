@@ -16,7 +16,8 @@ export const FIELDS = {
         MASS_IDS: 'massIds_'
     },
     TREE: {
-        PARENT_ID: 'parentId'
+        PARENT_ID: 'parentId',
+        IS_LEAF: 'isLeaf'
     }
 } as const
 

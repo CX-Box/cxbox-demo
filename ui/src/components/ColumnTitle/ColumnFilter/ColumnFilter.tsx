@@ -23,7 +23,7 @@ import styles from './ColumnFilter.less'
 import { useCleanOldRangeFilters } from '@hooks/useCleanOldRangeFilters'
 import { checkboxFilterCounterLimit, checkboxFilterFieldTypes, checkboxFilterMaxVisibleItems } from '@constants/filter'
 import { selectBcFilters, selectHasBcTree, selectWidget } from '@selectors/selectors'
-import { treeActions } from '../../../slices/tree'
+import { treeActions } from '@slices/tree'
 import { CustomFieldTypes, CustomWidgetTypes } from '@interfaces/widget'
 
 const isFilterValueEmpty = (value: unknown): boolean => {

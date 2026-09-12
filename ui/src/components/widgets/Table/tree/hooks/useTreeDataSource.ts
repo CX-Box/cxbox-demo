@@ -2,6 +2,7 @@ import { useCallback, useMemo } from 'react'
 import { TreeNode, BcTreeState } from '@slices/tree'
 import { RESTORE_ANCESTORS_ID, TREE_ROOT_ID, UNALLOCATED_NODES_ID } from '@components/widgets/Table/constants'
 import { TEXT_SEPARATOR_FOR_NEST_LEVEL } from '@constants/tree'
+import { FIELDS } from '@constants'
 
 export type RestoreAncestorsPosition = 'start' | 'end'
 
@@ -150,8 +151,8 @@ export const useTreeDataSource = (
                     return null
                 }
 
-                const parentId = node[bcTreeState?.parentIdFieldKey ?? 'parentId'] as string | null | undefined
-                const isLeaf = node[bcTreeState?.isLeafFieldKey ?? 'isLeaf'] === true
+                const parentId = node[bcTreeState?.parentIdFieldKey ?? FIELDS.TREE.PARENT_ID] as string | null | undefined
+                const isLeaf = node[bcTreeState?.isLeafFieldKey ?? FIELDS.TREE.IS_LEAF] === true
                 const childNodes = getChildNodesWithPseudoNodes(nodeId, buildTreeNode, currentLevel + 1, branchType)
                 const hasActualChildren = childNodes.some(child => child._recordType === 'node')
                 const technicalIsLeaf = isLeaf && !hasActualChildren
@@ -205,7 +206,7 @@ export const useTreeDataSource = (
 
             const orphanRootIds = Object.values(nodesById)
                 .filter(node => {
-                    const parentId = node[bcTreeState?.parentIdFieldKey ?? 'parentId']
+                    const parentId = node[bcTreeState?.parentIdFieldKey ?? FIELDS.TREE.PARENT_ID]
 
                     return (
                         !unallocatedNodeIds.has(String(node.id)) &&

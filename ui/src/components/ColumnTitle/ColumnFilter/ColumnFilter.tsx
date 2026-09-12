@@ -24,7 +24,7 @@ import { useCleanOldRangeFilters } from '@hooks/useCleanOldRangeFilters'
 import { checkboxFilterCounterLimit, checkboxFilterFieldTypes, checkboxFilterMaxVisibleItems } from '@constants/filter'
 import { selectBcFilters, selectHasBcTree, selectWidget } from '@selectors/selectors'
 import { treeActions } from '../../../slices/tree'
-import { CustomWidgetTypes } from '@interfaces/widget'
+import { CustomFieldTypes, CustomWidgetTypes } from '@interfaces/widget'
 
 const isFilterValueEmpty = (value: unknown): boolean => {
     if (value === null || value === undefined) {
@@ -106,8 +106,10 @@ function ColumnFilter({ widgetName, widgetMeta: widgetFieldMeta, rowMeta, classN
         )
     )
 
-    const isPickList = effectiveFieldMeta.type === FieldType.pickList
-    const isMultivalue = [FieldType.multivalue, FieldType.multivalueHover].includes(effectiveFieldMeta.type)
+    const isPickList = [FieldType.pickList, CustomFieldTypes.pickTree].includes(effectiveFieldMeta.type)
+    const isMultivalue = [FieldType.multivalue, FieldType.multivalueHover, CustomFieldTypes.multivalueTree].includes(
+        effectiveFieldMeta.type
+    )
 
     const showPopup = useCallback(() => {
         dispatch(
@@ -166,7 +168,7 @@ function ColumnFilter({ widgetName, widgetMeta: widgetFieldMeta, rowMeta, classN
 
             const isValueEmpty = isFilterValueEmpty(value)
 
-            if (effectiveFieldMeta.type === FieldType.pickList) {
+            if (isPickList) {
                 clearAssociatedFilter()
 
                 if (!isValueEmpty && rawFilter && rawFilter.type !== newFilter.type) {
@@ -207,6 +209,7 @@ function ColumnFilter({ widgetName, widgetMeta: widgetFieldMeta, rowMeta, classN
         [
             widget,
             effectiveFieldMeta.type,
+            isPickList,
             effectiveFieldMeta.key,
             filterByRangeEnabled,
             value,
@@ -223,7 +226,7 @@ function ColumnFilter({ widgetName, widgetMeta: widgetFieldMeta, rowMeta, classN
         (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
             e.preventDefault()
 
-            if (effectiveFieldMeta.type === FieldType.pickList) {
+            if (isPickList) {
                 clearAssociatedFilter()
             }
 
@@ -244,7 +247,7 @@ function ColumnFilter({ widgetName, widgetMeta: widgetFieldMeta, rowMeta, classN
             setValue(undefined)
         },
         [
-            effectiveFieldMeta.type,
+            isPickList,
             rawFilter,
             widget?.options?.hierarchyFull,
             widget?.bcName,

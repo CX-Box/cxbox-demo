@@ -14,6 +14,7 @@ import {
     getWidgetDefaultFilters
 } from '@utils/defaultFilters'
 import { getAssocTreeSelectedNodeIds } from '@utils/getAssocTreeSelectedNodeIds'
+import { BcFilter } from '@cxbox-ui/core'
 
 function useFiltersGroupName(bcName: string | undefined) {
     const filterGroupName = useAppSelector(state => state.screen.appliedFilterGroup[bcName!] ?? null)
@@ -21,8 +22,8 @@ function useFiltersGroupName(bcName: string | undefined) {
     const dispatch = useDispatch()
 
     const setFilterGroupName = useCallback(
-        (name: string | null) => {
-            dispatch(actions.setFilterGroup({ bcName: bcName!, filterGroupName: name }))
+        (name: string | null, additionalFilters?: BcFilter[]) => {
+            dispatch(actions.setFilterGroup({ bcName: bcName!, filterGroupName: name, additionalFilters }))
         },
         [bcName, dispatch]
     )
@@ -40,7 +41,8 @@ export const useFilterGroups = (meta?: AppWidgetMeta) => {
         defaultFilters,
         showResetButton,
         defaultFilterGroupName,
-        resetButtonTitleKey
+        resetButtonTitleKey,
+        hasSelectedRowsFilter
     } = useAppSelector(state => {
         const bc = selectBc(state, bcName)
         const bcFilters = selectBcFilters(state, bcName)
@@ -69,7 +71,8 @@ export const useFilterGroups = (meta?: AppWidgetMeta) => {
             defaultFilters: resolvedDefaultFilters,
             defaultFilterGroupName: getBcDefaultFilterGroupName(bc),
             showResetButton: resolvedDefaultFilters.length > 0 && !areFiltersEqual(bcFilters, resolvedDefaultFilters),
-            resetButtonTitleKey
+            resetButtonTitleKey,
+            hasSelectedRowsFilter
         }
     }, shallowEqual)
     const hasBcTree = useAppSelector(selectHasBcTree(bcName))
@@ -91,7 +94,13 @@ export const useFilterGroups = (meta?: AppWidgetMeta) => {
     const resetFilters = useCallback(() => {
         dispatch(actions.bcRemoveAllFilters({ bcName }))
         if (defaultFilterGroupName) {
-            setFilterGroupName(defaultFilterGroupName)
+            if (hasSelectedRowsFilter) {
+                const idFilter = defaultFilters.find(filter => filter.fieldName === FIELDS.TECHNICAL.ID)
+
+                setFilterGroupName(defaultFilterGroupName, idFilter ? [idFilter] : undefined)
+            } else {
+                setFilterGroupName(defaultFilterGroupName)
+            }
         } else {
             defaultFilters.forEach(filter => dispatch(actions.bcAddFilter({ bcName, filter, widgetName: meta?.name })))
         }
@@ -101,7 +110,7 @@ export const useFilterGroups = (meta?: AppWidgetMeta) => {
         } else {
             dispatch(actions.bcForceUpdate({ bcName }))
         }
-    }, [bcName, defaultFilterGroupName, defaultFilters, dispatch, hasBcTree, meta?.name, setFilterGroupName])
+    }, [bcName, defaultFilterGroupName, defaultFilters, dispatch, hasBcTree, hasSelectedRowsFilter, meta?.name, setFilterGroupName])
 
     const applyFilterGroup = useCallback(
         (value: string) => {

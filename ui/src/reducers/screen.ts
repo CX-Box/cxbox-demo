@@ -188,7 +188,7 @@ const screenReducerBuilder = reducers
         })
     })
     .addCase(actions.setFilterGroup, (state, action) => {
-        const { bcName, filterGroupName } = action.payload
+        const { bcName, filterGroupName, additionalFilters } = action.payload
         const bc = state.bo.bc[bcName]
 
         if (bc && filterGroupName?.length) {
@@ -196,7 +196,19 @@ const screenReducerBuilder = reducers
 
             const filtersGroup = bc.filterGroups?.find(filtersGroup => filtersGroup.name === filterGroupName)
 
-            state.filters[bcName] = utils.parseFilters(filtersGroup?.filters)
+            let newFilters = utils.parseFilters(filtersGroup?.filters) || []
+
+            if (additionalFilters?.length && newFilters.length) {
+                newFilters = newFilters.filter(
+                    newFilter =>
+                        !additionalFilters.find(
+                            additionalFilter =>
+                                newFilter.fieldName === additionalFilter.fieldName && newFilter.type === additionalFilter.type
+                        )
+                )
+            }
+
+            state.filters[bcName] = [...newFilters, ...(additionalFilters || [])]
         } else if (!filterGroupName && isDefined(state.appliedFilterGroup[bcName])) {
             delete state.appliedFilterGroup[bcName]
             delete state.filters[bcName]

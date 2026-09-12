@@ -23,12 +23,10 @@ import { PopupData } from '@interfaces/view'
 import { cancelRequestActionTypes, cancelRequestEpic } from '@utils/cancelRequestEpic'
 import { RootEpic, RootState } from '@store'
 import { buildBcUrl } from '@utils/buildBcUrl'
-import { createDictionaryFrom, treeActions } from '@slices/tree'
+import { treeActions } from '@slices/tree'
 import { isTreeWidget } from '@constants/widget'
 import { DEFAULT_PAGE, DEFAULT_PAGE_LIMIT } from '@constants/pagination'
-import { FilterType } from '@interfaces/filters'
-import { FIELDS } from '@constants'
-import { getBcDefaultFilters, mergeFilters } from '@utils/defaultFilters'
+import { DEFAULT_ASSOC_ID_FILTER_PARAMS, getBcDefaultFilterGroupName, getBcDefaultFilters, mergeFilters } from '@utils/defaultFilters'
 import { CustomWidgetTypes } from '@interfaces/widget'
 import { getAssocTreeSelectedNodeIds } from '@utils/getAssocTreeSelectedNodeIds'
 import { selectBcFilters } from '@selectors/selectors'
@@ -213,49 +211,67 @@ export const bcFetchDataEpic: RootEpic = (action$, state$, { api, utils }) =>
                     return EMPTY
                 }
 
-                const resetTree = bcForceUpdate.match(action) || bcChangePage.match(action) || showViewPopup.match(action)
+                const isPopupOpen = showViewPopup.match(action)
+                const resetTree = bcForceUpdate.match(action) || bcChangePage.match(action) || isPopupOpen
                 const withBcDataSideEffects = bcFetchDataRequest.match(action) || resetTree
 
-                const isAssocTreePopup = showViewPopup.match(action) && widget.type === CustomWidgetTypes.AssocTreePopup
+                const isAssocTreePopupOpen = isPopupOpen && widget.type === CustomWidgetTypes.AssocTreePopup
+
                 const rawFilters = selectBcFilters(state, bcName)
                 const filtersUntouched = rawFilters === undefined
                 const hasAppliedFilters = Array.isArray(rawFilters) && rawFilters.length > 0
 
                 let setDefaultFilters: Observable<AnyAction> = EMPTY
                 let hasFilters = hasAppliedFilters
+                const defaultFilterGroupName = getBcDefaultFilterGroupName(bc)
+                const bcDefaultFilters = getBcDefaultFilters(bc)
 
-                if (isAssocTreePopup) {
+                if (isAssocTreePopupOpen) {
                     const selectedNodeIds = getAssocTreeSelectedNodeIds(state, action.payload, widget)
                     const newIdFilter = selectedNodeIds.length
                         ? {
-                              type: FilterType.equalsOneOf,
-                              fieldName: FIELDS.TECHNICAL.ID,
+                              ...DEFAULT_ASSOC_ID_FILTER_PARAMS,
                               value: selectedNodeIds
                           }
                         : undefined
                     const unnecessaryFilterById = rawFilters?.find(filter => filter.fieldName === newIdFilter?.fieldName)
-                    const defaultFilters = mergeFilters(
-                        filtersUntouched ? getBcDefaultFilters(bc)?.filter(filter => filter.fieldName !== newIdFilter?.fieldName) : [],
-                        newIdFilter ? [newIdFilter] : undefined
-                    )
+                    const effectiveDefaultFilters = filtersUntouched
+                        ? bcDefaultFilters.filter(filter => filter.fieldName !== newIdFilter?.fieldName)
+                        : (rawFilters ?? []).filter(filter => filter.fieldName !== newIdFilter?.fieldName)
+                    const defaultFilters = mergeFilters(effectiveDefaultFilters, newIdFilter ? [newIdFilter] : undefined)
 
                     setDefaultFilters = concat(
                         unnecessaryFilterById
                             ? of(actions.bcRemoveFilter({ bcName: widget.bcName, filter: unnecessaryFilterById }))
                             : EMPTY,
-                        of(...defaultFilters.map(filter => actions.bcAddFilter({ bcName: widget.bcName, filter, widgetName: widget.name })))
+                        defaultFilterGroupName && filtersUntouched
+                            ? of(
+                                  actions.setFilterGroup({
+                                      bcName: widget.bcName,
+                                      filterGroupName: defaultFilterGroupName,
+                                      additionalFilters: newIdFilter ? [newIdFilter] : undefined
+                                  })
+                              )
+                            : of(
+                                  ...defaultFilters.map(filter =>
+                                      actions.bcAddFilter({ bcName: widget.bcName, filter, widgetName: widget.name })
+                                  )
+                              )
                     )
 
-                    hasFilters = defaultFilters.length > 0
+                    hasFilters = hasAppliedFilters || defaultFilters.length > 0 || (Boolean(defaultFilterGroupName) && filtersUntouched)
                 } else if (filtersUntouched) {
-                    const defaultFilters = getBcDefaultFilters(bc)
-
-                    if (defaultFilters.length > 0) {
+                    if (defaultFilterGroupName) {
+                        setDefaultFilters = of(actions.setFilterGroup({ bcName: widget.bcName, filterGroupName: defaultFilterGroupName }))
+                    } else if (bcDefaultFilters.length > 0) {
                         setDefaultFilters = of(
-                            ...defaultFilters.map(filter => actions.bcAddFilter({ bcName: widget.bcName, filter, widgetName: widget.name }))
+                            ...bcDefaultFilters.map(filter =>
+                                actions.bcAddFilter({ bcName: widget.bcName, filter, widgetName: widget.name })
+                            )
                         )
-                        hasFilters = true
                     }
+
+                    hasFilters = hasAppliedFilters || Boolean(defaultFilterGroupName) || bcDefaultFilters.length > 0
                 }
 
                 return concat(

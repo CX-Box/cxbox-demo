@@ -40,10 +40,10 @@ export const getBcDefaultFilterGroupName = (bc?: BcMeta): string | null => {
     return defaultFilterGroup?.name ?? null
 }
 
-export const mergeFilters = (filters: BcFilter[], secondFilters?: BcFilter[]): BcFilter[] => {
+export const mergeFilters = (filters: BcFilter[] = [], secondFilters?: BcFilter[]): BcFilter[] => {
     if (secondFilters?.length) {
-        const secondFilterFiledNames = new Set(secondFilters.map(filter => filter.fieldName))
-        return [...filters.filter(filter => !secondFilterFiledNames.has(filter.fieldName)), ...secondFilters]
+        const secondFilterFieldNames = new Set(secondFilters.map(filter => filter.fieldName))
+        return [...filters.filter(filter => !secondFilterFieldNames.has(filter.fieldName)), ...secondFilters]
     }
 
     return filters

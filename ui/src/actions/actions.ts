@@ -1,5 +1,5 @@
 import { AnyAction, createAction } from '@reduxjs/toolkit'
-import { actions, interfaces } from '@cxbox-ui/core'
+import { actions, BcFilter, interfaces } from '@cxbox-ui/core'
 import { OperationPreInvokeCustom } from '@interfaces/operation'
 import { NotificationState } from '@interfaces/notification'
 import { LoginResponse } from '@interfaces/session'
@@ -146,4 +146,6 @@ export const setMassResultFilterEnabled = createAction<{
 
 export const setAlternativePaginationType = createAction<{ widgetName: string; type: PaginationMode }>('setAlternativePaginationType')
 
-export const setFilterGroup = createAction<{ bcName: string; filterGroupName: string | null }>('setFilterGroup')
+export const setFilterGroup = createAction<{ bcName: string; filterGroupName: string | null; additionalFilters?: BcFilter[] }>(
+    'setFilterGroup'
+)

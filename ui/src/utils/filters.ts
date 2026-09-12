@@ -49,6 +49,8 @@ export function getFilterType(fieldType: string) {
         }
         case CustomFieldTypes.RichText:
         case CustomFieldTypes.SuggestionPickList:
+        case CustomFieldTypes.pickTree:
+        case CustomFieldTypes.inlinePickTree:
         case FieldType.inlinePickList:
         case FieldType.pickList:
         case FieldType.input:

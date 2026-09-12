@@ -6,7 +6,7 @@ import cn from 'classnames'
 import { AVAILABLE_LIMITS_LIST, DEFAULT_PAGE_LIMIT } from '@constants/pagination'
 
 interface LimitProps {
-    className: string
+    className?: string
     classNameContainer?: string
     value?: number
     total?: number | string | null

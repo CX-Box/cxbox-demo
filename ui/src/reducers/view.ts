@@ -3,6 +3,7 @@ import { AnyAction, createReducer, isAnyOf } from '@reduxjs/toolkit'
 import { actions, partialUpdateRecordForm, resetRecordForm, setBcCount, setRecordForm } from '@actions'
 import { PopupData } from '@interfaces/view'
 import { RowMeta } from '@interfaces/rowMeta'
+import { treeActions } from '../slices/tree'
 
 interface ViewState extends Omit<CoreViewState, 'popupData'> {
     rowMeta: {
@@ -64,6 +65,13 @@ const viewReducerBuilder = reducers
     })
     .addCase(partialUpdateRecordForm, (state, action) => {
         state.recordForm[action.payload.bcName] = { ...state.recordForm[action.payload.bcName], ...action.payload }
+    })
+    .addCase(treeActions.initTree, (state, action) => {
+        const bcName = action.payload.bcName
+        // so that there are no problems with the checkbox logic
+        if (state.selectedRows[bcName]) {
+            delete state.selectedRows[bcName]
+        }
     })
     .addMatcher(isAnyOf(actions.showViewPopup, actions.showFileViewerPopup, actions.showWsNotificationPopup), (state, action) => {
         const { options, ...fileViewerPopupData } = action.payload

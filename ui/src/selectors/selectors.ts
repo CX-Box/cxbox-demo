@@ -53,6 +53,10 @@ export const selectBcFilters = createUniversalSelector((state: RootState, bcName
     bcName ? state.screen.filters[bcName] : undefined
 )
 
+export const selectViewFilters = createUniversalSelector((state: RootState, bcName: string | undefined) =>
+    selectBcFilters(state, bcName)?.filter(filter => filter.viewName === state.view.name)
+)
+
 export const selectBcSorters = createUniversalSelector((state: RootState, bcName: string | undefined) =>
     bcName ? state.screen.sorters[bcName] : undefined
 )
@@ -75,4 +79,12 @@ export const selectBcNameFromPopupData = createUniversalSelector((state: RootSta
     if (widgetName) {
         return state.view.widgets.find(widget => widget.name === widgetName)?.bcName
     }
+})
+
+export const selectBcTree = createUniversalSelector((state: RootState, bcName: string | undefined) => {
+    return bcName ? state.tree[bcName] : undefined
+})
+
+export const selectHasBcTree = createUniversalSelector((state: RootState, bcName: string | undefined) => {
+    return !!selectBcTree(state, bcName)
 })

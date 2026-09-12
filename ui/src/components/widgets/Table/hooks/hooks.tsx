@@ -3,7 +3,18 @@ import { shallowEqual, useDispatch } from 'react-redux'
 import { useCallback } from 'react'
 import { actions } from '@actions'
 import { FIELDS } from '@constants'
-import { selectBc, selectBcFilters } from '@selectors/selectors'
+import { selectBc, selectBcFilters, selectHasBcTree } from '@selectors/selectors'
+import { treeActions } from '@slices/tree'
+import { AppWidgetMeta, CustomWidgetTypes } from '@interfaces/widget'
+import {
+    getBcDefaultFilters,
+    areFiltersEqual,
+    getBcDefaultFilterGroupName,
+    getResetFilterTitleKey,
+    getWidgetDefaultFilters
+} from '@utils/defaultFilters'
+import { getAssocTreeSelectedNodeIds } from '@utils/getAssocTreeSelectedNodeIds'
+import { BcFilter } from '@cxbox-ui/core'
 
 function useFiltersGroupName(bcName: string | undefined) {
     const filterGroupName = useAppSelector(state => state.screen.appliedFilterGroup[bcName!] ?? null)
@@ -11,8 +22,8 @@ function useFiltersGroupName(bcName: string | undefined) {
     const dispatch = useDispatch()
 
     const setFilterGroupName = useCallback(
-        (name: string | null) => {
-            dispatch(actions.setFilterGroup({ bcName: bcName!, filterGroupName: name }))
+        (name: string | null, additionalFilters?: BcFilter[]) => {
+            dispatch(actions.setFilterGroup({ bcName: bcName!, filterGroupName: name, additionalFilters }))
         },
         [bcName, dispatch]
     )
@@ -20,8 +31,19 @@ function useFiltersGroupName(bcName: string | undefined) {
     return { filterGroupName, setFilterGroupName }
 }
 
-export const useFilterGroups = (bcName: string = '') => {
-    const { filtersExist, filterGroupsExist, filterGroups, filtersCount } = useAppSelector(state => {
+export const useFilterGroups = (meta?: AppWidgetMeta) => {
+    const bcName = meta?.bcName ?? ''
+    const {
+        filtersExist,
+        filterGroupsExist,
+        filterGroups,
+        filtersCount,
+        defaultFilters,
+        showResetButton,
+        defaultFilterGroupName,
+        resetButtonTitleKey,
+        hasSelectedRowsFilter
+    } = useAppSelector(state => {
         const bc = selectBc(state, bcName)
         const bcFilters = selectBcFilters(state, bcName)
         const screenViewerMode = state.screen.viewerMode[bcName]
@@ -34,15 +56,26 @@ export const useFilterGroups = (bcName: string = '') => {
         const massModeFiltersExist =
             !!bcFilters?.length &&
             (bcFilters.length > 1 || !filterById || (Array.isArray(filterById.value) && !!selectedRows?.length && resultFilterEnabled))
+        const selectedNodeIds = getAssocTreeSelectedNodeIds(state, state.view.popupData, meta)
+        const resolvedDefaultFilters = getWidgetDefaultFilters(meta, bc, { selectedNodeIds })
+        const hasDefaultFilters = (getBcDefaultFilters(bc)?.length ?? 0) > 0
+        const hasSelectedRowsFilter = meta?.type === CustomWidgetTypes.AssocTreePopup && selectedNodeIds.length > 0
+        const resetButtonTitleKey = getResetFilterTitleKey({ hasDefaultFilters, hasSelectedRowsFilter })
 
         return {
             cursor: bc?.cursor,
             filterGroups: bc?.filterGroups,
             filterGroupsExist: !!bc?.filterGroups?.length,
             filtersExist: enabledMassMode ? massModeFiltersExist : defaultFiltersExist,
-            filtersCount: enabledMassMode && filterById && !resultFilterEnabled ? filtersLength - 1 : filtersLength
+            filtersCount: enabledMassMode && filterById && !resultFilterEnabled ? filtersLength - 1 : filtersLength,
+            defaultFilters: resolvedDefaultFilters,
+            defaultFilterGroupName: getBcDefaultFilterGroupName(bc),
+            showResetButton: resolvedDefaultFilters.length > 0 && !areFiltersEqual(bcFilters, resolvedDefaultFilters),
+            resetButtonTitleKey,
+            hasSelectedRowsFilter
         }
     }, shallowEqual)
+    const hasBcTree = useAppSelector(selectHasBcTree(bcName))
 
     const { filterGroupName, setFilterGroupName } = useFiltersGroupName(bcName)
 
@@ -50,22 +83,56 @@ export const useFilterGroups = (bcName: string = '') => {
 
     const clearAllFilters = useCallback(() => {
         dispatch(actions.bcRemoveAllFilters({ bcName }))
-        dispatch(actions.bcForceUpdate({ bcName }))
-    }, [dispatch, bcName])
+
+        if (hasBcTree) {
+            dispatch(treeActions.applyFilter({ bcName: bcName as string }))
+        } else {
+            dispatch(actions.bcForceUpdate({ bcName }))
+        }
+    }, [dispatch, bcName, hasBcTree])
+
+    const resetFilters = useCallback(() => {
+        dispatch(actions.bcRemoveAllFilters({ bcName }))
+        if (defaultFilterGroupName) {
+            if (hasSelectedRowsFilter) {
+                const idFilter = defaultFilters.find(filter => filter.fieldName === FIELDS.TECHNICAL.ID)
+
+                setFilterGroupName(defaultFilterGroupName, idFilter ? [idFilter] : undefined)
+            } else {
+                setFilterGroupName(defaultFilterGroupName)
+            }
+        } else {
+            defaultFilters.forEach(filter => dispatch(actions.bcAddFilter({ bcName, filter, widgetName: meta?.name })))
+        }
+
+        if (hasBcTree) {
+            dispatch(treeActions.applyFilter({ bcName }))
+        } else {
+            dispatch(actions.bcForceUpdate({ bcName }))
+        }
+    }, [bcName, defaultFilterGroupName, defaultFilters, dispatch, hasBcTree, hasSelectedRowsFilter, meta?.name, setFilterGroupName])
 
     const applyFilterGroup = useCallback(
         (value: string) => {
             setFilterGroupName(value ?? null)
-            dispatch(actions.bcForceUpdate({ bcName }))
+
+            if (hasBcTree) {
+                dispatch(treeActions.applyFilter({ bcName }))
+            } else {
+                dispatch(actions.bcForceUpdate({ bcName }))
+            }
         },
-        [bcName, dispatch, setFilterGroupName]
+        [bcName, dispatch, hasBcTree, setFilterGroupName]
     )
 
     return {
         showFilterGroups: filterGroupsExist,
         showClearButton: filtersExist,
+        showResetButton,
+        resetButtonTitleKey,
         applyFilterGroup,
         clearAllFilters,
+        resetFilters,
         filterGroups,
         appliedFiltersCount: filtersCount,
         appliedFilterGroup: filterGroupName

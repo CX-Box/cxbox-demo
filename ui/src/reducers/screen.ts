@@ -156,7 +156,6 @@ const screenReducerBuilder = reducers
 
         state.alternativePagination = { ...state.alternativePagination, [widgetName]: type }
     })
-    // TODO delete after execution CXBOX-1090
     .replaceCase(actions.selectScreen, (state, action) => {
         const { screen } = action.payload
 
@@ -168,7 +167,7 @@ const screenReducerBuilder = reducers
             bcDictionary[item.name] = item
 
             const sorter = !state.sorters[item.name] ? utils.parseSorters(item.defaultSort) : null
-            const filter = utils.parseFilters(item.defaultFilter)
+            const filter = !state.filters[item.name] ? utils.parseFilters(item.defaultFilter) : null
 
             if (sorter) {
                 bcSorters[item.name] = sorter
@@ -189,7 +188,7 @@ const screenReducerBuilder = reducers
         })
     })
     .addCase(actions.setFilterGroup, (state, action) => {
-        const { bcName, filterGroupName } = action.payload
+        const { bcName, filterGroupName, additionalFilters } = action.payload
         const bc = state.bo.bc[bcName]
 
         if (bc && filterGroupName?.length) {
@@ -197,10 +196,29 @@ const screenReducerBuilder = reducers
 
             const filtersGroup = bc.filterGroups?.find(filtersGroup => filtersGroup.name === filterGroupName)
 
-            state.filters[bcName] = utils.parseFilters(filtersGroup?.filters)
+            let newFilters = utils.parseFilters(filtersGroup?.filters) || []
+
+            if (additionalFilters?.length && newFilters.length) {
+                newFilters = newFilters.filter(
+                    newFilter =>
+                        !additionalFilters.find(
+                            additionalFilter =>
+                                newFilter.fieldName === additionalFilter.fieldName && newFilter.type === additionalFilter.type
+                        )
+                )
+            }
+
+            state.filters[bcName] = [...newFilters, ...(additionalFilters || [])]
         } else if (!filterGroupName && isDefined(state.appliedFilterGroup[bcName])) {
             delete state.appliedFilterGroup[bcName]
             delete state.filters[bcName]
+        }
+    })
+    .replaceCase(actions.bcRemoveAllFilters, (state, action) => {
+        state.filters[action.payload.bcName] = []
+
+        if (state.bo.bc[action.payload.bcName]) {
+            state.bo.bc[action.payload.bcName].page = 1
         }
     })
     .addMatcher(isAnyOf(actions.selectScreen), (state, action) => {
@@ -216,7 +234,7 @@ const screenReducerBuilder = reducers
 
             // Applying filterGroup by default
             const bcHasDefaultFilter = !!bc.defaultFilter?.length
-            const bcHasAppliedFilter = state.filters[bc.name]?.length
+            const bcHasAppliedFilter = state.filters[bc.name]
             const defaultFilterGroup = bc.filterGroups?.find(filterGroup => filterGroup.defaultFilter)
 
             if (!bcHasDefaultFilter && !bcHasAppliedFilter && defaultFilterGroup) {

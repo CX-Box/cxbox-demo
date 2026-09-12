@@ -102,6 +102,7 @@ function TreeTable<T extends CustomDataItem>({
                 ...onRow?.(record, index),
                 'data-test-widget-tree-row-id': record.id,
                 'data-test-widget-tree-row-type': isNode(record) ? 'Row' : 'PseudoRow',
+                'data-test-widget-tree-row-parent-id': String((isNode(record) ? treeRecord._treeParentId : treeRecord.parentId) ?? null),
                 'data-record-type': treeRecord._recordType,
                 'data-hidden-tree-row': treeRecord._recordType === 'restore-ancestors' && !treeRecord._separatorText,
                 'data-restore-ancestors-branch': isRestoreAncestorsBranch(treeRecord) ? 'true' : undefined,

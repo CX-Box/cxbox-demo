@@ -106,6 +106,7 @@ export function TreeTableCell<T extends CustomDataItem>({
                         type="Link"
                         size="small"
                         removeIndentation={true}
+                        data-test-widget-tree-row-restore-path={true}
                         style={{
                             border: 'none',
                             marginRight: 8,
@@ -124,10 +125,15 @@ export function TreeTableCell<T extends CustomDataItem>({
                 )}
                 {!dataItem._treeIsLeaf && dataItem._recordType === 'node' ? (
                     disableRowExpand ? (
-                        <Icon component={ListDotSvg} style={{ marginRight: 8, cursor: 'initial', color: 'rgba(0, 0, 0, 0.65)' }} />
+                        <Icon
+                            component={ListDotSvg}
+                            data-test-widget-tree-row-expand-disabled={true}
+                            style={{ marginRight: 8, cursor: 'initial', color: 'rgba(0, 0, 0, 0.65)' }}
+                        />
                     ) : (
                         <Icon
                             type={isExpanded ? EXPANDED_ICON_TYPE : COLLAPSED_ICON_TYPE}
+                            data-test-widget-tree-row-expand={true}
                             style={{ marginRight: 8, cursor: 'pointer' }}
                             onClick={event => {
                                 event.stopPropagation()
@@ -140,6 +146,7 @@ export function TreeTableCell<T extends CustomDataItem>({
                 )}
                 {showSelection && dataItem._recordType === 'node' && (
                     <Checkbox
+                        data-test-widget-tree-row-select={true}
                         style={{ marginRight: 8 }}
                         className={selectionState.implicit ? styles.implicitCheckboxMuted : ''}
                         checked={selectionState.checked}

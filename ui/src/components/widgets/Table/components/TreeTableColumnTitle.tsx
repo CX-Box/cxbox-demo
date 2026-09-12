@@ -50,6 +50,7 @@ export function TreeTableColumnTitle({
         <div style={{ display: 'flex', alignItems: 'center' }}>
             <Icon
                 type={isExpanded ? 'down' : 'right'}
+                data-test-widget-tree-header-expand={true}
                 style={{ marginRight: 8, cursor: 'pointer' }}
                 onClick={event => {
                     event.stopPropagation()
@@ -58,6 +59,7 @@ export function TreeTableColumnTitle({
             />
             {showSelection && (
                 <Checkbox
+                    data-test-widget-tree-column-select={true}
                     style={{ marginRight: 8 }}
                     className={selectionState?.implicit ? styles.implicitCheckboxMuted : ''}
                     checked={selectionState?.checked}

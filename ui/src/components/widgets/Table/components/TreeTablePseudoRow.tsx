@@ -41,6 +41,7 @@ export function TreeTablePseudoRow({
             <>
                 {showSelection && (
                     <Checkbox
+                        data-test-widget-tree-show-more-select={true}
                         style={{ marginRight: 8 }}
                         className={selectionState.implicit ? styles.implicitCheckboxMuted : ''}
                         checked={selectionState.checked}
@@ -56,6 +57,7 @@ export function TreeTablePseudoRow({
                         type="Link"
                         size="small"
                         removeIndentation={true}
+                        data-test-widget-tree-show-more={true}
                         disabled={dataItem._disabled}
                         loading={dataItem._loading}
                         onClick={createFetchNodesHandler(dataItem.parentId, true)}
@@ -74,6 +76,7 @@ export function TreeTablePseudoRow({
                     type="Link"
                     size="small"
                     removeIndentation={true}
+                    data-test-widget-tree-restore-path-all={true}
                     disabled={dataItem._disabled}
                     loading={dataItem._loading}
                     style={{ border: 'none', width: '100%', background: 'transparent' }}

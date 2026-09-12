@@ -49,7 +49,9 @@ function Header({ meta }: HeaderProps) {
             {showResetButton && <ActionLink onClick={resetFilters}>{t(resetButtonTitleKey)}</ActionLink>}
             {showClearButton && filterActive && (
                 <>
-                    <span style={{ color: 'var(--field-read-color)' }}>{t('shown {{n}}', { n: shownCount })}</span>
+                    <span data-test-widget-tree-filter-shown={shownCount} style={{ color: 'var(--field-read-color)' }}>
+                        {t('shown {{n}}', { n: shownCount })}
+                    </span>
 
                     {filterHasNext && filterPagination && (
                         <ActionLink onClick={filterPagination.loading ? undefined : fetchNextFilterPage}>

@@ -1,13 +1,11 @@
 import React from 'react'
-import { Checkbox, Icon } from 'antd'
+import { Icon } from 'antd'
 import { WidgetListField } from '@cxbox-ui/schema'
 import ColumnTitle from '@components/ColumnTitle/ColumnTitle'
-import { TREE_ROOT_ID } from '@components/widgets/Table/constants'
 import { CustomDataItem } from '@components/widgets/Table/Table.interfaces'
 import { useTableTree } from '@components/widgets/Table/tree/hooks/useTableTree'
 import { useTreeRowSelection } from '@components/widgets/Table/tree/hooks/useTreeRowSelection'
 import { RowMetaField } from '@interfaces/rowMeta'
-import styles from '../Table.less'
 
 interface TreeTableColumnTitleProps {
     field: WidgetListField
@@ -44,8 +42,6 @@ export function TreeTableColumnTitle({
         return title
     }
 
-    const selectionState = showSelection ? getNodeSelectionState(TREE_ROOT_ID) : undefined
-
     return (
         <div style={{ display: 'flex', alignItems: 'center' }}>
             <Icon
@@ -57,17 +53,6 @@ export function TreeTableColumnTitle({
                     handleExpand(!isExpanded, { id: null as any } as CustomDataItem)
                 }}
             />
-            {showSelection && (
-                <Checkbox
-                    data-test-widget-tree-column-select={true}
-                    style={{ marginRight: 8 }}
-                    className={selectionState?.implicit ? styles.implicitCheckboxMuted : ''}
-                    checked={selectionState?.checked}
-                    indeterminate={selectionState?.indeterminate}
-                    onChange={event => selectNode(TREE_ROOT_ID, event.target.checked)}
-                    onClick={event => event.stopPropagation()}
-                />
-            )}
             {title}
         </div>
     )

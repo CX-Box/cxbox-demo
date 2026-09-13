@@ -277,6 +277,10 @@ const screenReducerBuilder = reducers
     })
     .addMatcher(isAnyOf(actions.bcRemoveAllFilters, actions.bcRemoveFilter, actions.bcAddFilter), (state, action) => {
         const bcName = action.payload.bcName
+        if ((action.payload as { options?: { cancelResetFiltersGroup?: boolean } })?.options?.cancelResetFiltersGroup) {
+            return
+        }
+
         if (bcName && state.appliedFilterGroup[bcName]?.length) {
             delete state.appliedFilterGroup[bcName]
         }

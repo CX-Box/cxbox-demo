@@ -149,3 +149,15 @@ export const setAlternativePaginationType = createAction<{ widgetName: string; t
 export const setFilterGroup = createAction<{ bcName: string; filterGroupName: string | null; additionalFilters?: BcFilter[] }>(
     'setFilterGroup'
 )
+
+export const bcAddFilter = createAction<
+    ReturnType<typeof actions.bcAddFilter>['payload'] & {
+        options?: { cancelResetFiltersGroup?: boolean }
+    }
+>('bcAddFilter')
+
+export const bcRemoveFilter = createAction<
+    ReturnType<typeof actions.bcRemoveFilter>['payload'] & {
+        options?: { cancelResetFiltersGroup?: boolean }
+    }
+>('bcRemoveFilter')

@@ -26,7 +26,13 @@ import { buildBcUrl } from '@utils/buildBcUrl'
 import { treeActions } from '@slices/tree'
 import { isTreeWidget } from '@constants/widget'
 import { DEFAULT_PAGE, DEFAULT_PAGE_LIMIT } from '@constants/pagination'
-import { DEFAULT_ASSOC_ID_FILTER_PARAMS, getBcDefaultFilterGroupName, getBcDefaultFilters, mergeFilters } from '@utils/defaultFilters'
+import {
+    areFiltersEqual,
+    DEFAULT_ASSOC_ID_FILTER_PARAMS,
+    getBcDefaultFilterGroupName,
+    getBcDefaultFilters,
+    mergeFilters
+} from '@utils/defaultFilters'
 import { CustomWidgetTypes } from '@interfaces/widget'
 import { getAssocTreeSelectedNodeIds } from '@utils/getAssocTreeSelectedNodeIds'
 import { selectBcFilters } from '@selectors/selectors'
@@ -159,6 +165,104 @@ export const getBcFetchSideEffects = ({ action, state, data, bcName, widgetName,
 
     return { cursorChange, fetchRowMeta, fetchChildren, resetOutdatedData, widgetIsUsed }
 }
+interface AssocTreePopupDefaultFilterParams {
+    bcName: string
+    widgetName: string
+    defaultFilterGroupName: string | null
+    appliedFilterGroupName?: string
+    filtersUntouched: boolean
+    rawFilters?: BcFilter[]
+    bcDefaultFilters: BcFilter[]
+    newIdFilter?: BcFilter
+}
+
+export const getAssocTreePopupDefaultFilterActions = ({
+    bcName,
+    widgetName,
+    defaultFilterGroupName,
+    appliedFilterGroupName,
+    filtersUntouched,
+    rawFilters,
+    bcDefaultFilters,
+    newIdFilter
+}: AssocTreePopupDefaultFilterParams): Observable<AnyAction> => {
+    const isCurrentFilterGroupActive = Boolean(defaultFilterGroupName) && defaultFilterGroupName === appliedFilterGroupName
+
+    if (defaultFilterGroupName && filtersUntouched) {
+        return of(
+            actions.setFilterGroup({
+                bcName,
+                filterGroupName: defaultFilterGroupName,
+                additionalFilters: newIdFilter ? [newIdFilter] : undefined
+            })
+        )
+    }
+
+    if (newIdFilter && isCurrentFilterGroupActive && !filtersUntouched) {
+        return of(
+            actions.bcAddFilter({
+                bcName,
+                filter: newIdFilter,
+                widgetName,
+                options: {
+                    cancelResetFiltersGroup: true
+                }
+            })
+        )
+    }
+
+    const effectiveFilters = (filtersUntouched ? bcDefaultFilters : rawFilters ?? []).filter(
+        filter => filter.fieldName !== newIdFilter?.fieldName
+    )
+    const defaultFilters = mergeFilters(effectiveFilters, newIdFilter ? [newIdFilter] : undefined)
+
+    if (areFiltersEqual(rawFilters, defaultFilters)) {
+        return EMPTY
+    }
+
+    return of(
+        ...defaultFilters.map(filter =>
+            actions.bcAddFilter({
+                bcName,
+                filter,
+                widgetName
+            })
+        )
+    )
+}
+
+interface TreeDefaultFilterParams {
+    bcName: string
+    widgetName: string
+    defaultFilterGroupName: string | null
+    bcDefaultFilters: BcFilter[]
+}
+
+export const getTreeDefaultFilterActions = ({
+    bcName,
+    widgetName,
+    defaultFilterGroupName,
+    bcDefaultFilters
+}: TreeDefaultFilterParams): Observable<AnyAction> => {
+    if (defaultFilterGroupName) {
+        return of(actions.setFilterGroup({ bcName, filterGroupName: defaultFilterGroupName }))
+    }
+
+    if (bcDefaultFilters.length > 0) {
+        return of(
+            ...bcDefaultFilters.map(filter =>
+                actions.bcAddFilter({
+                    bcName,
+                    filter,
+                    widgetName
+                })
+            )
+        )
+    }
+
+    return EMPTY
+}
+
 /**
  *
  *
@@ -234,42 +338,44 @@ export const bcFetchDataEpic: RootEpic = (action$, state$, { api, utils }) =>
                               value: selectedNodeIds
                           }
                         : undefined
-                    const unnecessaryFilterById = rawFilters?.find(filter => filter.fieldName === newIdFilter?.fieldName)
-                    const effectiveDefaultFilters = filtersUntouched
-                        ? bcDefaultFilters.filter(filter => filter.fieldName !== newIdFilter?.fieldName)
-                        : (rawFilters ?? []).filter(filter => filter.fieldName !== newIdFilter?.fieldName)
-                    const defaultFilters = mergeFilters(effectiveDefaultFilters, newIdFilter ? [newIdFilter] : undefined)
-
-                    setDefaultFilters = concat(
-                        unnecessaryFilterById
-                            ? of(actions.bcRemoveFilter({ bcName: widget.bcName, filter: unnecessaryFilterById }))
-                            : EMPTY,
-                        defaultFilterGroupName && filtersUntouched
-                            ? of(
-                                  actions.setFilterGroup({
-                                      bcName: widget.bcName,
-                                      filterGroupName: defaultFilterGroupName,
-                                      additionalFilters: newIdFilter ? [newIdFilter] : undefined
-                                  })
-                              )
-                            : of(
-                                  ...defaultFilters.map(filter =>
-                                      actions.bcAddFilter({ bcName: widget.bcName, filter, widgetName: widget.name })
-                                  )
-                              )
+                    const unnecessaryFiltersById = rawFilters?.filter(
+                        filter => filter.fieldName === DEFAULT_ASSOC_ID_FILTER_PARAMS.fieldName
                     )
+
+                    const removeStaleIdFilters = unnecessaryFiltersById?.length
+                        ? of(
+                              ...unnecessaryFiltersById.map(filter =>
+                                  actions.bcRemoveFilter({ bcName: widget.bcName, filter, options: { cancelResetFiltersGroup: true } })
+                              )
+                          )
+                        : EMPTY
+
+                    const applyAssocFilters = getAssocTreePopupDefaultFilterActions({
+                        bcName: widget.bcName,
+                        widgetName: widget.name,
+                        defaultFilterGroupName,
+                        appliedFilterGroupName: state.screen.appliedFilterGroup[bcName],
+                        filtersUntouched,
+                        rawFilters,
+                        bcDefaultFilters,
+                        newIdFilter
+                    })
+
+                    setDefaultFilters = concat(removeStaleIdFilters, applyAssocFilters)
+
+                    const effectiveDefaultFilters = (filtersUntouched ? bcDefaultFilters : rawFilters ?? []).filter(
+                        filter => filter.fieldName !== newIdFilter?.fieldName
+                    )
+                    const defaultFilters = mergeFilters(effectiveDefaultFilters, newIdFilter ? [newIdFilter] : undefined)
 
                     hasFilters = hasAppliedFilters || defaultFilters.length > 0 || (Boolean(defaultFilterGroupName) && filtersUntouched)
                 } else if (filtersUntouched) {
-                    if (defaultFilterGroupName) {
-                        setDefaultFilters = of(actions.setFilterGroup({ bcName: widget.bcName, filterGroupName: defaultFilterGroupName }))
-                    } else if (bcDefaultFilters.length > 0) {
-                        setDefaultFilters = of(
-                            ...bcDefaultFilters.map(filter =>
-                                actions.bcAddFilter({ bcName: widget.bcName, filter, widgetName: widget.name })
-                            )
-                        )
-                    }
+                    setDefaultFilters = getTreeDefaultFilterActions({
+                        bcName: widget.bcName,
+                        widgetName: widget.name,
+                        defaultFilterGroupName,
+                        bcDefaultFilters
+                    })
 
                     hasFilters = hasAppliedFilters || Boolean(defaultFilterGroupName) || bcDefaultFilters.length > 0
                 }

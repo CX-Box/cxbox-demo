@@ -10,7 +10,7 @@
   "navigation": {
     "type": "standard",
     "menu": [
-     {
+      {
         "title": "Job Administration",
         "child": [
           {
@@ -57,6 +57,9 @@
       },
       {
         "viewName": "dictionaryAdmin"
+      },
+      {
+        "viewName": "orgStructureAdmin"
       }
     ]
   }

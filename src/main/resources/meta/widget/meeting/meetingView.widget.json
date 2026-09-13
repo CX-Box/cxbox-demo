@@ -31,9 +31,10 @@
           "maxRows": 1
         },
         {
-          "label": "Responsible",
-          "key": "responsibleName",
-          "type": "input"
+          "label": "Additional Contacts",
+          "key": "additionalContacts",
+          "displayedKey": "additionalContactsDisplayedKey",
+          "type": "multivalue"
         }
       ]
     }
@@ -81,7 +82,7 @@
         {
           "cols": [
             {
-              "fieldKey": "responsibleName",
+              "fieldKey": "additionalContacts",
               "span": 12
             }
           ]

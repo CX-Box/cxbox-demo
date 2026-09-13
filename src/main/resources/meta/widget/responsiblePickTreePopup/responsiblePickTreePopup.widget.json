@@ -1,0 +1,45 @@
+{
+  "name": "responsiblePickTreePopup",
+  "title": "Select Responsible",
+  "type": "PickTreePopup",
+  "bc": "responsiblePickTreePopup",
+  "fields": [
+    {
+      "title": "Name",
+      "key": "fullName",
+      "type": "input"
+    },
+    {
+      "title": "Type",
+      "key": "type",
+      "type": "dictionary"
+    },
+    {
+      "title": "Dept Code",
+      "key": "deptCode",
+      "type": "input"
+    },
+    {
+      "title": "User Login",
+      "key": "userLogin",
+      "type": "input"
+    },
+    {
+      "key": "parentId",
+      "type": "hidden"
+    },
+    {
+      "key": "isLeaf",
+      "type": "hidden"
+    },
+    {
+      "key": "userId",
+      "type": "hidden"
+    }
+  ],
+  "options": {
+    "tree": {
+      "selection": "leaf"
+    }
+  }
+}

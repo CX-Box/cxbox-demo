@@ -6,28 +6,26 @@ import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
-import org.demo.dto.cxbox.inner.ResponsibleDTO;
+import org.demo.dto.cxbox.inner.UserDTO;
 import org.demo.entity.core.User;
 import org.springframework.stereotype.Service;
 
-@SuppressWarnings({"java:S3252","java:S1186", "java:S1170"})
+@SuppressWarnings({"java:S3252", "java:S1186", "java:S1170"})
 @Service
 @RequiredArgsConstructor
-public class ResponsiblePickListService extends VersionAwareResponseService<ResponsibleDTO, User> {
+public class UserPickService extends VersionAwareResponseService<UserDTO, User> {
 
 	@Getter(onMethod_ = @Override)
-	private final Class<ResponsiblePickListMeta> meta = ResponsiblePickListMeta.class;
+	private final Class<UserPickMeta> meta = UserPickMeta.class;
 
 	@Override
-	protected CreateResult<ResponsibleDTO> doCreateEntity(User entity, BusinessComponent bc) {
+	protected CreateResult<UserDTO> doCreateEntity(User entity, BusinessComponent bc) {
 		return null;
 	}
 
 	@Override
-	protected ActionResultDTO<ResponsibleDTO> doUpdateEntity(User entity, ResponsibleDTO data,
-			BusinessComponent bc) {
+	protected ActionResultDTO<UserDTO> doUpdateEntity(User entity, UserDTO data, BusinessComponent bc) {
 		return null;
 	}
-
 
 }

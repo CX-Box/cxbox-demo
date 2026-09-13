@@ -15,7 +15,7 @@
       "gridWidth": 24
     },
     {
-      "widgetName": "responsiblePickListPopup",
+      "widgetName": "responsiblePickTreePopup",
       "position": 20,
       "gridWidth": 24
     },

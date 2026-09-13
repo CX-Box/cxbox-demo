@@ -1,0 +1,47 @@
+{
+  "name": "orgStructureAdmin",
+  "title": "Org Structure",
+  "template": "DashboardView",
+  "url": "/screen/admin/view/orgStructureAdmin",
+  "widgets": [
+    {
+      "widgetName": "secondLevelMenu",
+      "position": 0,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "orgStructure",
+      "position": 10,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "orgStructureCreateForm",
+      "position": 20,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "orgStructureEditForm",
+      "position": 25,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "deptPickListPopup",
+      "position": 40,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "userPickListPopup",
+      "position": 50,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "orgStructurePickTreePopup",
+      "position": 60,
+      "gridWidth": 24
+    }
+  ],
+  "rolesAllowed": [
+    "CXBOX_USER",
+    "BUSINESS_ADMIN"
+  ]
+}

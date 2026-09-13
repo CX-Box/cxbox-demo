@@ -5,7 +5,7 @@ import { DataItem, OperationTypeCrud, utils, WidgetFieldBase } from '@cxbox-ui/c
 import { actions } from '@actions'
 import { isAnyOf } from '@reduxjs/toolkit'
 import { buildBcUrl } from '@utils/buildBcUrl'
-import { selectBcFilters, selectWidgetByCondition } from '@selectors/selectors'
+import { selectBcFilters, selectHasBcTree, selectWidgetByCondition } from '@selectors/selectors'
 import { getUniqueValues, treeActions } from '@slices/tree'
 import { FilterType } from '@interfaces/filters'
 import { FIELDS } from '@constants'
@@ -334,6 +334,11 @@ const syncTreeNodesToBcDataEpic: RootEpic = (action$, state$, { utils: internalU
         switchMap(action => {
             const { bcName } = action.payload
             const state = state$.value
+
+            if (!selectHasBcTree(state, bcName)) {
+                return EMPTY
+            }
+
             const allData = getAllDataFromTree(state, bcName)
             const bc = state.screen.bo.bc[bcName]
             const prevCursor = bc?.cursor
@@ -413,6 +418,11 @@ export const reconcileTreeNodeEpic: RootEpic = (action$, state$) =>
         mergeMap(action => {
             const { bcName, cursor, dataItem } = action.payload
             const state = state$.value
+
+            if (!selectHasBcTree(state, bcName)) {
+                return EMPTY
+            }
+
             const effectiveCursor = normalizeNodeId(cursor ?? state.screen.bo.bc[bcName]?.cursor)
             const context = dataItem ? getTreeReconcileContext(state, bcName, effectiveCursor, dataItem) : null
 
@@ -435,6 +445,11 @@ export const refreshNodeEpic: RootEpic = (action$, state$, { api, utils: interna
         mergeMap(action => {
             const state = state$.value
             const { bcName, nodeId: payloadNodeId } = action.payload
+
+            if (!selectHasBcTree(state, bcName)) {
+                return EMPTY
+            }
+
             const nodeId = normalizeNodeId(payloadNodeId)
             const tree = state.tree[bcName]
             const widget = getTreeWidget(state, bcName)
@@ -534,11 +549,20 @@ export const refreshNodeEpic: RootEpic = (action$, state$, { api, utils: interna
         })
     )
 
-const removeCanceledTreeDraftEpic: RootEpic = action$ =>
+const removeCanceledTreeDraftEpic: RootEpic = (action$, state$) =>
     action$.pipe(
         filter(actions.setOperationFinished.match),
         filter(action => action.payload.operationType === OperationTypeCrud.cancelCreate),
-        map(action => treeActions.removeDraftNodes({ bcName: action.payload.bcName }))
+        mergeMap(action => {
+            const state = state$.value
+            const { bcName } = action.payload
+
+            if (!selectHasBcTree(state, bcName)) {
+                return EMPTY
+            }
+
+            return of(treeActions.removeDraftNodes({ bcName }))
+        })
     )
 
 export const fetchTreeNodesEpic: RootEpic = (action$, state$, { api, utils: internalUtils }) =>

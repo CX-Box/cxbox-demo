@@ -22,7 +22,7 @@ import LevelMenu from '../widgets/LevelMenu/LevelMenu'
 import { Number } from '@fields/Number/Number'
 import { FormPopup } from '../widgets/FormPopup/FormPopup'
 import MultivalueField from '../../fields/Multivalue/MultivalueField'
-import InlinePickList from '../../fields/InlinePickList/InlinePickList'
+import PickField, { PickFieldProps } from '../../fields/PickField/PickField'
 import FileUpload from '@fields/FileUpload/FileUpload'
 import { FieldType, interfaces, utils } from '@cxbox-ui/core'
 import { AdditionalInfoWidget } from '@components/widgets/AdditionalInfo/AdditionalInfoWidget'
@@ -43,6 +43,9 @@ import CardList from '@components/widgets/CardList/CardList'
 import CardCarouselList from '@components/widgets/CardCarouselList/CardCarouselList'
 import { CalendarList, CalendarYearList } from '@components/widgets/CalendarList'
 import RichText from '@fields/RichText/RichText'
+import TreeTable from '../widgets/Table/TreeTable'
+import AssocTreePopup from '../widgets/AssocTreePopup/AssocTreePopup'
+import PickTreePopup from '@components/widgets/PickTreePopup/PickTreePopup'
 
 export const customFields = {
     [FieldType.number]: Number,
@@ -50,8 +53,11 @@ export const customFields = {
     [FieldType.money]: Number,
     [FieldType.dictionary]: Dictionary,
     [FieldType.multivalue]: MultivalueField,
-    [FieldType.pickList]: InlinePickList,
-    [FieldType.inlinePickList]: InlinePickList,
+    [FieldType.pickList]: (props: Omit<PickFieldProps, 'inline'>) => <PickField {...props} inline={false} />,
+    [FieldType.inlinePickList]: (props: Omit<PickFieldProps, 'inline'>) => <PickField {...props} inline={true} />,
+    [CustomFieldTypes.pickTree]: (props: Omit<PickFieldProps, 'inline'>) => <PickField {...props} inline={false} />,
+    [CustomFieldTypes.inlinePickTree]: (props: Omit<PickFieldProps, 'inline'>) => <PickField {...props} inline={true} />,
+    [CustomFieldTypes.multivalueTree]: MultivalueField,
     [CustomFieldTypes.MultipleSelect]: MultipleSelectField,
     [FieldType.fileUpload]: FileUpload,
     [CustomFieldTypes.Time]: TimeField,
@@ -87,7 +93,10 @@ export const customWidgets: Partial<Record<CustomWidgetTypes | interfaces.Widget
     [CustomWidgetTypes.CalendarYearList]: { component: CalendarYearList, card: null },
     [CustomWidgetTypes.CardList]: { component: CardList },
     [CustomWidgetTypes.CardCarouselList]: { component: CardCarouselList },
-    [CustomWidgetTypes.RelationGraph]: { component: Chart, card: DashboardCard }
+    [CustomWidgetTypes.RelationGraph]: { component: Chart, card: DashboardCard },
+    [CustomWidgetTypes.Tree]: { component: TreeTable, card: DashboardCard },
+    [CustomWidgetTypes.AssocTreePopup]: { component: AssocTreePopup, isPopup: true, card: null },
+    [CustomWidgetTypes.PickTreePopup]: { component: PickTreePopup, isPopup: true, card: null }
 }
 
 utils.extendPopupWidgetTypes(customWidgets)

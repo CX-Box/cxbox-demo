@@ -87,20 +87,17 @@ export function useExpandableForm<R extends CustomDataItem>(currentWidgetMeta: A
     )
 
     const expandIcon = useCallback(
-        ({ expanded, record, onExpand }: ExpandIconProps<R>) => {
+        ({ record }: ExpandIconProps<R>) => {
+            const active = isActiveRecord(record)
+
             return (
                 <ExpandIcon
-                    expanded={isActiveRecord(record) && expanded}
+                    expanded={active}
                     openIcon="edit"
                     closeIcon="close"
                     onClick={event => {
-                        if (!isActiveRecord(record) && expanded) {
-                            handleExpand(true, record)
-                        } else if (isActiveRecord(record) && expanded) {
-                            handleExpand(false, record)
-                        } else {
-                            onExpand(record, event)
-                        }
+                        event.stopPropagation()
+                        handleExpand(!active, record)
                     }}
                 />
             )

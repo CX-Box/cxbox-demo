@@ -1,4 +1,4 @@
-import { joinPaths } from '@utils/api'
+import { joinPaths } from '@utils/joinPaths'
 
 const isDev = process.env.NODE_ENV === 'development'
 

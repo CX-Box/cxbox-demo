@@ -82,7 +82,7 @@ export const useRowSelection = (widgetName: string) => {
     const clearSelectedRows = useCallback(() => {
         dispatch(actions.clearSelectedRows({ bcName }))
     }, [bcName, dispatch])
-    const selectedRowKeys = useMemo(() => selectedRows?.map(item => item.id as string), [selectedRows])
+    const selectedRowKeys = useMemo(() => selectedRows?.map(item => String(item.id)), [selectedRows])
 
     return { clearSelectedRows, selectAll, select, selectItems, selectedRows, selectedRowKeys }
 }

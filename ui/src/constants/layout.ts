@@ -3,4 +3,11 @@ import { CustomWidgetTypes } from '@interfaces/widget'
 
 export const sidebarWidgetsTypes: string[] = [CustomWidgetTypes.AdditionalInfo, CustomWidgetTypes.AdditionalList]
 
-export const popupWidgets = [WidgetTypes.AssocListPopup, WidgetTypes.PickListPopup, WidgetTypes.FlatTreePopup, CustomWidgetTypes.FormPopup]
+export const popupWidgets = [
+    WidgetTypes.AssocListPopup,
+    WidgetTypes.PickListPopup,
+    WidgetTypes.FlatTreePopup,
+    CustomWidgetTypes.FormPopup,
+    CustomWidgetTypes.AssocTreePopup,
+    CustomWidgetTypes.PickTreePopup
+]

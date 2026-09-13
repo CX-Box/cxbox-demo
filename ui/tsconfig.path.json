@@ -22,6 +22,10 @@
       "@i18n": ["./i18n"],
       "@fields": ["./fields"],
       "@fields/*": ["./fields/*"],
+      "@features": ["./features"],
+      "@features/*": ["./features/*"],
+      "@slices": ["./slices"],
+      "@slices/*": ["./slices/*"],
       "@selectors/*": ["./selectors/*"],
       "@selectors": ["./selectors"]
     }

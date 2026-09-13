@@ -5,6 +5,7 @@ import { sessionReducer } from './session'
 import { routerReducer } from './router'
 import { combineReducers } from '@reduxjs/toolkit'
 import { notificationReducer } from './notification'
+import { treeReducer } from '../slices/tree'
 
 export const rootReducer = combineReducers({
     screen: screenReducer,
@@ -12,5 +13,6 @@ export const rootReducer = combineReducers({
     view: viewReducer,
     session: sessionReducer,
     router: routerReducer,
-    notification: notificationReducer
+    notification: notificationReducer,
+    tree: treeReducer
 })

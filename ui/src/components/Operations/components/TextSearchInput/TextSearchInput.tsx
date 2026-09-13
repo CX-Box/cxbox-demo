@@ -9,6 +9,8 @@ import { Icon, Popover } from 'antd'
 import { useAppSelector } from '@store'
 import { FilterType } from '@interfaces/filters'
 import { FilterType as CoreFilterType } from '@cxbox-ui/core'
+import { selectHasBcTree } from '@selectors/selectors'
+import { treeActions } from '@slices/tree'
 
 const FULL_TEXT_SEARCH = FilterType.fullTextSearch as CoreFilterType
 
@@ -62,6 +64,7 @@ export const useActualValue = <T extends unknown>(value: T) => {
 }
 
 export const useSearchSynchronizedWithFilter = (widgetName: string, bcName: string) => {
+    const hasBcTree = useAppSelector(selectHasBcTree(bcName))
     const externalFilterValue = useAppSelector(state => state.screen.filters[bcName]?.find(item => item.type === FULL_TEXT_SEARCH))
         ?.value as string | undefined
     const [value, setValue] = useState<string | null | undefined>(externalFilterValue)
@@ -89,6 +92,14 @@ export const useSearchSynchronizedWithFilter = (widgetName: string, bcName: stri
         setValue(value || null)
     }, [])
 
+    const refreshData = useCallback(() => {
+        if (hasBcTree) {
+            dispatch(treeActions.applyFilter({ bcName }))
+        } else {
+            dispatch(actions.bcForceUpdate({ bcName }))
+        }
+    }, [bcName, dispatch, hasBcTree])
+
     const changeFilter = useCallback(() => {
         if (valueRef.current === null && externalFilterValueRef.current) {
             dispatch(
@@ -98,7 +109,7 @@ export const useSearchSynchronizedWithFilter = (widgetName: string, bcName: stri
                 })
             )
 
-            dispatch(actions.bcForceUpdate({ bcName: bcName }))
+            refreshData()
         } else if (valueRef.current !== externalFilterValueRef.current) {
             dispatch(
                 actions.bcAddFilter({
@@ -108,9 +119,9 @@ export const useSearchSynchronizedWithFilter = (widgetName: string, bcName: stri
                 })
             )
 
-            dispatch(actions.bcForceUpdate({ bcName: bcName }))
+            refreshData()
         }
-    }, [valueRef, externalFilterValueRef, dispatch, bcName, widgetName])
+    }, [valueRef, externalFilterValueRef, dispatch, bcName, widgetName, refreshData])
 
     useDebouncedTextSearch(value as string, changeFilter)
 

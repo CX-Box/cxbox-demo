@@ -5,8 +5,11 @@ import qs from 'query-string'
 import { useAppSelector } from '@store'
 import { actions } from '@actions'
 import { createFilterGroupTempId } from '@components/widgets/Table/filterGroup'
+import { selectHasBcTree } from '@selectors/selectors'
+import { treeActions } from '@slices/tree'
 
 export function usePresetFilterSettings(bcName: string) {
+    const hasBcTree = useAppSelector(selectHasBcTree(bcName))
     const { filterGroups, filters } = useAppSelector(state => {
         const bc = bcName ? state.screen.bo.bc[bcName] : undefined
 
@@ -31,9 +34,13 @@ export function usePresetFilterSettings(bcName: string) {
 
     const forceUpdate = useCallback(
         (bcName: string) => {
-            dispatch(actions.bcForceUpdate({ bcName }))
+            if (hasBcTree) {
+                dispatch(treeActions.applyFilter({ bcName }))
+            } else {
+                dispatch(actions.bcForceUpdate({ bcName }))
+            }
         },
-        [dispatch]
+        [dispatch, hasBcTree]
     )
 
     const applyFilterGroup = useMemo(() => {

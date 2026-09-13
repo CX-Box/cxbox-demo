@@ -17,6 +17,7 @@ import { useSetCssVariable } from '@hooks/useSetCssVariable'
 import { addAlphaToHex } from '@utils/color'
 import { FIELD_DISABLED_COLOR, WHEN_EDITABLE_FIELD_IS_DISABLED_THEN_FONT_OPACITY } from '@constants'
 import { Router } from '@router'
+import { TREE_SHOW_MORE_PADDING_TOP } from '@constants/tree'
 
 export const AppLayout: React.FC = () => {
     const dispatch = useAppDispatch()
@@ -38,6 +39,7 @@ export const AppLayout: React.FC = () => {
     }, [])
 
     useSetCssVariable('--field-disabled-color', addAlphaToHex(FIELD_DISABLED_COLOR, WHEN_EDITABLE_FIELD_IS_DISABLED_THEN_FONT_OPACITY))
+    useSetCssVariable('--tree-show-more-padding-top', String(TREE_SHOW_MORE_PADDING_TOP))
 
     useScrollToTopAfterChangeRoute(getContentElement)
 

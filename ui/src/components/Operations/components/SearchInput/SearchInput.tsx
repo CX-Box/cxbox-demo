@@ -14,7 +14,15 @@ const SearchInput: React.FunctionComponent<SearchInputProps> = props => {
     const { onChange, value, className, placeholder = 'Search' } = props
     return (
         <div className={cn(styles.container, className)}>
-            <Input value={value} prefix={<Icon type="search" />} placeholder={placeholder} onChange={onChange} maxLength={100} allowClear />
+            <Input
+                data-test-widget-full-text-search={true}
+                value={value}
+                prefix={<Icon type="search" />}
+                placeholder={placeholder}
+                onChange={onChange}
+                maxLength={100}
+                allowClear
+            />
         </div>
     )
 }

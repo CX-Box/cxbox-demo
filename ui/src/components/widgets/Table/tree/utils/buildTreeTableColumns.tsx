@@ -14,12 +14,10 @@ import { buildContinuingGuidesWidthById } from '@components/widgets/Table/tree/u
 
 type TreeLevelCellStyle = React.CSSProperties & {
     '--tree-level': number
-    '--tree-active-level'?: number
     '--tree-continuing-guides-width': string
 }
 
 interface BuildTreeTableColumnsParams<T extends CustomDataItem> {
-    activeLevel?: number
     fields: AppWidgetTableMeta['fields']
     dataSource: TableTreeNode[]
     widget: AppWidgetTableMeta | AppWidgetGroupingHierarchyMeta
@@ -40,7 +38,6 @@ interface BuildTreeTableColumnsParams<T extends CustomDataItem> {
 }
 
 export function buildTreeTableColumns<T extends CustomDataItem>({
-    activeLevel,
     widget,
     fields,
     dataSource,
@@ -124,7 +121,6 @@ export function buildTreeTableColumns<T extends CustomDataItem>({
                               className: styles.treeLevelCell,
                               style: {
                                   '--tree-level': (dataItem as T & TableTreeNode)._level ?? 0,
-                                  '--tree-active-level': activeLevel,
                                   '--tree-continuing-guides-width': continuingGuidesWidthById.get(String(dataItem.id)) ?? '0px'
                               } as TreeLevelCellStyle
                           }

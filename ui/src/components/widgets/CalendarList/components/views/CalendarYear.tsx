@@ -291,7 +291,9 @@ const CalendarYear = React.forwardRef<CalendarYearApiHandle, CalendarYearProps>(
                 }
             }
 
-            const getPopupContainer = (triggerNode: HTMLElement) => triggerNode.parentElement as HTMLElement
+            // Keep popups inside the event popover so it does not close, but not inside a clipping parent (richText toolbar)
+            const getPopupContainer = (triggerNode: HTMLElement) =>
+                (triggerNode.closest('.ant-popover-inner-content') ?? triggerNode.parentElement) as HTMLElement
 
             const hoverContent = (
                 <ConfigProvider getPopupContainer={getPopupContainer}>

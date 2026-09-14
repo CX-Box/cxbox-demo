@@ -7,8 +7,7 @@
     {
       "label": "Contact Name",
       "key": "fullName",
-      "type": "input",
-      "drillDown": "true"
+      "type": "input"
     },
     {
       "label": "Phone Number",

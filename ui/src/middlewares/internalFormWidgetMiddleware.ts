@@ -255,17 +255,20 @@ export const internalFormWidgetMiddleware: Middleware =
                     cardOptions?.valueFieldKey ? cardOptions?.valueFieldKey === field.key : field.type === FieldType.fileUpload
                 )
 
-                dispatch(
-                    actions.showFileViewerPopup({
-                        active: true,
-                        options: {
-                            bcName: action.payload?.bcName,
-                            type: 'file-viewer',
-                            calleeFieldKey: widgetField?.key as string
-                        },
-                        calleeWidgetName: widgetWithInternalPopupWidgetCreate?.name as string
-                    })
-                )
+                // popup create of a widget without a file field (e.g. calendar) is a form popup, not the file viewer
+                if (widgetField) {
+                    dispatch(
+                        actions.showFileViewerPopup({
+                            active: true,
+                            options: {
+                                bcName: action.payload?.bcName,
+                                type: 'file-viewer',
+                                calleeFieldKey: widgetField.key
+                            },
+                            calleeWidgetName: widgetWithInternalPopupWidgetCreate?.name as string
+                        })
+                    )
+                }
             }
             // after: Opening file viewer popup
 

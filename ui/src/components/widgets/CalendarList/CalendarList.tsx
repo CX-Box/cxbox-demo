@@ -10,6 +10,8 @@ import Filters from '@components/widgets/CalendarList/components/filters/Filters
 import { mapRefinerKeyToFieldKey } from '@components/widgets/CalendarList/constants'
 import { useWidgetOperations } from '@hooks/useWidgetOperations'
 import { selectBcRecordForm } from '@selectors/selectors'
+import { useCalendarCreateInPopup } from '@components/widgets/CalendarList/hooks/useCalendarCreateInPopup'
+import CalendarCreatePopup from '@components/widgets/CalendarList/components/others/CalendarCreatePopup'
 import { useCalendarMonthDataCheck } from '@components/widgets/CalendarList/hooks/useCalendarMonthDataCheck'
 import DropdownSetting from '@components/widgets/Table/components/DropdownSetting'
 import { Icon, Menu, Tooltip } from 'antd'
@@ -22,6 +24,7 @@ const CalendarList: React.FC<CalendarListProps> = ({ meta: widget }) => {
     const calendarRef = useRef<CalendarMonthApiHandle>(null)
     const prevIsListRef = useRef<boolean>(false)
     const recordForm = useAppSelector(selectBcRecordForm(widget.bcName))
+    const isCreateInPopup = useCalendarCreateInPopup(widget)
 
     const { t } = useTranslation()
     const operations = useWidgetOperations(widget.name, ['bc', 'mass'])
@@ -37,10 +40,11 @@ const CalendarList: React.FC<CalendarListProps> = ({ meta: widget }) => {
     }, [isList])
 
     useEffect(() => {
-        if (isIncorrectLimit || recordForm?.create || isIncorrectData) {
+        // a new record being created in the popup has no dates yet, it must not switch the widget to the table
+        if (isIncorrectLimit || (!isCreateInPopup && (recordForm?.create || isIncorrectData))) {
             setIsList(true)
         }
-    }, [isIncorrectData, isIncorrectLimit, recordForm?.create])
+    }, [isCreateInPopup, isIncorrectData, isIncorrectLimit, recordForm?.create])
 
     const enabledMassMode = useAppSelector(state => state.screen.viewerMode[widget.bcName]?.mode === 'mass')
     const enabledListMode = isList || enabledMassMode
@@ -105,6 +109,7 @@ const CalendarList: React.FC<CalendarListProps> = ({ meta: widget }) => {
                     {operations?.length ? <Operations widgetMeta={widget} bcName={widget.bcName} operations={operations} /> : null}
                     <Filters widgetName={widget.name} ignoreFieldNames={ignoreFieldNames} />
                     <CalendarMonth ref={calendarRef} meta={widget} toggleButton={listToggleButton} />
+                    {isCreateInPopup && <CalendarCreatePopup meta={widget} />}
                 </>
             )}
         </div>

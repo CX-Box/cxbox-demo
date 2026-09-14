@@ -104,7 +104,6 @@ const TextArea: React.FunctionComponent<TextAreaProps> = ({
                             <Popover
                                 overlayClassName={styles.popoverOverlay}
                                 placement="bottom"
-                                getTooltipContainer={trigger => trigger.parentElement as HTMLElement}
                                 content={
                                     <ReadOnlyField widgetName={widgetName} meta={meta}>
                                         {defaultValue}

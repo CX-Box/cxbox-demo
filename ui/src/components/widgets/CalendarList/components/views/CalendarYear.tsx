@@ -38,6 +38,8 @@ import { useFieldDrilldown } from '@hooks/useFieldDrilldown'
 import { useEventDataTransform } from '@components/widgets/CalendarList/hooks'
 import { useCleanOldRangeFilters } from '@hooks/useCleanOldRangeFilters'
 import { isDefined } from '@utils/isDefined'
+import { useCalendarFormPopoverWidth } from '@components/widgets/CalendarList/hooks/useCalendarFormPopoverWidth'
+import { POPUP_FORM_STYLES } from '@components/widgets/CalendarList/utils/calendarCreatePopup'
 import Calendar from '@components/widgets/CalendarList/components/views/Calendar'
 import { actions, resetRecordForm, setRecordForm } from '@actions'
 import { ConfigProvider } from 'antd'
@@ -246,6 +248,8 @@ const CalendarYear = React.forwardRef<CalendarYearApiHandle, CalendarYearProps>(
     }, [changeYear])
 
     const { internalWidget, internalWidgetActiveCursor, internalWidgetStyle, renderForm } = useCalendarInternalForm(meta)
+    const formPopoverWidth = useCalendarFormPopoverWidth(wrapperRef, internalWidget?.gridWidth)
+    const formPopoverStyle = useMemo(() => (formPopoverWidth ? { width: formPopoverWidth } : undefined), [formPopoverWidth])
     const dispatch = useDispatch()
 
     const { drilldown: handleDrillDownByTitle, fieldMeta: titleFieldMeta } = useFieldDrilldown(
@@ -278,7 +282,7 @@ const CalendarYear = React.forwardRef<CalendarYearApiHandle, CalendarYearProps>(
 
     const renderEventContent: CustomContentGenerator<EventContentArg> = useCallback(
         arg => {
-            const isInlineForm = isDefined(internalWidget) && internalWidgetStyle === 'inlineForm'
+            const isInlineForm = isDefined(internalWidget) && POPUP_FORM_STYLES.includes(internalWidgetStyle)
             const withoutInlineForm = !isInlineForm
 
             const handleSelectRecord = () => {
@@ -317,6 +321,7 @@ const CalendarYear = React.forwardRef<CalendarYearApiHandle, CalendarYearProps>(
                     contentClick={clickContent}
                     overlayClassNameHover={styles.operationsPopover}
                     overlayClassNameClick={styles.formPopover}
+                    overlayStyleClick={formPopoverStyle}
                 >
                     <div className={styles.calendarContainer} onClick={withoutInlineForm ? handleSelectRecord : undefined}>
                         <CalendarEvent
@@ -331,6 +336,7 @@ const CalendarYear = React.forwardRef<CalendarYearApiHandle, CalendarYearProps>(
         },
         [
             dispatch,
+            formPopoverStyle,
             handleDrillDownByTitle,
             internalWidget,
             internalWidgetActiveCursor,

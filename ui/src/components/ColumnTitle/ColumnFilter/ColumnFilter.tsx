@@ -1,5 +1,6 @@
 import React, { memo, useCallback, useEffect, useMemo, useState, FormEvent } from 'react'
 import { Button, Popover } from 'antd'
+import cn from 'classnames'
 import {
     BcFilter,
     DataValue,
@@ -314,7 +315,15 @@ function ColumnFilter({ widgetName, widgetMeta: widgetFieldMeta, rowMeta, classN
                     visible={visible}
                     filterByRangeEnabled={filterByRangeEnabled}
                 />
-                {isPickList && <Button icon="ellipsis" onClick={handlePicklistFilterOpen} />}
+                {isPickList && (
+                    <Button
+                        icon="ellipsis"
+                        className={cn({ [styles.popupFilterActive]: !!associatedFilter })}
+                        data-test-filter-popup-select={true}
+                        data-test-filter-popup-select-active={!!associatedFilter}
+                        onClick={handlePicklistFilterOpen}
+                    />
+                )}
             </div>
         </FilterForm>
     )

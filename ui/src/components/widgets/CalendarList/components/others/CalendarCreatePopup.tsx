@@ -1,29 +1,29 @@
 import React, { useCallback } from 'react'
-import { Spin } from 'antd'
 import { OperationTypeCrud } from '@cxbox-ui/core'
 import { AppWidgetMeta } from '@interfaces/widget'
 import { useAppDispatch, useAppSelector } from '@store'
 import { actions } from '@actions'
-import { selectBcMetaInProgress, selectBcRecordForm } from '@selectors/selectors'
-import { useInternalWidget } from '@hooks/useInternalWidget'
+import { selectBcRecordForm } from '@selectors/selectors'
+import { useCalendarInternalForm } from '@components/widgets/CalendarList/hooks/useCalendarInternalForm'
 import { useCalendarCreateInPopup } from '@components/widgets/CalendarList/hooks/useCalendarCreateInPopup'
 import Popup from '@components/Popup/Popup'
-import DebugWidgetWrapper from '@components/DebugWidgetWrapper/DebugWidgetWrapper'
-import InnerForm from '@components/widgets/CalendarList/components/others/InnerForm'
-import styles from './CalendarCreatePopup.less'
+import styles from '@components/widgets/FormPopup/FormPopup.less'
 
 interface CalendarCreatePopupProps {
+    /**
+     * Calendar widget which create form is shown
+     */
     meta: AppWidgetMeta
 }
 
 /**
- * Create form of a calendar widget shown in a modal (options.create.style = "popup", the default for calendars)
+ * Create form of a calendar widget in a popup (options.create.style "inlineForm" or "popup").
+ * Rendered by the layout in place of the create widget, so the width is set by its gridWidth like for popup widgets.
  */
 function CalendarCreatePopup({ meta }: CalendarCreatePopupProps) {
     const dispatch = useAppDispatch()
-    const { internalWidget, internalWidgetOperations, isCreateStyle } = useInternalWidget(meta)
+    const { internalWidget, isCreateStyle, renderForm } = useCalendarInternalForm(meta)
     const recordForm = useAppSelector(selectBcRecordForm(meta.bcName))
-    const rowMetaInProgress = useAppSelector(selectBcMetaInProgress(meta.bcName))
 
     const isCreateInPopup = useCalendarCreateInPopup(meta)
     const showed = isCreateInPopup && !!internalWidget && !!recordForm?.create && isCreateStyle
@@ -45,7 +45,6 @@ function CalendarCreatePopup({ meta }: CalendarCreatePopupProps) {
     return (
         <Popup
             className={styles.popupContainer}
-            size="medium"
             showed={showed}
             title={internalWidget.title}
             bcName={meta.bcName}
@@ -54,13 +53,7 @@ function CalendarCreatePopup({ meta }: CalendarCreatePopupProps) {
             footer={null}
             onCancelHandler={handleCancel}
         >
-            <div className={styles.content}>
-                <DebugWidgetWrapper meta={internalWidget}>
-                    <Spin spinning={rowMetaInProgress}>
-                        <InnerForm widgetMeta={internalWidget} operations={internalWidgetOperations} rowId={recordForm?.cursor} />
-                    </Spin>
-                </DebugWidgetWrapper>
-            </div>
+            <div className={styles.formPopupModal}>{renderForm(recordForm?.cursor)}</div>
         </Popup>
     )
 }

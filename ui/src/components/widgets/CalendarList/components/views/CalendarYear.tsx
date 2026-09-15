@@ -8,7 +8,7 @@ import listPlugin from '@fullcalendar/list'
 import FullCalendar from '@fullcalendar/react'
 import styles from './CalendarYear.less'
 import { useAppSelector } from '@store'
-import { selectBc, selectBcData, selectBcFilters, selectBcMetaInProgress } from '@selectors/selectors'
+import { selectBc, selectBcData, selectBcFilters } from '@selectors/selectors'
 import CalendarToolbar from '@components/widgets/CalendarList/components/toolbar/CalendarToolbar'
 import CalendarEvent from '@components/widgets/CalendarList/components/events/CalendarEvent'
 import { CustomContentGenerator, DateInput, EventContentArg } from '@fullcalendar/core'
@@ -40,11 +40,9 @@ import { useCleanOldRangeFilters } from '@hooks/useCleanOldRangeFilters'
 import { isDefined } from '@utils/isDefined'
 import Calendar from '@components/widgets/CalendarList/components/views/Calendar'
 import { actions, resetRecordForm, setRecordForm } from '@actions'
-import { ConfigProvider, Spin } from 'antd'
-import DebugWidgetWrapper from '@components/DebugWidgetWrapper/DebugWidgetWrapper'
-import InnerForm from '@components/widgets/CalendarList/components/others/InnerForm'
+import { ConfigProvider } from 'antd'
 import RowOperationsButton from '@components/widgets/CalendarList/components/others/RowOperations/RowOperationsButton'
-import { useInternalWidget } from '@hooks/useInternalWidget'
+import { useCalendarInternalForm } from '@components/widgets/CalendarList/hooks/useCalendarInternalForm'
 import { useDispatch } from 'react-redux'
 import UniquePopoverHoverAndClick, {
     UniquePopoverHoverAndClickProps
@@ -247,8 +245,7 @@ const CalendarYear = React.forwardRef<CalendarYearApiHandle, CalendarYearProps>(
         changeYear(today)
     }, [changeYear])
 
-    const { internalWidget, internalWidgetOperations, internalWidgetActiveCursor, internalWidgetStyle } = useInternalWidget(meta)
-    const rowMetaInProgress = useAppSelector(selectBcMetaInProgress(internalWidget?.bcName))
+    const { internalWidget, internalWidgetActiveCursor, internalWidgetStyle, renderForm } = useCalendarInternalForm(meta)
     const dispatch = useDispatch()
 
     const { drilldown: handleDrillDownByTitle, fieldMeta: titleFieldMeta } = useFieldDrilldown(
@@ -281,7 +278,6 @@ const CalendarYear = React.forwardRef<CalendarYearApiHandle, CalendarYearProps>(
 
     const renderEventContent: CustomContentGenerator<EventContentArg> = useCallback(
         arg => {
-            const isLoading = (internalWidget && arg.event.id !== internalWidgetActiveCursor) || rowMetaInProgress
             const isInlineForm = isDefined(internalWidget) && internalWidgetStyle === 'inlineForm'
             const withoutInlineForm = !isInlineForm
 
@@ -301,15 +297,7 @@ const CalendarYear = React.forwardRef<CalendarYearApiHandle, CalendarYearProps>(
 
             const clickContent = isInlineForm ? (
                 <ConfigProvider getPopupContainer={getPopupContainer}>
-                    <DebugWidgetWrapper meta={internalWidget}>
-                        <Spin spinning={isLoading}>
-                            <InnerForm
-                                widgetMeta={internalWidget}
-                                operations={internalWidgetOperations}
-                                additionalOperations={<RowOperationsButton widget={meta} />}
-                            />
-                        </Spin>
-                    </DebugWidgetWrapper>
+                    {renderForm(arg.event.id, <RowOperationsButton widget={meta} />)}
                 </ConfigProvider>
             ) : undefined
 
@@ -346,11 +334,10 @@ const CalendarYear = React.forwardRef<CalendarYearApiHandle, CalendarYearProps>(
             handleDrillDownByTitle,
             internalWidget,
             internalWidgetActiveCursor,
-            internalWidgetOperations,
             internalWidgetStyle,
             isActiveRecord,
             meta,
-            rowMetaInProgress,
+            renderForm,
             titleFieldMeta,
             toggleRecordForm
         ]

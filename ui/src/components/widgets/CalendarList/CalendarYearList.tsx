@@ -11,7 +11,6 @@ import { mapRefinerKeyToFieldKey } from '@components/widgets/CalendarList/consta
 import { useWidgetOperations } from '@hooks/useWidgetOperations'
 import { selectBcRecordForm } from '@selectors/selectors'
 import { useCalendarCreateInPopup } from '@components/widgets/CalendarList/hooks/useCalendarCreateInPopup'
-import CalendarCreatePopup from '@components/widgets/CalendarList/components/others/CalendarCreatePopup'
 import { useCalendarYearDataCheck } from '@components/widgets/CalendarList/hooks/useCalendarYearDataCheck'
 import { Icon, Menu, Tooltip } from 'antd'
 import DropdownSetting from '@components/widgets/Table/components/DropdownSetting'
@@ -109,7 +108,6 @@ const CalendarYearList: React.FC<CalendarYearListProps> = ({ meta: widget }) => 
                     {operations?.length ? <Operations widgetMeta={widget} bcName={widget.bcName} operations={operations} /> : null}
                     <Filters widgetName={widget.name} ignoreFieldNames={ignoreFieldNames} />
                     <CalendarYear ref={calendarRef} meta={widget} toggleButton={listToggleButton} />
-                    {isCreateInPopup && <CalendarCreatePopup meta={widget} />}
                 </>
             )}
         </div>

@@ -1,16 +1,13 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import { Row, Col } from 'antd'
 import Widget from '@components/Widget/Widget'
 import { createSkipWidgetList } from '@utils/createSkipWidgetList'
 import { groupByRow } from '@utils/layout'
-import { LAYOUT_GRID_COLUMNS, LAYOUT_ROW_GUTTER, popupWidgets, sidebarWidgetsTypes } from '@constants/layout'
+import { popupWidgets, sidebarWidgetsTypes } from '@constants/layout'
 import { CustomWidgetDescriptor, WidgetTypes } from '@cxbox-ui/core'
 import { AppWidgetMeta, CustomWidgetTypes } from '@interfaces/widget'
-import CalendarCreatePopup from '@components/widgets/CalendarList/components/others/CalendarCreatePopup'
-import CalendarFormPopoverSizer, {
-    CalendarFormPopoverWidthContext
-} from '@components/widgets/CalendarList/components/others/CalendarFormPopoverSizer'
-import { getCalendarCreatePopupOwners, getCalendarEditPopoverOwners } from '@components/widgets/CalendarList/utils/calendarCreatePopup'
+import { useCalendarLayoutPlaces } from '@components/widgets/CalendarList/hooks/useCalendarLayoutPlaces'
+import { CalendarFormPopoverWidthProvider } from '@components/widgets/CalendarList/components/others/CalendarFormPopoverSizer'
 import styles from './DashboardLayout.less'
 
 export interface DashboardLayoutProps {
@@ -22,22 +19,11 @@ export interface DashboardLayoutProps {
 }
 
 export function DashboardLayout(props: DashboardLayoutProps) {
-    // calendar create widgets are internal, but their popup takes a place in the layout like popup widgets
-    const calendarCreatePopupOwners = useMemo(() => getCalendarCreatePopupOwners(props.widgets), [props.widgets])
-    // calendar edit widgets get a place in the layout too: the width of their popover is measured there like of a popup
-    const calendarEditPopoverOwners = useMemo(() => getCalendarEditPopoverOwners(props.widgets), [props.widgets])
-    const [calendarFormPopoverWidths, setCalendarFormPopoverWidths] = useState<Record<string, number>>({})
-
-    const handleCalendarFormPopoverWidthChange = useCallback((calendarName: string, width: number) => {
-        setCalendarFormPopoverWidths(widths => (widths[calendarName] === width ? widths : { ...widths, [calendarName]: width }))
-    }, [])
+    const calendarLayoutPlaces = useCalendarLayoutPlaces(props.widgets)
 
     const widgetsByRow = React.useMemo(() => {
-        return groupByRow(props.widgets, props.skipWidgetTypes || [], [
-            ...Object.keys(calendarCreatePopupOwners),
-            ...Object.keys(calendarEditPopoverOwners)
-        ])
-    }, [props.widgets, props.skipWidgetTypes, calendarCreatePopupOwners, calendarEditPopoverOwners])
+        return groupByRow(props.widgets, props.skipWidgetTypes || [], calendarLayoutPlaces.widgetNames)
+    }, [props.widgets, props.skipWidgetTypes, calendarLayoutPlaces.widgetNames])
 
     const additionalInfoWidgets = useMemo(() => {
         const skipWidgetList = createSkipWidgetList(props.widgets)
@@ -50,37 +36,18 @@ export function DashboardLayout(props: DashboardLayoutProps) {
     }, [props.widgets])
 
     const CommonWidgets = Object.values(widgetsByRow).map((row, rowIndex) => (
-        <Row key={rowIndex} gutter={[LAYOUT_ROW_GUTTER, 0]}>
+        <Row key={rowIndex} gutter={[24, 0]}>
             {row.map((widget, colIndex) => {
-                const calendarCreatePopupOwner = calendarCreatePopupOwners[widget.name]
-                const calendarEditPopoverOwner = calendarEditPopoverOwners[widget.name]
-                const isCalendarFormPlace = !!calendarCreatePopupOwner || !!calendarEditPopoverOwner
-                const widgetCol = (
+                const calendarLayoutPlace = calendarLayoutPlaces.renderPlace(widget, colIndex)
+                const widgetCol = calendarLayoutPlace || (
                     <Col key={colIndex} span={widget.gridWidth}>
-                        {isCalendarFormPlace ? (
-                            <>
-                                {calendarCreatePopupOwner && <CalendarCreatePopup meta={calendarCreatePopupOwner} />}
-                                {calendarEditPopoverOwner && (
-                                    <CalendarFormPopoverSizer
-                                        calendarName={calendarEditPopoverOwner.name}
-                                        onWidthChange={handleCalendarFormPopoverWidthChange}
-                                    />
-                                )}
-                            </>
-                        ) : (
-                            <Widget
-                                meta={widget}
-                                card={props.card}
-                                customWidgets={props.customWidgets}
-                                customSpinner={props.customSpinner}
-                            />
-                        )}
+                        <Widget meta={widget} card={props.card} customWidgets={props.customWidgets} customSpinner={props.customSpinner} />
                     </Col>
                 )
 
-                return popupWidgets.includes(widget.type as WidgetTypes) || isCalendarFormPlace ? (
-                    <Col key={colIndex} span={LAYOUT_GRID_COLUMNS}>
-                        <Row gutter={[LAYOUT_ROW_GUTTER, 0]}>{widgetCol}</Row>
+                return popupWidgets.includes(widget.type as WidgetTypes) || calendarLayoutPlace ? (
+                    <Col key={colIndex} span={24}>
+                        <Row gutter={[24, 0]}>{widgetCol}</Row>
                     </Col>
                 ) : (
                     widgetCol
@@ -102,28 +69,24 @@ export function DashboardLayout(props: DashboardLayoutProps) {
 
     if (additionalInfoWidgets.length !== 0) {
         return (
-            <CalendarFormPopoverWidthContext.Provider value={calendarFormPopoverWidths}>
-                <Row gutter={24}>
-                    <Col span={18}>{ProcessedCommonWidgets}</Col>
-                    <Col span={6} className={styles.additionalInfoContainer}>
-                        {additionalInfoWidgets.map(widget => (
-                            <Row key={widget.name} gutter={[8, 8]}>
-                                <Col span={24}>
-                                    <Widget meta={widget} customWidgets={props.customWidgets} customSpinner={props.customSpinner} />
-                                </Col>
-                            </Row>
-                        ))}
-                    </Col>
-                </Row>
-            </CalendarFormPopoverWidthContext.Provider>
+            <Row gutter={24}>
+                <Col span={18}>
+                    <CalendarFormPopoverWidthProvider>{ProcessedCommonWidgets}</CalendarFormPopoverWidthProvider>
+                </Col>
+                <Col span={6} className={styles.additionalInfoContainer}>
+                    {additionalInfoWidgets.map(widget => (
+                        <Row key={widget.name} gutter={[8, 8]}>
+                            <Col span={24}>
+                                <Widget meta={widget} customWidgets={props.customWidgets} customSpinner={props.customSpinner} />
+                            </Col>
+                        </Row>
+                    ))}
+                </Col>
+            </Row>
         )
     }
 
-    return (
-        <CalendarFormPopoverWidthContext.Provider value={calendarFormPopoverWidths}>
-            {ProcessedCommonWidgets}
-        </CalendarFormPopoverWidthContext.Provider>
-    )
+    return <CalendarFormPopoverWidthProvider>{ProcessedCommonWidgets}</CalendarFormPopoverWidthProvider>
 }
 
 export default React.memo(DashboardLayout)

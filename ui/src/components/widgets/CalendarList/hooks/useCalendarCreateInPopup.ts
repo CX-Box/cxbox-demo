@@ -1,7 +1,7 @@
 import { AppWidgetMeta } from '@interfaces/widget'
 import { useAppSelector } from '@store'
 import { selectWidget } from '@selectors/selectors'
-import { isCalendarCreatePopupStyle } from '@components/widgets/CalendarList/utils/calendarCreatePopup'
+import { isCalendarCreatePopupStyle } from '@components/widgets/CalendarList/utils/calendarFormPopups'
 
 /**
  * Calendar widgets create records in a popup for options.create.style "inlineForm" (default) and "popup".

@@ -5,9 +5,14 @@
   "url": "/screen/meeting/view/calendarView",
   "widgets": [
     {
-      "widgetName": "calendarFormForList",
+      "widgetName": "calendarEditFormForList",
       "position": 2,
       "gridWidth": 4
+    },
+    {
+      "widgetName": "calendarCreateFormForList",
+      "position": 3,
+      "gridWidth": 6
     },
     {
       "widgetName": "secondLevelMenu",

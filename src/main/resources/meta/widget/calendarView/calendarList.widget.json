@@ -42,10 +42,10 @@
       "endFieldKey": "endDateTime"
     },
     "create": {
-      "widget": "calendarFormForList"
+      "widget": "calendarCreateFormForList"
     },
     "edit": {
-      "widget": "calendarFormForList"
+      "widget": "calendarEditFormForList"
     },
     "pagination":{
       "type": "nextAndPreviousSmart",

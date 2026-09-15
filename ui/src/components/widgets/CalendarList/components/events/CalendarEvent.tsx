@@ -53,7 +53,7 @@ const CalendarEvent: React.FC<CalendarEventProps> = ({ widgetName, drillDownFiel
                         cursor={arg.event.id}
                         onDrillDown={handleDrillDown}
                         drillDownComponent={
-                            <span className={styles.actionLink} onClick={handleDrillDown}>
+                            <span className={styles.actionLink} data-test-field-drilldown={true} onClick={handleDrillDown}>
                                 {arg.event.title}
                             </span>
                         }

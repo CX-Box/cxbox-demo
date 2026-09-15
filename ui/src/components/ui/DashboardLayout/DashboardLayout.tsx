@@ -3,7 +3,7 @@ import { Row, Col } from 'antd'
 import Widget from '@components/Widget/Widget'
 import { createSkipWidgetList } from '@utils/createSkipWidgetList'
 import { groupByRow } from '@utils/layout'
-import { popupWidgets, sidebarWidgetsTypes } from '@constants/layout'
+import { LAYOUT_GRID_COLUMNS, LAYOUT_ROW_GUTTER, popupWidgets, sidebarWidgetsTypes } from '@constants/layout'
 import { CustomWidgetDescriptor, WidgetTypes } from '@cxbox-ui/core'
 import { AppWidgetMeta, CustomWidgetTypes } from '@interfaces/widget'
 import CalendarCreatePopup from '@components/widgets/CalendarList/components/others/CalendarCreatePopup'
@@ -37,7 +37,7 @@ export function DashboardLayout(props: DashboardLayoutProps) {
     }, [props.widgets])
 
     const CommonWidgets = Object.values(widgetsByRow).map((row, rowIndex) => (
-        <Row key={rowIndex} gutter={[24, 0]}>
+        <Row key={rowIndex} gutter={[LAYOUT_ROW_GUTTER, 0]}>
             {row.map((widget, colIndex) => {
                 const calendarCreatePopupOwner = calendarCreatePopupOwners[widget.name]
                 const widgetCol = (
@@ -56,8 +56,8 @@ export function DashboardLayout(props: DashboardLayoutProps) {
                 )
 
                 return popupWidgets.includes(widget.type as WidgetTypes) || calendarCreatePopupOwner ? (
-                    <Col key={colIndex} span={24}>
-                        <Row gutter={[24, 0]}>{widgetCol}</Row>
+                    <Col key={colIndex} span={LAYOUT_GRID_COLUMNS}>
+                        <Row gutter={[LAYOUT_ROW_GUTTER, 0]}>{widgetCol}</Row>
                     </Col>
                 ) : (
                     widgetCol

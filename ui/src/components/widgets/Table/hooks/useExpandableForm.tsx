@@ -13,7 +13,7 @@ import { ControlColumn, CustomDataItem } from '@components/widgets/Table/Table.i
 import { RowSelectionType } from 'antd/es/table'
 import { getRowSelectionOffset } from '@components/widgets/Table/utils/rowSelection'
 import { InternalWidgetOptionsName, useInternalWidget } from '@hooks/useInternalWidget'
-import { isCalendarCreatePopupStyle } from '@components/widgets/CalendarList/utils/calendarCreatePopup'
+import { isCalendarCreatePopupStyle } from '@components/widgets/CalendarList/utils/calendarFormPopups'
 
 type WidgetMetaField = { type: string; hidden?: boolean }
 

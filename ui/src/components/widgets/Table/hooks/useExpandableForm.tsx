@@ -13,6 +13,7 @@ import { ControlColumn, CustomDataItem } from '@components/widgets/Table/Table.i
 import { RowSelectionType } from 'antd/es/table'
 import { getRowSelectionOffset } from '@components/widgets/Table/utils/rowSelection'
 import { InternalWidgetOptionsName, useInternalWidget } from '@hooks/useInternalWidget'
+import { isCalendarCreatePopupStyle } from '@components/widgets/CalendarList/utils/calendarFormPopups'
 
 type WidgetMetaField = { type: string; hidden?: boolean }
 
@@ -106,17 +107,19 @@ export function useExpandableForm<R extends CustomDataItem>(currentWidgetMeta: A
     )
 
     const isLoading = internalWidget && currentActiveRowId !== internalWidgetActiveCursor
+    // a calendar in the table mode creates records in its popup, the new record row is not expanded
+    const createInPopup = isCreateStyle && isCalendarCreatePopupStyle(currentWidgetMeta)
 
     const expandedRowRender = useCallback(
         (record: R) =>
-            isActiveRecord(record) && internalWidget !== undefined ? (
+            isActiveRecord(record) && internalWidget !== undefined && !createInPopup ? (
                 <DebugWidgetWrapper meta={internalWidget}>
                     <Spin spinning={isLoading}>
                         <ExpandedRow widgetMeta={internalWidget as WidgetFormMeta} operations={internalWidgetOperations} record={record} />
                     </Spin>
                 </DebugWidgetWrapper>
             ) : null,
-        [isActiveRecord, internalWidget, isLoading, internalWidgetOperations]
+        [createInPopup, isActiveRecord, internalWidget, isLoading, internalWidgetOperations]
     )
 
     const getExpandIconColumnIndex = (
@@ -151,7 +154,7 @@ export function useExpandableForm<R extends CustomDataItem>(currentWidgetMeta: A
         expandIcon: expandable ? expandIcon : undefined,
         expandIconColumn: expandable ? EXPAND_ICON_COLUMN : undefined,
         expandedRowRender: expandable ? expandedRowRender : undefined,
-        expandedRowId: expandable ? currentActiveRowId : undefined,
+        expandedRowId: expandable && !createInPopup ? currentActiveRowId : undefined,
         onExpand: expandable ? handleExpand : undefined,
         isCreateStyle,
         isEditStyle

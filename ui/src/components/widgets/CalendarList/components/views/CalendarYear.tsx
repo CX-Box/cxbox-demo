@@ -323,7 +323,12 @@ const CalendarYear = React.forwardRef<CalendarYearApiHandle, CalendarYearProps>(
                     overlayClassNameClick={styles.formPopover}
                     overlayStyleClick={formPopoverStyle}
                 >
-                    <div className={styles.calendarContainer} onClick={withoutInlineForm ? handleSelectRecord : undefined}>
+                    <div
+                        className={styles.calendarContainer}
+                        data-test-widget-list-row-id={arg.event.id}
+                        data-test-widget-list-row-type="Row"
+                        onClick={withoutInlineForm ? handleSelectRecord : undefined}
+                    >
                         <CalendarEvent
                             widgetName={meta.name}
                             drillDownFieldMeta={titleFieldMeta}

@@ -15,16 +15,9 @@
     color: rgb(85, 85, 85);
 }
 
-// "..." of the pickList filter while the filter chosen in the popup is applied: as the active filter icon, bold
-:global(.ant-btn).popupFilterActive,
-:global(.ant-btn).popupFilterActive:hover,
-:global(.ant-btn).popupFilterActive:focus {
-    color: rgb(85, 85, 85);
-
-    svg {
-        stroke: currentColor;
-        stroke-width: 60px;
-    }
+// "..." of the pickList filter: number of the records chosen in the popup, colored as the active filter icon
+.popupFilterBadge :global(.ant-badge-count) {
+    background-color: rgb(85, 85, 85);
 }
 
 :global(.ant-calendar-picker-container) {

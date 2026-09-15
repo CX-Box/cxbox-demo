@@ -112,7 +112,7 @@ const getTreeUserFilters = (state: RootState, bcName: string, parentIdFieldKey: 
 export const initTreeEpic: RootEpic = (action$, state$) =>
     action$.pipe(
         filter(actions.selectView.match),
-        mergeMap(() => {
+        mergeMap(action => {
             const state = state$.value
             const widgets = state.view.widgets as AppWidgetMeta[] | undefined
             const treeWidgets = widgets?.filter(isTreeWidget)
@@ -135,7 +135,21 @@ export const initTreeEpic: RootEpic = (action$, state$) =>
                 })
             })
 
-            return from(initActions)
+            // A view opened by a tab reuses the loaded bc: the core requests only a bc without data or cursor,
+            // while the nodes of a tree are kept apart from that data, so the tree requests its root itself
+            const fetchActions = action.payload.isTab
+                ? treeBcNames
+                      .filter(bcName => bcName in state.data && state.screen.bo.bc[bcName]?.cursor !== null)
+                      .filter(bcName => !state.tree[bcName]?.nodesState[TREE_ROOT_ID])
+                      .map(bcName =>
+                          actions.bcFetchDataRequest({
+                              bcName,
+                              widgetName: treeWidgets.find(widget => widget.bcName === bcName)?.name ?? ''
+                          })
+                      )
+                : []
+
+            return from([...initActions, ...fetchActions])
         })
     )
 

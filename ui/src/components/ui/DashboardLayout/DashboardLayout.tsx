@@ -6,6 +6,8 @@ import { groupByRow } from '@utils/layout'
 import { popupWidgets, sidebarWidgetsTypes } from '@constants/layout'
 import { CustomWidgetDescriptor, WidgetTypes } from '@cxbox-ui/core'
 import { AppWidgetMeta, CustomWidgetTypes } from '@interfaces/widget'
+import CalendarCreatePopup from '@components/widgets/CalendarList/components/others/CalendarCreatePopup'
+import { getCalendarCreatePopupOwners } from '@components/widgets/CalendarList/utils/calendarCreatePopup'
 import styles from './DashboardLayout.less'
 
 export interface DashboardLayoutProps {
@@ -17,9 +19,12 @@ export interface DashboardLayoutProps {
 }
 
 export function DashboardLayout(props: DashboardLayoutProps) {
+    // calendar create widgets are internal, but their popup takes a place in the layout like popup widgets
+    const calendarCreatePopupOwners = useMemo(() => getCalendarCreatePopupOwners(props.widgets), [props.widgets])
+
     const widgetsByRow = React.useMemo(() => {
-        return groupByRow(props.widgets, props.skipWidgetTypes || [])
-    }, [props.widgets, props.skipWidgetTypes])
+        return groupByRow(props.widgets, props.skipWidgetTypes || [], Object.keys(calendarCreatePopupOwners))
+    }, [props.widgets, props.skipWidgetTypes, calendarCreatePopupOwners])
 
     const additionalInfoWidgets = useMemo(() => {
         const skipWidgetList = createSkipWidgetList(props.widgets)
@@ -34,13 +39,23 @@ export function DashboardLayout(props: DashboardLayoutProps) {
     const CommonWidgets = Object.values(widgetsByRow).map((row, rowIndex) => (
         <Row key={rowIndex} gutter={[24, 0]}>
             {row.map((widget, colIndex) => {
+                const calendarCreatePopupOwner = calendarCreatePopupOwners[widget.name]
                 const widgetCol = (
                     <Col key={colIndex} span={widget.gridWidth}>
-                        <Widget meta={widget} card={props.card} customWidgets={props.customWidgets} customSpinner={props.customSpinner} />
+                        {calendarCreatePopupOwner ? (
+                            <CalendarCreatePopup meta={calendarCreatePopupOwner} />
+                        ) : (
+                            <Widget
+                                meta={widget}
+                                card={props.card}
+                                customWidgets={props.customWidgets}
+                                customSpinner={props.customSpinner}
+                            />
+                        )}
                     </Col>
                 )
 
-                return popupWidgets.includes(widget.type as WidgetTypes) ? (
+                return popupWidgets.includes(widget.type as WidgetTypes) || calendarCreatePopupOwner ? (
                     <Col key={colIndex} span={24}>
                         <Row gutter={[24, 0]}>{widgetCol}</Row>
                     </Col>

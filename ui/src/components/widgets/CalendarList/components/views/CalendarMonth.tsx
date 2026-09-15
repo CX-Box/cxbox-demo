@@ -7,16 +7,14 @@ import listPlugin from '@fullcalendar/list'
 import FullCalendar from '@fullcalendar/react'
 import styles from './CalendarMonth.less'
 import { useAppSelector } from '@store'
-import { selectBc, selectBcData, selectBcFilters, selectBcMetaInProgress } from '@selectors/selectors'
+import { selectBc, selectBcData, selectBcFilters } from '@selectors/selectors'
 import CalendarToolbar from '@components/widgets/CalendarList/components/toolbar/CalendarToolbar'
 import CalendarEvent from '@components/widgets/CalendarList/components/events/CalendarEvent'
 import { CustomContentGenerator, DateInput, EventContentArg, MoreLinkContentArg } from '@fullcalendar/core'
-import InnerForm from '@components/widgets/CalendarList/components/others/InnerForm'
-import { useInternalWidget } from '@hooks/useInternalWidget'
-import { ConfigProvider, Spin } from 'antd'
+import { useCalendarInternalForm } from '@components/widgets/CalendarList/hooks/useCalendarInternalForm'
+import { ConfigProvider } from 'antd'
 import { useDispatch } from 'react-redux'
 import { actions, resetRecordForm, setRecordForm } from '@actions'
-import DebugWidgetWrapper from '@components/DebugWidgetWrapper/DebugWidgetWrapper'
 import {
     CALENDAR_GRID,
     CalendarGridViews,
@@ -290,8 +288,7 @@ const CalendarMonth = React.forwardRef<CalendarMonthApiHandle, CalendarMonthProp
     const handleNavLinkDayClick = useMemo(() => createNavLinkHandler(CALENDAR_GRID.timeGridDay), [createNavLinkHandler])
     const handleNavLinkWeekClick = useMemo(() => createNavLinkHandler(CALENDAR_GRID.timeGridWeek), [createNavLinkHandler])
 
-    const { internalWidget, internalWidgetOperations, internalWidgetActiveCursor, internalWidgetStyle } = useInternalWidget(meta)
-    const rowMetaInProgress = useAppSelector(selectBcMetaInProgress(internalWidget?.bcName))
+    const { internalWidget, internalWidgetActiveCursor, internalWidgetStyle, renderForm } = useCalendarInternalForm(meta)
     const dispatch = useDispatch()
 
     const { drilldown: handleDrillDownByTitle, fieldMeta: titleFieldMeta } = useFieldDrilldown(
@@ -328,7 +325,6 @@ const CalendarMonth = React.forwardRef<CalendarMonthApiHandle, CalendarMonthProp
 
     const renderEventContent: CustomContentGenerator<EventContentArg> = useCallback(
         arg => {
-            const isLoading = (internalWidget && arg.event.id !== internalWidgetActiveCursor) || rowMetaInProgress
             const isInlineForm = isDefined(internalWidget) && internalWidgetStyle === 'inlineForm'
             const withoutInlineForm = !isInlineForm
 
@@ -348,15 +344,7 @@ const CalendarMonth = React.forwardRef<CalendarMonthApiHandle, CalendarMonthProp
 
             const clickContent = isInlineForm ? (
                 <ConfigProvider getPopupContainer={getPopupContainer}>
-                    <DebugWidgetWrapper meta={internalWidget}>
-                        <Spin spinning={isLoading}>
-                            <InnerForm
-                                widgetMeta={internalWidget}
-                                operations={internalWidgetOperations}
-                                additionalOperations={<RowOperationsButton widget={meta} />}
-                            />
-                        </Spin>
-                    </DebugWidgetWrapper>
+                    {renderForm(arg.event.id, <RowOperationsButton widget={meta} />)}
                 </ConfigProvider>
             ) : undefined
 
@@ -393,11 +381,10 @@ const CalendarMonth = React.forwardRef<CalendarMonthApiHandle, CalendarMonthProp
             handleDrillDownByTitle,
             internalWidget,
             internalWidgetActiveCursor,
-            internalWidgetOperations,
             internalWidgetStyle,
             isActiveRecord,
             meta,
-            rowMetaInProgress,
+            renderForm,
             titleFieldMeta,
             toggleRecordForm
         ]

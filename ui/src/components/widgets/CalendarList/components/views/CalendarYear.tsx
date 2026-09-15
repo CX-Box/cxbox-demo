@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useCallback, useContext, useEffect, useRef, useState, useImperativeHandle, useMemo } from 'react'
+import React, { ChangeEvent, useCallback, useEffect, useRef, useState, useImperativeHandle, useMemo } from 'react'
 import { AppWidgetMeta, WidgetField } from '@interfaces/widget'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
@@ -38,8 +38,8 @@ import { useFieldDrilldown } from '@hooks/useFieldDrilldown'
 import { useEventDataTransform } from '@components/widgets/CalendarList/hooks'
 import { useCleanOldRangeFilters } from '@hooks/useCleanOldRangeFilters'
 import { isDefined } from '@utils/isDefined'
-import { CalendarFormPopoverWidthContext } from '@components/widgets/CalendarList/components/others/CalendarFormPopoverSizer'
-import { POPUP_FORM_STYLES } from '@components/widgets/CalendarList/utils/calendarCreatePopup'
+import { useCalendarFormPopoverWidth } from '@components/widgets/CalendarList/components/others/CalendarFormPopoverSizer'
+import { POPUP_FORM_STYLES } from '@components/widgets/CalendarList/utils/calendarFormPopups'
 import Calendar from '@components/widgets/CalendarList/components/views/Calendar'
 import { actions, resetRecordForm, setRecordForm } from '@actions'
 import { ConfigProvider } from 'antd'
@@ -248,7 +248,7 @@ const CalendarYear = React.forwardRef<CalendarYearApiHandle, CalendarYearProps>(
     }, [changeYear])
 
     const { internalWidget, internalWidgetActiveCursor, internalWidgetStyle, renderForm } = useCalendarInternalForm(meta)
-    const formPopoverWidth = useContext(CalendarFormPopoverWidthContext)[meta.name]
+    const formPopoverWidth = useCalendarFormPopoverWidth(meta.name)
     const formPopoverStyle = useMemo(() => (formPopoverWidth ? { width: formPopoverWidth } : undefined), [formPopoverWidth])
     const dispatch = useDispatch()
 

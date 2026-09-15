@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useCallback, useContext, useEffect, useMemo, useRef, useState, useImperativeHandle } from 'react'
+import React, { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState, useImperativeHandle } from 'react'
 import { AppWidgetMeta, WidgetField } from '@interfaces/widget'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
@@ -39,8 +39,8 @@ import { MoreLink } from '../others/MoreLink'
 import { useEventDataTransform } from '@components/widgets/CalendarList/hooks'
 import { useCleanOldRangeFilters } from '@hooks/useCleanOldRangeFilters'
 import { isDefined } from '@utils/isDefined'
-import { CalendarFormPopoverWidthContext } from '@components/widgets/CalendarList/components/others/CalendarFormPopoverSizer'
-import { POPUP_FORM_STYLES } from '@components/widgets/CalendarList/utils/calendarCreatePopup'
+import { useCalendarFormPopoverWidth } from '@components/widgets/CalendarList/components/others/CalendarFormPopoverSizer'
+import { POPUP_FORM_STYLES } from '@components/widgets/CalendarList/utils/calendarFormPopups'
 import Calendar from '@components/widgets/CalendarList/components/views/Calendar'
 import UniquePopoverHoverAndClick, {
     UniquePopoverHoverAndClickProps
@@ -291,7 +291,7 @@ const CalendarMonth = React.forwardRef<CalendarMonthApiHandle, CalendarMonthProp
     const handleNavLinkWeekClick = useMemo(() => createNavLinkHandler(CALENDAR_GRID.timeGridWeek), [createNavLinkHandler])
 
     const { internalWidget, internalWidgetActiveCursor, internalWidgetStyle, renderForm } = useCalendarInternalForm(meta)
-    const formPopoverWidth = useContext(CalendarFormPopoverWidthContext)[meta.name]
+    const formPopoverWidth = useCalendarFormPopoverWidth(meta.name)
     const formPopoverStyle = useMemo(() => (formPopoverWidth ? { width: formPopoverWidth } : undefined), [formPopoverWidth])
     const dispatch = useDispatch()
 

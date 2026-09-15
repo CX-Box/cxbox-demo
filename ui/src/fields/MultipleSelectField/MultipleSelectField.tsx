@@ -53,6 +53,7 @@ const MultipleSelectField: React.FunctionComponent<MultipleSelectFieldProps> = p
         forwardedRef: selectRef,
         className: styles.multipleSelect,
         dropdownClassName: styles.dropDownMenu,
+        dropdownMatchSelectWidth: false,
         onDropdownVisibleChange: useFixSelectDropdownForScroll(selectRef),
         mode: 'multiple',
         optionLabelProp: 'label',

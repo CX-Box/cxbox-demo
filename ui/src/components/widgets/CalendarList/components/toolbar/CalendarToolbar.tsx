@@ -40,10 +40,10 @@ const CalendarToolbar: React.FC<CalendarToolbarProps> = ({
         <CalendarToolbarLayout
             leftControls={[
                 <Button.Group key="arrows" size={size}>
-                    <Button onClick={onPrev} icon="left" />
-                    <Button onClick={onNext} icon="right" />
+                    <Button onClick={onPrev} icon="left" data-test-widget-calendar-prev={true} />
+                    <Button onClick={onNext} icon="right" data-test-widget-calendar-next={true} />
                 </Button.Group>,
-                <Button key="today" onClick={onToday} size={size} type="link">
+                <Button key="today" onClick={onToday} size={size} type="link" data-test-widget-calendar-today={true}>
                     {t('Today')}
                 </Button>
             ]}
@@ -61,7 +61,7 @@ const CalendarToolbar: React.FC<CalendarToolbarProps> = ({
                     <Radio.Group value={view} onChange={onViewChange} size={size}>
                         {viewList.map(item => (
                             <Radio.Button key={item.value} value={item.value}>
-                                {item.title}
+                                <span data-test-widget-calendar-view={item.value}>{item.title}</span>
                             </Radio.Button>
                         ))}
                     </Radio.Group>

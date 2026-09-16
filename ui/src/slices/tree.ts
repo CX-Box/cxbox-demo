@@ -414,6 +414,9 @@ const treeSlice = createSlice({
                 })
             }
         },
+        resetTree(state, action: PayloadAction<{ bcName: string }>) {
+            delete state[action.payload.bcName]
+        },
         fetchChildNodeData(
             state,
             action: PayloadAction<{

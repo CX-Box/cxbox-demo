@@ -11,7 +11,8 @@ const selectedItemClass = 'selectedItem'
 
 function ScreenNavigation() {
     const screens = useAppSelector(state => state.session.screens)
-    const screenName = useAppSelector(state => state.router.screenName)
+    // the router sets the name after the first render (undefined, then null): without the normalization the whole menu is rendered twice
+    const screenName = useAppSelector(state => state.router.screenName ?? null)
     const selectedScreen = screens.find(item => item.name === screenName) || screens.find(screen => screen.defaultScreen) || screens[0]
     const screenUrl = selectedScreen?.url ?? `/screen/${screenName}`
     const changeLocation = useChangeLocation({ forceUpdate: true })
@@ -29,7 +30,16 @@ function ScreenNavigation() {
     useEffect(() => {
         // can't use .ant-menu-item-selected because dom nodes changes it too slowly
         const selectedItem = document.querySelector(`.${CSS.escape(styles.item)}.${selectedItemClass}`)
-        selectedItem?.scrollIntoView()
+        const menu = selectedItem?.closest(`.${CSS.escape(styles.container)}`)
+        // a click on a visible item keeps the list where it is: the list is scrolled only when the screen is opened by a link or a drilldown
+        const itemIsVisible =
+            selectedItem &&
+            menu &&
+            selectedItem.getBoundingClientRect().top >= menu.getBoundingClientRect().top &&
+            selectedItem.getBoundingClientRect().bottom <= menu.getBoundingClientRect().bottom
+        if (!itemIsVisible) {
+            selectedItem?.scrollIntoView()
+        }
     }, [screenUrl])
 
     const menuSearch = !menuCollapsed && (

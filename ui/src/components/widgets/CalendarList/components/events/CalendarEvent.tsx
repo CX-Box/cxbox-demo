@@ -39,7 +39,13 @@ const CalendarEvent: React.FC<CalendarEventProps> = ({ widgetName, drillDownFiel
                     {arg.timeText}
                 </span>
             ) : null}
-            <span className="fc-event-title">
+            <span
+                className="fc-event-title"
+                data-test="FIELD"
+                data-test-field-type={drillDownFieldMeta?.type}
+                data-test-field-title={drillDownFieldMeta?.title}
+                data-test-field-key={drillDownFieldMeta?.key}
+            >
                 {onDrillDown ? (
                     <DrillDown
                         meta={drillDownFieldMeta}
@@ -47,7 +53,7 @@ const CalendarEvent: React.FC<CalendarEventProps> = ({ widgetName, drillDownFiel
                         cursor={arg.event.id}
                         onDrillDown={handleDrillDown}
                         drillDownComponent={
-                            <span className={styles.actionLink} onClick={handleDrillDown}>
+                            <span className={styles.actionLink} data-test-field-drilldown={true} onClick={handleDrillDown}>
                                 {arg.event.title}
                             </span>
                         }

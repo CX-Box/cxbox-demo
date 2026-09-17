@@ -7,11 +7,21 @@ export interface UniquePopoverHoverAndClickProps
     contentClick?: React.ReactNode
     overlayClassNameHover: UniquePopoverProps['overlayClassName']
     overlayClassNameClick: UniquePopoverProps['overlayClassName']
+    overlayStyleClick?: UniquePopoverProps['overlayStyle']
     onVisibleChange?: (visible: boolean, uid: string, triggerType: 'hover' | 'click') => void
 }
 
 const UniquePopoverHoverAndClick: React.FC<UniquePopoverHoverAndClickProps> = props => {
-    const { children, contentHover, contentClick, overlayClassNameClick, overlayClassNameHover, onVisibleChange, ...rest } = props
+    const {
+        children,
+        contentHover,
+        contentClick,
+        overlayClassNameClick,
+        overlayClassNameHover,
+        overlayStyleClick,
+        onVisibleChange,
+        ...rest
+    } = props
 
     const handleVisibleChangeHover = useCallback(
         (nextVisible: boolean, uid: string) => {
@@ -37,6 +47,7 @@ const UniquePopoverHoverAndClick: React.FC<UniquePopoverHoverAndClickProps> = pr
             <UniquePopover
                 onVisibleChange={handleVisibleChangeClick}
                 overlayClassName={overlayClassNameClick}
+                overlayStyle={overlayStyleClick}
                 trigger="click"
                 content={contentClick}
                 {...rest}

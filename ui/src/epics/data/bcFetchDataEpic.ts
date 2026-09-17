@@ -35,7 +35,7 @@ import {
 } from '@utils/defaultFilters'
 import { CustomWidgetTypes } from '@interfaces/widget'
 import { getAssocTreeSelectedNodeIds } from '@utils/getAssocTreeSelectedNodeIds'
-import { selectBcFilters } from '@selectors/selectors'
+import { selectBcFilters, selectHasBcTree } from '@selectors/selectors'
 import { getAllDataFromTree } from '@utils/tree'
 
 const {

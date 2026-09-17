@@ -1,4 +1,6 @@
 import type { TreeExpandedStateAfterFilter, TreeSearchModes } from '@interfaces/widget'
+import { CustomWidgetTypes } from '@interfaces/widget'
+import { WidgetTypes } from '@cxbox-ui/core'
 import { Lookup } from '@utils/Lookup'
 
 export const TREE_ROOT_ID = String(null)
@@ -26,3 +28,7 @@ export const normalizeTreeSearchModes = (searchModes?: string[]): TreeSearchMode
 export const DEFAULT_EXPANDED_STATE_AFTER_FILTER: TreeExpandedStateAfterFilter = TREE_EXPANDED_STATE_AFTER_FILTERS.merge
 export const TEXT_SEPARATOR_FOR_NEST_LEVEL: string | null = null // 'Nesting level over {{limit}}'
 export const TREE_SHOW_MORE_PADDING_TOP: number = 0
+
+export const TREE_WIDGETS = [CustomWidgetTypes.Tree, CustomWidgetTypes.AssocTreePopup, CustomWidgetTypes.PickTreePopup]
+
+export const WIDGETS_COMPATIBLE_WITH_TREE = [...TREE_WIDGETS, WidgetTypes.Form]

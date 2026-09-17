@@ -14,7 +14,18 @@ import { buildBcFetchContext, getBcFetchSideEffects } from './data/bcFetchDataEp
 import { getTreeDeleteCursor } from './view'
 import { DEFAULT_PAGE, MAIN_DEFAULT_PAGINATION_TYPE, PaginationMode } from '@constants/pagination'
 import { isDataItemMatchedByFilters } from '@utils/filterMatch'
-import { extractNodeIds, getAllDataFromTree, getAncestorNodeIds, getTreeFieldKeys, getTreeNodeParentId, normalizeNodeId } from '@utils/tree'
+import {
+    extractNodeIds,
+    findTreeIncompatibleConflicts,
+    formatTreeIncompatibleErrorMessage,
+    getAllDataFromTree,
+    getAncestorNodeIds,
+    getTreeFieldKeys,
+    getTreeNodeParentId,
+    getVisibleWidgetIncompatibleWithTree,
+    getVisibleTreeWidgets,
+    normalizeNodeId
+} from '@utils/tree'
 import { isTreeWidget } from '@constants/widget'
 import { AppWidgetMeta } from '@interfaces/widget'
 import {
@@ -98,7 +109,7 @@ export const fetchPagesUntilDataChanges = ({
 }
 
 const getPaginationType = (state: RootState, widget?: AppWidgetMeta) =>
-    widget ? state.screen.alternativePagination[widget.name] ?? getWidgetPaginationType(widget) : MAIN_DEFAULT_PAGINATION_TYPE
+    widget ? state.screen.alternativePagination?.[widget.name] ?? getWidgetPaginationType(widget) : MAIN_DEFAULT_PAGINATION_TYPE
 
 const getTreeWidget = (state: RootState, bcName: string) =>
     selectWidgetByCondition(state, widget => widget.bcName === bcName && isTreeWidget(widget)) as AppWidgetMeta | undefined
@@ -109,33 +120,126 @@ const getIdsFilterParams = (ids: string[]) =>
 const getTreeUserFilters = (state: RootState, bcName: string, parentIdFieldKey: string) =>
     (selectBcFilters(state, bcName) ?? []).filter(filter => filter.fieldName !== parentIdFieldKey)
 
+export const createTreeInitAction = (state: RootState, treeWidget: AppWidgetMeta, reset = false) => {
+    const treeFieldKeys = getTreeFieldKeys(treeWidget)
+    return treeActions.initTree({
+        bcName: treeWidget.bcName,
+        reset,
+        searchMode: normalizeTreeSearchModes(treeWidget.options?.tree?.searchModes)[0],
+        paginationType: getPaginationType(state, treeWidget),
+        ...treeFieldKeys
+    })
+}
+
+export const logTreeIncompatibleConflicts = (widgets: AppWidgetMeta[] | undefined, state: RootState) => {
+    if (!widgets || widgets.length === 0) {
+        return
+    }
+    const conflicts = findTreeIncompatibleConflicts(widgets, state)
+    conflicts.forEach(conflict => {
+        conflict.incompatibleWidgets.forEach(widget => {
+            console.error(formatTreeIncompatibleErrorMessage(widget))
+        })
+    })
+}
+
+export const getTreeTransitionActions = (bcName: string, widgets: AppWidgetMeta[], state: RootState): AnyAction[] => {
+    const visibleTreeOnCurrentView = getVisibleTreeWidgets(bcName, widgets, state)[0]
+    const visibleIncompatibleOnCurrentView = getVisibleWidgetIncompatibleWithTree(bcName, widgets, state)[0]
+
+    const hasDataAndCursor = bcName in (state.data ?? {}) && state.screen?.bo?.bc?.[bcName]?.cursor !== null
+    const hasTree = Boolean(state.tree?.[bcName])
+    const isRootLoaded = Boolean(state.tree?.[bcName]?.nodesState?.[TREE_ROOT_ID])
+
+    const resultActions: AnyAction[] = []
+
+    // Tree -> Incompatible
+    if (hasTree && visibleIncompatibleOnCurrentView && !visibleTreeOnCurrentView) {
+        resultActions.push(treeActions.resetTree({ bcName }))
+        if (hasDataAndCursor) {
+            resultActions.push(
+                actions.bcForceUpdate({
+                    bcName,
+                    widgetName: visibleIncompatibleOnCurrentView.name
+                })
+            )
+        }
+        return resultActions
+    }
+
+    // Incompatible / None -> Tree (with incompatible)
+    if (!hasTree && visibleTreeOnCurrentView) {
+        resultActions.push(createTreeInitAction(state, visibleTreeOnCurrentView, true))
+        if (hasDataAndCursor) {
+            resultActions.push(
+                actions.bcForceUpdate({
+                    bcName,
+                    widgetName: visibleTreeOnCurrentView.name
+                })
+            )
+        }
+        return resultActions
+    }
+
+    // Tree -> Tree (with incompatible)
+    if (hasTree && visibleTreeOnCurrentView) {
+        if (!hasDataAndCursor) {
+            resultActions.push(createTreeInitAction(state, visibleTreeOnCurrentView, false))
+        } else if (!isRootLoaded) {
+            resultActions.push(
+                actions.bcForceUpdate({
+                    bcName,
+                    widgetName: visibleTreeOnCurrentView.name
+                })
+            )
+        }
+        return resultActions
+    }
+
+    return resultActions
+}
+
 export const initTreeEpic: RootEpic = (action$, state$) =>
     action$.pipe(
         filter(actions.selectView.match),
-        mergeMap(() => {
+        mergeMap(action => {
             const state = state$.value
-            const widgets = state.view.widgets as AppWidgetMeta[] | undefined
-            const treeWidgets = widgets?.filter(isTreeWidget)
+            const isTab = !!action.payload.isTab
+            const widgets = (action.payload.widgets ?? state.view?.widgets) as AppWidgetMeta[] | undefined
 
-            if (!treeWidgets || treeWidgets.length === 0) {
+            if (!widgets || widgets.length === 0) {
                 return EMPTY
             }
 
-            const treeBcNames = getUniqueValues(treeWidgets.map(w => w.bcName).filter(Boolean))
+            logTreeIncompatibleConflicts(widgets, state)
 
-            const initActions = treeBcNames.map(bcName => {
-                const treeWidget = treeWidgets.find(widget => widget.bcName === bcName)
-                const treeFieldKeys = getTreeFieldKeys(treeWidget)
+            if (!isTab) {
+                const treeWidgets = widgets.filter(isTreeWidget)
 
-                return treeActions.initTree({
-                    bcName,
-                    searchMode: normalizeTreeSearchModes(treeWidget?.options?.tree?.searchModes)[0],
-                    paginationType: getPaginationType(state, treeWidget),
-                    ...treeFieldKeys
-                })
+                if (treeWidgets.length === 0) {
+                    return EMPTY
+                }
+
+                const treeBcNames = getUniqueValues(treeWidgets.map(w => w.bcName).filter(Boolean))
+
+                return from(
+                    treeBcNames.map(bcName => {
+                        const treeWidget = treeWidgets.find(widget => widget.bcName === bcName)!
+                        return createTreeInitAction(state, treeWidget)
+                    })
+                )
+            }
+
+            const bcNames = getUniqueValues(widgets.map(widget => widget.bcName).filter(Boolean))
+
+            const resultActions: AnyAction[] = []
+
+            bcNames.forEach(bcName => {
+                const transitionActions = getTreeTransitionActions(bcName, widgets, state)
+                resultActions.push(...transitionActions)
             })
 
-            return from(initActions)
+            return resultActions.length > 0 ? from(resultActions) : EMPTY
         })
     )
 
@@ -148,6 +252,41 @@ const changeTreePaginationTypeEpic: RootEpic = (action$, state$) =>
             return widget && isTreeWidget(widget)
                 ? of(treeActions.changePaginationType({ bcName: widget.bcName, paginationType: action.payload.type }))
                 : EMPTY
+        })
+    )
+
+const handleTreeShowConditionChangeEpic: RootEpic = (action$, state$) =>
+    action$.pipe(
+        filter(
+            isAnyOf(
+                actions.bcSelectRecord,
+                actions.bcChangeCursors,
+                actions.bcFetchDataSuccess,
+                actions.changeDataItem,
+                actions.changeDataItems
+            )
+        ),
+        mergeMap(action => {
+            const state = state$.value
+            const widgets = state.view.widgets as AppWidgetMeta[]
+            const hasTreeOnView = widgets?.some(isTreeWidget) || Object.keys(state.tree ?? {}).length > 0
+
+            if (!hasTreeOnView || !widgets || widgets.length === 0) {
+                return EMPTY
+            }
+
+            logTreeIncompatibleConflicts(widgets, state)
+
+            const bcNames = getUniqueValues(widgets.map(widget => widget.bcName).filter(Boolean))
+
+            const resultActions: AnyAction[] = []
+
+            bcNames.forEach(bcName => {
+                const transitionActions = getTreeTransitionActions(bcName, widgets, state)
+                resultActions.push(...transitionActions)
+            })
+
+            return resultActions.length > 0 ? from(resultActions) : EMPTY
         })
     )
 
@@ -872,6 +1011,7 @@ const restoreNodePathsEpic: RootEpic = (action$, state$, { api }) =>
 export const treeEpics = {
     initTreeEpic,
     changeTreePaginationTypeEpic,
+    handleTreeShowConditionChangeEpic,
     syncTreeNodesToBcDataEpic,
     reconcileTreeNodeEpic,
     refreshNodeEpic,

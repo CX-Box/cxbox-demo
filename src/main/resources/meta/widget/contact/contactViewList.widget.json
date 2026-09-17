@@ -7,8 +7,7 @@
     {
       "title": "Name",
       "key": "fullName",
-      "type": "input",
-      "drillDown": "true"
+      "type": "input"
     },
     {
       "title": "Phone Number",
@@ -22,6 +21,9 @@
     }
   ],
   "options": {
+    "edit": {
+      "style": "none"
+    },
     "actionGroups": {
       "include": []
     }

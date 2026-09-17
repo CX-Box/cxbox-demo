@@ -7,8 +7,7 @@
     {
       "title": "Name",
       "key": "fullNameWithoutFilter",
-      "type": "input",
-      "drillDown": "true"
+      "type": "input"
     },
     {
       "title": "Phone Number",

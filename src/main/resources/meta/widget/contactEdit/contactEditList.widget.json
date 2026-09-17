@@ -8,7 +8,7 @@
       "title": "Contact Full Name",
       "key": "fullName",
       "type": "input",
-      "drillDown": "true"
+      "drillDown": true
     },
     {
       "title": "Phone Number",
@@ -22,10 +22,12 @@
     }
   ],
   "options": {
+    "edit": {
+      "style": "none"
+    },
     "actionGroups": {
       "include": [
         "create",
-        "save",
         "edit",
         "delete_association_and_contact",
         "delete_association_and_save_contact",

@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useRef } from 'react'
 import { Icon, Select as AntdSelect } from 'antd'
 import { connect } from 'react-redux'
 import cn from 'classnames'
-import useDropdownMaxWidth from '@hooks/useDropdownMaxWidth'
+import useSelectDropdown from '@hooks/useSelectDropdown'
 import { multipleSelect_dropDownMaxCols } from '@fields/MultipleSelectField/constants'
 import Select, { SelectProps } from '@components/ui/Select/Select'
 import { buildBcUrl } from '@utils/buildBcUrl'
@@ -53,7 +53,7 @@ const MultipleSelectField: React.FunctionComponent<MultipleSelectFieldProps> = p
         [onChange]
     )
 
-    const dropdown = useDropdownMaxWidth(selectRef, multipleSelect_dropDownMaxCols)
+    const dropdown = useSelectDropdown(selectRef, multipleSelect_dropDownMaxCols)
 
     const extendedProps: SelectProps<string[]> = {
         ...props,

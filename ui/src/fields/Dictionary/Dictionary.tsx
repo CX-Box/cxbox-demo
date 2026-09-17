@@ -11,7 +11,7 @@ import { buildBcUrl } from '@utils/buildBcUrl'
 import * as dictionaryCustomIcons from '@assets/icons/dictionaryCustomIcons'
 import { AppDictionaryFieldMeta, EDictionaryMode } from '@interfaces/widget'
 import cn from 'classnames'
-import useDropdownMaxWidth from '@hooks/useDropdownMaxWidth'
+import useSelectDropdown from '@hooks/useSelectDropdown'
 import { dictionary_dropDownMaxCols } from '@fields/Dictionary/constants'
 import DrillDown from '@components/ui/DrillDown/DrillDown'
 
@@ -62,7 +62,7 @@ const Dictionary: React.FC<DictionaryProps> = props => {
         }
     }, [value, multiple])
 
-    const dropdown = useDropdownMaxWidth(selectRef, dictionary_dropDownMaxCols)
+    const dropdown = useSelectDropdown(selectRef, dictionary_dropDownMaxCols)
 
     const extendedProps: SelectProps<string | string[]> = {
         ...props,

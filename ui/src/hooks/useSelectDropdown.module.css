@@ -1,0 +1,4 @@
+/* antd puts the field width into the inline min-width of a dropdown, this lets us lower it on a narrow window */
+.dropdown {
+    min-width: var(--select-dropdown-min-width, 0) !important;
+}

@@ -38,6 +38,7 @@
     <minio.version>9.0.3</minio.version>  <!--due to CVE-2025-14813 -->
     <okhttp.version>5.3.2</okhttp.version> <!-- synced with minio lib version -->
     <postgresql.version>42.7.13</postgresql.version> <!-- due to CVE-2026-42198 -->
+    <pdfbox.version>2.0.35</pdfbox.version> <!-- text layer of a document with coordinates, ai extract -->
   </properties>
 
   <dependencies>
@@ -156,6 +157,11 @@
       <version>${okhttp.version}</version>
     </dependency>
     <!--end minio dependencies-->
+    <dependency>
+      <groupId>org.apache.pdfbox</groupId>
+      <artifactId>pdfbox</artifactId>
+      <version>${pdfbox.version}</version>
+    </dependency>
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>

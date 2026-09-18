@@ -20,14 +20,14 @@
       "type": "dictionary"
     },
     {
-      "label": "Address",
-      "key": "address",
-      "type": "richText"
-    },
-    {
       "label": "Status",
       "key": "status",
       "type": "dictionary"
+    },
+    {
+      "label": "Client code",
+      "key": "clientCode",
+      "type": "input"
     },
     {
       "label": "Field of Activity",
@@ -49,14 +49,6 @@
     }
   ],
   "options": {
-    "actionGroups": {
-      "include": [
-        "next",
-        "previous",
-        "finish",
-        "cancel-create"
-      ]
-    },
     "layout": {
       "rows": [
         {
@@ -64,11 +56,7 @@
             {
               "fieldKey": "fullName",
               "span": 12
-            }
-          ]
-        },
-        {
-          "cols": [
+            },
             {
               "fieldKey": "importance",
               "span": 12
@@ -78,15 +66,11 @@
         {
           "cols": [
             {
-              "fieldKey": "address",
-              "span": 12
-            }
-          ]
-        },
-        {
-          "cols": [
-            {
               "fieldKey": "status",
+              "span": 12
+            },
+            {
+              "fieldKey": "clientCode",
               "span": 12
             }
           ]
@@ -96,11 +80,7 @@
             {
               "fieldKey": "fieldOfActivity",
               "span": 12
-            }
-          ]
-        },
-        {
-          "cols": [
+            },
             {
               "fieldKey": "brief",
               "span": 12
@@ -108,6 +88,20 @@
           ]
         }
       ]
+    },
+    "extract": {
+      "fields": {
+        "importance": {
+          "description": "ключевой заказчик = High, обычный = Middle"
+        },
+        "clientCode": {
+          "pattern": "^[0-9]{6,12}$",
+          "description": "внутренний код клиента или ИНН: только цифры"
+        }
+      }
+    },
+    "actionGroups": {
+      "include": []
     }
   }
 }

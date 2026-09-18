@@ -189,6 +189,13 @@ export interface AppWidgetMeta extends WidgetMeta {
             }
         }
 
+        /**
+         * Fills the fields of the form from the document shown by this widget. Default false.
+         */
+        extract?: {
+            enabled: boolean
+        }
+
         additional?: {
             enabled: boolean
             fields: string[]

@@ -5,6 +5,7 @@ import { AppWidgetTableMeta, FileUploadFieldMeta } from '@interfaces/widget'
 import { FieldType } from '@cxbox-ui/core'
 import styles from './FilePreview.module.css'
 import FieldBaseThemeWrapper from '@components/FieldBaseThemeWrapper/FieldBaseThemeWrapper'
+import { AiDocumentPanel } from '@features/aiExtract'
 
 interface FilePreviewProps {
     meta: AppWidgetTableMeta
@@ -24,6 +25,10 @@ const FilePreview: React.FC<FilePreviewProps> = ({ meta }) => {
 
     if (!fileField) {
         return null
+    }
+
+    if (meta.options?.extract?.enabled) {
+        return <AiDocumentPanel widgetMeta={meta} fieldMeta={fileField} />
     }
 
     return (

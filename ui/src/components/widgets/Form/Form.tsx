@@ -12,6 +12,7 @@ import { RowMetaField } from '@interfaces/rowMeta'
 import { WidgetField } from '@interfaces/widget'
 import styles from './Form.less'
 import FieldBaseThemeWrapper from '@components/FieldBaseThemeWrapper/FieldBaseThemeWrapper'
+import { AiExtractField } from '@features/aiExtract'
 
 interface FormOwnProps {
     meta: Omit<WidgetFormMeta, 'type'>
@@ -69,13 +70,15 @@ export const Form: FunctionComponent<FormProps> = ({ meta, fields, missingFields
                                                 validateStatus={error ? 'error' : undefined}
                                                 help={error ? <div data-test-error-text={true}>{t(error)}</div> : undefined}
                                             >
-                                                <Field
-                                                    bcName={bcName}
-                                                    cursor={cursor}
-                                                    widgetName={name}
-                                                    widgetFieldMeta={field as WidgetField}
-                                                    disableHoverError={true}
-                                                />
+                                                <AiExtractField bcName={bcName} widgetName={name} fieldKey={field?.key}>
+                                                    <Field
+                                                        bcName={bcName}
+                                                        cursor={cursor}
+                                                        widgetName={name}
+                                                        widgetFieldMeta={field as WidgetField}
+                                                        disableHoverError={true}
+                                                    />
+                                                </AiExtractField>
                                             </AntdForm.Item>
                                         </Col>
                                     )

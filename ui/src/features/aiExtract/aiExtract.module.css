@@ -1,0 +1,834 @@
+/* Filling a form from a document: the document itself, frames over it and the panel of the result.
+   Colours and shapes are the ones the platform already uses, only the states of a value are new. */
+
+/* the panel fits its widget exactly: a panel taller than its container makes the container scroll as well, and
+   a screen with one document on it ends up with four scrollbars */
+.panel {
+    display: flex;
+    flex-direction: column;
+    /* the widget of the document is a flex column with a title of its own: the panel takes what is left of it,
+    not the whole of it, or the container scrolls on top of everything that scrolls inside */
+    flex: 1 1 auto;
+    min-height: 0;
+    background: #fff;
+}
+
+/* one row on one baseline, the way a widget keeps its own: the action first, the name of the document next to
+   it, everything about the state of the run in one group at the right edge */
+.header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 40px;
+    padding: 4px 12px;
+    border-bottom: 1px solid #e8e8e8;
+    background: #fafafa;
+}
+
+.fileName {
+    flex: 0 1 auto;
+    max-width: 320px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 13px;
+    font-weight: 500;
+    color: #262626;
+}
+
+.summary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+    font-size: 12px;
+    color: #8c8c8c;
+    white-space: nowrap;
+}
+
+.error {
+    padding: 8px 12px;
+    color: #f5222d;
+    background: #fff1f0;
+    border-bottom: 1px solid #ffccc7;
+}
+
+.body {
+    position: relative;
+    display: flex;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+.document {
+    position: relative;
+    flex: 1 1 auto;
+    overflow: auto;
+    padding: 12px;
+    background: #f5f5f5;
+}
+
+.pageWrapper {
+    position: relative;
+    /* to the left, so that the whole free margin stays on the right, where the notes are */
+    margin: 0 0 12px 0;
+    background: #fff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+
+/* frames over the document */
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: visible;
+    /* above the text layer of the viewer, otherwise a frame cannot be clicked */
+    z-index: 3;
+    /* the text of the document under the layer stays selectable */
+    pointer-events: none;
+}
+
+/* a frame answers a click but never takes the mouse: the click is looked up by its place, so selecting the text
+   of the document under the frames keeps working */
+.box {
+    position: absolute;
+    border: 1px solid rgba(140, 140, 140, 0.6);
+    border-radius: 2px;
+    background: rgba(140, 140, 140, 0.14);
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.boxHovered {
+    background: rgba(24, 144, 255, 0.3);
+}
+
+/* a pair of the document that went to no field yet */
+/* A piece of the document the recognition read but no field took. There are hundreds of them on a page, so
+   they are quiet - but they are seen: the page shows at a glance how much was read and what stayed outside the
+   form. */
+.boxFree {
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-bottom-color: #bfbfbf;
+    border-radius: 2px;
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.boxFree.boxHovered {
+    border-color: #1890ff;
+    background: rgba(24, 144, 255, 0.1);
+}
+
+/* a place the machine took a value from, still unconfirmed: the yellow of the form, so the eye goes from the
+   field to the document and back without translating colours */
+/* approved by the person: the same green as the mark on the field */
+.boxChecked {
+    border-color: #52c41a;
+    background: rgba(82, 196, 26, 0.18);
+}
+
+.boxCheck {
+    border-color: #faad14;
+    background: rgba(250, 173, 20, 0.22);
+}
+
+.boxManual {
+    border-color: #8c8c8c;
+    background: rgba(140, 140, 140, 0.16);
+}
+
+/* a piece of the document the person selected by hand */
+.boxSelection {
+    border: 2px solid #722ed1;
+    background: rgba(114, 46, 209, 0.1);
+}
+
+/* where the eye is asked to look: a ring, not another colour - the colours here mean states, not places */
+.boxActive {
+    border-width: 2px;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.18);
+}
+
+.connector {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    overflow: visible;
+}
+
+/* note next to a frame: what the document says here and which field took it */
+
+.note {
+    pointer-events: auto;
+    position: absolute;
+    z-index: 5;
+    width: 230px;
+    padding: 8px;
+    background: #fff;
+    border: 1px solid #1890ff;
+    border-radius: 3px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    font-size: 12px;
+}
+
+.noteCheck {
+    border-color: #fa8c16;
+}
+
+.noteFree {
+    border-color: #d9d9d9;
+}
+
+.noteActive {
+    z-index: 6;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+}
+
+.noteLabel {
+    color: #8c8c8c;
+    margin-bottom: 6px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.noteSelect {
+    width: 100%;
+    margin-bottom: 6px;
+}
+
+.noteField {
+    margin-bottom: 2px;
+}
+
+.noteValue {
+    word-break: break-word;
+}
+
+.noteDiff {
+    margin-top: 4px;
+    padding: 2px 4px;
+    border-radius: 2px;
+    background: #fafafa;
+    color: #595959;
+    font-size: 11px;
+    word-break: break-word;
+}
+
+.noteHint {
+    margin-top: 4px;
+    color: #8c8c8c;
+    font-size: 11px;
+}
+
+.noteCopy {
+    margin-top: 4px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: #1890ff;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.noteCopy:hover {
+    text-decoration: underline;
+}
+
+/* panel of the result */
+
+.review {
+    position: relative;
+    width: 280px;
+    flex: 0 0 280px;
+    overflow: auto;
+    border-left: 1px solid #e8e8e8;
+    box-shadow: -2px 0 6px rgba(0, 0, 0, 0.06);
+    background: #fff;
+    outline: none;
+    transition: flex-basis 0.15s, width 0.15s;
+}
+
+/* folded away: the document gets the whole half of the screen, the count stays in sight */
+.review.reviewFolded {
+    width: 24px;
+    flex: 0 0 24px;
+    overflow: hidden;
+}
+
+.reviewStrip {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    height: 100%;
+    padding: 10px 0;
+    color: #8c8c8c;
+    background: #fafafa;
+    cursor: pointer;
+}
+
+.reviewStrip:hover {
+    color: #262626;
+    background: #f0f0f0;
+}
+
+.reviewStripCount {
+    font-size: 11px;
+    font-weight: 600;
+    color: #d48806;
+}
+
+/* the head of the panel: a widget of its own, white like the rest and not a stripe of colour */
+/* the row of buttons: the first thing in the panel, with nothing above it */
+.top {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    margin-bottom: 8px;
+    padding: 8px 12px;
+    box-shadow: 0 1px 0 #f0f0f0;
+}
+
+/* the field being looked at right now: its value, its place in the document and what else can be put in it */
+.card {
+    position: relative;
+    z-index: 0;
+    padding: 12px 12px 4px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+/* the state of the value, the same pill as on the field of the form */
+/* how sure the machine is, in the line that explains where the value came from: a number, not a badge */
+.cardState {
+    font-weight: 600;
+    color: #262626;
+}
+
+.cardField {
+    position: relative;
+    margin: 0;
+}
+
+.cardField :global(.ant-select),
+.cardField :global(.ant-input),
+.cardField :global(.ant-input-number),
+.cardHint {
+    margin: 6px 0 0;
+    overflow-wrap: anywhere;
+    font-size: 12px;
+    line-height: 17px;
+    color: #8c8c8c;
+}
+
+.cardVariantsTitle {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 4px;
+    font-size: 11px;
+    color: #1890ff;
+    cursor: pointer;
+}
+
+.cardVariants {
+    margin: 8px 0 0;
+    font-size: 12px;
+    margin-top: 10px;
+}
+
+.cardNav {
+    display: flex;
+    gap: 4px;
+    margin-left: auto;
+}
+
+/* the short list of all the fields, so the whole picture is visible under the open one */
+.queueRow {
+    cursor: pointer;
+}
+
+.queueRow:hover {
+    background: #fafafa;
+}
+
+.queueRowActive {
+    background: #e6f7ff;
+}
+
+.queueValue {
+    display: block;
+    word-break: break-word;
+    color: #262626;
+}
+
+/* how big the document is shown: a scan of a contract is unreadable at the width of a column */
+.pages {
+    font-size: 12px;
+    color: #8c8c8c;
+    white-space: nowrap;
+}
+
+/* when the run has not happened yet there is no summary to push the rest to the right edge */
+.header .pages:first-of-type {
+    margin-left: auto;
+}
+
+.header :global(.ant-btn) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 28px;
+    min-width: 28px;
+}
+
+.header :global(.anticon) {
+    font-size: 16px;
+    line-height: 1;
+}
+
+.zoom {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.zoomValue {
+    min-width: 38px;
+    text-align: center;
+    font-size: 11px;
+    color: #8c8c8c;
+}
+
+/* the name of the field right at the frame: the link between the form and the place is seen, not guessed */
+.boxTag {
+    position: absolute;
+    left: 0;
+    bottom: 100%;
+    margin-bottom: 2px;
+    padding: 0 4px;
+    font-size: 10px;
+    line-height: 14px;
+    white-space: nowrap;
+    color: #fff;
+    background: #595959;
+    border-radius: 2px;
+    pointer-events: none;
+}
+
+.boxTagChecked {
+    background: #52c41a;
+}
+
+.boxTagCheck {
+    background: #faad14;
+}
+
+.boxTagGuess {
+    background: #f5222d;
+}
+
+.boxTagManual {
+    background: #8c8c8c;
+}
+
+/* nothing found at all, nothing left over, nothing to fix: a panel never stands silent and empty */
+.empty {
+    padding: 20px 16px;
+    text-align: center;
+    color: #595959;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.emptyIcon {
+    font-size: 22px;
+    color: #bfbfbf;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.emptyHint {
+    margin-top: 6px;
+    font-size: 11px;
+    line-height: 1.5;
+    color: #8c8c8c;
+}
+
+.emptySmall {
+    padding: 10px 12px;
+    font-size: 11px;
+    color: #bfbfbf;
+}
+
+/* one click from a selected piece of the document into the field being looked at */
+.noteApply {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    width: 100%;
+    margin-top: 4px;
+    padding: 3px 6px;
+    font-size: 12px;
+    color: #fff;
+    background: #1890ff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.noteApply:hover {
+    background: #40a9ff;
+}
+
+/* a section that folds: the leftovers of a big document are opened when they are needed */
+.reviewSectionButton {
+    cursor: pointer;
+}
+
+.reviewSectionButton:hover {
+    color: #595959;
+}
+
+/* What the value replaced. What is gone stands struck through in plain black, what is there now carries the
+   colour of its own case - yellow while it is the machine's word, quiet when a person put it there. Nothing is
+   cut in the middle: a long value wraps, a very long one is shown as a delta of words. */
+/* every state the value has been in, one line each, the last one being what stands there now */
+.changed {
+    margin: 8px 0 0;
+    font-size: 12px;
+    line-height: 18px;
+}
+
+.changedStep {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 1px 0;
+}
+
+/* a glyph of a history line: the same drawing, smaller and without the circle of a state */
+.mark.changedMark {
+    flex: 0 0 16px;
+    width: 16px;
+    height: 18px;
+    background: none;
+}
+
+.mark.changedMark svg {
+    width: 13px;
+    height: 13px;
+    color: #bfbfbf;
+}
+
+.changedBack {
+    flex: 0 0 auto;
+    margin-left: auto;
+    color: #1890ff;
+    cursor: pointer;
+}
+
+.changedLine {
+    flex: 1 1 auto;
+    max-height: 36px;
+    overflow: hidden;
+    word-break: break-word;
+}
+
+.changedOld {
+    color: #262626;
+    text-decoration: line-through;
+}
+
+.changedEmpty {
+    font-style: italic;
+    color: #bfbfbf;
+}
+
+/* The mark of a state: one circle, one size, everywhere. The same thing is drawn on the field of the form, in
+   the queue and in the head of the card, so a person learns it once and never has to translate.
+   The glyph says what happened, the colour says who did it: yellow is the machine asking for a look, green is
+   a person's word, grey is quiet. Red is never used - it belongs to validation. */
+.mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    flex: 0 0 20px;
+    border-radius: 50%;
+    color: #fff;
+    background: #bfbfbf;
+}
+
+.mark svg {
+    display: block;
+    color: #fff;
+}
+
+/* green is "take it as it is", yellow is "look at it", red is "this is a stop", grey is "not your business
+   right now". Nothing here invents a new meaning for a colour a person already knows. */
+.mark_wait {
+    background: #faad14;
+}
+
+.mark_risk {
+    background: #f5222d;
+}
+
+.mark_done {
+    background: #52c41a;
+}
+
+/* The field of the form the document filled in.
+
+   The form has to stay a form: nothing here changes the size of a field or moves it. The state of the value is
+   the same round mark in the corner of the control, and, when the value is worth a look, a light outline. */
+.field {
+    position: relative;
+    cursor: pointer;
+}
+
+/* the mark stands on one axis with the arrow of the control below it: two circles in one corner that do not
+   share a centre read as a mistake, and this one is in the corner of every field of the form */
+.fieldBadge {
+    position: absolute;
+    top: -10px;
+    right: 7px;
+    z-index: 2;
+    box-shadow: 0 0 0 2px #fff;
+    cursor: pointer;
+}
+
+/* the document gave the value but supports it poorly: worth a look. Never red - red belongs to validation and
+   to a required field, and taking it would make a form lie about itself */
+/* the field the person stands on: a ring in the colour of its own state */
+.fieldActive .fieldBadge {
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px #bfbfbf;
+}
+
+.fieldActive .mark_done {
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px #52c41a;
+}
+
+.fieldActive .mark_risk {
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px #f5222d;
+}
+
+.fieldActive .mark_wait {
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px #faad14;
+}
+
+/* the head of a section of the list: a title of the platform, so nothing here touches its size or its case */
+.reviewSection {
+    display: flex;
+    align-items: center;
+}
+
+/* the title of a section holds its line whatever stands next to it: a word that wraps under its own button is
+   the first thing the eye reads as broken */
+.reviewSection > span:first-child {
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.reviewCount {
+    margin-left: auto;
+    padding-left: 8px;
+    font-weight: 400;
+    color: #bfbfbf;
+}
+
+/* a button of a section title, where a widget keeps its own buttons */
+.reviewSectionAction.reviewSectionAction {
+    margin-left: auto;
+    padding-right: 0;
+}
+
+/* the widget a group of fields belongs to: a quiet line above them, never louder than the section it lives in */
+.reviewWidget {
+    padding: 6px 12px 2px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #262626;
+}
+
+/* the mark of a state in the queue and in the head of the card */
+.boxGuess {
+    border-color: #f5222d;
+    background: rgba(245, 34, 45, 0.18);
+}
+.reviewEmpty {
+    color: #bfbfbf;
+}
+.reviewNote {
+    margin-top: 2px;
+    font-size: 11px;
+    color: #722ed1;
+}
+.reviewAlternative {
+    margin-top: 4px;
+    padding: 4px 6px;
+    border: 1px solid #f0f0f0;
+    border-radius: 2px;
+    background: #fafafa;
+    font-size: 11px;
+    word-break: break-word;
+}
+.reviewAlternative:hover {
+    border-color: #1890ff;
+    background: #e6f7ff;
+}
+.reviewAlternativeLabel {
+    display: block;
+    color: #8c8c8c;
+}
+.reviewSearch {
+    width: calc(100% - 24px);
+    margin: 8px 12px;
+}
+.working {
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    transform: translate(-50%, -50%);
+    width: 280px;
+    padding: 20px 24px;
+    text-align: center;
+    background: #fff;
+    border: 1px solid #e8e8e8;
+    border-radius: 4px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    z-index: 5;
+}
+.workingTitle {
+    margin-top: 12px;
+    font-weight: 500;
+    color: #262626;
+}
+.workingHint {
+    margin-top: 4px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #8c8c8c;
+}
+
+/* the marks are explained in one place: a person should not have to guess what a glyph means */
+.reviewHelp {
+    margin-left: 8px;
+    color: #bfbfbf;
+    cursor: help;
+}
+
+/* the buttons of the card: one row above the value, always in the same place and all of one size */
+/* the row of buttons: the platform's own buttons, in one row, wrapping when the panel is narrow */
+/* the buttons of the field, all on one left edge. Should a locale make them wider than the panel they wrap onto
+   the next line and keep that edge: a row that lines itself up on the right reads as spilled. */
+.cardTools {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+}
+
+/* the fold is the only thing here that acts on the panel and not on the value, so it stands at the far edge */
+.cardTools .cardNav {
+    margin-left: auto;
+}
+
+/* the title of the card stands in the padding of the card, on the same left edge as everything under it */
+.cardHead.cardHead {
+    margin: 0 0 6px;
+    padding: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* a list of the panel as a widget: a title and the rows under it */
+.listCard {
+    margin-bottom: 8px;
+    padding: 4px 0 6px;
+}
+
+.listCard .reviewSection {
+    margin: 0;
+    padding: 6px 12px 4px;
+}
+
+/* a cell of the list wraps what does not fit, the way the tables of the application do, and keeps its distance
+   from the mark of the row: a glyph glued to a word reads as one blot */
+
+/* The list is the AdditionalList widget of the platform: its own container does the look of the rows. Only
+   two things are said here - the table fits the width of a panel, and the negative margin that widget uses to
+   line up with its own padding is taken back, because there is no such padding here. */
+.queueTable.queueTable {
+    margin-left: 0;
+}
+
+/* a cell of the list wraps what does not fit, the way the tables of the application do: in a panel this narrow
+   a value cut to "..." would have to be hovered to be read */
+.queueName {
+    display: block;
+    padding-left: 8px;
+    word-break: break-word;
+}
+
+/* the list of the panel: the table of the application, narrowed to the room a panel has */
+.queueTable :global(table) {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.queueTable :global(.ant-table-body) {
+    overflow-x: hidden;
+}
+
+.queueTable :global(.ant-table-tbody > tr:last-child > td) {
+    border-bottom: none;
+}
+
+.queueTable :global(.ant-table-placeholder) {
+    display: none;
+}
+
+/* the first column of a list starts where every other line of the panel stands, and keeps the mark away from
+   the name of the field: a glyph glued to a word reads as one blot */
+.queueTable :global(.ant-table .ant-table-row > td:first-child) {
+    padding-left: 12px;
+    padding-right: 8px;
+}
+
+/* the control takes the width of the card, as it takes the width of its column on the form: a select that
+   shrinks to its own text leaves the mark of the field hanging beside it */
+.cardField :global(.ant-form-item-control-wrapper),
+.cardField :global(.ant-form-item-children),
+.cardField :global(.ant-select),
+.cardField :global(.ant-input),
+.cardField :global(.ant-input-number),
+.cardField :global(.ant-calendar-picker) {
+    width: 100%;
+}
+
+/* the mark of a row keeps its distance from the name of the field by itself, whatever the table around it does
+   with the padding of its cells */
+.queueMark {
+    margin-right: 8px;
+}
+
+/* the end of the work said out loud: the queue is empty and the person is told so, not left guessing */
+.done {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    padding: 10px 12px;
+    font-size: 13px;
+    color: #237804;
+    background: #f6ffed;
+}

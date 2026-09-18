@@ -1,1 +1,1 @@
-export const dictionary_dropDownMaxCols = 1.3
+export const dictionary_dropDownMaxCols = 5

@@ -24,6 +24,9 @@ public abstract class ClientAbstractDTO extends DataResponseDTO {
 	@SearchParameter(name = "address")
 	private String address;
 
+	@SearchParameter(name = "clientCode")
+	private String clientCode;
+
 	@SearchParameter(name = "importance", provider = DictionaryValueProvider.class)
 	private ClientImportance importance;
 
@@ -45,6 +48,7 @@ public abstract class ClientAbstractDTO extends DataResponseDTO {
 	ClientAbstractDTO(Client client) {
 		this.id = client.getId().toString();
 		this.address = client.getAddress();
+		this.clientCode = client.getClientCode();
 		this.fullName = client.getFullName();
 		this.importance = client.getImportance();
 		this.editStep = client.getEditStep();

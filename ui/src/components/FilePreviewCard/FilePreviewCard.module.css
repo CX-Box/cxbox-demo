@@ -6,7 +6,13 @@
     z-index: 10;
 }
 
+/* The content takes what is left of the card, not the whole of its height: the title of the widget stands above
+   it, so "height: 100%" made the two of them taller than the card and the card scrolled on top of everything
+   that scrolls inside it. */
 .fixedContainer :global(.ant-spin-nested-loading),
 .fixedContainer :global(.ant-spin-container) {
-    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
 }

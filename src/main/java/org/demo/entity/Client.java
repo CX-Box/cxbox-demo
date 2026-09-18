@@ -36,6 +36,9 @@ public class Client extends BaseEntity {
 
 	private String address;
 
+	/** The code the client is given in our own systems: no document of a client ever holds it. */
+	private String clientCode;
+
 	@ElementCollection(targetClass = FieldOfActivity.class)
 	@CollectionTable(name = "FIELD_OF_ACTIVITY", joinColumns = @JoinColumn(name = "CLIENT_ID"))
 	@Column(name = "VALUE", nullable = false)

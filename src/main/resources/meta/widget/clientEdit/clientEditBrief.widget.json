@@ -1,0 +1,35 @@
+{
+  "name": "clientEditBrief",
+  "title": "Brief",
+  "type": "FilePreview",
+  "bc": "clientEdit",
+  "fields": [
+    {
+      "label": "Brief",
+      "key": "brief",
+      "type": "fileUpload",
+      "fileIdKey": "briefId",
+      "preview": {
+        "enabled": true,
+        "mode": "inline"
+      }
+    }
+  ],
+  "options": {
+    "extract": {
+      "enabled": true
+    },
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "brief",
+              "span": 12
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

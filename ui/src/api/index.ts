@@ -10,7 +10,7 @@ import { FilterGroup, FilterType } from '@interfaces/filters'
 import { saveAs } from 'file-saver'
 import { getFileNameFromDisposition } from '@utils/getFileNameFromDisposition'
 import { map, Observable } from 'rxjs'
-import { Auth } from '../auth'
+import { platformSession } from '../auth/platformSession'
 
 class Api extends CXBoxApi {
     loginByRoleRequest(role: string) {
@@ -193,17 +193,21 @@ class Api extends CXBoxApi {
     }
 }
 
-function tokenInterceptor(rqConfig: InternalAxiosRequestConfig) {
-    return Auth.getInstance()
-        .getUser()
-        .then(user => {
-            rqConfig.headers.Authorization = `Bearer ${user?.access_token}`
-            return rqConfig
-        })
-}
-
 const __AJAX_TIMEOUT__ = 900000
 const __CLIENT_ID__: number = Date.now()
+
+/**
+ * Per-tab client id sent as `ClientId` header with every request; also written to the copied error details
+ */
+export const CLIENT_ID = __CLIENT_ID__
+
+export interface TimedRequestConfig extends InternalAxiosRequestConfig {
+    /**
+     * Timestamps taken around the request (before the token refresh started and when the error arrived); used by error popup details
+     */
+    requestStartedAt?: number
+    requestFinishedAt?: number
+}
 
 const HEADERS = { Pragma: 'no-cache', 'Cache-Control': 'no-cache, no-store, must-revalidate' }
 
@@ -217,8 +221,26 @@ const instance = axios.create({
     }
 })
 
-if (!process.env['REACT_APP_NO_SSO']) {
-    instance.interceptors.request.use(tokenInterceptor, () => Promise.reject())
-}
+instance.interceptors.request.use(
+    rqConfig => platformSession.authorizeRequest(rqConfig),
+    () => Promise.reject()
+)
+
+// registered last, so it runs first (request interceptors are applied in reverse order): the timestamp is taken before the token refresh
+instance.interceptors.request.use(config => {
+    ;(config as TimedRequestConfig).requestStartedAt = Date.now()
+    return config
+})
+
+instance.interceptors.response.use(
+    response => response,
+    error => {
+        // also reached by the synthetic 401 thrown from `platformSession.authorizeRequest`: request interceptor rejections flow through this chain
+        if (error?.config) {
+            ;(error.config as TimedRequestConfig).requestFinishedAt = Date.now()
+        }
+        return Promise.reject(error)
+    }
+)
 
 export const CxBoxApiInstance = new Api(instance, Infinity, Object.values(FilterType))

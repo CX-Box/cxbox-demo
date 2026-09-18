@@ -32,6 +32,10 @@ export type FeatureSetting = {
 }
 
 export interface LoginResponse extends interfaces.LoginResponse {
+    /**
+     * Backend HTTP session id, the same value is written to the SIEM log (`session: ...`)
+     */
+    sessionId?: string
     userId: string
     featureSettings?: FeatureSetting[]
     screens: SessionScreen[]

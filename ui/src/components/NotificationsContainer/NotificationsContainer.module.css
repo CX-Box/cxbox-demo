@@ -39,10 +39,11 @@
     }
 }
 
-.closeAllButton {
+/* .container makes the rules more specific than antd .ant-btn { display: inline-block }: the module css is loaded before antd css */
+.container .closeAllButton {
     display: none;
 }
 
-.closeAllButton:has(+ div :global(.ant-notification-notice)) {
+.container .closeAllButton:has(+ div :global(.ant-notification-notice)) {
     display: initial;
 }

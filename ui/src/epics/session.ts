@@ -1,13 +1,13 @@
-import { loginDone, SSO_AUTH } from '@actions'
+import { AuthErrorStatusCode, loginDone, showAuthErrorPopup, SSO_AUTH } from '@actions'
 import { AxiosError } from 'axios'
-import { catchError, concat, EMPTY, filter, from, mergeMap, of, switchMap } from 'rxjs'
+import { catchError, concat, EMPTY, exhaustMap, filter, from, map, mergeMap, of, switchMap } from 'rxjs'
 import { processScreensOnLogin } from './utils/processScreensOnLogin'
-import { actions, utils } from '@cxbox-ui/core'
+import { actions, interfaces, utils } from '@cxbox-ui/core'
 import { RootEpic } from '@store'
 import { LoginResponse } from '@interfaces/session'
-import { Auth } from '../auth'
-import { OIDC_CONFIG_URL } from '@constants'
-import { getNormalizedAppRouteFromUrl } from '@utils/api'
+import { platformSession } from '../auth/platformSession'
+import { toRequestErrorInfo } from '@utils/requestErrorInfo'
+import { isAuthErrorSnoozed } from '../reducers/session'
 
 const responseStatusMessages: Record<number, string> = {
     401: 'Unauthorized',
@@ -17,45 +17,29 @@ const responseStatusMessages: Record<number, string> = {
 const ssoAuthEpic: RootEpic = action$ =>
     action$.pipe(
         filter(SSO_AUTH.match),
-        switchMap(() => {
-            return from(Auth.init(OIDC_CONFIG_URL)).pipe(
-                switchMap(userManager => {
-                    if (Auth.signInCallbackParam) {
-                        return from(userManager.signinCallback()).pipe(
-                            switchMap(user => {
-                                if (Auth.signInCallbackParam === 'redirect') {
-                                    const state = user?.state as Record<string, string | undefined>
-                                    const route = state.route ? state.route : ''
-                                    window.history.replaceState(null, '', route)
-                                    return of(actions.login({ login: '', password: '' }))
-                                }
-                                return EMPTY
-                            })
-                        )
+        // exhaustMap, not switchMap: while the sign in is in flight a second SSO_AUTH (the effect of AppLayout fires again while
+        // the session is not active yet) must be ignored, not restart it
+        exhaustMap(() =>
+            from(platformSession.signInOnPageLoad()).pipe(
+                switchMap(outcome => {
+                    if (outcome === 'signedIn') {
+                        return of(actions.login({ login: '', password: '' }))
                     }
-
-                    return from(userManager.getUser()).pipe(
-                        switchMap(user => {
-                            if (user && !user.expired) {
-                                window.history.replaceState(null, '', getNormalizedAppRouteFromUrl())
-                                return of(actions.login({ login: '', password: '' }))
-                            } else {
-                                userManager.signinRedirect({
-                                    state: {
-                                        route: getNormalizedAppRouteFromUrl()
-                                    }
-                                })
-                                return EMPTY
-                            }
-                        })
-                    )
-                }),
-                catchError(error => {
-                    console.error('Authentication failed', error)
-                    return EMPTY
+                    // nothing worked out: the popup with its ways out, not a spinner for ever
+                    return outcome === 'failed'
+                        ? of(
+                              showAuthErrorPopup({
+                                  statusCode: 401,
+                                  method: 'GET',
+                                  url: window.location.origin + window.location.pathname,
+                                  finishedAt: new Date().toISOString(),
+                                  responseData: 'The sign in could not be completed, see the console'
+                              })
+                          )
+                        : EMPTY
                 })
             )
-        })
+        )
     )
 
 const loginEpic: RootEpic = (action$, state$, { api }) =>
@@ -78,7 +62,8 @@ const loginEpic: RootEpic = (action$, state$, { api }) =>
                             screens: processScreensOnLogin(data.screens),
                             userId: data.userId,
                             featureSettings: data.featureSettings,
-                            language: data.language
+                            language: data.language,
+                            sessionId: data.sessionId
                         })
                     )
                 }),
@@ -139,6 +124,7 @@ export const loginByAnotherRoleEpic: RootEpic = (action$, state$, { api }) =>
                             userId: data.userId,
                             featureSettings: data.featureSettings,
                             language: data.language,
+                            sessionId: data.sessionId,
                             defaultUrl
                         })
                     ])
@@ -158,7 +144,7 @@ const logoutEpic: RootEpic = action$ =>
     action$.pipe(
         filter(actions.logout.match),
         switchMap(() => {
-            Auth.getInstance().signoutRedirect()
+            void platformSession.signOut()
             return of(actions.logoutDone(null))
         }),
         catchError(error => {
@@ -175,10 +161,54 @@ const logoutDoneEpic: RootEpic = action$ =>
         })
     )
 
+const AUTH_ERROR_STATUS_CODES: number[] = [401, 403]
+
+/**
+ * Overrides core `httpError401Epic` (it dispatched `logoutDone` and left empty widgets): 401 and 403 open AuthErrorPopup,
+ * also before the session is active (SSO login of a user without roles), except in basic-auth mode where the login form shows the error.
+ * "No" snoozes the popup for a while.
+ */
+const httpError401Epic: RootEpic = (action$, state$) =>
+    action$.pipe(
+        filter(actions.httpError.match),
+        filter(action => AUTH_ERROR_STATUS_CODES.includes(action.payload.statusCode)),
+        filter(() => state$.value.session.active || !process.env['REACT_APP_NO_SSO']),
+        filter(() => !isAuthErrorSnoozed(state$.value.session)),
+        map(action =>
+            showAuthErrorPopup({
+                ...toRequestErrorInfo(action.payload.error),
+                statusCode: action.payload.statusCode as AuthErrorStatusCode
+            })
+        )
+    )
+
+/**
+ * Overrides core `httpErrorDefaultEpic`: identical to the core one, but 403 is excluded
+ * because it is handled by `httpError401Epic` above instead of the generic business error popup.
+ */
+const knownHttpErrors = [...AUTH_ERROR_STATUS_CODES, 409, 418, 500]
+
+const httpErrorDefaultEpic: RootEpic = action$ =>
+    action$.pipe(
+        filter(actions.httpError.match),
+        filter(action => !knownHttpErrors.includes(action.payload.statusCode)),
+        map(action =>
+            actions.showViewError({
+                error: {
+                    type: interfaces.ApplicationErrorType.BusinessError,
+                    code: action.payload.error.response?.status,
+                    details: action.payload.error.response?.data
+                } as interfaces.ApplicationError
+            })
+        )
+    )
+
 export const sessionEpics = {
     ssoAuthEpic,
     logoutEpic,
     logoutDoneEpic,
     loginEpic,
-    loginByAnotherRoleEpic
+    loginByAnotherRoleEpic,
+    httpError401Epic,
+    httpErrorDefaultEpic
 }

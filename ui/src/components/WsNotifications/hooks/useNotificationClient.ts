@@ -3,34 +3,70 @@ import { useDispatch } from 'react-redux'
 import { AxiosError } from 'axios'
 import { actions, interfaces } from '@cxbox-ui/core'
 import showSocketNotification from '../ShowSocketNotification'
-import { brokerURL, heartbeatIncoming, heartbeatOutgoing, reconnectDelay } from '@constants/notification'
+import { brokerURL, heartbeatIncoming, heartbeatOutgoing, maxReconnectDelay, reconnectDelay } from '@constants/notification'
 import { Client, IFrame } from '@stomp/stompjs'
 import { SocketNotification } from '@interfaces/notification'
 import { createUserSubscribeUrl } from '../utils'
-import { useAppSelector } from '@store'
+import { store, useAppSelector } from '@store'
 import { EFeatureSettingKey } from '@interfaces/session'
 import { EDrillDownTooltipValue } from '@components/ui/DrillDown/constants'
-import { Auth } from '../../../auth'
+import { showAuthErrorPopup } from '@actions'
+import { platformSession } from '../../../auth/platformSession'
+import { isAuthErrorSnoozed } from '../../../reducers/session'
 
 const { ApplicationErrorType } = interfaces
 
+/**
+ * The handshake token is taken the way a request takes it: the stored one, or the shared renewal behind `platformSession.authorizeWebSocketUrl()`
+ * (a `signinSilent()` of its own would race with the interceptor and the other tabs, https://github.com/authts/oidc-client-ts/issues/1618).
+ * Without a valid token (the session is over, the OIDC provider is down) the handshake is skipped and tried again after the
+ * reconnect delay, which doubles up to `maxReconnectDelay` (stompjs 7.0 has no backoff of its own); the "Sign in again?" popup
+ * is shown as for a failed request. The client keeps trying until a token is available again, it stops only after a logout.
+ */
 const notificationClient = new Client({
     brokerURL: brokerURL,
     reconnectDelay: reconnectDelay,
     heartbeatIncoming: heartbeatIncoming,
     heartbeatOutgoing: heartbeatOutgoing,
     beforeConnect: async () => {
-        try {
-            const user = await Auth.getInstance().getUser()
-
-            if (user && user.access_token) {
-                notificationClient.brokerURL = brokerURL + '?access_token=' + encodeURI(user.access_token)
-            }
-        } catch (error) {
-            console.error('Failed to get access token for WebSocket connection', error)
+        if (!store.getState().session.active) {
+            await notificationClient.deactivate()
+            return
         }
-    }
+        const startedAt = new Date().toISOString()
+        try {
+            notificationClient.brokerURL = await platformSession.authorizeWebSocketUrl(brokerURL)
+        } catch (error) {
+            const delay = backOff()
+            console.warn(
+                `Websocket handshake skipped: no valid token (the session is over or the OIDC provider is unreachable), next attempt in ${
+                    delay / 1000
+                }s`,
+                error
+            )
+            await notificationClient.deactivate()
+            setTimeout(() => notificationClient.activate(), delay)
+            if (!isAuthErrorSnoozed(store.getState().session)) {
+                store.dispatch(
+                    showAuthErrorPopup({
+                        statusCode: 401,
+                        method: 'CONNECT',
+                        url: brokerURL,
+                        startedAt,
+                        finishedAt: new Date().toISOString(),
+                        responseData: error instanceof Error ? error.message : undefined
+                    })
+                )
+            }
+        }
+    },
+    onWebSocketClose: backOff
 })
+
+function backOff() {
+    notificationClient.reconnectDelay = Math.min(notificationClient.reconnectDelay * 2, maxReconnectDelay)
+    return notificationClient.reconnectDelay
+}
 
 export function useNotificationClient(subscribeCallback?: (messageBody: SocketNotification) => void) {
     const dispatch = useDispatch()
@@ -103,6 +139,7 @@ export function useNotificationClient(subscribeCallback?: (messageBody: SocketNo
     useEffect(() => {
         if (!disableWebSocketNotification && !notificationClient.active && userId) {
             notificationClient.onConnect = frame => {
+                notificationClient.reconnectDelay = reconnectDelay
                 handleStompConnectRef.current(frame, createUserSubscribeUrl(userId))
             }
 

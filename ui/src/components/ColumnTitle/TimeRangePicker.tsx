@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { Button, TimePicker } from 'antd'
+import { Button } from 'antd'
 import { DataValue } from '@cxbox-ui/schema'
 import moment from 'moment'
 import { useTranslation } from 'react-i18next'
 import { isoLocalFormatter } from '@utils/date'
 import { TimePickerProps } from 'antd/lib/time-picker'
 import { useAppSelector } from '@store'
+import TimePicker from '@components/ui/TimePicker/TimePicker'
 import styles from './TimeRangePicker.less'
 
 interface TimeRangePickerProps extends Omit<TimePickerProps, 'onChange' | 'value'> {
@@ -88,6 +89,14 @@ function TimeRangePicker({ value, onChange, format, ...rest }: TimeRangePickerPr
         }
     }
 
+    // Enter and Ok in Start time close it and move on to an empty End time, as RangePicker does for dates
+    const handleStartConfirm = () => {
+        setStartOpen(false)
+        if (!endTime) {
+            setEndOpen(true)
+        }
+    }
+
     return (
         <div className={styles.container}>
             <TimePicker
@@ -100,9 +109,10 @@ function TimeRangePicker({ value, onChange, format, ...rest }: TimeRangePickerPr
                 defaultOpenValue={moment(`${defaultDate?.value}T00:00:00`)}
                 open={startOpen}
                 onOpenChange={open => setStartOpen(open)}
+                onPressEnter={handleStartConfirm}
                 popupClassName={styles.popupContainer}
                 addon={() => (
-                    <Button size="small" type="primary" onClick={() => setStartOpen(false)}>
+                    <Button size="small" type="primary" onClick={handleStartConfirm}>
                         {t('Ok')}
                     </Button>
                 )}

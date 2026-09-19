@@ -15,6 +15,7 @@ import {
 } from '@utils/defaultFilters'
 import { getAssocTreeSelectedNodeIds } from '@utils/getAssocTreeSelectedNodeIds'
 import { BcFilter } from '@cxbox-ui/core'
+import { isCursorInUrl } from '@utils/isCursorInUrl'
 
 function useFiltersGroupName(bcName: string | undefined) {
     const filterGroupName = useAppSelector(state => state.screen.appliedFilterGroup[bcName!] ?? null)
@@ -145,9 +146,7 @@ export const useTableShowAllRecords = (bcName: string) => {
 
         return bc?.cursor
     })
-    const limitBySelf = useAppSelector(state => {
-        return cursor ? !!state.router.bcPath?.includes(`${bcName}/${cursor}`) : false
-    })
+    const limitBySelf = useAppSelector(state => isCursorInUrl(state, bcName))
 
     const dispatch = useDispatch()
 

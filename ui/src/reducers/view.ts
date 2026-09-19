@@ -1,6 +1,6 @@
 import { PendingValidationFailsFormat, reducers, ViewState as CoreViewState } from '@cxbox-ui/core'
 import { AnyAction, createReducer, isAnyOf } from '@reduxjs/toolkit'
-import { actions, partialUpdateRecordForm, resetRecordForm, setBcCount, setRecordForm } from '@actions'
+import { actions, partialUpdateRecordForm, resetBcCount, resetRecordForm, setBcCount, setRecordForm } from '@actions'
 import { PopupData } from '@interfaces/view'
 import { RowMeta } from '@interfaces/rowMeta'
 import { treeActions } from '../slices/tree'
@@ -59,6 +59,9 @@ const viewReducerBuilder = reducers
     .addCase(setBcCount, (state, action) => {
         const { bcName: bcCountName, count } = action.payload
         state.bcRecordsCount[bcCountName] = { count }
+    })
+    .addCase(resetBcCount, (state, action) => {
+        delete state.bcRecordsCount[action.payload.bcName]
     })
     .addCase(setRecordForm, (state, action) => {
         state.recordForm[action.payload.bcName] = action.payload

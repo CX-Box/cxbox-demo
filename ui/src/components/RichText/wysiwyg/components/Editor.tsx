@@ -28,7 +28,7 @@ const Editor: React.FC<Props> = ({
     onViewModeChange,
     onlyOneRow
 }) => {
-    const { editor } = useRichTextEditor({ value, onChange, readOnly, disabled, onBlur, onFocus })
+    const { editor } = useRichTextEditor({ value, onChange, readOnly, disabled, placeholder, onBlur, onFocus })
 
     const handleViewModeChange = useCallback(
         (mode: ViewMode) => {

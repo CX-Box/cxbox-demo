@@ -14,9 +14,7 @@ export interface ErrorPopupInnerProps {
     forceBusinessMessage?: React.ReactNode
     onClose?: () => void
 
-    /**
-     * Technical details of the failed request (`RequestErrorDetails`); replaces the built-in "Details" collapse when provided
-     */
+    /** Replaces the built-in "Details" collapse */
     requestDetails?: React.ReactNode
 
     exportStateEnabled?: boolean // manage the export button

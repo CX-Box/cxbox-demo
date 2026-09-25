@@ -5,7 +5,7 @@ import { browserRefreshTokenLock, RotationSafeUserManager } from './rotationSafe
 
 Log.setLogger(console)
 
-/** A timeout set on the stand counts when it is a positive number (it may arrive as a string) */
+/** Zero does not switch a timeout off: without a timeout a request to the provider can wait forever */
 const seconds = (fromStand: unknown, byDefault: number) => (Number(fromStand) > 0 ? Number(fromStand) : byDefault)
 
 export class Auth {
@@ -16,13 +16,13 @@ export class Auth {
     private static _initializing: Promise<UserManager> | null = null
 
     /**
-     * Single flight: the check of `_instance` used to stand before the request for the settings and the assignment after it, so two
-     * callers that started together both built a UserManager and both went through the sign in. Now they share one initialization.
+     * A singleton per page, also for calls made at the same time.
+     * Two plain UserManagers in one page would send the same refresh token twice
      */
     public static init(url: string) {
         if (!Auth._initializing) {
             Auth._initializing = Auth.create(url).catch(error => {
-                Auth._initializing = null // a failure is not remembered: the next sign in asks for the settings again
+                Auth._initializing = null
                 throw error
             })
         }
@@ -47,13 +47,12 @@ export class Auth {
             userStore: new WebStorageStateStore({ store: localStorage })
         }
 
-        // A browser without IndexedDB cannot lock a refresh token: it gets plain oidc-client-ts as well, whatever the constant says
+        // RotationSafeUserManager keeps its locks in IndexedDB. Where IndexedDB does not work, the plain UserManager
+        // is used: it renews tokens, only without the lock
         if (userManagerOfThisBrowser() === 'original' || !(await browserRefreshTokenLock.isAvailable())) {
-            // the settings above and plain oidc-client-ts: exactly as before 3.0.2
             Auth._instance = new UserManager(oidcConfig)
             return Auth._instance
         }
-        // The stand can make a timeout longer, but cannot remove it: without a timeout a request to the provider can wait forever
         oidcConfig.silentRequestTimeoutInSeconds = seconds(data['silentRequestTimeoutInSeconds'], SILENT_REQUEST_TIMEOUT_SECONDS)
         oidcConfig.requestTimeoutInSeconds = seconds(data['requestTimeoutInSeconds'], OIDC_REQUEST_TIMEOUT_SECONDS)
         Auth._instance = new RotationSafeUserManager(oidcConfig)

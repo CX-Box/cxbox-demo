@@ -16,13 +16,6 @@ import { isAuthErrorSnoozed } from '../../../reducers/session'
 
 const { ApplicationErrorType } = interfaces
 
-/**
- * The handshake token is taken the way a request takes it: the stored one, or the shared renewal behind `platformSession.authorizeWebSocketUrl()`
- * (a `signinSilent()` of its own would race with the interceptor and the other tabs, https://github.com/authts/oidc-client-ts/issues/1618).
- * Without a valid token (the session is over, the OIDC provider is down) the handshake is skipped and tried again after the
- * reconnect delay, which doubles up to `maxReconnectDelay` (stompjs 7.0 has no backoff of its own); the "Sign in again?" popup
- * is shown as for a failed request. The client keeps trying until a token is available again, it stops only after a logout.
- */
 const notificationClient = new Client({
     brokerURL: brokerURL,
     reconnectDelay: reconnectDelay,
@@ -63,6 +56,7 @@ const notificationClient = new Client({
     onWebSocketClose: backOff
 })
 
+// stompjs 7.0 has no backoff of its own
 function backOff() {
     notificationClient.reconnectDelay = Math.min(notificationClient.reconnectDelay * 2, maxReconnectDelay)
     return notificationClient.reconnectDelay

@@ -14,26 +14,17 @@ const MESSAGE_BY_STATUS: Record<AuthErrorStatusCode, string> = {
 }
 
 /**
- * Shown after 401/403 response (see `httpError401Epic`) and when the sign in could not be completed.
- *
- * "Sign in again" goes to the provider and back: no password while the SSO session lives, and back on the same screen.
- * If the provider is not reachable, both buttons leave the popup open and it says so: what has been typed is not lost, and
- * the user can try again.
- * "Sign out" does the same as "Log out" of the user menu - the way to come back as another user.
- * Closing the popup (Esc, the cross) leaves the page as it is, so that what has been typed can be copied, and snoozes the popup
- * for `AUTH_ERROR_SNOOZE_SECONDS`. In `strict` mode (see `AUTH_ERROR_MODE`) the popup cannot be closed.
- * Technical info of the failed request (details and copy links) comes from `RequestErrorDetails`.
+ * The popup never reloads the page by itself: the user must not lose what was typed.
+ * The cross hides it for a while, so the data can be copied
  */
 function AuthErrorPopup() {
     const authError = useAppSelector(state => state.session.authError)
     const dispatch = useAppDispatch()
     const { t } = useTranslation()
-    // 'signingIn', 'signingOut': the pressed button shows a spinner until the page leaves.
-    // 'failed': the provider is not reachable, the popup says so
     const [redirect, setRedirect] = useState<'ready' | 'signingIn' | 'signingOut' | 'failed'>('ready')
 
-    // A new popup starts clean. And "Back" on the provider page restores this page as it was: with the spinner on the button
     useEffect(() => setRedirect('ready'), [authError])
+    // "Back" from the provider page restores this page from the browser cache, with the spinner on the button
     useEffect(() => {
         const onPageShow = () => setRedirect('ready')
         window.addEventListener('pageshow', onPageShow)
@@ -50,7 +41,7 @@ function AuthErrorPopup() {
             } else if (result === 'failed') {
                 setRedirect('failed')
             }
-            // 'redirecting': the popup stays until the page leaves, an empty screen says nothing
+            // 'redirecting': the popup stays until the page leaves, an empty screen would say nothing
         },
         [dispatch]
     )

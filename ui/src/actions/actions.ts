@@ -17,14 +17,10 @@ export type AuthErrorStatusCode = 401 | 403
 
 export type AuthErrorInfo = RequestErrorInfo & { statusCode: AuthErrorStatusCode }
 
-/**
- * Shows popup offering to re-login after 401 (session expired) or 403 (insufficient permissions) response
- */
+/** Opens AuthErrorPopup after a 401 (the session has expired) or 403 (insufficient permissions) response */
 export const showAuthErrorPopup = createAction<AuthErrorInfo>('showAuthErrorPopup')
 
-/**
- * `snoozedUntil` (timestamp): do not show the popup again until then, set by "No"
- */
+/** `snoozedUntil`: the popup is not shown again until this time (a timestamp in milliseconds) */
 export const closeAuthErrorPopup = createAction<{ snoozedUntil?: number } | undefined>('closeAuthErrorPopup')
 
 /**

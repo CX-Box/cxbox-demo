@@ -1,49 +1,30 @@
 /**
- * The guard of {@link RotationSafeUserManager}: a lock on every refresh token. The contract is {@link RefreshTokenLock}.
- * The default implementation is {@link browserRefreshTokenLock}: it uses IndexedDB inside.
- */
-
-/**
- * A lock on every refresh token. Only the tab that locked a token can send it. All tabs of the browser share the locks.
- *
- * An implementation must keep two promises:
+ * Only the tab that locked a refresh token sends it. An implementation must follow two rules:
  *
  * - {@link RefreshTokenLock.tryLock} is atomic for all tabs: if several tabs lock the same token, only one gets true.
  * - A lock survives a page reload and a browser crash.
  */
 export interface RefreshTokenLock {
-    /** Returns true if the token was not locked. True only once per token. If the storage is not available, returns false */
+    /**
+     * True only once per token. If the storage does not work, false: better not to send a token than to send it twice
+     */
     tryLock(token: string): Promise<boolean>
 
     /** Called when the provider does not rotate tokens: the same token can be sent next time */
     unlock(token: string): Promise<void>
 
     /**
-     * Can the lock keep its promises in this browser? If not, do not use {@link RotationSafeUserManager}: create a plain
-     * `UserManager` of oidc-client-ts. It has no guard, but it renews tokens, and that is better than never sending a
-     * refresh token.
+     * If false, create a plain `UserManager` instead of `RotationSafeUserManager`:
+     * without the lock it would never send a refresh token
      */
     isAvailable(): Promise<boolean>
 }
 
-/** The warning in the browser console when the storage is not available. It is written together with the error */
 const NOT_AVAILABLE = 'Token renewal: the refresh token lock is not available, so the refresh token is not sent'
 
 /**
- * {@link RefreshTokenLock} for all tabs of one browser. Inside: IndexedDB database `oidc.refresh-token-locks`, store `locks`.
- * Key: the hash of a token, not the token. Value: the time when it was locked.
- *
- * IndexedDB keeps the promises of {@link RefreshTokenLock}, and localStorage cannot:
- *
- * - Adding a key is atomic: if several tabs add the same key, only one succeeds.
- * - A committed record survives F5 and a browser crash.
- *
- * **If the browser has no IndexedDB**, then {@link RefreshTokenLock.isAvailable} returns false: the application should
- * create a plain `UserManager`. If it does not, {@link RefreshTokenLock.tryLock} returns false, the refresh token is never
- * sent, and every renewal uses the SSO cookie.
- *
- * All browsers since 2016 have IndexedDB (Chrome, Edge, Firefox, Safari 10+). One exception: Firefox private mode before
- * version 115 (July 2023).
+ * IndexedDB, not localStorage: adding a key there is atomic for all tabs, and a committed record survives F5
+ * and a browser crash
  */
 export const browserRefreshTokenLock: RefreshTokenLock = {
     async tryLock(token) {
@@ -83,7 +64,6 @@ export const browserRefreshTokenLock: RefreshTokenLock = {
     }
 }
 
-/** One transaction: open the database, write, wait for the commit, close */
 async function writeToStore(write: (store: IDBObjectStore) => void): Promise<void> {
     const database = await openDatabase()
     try {
@@ -96,7 +76,6 @@ async function writeToStore(write: (store: IDBObjectStore) => void): Promise<voi
     }
 }
 
-/** Rejects if IndexedDB is not available or does not open in 3 seconds */
 function openDatabase(): Promise<IDBDatabase> {
     return new Promise((resolve, reject) => {
         const request = indexedDB.open('oidc.refresh-token-locks', 1)
@@ -111,7 +90,7 @@ function openDatabase(): Promise<IDBDatabase> {
     })
 }
 
-/** Resolves when the transaction is COMMITTED: only a committed record survives F5. Rejects if the transaction is rolled back */
+/** Only a committed record survives F5, so a lock counts only after `oncomplete` */
 function committed(transaction: IDBTransaction): Promise<void> {
     return new Promise((resolve, reject) => {
         transaction.oncomplete = () => resolve()
@@ -129,7 +108,9 @@ function deleteOlderThanMonth(store: IDBObjectStore) {
     }
 }
 
-/** The store keeps hashes, not tokens. On plain http there is no `crypto.subtle`: then the token itself is the key */
+/**
+ * The store keeps hashes, not the tokens themselves. Plain http has no `crypto.subtle`: then the key is the token
+ */
 async function hashOf(token: string) {
     if (!crypto.subtle) {
         return token

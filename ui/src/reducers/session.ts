@@ -13,19 +13,11 @@ interface Session extends interfaces.Session {
     featureSettings?: FeatureSetting[]
     language?: string | null | undefined
     sessionId?: string
-    /**
-     * Details of the last 401/403 response; drives AuthErrorPopup (first error wins while the popup is open)
-     */
     authError: AuthErrorInfo | null
-    /**
-     * Timestamp until which AuthErrorPopup is not shown again after "No"
-     */
     authErrorSnoozedUntil: number | null
 }
 
-/**
- * "No" on AuthErrorPopup keeps it closed for a while: every path that shows the popup (failed requests, the websocket) checks this
- */
+/** Every place that shows AuthErrorPopup checks it: failed requests, the websocket */
 export const isAuthErrorSnoozed = (session: Session) => !!session.authErrorSnoozedUntil && Date.now() < session.authErrorSnoozedUntil
 
 const initialState: Session = {

@@ -39,7 +39,6 @@
     }
 }
 
-/* .container makes the rules more specific than antd .ant-btn { display: inline-block }: the module css is loaded before antd css */
 .container .closeAllButton {
     display: none;
 }

@@ -15,24 +15,14 @@ const formatDate = (iso?: string) => (iso ? moment(iso).format(DATE_FORMAT) : 'â
 
 interface RequestErrorDetailsProps {
     info?: RequestErrorInfo | null
-    /**
-     * Anything else worth having in the copied JSON (error message, details, code)
-     */
+    /** Added to the copied JSON */
     extra?: Record<string, unknown>
-    /**
-     * Extra content rendered inside the expanded details after the request info
-     */
     children?: React.ReactNode
 }
 
 /**
- * Technical details of a failed request for error popups: one row of two links.
- *
- * The arrow expands the technical info (and copies it right away), collapsed by default: what support needs to find the request in the server log
- * from a screenshot â€” session id (the same value is written to the SIEM log as `session: ...`), request start/finish time,
- * status and request.
- * "Copy details" is always visible (business users press it without opening anything) and copies the full info as JSON:
- * session id, current screen/view and browser url, request, status, timings, response headers and body.
+ * For the support team. The expanded part is what they need to find the request in the server log
+ * from a screenshot. "Copy details" is always visible: business users press it without opening anything.
  */
 function RequestErrorDetails({ info, extra, children }: RequestErrorDetailsProps) {
     const sessionId = useAppSelector(state => state.session.sessionId)
@@ -62,10 +52,8 @@ function RequestErrorDetails({ info, extra, children }: RequestErrorDetailsProps
                     responseHeaders: info?.responseHeaders ?? null,
                     responseBody: info?.responseData ?? null,
                     userAgent: info?.browser ?? navigator.userAgent,
-                    // the two things of the browser the token renewal stands on, see `auth/rotationSafeUserManager`
                     webLocks: info?.webLocks ?? 'locks' in navigator,
                     indexedDb: info?.indexedDb ?? 'indexedDB' in window,
-                    // the three switches of the authorization as this browser runs them, see `constants/index.ts`
                     userManager: userManagerOfThisBrowser(),
                     authErrorMode: AUTH_ERROR_MODE,
                     signInCallbackDetection: signInCallbackDetectionOfThisBrowser()
@@ -81,7 +69,6 @@ function RequestErrorDetails({ info, extra, children }: RequestErrorDetailsProps
         message.success(t('Copied'), 1.5)
     }, [detailsText, t])
 
-    // the arrow both expands the details and copies them right away
     const handleToggle = useCallback(() => {
         if (!expanded) {
             handleCopyDetails()

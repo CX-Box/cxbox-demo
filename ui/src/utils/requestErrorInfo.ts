@@ -1,12 +1,7 @@
 import { AxiosError } from 'axios'
 import { TimedRequestConfig } from '../api'
 
-/**
- * Technical details of a failed HTTP request.
- *
- * Shown collapsed in error popups (what is needed to find the request in the server log from a screenshot)
- * and copied to clipboard in full by "Copy details to clipboard".
- */
+/** For the support team: it finds the failed request in the server log by these details */
 export interface RequestErrorInfo {
     statusCode?: number
     method?: string
@@ -16,18 +11,18 @@ export interface RequestErrorInfo {
     responseStatusText?: string
     responseHeaders?: Record<string, string>
     responseData?: string
-    /** What the browser is, and the two things of it the token renewal stands on (see `auth/rotationSafeUserManager`) */
     browser?: string
-    /** Without Web Locks the tabs do not queue their renewals: safe, but a tab may go for the SSO cookie while another one renews */
+    /**
+     * What the token renewal uses in the browser, see "Requirements" in `auth/rotationSafeUserManager/README.md`
+     */
     webLocks?: boolean
-    /** Without IndexedDB a refresh token cannot be recorded as sent, so it is never sent: the session lives by the SSO cookie alone */
     indexedDb?: boolean
 }
 
 const toIso = (timestamp?: number) => (timestamp ? new Date(timestamp).toISOString() : undefined)
 
 /**
- * Pure: timestamps are taken from the request config (see interceptors in `api/index.ts`), so it can be used inside reducers
+ * Takes the times from the request, not from `Date.now()`: the function is pure and is called in reducers
  */
 export function toRequestErrorInfo(error: AxiosError): RequestErrorInfo {
     const config = error.config as TimedRequestConfig | undefined

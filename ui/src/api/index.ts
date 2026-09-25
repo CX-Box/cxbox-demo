@@ -196,15 +196,9 @@ class Api extends CXBoxApi {
 const __AJAX_TIMEOUT__ = 900000
 const __CLIENT_ID__: number = Date.now()
 
-/**
- * Per-tab client id sent as `ClientId` header with every request; also written to the copied error details
- */
 export const CLIENT_ID = __CLIENT_ID__
 
 export interface TimedRequestConfig extends InternalAxiosRequestConfig {
-    /**
-     * Timestamps taken around the request (before the token refresh started and when the error arrived); used by error popup details
-     */
     requestStartedAt?: number
     requestFinishedAt?: number
 }
@@ -226,7 +220,7 @@ instance.interceptors.request.use(
     () => Promise.reject()
 )
 
-// registered last, so it runs first (request interceptors are applied in reverse order): the timestamp is taken before the token refresh
+// axios runs request interceptors in reverse order: this one runs first, and the start time includes the token renewal
 instance.interceptors.request.use(config => {
     ;(config as TimedRequestConfig).requestStartedAt = Date.now()
     return config
@@ -235,7 +229,6 @@ instance.interceptors.request.use(config => {
 instance.interceptors.response.use(
     response => response,
     error => {
-        // also reached by the synthetic 401 thrown from `platformSession.authorizeRequest`: request interceptor rejections flow through this chain
         if (error?.config) {
             ;(error.config as TimedRequestConfig).requestFinishedAt = Date.now()
         }

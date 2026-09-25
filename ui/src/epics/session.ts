@@ -17,15 +17,13 @@ const responseStatusMessages: Record<number, string> = {
 const ssoAuthEpic: RootEpic = action$ =>
     action$.pipe(
         filter(SSO_AUTH.match),
-        // exhaustMap, not switchMap: while the sign in is in flight a second SSO_AUTH (the effect of AppLayout fires again while
-        // the session is not active yet) must be ignored, not restart it
+        // a second SSO_AUTH during the sign in is ignored: AppLayout dispatches it again while the session is not active yet
         exhaustMap(() =>
             from(platformSession.signInOnPageLoad()).pipe(
                 switchMap(outcome => {
                     if (outcome === 'signedIn') {
                         return of(actions.login({ login: '', password: '' }))
                     }
-                    // nothing worked out: the popup with its ways out, not a spinner for ever
                     return outcome === 'failed'
                         ? of(
                               showAuthErrorPopup({
@@ -164,9 +162,8 @@ const logoutDoneEpic: RootEpic = action$ =>
 const AUTH_ERROR_STATUS_CODES: number[] = [401, 403]
 
 /**
- * Overrides core `httpError401Epic` (it dispatched `logoutDone` and left empty widgets): 401 and 403 open AuthErrorPopup,
- * also before the session is active (SSO login of a user without roles), except in basic-auth mode where the login form shows the error.
- * "No" snoozes the popup for a while.
+ * Replaces the core epic with the same name. It works before the session is active too: an SSO user without
+ * roles gets 403 at the sign in. Only in the build without SSO the login form shows that error itself.
  */
 const httpError401Epic: RootEpic = (action$, state$) =>
     action$.pipe(
@@ -182,12 +179,11 @@ const httpError401Epic: RootEpic = (action$, state$) =>
         )
     )
 
-/**
- * Overrides core `httpErrorDefaultEpic`: identical to the core one, but 403 is excluded
- * because it is handled by `httpError401Epic` above instead of the generic business error popup.
- */
 const knownHttpErrors = [...AUTH_ERROR_STATUS_CODES, 409, 418, 500]
 
+/**
+ * Replaces the core epic with the same name: 403 goes to `httpError401Epic`, not to the business error popup
+ */
 const httpErrorDefaultEpic: RootEpic = action$ =>
     action$.pipe(
         filter(actions.httpError.match),

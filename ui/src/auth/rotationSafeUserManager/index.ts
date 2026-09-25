@@ -1,6 +1,6 @@
 /**
- * A folder that does not depend on the application: take it as it is into any project that uses oidc-client-ts.
- * The README is the documentation of {@link RotationSafeUserManager}.
+ * A folder that does not depend on the application: copy it into any project that uses oidc-client-ts 3.5.0.
+ * How to use it and what it needs: README.md in this folder.
  */
 export { RotationSafeUserManager } from './rotationSafeUserManager'
 export { browserRefreshTokenLock } from './refreshTokenLock'

@@ -21,9 +21,6 @@ const ErrorPopup: FunctionComponent<ErrorPopupProps> = props => {
     const isSystemError = props.error.type === ApplicationErrorType.SystemError
     const isBusinessError = props.error.type === ApplicationErrorType.BusinessError
     const exportStateEnabled = useAppSelector(state => !!state.session.exportStateEnabled)
-    /**
-     * Details of the last failed API request (see `view.lastRequestError`); absent for errors that did not come from HTTP
-     */
     const requestInfo = useAppSelector(state => state.view.lastRequestError)
 
     const dispatch = useDispatch()

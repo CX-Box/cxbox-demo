@@ -28,9 +28,6 @@ interface ViewState extends Omit<CoreViewState, 'popupData'> {
         }
     }
     popupData?: PopupData
-    /**
-     * Details of the last failed API request, shown in ErrorPopup "Details" (cleared together with the error)
-     */
     lastRequestError: RequestErrorInfo | null
     groups?: {
         widgetNames: string[]
@@ -79,7 +76,6 @@ const viewReducerBuilder = reducers
             delete state.selectedRows[bcName]
         }
     })
-    // addMatcher: the core builder already has addCase handlers for these actions, a second addCase is not allowed
     .addMatcher(isAnyOf(actions.apiError), (state, action) => {
         state.lastRequestError = toRequestErrorInfo(action.payload.error)
     })

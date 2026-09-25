@@ -38,7 +38,7 @@ marked.use({
     }
 })
 
-const getExtensions = (getPlaceholder: () => string) => [
+const getExtensions = (getPlaceholder: () => string, readOnly: boolean) => [
     Document,
     Blockquote,
     BulletList,
@@ -52,7 +52,8 @@ const getExtensions = (getPlaceholder: () => string) => [
     ListKeymap,
     Text,
     TrailingNode,
-    Placeholder.configure({ placeholder: getPlaceholder }),
+    // a disabled field shows the placeholder too; the read-only view keeps the editor default (none)
+    Placeholder.configure({ placeholder: getPlaceholder, showOnlyWhenEditable: readOnly }),
     Code,
     CodeBlock,
     Italic,
@@ -103,7 +104,7 @@ export const useRichTextEditor = ({
 }: UseRichTextEditorProps) => {
     // placeholder is read through a ref: the extensions are created once for the editor
     const placeholderRef = useRef(placeholder)
-    const extensions = useMemo(() => getExtensions(() => placeholderRef.current ?? ''), [])
+    const extensions = useMemo(() => getExtensions(() => placeholderRef.current ?? '', readOnly), [readOnly])
 
     const lastEmittedRef = useRef(value)
     const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)

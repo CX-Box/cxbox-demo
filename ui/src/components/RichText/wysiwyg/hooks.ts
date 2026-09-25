@@ -52,7 +52,7 @@ const getExtensions = (getPlaceholder: () => string) => [
     ListKeymap,
     Text,
     TrailingNode,
-    Placeholder.configure({ placeholder: getPlaceholder }),
+    Placeholder.configure({ placeholder: getPlaceholder, showOnlyWhenEditable: false }),
     Code,
     CodeBlock,
     Italic,

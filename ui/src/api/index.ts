@@ -10,7 +10,7 @@ import { FilterGroup, FilterType } from '@interfaces/filters'
 import { saveAs } from 'file-saver'
 import { getFileNameFromDisposition } from '@utils/getFileNameFromDisposition'
 import { map, Observable } from 'rxjs'
-import { Auth } from '../auth'
+import { platformSession } from '../auth/platformSession'
 
 class Api extends CXBoxApi {
     loginByRoleRequest(role: string) {
@@ -193,17 +193,15 @@ class Api extends CXBoxApi {
     }
 }
 
-function tokenInterceptor(rqConfig: InternalAxiosRequestConfig) {
-    return Auth.getInstance()
-        .getUser()
-        .then(user => {
-            rqConfig.headers.Authorization = `Bearer ${user?.access_token}`
-            return rqConfig
-        })
-}
-
 const __AJAX_TIMEOUT__ = 900000
 const __CLIENT_ID__: number = Date.now()
+
+export const CLIENT_ID = __CLIENT_ID__
+
+export interface TimedRequestConfig extends InternalAxiosRequestConfig {
+    requestStartedAt?: number
+    requestFinishedAt?: number
+}
 
 const HEADERS = { Pragma: 'no-cache', 'Cache-Control': 'no-cache, no-store, must-revalidate' }
 
@@ -217,8 +215,25 @@ const instance = axios.create({
     }
 })
 
-if (!process.env['REACT_APP_NO_SSO']) {
-    instance.interceptors.request.use(tokenInterceptor, () => Promise.reject())
-}
+instance.interceptors.request.use(
+    rqConfig => platformSession.authorizeRequest(rqConfig),
+    () => Promise.reject()
+)
+
+// axios runs request interceptors in reverse order: this one runs first, and the start time includes the token renewal
+instance.interceptors.request.use(config => {
+    ;(config as TimedRequestConfig).requestStartedAt = Date.now()
+    return config
+})
+
+instance.interceptors.response.use(
+    response => response,
+    error => {
+        if (error?.config) {
+            ;(error.config as TimedRequestConfig).requestFinishedAt = Date.now()
+        }
+        return Promise.reject(error)
+    }
+)
 
 export const CxBoxApiInstance = new Api(instance, Infinity, Object.values(FilterType))

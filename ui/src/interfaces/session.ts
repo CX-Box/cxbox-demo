@@ -32,6 +32,8 @@ export type FeatureSetting = {
 }
 
 export interface LoginResponse extends interfaces.LoginResponse {
+    /** The same value is in the SIEM log (`session: ...`): support finds the requests of the user by it */
+    sessionId?: string
     userId: string
     featureSettings?: FeatureSetting[]
     screens: SessionScreen[]

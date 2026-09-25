@@ -2,7 +2,7 @@ import { interfaces, reducers } from '@cxbox-ui/core'
 import { createReducer } from '@reduxjs/toolkit'
 import { createSettingMap, createSettingPath } from '@utils/tableSettings'
 import { TableSettingsMap } from '@interfaces/tableSettings'
-import { actions } from '@actions'
+import { actions, AuthErrorInfo } from '@actions'
 import { FeatureSetting, SessionScreen } from '@interfaces/session'
 
 interface Session extends interfaces.Session {
@@ -12,7 +12,13 @@ interface Session extends interfaces.Session {
     screens: SessionScreen[]
     featureSettings?: FeatureSetting[]
     language?: string | null | undefined
+    sessionId?: string
+    authError: AuthErrorInfo | null
+    authErrorSnoozedUntil: number | null
 }
+
+/** Every place that shows AuthErrorPopup checks it: failed requests, the websocket */
+export const isAuthErrorSnoozed = (session: Session) => !!session.authErrorSnoozedUntil && Date.now() < session.authErrorSnoozedUntil
 
 const initialState: Session = {
     ...reducers.initialSessionState,
@@ -23,6 +29,8 @@ const initialState: Session = {
     notifications: [],
     isMetaRefreshing: false,
     tableSettings: null,
+    authError: null,
+    authErrorSnoozedUntil: null,
     disableDeprecatedFeatures: {
         popupCloseAfterChangeData: true,
         /**
@@ -62,6 +70,13 @@ const sessionReducerBuilder = reducers
         state.tableSettings = state.tableSettings ?? {}
 
         state.tableSettings[settingPath] = null
+    })
+    .addCase(actions.showAuthErrorPopup, (state, action) => {
+        state.authError = state.authError ?? action.payload
+    })
+    .addCase(actions.closeAuthErrorPopup, (state, action) => {
+        state.authError = null
+        state.authErrorSnoozedUntil = action.payload?.snoozedUntil ?? null
     }).builder
 
 export const sessionReducer = createReducer(initialState, sessionReducerBuilder)

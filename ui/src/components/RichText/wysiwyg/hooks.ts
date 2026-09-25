@@ -23,7 +23,7 @@ import { Heading } from '@tiptap/extension-heading'
 import { Paragraph } from '@tiptap/extension-paragraph'
 import { Dropcursor } from '@tiptap/extension-dropcursor'
 import { Document } from '@tiptap/extension-document'
-import { Gapcursor, TrailingNode, UndoRedo } from '@tiptap/extensions'
+import { Gapcursor, Placeholder, TrailingNode, UndoRedo } from '@tiptap/extensions'
 import { ListKeymap } from '@tiptap/extension-list'
 import { Text } from '@tiptap/extension-text'
 import { isDefined } from '@utils/isDefined'
@@ -38,7 +38,7 @@ marked.use({
     }
 })
 
-const getExtensions = () => [
+const getExtensions = (getPlaceholder: () => string) => [
     Document,
     Blockquote,
     BulletList,
@@ -52,6 +52,7 @@ const getExtensions = () => [
     ListKeymap,
     Text,
     TrailingNode,
+    Placeholder.configure({ placeholder: getPlaceholder }),
     Code,
     CodeBlock,
     Italic,
@@ -84,14 +85,25 @@ interface UseRichTextEditorProps {
     onChange: (markdown: string) => void
     readOnly?: boolean
     disabled?: boolean
+    placeholder?: string
     onBlur?: () => void
     onFocus?: () => void
 }
 
 const DEBOUNCE_MS = 120
 
-export const useRichTextEditor = ({ value, onChange, readOnly = false, disabled = false, onBlur, onFocus }: UseRichTextEditorProps) => {
-    const extensions = useMemo(() => getExtensions(), [])
+export const useRichTextEditor = ({
+    value,
+    onChange,
+    readOnly = false,
+    disabled = false,
+    placeholder,
+    onBlur,
+    onFocus
+}: UseRichTextEditorProps) => {
+    // placeholder is read through a ref: the extensions are created once for the editor
+    const placeholderRef = useRef(placeholder)
+    const extensions = useMemo(() => getExtensions(() => placeholderRef.current ?? ''), [])
 
     const lastEmittedRef = useRef(value)
     const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -111,6 +123,14 @@ export const useRichTextEditor = ({ value, onChange, readOnly = false, disabled 
         onBlur,
         onFocus
     })
+
+    useEffect(() => {
+        placeholderRef.current = placeholder
+        if (editor && !editor.isDestroyed) {
+            // an empty transaction redraws the placeholder, the document and onChange are untouched
+            editor.view.dispatch(editor.state.tr)
+        }
+    }, [editor, placeholder])
 
     useEffect(() => {
         if (!editor || editor.isDestroyed) {

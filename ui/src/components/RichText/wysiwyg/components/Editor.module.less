@@ -13,6 +13,14 @@
       margin-bottom: 0;
     }
 
+    p.is-editor-empty:first-child::before {
+      content: attr(data-placeholder);
+      float: left;
+      height: 0;
+      pointer-events: none;
+      color: var(--field-placeholder-color);
+    }
+
     ul,
     ol {
       padding: 0 1rem;

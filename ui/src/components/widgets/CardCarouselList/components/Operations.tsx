@@ -31,6 +31,8 @@ const Operations: React.FC<OperationsProps> = ({ operations, getOperationProps }
             return (
                 <Menu.Item
                     key={operation.type}
+                    data-test-widget-list-row-action-item={true}
+                    data-test-action-text={t(operation.text ?? '')}
                     className={styles.subOperation}
                     hidden={operation.hidden}
                     disabled={operation.disabled}
@@ -100,6 +102,8 @@ const Operations: React.FC<OperationsProps> = ({ operations, getOperationProps }
                         <Button
                             className={styles.button}
                             key={operation.type}
+                            data-test-widget-list-row-action-item={true}
+                            data-test-action-text={t(operation.text ?? '')}
                             icon={operation.icon}
                             type="default"
                             removeIndentation={!text}

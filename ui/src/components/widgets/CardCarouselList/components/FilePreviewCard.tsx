@@ -89,6 +89,7 @@ const FilePreviewCard: React.FC<FilePreviewCardProps> = ({
     return (
         <PreviewCardLayout
             {...cardProps}
+            data-test-widget-list-row-id={id}
             actions={<Operations getOperationProps={getOperationProps} operations={customOperationsWithDefault} />}
         >
             {children}

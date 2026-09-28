@@ -1,5 +1,6 @@
 import { CertificateData } from '@interfaces/sign'
 import { getCadesPlugin } from '@utils/cadesPlugin/getCadesPlugin'
+import moment from 'moment'
 
 export default async function getCertificates(): Promise<CertificateData[]> {
     const cadesplugin = getCadesPlugin()
@@ -17,8 +18,8 @@ export default async function getCertificates(): Promise<CertificateData[]> {
         const to = (await cert.ValidToDate) as Date
         const from = (await cert.ValidFromDate) as Date
         const name = await cert.GetInfo(0)
-        const validator = await cert.IsValid()
-        const isValid = await validator.Result
+        // IsValid() checks the chain and can take seconds; an expired certificate is not valid anyway
+        const isValid = moment().isAfter(to) ? false : await (await cert.IsValid()).Result
         const hasPrivateKey = await cert.HasPrivateKey()
 
         let privateKey = null

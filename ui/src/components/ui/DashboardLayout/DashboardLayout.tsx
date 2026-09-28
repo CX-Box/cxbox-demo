@@ -4,6 +4,7 @@ import Widget from '@components/Widget/Widget'
 import { createSkipWidgetList } from '@utils/createSkipWidgetList'
 import { groupByRow } from '@utils/layout'
 import { popupWidgets, sidebarWidgetsTypes } from '@constants/layout'
+import { useSidebarVisibility } from '@hooks/useSidebarVisibility'
 import { CustomWidgetDescriptor, WidgetTypes } from '@cxbox-ui/core'
 import { AppWidgetMeta, CustomWidgetTypes } from '@interfaces/widget'
 import styles from './DashboardLayout.less'
@@ -26,6 +27,7 @@ export function DashboardLayout(props: DashboardLayoutProps) {
 
         return props.widgets.filter(widget => sidebarWidgetsTypes.includes(widget.type) && !skipWidgetList.includes(widget.name))
     }, [props.widgets])
+    const isSidebarVisible = useSidebarVisibility(additionalInfoWidgets)
 
     const filePreviewWidget = useMemo(() => {
         return props.widgets.find(widget => widget.type === CustomWidgetTypes.FilePreview)
@@ -62,7 +64,7 @@ export function DashboardLayout(props: DashboardLayoutProps) {
         CommonWidgets
     )
 
-    if (additionalInfoWidgets.length !== 0) {
+    if (additionalInfoWidgets.length !== 0 && isSidebarVisible) {
         return (
             <Row gutter={24}>
                 <Col span={18}>{ProcessedCommonWidgets}</Col>

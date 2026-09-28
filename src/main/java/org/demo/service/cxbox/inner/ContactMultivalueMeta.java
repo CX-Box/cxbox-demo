@@ -15,7 +15,6 @@ public class ContactMultivalueMeta extends FieldMetaBuilder<ContactMultivalueDTO
 	@Override
 	public void buildRowDependentMeta(RowDependentFieldsMeta<ContactMultivalueDTO> fields,
 			InnerBcDescription bcDescription, Long id, Long parentId) {
-		fields.setEnabled(ContactMultivalueDTO_.id);
 		fields.setEnabled(ContactMultivalueDTO_.fullName);
 	}
 

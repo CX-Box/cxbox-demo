@@ -21,7 +21,7 @@ import { TREE_SHOW_MORE_PADDING_TOP } from '@constants/tree'
 
 export const AppLayout: React.FC = () => {
     const dispatch = useAppDispatch()
-    const noSSO = Boolean(process.env['REACT_APP_NO_SSO'])
+    const noSSO = process.env['REACT_APP_NO_SSO'] === 'true'
 
     const sessionActive = useAppSelector(state => state.session.active)
     const logoutRequested = useAppSelector(state => state.session.logout)

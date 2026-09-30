@@ -5,6 +5,7 @@ import { shallowEqual, useDispatch } from 'react-redux'
 import { useCallback, useMemo } from 'react'
 import { actions } from '@actions'
 import { DataItem } from '@cxbox-ui/core'
+import { isEmptyValue } from '@components/ColumnTitle/components/utils'
 
 type SelectedItem = Omit<DataItem, 'vstamp'>
 
@@ -29,19 +30,24 @@ export const useRowSelection = (widgetName: string) => {
             }
 
             const pickMapFieldKey = widget?.options?.massOp?.pickMapFieldKey
+            // values of grouping fields repeat in many records, the title is the first field that does not group
+            const groupingFields = widget?.options?.groupingHierarchy?.fields ?? []
 
             const titleKey =
                 pickMapFieldKey === null
                     ? pickMapFieldKey
-                    : pickMapFieldKey ?? (widget?.fields as WidgetField[])?.find(item => item?.key)?.key
+                    : pickMapFieldKey ??
+                      (widget?.fields as WidgetField[])?.find(item => item?.key && !groupingFields.includes(item.key))?.key
 
             if (titleKey) {
-                result.title = record.title ?? record[titleKey]
+                const title = record.title ?? record[titleKey]
+                // an empty chip cannot be told apart from others, the id is shown as for rows selected from a file
+                result.title = isEmptyValue(title) ? record.id : title
             }
 
             return result
         },
-        [widget?.fields, widget?.options?.massOp?.pickMapFieldKey]
+        [widget?.fields, widget?.options?.groupingHierarchy?.fields, widget?.options?.massOp?.pickMapFieldKey]
     )
 
     const selectItems = useCallback(

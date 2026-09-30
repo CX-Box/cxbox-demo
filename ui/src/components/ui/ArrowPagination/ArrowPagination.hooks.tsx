@@ -1,10 +1,15 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAppSelector } from '@store'
 import { shallowEqual, useDispatch } from 'react-redux'
 import { actions } from '@actions'
 import { WidgetMeta } from '@cxbox-ui/core'
 
-export function useArrowPagination(widget?: WidgetMeta) {
+/**
+ * The arrows go through the rows of the widget page by page and change the active record.
+ * With `recordId` they go from this row and give the next one to `onRecordChange`, the active record stays:
+ * rows of a mass operation are only viewed.
+ */
+export function useArrowPagination(widget?: WidgetMeta, recordId?: string, onRecordChange?: (recordId: string) => void) {
     const { bc, data, page, limit, total, hasNext } = useAppSelector(state => {
         const bc = widget?.bcName ? state.screen.bo.bc[widget.bcName] : undefined
         const data = bc ? state.data[bc.name] : undefined
@@ -24,9 +29,21 @@ export function useArrowPagination(widget?: WidgetMeta) {
     }, shallowEqual)
 
     const dispatch = useDispatch()
+    const currentRecordId = recordId ?? bc?.cursor
+
+    const selectRecord = useCallback(
+        (id: string) => {
+            if (recordId === undefined) {
+                dispatch(actions.bcSelectRecord({ bcName: bc?.name as string, cursor: id }))
+            } else {
+                onRecordChange?.(id)
+            }
+        },
+        [bc?.name, dispatch, onRecordChange, recordId]
+    )
 
     const getIndexOnPage = () => {
-        return data?.findIndex(item => item.id === (bc?.cursor as string)) ?? -1
+        return data?.findIndex(item => item.id === currentRecordId) ?? -1
     }
 
     const convertToIndexOnPage = (currentIndex: number) => {
@@ -36,18 +53,17 @@ export function useArrowPagination(widget?: WidgetMeta) {
     const [changePageType, setChangePageType] = useState<'previous' | 'next' | null>(null)
     const currentPageRef = useRef<number | null>(null)
 
-    // sets the cursor to the last record when moving to the previous page
+    // sets the last record when moving to the previous page; on the next page the active record becomes the first one by itself
     useEffect(() => {
-        if (changePageType === 'previous' && data?.length && !bc?.loading && page === currentPageRef.current) {
-            dispatch(
-                actions.bcSelectRecord({
-                    bcName: bc?.name as string,
-                    cursor: data?.[data?.length - 1]?.id as string
-                })
-            )
+        if (changePageType && data?.length && !bc?.loading && page === currentPageRef.current) {
+            if (changePageType === 'previous') {
+                selectRecord(data[data.length - 1].id as string)
+            } else if (recordId !== undefined) {
+                selectRecord(data[0].id as string)
+            }
             setChangePageType(null)
         }
-    }, [bc?.loading, bc?.name, changePageType, data, dispatch, page])
+    }, [bc?.loading, changePageType, data, page, recordId, selectRecord])
 
     const onChange = (index: number) => {
         if (bc && data) {
@@ -61,13 +77,8 @@ export function useArrowPagination(widget?: WidgetMeta) {
                 dispatch(actions.bcChangePage({ bcName: bc.name as string, page: page + 1, widgetName: widget?.name }))
                 currentPageRef.current = page + 1
                 setChangePageType('next')
-            } else if (bc.cursor !== data[indexOnPage].id) {
-                dispatch(
-                    actions.bcSelectRecord({
-                        bcName: bc.name as string,
-                        cursor: data[indexOnPage].id as string
-                    })
-                )
+            } else if (currentRecordId !== data[indexOnPage].id) {
+                selectRecord(data[indexOnPage].id as string)
             }
         }
     }

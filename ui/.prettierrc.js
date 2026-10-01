@@ -5,5 +5,11 @@ module.exports = {
   singleQuote: true,
   trailingComma: 'none',
   tabWidth: 4,
-  endOfLine: 'auto'
+  endOfLine: 'auto',
+  overrides: [
+    {
+      files: 'package.json',
+      options: { tabWidth: 2 }
+    }
+  ]
 }

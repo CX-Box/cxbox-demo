@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react'
-import { Icon, Menu, Modal, Skeleton, Spin } from 'antd'
+import { Icon, Menu, Skeleton, Spin } from 'antd'
 import styles from './RowOperationsMenu.less'
 import { useAppDispatch, useAppSelector } from '@store'
 import { useTranslation } from 'react-i18next'
@@ -9,7 +9,7 @@ import { actions, interfaces, isOperationGroup } from '@cxbox-ui/core'
 import { MenuProps } from 'antd/es/menu'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import { AppWidgetMeta } from '@interfaces/widget'
-import CryptoGeneratorContent from '@components/CryptoGeneratorContent/CryptoGeneratorContent'
+import CryptoGeneratorModal from '@components/CryptoGeneratorContent/CryptoGeneratorModal'
 import { selectBcMetaInProgress } from '@selectors/selectors'
 /**
  * {@link RowOperationsMenu | RowOperationsMenu} properties
@@ -85,9 +85,7 @@ export const RowOperationsMenu = ({ meta: widgetMeta, bcName: hierarchyBc, onSel
     const cryptoGeneratorModal = useMemo(() => {
         return (
             isOpenSingModal && (
-                <Modal visible onCancel={clearActiveSignOperation} footer={null}>
-                    <CryptoGeneratorContent meta={widgetMeta} operationType={activeSignOperation} onClose={clearActiveSignOperation} />
-                </Modal>
+                <CryptoGeneratorModal meta={widgetMeta} operationType={activeSignOperation} onClose={clearActiveSignOperation} />
             )
         )
     }, [activeSignOperation, clearActiveSignOperation, isOpenSingModal, widgetMeta])

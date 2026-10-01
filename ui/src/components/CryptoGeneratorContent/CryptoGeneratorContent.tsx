@@ -35,6 +35,10 @@ interface CryptoGeneratorContentProps {
     operationType: string
     meta: AppWidgetMeta
     onClose: () => void
+    /**
+     * Called when signing or encryption starts and ends. The popup uses it to block closing.
+     */
+    onInProgressChange?: (inProgress: boolean) => void
 }
 
 export function getErrorMessage(error: unknown): string {
@@ -88,7 +92,7 @@ const hasEncryptInGeneratorType = (generatorType: CryptoGeneratorTypes) =>
 const hasCombinedTypeInGeneratorType = (generatorType: CryptoGeneratorTypes) =>
     generatorType === 'signAndEncrypt' || generatorType === 'encryptAndSign'
 
-function CryptoGeneratorContent({ operationType, meta, onClose }: CryptoGeneratorContentProps) {
+function CryptoGeneratorContent({ operationType, meta, onClose, onInProgressChange }: CryptoGeneratorContentProps) {
     const { bcName, options, name: widgetName } = meta
     const { t } = useTranslation()
 
@@ -129,6 +133,8 @@ function CryptoGeneratorContent({ operationType, meta, onClose }: CryptoGenerato
     const [selectedEncCert, setSelectedEncCert] = React.useState<CertificateData | undefined>()
 
     const [certBusinessError, setCertBusinessError] = useState(false)
+
+    const [inProgress, setInProgress] = useState(false)
 
     useEffect(() => {
         if (certList) {
@@ -187,7 +193,8 @@ function CryptoGeneratorContent({ operationType, meta, onClose }: CryptoGenerato
                 return
             }
 
-            onClose()
+            setInProgress(true)
+            onInProgressChange?.(true)
 
             try {
                 const response = await CxBoxApiInstance.getFile(fileId)
@@ -288,12 +295,17 @@ function CryptoGeneratorContent({ operationType, meta, onClose }: CryptoGenerato
                         }
                     })
                 )
+            } finally {
+                setInProgress(false)
+                onInProgressChange?.(false)
+                onClose()
             }
         },
         [
             selectedSignCert,
             selectedEncCert,
             onClose,
+            onInProgressChange,
             fileId,
             dispatch,
             signatureFileIdKey,
@@ -428,6 +440,7 @@ function CryptoGeneratorContent({ operationType, meta, onClose }: CryptoGenerato
 
                         <Button
                             onClick={handleSignWithCondition}
+                            loading={inProgress}
                             disabled={
                                 (hasSignatureInGeneratorType(resolvedType) && !selectedSignCert) ||
                                 (hasEncryptInGeneratorType(resolvedType) && !selectedEncCert)

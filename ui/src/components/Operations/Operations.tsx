@@ -1,6 +1,6 @@
 import React, { ReactNode, useCallback, useMemo, useState } from 'react'
 import { isOperationGroup, WidgetTypes } from '@cxbox-ui/core'
-import { Icon, Modal } from 'antd'
+import { Icon } from 'antd'
 import { useAppSelector } from '@store'
 import styles from './Operations.less'
 import { useDispatch } from 'react-redux'
@@ -16,7 +16,7 @@ import { actions } from '@actions'
 import { AVAILABLE_MASS_STEPS } from '@components/widgets/Table/massOperations/constants'
 import { Operation, OperationGroup } from '@interfaces/rowMeta'
 import { useStaleValueWhileRowMetaLoading } from '@hooks/useStaleValueWhileRowMetaLoading'
-import CryptoGeneratorContent from '@components/CryptoGeneratorContent/CryptoGeneratorContent'
+import CryptoGeneratorModal from '@components/CryptoGeneratorContent/CryptoGeneratorModal'
 
 export interface OperationsProps {
     className?: string
@@ -92,9 +92,7 @@ function Operations(props: OperationsProps) {
     const cryptoGeneratorModal = useMemo(() => {
         return (
             isOpenSingModal && (
-                <Modal visible onCancel={clearActiveSignOperation} footer={null}>
-                    <CryptoGeneratorContent meta={widgetMeta} operationType={activeSignOperation} onClose={clearActiveSignOperation} />
-                </Modal>
+                <CryptoGeneratorModal meta={widgetMeta} operationType={activeSignOperation} onClose={clearActiveSignOperation} />
             )
         )
     }, [activeSignOperation, clearActiveSignOperation, isOpenSingModal, widgetMeta])

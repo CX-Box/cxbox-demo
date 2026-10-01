@@ -1,0 +1,45 @@
+{
+  "name": "clientEditAddress",
+  "title": "Address",
+  "type": "Form",
+  "bc": "clientEdit",
+  "fields": [
+    {
+      "label": "Address",
+      "key": "address",
+      "type": "richText"
+    }
+  ],
+  "options": {
+    "extract": {
+      "fields": {
+        "address": {
+          "labels": [
+            "Место нахождения Стороны-2",
+            "Юридический адрес"
+          ]
+        }
+      }
+    },
+    "layout": {
+      "rows": [
+        {
+          "cols": [
+            {
+              "fieldKey": "address",
+              "span": 24
+            }
+          ]
+        }
+      ]
+    },
+    "actionGroups": {
+      "include": [
+        "next",
+        "previous",
+        "finish",
+        "cancel-create"
+      ]
+    }
+  }
+}

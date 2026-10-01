@@ -28,6 +28,7 @@ public class ClientReadWriteMeta extends FieldMetaBuilder<ClientWriteDTO> {
 		fields.setEnabled(
 				ClientWriteDTO_.fullName,
 				ClientWriteDTO_.address,
+				ClientWriteDTO_.clientCode,
 				ClientWriteDTO_.importance,
 				ClientWriteDTO_.fieldOfActivity,
 				ClientWriteDTO_.briefId,

@@ -174,3 +174,25 @@ org:
       enabled: true
     dashboard:
       enabled: false
+
+# Заполнение формы из документа: две независимые модели, каждая настраивается одинаково
+demo:
+  ai:
+    # распознавание документа: текст с координатами
+    recognize:
+      provider: ${AI_RECOGNIZE_PROVIDER:pdfText}
+    # раскладывание распознанного по полям формы
+    mapping:
+      provider: ${AI_MAPPING_PROVIDER:chat}
+      base-url: ${AI_MAPPING_URL:http://localhost:49999/v1}
+      api-key: ${AI_MAPPING_KEY:}
+      model: ${AI_MAPPING_MODEL:qwen3-1.7b}
+      timeout: 120s
+      temperature: 0.0
+      max-tokens: 1024
+      window-chars: 6000
+      overlap-lines: 3
+      max-windows: 20
+      extra-body:
+        chat_template_kwargs:
+          enable_thinking: false

@@ -41,3 +41,14 @@ services:
       MINIO_ROOT_USER: "4eb6a7db8b58994ea61b"
       MINIO_ROOT_PASSWORD: "prCv8t9LGRH18FB5pLr5jqDZ/dixZkb9cFajueGW"
       MINIO_DEFAULT_BUCKETS: "edcs3gnsadevb"
+  # CXBOX-1300: language model for filling a form from a document. OpenAI-compatible API on http://localhost:49999/v1.
+  # The first start downloads the model (about 1.1 GB) into ./.tmp/llm, later starts are offline.
+  cxbox_llm:
+    image: ghcr.io/ggml-org/llama.cpp:server
+    command: -hf unsloth/Qwen3-1.7B-GGUF:Q4_K_M --alias qwen3-1.7b --host 0.0.0.0 --port 49999 -c 32768 --parallel 2 --jinja --no-ui
+    environment:
+      LLAMA_CACHE: /models
+    volumes:
+      - ./.tmp/llm:/models
+    ports:
+      - "49999:49999"

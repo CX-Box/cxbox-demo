@@ -25,13 +25,23 @@
       "gridWidth": 24
     },
     {
+      "widgetName": "clientEditBrief",
+      "position": 31,
+      "gridWidth": 12
+    },
+    {
+      "widgetName": "clientEditAddress",
+      "position": 32,
+      "gridWidth": 24
+    },
+    {
       "widgetName": "companySuggestionPickList",
       "position": 100,
       "gridWidth": 24
     }
   ],
   "rolesAllowed": [
-   "CXBOX_USER",
+    "CXBOX_USER",
     "ADMIN"
   ]
 }

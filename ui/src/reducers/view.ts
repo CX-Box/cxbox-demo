@@ -4,6 +4,7 @@ import { actions, partialUpdateRecordForm, resetRecordForm, setBcCount, setRecor
 import { PopupData } from '@interfaces/view'
 import { RowMeta } from '@interfaces/rowMeta'
 import { treeActions } from '../slices/tree'
+import { RequestErrorInfo, toRequestErrorInfo } from '@utils/requestErrorInfo'
 
 interface ViewState extends Omit<CoreViewState, 'popupData'> {
     rowMeta: {
@@ -27,6 +28,7 @@ interface ViewState extends Omit<CoreViewState, 'popupData'> {
         }
     }
     popupData?: PopupData
+    lastRequestError: RequestErrorInfo | null
     groups?: {
         widgetNames: string[]
         collapsedCondition?: {
@@ -51,7 +53,8 @@ const initialState: ViewState = {
     readOnly: false,
     popupData: { bcName: '' },
     bcRecordsCount: {},
-    recordForm: {}
+    recordForm: {},
+    lastRequestError: null
 }
 
 const viewReducerBuilder = reducers
@@ -72,6 +75,12 @@ const viewReducerBuilder = reducers
         if (state.selectedRows[bcName]) {
             delete state.selectedRows[bcName]
         }
+    })
+    .addMatcher(isAnyOf(actions.apiError), (state, action) => {
+        state.lastRequestError = toRequestErrorInfo(action.payload.error)
+    })
+    .addMatcher(isAnyOf(actions.closeViewError), state => {
+        state.lastRequestError = null
     })
     .addMatcher(isAnyOf(actions.showViewPopup, actions.showFileViewerPopup, actions.showWsNotificationPopup), (state, action) => {
         const { options, ...fileViewerPopupData } = action.payload

@@ -39,10 +39,10 @@
     }
 }
 
-.closeAllButton {
+.container .closeAllButton {
     display: none;
 }
 
-.closeAllButton:has(+ div :global(.ant-notification-notice)) {
+.container .closeAllButton:has(+ div :global(.ant-notification-notice)) {
     display: initial;
 }

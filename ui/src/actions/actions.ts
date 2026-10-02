@@ -9,8 +9,19 @@ import { FileViewerPopupOptions, WsNotificationPopupOptions } from '@interfaces/
 import { DataItem } from '@cxbox-ui/core'
 import { ViewerModeMass } from '../reducers/screen'
 import { PaginationMode } from '@constants/pagination'
+import { RequestErrorInfo } from '@utils/requestErrorInfo'
 
 export const SSO_AUTH = createAction('SSO_AUTH')
+
+export type AuthErrorStatusCode = 401 | 403
+
+export type AuthErrorInfo = RequestErrorInfo & { statusCode: AuthErrorStatusCode }
+
+/** Opens AuthErrorPopup after a 401 (the session has expired) or 403 (insufficient permissions) response */
+export const showAuthErrorPopup = createAction<AuthErrorInfo>('showAuthErrorPopup')
+
+/** `snoozedUntil`: the popup is not shown again until this time (a timestamp in milliseconds) */
+export const closeAuthErrorPopup = createAction<{ snoozedUntil?: number } | undefined>('closeAuthErrorPopup')
 
 /**
  * Declare your redux actions here with action name and payload type

@@ -83,6 +83,33 @@
     },
     "ignorePatterns": [
       "public/cadesplugin_api.js"
+    ],
+    "overrides": [
+      {
+        "files": [
+          "src/**/*.ts",
+          "src/**/*.tsx"
+        ],
+        "excludedFiles": [
+          "src/auth/**"
+        ],
+        "rules": {
+          "no-restricted-imports": [
+            "warn",
+            {
+              "paths": [
+                {
+                  "name": "oidc-client-ts",
+                  "message": "oidc-client-ts is used in src/auth only: a UserManager created by hand has no guard, see src/auth/rotationSafeUserManager"
+                }
+              ],
+              "patterns": [
+                "**/auth/rotationSafeUserManager/*"
+              ]
+            }
+          ]
+        }
+      }
     ]
   },
   "browserslist": {

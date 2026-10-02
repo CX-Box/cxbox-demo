@@ -17,7 +17,9 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.NonNull;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.resource.BearerTokenErrors;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 
 @RequiredArgsConstructor
@@ -62,6 +64,10 @@ public class OidcJwtTokenConverter implements Converter<Jwt, OidcAuthenticationT
 				login,
 				roles.stream().map(SimpleGrantedAuthority::getAuthority).collect(Collectors.toSet())
 		);
+
+		if (roles.isEmpty()) {
+			throw new OAuth2AuthenticationException(BearerTokenErrors.insufficientScope("User has no roles. Forbidden. HTTP 403", ROLES));
+		}
 
 		CxboxUserDetailsInterface userDetails = userService.createUserDetails(
 				user,

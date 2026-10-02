@@ -1,17 +1,35 @@
 import { Log, UserManager, WebStorageStateStore, UserManagerSettings } from 'oidc-client-ts'
 import axios from 'axios'
+import { OIDC_REQUEST_TIMEOUT_SECONDS, SILENT_REQUEST_TIMEOUT_SECONDS, userManagerOfThisBrowser } from '@constants'
+import { browserRefreshTokenLock, RotationSafeUserManager } from './rotationSafeUserManager'
 
 Log.setLogger(console)
+
+/** Zero does not switch a timeout off: without a timeout a request to the provider can wait forever */
+const seconds = (fromStand: unknown, byDefault: number) => (Number(fromStand) > 0 ? Number(fromStand) : byDefault)
 
 export class Auth {
     private static _instance: UserManager | null = null
 
     private constructor() {}
 
-    public static async init(url: string) {
-        if (Auth._instance) {
-            throw new Error(`UserManager is already initialized`)
+    private static _initializing: Promise<UserManager> | null = null
+
+    /**
+     * A singleton per page, also for calls made at the same time.
+     * Two plain UserManagers in one page would send the same refresh token twice
+     */
+    public static init(url: string) {
+        if (!Auth._initializing) {
+            Auth._initializing = Auth.create(url).catch(error => {
+                Auth._initializing = null
+                throw error
+            })
         }
+        return Auth._initializing
+    }
+
+    private static async create(url: string) {
         const { data } = await axios.get(url)
 
         const appBasePath = '/ui/#/'
@@ -29,7 +47,15 @@ export class Auth {
             userStore: new WebStorageStateStore({ store: localStorage })
         }
 
-        Auth._instance = new UserManager(oidcConfig)
+        // RotationSafeUserManager keeps its locks in IndexedDB. Where IndexedDB does not work, the plain UserManager
+        // is used: it renews tokens, only without the lock
+        if (userManagerOfThisBrowser() === 'original' || !(await browserRefreshTokenLock.isAvailable())) {
+            Auth._instance = new UserManager(oidcConfig)
+            return Auth._instance
+        }
+        oidcConfig.silentRequestTimeoutInSeconds = seconds(data['silentRequestTimeoutInSeconds'], SILENT_REQUEST_TIMEOUT_SECONDS)
+        oidcConfig.requestTimeoutInSeconds = seconds(data['requestTimeoutInSeconds'], OIDC_REQUEST_TIMEOUT_SECONDS)
+        Auth._instance = new RotationSafeUserManager(oidcConfig)
         return Auth._instance
     }
 

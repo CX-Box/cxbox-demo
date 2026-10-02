@@ -240,6 +240,20 @@
       "More {{n}}": "Еще {{n}}",
       "Other {{n}}": "Прочее {{n}}",
       "shown {{n}}": "показано {{n}}",
-      "No Data": "Нет данных"
+      "No Data": "Нет данных",
+        "Session has expired": "Время сессии истекло",
+        "Insufficient permissions": "Недостаточно прав",
+        "Sign in again": "Войти заново",
+        "Sign out": "Выйти",
+        "Close this window to copy unsaved data: it comes back in {{seconds}} seconds": "Закройте окно, чтобы скопировать несохранённые данные: оно появится снова через {{seconds}} с",
+        "The sign in service is not reachable. Check the connection and try again": "Сервис входа недоступен. Проверьте соединение и попробуйте ещё раз",
+        "Yes": "Да",
+        "No": "Нет",
+        "Session": "Сессия",
+        "Started": "Начало",
+        "Finished": "Окончание",
+        "Request": "Запрос",
+        "Copy details": "Скопировать детали",
+        "Copied": "Скопировано"
   }
 }

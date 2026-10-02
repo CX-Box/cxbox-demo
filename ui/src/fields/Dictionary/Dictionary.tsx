@@ -11,7 +11,8 @@ import { buildBcUrl } from '@utils/buildBcUrl'
 import * as dictionaryCustomIcons from '@assets/icons/dictionaryCustomIcons'
 import { AppDictionaryFieldMeta, EDictionaryMode } from '@interfaces/widget'
 import cn from 'classnames'
-import useFixSelectDropdownForScroll from '@hooks/useFixSelectDropdownForScroll'
+import useSelectDropdown from '@hooks/useSelectDropdown'
+import { dictionary_dropDownMaxCols } from '@fields/Dictionary/constants'
 import DrillDown from '@components/ui/DrillDown/DrillDown'
 
 export interface DictionaryProps extends BaseFieldProps {
@@ -61,13 +62,15 @@ const Dictionary: React.FC<DictionaryProps> = props => {
         }
     }, [value, multiple])
 
+    const dropdown = useSelectDropdown(selectRef, dictionary_dropDownMaxCols)
+
     const extendedProps: SelectProps<string | string[]> = {
         ...props,
         mode: multiple ? 'multiple' : 'default',
         value: resultValue as string | string[],
         allowClear: !!value,
         showSearch: true,
-        onDropdownVisibleChange: useFixSelectDropdownForScroll(selectRef),
+        ...dropdown,
         onChange: handleChange,
         dropdownMatchSelectWidth: false,
         forwardedRef: selectRef,

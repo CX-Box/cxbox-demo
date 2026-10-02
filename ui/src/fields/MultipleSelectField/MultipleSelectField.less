@@ -10,6 +10,11 @@
   background-color: white;
 }
 
+// antd keeps 32px on the right for its "selected" check, we show the choice by our own checkbox on the left
+.dropDownMenu:global(.ant-select-dropdown.ant-select-dropdown--multiple) :global(.ant-select-dropdown-menu-item) {
+  padding-right: 12px;
+}
+
 .readOnly {
   display: inline-block;
   max-width: 100%;

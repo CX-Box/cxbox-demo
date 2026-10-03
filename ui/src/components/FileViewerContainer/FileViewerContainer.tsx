@@ -10,7 +10,7 @@ import { useArrowPagination } from '@components/ui/ArrowPagination/ArrowPaginati
 import { useWindowSize } from '@hooks/useWindowSize'
 import { useVisibility } from '@hooks/useVisibility'
 import { trimString } from '@utils/fileViewer'
-import { actions } from '@cxbox-ui/core'
+import { actions } from '@actions'
 import { WidgetField } from '@cxbox-ui/schema'
 import { FileViewerPopupOptions } from '@interfaces/view'
 import { AppWidgetMeta, FileUploadFieldMeta } from '@interfaces/widget'
@@ -40,7 +40,9 @@ function FileViewerContainer({ isInline, widgetName, fieldKey }: FileViewerConta
 
     const popupData = useAppSelector(state => state.view.popupData)
     const { active, calleeWidgetName, options } = popupData ?? {}
-    const { type, calleeFieldKey, mode } = (options as FileViewerPopupOptions) ?? {}
+    const { type, calleeFieldKey, mode, recordId: popupRecordId } = (options as FileViewerPopupOptions) ?? {}
+    // the inline preview is not a popup: it always shows the active record
+    const shownRecordId = isInline ? undefined : popupRecordId
 
     const visible = isInline || active
     const fileFieldKey = fieldKey || calleeFieldKey
@@ -52,14 +54,28 @@ function FileViewerContainer({ isInline, widgetName, fieldKey }: FileViewerConta
     const { fileSource, fileIdKey = '', preview } = widgetField ?? {}
 
     const cursor = useAppSelector(state => selectBc(state, widget?.bcName)?.cursor)
-    const record = useAppSelector(selectBcDataItem(widget?.bcName, cursor)) as Record<string, string> | undefined
+    // the row given to the popup is only viewed, otherwise the preview shows the active record
+    const recordId = shownRecordId ?? cursor
+    const record = useAppSelector(selectBcDataItem(widget?.bcName, recordId)) as Record<string, string> | undefined
 
-    const paginationProps = useArrowPagination(widget)
+    const showRecord = useCallback(
+        (id: string) => {
+            dispatch(
+                actions.showFileViewerPopup({
+                    active: true,
+                    calleeWidgetName: calleeWidgetName as string,
+                    options: { ...(options as FileViewerPopupOptions), recordId: id }
+                })
+            )
+        },
+        [calleeWidgetName, dispatch, options]
+    )
+    const paginationProps = useArrowPagination(widget, shownRecordId, showRecord)
     const windowSize = useWindowSize()
     const { visibility: fullscreen, changeVisibility: setFullscreen } = useVisibility(false)
     const { internalWidget, isLoading, internalWidgetOperations } = usePopupFormWidget(widget as AppWidgetMeta)
 
-    const { fileName = '', downloadUrl } = useFileFieldData(widget?.bcName, cursor, fileFieldKey, fileIdKey, fileSource)
+    const { fileName = '', downloadUrl } = useFileFieldData(widget?.bcName, recordId, fileFieldKey, fileIdKey, fileSource)
 
     useEffect(() => {
         if (visible) {
@@ -214,19 +230,22 @@ function FileViewerContainer({ isInline, widgetName, fieldKey }: FileViewerConta
                     <div className={styles.footer}>
                         <ArrowPagination {...paginationProps} />
                     </div>
-                    <InnerWidget
-                        widgetName={internalWidget?.name}
-                        spinning={isLoading}
-                        afterWidget={
-                            internalWidget && internalWidgetOperations?.length ? (
-                                <Operations
-                                    operations={internalWidgetOperations}
-                                    bcName={internalWidget?.bcName}
-                                    widgetMeta={internalWidget}
-                                />
-                            ) : null
-                        }
-                    />
+                    {/* the record form works with the active record, a row that is only viewed has no form */}
+                    {!shownRecordId && (
+                        <InnerWidget
+                            widgetName={internalWidget?.name}
+                            spinning={isLoading}
+                            afterWidget={
+                                internalWidget && internalWidgetOperations?.length ? (
+                                    <Operations
+                                        operations={internalWidgetOperations}
+                                        bcName={internalWidget?.bcName}
+                                        widgetMeta={internalWidget}
+                                    />
+                                ) : null
+                            }
+                        />
+                    )}
                 </Popup>
             )}
         </>

@@ -23,6 +23,8 @@ import { AppWidgetMeta } from '@interfaces/widget'
 import { postInvokeHasRefreshBc } from '@utils/postInvokeHasRefreshBc'
 import { useFilterGroups } from '@components/widgets/Table/hooks/hooks'
 import Confirm from '@components/widgets/Table/massOperations/Confirm/Confirm'
+import MassCryptoConfirm, { MassCryptoProcessing } from '@components/widgets/Table/massOperations/Crypto/MassCryptoConfirm'
+import { getCryptoGenerator } from '@components/CryptoGeneratorContent/cryptoFile'
 import { FilterType } from '@interfaces/filters'
 import Title from '@components/widgets/Table/massOperations/Title'
 import TitleWithResult from '@components/widgets/Table/massOperations/TiltleWithResult'
@@ -68,6 +70,8 @@ const Layout: React.FC<LayoutProps> = ({ widgetName, bcName, children }) => {
         () => flattenOperations.find(operation => operation.type === operationType),
         [flattenOperations, operationType]
     )
+    // mass signing and encryption: certificates are chosen on the step "Confirm operation"
+    const isCryptoOperation = !!getCryptoGenerator(widget, operationType)
 
     const { select, selectItems, selectedRows, clearSelectedRows } = useRowSelection(widgetName)
 
@@ -167,6 +171,7 @@ const Layout: React.FC<LayoutProps> = ({ widgetName, bcName, children }) => {
     const filters = useAppSelector(state => state.screen.filters[bcName])
 
     const [wasOperationCall, setWasOperationCall] = useState(false)
+    const [cryptoProcessing, setCryptoProcessing] = useState<MassCryptoProcessing>()
 
     useEffect(() => {
         if (wasOperationCall && bcData?.length && !bc?.loading) {
@@ -256,7 +261,7 @@ const Layout: React.FC<LayoutProps> = ({ widgetName, bcName, children }) => {
                 visibleOperationsByStep.splice(0, 0, 'back', 'cancel')
 
                 if (currentMassOperation) {
-                    visibleOperationsByStep.push(hasMassPreInvoke ? 'next' : 'apply')
+                    visibleOperationsByStep.push(hasMassPreInvoke || isCryptoOperation ? 'next' : 'apply')
                 }
 
                 if (visibleOperationsByStep.includes(buttonType)) {
@@ -292,7 +297,8 @@ const Layout: React.FC<LayoutProps> = ({ widgetName, bcName, children }) => {
                             })
                         )
                         clearAllFilters()
-                        setWasOperationCall(true)
+                        // without preInvoke only mass signing gets here: it sends the action itself, after signing the files
+                        hasMassPreInvoke && setWasOperationCall(true)
                         moveToStep('Confirm operation')
                     }
                 }
@@ -308,8 +314,16 @@ const Layout: React.FC<LayoutProps> = ({ widgetName, bcName, children }) => {
             if (currentStep === 'Confirm operation') {
                 visibleOperationsByStep.splice(0, 0, 'back')
 
+                if (cryptoProcessing) {
+                    visibleOperationsByStep.push('interrupt-and-next')
+                }
+
                 if (visibleOperationsByStep.includes(buttonType)) {
                     result.hidden = false
+                }
+
+                if (buttonType === 'interrupt-and-next') {
+                    result.onClick = cryptoProcessing?.stop
                 }
 
                 if (buttonType === 'back') {
@@ -390,6 +404,7 @@ const Layout: React.FC<LayoutProps> = ({ widgetName, bcName, children }) => {
             cancel,
             changeStep,
             clearAllFilters,
+            cryptoProcessing,
             currentMassOperation,
             currentStep,
             defaultSort,
@@ -397,6 +412,7 @@ const Layout: React.FC<LayoutProps> = ({ widgetName, bcName, children }) => {
             exportTable,
             filters,
             hasMassPreInvoke,
+            isCryptoOperation,
             moveToStep,
             operationType,
             postInvoke,
@@ -412,7 +428,17 @@ const Layout: React.FC<LayoutProps> = ({ widgetName, bcName, children }) => {
 
     const getContent = () => {
         if (step === 'Confirm operation') {
-            return <Confirm widgetName={popupData?.widgetName ?? widgetName} />
+            return isCryptoOperation ? (
+                <MassCryptoConfirm
+                    widgetName={widgetName}
+                    bcName={bcName}
+                    operationType={operationType as string}
+                    hasPreInvoke={hasMassPreInvoke}
+                    onProcessingChange={setCryptoProcessing}
+                />
+            ) : (
+                <Confirm widgetName={popupData?.widgetName ?? widgetName} />
+            )
         }
         return children
     }
@@ -501,12 +527,12 @@ const Layout: React.FC<LayoutProps> = ({ widgetName, bcName, children }) => {
             title: item.step && t(item.step)
         }))
 
-        if (!currentMassOperation?.preInvoke) {
+        if (!currentMassOperation?.preInvoke && !isCryptoOperation) {
             result = result.filter(item => item.step !== 'Confirm operation')
         }
 
         return result
-    }, [currentMassOperation?.preInvoke, t])
+    }, [currentMassOperation?.preInvoke, isCryptoOperation, t])
 
     return (
         <AntdLayout style={{}}>

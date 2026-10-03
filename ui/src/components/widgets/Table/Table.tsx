@@ -14,6 +14,7 @@ import { usePresetFilterSettings } from './hooks/usePresetFilterSettings'
 import { DataItem, IdItemResponse } from '@cxbox-ui/core'
 import { ControlColumn, CustomDataItem } from '@components/widgets/Table/Table.interfaces'
 import { getGroupingHierarchyRowKey, useGroupingHierarchy } from '@components/widgets/Table/groupingHierarchy'
+import { isRecordRow } from '@components/widgets/Table/groupingHierarchy/utils/isRecordRow'
 import { selectBcData } from '@selectors/selectors'
 import ColumnOrderSettingModal from '@components/widgets/Table/components/ColumnOrderSettingModal'
 import StandardTable from '@components/widgets/Table/StandardTable'
@@ -85,7 +86,12 @@ function Table<T extends CustomDataItem>({
         bcPageLimit,
         scrollToTop,
         showUp
-    } = useGroupingHierarchy(unprocessedMeta as AppWidgetGroupingHierarchyMeta, isGroupingHierarchy)
+    } = useGroupingHierarchy(
+        unprocessedMeta as AppWidgetGroupingHierarchyMeta,
+        isGroupingHierarchy,
+        // after the rows are selected, only the groups with selected rows are shown: the data is filtered by their ids
+        enabledMassMode && step !== 'Select rows'
+    )
 
     const processedMeta = useMemo(
         () => ({ ...unprocessedMeta, fields: sortFieldsByGroupKeys(unprocessedMeta.fields) }),
@@ -117,16 +123,27 @@ function Table<T extends CustomDataItem>({
             showCheckboxForMassMode
                 ? {
                       type: 'checkbox',
-                      selectedRowKeys,
+                      // grouped rows of GroupingHierarchy show the first record of a group in the group row, its key is the group path
+                      selectedRowKeys: enabledGrouping
+                          ? selectedRowKeys?.map(id => getGroupingHierarchyRowKeyByRecordId(id) ?? id)
+                          : selectedRowKeys,
                       onSelect: select,
                       onSelectAll: selectAll,
-                      getCheckboxProps: () => ({
+                      getCheckboxProps: record => ({
                           'data-test-widget-list-column-select': true,
-                          disabled: disabledCheckboxForMassMode
+                          disabled: disabledCheckboxForMassMode || (enabledGrouping && !isRecordRow(record))
                       })
                   }
                 : undefined,
-        [disabledCheckboxForMassMode, select, selectAll, selectedRowKeys, showCheckboxForMassMode]
+        [
+            disabledCheckboxForMassMode,
+            enabledGrouping,
+            getGroupingHierarchyRowKeyByRecordId,
+            select,
+            selectAll,
+            selectedRowKeys,
+            showCheckboxForMassMode
+        ]
     )
 
     const currentRowSelection = enabledMassMode ? rowSelectionForMassMode : rest.rowSelection

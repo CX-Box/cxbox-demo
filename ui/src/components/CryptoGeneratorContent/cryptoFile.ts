@@ -35,11 +35,49 @@ export interface CryptoFileBaseNames {
     encryptedFileBaseName: string
 }
 
+export const CRYPTO_GENERATOR_TYPES: readonly CryptoGeneratorTypes[] = ['sign', 'encrypt', 'signAndEncrypt', 'encryptAndSign']
+
+/**
+ * `type` of the settings is not one of `CRYPTO_GENERATOR_TYPES`: a mistake in the widget meta, nothing can be signed
+ */
+export const hasInvalidCryptoGeneratorType = (cryptoGenerator?: CryptoGeneratorItem) =>
+    !!cryptoGenerator?.type && !CRYPTO_GENERATOR_TYPES.includes(cryptoGenerator.type)
+
 /**
  * Settings of CryptoPro for the action: an item of `options.cryptoGenerator` of the widget
  */
 export const getCryptoGenerator = (widget: AppWidgetMeta | undefined, actionName: string | undefined) =>
     widget?.options?.cryptoGenerator?.find(item => item.actionName === actionName)
+
+/**
+ * What the action does: `type` of the settings, or, without it, the result files that the settings have keys for
+ */
+export const resolveCryptoGeneratorType = (
+    {
+        type: cryptoGeneratorType,
+        signatureFileIdKey,
+        signatureFileNameKey,
+        encryptedFileIdKey,
+        encryptedFileNameKey
+    }: CryptoGeneratorItem = {} as CryptoGeneratorItem
+) => {
+    const hasSignConfig = !!(signatureFileIdKey || signatureFileNameKey)
+    const hasEncryptConfig = !!(encryptedFileIdKey || encryptedFileNameKey)
+
+    let resolvedType: CryptoGeneratorTypes = cryptoGeneratorType || 'sign'
+
+    if (!cryptoGeneratorType) {
+        if (hasSignConfig && !hasEncryptConfig) {
+            resolvedType = 'sign'
+        } else if (!hasSignConfig && hasEncryptConfig) {
+            resolvedType = 'encrypt'
+        } else if (hasSignConfig && hasEncryptConfig) {
+            resolvedType = 'encryptAndSign'
+        }
+    }
+
+    return resolvedType
+}
 
 export const hasSignatureInGeneratorType = (generatorType: CryptoGeneratorTypes) =>
     generatorType === 'sign' || generatorType === 'signAndEncrypt' || generatorType === 'encryptAndSign'
@@ -114,7 +152,13 @@ export async function createCryptoData(
         }
     }
 
-    return strategies[generatorType]()
+    const strategy = strategies[generatorType]
+
+    if (!strategy) {
+        throw new Error(`Unknown type "${generatorType}" of options.cryptoGenerator, expected: ${CRYPTO_GENERATOR_TYPES.join(', ')}`)
+    }
+
+    return strategy()
 }
 
 /**

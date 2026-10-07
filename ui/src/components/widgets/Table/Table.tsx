@@ -30,6 +30,9 @@ import TableSettings from '@components/widgets/Table/components/TableSettings'
 import { buildTableColumns } from '@components/widgets/Table/utils/buildTableColumns'
 import { useTableRows } from '@components/widgets/Table/hooks/useTableRows'
 
+// without expandIcon antd draws its own icon for rows with children, the grouped rows of GroupingHierarchy have them
+const noExpandIcon = () => null
+
 interface TableProps<T extends CustomDataItem> extends AntdTableProps<T> {
     meta: AppWidgetTableMeta | AppWidgetGroupingHierarchyMeta
     primaryColumn?: ControlColumn<T>
@@ -336,7 +339,7 @@ function Table<T extends CustomDataItem>({
             onHeaderRow={onHeaderRow}
             expandedRowKeys={expandedRowKeys}
             expandIconColumnIndex={getExpandIconColumnIndex(controlColumns, resultedFields, currentRowSelection?.type)}
-            expandIcon={enabledMassMode ? undefined : resultExpandIcon}
+            expandIcon={enabledMassMode ? noExpandIcon : resultExpandIcon}
             expandedRowRender={enabledMassMode ? undefined : expandedRowRender}
             onExpand={onExpand}
             hideRowActions={hideRowActions}

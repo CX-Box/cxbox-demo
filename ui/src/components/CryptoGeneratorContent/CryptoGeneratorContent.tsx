@@ -7,7 +7,7 @@ import { CxBoxApiInstance } from 'api'
 import { ApplicationErrorType, PendingDataItem } from '@cxbox-ui/core'
 import { CertificateData } from '@interfaces/sign'
 import styles from './CryptoGeneratorContent.module.less'
-import { AppWidgetMeta, CryptoGeneratorItem, CryptoGeneratorTypes } from '@interfaces/widget'
+import { AppWidgetMeta, CryptoGeneratorTypes } from '@interfaces/widget'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import getCertificates from '@utils/cadesPlugin/getCertificates'
 import moment from 'moment'
@@ -26,16 +26,19 @@ import Button from '@components/ui/Button/Button'
 import { DateFormat } from '@interfaces/date'
 import {
     createCryptoData,
+    CRYPTO_GENERATOR_TYPES,
     CryptoFile,
     CryptoSettings,
     getCryptoFileBaseNames,
     getCryptoGenerator,
     hasEncryptInGeneratorType,
+    hasInvalidCryptoGeneratorType,
     hasSignatureInGeneratorType,
+    resolveCryptoGeneratorType,
     uploadCryptoData
 } from '@components/CryptoGeneratorContent/cryptoFile'
 
-const SIGN_CONTENT_STATES = Lookup.create(['PLUGIN_ERROR', 'LOADING', 'CERTIFICATES_EMPTY', 'CERTIFICATES_FOUND'])
+const SIGN_CONTENT_STATES = Lookup.create(['CONFIG_ERROR', 'PLUGIN_ERROR', 'LOADING', 'CERTIFICATES_EMPTY', 'CERTIFICATES_FOUND'])
 
 interface CryptoGeneratorContentProps {
     operationType: string
@@ -52,6 +55,10 @@ interface CryptoGeneratorContentProps {
      * Replaces signing of the current record, used by mass signing
      */
     onExecute?: (settings: CryptoSettings) => void
+    /**
+     * Text of the button instead of "Execute", when the button does not sign yet
+     */
+    executeText?: string
 }
 
 export function getErrorMessage(error: unknown): string {
@@ -69,34 +76,7 @@ export function getErrorMessage(error: unknown): string {
     return String(error)
 }
 
-const resolveCryptoGeneratorType = (
-    {
-        type: cryptoGeneratorType,
-        signatureFileIdKey,
-        signatureFileNameKey,
-        encryptedFileIdKey,
-        encryptedFileNameKey
-    }: CryptoGeneratorItem = {} as CryptoGeneratorItem
-) => {
-    const hasSignConfig = !!(signatureFileIdKey || signatureFileNameKey)
-    const hasEncryptConfig = !!(encryptedFileIdKey || encryptedFileNameKey)
-
-    let resolvedType: CryptoGeneratorTypes = cryptoGeneratorType || 'sign'
-
-    if (!cryptoGeneratorType) {
-        if (hasSignConfig && !hasEncryptConfig) {
-            resolvedType = 'sign'
-        } else if (!hasSignConfig && hasEncryptConfig) {
-            resolvedType = 'encrypt'
-        } else if (hasSignConfig && hasEncryptConfig) {
-            resolvedType = 'encryptAndSign'
-        }
-    }
-
-    return resolvedType
-}
-
-function CryptoGeneratorContent({ operationType, meta, onClose, onInProgressChange, onExecute }: CryptoGeneratorContentProps) {
+function CryptoGeneratorContent({ operationType, meta, onClose, onInProgressChange, onExecute, executeText }: CryptoGeneratorContentProps) {
     const { bcName, name: widgetName } = meta
     const { t } = useTranslation()
 
@@ -113,6 +93,7 @@ function CryptoGeneratorContent({ operationType, meta, onClose, onInProgressChan
     } = cryptoGenerator || {}
 
     const resolvedType: CryptoGeneratorTypes = resolveCryptoGeneratorType(cryptoGenerator)
+    const configError = hasInvalidCryptoGeneratorType(cryptoGenerator)
 
     const dispatch = useDispatch()
 
@@ -137,7 +118,13 @@ function CryptoGeneratorContent({ operationType, meta, onClose, onInProgressChan
     const [inProgress, setInProgress] = useState(false)
 
     useEffect(() => {
-        if (certList) {
+        if (configError) {
+            console.error(`Unknown type "${cryptoGenerator?.type}" of options.cryptoGenerator for the action ${actionName}`)
+        }
+    }, [actionName, configError, cryptoGenerator?.type])
+
+    useEffect(() => {
+        if (certList || configError) {
             return
         }
 
@@ -162,7 +149,7 @@ function CryptoGeneratorContent({ operationType, meta, onClose, onInProgressChan
                 setCertBusinessError(true)
             }
         })()
-    }, [certList, dispatch])
+    }, [certList, configError, dispatch])
 
     const updatePendingData = React.useCallback(
         (data: CryptoFile, pickMap: Record<string, keyof CryptoFile>) => {
@@ -285,6 +272,9 @@ function CryptoGeneratorContent({ operationType, meta, onClose, onInProgressChan
     const actualCertificate = filterActiveCertificates(certList)
 
     const currentState = useMemo(() => {
+        if (configError) {
+            return SIGN_CONTENT_STATES.CONFIG_ERROR
+        }
         if (cadesPluginError) {
             return SIGN_CONTENT_STATES.PLUGIN_ERROR
         }
@@ -296,7 +286,7 @@ function CryptoGeneratorContent({ operationType, meta, onClose, onInProgressChan
         }
 
         return SIGN_CONTENT_STATES.CERTIFICATES_FOUND
-    }, [actualCertificate.length, cadesPluginError, certEmpty, certList])
+    }, [actualCertificate.length, cadesPluginError, certEmpty, certList, configError])
 
     const createCertSelect = useCallback(
         (value: string | undefined, onChange: (value: string | undefined) => void) => {
@@ -319,6 +309,16 @@ function CryptoGeneratorContent({ operationType, meta, onClose, onInProgressChan
     return (
         <>
             <Switch test={currentState}>
+                <Case value={SIGN_CONTENT_STATES.CONFIG_ERROR}>
+                    <Typography className={styles.typography}>
+                        {t('Unknown crypto generator type', {
+                            type: cryptoGenerator?.type,
+                            actionName,
+                            types: CRYPTO_GENERATOR_TYPES.join(', ')
+                        })}
+                    </Typography>
+                </Case>
+
                 <Case value={SIGN_CONTENT_STATES.PLUGIN_ERROR}>
                     <Typography className={styles.typography}>
                         <Trans
@@ -397,7 +397,7 @@ function CryptoGeneratorContent({ operationType, meta, onClose, onInProgressChan
                                 (hasEncryptInGeneratorType(resolvedType) && !selectedEncCert)
                             }
                         >
-                            {t('Execute')}
+                            {executeText ?? t('Execute')}
                         </Button>
                     </FieldBaseThemeWrapper>
                 </Case>

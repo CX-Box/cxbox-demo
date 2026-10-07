@@ -31,6 +31,10 @@ interface MassCryptoRow {
     options?: Record<string, string>
     success?: false
     errorMessage?: string
+    /**
+     * What the files in `options` were made from, see `getCryptoKey`. It stays in the selected rows and is not sent
+     */
+    cryptoKey?: string
 }
 
 type RowResult = Omit<MassCryptoRow, 'id'>
@@ -46,10 +50,21 @@ const toOptions = ({ signature, encrypted }: CryptoFiles): Record<string, string
 })
 
 /**
+ * The same settings and the same document file give the same result: such a row is not signed again
+ */
+const getCryptoKey = ({ generatorType, signaturePackage, signatureType, signCert, encCert }: CryptoSettings, documentFileId: string) =>
+    [generatorType, signaturePackage, signatureType, signCert?.publicKeyValue, encCert?.publicKeyValue, documentFileId].join('|')
+
+/**
  * Signs and/or encrypts the files of the selected rows one by one, then sends the mass action once.
  *
- * `stop` ends the processing at once, without waiting for the current row: the mass action is sent for the processed rows,
- * the other rows get an error. Leaving the step ends the processing too, and then the mass action is not sent.
+ * A repeated run, for example after the action failed, sends the files that the rows already got with the same certificates
+ * from the same documents and processes only the other rows: the files are not created again.
+ *
+ * `stop` interrupts the processing: the current row is finished and its files are sent, the next rows are not started
+ * and get the error "Interrupted". If no row is processed yet, nothing is sent: `run` gives `false`.
+ * Leaving the step ends the processing at once and the mass action is not sent; the files of the current row
+ * are still uploaded, there is nothing to cancel the upload with.
  */
 export const useMassCrypto = (widgetName: string, bcName: string, operationType: string) => {
     const { t } = useTranslation()
@@ -61,18 +76,28 @@ export const useMassCrypto = (widgetName: string, bcName: string, operationType:
 
     const [progress, setProgress] = useState<MassCryptoProgress | null>(null)
     const [processing, setProcessing] = useState(false)
-    const stopRef = useRef<(() => void) | null>(null)
+    // `stop` was called, the current row is being finished
+    const [stopping, setStopping] = useState(false)
+    // interrupts the run, `null` when nothing runs or the run is already interrupted
+    const interruptRef = useRef<(() => void) | null>(null)
+    // ends the waiting of the run at once when the step is left
+    const abortRef = useRef<(() => void) | null>(null)
     const unmountedRef = useRef(false)
 
     useEffect(() => {
         return () => {
             unmountedRef.current = true
-            stopRef.current?.()
+            abortRef.current?.()
         }
     }, [])
 
     const stop = useCallback(() => {
-        stopRef.current?.()
+        if (!interruptRef.current) {
+            return
+        }
+        interruptRef.current()
+        interruptRef.current = null
+        setStopping(true)
     }, [])
 
     const processRow = useCallback(
@@ -104,25 +129,31 @@ export const useMassCrypto = (widgetName: string, bcName: string, operationType:
     )
 
     const run = useCallback(
-        async (settings: CryptoSettings, send: () => void) => {
+        async (settings: CryptoSettings, send: () => void): Promise<boolean> => {
             if (!cryptoGenerator || !selectedRows?.length) {
-                return
+                return false
             }
 
             const ids = selectedRows.map(row => row.id as string)
+            const previousRows = new Map((selectedRows as unknown as MassCryptoRow[]).map(row => [row.id, row]))
             const results = new Map<string, RowResult>()
-            let stopped = false
-            const stopSignal = new Promise<null>(resolve => {
-                stopRef.current = () => {
-                    stopped = true
+            let interrupted = false
+            const interruptSignal = new Promise<null>(resolve => {
+                interruptRef.current = () => {
+                    interrupted = true
                     resolve(null)
                 }
             })
+            const abortSignal = new Promise<null>(resolve => {
+                abortRef.current = () => resolve(null)
+            })
 
             setProcessing(true)
+            setStopping(false)
             setProgress({ done: 0, total: ids.length })
 
             try {
+                // the records are not waited for when interrupted: no row is processed yet
                 const records = await Promise.race([
                     lastValueFrom(
                         CxBoxApiInstance.fetchBcDataAll(screenName, buildBcUrl(bcName), {
@@ -130,24 +161,32 @@ export const useMassCrypto = (widgetName: string, bcName: string, operationType:
                             _limit: ids.length
                         })
                     ),
-                    stopSignal
+                    interruptSignal,
+                    abortSignal
                 ])
                 // signature is checked until the first success: the same certificate signs every row
                 let verified = false
 
                 for (const id of ids) {
-                    if (stopped || !records) {
+                    if (interrupted || unmountedRef.current || !records) {
                         break
                     }
 
+                    const record = records.find(item => item.id === id)
+                    const documentFileId = record?.[cryptoGenerator.documentFileIdKey!] as string | undefined
+                    const cryptoKey = documentFileId ? getCryptoKey(settings, documentFileId) : undefined
+                    const previous = previousRows.get(id)
+
+                    if (cryptoKey && previous?.options && previous.cryptoKey === cryptoKey) {
+                        results.set(id, { options: previous.options, cryptoKey })
+                        setProgress({ done: results.size, total: ids.length })
+                        continue
+                    }
+
+                    // the current row is finished when interrupted, its files are sent; leaving the step does not wait for it
                     const result: RowResult | null = await Promise.race([
-                        processRow(
-                            records.find(item => item.id === id),
-                            settings,
-                            cryptoGenerator,
-                            !verified
-                        ),
-                        stopSignal
+                        processRow(record, settings, cryptoGenerator, !verified),
+                        abortSignal
                     ])
 
                     if (!result) {
@@ -155,7 +194,7 @@ export const useMassCrypto = (widgetName: string, bcName: string, operationType:
                     }
 
                     verified = verified || !!result.options
-                    results.set(id, result)
+                    results.set(id, result.options ? { ...result, cryptoKey } : result)
                     setProgress({ done: results.size, total: ids.length })
                 }
             } catch (e) {
@@ -163,13 +202,21 @@ export const useMassCrypto = (widgetName: string, bcName: string, operationType:
                 ids.forEach(id => results.has(id) || results.set(id, { success: false, errorMessage }))
             }
 
-            stopRef.current = null
+            interruptRef.current = null
+            abortRef.current = null
 
             if (unmountedRef.current) {
-                return
+                return false
             }
 
             setProcessing(false)
+            setStopping(false)
+
+            if (interrupted && !results.size) {
+                // nothing is processed, so there is nothing to send: the step is shown again
+                setProgress(null)
+                return false
+            }
 
             const rows: MassCryptoRow[] = ids.map(id => ({
                 // selectRows merges the fields: undefined clears the values of a previous run of the step
@@ -177,15 +224,17 @@ export const useMassCrypto = (widgetName: string, bcName: string, operationType:
                 options: undefined,
                 success: undefined,
                 errorMessage: undefined,
+                cryptoKey: undefined,
                 ...(results.get(id) ?? { success: false, errorMessage: t('Interrupted') })
             }))
             // selected rows keep `options` only to send them with the mass action, DataItem has no object values
             dispatch(actions.selectRows({ bcName, dataItems: rows as unknown as Array<Omit<DataItem, 'vstamp'>> }))
             // the progress stays until the results step; if the action fails, the step is repeated with Back
             send()
+            return true
         },
         [bcName, cryptoGenerator, dispatch, processRow, screenName, selectedRows, t]
     )
 
-    return { progress, processing, run, stop }
+    return { progress, processing, stopping, run, stop }
 }

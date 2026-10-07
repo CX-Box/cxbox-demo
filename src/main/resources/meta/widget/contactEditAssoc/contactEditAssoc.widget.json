@@ -22,6 +22,9 @@
     }
   ],
   "options": {
+    "edit": {
+      "style": "none"
+    },
     "actionGroups": {
       "include": [
       ]

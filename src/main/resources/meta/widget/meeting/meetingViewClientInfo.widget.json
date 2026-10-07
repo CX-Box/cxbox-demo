@@ -14,6 +14,12 @@
       "label": "Contact",
       "key": "contactName",
       "type": "input"
+    },
+    {
+      "label": "Additional Contacts",
+      "key": "additionalContacts",
+      "displayedKey": "additionalContactsDisplayedKey",
+      "type": "multivalue"
     }
   ],
   "options": {
@@ -35,6 +41,14 @@
           "cols": [
             {
               "fieldKey": "contactName",
+              "span": 12
+            }
+          ]
+        },
+        {
+          "cols": [
+            {
+              "fieldKey": "additionalContacts",
               "span": 12
             }
           ]

@@ -27,7 +27,7 @@ const processingStepButtons: StepButtonsFactory = (state, actions) => ({
     // leaving the step during the processing would lose the signed files, the processing is stopped with its own button
     back: { onClick: actions.backToReview, disabled: !!state.processing },
     // while the action is being sent there is nothing to stop
-    ...(state.processing?.stop ? { 'interrupt-and-next': { onClick: state.processing.stop, loading: state.processing.stopping } } : {})
+    ...(state.processing?.stop ? { 'interrupt-and-next': { onClick: state.processing.stop } } : {})
 })
 
 /**

@@ -11,10 +11,6 @@ export interface MassOperationProcessing {
      * `undefined` when the rows are processed and the action is being sent: there is nothing to stop
      */
     stop?: () => void
-    /**
-     * `stop` was called and the processing is being finished, a repeated `stop` does nothing
-     */
-    stopping: boolean
 }
 
 type ButtonProps = ReturnType<NonNullable<OperationsProps['getOperationProps']>>

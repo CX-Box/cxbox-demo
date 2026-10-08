@@ -55,7 +55,7 @@ function MassCryptoSign({
     const { t } = useTranslation()
     const dispatch = useDispatch()
     const widget = useAppSelector(state => selectWidget(state, widgetName)) as AppWidgetMeta | undefined
-    const { progress, processing, stopping, run, stop } = useMassCrypto(widgetName, bcName, operationType)
+    const { progress, processing, run, stop } = useMassCrypto(widgetName, bcName, operationType)
     const sending = useOperationInProgress(bcName)(operationType)
 
     const send = useCallback(() => {
@@ -94,15 +94,15 @@ function MassCryptoSign({
         }
     }, [execute, settings])
 
-    // without a cleanup on every change: the buttons of the step would blink when `stopping` changes.
+    // without a cleanup on every change: the buttons of the step would blink.
     // Sending of the action is a part of the processing: the step is not left until the answer comes
     useEffect(() => {
         if (processing) {
-            onProcessingChange({ stop, stopping })
+            onProcessingChange({ stop })
         } else {
-            onProcessingChange(sending ? { stopping: false } : undefined)
+            onProcessingChange(sending ? {} : undefined)
         }
-    }, [onProcessingChange, processing, sending, stop, stopping])
+    }, [onProcessingChange, processing, sending, stop])
 
     useEffect(() => {
         return () => onProcessingChange(undefined)

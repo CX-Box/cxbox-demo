@@ -14,7 +14,7 @@ const FilterForm: React.FC<FilterFormProps> = ({ children, filtersCounter, onApp
     const { t } = useTranslation()
 
     return (
-        <Form onSubmit={onApply} layout="vertical">
+        <Form onSubmit={onApply} layout="vertical" data-test-filter-popup={true}>
             {children}
             <div className={styles.operators}>
                 <Button className={styles.button} data-test-filter-popup-apply={true} htmlType="submit">

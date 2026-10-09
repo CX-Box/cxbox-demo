@@ -13,8 +13,8 @@ import {
     utils,
     WidgetMeta
 } from '@cxbox-ui/core'
-import { EMPTY_ARRAY, FIELDS } from '@constants'
-import { actions, sendOperationSuccess, setBcCount } from '@actions'
+import { FIELDS } from '@constants'
+import { actions, resetBcCount, sendOperationSuccess, setBcCount } from '@actions'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import { AxiosError } from 'axios'
 import { postOperationRoutine } from './utils/postOperationRoutine'
@@ -33,6 +33,7 @@ import { isTreeWidget } from '@constants/widget'
 import { DEFAULT_TREE_PARENT_FIELD_KEY, normalizeNodeId } from '@utils/tree'
 import { selectBcFilters } from '@selectors/selectors'
 import { TREE_ROOT_ID } from '@constants/tree'
+import { loadBcCount } from './utils/loadBcCount'
 
 const getWidgetsForRowMetaUpdate = (state: RootState, activeBcName: string) => {
     const { widgets, pendingDataChanges } = state.view
@@ -99,17 +100,7 @@ const bcFetchCountEpic: RootEpic = (action$, state$, { api }) =>
                 const missingCountsBcNames = bcList.filter(
                     bc => findWidgetHasCount(bc, widgets, alternativePagination) && !(bc in state.view.bcRecordsCount) && bc in data
                 )
-                return concat(
-                    ...missingCountsBcNames.map(bc => {
-                        const screenName = state.screen.screenName
-                        const filters = utils.getFilters(state.screen.filters[bc] || EMPTY_ARRAY)
-                        const bcUrl = buildBcUrl(bc)
-                        return api.fetchBcCount(screenName, bcUrl, filters).pipe(
-                            mergeMap(({ data }) => of(setBcCount({ bcName: bc, count: data }))),
-                            catchError((error: AxiosError) => utils.createApiErrorObservable(error))
-                        )
-                    })
-                )
+                return concat(...missingCountsBcNames.map(bc => loadBcCount(state$, api, bc)))
             }
 
             const widgets = state.view.widgets as AppWidgetMeta[]
@@ -184,14 +175,10 @@ const bcFetchCountEpic: RootEpic = (action$, state$, { api }) =>
             }
 
             if (widgetWithCount) {
-                const bcName = widgetWithCount.bcName
-                const screenName = state.screen.screenName
-                const filters = utils.getFilters(state.screen.filters[bcName] || EMPTY_ARRAY)
-                const bcUrl = buildBcUrl(bcName)
-                return api.fetchBcCount(screenName, bcUrl, filters).pipe(
-                    mergeMap(({ data }) => of(setBcCount({ bcName, count: data }))),
-                    catchError((error: AxiosError) => utils.createApiErrorObservable(error))
-                )
+                return loadBcCount(state$, api, widgetWithCount.bcName)
+            } else if (actions.bcFetchDataSuccess.match(action) && action.payload.bcName in state.view.bcRecordsCount) {
+                // data is loaded on a view without the count: the count of the previous data must not stay
+                return of(resetBcCount({ bcName: action.payload.bcName }))
             } else {
                 return EMPTY
             }

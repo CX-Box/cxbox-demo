@@ -1,6 +1,5 @@
 import moment from 'moment'
 import React, { useEffect } from 'react'
-import { TimePicker } from 'antd'
 import { TimePickerProps } from 'antd/lib/time-picker'
 import ReadOnlyField from '../../components/ui/ReadOnlyField/ReadOnlyField'
 import { WidgetFieldBase } from '@cxbox-ui/schema'
@@ -9,6 +8,7 @@ import { useVisibility } from '@hooks/useVisibility'
 import Button from '@components/ui/Button/Button'
 import { useTranslation } from 'react-i18next'
 import { useAppSelector } from '@store'
+import TimePicker from '@components/ui/TimePicker/TimePicker'
 
 export const isoLocalFormatter = (date: moment.Moment) => date.format('YYYY-MM-DD[T]HH:mm:ss')
 

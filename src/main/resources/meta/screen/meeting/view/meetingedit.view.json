@@ -45,6 +45,11 @@
       "gridWidth": 24
     },
     {
+      "widgetName": "meetingEditResponsibleInfo",
+      "position": 65,
+      "gridWidth": 24
+    },
+    {
       "widgetName": "meetingEditResult",
       "position": 70,
       "gridWidth": 24

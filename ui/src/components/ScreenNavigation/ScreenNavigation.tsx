@@ -30,13 +30,10 @@ function ScreenNavigation() {
     useEffect(() => {
         // can't use .ant-menu-item-selected because dom nodes changes it too slowly
         const selectedItem = document.querySelector(`.${CSS.escape(styles.item)}.${selectedItemClass}`)
-        const menu = selectedItem?.closest(`.${CSS.escape(styles.container)}`)
-        // a click on a visible item keeps the list where it is: the list is scrolled only when the screen is opened by a link or a drilldown
-        const itemIsVisible =
-            selectedItem &&
-            menu &&
-            selectedItem.getBoundingClientRect().top >= menu.getBoundingClientRect().top &&
-            selectedItem.getBoundingClientRect().bottom <= menu.getBoundingClientRect().bottom
+        const itemRect = selectedItem?.getBoundingClientRect()
+        const menuRect = selectedItem?.closest(`.${CSS.escape(styles.container)}`)?.getBoundingClientRect()
+        // a fully visible item keeps the list where it is: the list is scrolled only when the screen is opened by a link or a drilldown
+        const itemIsVisible = Boolean(itemRect && menuRect && itemRect.top >= menuRect.top && itemRect.bottom <= menuRect.bottom)
         if (!itemIsVisible) {
             selectedItem?.scrollIntoView()
         }

@@ -8,6 +8,7 @@ import { selectors } from '@selectors'
 import { getInnerWidgetOptions, showUnsavedNotification } from './utils'
 import { selectBcData, selectWidget, selectWidgetByCondition } from '@selectors/selectors'
 import { FieldType } from '@cxbox-ui/schema'
+import { isInternalFormPopup } from '@utils/internalFormPopup'
 
 const { selectBcRecordPendingDataChanges, selectBcRecordForm, selectBc } = selectors
 
@@ -249,16 +250,12 @@ export const internalFormWidgetMiddleware: Middleware =
                 'popup'
             )
 
-            if (widgetWithInternalPopupWidgetCreate) {
+            // the create form of internalFormPopupWidgets is opened by the popup of the layout
+            if (widgetWithInternalPopupWidgetCreate && !isInternalFormPopup(widgetWithInternalPopupWidgetCreate, 'create')) {
                 const cardOptions = widgetWithInternalPopupWidgetCreate?.options?.card
                 const widgetField = (widgetWithInternalPopupWidgetCreate?.fields as FileUploadFieldMeta[])?.find(field =>
                     cardOptions?.valueFieldKey ? cardOptions?.valueFieldKey === field.key : field.type === FieldType.fileUpload
                 )
-
-                // popup create of a widget without a file field (e.g. calendar) is a form popup, not the file viewer
-                if (!widgetField) {
-                    return next(EMPTY_ACTION)
-                }
 
                 dispatch(
                     actions.showFileViewerPopup({

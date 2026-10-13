@@ -8,7 +8,7 @@ import listPlugin from '@fullcalendar/list'
 import FullCalendar from '@fullcalendar/react'
 import styles from './CalendarYear.less'
 import { useAppSelector } from '@store'
-import { selectBc, selectBcData, selectBcFilters } from '@selectors/selectors'
+import { selectBc, selectBcData, selectBcFilters, selectBcMetaInProgress } from '@selectors/selectors'
 import CalendarToolbar from '@components/widgets/CalendarList/components/toolbar/CalendarToolbar'
 import CalendarEvent from '@components/widgets/CalendarList/components/events/CalendarEvent'
 import { CustomContentGenerator, DateInput, EventContentArg } from '@fullcalendar/core'
@@ -38,13 +38,14 @@ import { useFieldDrilldown } from '@hooks/useFieldDrilldown'
 import { useEventDataTransform } from '@components/widgets/CalendarList/hooks'
 import { useCleanOldRangeFilters } from '@hooks/useCleanOldRangeFilters'
 import { isDefined } from '@utils/isDefined'
-import { useCalendarFormPopoverWidth } from '@components/widgets/CalendarList/components/others/CalendarFormPopoverSizer'
-import { POPUP_FORM_STYLES } from '@components/widgets/CalendarList/utils/calendarFormPopups'
+import { useInternalFormWidth } from '@components/InternalFormPopup/InternalFormPlace'
 import Calendar from '@components/widgets/CalendarList/components/views/Calendar'
 import { actions, resetRecordForm, setRecordForm } from '@actions'
-import { ConfigProvider } from 'antd'
+import { ConfigProvider, Spin } from 'antd'
+import DebugWidgetWrapper from '@components/DebugWidgetWrapper/DebugWidgetWrapper'
+import InnerForm from '@components/widgets/CalendarList/components/others/InnerForm'
 import RowOperationsButton from '@components/widgets/CalendarList/components/others/RowOperations/RowOperationsButton'
-import { useCalendarInternalForm } from '@components/widgets/CalendarList/hooks/useCalendarInternalForm'
+import { useInternalWidget } from '@hooks/useInternalWidget'
 import { useDispatch } from 'react-redux'
 import UniquePopoverHoverAndClick, {
     UniquePopoverHoverAndClickProps
@@ -247,8 +248,9 @@ const CalendarYear = React.forwardRef<CalendarYearApiHandle, CalendarYearProps>(
         changeYear(today)
     }, [changeYear])
 
-    const { internalWidget, internalWidgetActiveCursor, internalWidgetStyle, renderForm } = useCalendarInternalForm(meta)
-    const formPopoverWidth = useCalendarFormPopoverWidth(meta.name)
+    const { internalWidget, internalWidgetOperations, internalWidgetActiveCursor, internalWidgetStyle } = useInternalWidget(meta)
+    const rowMetaInProgress = useAppSelector(selectBcMetaInProgress(internalWidget?.bcName))
+    const formPopoverWidth = useInternalFormWidth(meta.options?.edit?.widget)
     const formPopoverStyle = useMemo(() => (formPopoverWidth ? { width: formPopoverWidth } : undefined), [formPopoverWidth])
     const dispatch = useDispatch()
 
@@ -282,14 +284,19 @@ const CalendarYear = React.forwardRef<CalendarYearApiHandle, CalendarYearProps>(
 
     const renderEventContent: CustomContentGenerator<EventContentArg> = useCallback(
         arg => {
-            const isInlineForm = isDefined(internalWidget) && POPUP_FORM_STYLES.includes(internalWidgetStyle)
+            const isLoading = (internalWidget && arg.event.id !== internalWidgetActiveCursor) || rowMetaInProgress
+            const isInlineForm = isDefined(internalWidget) && internalWidgetStyle === 'inlineForm'
             const withoutInlineForm = !isInlineForm
+            // "style": "popup": the form is drawn by the layout, a click on the event opens it
+            const isPopupForm = isDefined(internalWidget) && internalWidgetStyle === 'popup'
 
             const handleSelectRecord = () => {
                 if (arg.event.id !== internalWidgetActiveCursor) {
                     dispatch(actions.bcSelectRecord({ bcName: meta.bcName, cursor: arg.event.id }))
                 }
             }
+
+            const handleClick = isPopupForm ? () => toggleRecordForm(true, arg.event.extendedProps) : handleSelectRecord
 
             // Keep popups inside the event popover so it does not close, but not inside a clipping parent (richText toolbar)
             const getPopupContainer = (triggerNode: HTMLElement) =>
@@ -303,7 +310,16 @@ const CalendarYear = React.forwardRef<CalendarYearApiHandle, CalendarYearProps>(
 
             const clickContent = isInlineForm ? (
                 <ConfigProvider getPopupContainer={getPopupContainer}>
-                    {renderForm(arg.event.id, <RowOperationsButton widget={meta} />)}
+                    <DebugWidgetWrapper meta={internalWidget}>
+                        <Spin spinning={isLoading}>
+                            <InnerForm
+                                widgetMeta={internalWidget}
+                                operations={internalWidgetOperations}
+                                rowId={arg.event.id}
+                                additionalOperations={<RowOperationsButton widget={meta} />}
+                            />
+                        </Spin>
+                    </DebugWidgetWrapper>
                 </ConfigProvider>
             ) : undefined
 
@@ -329,7 +345,7 @@ const CalendarYear = React.forwardRef<CalendarYearApiHandle, CalendarYearProps>(
                         className={styles.calendarContainer}
                         data-test-widget-list-row-id={arg.event.id}
                         data-test-widget-list-row-type="Row"
-                        onClick={withoutInlineForm ? handleSelectRecord : undefined}
+                        onClick={withoutInlineForm ? handleClick : undefined}
                     >
                         <CalendarEvent
                             widgetName={meta.name}
@@ -347,10 +363,11 @@ const CalendarYear = React.forwardRef<CalendarYearApiHandle, CalendarYearProps>(
             handleDrillDownByTitle,
             internalWidget,
             internalWidgetActiveCursor,
+            internalWidgetOperations,
             internalWidgetStyle,
             isActiveRecord,
             meta,
-            renderForm,
+            rowMetaInProgress,
             titleFieldMeta,
             toggleRecordForm
         ]

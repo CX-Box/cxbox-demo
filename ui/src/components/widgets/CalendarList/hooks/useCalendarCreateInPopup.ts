@@ -1,14 +1,14 @@
 import { AppWidgetMeta } from '@interfaces/widget'
 import { useAppSelector } from '@store'
 import { selectWidget } from '@selectors/selectors'
-import { isCalendarCreatePopupStyle } from '@components/widgets/CalendarList/utils/calendarFormPopups'
+import { isInternalFormPopup } from '@utils/internalFormPopup'
 
 /**
- * Calendar widgets create records in a popup for options.create.style "inlineForm" (default) and "popup".
- * "inline" keeps creating in the table mode, "none" disables the create form.
+ * Whether the calendar creates records in the popup of the layout.
+ * Without its create form in the view the calendar creates records in the table mode.
  */
 export const useCalendarCreateInPopup = (widget: AppWidgetMeta) => {
     const createWidget = useAppSelector(selectWidget(widget.options?.create?.widget))
 
-    return !!createWidget && isCalendarCreatePopupStyle(widget)
+    return !!createWidget && isInternalFormPopup(widget, 'create')
 }

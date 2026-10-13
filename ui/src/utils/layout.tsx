@@ -3,7 +3,7 @@ import { sidebarWidgetsTypes } from '@constants/layout'
 import { AppWidgetMeta, CustomWidgetTypes } from '@interfaces/widget'
 
 /**
- * @param keepWidgetNames internal widgets that still take a place in the layout (e.g. calendar create and edit forms)
+ * @param keepWidgetNames internal widgets that still take a place in the layout (forms of internalFormPopupWidgets)
  */
 export function groupByRow<WidgetMeta extends AppWidgetMeta>(
     widgets: WidgetMeta[],

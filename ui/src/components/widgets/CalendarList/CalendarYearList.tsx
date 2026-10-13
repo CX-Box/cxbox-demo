@@ -39,8 +39,7 @@ const CalendarYearList: React.FC<CalendarYearListProps> = ({ meta: widget }) => 
     }, [isList])
 
     useEffect(() => {
-        // a new record being created in the popup has no dates yet, it must not switch the widget to the table
-        if (isIncorrectLimit || (!isCreateInPopup && (recordForm?.create || isIncorrectData))) {
+        if (isIncorrectLimit || isIncorrectData || (!isCreateInPopup && recordForm?.create)) {
             setIsList(true)
         }
     }, [isCreateInPopup, isIncorrectData, isIncorrectLimit, recordForm?.create])

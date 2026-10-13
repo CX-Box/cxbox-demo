@@ -7,8 +7,8 @@ import { popupWidgets, sidebarWidgetsTypes } from '@constants/layout'
 import { useSidebarVisibility } from '@hooks/useSidebarVisibility'
 import { CustomWidgetDescriptor, WidgetTypes } from '@cxbox-ui/core'
 import { AppWidgetMeta, CustomWidgetTypes } from '@interfaces/widget'
-import { useCalendarLayoutPlaces } from '@components/widgets/CalendarList/hooks/useCalendarLayoutPlaces'
-import { CalendarFormPopoverWidthProvider } from '@components/widgets/CalendarList/components/others/CalendarFormPopoverSizer'
+import { getInternalFormPlaces } from '@utils/internalFormPopup'
+import InternalFormPlace, { InternalFormWidthProvider } from '@components/InternalFormPopup/InternalFormPlace'
 import styles from './DashboardLayout.less'
 
 export interface DashboardLayoutProps {
@@ -20,11 +20,11 @@ export interface DashboardLayoutProps {
 }
 
 export function DashboardLayout(props: DashboardLayoutProps) {
-    const calendarLayoutPlaces = useCalendarLayoutPlaces(props.widgets)
+    const internalFormPlaces = useMemo(() => getInternalFormPlaces(props.widgets), [props.widgets])
 
     const widgetsByRow = React.useMemo(() => {
-        return groupByRow(props.widgets, props.skipWidgetTypes || [], calendarLayoutPlaces.widgetNames)
-    }, [props.widgets, props.skipWidgetTypes, calendarLayoutPlaces.widgetNames])
+        return groupByRow(props.widgets, props.skipWidgetTypes || [], Object.keys(internalFormPlaces))
+    }, [props.widgets, props.skipWidgetTypes, internalFormPlaces])
 
     const additionalInfoWidgets = useMemo(() => {
         const skipWidgetList = createSkipWidgetList(props.widgets)
@@ -40,14 +40,16 @@ export function DashboardLayout(props: DashboardLayoutProps) {
     const CommonWidgets = Object.values(widgetsByRow).map((row, rowIndex) => (
         <Row key={rowIndex} gutter={[24, 0]}>
             {row.map((widget, colIndex) => {
-                const calendarLayoutPlace = calendarLayoutPlaces.renderPlace(widget, colIndex)
-                const widgetCol = calendarLayoutPlace || (
+                const internalFormOwner = internalFormPlaces[widget.name]
+                const widgetCol = internalFormOwner ? (
+                    <InternalFormPlace key={colIndex} widget={widget} owner={internalFormOwner} />
+                ) : (
                     <Col key={colIndex} span={widget.gridWidth}>
                         <Widget meta={widget} card={props.card} customWidgets={props.customWidgets} customSpinner={props.customSpinner} />
                     </Col>
                 )
 
-                return popupWidgets.includes(widget.type as WidgetTypes) || calendarLayoutPlace ? (
+                return popupWidgets.includes(widget.type as WidgetTypes) || internalFormOwner ? (
                     <Col key={colIndex} span={24}>
                         <Row gutter={[24, 0]}>{widgetCol}</Row>
                     </Col>
@@ -73,7 +75,7 @@ export function DashboardLayout(props: DashboardLayoutProps) {
         return (
             <Row gutter={24}>
                 <Col span={18}>
-                    <CalendarFormPopoverWidthProvider>{ProcessedCommonWidgets}</CalendarFormPopoverWidthProvider>
+                    <InternalFormWidthProvider>{ProcessedCommonWidgets}</InternalFormWidthProvider>
                 </Col>
                 <Col span={6} className={styles.additionalInfoContainer}>
                     {additionalInfoWidgets.map(widget => (
@@ -88,7 +90,7 @@ export function DashboardLayout(props: DashboardLayoutProps) {
         )
     }
 
-    return <CalendarFormPopoverWidthProvider>{ProcessedCommonWidgets}</CalendarFormPopoverWidthProvider>
+    return <InternalFormWidthProvider>{ProcessedCommonWidgets}</InternalFormWidthProvider>
 }
 
 export default React.memo(DashboardLayout)

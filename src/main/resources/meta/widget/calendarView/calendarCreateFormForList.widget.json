@@ -1,6 +1,6 @@
 {
-  "name": "calendarFormForList",
-  "title": "",
+  "name": "calendarCreateFormForList",
+  "title": "Create meeting",
   "type": "Form",
   "bc": "calendarList",
   "fields": [

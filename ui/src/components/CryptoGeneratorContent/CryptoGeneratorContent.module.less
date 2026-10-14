@@ -32,6 +32,19 @@
   --field-tag-inner-height: calc(var(--field-tag-height) - (var(--field-border-size) * 2));
 }
 
+// The same width in the popup and in the step of mass signing: the width of the popup content (520px minus paddings).
+// Rows of the certificate info have a negative bottom margin (antd gutter): without flow-root the next block
+// starts over the last row, and its text flows around the columns.
+.certificates {
+  max-width: 472px;
+  display: flow-root;
+
+  // The step of mass signing is inside a table, and a table removes the margin under form items (its cells are edited in forms)
+  :global(.ant-form-item).formItem {
+    margin-bottom: 16px;
+  }
+}
+
 .formItem {
   :global(.ant-form-item-label) {
     color: #000000d9;

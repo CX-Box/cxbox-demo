@@ -13,6 +13,7 @@ import getCertificates from '@utils/cadesPlugin/getCertificates'
 import moment from 'moment'
 import CertificateInfo from '@components/CryptoGeneratorContent/CertificateInfo'
 import { Trans, useTranslation } from 'react-i18next'
+import i18n from 'i18next'
 import { filterActiveCertificates } from '@utils/cadesPlugin/filterActiveCertificates'
 import { Lookup } from '@utils/Lookup'
 import Switch from '@components/Switch/Switch'
@@ -27,10 +28,14 @@ import { DateFormat } from '@interfaces/date'
 import {
     createCryptoData,
     CRYPTO_GENERATOR_TYPES,
+    getDownloadedFile,
+    LARGE_FILE_SIZE,
     CryptoFile,
+    CryptoProgress,
     CryptoSettings,
     getCryptoFileBaseNames,
     getCryptoGenerator,
+    getSignCertificateWarning,
     hasEncryptInGeneratorType,
     hasInvalidCryptoGeneratorType,
     hasSignatureInGeneratorType,
@@ -60,6 +65,15 @@ interface CryptoGeneratorContentProps {
      */
     executeText?: string
 }
+
+/**
+ * Text of the progress of a large file: what is done, the part, and the number of the stage when there are two
+ */
+export const getLargeFileProgressText = (progress: CryptoProgress) =>
+    i18n.t(progress.steps > 1 ? 'Large file progress by stages' : 'Large file progress', {
+        ...progress,
+        stage: i18n.t(progress.stage === 'sign' ? 'Large file stage sign' : 'Large file stage encrypt')
+    })
 
 export function getErrorMessage(error: unknown): string {
     if (error instanceof Error) {
@@ -116,6 +130,8 @@ function CryptoGeneratorContent({ operationType, meta, onClose, onInProgressChan
     const [certBusinessError, setCertBusinessError] = useState(false)
 
     const [inProgress, setInProgress] = useState(false)
+    // the part of a large file being passed to the plugin, `null` for a small file
+    const [largeFileProgress, setLargeFileProgress] = useState<CryptoProgress | null>(null)
 
     useEffect(() => {
         if (configError) {
@@ -187,7 +203,11 @@ function CryptoGeneratorContent({ operationType, meta, onClose, onInProgressChan
 
             try {
                 const response = await CxBoxApiInstance.getFile(fileId)
-                const cryptoData = await createCryptoData(response.data, settings)
+                const file = getDownloadedFile(response)
+                const isLargeFile = file.size > LARGE_FILE_SIZE
+                const cryptoData = await createCryptoData(file, settings, true, {
+                    onProgress: isLargeFile ? setLargeFileProgress : undefined
+                })
 
                 if (!cryptoData.signatureBase64 && !cryptoData.encryptedBase64) {
                     return
@@ -224,6 +244,7 @@ function CryptoGeneratorContent({ operationType, meta, onClose, onInProgressChan
                     })
                 )
             } finally {
+                setLargeFileProgress(null)
                 setInProgress(false)
                 onInProgressChange?.(false)
                 onClose?.()
@@ -270,6 +291,7 @@ function CryptoGeneratorContent({ operationType, meta, onClose, onInProgressChan
     }
 
     const actualCertificate = filterActiveCertificates(certList)
+    const signCertWarning = getSignCertificateWarning(selectedSignCert, resolvedType)
 
     const currentState = useMemo(() => {
         if (configError) {
@@ -374,6 +396,7 @@ function CryptoGeneratorContent({ operationType, meta, onClose, onInProgressChan
                                         })}
                                     </Form.Item>
                                     <CertificateInfo data={selectedSignCert} />
+                                    {signCertWarning && <Typography.Paragraph type="warning">{signCertWarning}</Typography.Paragraph>}
                                 </>
                             )}
 
@@ -399,6 +422,9 @@ function CryptoGeneratorContent({ operationType, meta, onClose, onInProgressChan
                         >
                             {executeText ?? t('Execute')}
                         </Button>
+                        {largeFileProgress && (
+                            <Typography.Text type="secondary">{getLargeFileProgressText(largeFileProgress)}</Typography.Text>
+                        )}
                     </FieldBaseThemeWrapper>
                 </Case>
             </Switch>

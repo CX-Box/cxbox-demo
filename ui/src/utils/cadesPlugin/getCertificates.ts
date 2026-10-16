@@ -43,6 +43,7 @@ export default async function getCertificates(): Promise<CertificateData[]> {
 
         const algorithm = await publicKey.Algorithm
         const algorithmFriendlyName = await algorithm.FriendlyName
+        const keyAlgorithmOid = await algorithm.Value
 
         certs.push({
             to,
@@ -57,6 +58,7 @@ export default async function getCertificates(): Promise<CertificateData[]> {
             cryptoProvider,
             privateKeyLink,
             algorithmFriendlyName,
+            keyAlgorithmOid,
             publicKeyValue
         })
     }

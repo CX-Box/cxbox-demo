@@ -16,11 +16,15 @@ import { getErrorMessage } from '@components/CryptoGeneratorContent/CryptoGenera
 import {
     createCryptoData,
     CryptoFiles,
+    CryptoProgress,
     CryptoSettings,
     getCryptoFileBaseNames,
     getCryptoGenerator,
+    getDownloadedFile,
+    LARGE_FILE_SIZE,
     uploadCryptoData
 } from '@components/CryptoGeneratorContent/cryptoFile'
+import { CadesPluginError } from '@utils/cadesPlugin/CadesPluginError'
 
 /**
  * Element of `massIds_` for one row: files of the row in `options` (keys of `MassOptionType` on the backend),
@@ -37,11 +41,16 @@ interface MassCryptoRow {
     cryptoKey?: string
 }
 
-type RowResult = Omit<MassCryptoRow, 'id'>
+type RowResult = Omit<MassCryptoRow, 'id'> & {
+    /** The plugin does not answer: the next rows would wait behind it, so the run stops. It is not sent */
+    stopsRun?: boolean
+}
 
 export interface MassCryptoProgress {
     done: number
     total: number
+    /** The parts of the large file of the current row, `undefined` for a small file */
+    file?: CryptoProgress
 }
 
 const toOptions = ({ signature, encrypted }: CryptoFiles): Record<string, string> => ({
@@ -66,7 +75,12 @@ const getCryptoKey = ({ generatorType, signaturePackage, signatureType, signCert
  * Leaving the step ends the processing at once and the mass action is not sent.
  * The CryptoPro plugin cannot be cancelled, so the current row goes on in the background and its plugin window may stay
  * open, but it is not signed after the file is downloaded, its files are not uploaded after the signing and its result
- * is not kept. Only the files of a row whose upload has started stay in the storage unused.
+ * is not kept. A large file passed to the plugin in parts (hashed for signing or encrypted) stops between its parts.
+ * Only the files of a row whose upload has started
+ * stay in the storage unused.
+ * When the plugin does not answer a part of a large file, the run stops: the row gets the error of the plugin,
+ * the rows that are not processed get "Plugin not responding, run stopped" instead of "Interrupted", and the processed
+ * rows are sent. The plugin is busy, and every next row would fail the same way after the timeout.
  */
 export const useMassCrypto = (widgetName: string, bcName: string, operationType: string) => {
     const { t } = useTranslation()
@@ -104,7 +118,8 @@ export const useMassCrypto = (widgetName: string, bcName: string, operationType:
             config: CryptoGeneratorItem,
             verify: boolean,
             // the run does not wait for the row any more: nothing is signed or uploaded after that
-            isInterrupted: () => boolean
+            isInterrupted: () => boolean,
+            onProgress: (file: CryptoProgress | undefined) => void
         ): Promise<RowResult> => {
             const fileId = record?.[config.documentFileIdKey!] as string | undefined
 
@@ -117,7 +132,11 @@ export const useMassCrypto = (widgetName: string, bcName: string, operationType:
                 if (isInterrupted()) {
                     return { success: false, errorMessage: t('Interrupted') }
                 }
-                const cryptoData = await createCryptoData(response.data, settings, verify)
+                const file = getDownloadedFile(response)
+                const cryptoData = await createCryptoData(file, settings, verify, {
+                    isInterrupted,
+                    onProgress: file.size > LARGE_FILE_SIZE ? onProgress : undefined
+                })
                 if (isInterrupted()) {
                     return { success: false, errorMessage: t('Interrupted') }
                 }
@@ -127,7 +146,10 @@ export const useMassCrypto = (widgetName: string, bcName: string, operationType:
                     ? { options: toOptions(files) }
                     : { success: false, errorMessage: t('No files were created') }
             } catch (e) {
-                return { success: false, errorMessage: getErrorMessage(e) }
+                const stopsRun = e instanceof CadesPluginError && e.code === CadesPluginError.PLUGIN_NOT_RESPONDING
+                return { success: false, errorMessage: getErrorMessage(e), stopsRun }
+            } finally {
+                onProgress(undefined)
             }
         },
         [t]
@@ -150,6 +172,8 @@ export const useMassCrypto = (widgetName: string, bcName: string, operationType:
                 }
             })
             const isInterrupted = () => interrupted
+            // the rows that are not processed get it instead of "Interrupted" when the plugin stopped answering
+            let notProcessedMessage = t('Interrupted')
 
             setProcessing(true)
             setProgress({ done: 0, total: ids.length })
@@ -165,7 +189,8 @@ export const useMassCrypto = (widgetName: string, bcName: string, operationType:
                     ),
                     interruptSignal
                 ])
-                // signature is checked until the first success: the same certificate signs every row
+                // a signature made whole is checked until the first success: the same certificate signs every row;
+                // a signature by the hash is always checked
                 let verified = false
 
                 for (const id of ids) {
@@ -185,8 +210,13 @@ export const useMassCrypto = (widgetName: string, bcName: string, operationType:
                     }
 
                     // neither interrupting nor leaving the step waits for the current row
+                    const done = results.size
                     const result: RowResult | null = await Promise.race([
-                        processRow(record, settings, cryptoGenerator, !verified, isInterrupted),
+                        processRow(record, settings, cryptoGenerator, !verified, isInterrupted, file => {
+                            if (!isInterrupted() && !unmountedRef.current) {
+                                setProgress({ done, total: ids.length, file })
+                            }
+                        }),
                         interruptSignal
                     ])
 
@@ -194,9 +224,16 @@ export const useMassCrypto = (widgetName: string, bcName: string, operationType:
                         break
                     }
 
-                    verified = verified || !!result.options
-                    results.set(id, result.options ? { ...result, cryptoKey } : result)
+                    const { stopsRun, ...rowResult } = result
+                    verified = verified || !!rowResult.options
+                    results.set(id, rowResult.options ? { ...rowResult, cryptoKey } : rowResult)
                     setProgress({ done: results.size, total: ids.length })
+
+                    if (stopsRun) {
+                        interrupted = true
+                        notProcessedMessage = t('Plugin not responding, run stopped')
+                        break
+                    }
                 }
             } catch (e) {
                 const errorMessage = getErrorMessage(e)
@@ -224,7 +261,7 @@ export const useMassCrypto = (widgetName: string, bcName: string, operationType:
                 success: undefined,
                 errorMessage: undefined,
                 cryptoKey: undefined,
-                ...(results.get(id) ?? { success: false, errorMessage: t('Interrupted') })
+                ...(results.get(id) ?? { success: false, errorMessage: notProcessedMessage })
             }))
             // selected rows keep `options` only to send them with the mass action, DataItem has no object values
             dispatch(actions.selectRows({ bcName, dataItems: rows as unknown as Array<Omit<DataItem, 'vstamp'>> }))

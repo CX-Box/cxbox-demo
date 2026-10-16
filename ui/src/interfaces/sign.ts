@@ -11,6 +11,8 @@ export interface CertificateData {
     isValid: boolean
     hasPrivateKey: boolean
     algorithmFriendlyName: string
+    /** OID of the public key algorithm, e.g. `1.2.643.7.1.1.1.1` for GOST R 34.10-2012 256 */
+    keyAlgorithmOid?: string
     publicKeyValue: string
     cryptoProvider?: string
     privateKeyLink?: string
@@ -38,6 +40,11 @@ declare global {
             propset_ContentEncoding(encodingType: number): Promise<void>
             propset_Content(content: string): Promise<void>
             Encrypt(encodingType: number): Promise<string>
+            /**
+             * Encrypts the next part of base64 data; `isFinal` for the last one. Returns base64 of the next part
+             * of the encrypted message, or '' when there is nothing to return yet
+             */
+            StreamEncrypt(data: string, isFinal: boolean): Promise<string>
         }
     }
 

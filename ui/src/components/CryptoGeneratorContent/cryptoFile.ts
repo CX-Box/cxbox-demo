@@ -1,3 +1,4 @@
+import { t } from 'i18next'
 import { CxBoxApiInstance } from 'api'
 import { DataItem } from '@cxbox-ui/schema'
 import { CertificateData } from '@interfaces/sign'
@@ -5,7 +6,17 @@ import { AppWidgetMeta, CryptoGeneratorItem, CryptoGeneratorTypes } from '@inter
 import { SignaturePackage, SignatureType } from '@constants/cadesPlugin'
 import createVerifiedSignature from '@utils/cadesPlugin/createVerifiedSignature'
 import { encryptData } from '@utils/cadesPlugin/encryptData'
-import { base64ToPemBlob } from '@utils/cadesPlugin/base64ToPemBlob'
+import { Base64Text, CryptoInput, CryptoPartsOptions, toTextBlob } from '@utils/cadesPlugin/base64Data'
+import {
+    checkMaxFileSize,
+    checkRecipientFileSize,
+    fitsPluginMessageSize,
+    getLargestWholeSignedFileSize,
+    toMegabytes
+} from '@utils/cadesPlugin/checkPluginDataSize'
+import { getHashAlgorithmByKeyOid, getHashSigningAlgorithm } from '@utils/cadesPlugin/hashData'
+import { checkStreamEncrypt } from '@utils/cadesPlugin/streamEncrypt'
+import { resultDamaged } from '@utils/cadesPlugin/cryptoResult'
 
 export interface CryptoSettings {
     generatorType: CryptoGeneratorTypes
@@ -15,9 +26,57 @@ export interface CryptoSettings {
     encCert?: CertificateData
 }
 
+/**
+ * Results of signing and/or encryption: base64 of the signature and of the encrypted file, `Base64Text` for large data
+ */
 export interface CryptoData {
-    signatureBase64?: string
-    encryptedBase64?: string
+    signatureBase64?: string | Base64Text
+    encryptedBase64?: string | Base64Text
+}
+
+/**
+ * Progress is shown only for a file larger than this, bytes. The file has parts only when its base64
+ * (or the base64 of the data made from it) is longer than `PLUGIN_MESSAGE_LIMIT`
+ */
+export const LARGE_FILE_SIZE = 10 * 1024 * 1024
+
+/**
+ * The document downloaded to be signed or encrypted. A download cut short would be signed as if it were the whole
+ * document, and the signature would not match the document of the record, so its size is checked by `Content-Length`.
+ * The header is not compared when the response is compressed: then it is the size of the compressed data
+ *
+ * @throws CadesPluginError `RESULT_DAMAGED` when the size differs from `Content-Length` of an uncompressed response
+ */
+export function getDownloadedFile({ data, headers }: { data: Blob; headers: unknown }): Blob {
+    const header = (name: string) => (headers as Record<string, unknown> | undefined)?.[name]
+    const expected = Number(header('content-length'))
+    if (!header('content-encoding') && Number.isFinite(expected) && expected > 0 && data.size !== expected) {
+        throw resultDamaged(`the document is downloaded not whole: ${data.size} of ${expected} bytes`)
+    }
+    return data
+}
+
+/**
+ * Progress of {@link createCryptoData} on a large file
+ */
+export interface CryptoProgress {
+    /** What is done now */
+    stage: 'sign' | 'encrypt'
+    /** Number of the stage, from 1 */
+    step: number
+    /** Number of the stages: 2 for signing and encryption together */
+    steps: number
+    /** Number of the part of the stage, from 1 */
+    part: number
+    /** Number of the parts of the stage */
+    total: number
+}
+
+export interface CryptoDataOptions {
+    /** Called after each part of a large file */
+    onProgress?: (progress: CryptoProgress) => void
+    /** Checked between the parts: `true` stops the operation with the error "Interrupted" */
+    isInterrupted?: () => boolean
 }
 
 export interface CryptoFile {
@@ -101,21 +160,101 @@ export const getCryptoFileBaseNames = (
 })
 
 /**
+ * The smallest size of the `.enc` file as text, bytes: base64 of the encrypted message without the CMS around the data;
+ * the plugin breaks the base64 of small data into lines
+ */
+const encryptedTextSize = (size: number) => {
+    const base64 = Math.ceil(size / 3) * 4
+    return fitsPluginMessageSize(size) ? Math.ceil((base64 / 64) * 66) : base64
+}
+
+/**
+ * Checks the limits and the plugin before signing and encryption: the user should not wait for a result that is thrown away then.
+ * Everything is checked by the smallest size of the data (without the CMS a signature or encryption adds),
+ * so nothing that would work is refused here; each operation checks the exact size again.
+ * Near a border the work may still fail after the first stage: the signature is a few KB larger than the file
+ */
+async function checkBeforeStart(file: Blob, { generatorType, signaturePackage, signCert }: CryptoSettings) {
+    checkMaxFileSize(file.size)
+    const isAttached = signaturePackage === 'attached'
+
+    if (hasEncryptInGeneratorType(generatorType)) {
+        checkRecipientFileSize(file.size, 'encrypt')
+        if (!fitsPluginMessageSize(file.size)) {
+            await checkStreamEncrypt()
+        }
+    }
+
+    if (hasSignatureInGeneratorType(generatorType)) {
+        // encrypt and sign signs the .enc file: base64 text, 4/3 of the file
+        const isEncryptedSigned = generatorType === 'encryptAndSign'
+        if (isAttached) {
+            if (isEncryptedSigned) {
+                checkRecipientFileSize(encryptedTextSize(file.size), 'signEncrypted')
+            } else {
+                checkRecipientFileSize(file.size, 'sign')
+            }
+        }
+        if (!fitsPluginMessageSize(isEncryptedSigned ? encryptedTextSize(file.size) : file.size)) {
+            await getHashSigningAlgorithm(signCert!.itself, getLargestWholeSignedFileSize(isEncryptedSigned))
+        }
+    }
+}
+
+/**
+ * Warning under the signing certificate when its key is not GOST: such a certificate signs only files that go
+ * to the plugin whole. The size of the file is not known before it is downloaded, so the limit is named in advance
+ *
+ * @returns `undefined` for a GOST certificate, or when there is no certificate or its `keyAlgorithmOid`
+ */
+export function getSignCertificateWarning(certificate: CertificateData | undefined, generatorType: CryptoGeneratorTypes) {
+    const oid = certificate?.keyAlgorithmOid
+    if (!oid || getHashAlgorithmByKeyOid(oid)) {
+        return undefined
+    }
+    return t('Not GOST certificate', {
+        algorithm: certificate.algorithmFriendlyName || oid,
+        max: toMegabytes(getLargestWholeSignedFileSize(generatorType === 'encryptAndSign'), Math.floor)
+    })
+}
+
+/**
  * Signs and/or encrypts one file with the CryptoPro plugin.
- * `verify: false` skips the check of the created signature: mass signing checks it only until the first success.
+ * `verify: false` skips the check of a signature made whole: mass signing checks it only until the first success.
+ * A signature by the hash of a large file is always checked.
+ * `onProgress` and `isInterrupted` are called between the parts of a large file passed to the plugin.
+ *
+ * @throws CadesPluginError `FILE_TOO_LARGE` for a file larger than `MAX_CRYPTO_FILE_SIZE`,
+ * or than `RECIPIENT_MAX_FILE_SIZE` for an attached signature or encryption;
+ * `UNSUPPORTED_KEY_ALGORITHM` and `PLUGIN_OUTDATED` for a large file, before the file is passed to the plugin;
+ * `PLUGIN_NOT_RESPONDING` when the plugin does not answer a part in `PLUGIN_PART_TIMEOUT`;
+ * `RESULT_DAMAGED` when the downloaded file or a result assembled from parts is not whole;
+ * `SIGNATURE_VERIFICATION_FAILED` when the created signature is not valid;
+ * Error "Interrupted" when `isInterrupted` returns `true`
  */
 export async function createCryptoData(
     file: Blob,
-    { generatorType, signaturePackage, signatureType, signCert, encCert }: CryptoSettings,
-    verify: boolean = true
+    settings: CryptoSettings,
+    verify: boolean = true,
+    { onProgress, isInterrupted }: CryptoDataOptions = {}
 ): Promise<CryptoData> {
-    const sign = (data: Blob | string) =>
+    const { generatorType, signaturePackage, signatureType, signCert, encCert } = settings
+    await checkBeforeStart(file, settings)
+
+    const steps = hasCombinedTypeInGeneratorType(generatorType) ? 2 : 1
+    const partsOptions = (stage: CryptoProgress['stage'], step: number): CryptoPartsOptions => ({
+        isInterrupted,
+        onProgress: onProgress && ((part, total) => onProgress({ stage, step, steps, part, total }))
+    })
+
+    const sign = (data: CryptoInput, step: number = 1) =>
         createVerifiedSignature(signCert!.itself, data, {
             cadesType: signatureType,
             signaturePackage,
-            verify
+            verify,
+            ...partsOptions('sign', step)
         })
-    const encrypt = (data: Blob | string) => encryptData(encCert!.itself, data)
+    const encrypt = (data: CryptoInput, step: number = 1) => encryptData(encCert!.itself, data, partsOptions('encrypt', step))
 
     const strategies: Record<CryptoGeneratorTypes, () => Promise<CryptoData>> = {
         sign: async () => ({
@@ -134,7 +273,7 @@ export async function createCryptoData(
             const dataToEncrypt = signaturePackage === 'attached' ? signatureBase64 : file
             return {
                 signatureBase64,
-                encryptedBase64: await encrypt(dataToEncrypt)
+                encryptedBase64: await encrypt(dataToEncrypt, 2)
             }
         },
         encryptAndSign: async () => {
@@ -143,11 +282,10 @@ export async function createCryptoData(
             if (!encryptedBase64) {
                 return {}
             }
-            const encryptedBlob = base64ToPemBlob(encryptedBase64)
-
+            // the signature is of the .enc file as it is stored: base64 text
             return {
                 encryptedBase64,
-                signatureBase64: await sign(encryptedBlob)
+                signatureBase64: await sign(toTextBlob(encryptedBase64), 2)
             }
         }
     }
@@ -176,8 +314,8 @@ export async function uploadCryptoData(
     }: Pick<CryptoGeneratorItem, 'signatureFileIdKey' | 'signatureFileNameKey' | 'encryptedFileIdKey' | 'encryptedFileNameKey'>,
     { signatureFileBaseName, encryptedFileBaseName }: CryptoFileBaseNames
 ): Promise<CryptoFiles> {
-    const upload = async (base64: string, extension: 'sig' | 'enc', baseName: string): Promise<CryptoFile> => {
-        const response = await CxBoxApiInstance.uploadFile(base64ToPemBlob(base64), `${baseName}.${extension}`)
+    const upload = async (base64: string | Base64Text, extension: 'sig' | 'enc', baseName: string): Promise<CryptoFile> => {
+        const response = await CxBoxApiInstance.uploadFile(toTextBlob(base64), `${baseName}.${extension}`)
         return response.data.data
     }
 

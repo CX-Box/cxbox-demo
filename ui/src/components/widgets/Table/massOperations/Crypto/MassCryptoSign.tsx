@@ -7,7 +7,7 @@ import { useOperationInProgress } from '@hooks/useOperationInProgress'
 import { actions } from '@actions'
 import { selectWidget } from '@selectors/selectors'
 import { AppWidgetMeta } from '@interfaces/widget'
-import CryptoGeneratorContent from '@components/CryptoGeneratorContent/CryptoGeneratorContent'
+import CryptoGeneratorContent, { getLargeFileProgressText } from '@components/CryptoGeneratorContent/CryptoGeneratorContent'
 import { CryptoSettings } from '@components/CryptoGeneratorContent/cryptoFile'
 import { useMassCrypto } from '@components/widgets/Table/massOperations/Crypto/useMassCrypto'
 import type { MassOperationProcessing } from '@components/widgets/Table/massOperations/stepButtons'
@@ -119,6 +119,7 @@ function MassCryptoSign({
                     size="small"
                 />
                 <span className={styles.text}>{t('Mass crypto progress', progress)}</span>
+                {progress.file && <span className={styles.text}>{getLargeFileProgressText(progress.file)}</span>}
             </div>
         )
     }

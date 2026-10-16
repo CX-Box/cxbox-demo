@@ -17,28 +17,22 @@ import { useHover } from '@hooks/useHover'
 export const useTimeoutIdList = () => {
     const list = useRef<NodeJS.Timeout[]>([])
 
-    const clearList = useCallback(() => {
-        list.current.forEach(timeoutId => clearTimeout(timeoutId))
+    const clear = useCallback(() => {
+        list.current.forEach(clearTimeout)
         list.current = []
     }, [])
 
-    const removeItem = useCallback((timeoutId?: NodeJS.Timeout) => {
-        list.current.filter(id => id !== timeoutId)
+    const remove = useCallback((timeoutId?: NodeJS.Timeout) => {
+        list.current = list.current.filter(id => id !== timeoutId)
     }, [])
 
-    const addItem = useCallback((timeoutId?: NodeJS.Timeout) => {
-        timeoutId && list.current.push(timeoutId)
+    const add = useCallback((timeoutId?: NodeJS.Timeout) => {
+        if (timeoutId) {
+            list.current.push(timeoutId)
+        }
     }, [])
 
-    return useMemo(
-        () => ({
-            items: list,
-            clear: clearList,
-            remove: removeItem,
-            add: addItem
-        }),
-        [addItem, clearList, removeItem]
-    )
+    return useMemo(() => ({ clear, remove, add }), [add, clear, remove])
 }
 
 export const useFileUploadHint = (accept?: string) => {

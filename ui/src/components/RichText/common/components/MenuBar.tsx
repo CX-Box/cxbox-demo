@@ -59,8 +59,12 @@ export default function MenuBar({
         [toolbarDisabled]
     )
 
+    // The toolbar never takes the focus from the text: a click on a button or on a menu item (the menus are React children
+    // of the toolbar, so their events come here too) is not leaving the field, and the selection in the text stays.
+    const keepFocusInText = useCallback((event: React.MouseEvent) => event.preventDefault(), [])
+
     return (
-        <div className={cn('editor__header', className)} style={style}>
+        <div className={cn('editor__header', className)} style={style} onMouseDown={keepFocusInText}>
             <ToolbarOverflowWrapper
                 items={items}
                 renderItem={renderItem}

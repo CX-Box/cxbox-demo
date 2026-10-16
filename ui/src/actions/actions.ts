@@ -61,6 +61,13 @@ export const setBcCount = createAction<{
     bcName: string
 }>('setBcCount')
 
+/**
+ * Remove the number of records for BC
+ */
+export const resetBcCount = createAction<{
+    bcName: string
+}>('resetBcCount')
+
 export const setRecordForm = createAction<{
     widgetName: string
     bcName: string

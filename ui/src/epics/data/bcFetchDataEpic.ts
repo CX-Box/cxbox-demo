@@ -37,6 +37,7 @@ import { CustomWidgetTypes } from '@interfaces/widget'
 import { getAssocTreeSelectedNodeIds } from '@utils/getAssocTreeSelectedNodeIds'
 import { selectBcFilters, selectHasBcTree } from '@selectors/selectors'
 import { getAllDataFromTree } from '@utils/tree'
+import { isCursorInUrl } from '@utils/isCursorInUrl'
 
 const {
     checkShowCondition,
@@ -88,7 +89,7 @@ export const buildBcFetchContext = (state: RootState, bcName: string, options: B
         item => item.bcName === widget.bcName && item.type === WidgetTypes.AssocListPopup && item.options?.hierarchyFull
     )
     const filters = options.filters ?? (fullHierarchyWidget ? [] : state.screen.filters[bcName] || [])
-    const limitBySelfCursor = options.limitBySelfCursor ?? state.router.bcPath?.includes(`${bcName}/${bc.cursor}`)
+    const limitBySelfCursor = options.limitBySelfCursor ?? isCursorInUrl(state, bcName)
     const bcUrl = buildBcUrl(bcName, !!limitBySelfCursor, state) ?? ''
 
     const fetchParams: Record<string, any> = {

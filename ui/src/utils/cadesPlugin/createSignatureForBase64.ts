@@ -1,6 +1,7 @@
 import { getCadesPlugin } from '@utils/cadesPlugin/getCadesPlugin'
 import { CertificateAsync } from '@interfaces/sign'
-import { SIGNATURE_TYPES, SignaturePackage, SignatureType } from '@constants/cadesPlugin'
+import { SignaturePackage, SignatureType } from '@constants/cadesPlugin'
+import createSigner from '@utils/cadesPlugin/createSigner'
 
 export default async function createSignatureForBase64(
     certificate: CertificateAsync,
@@ -9,28 +10,7 @@ export default async function createSignatureForBase64(
 ): Promise<string> {
     const cadesplugin = getCadesPlugin()
 
-    // Setting up a signer
-    const oSigner = await cadesplugin.CreateObjectAsync('CAdESCOM.CPSigner')
-
-    const oSigningTimeAttr = await cadesplugin.CreateObjectAsync('CAdESCOM.CPAttribute')
-    await oSigningTimeAttr.propset_Name(cadesplugin.CAPICOM_AUTHENTICATED_ATTRIBUTE_SIGNING_TIME)
-    const oTimeNow = new Date()
-    await oSigningTimeAttr.propset_Value(oTimeNow)
-
-    const attr = await oSigner.AuthenticatedAttributes2
-    await attr.Add(oSigningTimeAttr)
-
-    const oDocumentNameAttr = await cadesplugin.CreateObjectAsync('CAdESCOM.CPAttribute')
-    await oDocumentNameAttr.propset_Name(cadesplugin.CADESCOM_AUTHENTICATED_ATTRIBUTE_DOCUMENT_NAME)
-    await oDocumentNameAttr.propset_Value('Document Name')
-    await attr.Add(oDocumentNameAttr)
-
-    await oSigner.propset_Certificate(certificate)
-    await oSigner.propset_Options(cadesplugin.CAPICOM_CERTIFICATE_INCLUDE_WHOLE_CHAIN)
-
-    if (cadesType === SIGNATURE_TYPES.CADES_T) {
-        await oSigner.propset_TSAAddress(tsaUrl)
-    }
+    const oSigner = await createSigner(certificate, { cadesType, tsaUrl })
 
     // Signing
     const oSignedData = await cadesplugin.CreateObjectAsync('CAdESCOM.CadesSignedData')

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { shallowEqual, useDispatch } from 'react-redux'
 import { Form, notification, Select, Spin, Typography } from 'antd'
 import { useAppSelector } from '@store'
@@ -130,6 +130,12 @@ function CryptoGeneratorContent({ operationType, meta, onClose }: CryptoGenerato
 
     const [certBusinessError, setCertBusinessError] = useState(false)
 
+    // the window may be closed while signing goes on: the signing is finished, but the closed window is not updated
+    const [inProgress, setInProgress] = useState(false)
+    const [partProgress, setPartProgress] = useState<{ part: number; total: number } | null>(null)
+    const isMounted = useRef(true)
+    useEffect(() => () => void (isMounted.current = false), [])
+
     useEffect(() => {
         if (certList) {
             return
@@ -187,7 +193,7 @@ function CryptoGeneratorContent({ operationType, meta, onClose }: CryptoGenerato
                 return
             }
 
-            onClose()
+            setInProgress(true)
 
             try {
                 const response = await CxBoxApiInstance.getFile(fileId)
@@ -196,7 +202,8 @@ function CryptoGeneratorContent({ operationType, meta, onClose }: CryptoGenerato
                 const sign = (data: Blob | string) =>
                     createVerifiedSignature(selectedSignCert!.itself, data, {
                         cadesType: signatureType,
-                        signaturePackage: currentSignaturePackage
+                        signaturePackage: currentSignaturePackage,
+                        onProgress: (part, total) => isMounted.current && setPartProgress({ part, total })
                     })
                 const encrypt = (data: Blob | string) => encryptData(selectedEncCert!.itself, data)
 
@@ -288,6 +295,12 @@ function CryptoGeneratorContent({ operationType, meta, onClose }: CryptoGenerato
                         }
                     })
                 )
+            } finally {
+                if (isMounted.current) {
+                    setPartProgress(null)
+                    setInProgress(false)
+                    onClose()
+                }
             }
         },
         [
@@ -428,6 +441,7 @@ function CryptoGeneratorContent({ operationType, meta, onClose }: CryptoGenerato
 
                         <Button
                             onClick={handleSignWithCondition}
+                            loading={inProgress}
                             disabled={
                                 (hasSignatureInGeneratorType(resolvedType) && !selectedSignCert) ||
                                 (hasEncryptInGeneratorType(resolvedType) && !selectedEncCert)
@@ -435,6 +449,13 @@ function CryptoGeneratorContent({ operationType, meta, onClose }: CryptoGenerato
                         >
                             {t('Execute')}
                         </Button>
+                        {partProgress && (
+                            <Typography.Text type="secondary">
+                                {partProgress.part < partProgress.total
+                                    ? t('Large file progress', partProgress)
+                                    : t('Large file finishing')}
+                            </Typography.Text>
+                        )}
                     </FieldBaseThemeWrapper>
                 </Case>
             </Switch>

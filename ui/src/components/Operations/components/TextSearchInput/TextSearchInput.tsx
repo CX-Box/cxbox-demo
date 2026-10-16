@@ -39,7 +39,7 @@ const TextSearchInput = ({ widgetName, bcName, placeholder }: TextSearchInputPro
             visible={showWarning}
             placement="bottomLeft"
             content={
-                <span>
+                <span data-test-widget-full-text-search-hint={true}>
                     <Icon type="warning" style={{ marginRight: 4 }} />
                     {t('Enter three or more characters')}
                 </span>
@@ -110,7 +110,7 @@ export const useSearchSynchronizedWithFilter = (widgetName: string, bcName: stri
             )
 
             refreshData()
-        } else if (valueRef.current !== externalFilterValueRef.current) {
+        } else if (valueRef.current && valueRef.current !== externalFilterValueRef.current) {
             dispatch(
                 actions.bcAddFilter({
                     bcName: bcName,

@@ -82,7 +82,6 @@ export function FormPopup(props: FormPopupProps) {
             bcName={bcName}
             widgetName={props.meta.name}
             disablePagination={true}
-            getContainer={null}
             defaultOkText={preInvoke?.yesText}
             defaultCancelText={preInvoke?.noText}
             okButtonProps={{

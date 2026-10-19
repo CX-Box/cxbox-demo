@@ -45,7 +45,11 @@ function Header({ meta }: HeaderProps) {
                     ))}
                 </Select>
             )}
-            {showClearButton && <ActionLink onClick={clearAllFilters}>{t('Clear filters', { count: appliedFiltersCount })}</ActionLink>}
+            {showClearButton && (
+                <ActionLink onClick={clearAllFilters} data-test-widget-list-clear-filters={true}>
+                    {t('Clear filters', { count: appliedFiltersCount })}
+                </ActionLink>
+            )}
             {showResetButton && <ActionLink onClick={resetFilters}>{t(resetButtonTitleKey)}</ActionLink>}
             {showClearButton && filterActive && (
                 <>

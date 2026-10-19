@@ -7,6 +7,7 @@ export interface IActionLinkProps {
     children?: React.ReactNode
     onClick?: (event: React.MouseEvent<HTMLAnchorElement>) => void
     style?: React.CSSProperties
+    [testMark: `data-test-${string}`]: boolean | string | undefined
 }
 
 /**
@@ -14,7 +15,7 @@ export interface IActionLinkProps {
  * @param props
  * @category Components
  */
-const ActionLink: React.FC<IActionLinkProps> = ({ className, style, children, onClick }) => {
+const ActionLink: React.FC<IActionLinkProps> = ({ className, style, children, onClick, ...testMarks }) => {
     const handleClick = React.useCallback(
         (e: React.MouseEvent<HTMLAnchorElement>) => {
             e.preventDefault()
@@ -24,7 +25,7 @@ const ActionLink: React.FC<IActionLinkProps> = ({ className, style, children, on
         [onClick]
     )
     return (
-        <a className={cn(styles.ActionLink, className)} style={style} onClick={handleClick}>
+        <a className={cn(styles.ActionLink, className)} style={style} onClick={handleClick} {...testMarks}>
             {children}
         </a>
     )

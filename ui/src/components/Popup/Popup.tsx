@@ -68,11 +68,11 @@ const Popup: FunctionComponent<PopupProps> = props => {
                 )}
 
                 <div className={styles.actions}>
-                    <Button onClick={onOkHandler} loading={okButtonProps?.loading}>
+                    <Button onClick={onOkHandler} loading={okButtonProps?.loading} data-test-popup-button-ok={true}>
                         {defaultOkText ?? t('Save')}
                     </Button>
 
-                    <Button onClick={onCancelHandler} type="formOperation">
+                    <Button onClick={onCancelHandler} type="formOperation" data-test-popup-button-cancel={true}>
                         {defaultCancelText ?? t('Cancel')}
                     </Button>
                 </div>

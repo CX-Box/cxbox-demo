@@ -6,63 +6,29 @@ import { useMergeRefs } from '@hooks/useMergeRefs'
 interface Props {
     readOnly: boolean | undefined
     value: string
-    onChange: (value: string) => void
+    onUserChange?: () => void
+    autoFocus?: boolean
     disabled?: boolean
     placeholder?: string
 }
 
-const DEBOUNCE_MS = 120
-
-const EditorContent: ForwardRefRenderFunction<ReactCodeMirrorRef, Props> = ({ value, readOnly, onChange, disabled, placeholder }, ref) => {
+const EditorContent: ForwardRefRenderFunction<ReactCodeMirrorRef, Props> = (
+    { value, readOnly, onUserChange, autoFocus, disabled, placeholder },
+    ref
+) => {
     const editorDomRef = useRef<HTMLElement | null>(null)
     const [localValue, setLocalValue] = useState<string>(value ?? '')
-    const lastEmittedRef = useRef<string>(value ?? '')
-    const onChangeRef = useRef(onChange)
-    const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+    // the value the text was made from: only another value replaces the text
+    const shownValueRef = useRef(value)
 
     useEffect(() => {
-        onChangeRef.current = onChange
-    }, [onChange])
-
-    useEffect(() => {
-        const externalValue = value ?? ''
-        if (externalValue === lastEmittedRef.current) {
-            return
-        }
-        if (externalValue === localValue) {
-            lastEmittedRef.current = externalValue
+        if (value === shownValueRef.current) {
             return
         }
 
-        if (debounceTimerRef.current) {
-            clearTimeout(debounceTimerRef.current)
-            debounceTimerRef.current = null
-        }
-        setLocalValue(externalValue)
-        lastEmittedRef.current = externalValue
-    }, [value, localValue])
-
-    useEffect(() => {
-        return () => {
-            if (debounceTimerRef.current) {
-                clearTimeout(debounceTimerRef.current)
-                debounceTimerRef.current = null
-            }
-        }
-    }, [])
-
-    const scheduleEmit = useCallback((nextValue: string) => {
-        if (debounceTimerRef.current) {
-            clearTimeout(debounceTimerRef.current)
-        }
-        debounceTimerRef.current = setTimeout(() => {
-            if (nextValue !== lastEmittedRef.current) {
-                lastEmittedRef.current = nextValue
-                onChangeRef.current(nextValue)
-            }
-            debounceTimerRef.current = null
-        }, DEBOUNCE_MS)
-    }, [])
+        shownValueRef.current = value
+        setLocalValue(value ?? '')
+    }, [value])
 
     const handleEditorChange = useCallback(
         (nextValue: string) => {
@@ -70,9 +36,9 @@ const EditorContent: ForwardRefRenderFunction<ReactCodeMirrorRef, Props> = ({ va
                 return
             }
             setLocalValue(nextValue)
-            scheduleEmit(nextValue)
+            onUserChange?.()
         },
-        [disabled, readOnly, scheduleEmit]
+        [disabled, readOnly, onUserChange]
     )
 
     const setRefs = useMergeRefs([
@@ -88,6 +54,9 @@ const EditorContent: ForwardRefRenderFunction<ReactCodeMirrorRef, Props> = ({ va
         <CodeMirror
             ref={setRefs}
             placeholder={placeholder}
+            autoFocus={autoFocus}
+            // like the visual editor: the cursor goes to the end of the text
+            onCreateEditor={autoFocus ? view => view.dispatch({ selection: { anchor: view.state.doc.length } }) : undefined}
             value={localValue || ''}
             height="100%"
             extensions={[markdown({ base: markdownLanguage, completeHTMLTags: false }), EditorView.lineWrapping]}

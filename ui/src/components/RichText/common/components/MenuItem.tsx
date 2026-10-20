@@ -51,11 +51,6 @@ export default function MenuItem({
             onClick={action}
             disabled={disabled}
             data-test-rich-text-action={actionKey}
-            onMouseDown={e => {
-                if (!hasItems) {
-                    e.preventDefault()
-                }
-            }}
             title={title}
         >
             {icon}

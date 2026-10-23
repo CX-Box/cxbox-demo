@@ -1,7 +1,7 @@
 import React from 'react'
 import { Col, Row } from 'antd'
-import { CertificateData } from '@interfaces/sign'
-import { getCertificateStatus } from '@utils/cadesPlugin/getCertificateStatus'
+import { CertificateData, CertificatePurpose, getCertificateProblem } from '@features/cryptoPro'
+import { cryptoProErrorMessage } from '@components/CryptoGeneratorContent/cryptoProErrorMessage'
 import moment from 'moment'
 import { DateFormat } from '@interfaces/date'
 import FieldBaseThemeWrapper from '@components/FieldBaseThemeWrapper/FieldBaseThemeWrapper'
@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next'
 type Field = {
     title: string
     key?: string
-    render?: (value: unknown, cert: CertificateData) => React.ReactNode
+    render?: (value: unknown, cert: CertificateData, purpose: CertificatePurpose) => React.ReactNode
 }
 
 const renderDate = (value: unknown) => {
@@ -41,17 +41,27 @@ const fields: Field[] = [
     {
         title: 'Status',
         key: 'status',
-        render: (_, dataItem: CertificateData) => {
-            return getCertificateStatus(dataItem)
-        }
+        render: (_, dataItem: CertificateData, purpose) => <CertificateStatus cert={dataItem} purpose={purpose} />
     }
 ]
 
-interface CertificateInfoProps {
-    data: CertificateData | undefined
+const CertificateStatus = ({ cert, purpose }: { cert: CertificateData; purpose: CertificatePurpose }) => {
+    const { t } = useTranslation()
+    const problem = getCertificateProblem(cert, { purpose })
+    if (!problem) {
+        return <>{t('Valid')}</>
+    }
+    const { key, params } = cryptoProErrorMessage(problem, cert)
+    return <>{t(key, params)}</>
 }
 
-const CertificateInfo = ({ data }: CertificateInfoProps) => {
+interface CertificateInfoProps {
+    data: CertificateData | undefined
+    /** `encrypt` for an encryption recipient: only the public key is needed @defaultValue `sign` */
+    purpose?: CertificatePurpose
+}
+
+const CertificateInfo = ({ data, purpose = 'sign' }: CertificateInfoProps) => {
     const { t } = useTranslation()
 
     if (!data) {
@@ -60,7 +70,7 @@ const CertificateInfo = ({ data }: CertificateInfoProps) => {
 
     const getContent = (field: Field) => {
         return field.render
-            ? field.render(data[field.key as keyof CertificateData], data)
+            ? field.render(data[field.key as keyof CertificateData], data, purpose)
             : field.key
             ? data[field.key as keyof CertificateData]
             : ''

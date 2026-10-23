@@ -52,6 +52,10 @@ module.exports = {
                 })
             }
 
+            // Tests do not affect the build: type errors in *.test.* files and testing/ helpers are not reported by it
+            const typeChecker = webpackConfig.plugins.find(plugin => /^ForkTsChecker/.test(plugin.constructor.name))
+            typeChecker?.options.issue.exclude.push({ file: '**/src/**/*.test.*' }, { file: '**/src/**/testing/**' })
+
             return webpackConfig
         }
     }

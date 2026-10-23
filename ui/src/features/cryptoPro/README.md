@@ -40,9 +40,10 @@ A new key algorithm is one line in `hashAlgorithm.ts`: key OID → hash constant
 -   Plugin calls on one object must run one by one, each awaited: otherwise the error of a part is lost.
 -   A call that takes a chunk (`Hash`, `StreamEncrypt`) is awaited at most 60 s, then `PLUGIN_NOT_RESPONDING`: these calls
     show no dialogs, so a longer wait means the extension lost the answer. Calls that may show the PIN dialog are not limited.
--   The CryptoPro documentation lists `SignHash` and `VerifyHash` (used here for signing by hash) among the calls that
-    «may require additional thematic studies» — a certification matter when CryptoPro is embedded into an application
-    ([plugin methods](https://docs.cryptopro.ru/cades/plugin/plugin-methods.md)).
+-   The CryptoPro documentation lists `SignHash` and `VerifyHash` (used here for signing by hash) among the calls whose use
+    «may require additional thematic studies», without giving reasons
+    ([plugin methods](https://docs.cryptopro.ru/cades/plugin/plugin-methods.md)). For projects that must use certified
+    cryptography, check with CryptoPro.
 
 ### Error codes
 

@@ -2,7 +2,7 @@ import React from 'react'
 import ErrorPopupInner from '@components/ui/ErrorPopup/ErrorPopupInner'
 import { ApplicationErrorType } from '@cxbox-ui/core'
 import { Trans } from 'react-i18next'
-import { CRYPTOPRO_LINKS } from '@constants/cadesPlugin'
+import { CRYPTOPRO_LINKS } from '@features/cryptoPro'
 
 const BUSINESS_ERROR = { type: ApplicationErrorType.BusinessError }
 

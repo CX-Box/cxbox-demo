@@ -119,7 +119,10 @@ function CryptoGeneratorContent({ operationType, meta, onClose, onInProgressChan
 
     useEffect(() => {
         if (configError) {
-            console.error(`Unknown type "${cryptoGenerator?.type}" of options.cryptoGenerator for the action ${actionName}`)
+            console.error(
+                `Signing is not configured: the action ${actionName} has an unknown type "${cryptoGenerator?.type}" ` +
+                    `in options.cryptoGenerator of the widget. Expected: ${CRYPTO_GENERATOR_TYPES.join(', ')}`
+            )
         }
     }, [actionName, configError, cryptoGenerator?.type])
 
@@ -310,13 +313,7 @@ function CryptoGeneratorContent({ operationType, meta, onClose, onInProgressChan
         <>
             <Switch test={currentState}>
                 <Case value={SIGN_CONTENT_STATES.CONFIG_ERROR}>
-                    <Typography className={styles.typography}>
-                        {t('Unknown crypto generator type', {
-                            type: cryptoGenerator?.type,
-                            actionName,
-                            types: CRYPTO_GENERATOR_TYPES.join(', ')
-                        })}
-                    </Typography>
+                    <Typography className={styles.typography}>{t('Operation is not configured. Contact your administrator.')}</Typography>
                 </Case>
 
                 <Case value={SIGN_CONTENT_STATES.PLUGIN_ERROR}>

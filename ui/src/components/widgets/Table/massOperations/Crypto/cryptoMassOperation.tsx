@@ -5,20 +5,8 @@ import type { MassOperationKind } from '@components/widgets/Table/massOperations
 import type { StepButtonsFactory } from '@components/widgets/Table/massOperations/stepButtons'
 import Confirm from '@components/widgets/Table/massOperations/Confirm/Confirm'
 import MassCryptoSign from '@components/widgets/Table/massOperations/Crypto/MassCryptoSign'
-import { getCryptoGenerator, resolveCryptoGeneratorType } from '@components/CryptoGeneratorContent/cryptoFile'
-import type { CryptoGeneratorTypes } from '@interfaces/widget'
 
 const { stepButtons, stepContent } = defaultMassOperation
-
-/**
- * Title of the step "Sign and encrypt" by what the action does, `type` of its `options.cryptoGenerator`
- */
-const SIGN_STEP_TITLES: Record<CryptoGeneratorTypes, string> = {
-    sign: 'Signing',
-    encrypt: 'Encryption',
-    signAndEncrypt: 'Signing and encryption',
-    encryptAndSign: 'Encryption and signing'
-}
 
 /**
  * Buttons of a step where the rows can be processed
@@ -37,8 +25,8 @@ const processingStepButtons: StepButtonsFactory = (state, actions) => ({
  */
 export const cryptoMassOperation: MassOperationKind = {
     getSteps: hasPreInvoke => AVAILABLE_MASS_STEPS.filter(step => hasPreInvoke || step !== 'Confirm operation'),
-    getStepTitle: (step, widget, operationType) =>
-        step === 'Sign and encrypt' ? SIGN_STEP_TITLES[resolveCryptoGeneratorType(getCryptoGenerator(widget, operationType))] : undefined,
+    // only the certificates are chosen there, the rows are signed after the confirm when the action has preInvoke
+    getStepTitle: step => (step === 'Sign and encrypt' ? 'Certificate selection' : undefined),
     stepButtons: {
         ...stepButtons,
         'Sign and encrypt': processingStepButtons,

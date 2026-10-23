@@ -1,11 +1,12 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { signAttached } from './attached'
+import { CRYPTOPRO_CONFIG } from './config'
 import { encrypt } from './encrypt'
 import { encryptAndSign, sign, signAndEncrypt } from './operations'
 import { signDetached } from './signDetached'
 import { CertificateData, SignedCms } from './types'
 
-vi.mock('./attached', () => ({ signAttached: vi.fn() }))
+vi.mock('./attached', async importOriginal => ({ ...(await importOriginal<typeof import('./attached')>()), signAttached: vi.fn() }))
 vi.mock('./signDetached', () => ({ signDetached: vi.fn() }))
 vi.mock('./encrypt', () => ({ encrypt: vi.fn() }))
 
@@ -69,5 +70,48 @@ describe('encryptAndSign', () => {
         vi.mocked(encrypt).mockRejectedValue(new Error('encrypt failed'))
         await expect(encryptAndSign(file, signer, recipient)).rejects.toThrow('encrypt failed')
         expect(signDetached).not.toHaveBeenCalled()
+    })
+})
+
+describe('attached size limit: the file the user chose, before any work', () => {
+    const config = { ...CRYPTOPRO_CONFIG }
+    const ofSize = (size: number) => new Blob([new Uint8Array(size)])
+    const operations = {
+        sign: (f: Blob) => sign(f, signer, { signaturePackage: 'attached' }),
+        signAndEncrypt: (f: Blob) => signAndEncrypt(f, signer, recipient, { signaturePackage: 'attached' }),
+        encryptAndSign: (f: Blob) => encryptAndSign(f, signer, recipient, { signaturePackage: 'attached' })
+    }
+
+    beforeEach(() => {
+        Object.assign(CRYPTOPRO_CONFIG, { nativeAttachedMaxSize: 100, attachedAssembly: false })
+    })
+
+    afterEach(() => {
+        Object.assign(CRYPTOPRO_CONFIG, config)
+    })
+
+    it.each(Object.entries(operations))('%s: a file over the limit — FILE_TOO_LARGE, nothing is signed or encrypted', async (_, run) => {
+        await expect(run(ofSize(101))).rejects.toEqual(expect.objectContaining({ code: 'FILE_TOO_LARGE' }))
+        expect(signAttached).not.toHaveBeenCalled()
+        expect(encrypt).not.toHaveBeenCalled()
+    })
+
+    it.each(Object.entries(operations))('%s: a file up to the limit is processed', async (_, run) => {
+        await run(ofSize(100))
+        expect(signAttached).toHaveBeenCalled()
+    })
+
+    it('encryptAndSign signs the .enc whatever its size: the limit is for the source file', async () => {
+        vi.mocked(encrypt).mockResolvedValue({ encrypted: ofSize(134) })
+        await operations.encryptAndSign(ofSize(100))
+        expect(signAttached).toHaveBeenCalledWith(expect.objectContaining({ size: 134 }), signer, {})
+    })
+
+    it('no limit for detached and with the assembly', async () => {
+        await sign(ofSize(1000), signer, { signaturePackage: 'detached' })
+        Object.assign(CRYPTOPRO_CONFIG, { attachedAssembly: true })
+        await sign(ofSize(1000), signer, { signaturePackage: 'attached' })
+        expect(signDetached).toHaveBeenCalled()
+        expect(signAttached).toHaveBeenCalled()
     })
 })

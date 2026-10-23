@@ -1,5 +1,4 @@
-import { blobToBase64, validateSize } from '@features/file'
-import { CRYPTOPRO_CONFIG } from '../config'
+import { blobToBase64 } from '@features/file'
 import { resolveCadesType } from '../cadesType'
 import { createSigner } from '../createSigner'
 import { wrapPluginError, CADES_ERROR_CODES } from '../errors'
@@ -12,19 +11,15 @@ import { CertificateData, SignOptions, SignedCms } from '../types'
  * Attached signature by `SignCades`: the plugin gets the whole file as one base64 string.
  *
  * @remarks
- * The plugin documentation limits such data to 10–60 MB depending on the computer, so the size is checked before reading.
- * The key algorithm is checked too, as for signing by hash: for keys other than GOST 2012 `SignCades` silently chooses
+ * The plugin documentation limits such data to 10–60 MB depending on the computer; the limit is checked by the operations
+ * for the user's file before any work ({@link checkAttachedSize}), not here: `encryptAndSign` signs the larger `.enc`.
+ * The key algorithm is checked, as for signing by hash: for keys other than GOST 2012 `SignCades` silently chooses
  * SHA-1 (RSA) or fails (CNG).
  *
- * @throws {@link CadesPluginError} `FILE_TOO_LARGE` above `nativeAttachedMaxSize` and `UNSUPPORTED_KEY` before the file is read;
+ * @throws {@link CadesPluginError} `UNSUPPORTED_KEY` before the file is read;
  * `CERT_*`, `USER_CANCELLED`, `SIGN_FAILED`, `VERIFY_FAILED` from the plugin
  */
 export async function signAttachedNative(file: Blob, cert: CertificateData, options: SignOptions = {}): Promise<SignedCms> {
-    try {
-        validateSize(file, CRYPTOPRO_CONFIG.nativeAttachedMaxSize)
-    } catch (error) {
-        throw wrapPluginError(error)
-    }
     resolveHashAlgorithm(cert.keyAlgorithmOid)
     const { cadesplugin } = await getCadesPlugin()
     const cadesType = resolveCadesType(cadesplugin, options)

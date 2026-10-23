@@ -1,3 +1,4 @@
+import { CRYPTOPRO_CONFIG } from './config'
 import { CadesPluginError, wrapPluginError, CADES_ERROR_CODES } from './errors'
 
 /**
@@ -112,6 +113,29 @@ export async function ensureCadesPluginInstalled(): Promise<void> {
  */
 export async function getPluginVersion(): Promise<string> {
     return (await getCadesPlugin()).version
+}
+
+/**
+ * Waits for a plugin call that takes one chunk at most `CRYPTOPRO_CONFIG.chunkTimeout`; the call itself is not cancelled.
+ *
+ * @param result - the pending plugin call
+ * @param call - its name for the error text, e.g. `Hash`
+ * @throws {@link CadesPluginError} `PLUGIN_NOT_RESPONDING` if the plugin does not answer in time
+ */
+export async function withChunkTimeout<T>(result: Promise<T>, call: string): Promise<T> {
+    const ms = CRYPTOPRO_CONFIG.chunkTimeout
+    let timer: ReturnType<typeof setTimeout> | undefined
+    const timeout = new Promise<never>((_, reject) => {
+        timer = setTimeout(
+            () => reject(new CadesPluginError(CADES_ERROR_CODES.PLUGIN_NOT_RESPONDING, `${call}: no answer from the plugin in ${ms} ms`)),
+            ms
+        )
+    })
+    try {
+        return await Promise.race([result, timeout])
+    } finally {
+        clearTimeout(timer)
+    }
 }
 
 /**

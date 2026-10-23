@@ -1,4 +1,4 @@
-import { signAttached } from './attached'
+import { checkAttachedSize, signAttached } from './attached'
 import { DEFAULT_SIGNATURE_PACKAGE, SIGNATURE_PACKAGE, SignaturePackage } from './constants'
 import { encrypt } from './encrypt'
 import { signDetached } from './signDetached'
@@ -11,6 +11,13 @@ export interface OperationOptions extends SignOptions {
 
 /** The `.sig` and `.enc` files of a combined operation */
 export interface SignedAndEncrypted extends SignResult, EncryptResult {}
+
+/** The attached size limit is for the file the user chose: checked before any work, whatever is signed later (the file or its .enc) */
+function checkFileSize(file: Blob, options: OperationOptions): void {
+    if (options.signaturePackage === SIGNATURE_PACKAGE.attached) {
+        checkAttachedSize(file.size)
+    }
+}
 
 /** Signature with its DER, by the package from the options */
 function signCms(file: Blob, signer: CertificateData, options: OperationOptions): Promise<SignedCms> {
@@ -26,8 +33,11 @@ function signCms(file: Blob, signer: CertificateData, options: OperationOptions)
  * ```ts
  * const { signature, method } = await sign(file, cert, { signaturePackage: 'attached' })
  * ```
+ *
+ * @throws {@link CadesPluginError} `FILE_TOO_LARGE` for an attached signature of a file over the limit, before any work
  */
 export async function sign(file: Blob, signer: CertificateData, options: OperationOptions = {}): Promise<SignResult> {
+    checkFileSize(file, options)
     const { signature, method } = await signCms(file, signer, options)
     return { signature, method }
 }
@@ -52,6 +62,7 @@ export async function signAndEncrypt(
     recipient: CertificateData,
     options: OperationOptions = {}
 ): Promise<SignedAndEncrypted> {
+    checkFileSize(file, options)
     const { signature, method, der } = await signCms(file, signer, options)
     const attached = options.signaturePackage === SIGNATURE_PACKAGE.attached
     const { encrypted } = await encrypt(attached ? der : file, recipient)
@@ -63,7 +74,7 @@ export async function signAndEncrypt(
  *
  * @remarks
  * The bytes of the `.enc` file as it is uploaded (base64 text) are signed, so the signature verifies against that file.
- * The attached size limit applies to the `.enc`, ≈ 4/3 of the file.
+ * The attached size limit applies to the source file, as for {@link sign}, and is checked before encryption.
  *
  * @example
  * ```ts
@@ -78,7 +89,8 @@ export async function encryptAndSign(
     recipient: CertificateData,
     options: OperationOptions = {}
 ): Promise<SignedAndEncrypted> {
+    checkFileSize(file, options)
     const { encrypted } = await encrypt(file, recipient)
-    const { signature, method } = await sign(encrypted, signer, options)
+    const { signature, method } = await signCms(encrypted, signer, options)
     return { encrypted, signature, method }
 }

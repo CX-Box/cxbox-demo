@@ -13,9 +13,6 @@ import {
 } from '@features/cryptoPro'
 import { FileTooLargeError, MiB } from '@features/file'
 import { DateFormat } from '@interfaces/date'
-import { CryptoGeneratorTypes } from '@interfaces/widget'
-
-const ENCRYPTED_TOO_LARGE = 'The encrypted file is too large for an attached signature'
 
 /** A message for the user as i18n key and parameters: `t(message.key, message.params)` */
 export interface CryptoProErrorMessage {
@@ -42,7 +39,6 @@ export function cryptoProErrorMessage(code: CadesErrorCode, cert?: CertificateDa
 
 /** The certificates of the operation that failed */
 export interface CryptoProOperation {
-    generatorType: CryptoGeneratorTypes
     signCert?: CertificateData
     encCert?: CertificateData
 }
@@ -58,15 +54,12 @@ function certificateWithProblem(code: CadesErrorCode, { signCert, encCert }: Cry
 /**
  * Notification of a CryptoPro error: `info` for a cancel by the user, `error` otherwise.
  * The message is for the user; the description keeps the plugin text with HRESULT for support.
- * `encryptAndSign` signs the .enc (≈ 4/3 of the file), so `FILE_TOO_LARGE` there is about the encrypted file.
  */
 export function cryptoProNotification(err: CadesPluginError, operation: CryptoProOperation) {
     const { code } = err
-    const message = cryptoProErrorMessage(code, certificateWithProblem(code, operation), err.cause)
-    const encryptedTooLarge = code === CADES_ERROR_CODES.FILE_TOO_LARGE && operation.generatorType === 'encryptAndSign'
     return {
         type: code === CADES_ERROR_CODES.USER_CANCELLED ? 'info' : 'error',
-        ...(encryptedTooLarge ? { ...message, key: ENCRYPTED_TOO_LARGE } : message),
+        ...cryptoProErrorMessage(code, certificateWithProblem(code, operation), err.cause),
         description: err.pluginMessage
     } as const
 }

@@ -13,6 +13,7 @@ import { Lookup, LookupValueOf } from '@utils/Lookup'
 export const CADES_ERROR_CODES = Lookup.create([
     'PLUGIN_NOT_AVAILABLE',
     'PLUGIN_OUTDATED',
+    'PLUGIN_NOT_RESPONDING',
     'CERT_EXPIRED',
     'CERT_NOT_YET_VALID',
     'CERT_NO_PRIVATE_KEY',
@@ -59,6 +60,7 @@ export type CertificateProblem = LookupValueOf<typeof CERTIFICATE_PROBLEMS>
 export const CADES_ERROR_I18N_KEYS: Record<CadesErrorCode, string> = {
     PLUGIN_NOT_AVAILABLE: 'CryptoPro plugin is not available',
     PLUGIN_OUTDATED: 'CryptoPro plugin is outdated',
+    PLUGIN_NOT_RESPONDING: 'CryptoPro plugin is not responding',
     CERT_EXPIRED: 'Certificate expired',
     CERT_NOT_YET_VALID: 'Certificate not yet valid',
     CERT_NO_PRIVATE_KEY: 'No private key for certificate',

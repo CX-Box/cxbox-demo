@@ -4,7 +4,7 @@
 import { Base64TextBuilder, base64ToBytes, forEachBase64Chunk } from '@features/file'
 import { CRYPTOPRO_CONFIG } from './config'
 import { CadesPluginError, wrapPluginError, CADES_ERROR_CODES } from './errors'
-import { getCadesPlugin, getPluginVersion, isPluginVersionAtLeast } from './plugin'
+import { getCadesPlugin, getPluginVersion, isPluginVersionAtLeast, withChunkTimeout } from './plugin'
 import { CertificateData, EncryptResult } from './types'
 
 async function checkPluginVersion(): Promise<void> {
@@ -30,7 +30,8 @@ async function checkPluginVersion(): Promise<void> {
  * await CxBoxApiInstance.uploadFile(encrypted, `${name}.enc`)
  * ```
  *
- * @throws {@link CadesPluginError} `PLUGIN_OUTDATED` for plugins older than 2.0.15260; the recipient certificate is checked
+ * @throws {@link CadesPluginError} `PLUGIN_OUTDATED` for plugins older than 2.0.15260; `PLUGIN_NOT_RESPONDING` if a chunk
+ * is not taken in time; `ENCRYPT_FAILED` for an empty message; the recipient certificate is checked
  * by the plugin: `CERT_*`, `UNSUPPORTED_KEY`, `ENCRYPT_FAILED`
  */
 export async function encrypt(data: Blob, recipient: CertificateData): Promise<EncryptResult> {
@@ -57,7 +58,7 @@ export async function encrypt(data: Blob, recipient: CertificateData): Promise<E
         let encryptedSize = 0
         await forEachBase64Chunk(data, CRYPTOPRO_CONFIG.chunkSize, async (chunk, isLast) => {
             // An intermediate result may be empty — that is normal
-            const part = await envelopedData.StreamEncrypt(chunk, isLast)
+            const part = await withChunkTimeout(envelopedData.StreamEncrypt(chunk, isLast), 'StreamEncrypt')
             if (part) {
                 const bytes = base64ToBytes(part)
                 encryptedSize += bytes.length

@@ -3,4 +3,4 @@
  *
  * @module features/cryptoPro/attached
  */
-export { signAttached } from './signAttached'
+export { checkAttachedSize, signAttached } from './signAttached'

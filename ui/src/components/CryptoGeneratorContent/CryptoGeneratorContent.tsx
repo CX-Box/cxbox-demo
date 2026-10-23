@@ -267,7 +267,6 @@ function CryptoGeneratorContent({ operationType, meta, onClose, onInProgressChan
                 console.error(err)
                 if (isCadesPluginError(err)) {
                     const { type, key, params, description } = cryptoProNotification(err, {
-                        generatorType,
                         signCert: selectedSignCert,
                         encCert: selectedEncCert
                     })

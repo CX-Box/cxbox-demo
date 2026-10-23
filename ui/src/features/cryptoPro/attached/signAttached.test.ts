@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { CRYPTOPRO_CONFIG } from '../config'
 import { CertificateData, SignedCms } from '../types'
 import { signAttachedNative } from './native'
-import { signAttached } from './signAttached'
+import { checkAttachedSize, signAttached } from './signAttached'
 
 vi.mock('./native', () => ({ signAttachedNative: vi.fn() }))
 // As after removing the optional module: its index.ts stays and exports no loader
@@ -28,18 +28,20 @@ describe('signAttached', () => {
         Object.assign(CRYPTOPRO_CONFIG, originalConfig)
     })
 
-    it.each([0, MAX])('signs %i B by SignCades of the whole file', async size => {
+    it.each([0, MAX + 1])('signs %i B by SignCades of the whole file: the size is checked by the caller', async size => {
         const blob = file(size)
 
         expect((await signAttached(blob, cert, options)).method).toBe('native')
         expect(signAttachedNative).toHaveBeenCalledWith(blob, cert, options)
     })
 
-    it('rejects a larger file with FILE_TOO_LARGE by default, before signing', async () => {
-        await expect(signAttached(file(MAX + 1), cert, options)).rejects.toEqual(
+    it('checkAttachedSize: up to the limit passes, larger — FILE_TOO_LARGE; with the assembly — any size', () => {
+        expect(() => checkAttachedSize(MAX)).not.toThrow()
+        expect(() => checkAttachedSize(MAX + 1)).toThrow(
             expect.objectContaining({ code: 'FILE_TOO_LARGE', cause: expect.objectContaining({ size: MAX + 1, maxSize: MAX }) })
         )
-        expect(signAttachedNative).not.toHaveBeenCalled()
+        CRYPTOPRO_CONFIG.attachedAssembly = true
+        expect(() => checkAttachedSize(MAX + 1)).not.toThrow()
     })
 
     it.each([1, MAX + 1])(

@@ -15,7 +15,8 @@ with plugin 2.0.15820, CryptoPro CSP 5 and Chromium 150 on Windows 11.
 | `REACT_APP_CRYPTOPRO_ATTACHED_ASSEMBLY` | `true` — attached signatures are always assembled from a detached one (any size)                        | `false`       |
 | `REACT_APP_CRYPTOPRO_INSTRUCTION_LINK`  | Link to the setup instructions in error messages                                                        | doc.cxbox.org |
 
-The rest is in `config.ts` as constants: the chunk size (3 MiB) and the limit of the native attached signature (40 MiB).
+The rest is in `config.ts` as constants: the chunk size (3 MiB), the limit of the native attached signature (40 MiB) and
+the wait for one chunk (60 s).
 
 ## Supported keys
 
@@ -37,6 +38,8 @@ A new key algorithm is one line in `hashAlgorithm.ts`: key OID → hash constant
 -   `SignHash` takes the hash algorithm from `HashedData`; without it the plugin hashes with GOST R 34.11-94 and a GOST
     2012 key fails with `0x80070057`.
 -   Plugin calls on one object must run one by one, each awaited: otherwise the error of a part is lost.
+-   A call that takes a chunk (`Hash`, `StreamEncrypt`) is awaited at most 60 s, then `PLUGIN_NOT_RESPONDING`: these calls
+    show no dialogs, so a longer wait means the extension lost the answer. Calls that may show the PIN dialog are not limited.
 -   The CryptoPro documentation lists `SignHash` and `VerifyHash` (used here for signing by hash) among the calls that
     «may require additional thematic studies» — a certification matter when CryptoPro is embedded into an application
     ([plugin methods](https://docs.cryptopro.ru/cades/plugin/plugin-methods.md)).
@@ -92,7 +95,9 @@ algorithm — signing by hash is impossible without it.
     amount of memory for any file size.
 -   Native attached signature (`SignCades`) passes the whole file to the plugin as one base64 string: ≈ 3.5 × the file
     in the browser, and the plugin fails at 10–60 MB depending on RAM (CryptoPro documentation). Hence the 40 MiB limit
-    (`FILE_TOO_LARGE`, the user sees «40 МБ» — as Windows Explorer counts).
+    (`FILE_TOO_LARGE`, the user sees «40 МБ» — as Windows Explorer counts). The limit is for the size of the file itself,
+    the base64 overhead is already in it; for `encryptAndSign` — of the source file, checked before encryption, though
+    the `.enc` that is signed is ≈ 4/3 of it.
 -   A whole-file base64 string hits the V8 string limit at ≈ 400 MB of file.
 
 ### Plugin memory
@@ -116,8 +121,6 @@ only at the end, so the encrypted bytes would be kept until then (300 MB file: p
 parses the whole message in memory and belongs to the optional `attachedAssembly` module; an own converter is ≈ 150 lines
 of BER parsing to maintain. Such a converter was tried and worked on the real plugin output, and was removed for that cost.
 
-If a recipient reads DER only, the conversion has to be added: the `.enc` of a non-empty file would then be DER as well.
-
 ## Attached signature of large files
 
 Optional, the `attachedAssembly` directory, loaded lazily. To drop it together with pkijs and asn1js, follow its `index.ts`:
@@ -130,7 +133,7 @@ delete the other files of the directory and export `undefined` instead of the lo
 -   Verification in the browser: the file goes to the plugin only in chunks, so the plugin verifies only the detached
     signature (`VerifyHash`); `VerifyCades` would need the whole file. Unit tests check this call protocol and that an
     assembled signature of a small file with a real key is verified as attached by an independent implementation
-    (pkijs + WebCrypto) and fails after a byte of the file is changed.
+    and fails after a byte of the file is changed.
 -   Verification by CryptoPro tools: `csptest` verified assembled signatures up to 100 MB and failed at 200 MB
     (`0x80093104`, `CRYPT_E_ASN1_LARGE`), so above 100 MB a warning is logged; the signature is still made.
 -   Check that the recipient accepts attached signatures: some require detached ones (e.g. Russian courts).

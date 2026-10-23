@@ -27,5 +27,10 @@ export const CRYPTOPRO_CONFIG = {
      */
     tsaUrl: envString('REACT_APP_CRYPTOPRO_TSA_URL'),
     /** Minimal plugin version for encryption in chunks: `StreamEncrypt` returns concatenable parts since 2.0.15260 */
-    minPluginVersion: '2.0.15260'
+    minPluginVersion: '2.0.15260',
+    /**
+     * Milliseconds to wait for the plugin to take one chunk (`Hash`, `StreamEncrypt`), then `PLUGIN_NOT_RESPONDING`.
+     * These calls show no dialogs, so a long wait means the extension lost the answer.
+     */
+    chunkTimeout: 60_000
 }

@@ -4,6 +4,7 @@ import { signAttachedNative } from './attached/native'
 import { CRYPTOPRO_CONFIG } from './config'
 import { encrypt } from './encrypt'
 import { hashBlob } from './hashBlob'
+import { encryptAndSign, sign } from './operations'
 import { getCadesPlugin, getPluginVersion } from './plugin'
 import { signDetached } from './signDetached'
 import { getCertificates } from './certificates'
@@ -59,6 +60,14 @@ describe('hashBlob', () => {
     it('fails when a chunk is not hashed instead of signing incomplete data', async () => {
         usePlugin({ failOn: { call: 'Hash', message: 'Hash failed' } })
         await expect(hashBlob(new Blob([randomBytes(CHUNK * 2)]), 101)).rejects.toEqual(expect.objectContaining({ message: 'Hash failed' }))
+    })
+
+    it('stops waiting for a chunk the plugin does not answer: PLUGIN_NOT_RESPONDING', async () => {
+        Object.assign(CRYPTOPRO_CONFIG, { chunkTimeout: 20 })
+        usePlugin({ hashDelay: 1000 })
+        await expect(hashBlob(new Blob([randomBytes(CHUNK)]), 101)).rejects.toEqual(
+            expect.objectContaining({ code: 'PLUGIN_NOT_RESPONDING', message: expect.stringContaining('Hash') })
+        )
     })
 })
 
@@ -148,12 +157,24 @@ describe('signAttachedNative', () => {
         expect(callsOf('VerifyCades')).toEqual([`VerifyCades(${SIGNATURE_BASE64}, 1, false)`])
         expect(result.method).toBe('native')
     })
+})
 
-    it('rejects a file over the limit before reading it and before the plugin', async () => {
-        await expect(signAttachedNative(new Blob([randomBytes(101)]), testCertificate())).rejects.toEqual(
+describe('attached size limit through the whole chain (SignCades, the assembly is off)', () => {
+    const recipient = testCertificate({ hasPrivateKey: false })
+    const options = { signaturePackage: 'attached' as const }
+
+    it('rejects a file over the limit before the plugin', async () => {
+        await expect(sign(new Blob([randomBytes(101)]), testCertificate(), options)).rejects.toEqual(
             expect.objectContaining({ code: 'FILE_TOO_LARGE' })
         )
         expect(plugin.calls).toEqual([])
+    })
+
+    it('encryptAndSign: a file up to the limit is signed even though its .enc is over it', async () => {
+        const { encrypted } = await encryptAndSign(new Blob([randomBytes(100)]), testCertificate(), recipient, options)
+
+        expect(encrypted.size).toBeGreaterThan(CRYPTOPRO_CONFIG.nativeAttachedMaxSize)
+        expect(callsOf('SignCades')).toHaveLength(1)
     })
 })
 
@@ -303,6 +324,14 @@ describe('encrypt', () => {
         usePlugin({ streamEncrypt: () => '' })
         await expect(encrypt(new Blob([randomBytes(CHUNK)]), recipient)).rejects.toEqual(
             expect.objectContaining({ code: 'ENCRYPT_FAILED' })
+        )
+    })
+
+    it('stops waiting for a part the plugin does not answer: PLUGIN_NOT_RESPONDING', async () => {
+        Object.assign(CRYPTOPRO_CONFIG, { chunkTimeout: 20 })
+        usePlugin({ streamEncrypt: () => new Promise<never>(() => {}) as unknown as string })
+        await expect(encrypt(new Blob([randomBytes(CHUNK)]), recipient)).rejects.toEqual(
+            expect.objectContaining({ code: 'PLUGIN_NOT_RESPONDING', message: expect.stringContaining('StreamEncrypt') })
         )
     })
 

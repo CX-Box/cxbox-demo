@@ -7,12 +7,26 @@ import { CertificateData, SignOptions, SignedCms } from '../types'
 import { signAttachedNative } from './native'
 
 /**
+ * Checks that an attached signature of a file of `size` bytes can be made: `SignCades` takes at most
+ * `CRYPTOPRO_CONFIG.nativeAttachedMaxSize`; with the assembly on — any size. The operations call it for the user's file
+ * before any work; {@link signAttached} does not check the size.
+ *
+ * @throws {@link CadesPluginError} `FILE_TOO_LARGE`
+ */
+export function checkAttachedSize(size: number): void {
+    const { nativeAttachedMaxSize, attachedAssembly } = CRYPTOPRO_CONFIG
+    if (!attachedAssembly && size > nativeAttachedMaxSize) {
+        throw wrapPluginError(new FileTooLargeError(size, nativeAttachedMaxSize))
+    }
+}
+
+/**
  * Attached CAdES signature: the file is inside the signature.
  *
  * @remarks
  * With `REACT_APP_CRYPTOPRO_ATTACHED_ASSEMBLY=true` every file, of any size, is assembled from a detached signature by hash
  * (`method: 'assembled'`), so that all attached signatures are made the same way. Otherwise — `SignCades` of the whole file
- * (`method: 'native'`) up to `CRYPTOPRO_CONFIG.nativeAttachedMaxSize` (40 MiB), larger files get `FILE_TOO_LARGE` before the file is read.
+ * (`method: 'native'`); its size limit is checked by the caller with {@link checkAttachedSize}.
  * The assembly is an optional module loaded lazily; if it is removed from the application — `ASSEMBLY_NOT_AVAILABLE`.
  *
  * @example
@@ -20,20 +34,16 @@ import { signAttachedNative } from './native'
  * const { signature, method } = await signAttached(file, cert)
  * ```
  *
- * @throws {@link CadesPluginError} `FILE_TOO_LARGE`, `ASSEMBLY_NOT_AVAILABLE`, `SIGN_FAILED` if the module chunk is not loaded,
+ * @throws {@link CadesPluginError} `ASSEMBLY_NOT_AVAILABLE`, `SIGN_FAILED` if the module chunk is not loaded,
  * and the errors of {@link signDetached} / `SignCades`
  */
 export async function signAttached(file: Blob, cert: CertificateData, options?: SignOptions): Promise<SignedCms> {
-    const { nativeAttachedMaxSize, attachedAssembly } = CRYPTOPRO_CONFIG
-    if (attachedAssembly) {
+    if (CRYPTOPRO_CONFIG.attachedAssembly) {
         const { signAttachedAssembled } = await loadOptionalModule(loadAttachedAssembly, 'attachedAssembly', {
             missing: CADES_ERROR_CODES.ASSEMBLY_NOT_AVAILABLE,
             failed: CADES_ERROR_CODES.SIGN_FAILED
         })
         return signAttachedAssembled(file, cert, options)
     }
-    if (file.size <= nativeAttachedMaxSize) {
-        return signAttachedNative(file, cert, options)
-    }
-    throw wrapPluginError(new FileTooLargeError(file.size, nativeAttachedMaxSize))
+    return signAttachedNative(file, cert, options)
 }

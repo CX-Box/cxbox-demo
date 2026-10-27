@@ -1,6 +1,7 @@
 import React from 'react'
 import type { MassStepType } from '@components/widgets/Table/massOperations/constants'
 import type { MassOperationProcessing } from '@components/widgets/Table/massOperations/stepButtons'
+import type { CryptoSettings } from '@components/CryptoGeneratorContent/cryptoFile'
 import Confirm from '@components/widgets/Table/massOperations/Confirm/Confirm'
 import TitleWithResult from '@components/widgets/Table/massOperations/TiltleWithResult'
 
@@ -19,6 +20,18 @@ export interface MassStepContentProps {
      * The step after the current one in the steps of the kind of operation
      */
     nextStep?: MassStepType
+    /**
+     * Sends the mass action with the selected rows, as "Apply" does
+     */
+    sendOperation: () => void
+    /**
+     * Certificates chosen before the confirm, `undefined` until they are chosen
+     */
+    settings?: CryptoSettings
+    /**
+     * Keeps the chosen certificates and opens the next step
+     */
+    onSettingsChosen: (settings: CryptoSettings) => void
     /**
      * The widget of the preInvoke confirm, it can differ from the widget of the table
      */
@@ -66,6 +79,8 @@ export const defaultStepContent: StepContentFactories = {
     'Select rows': ({ table }) => ({ content: table }),
     'Review rows': ({ table }) => ({ content: table }),
     'Confirm operation': ({ confirmWidgetName }) => ({ content: <Confirm widgetName={confirmWidgetName} /> }),
+    // the step is only in the kinds of operation that sign files, see `cryptoMassOperation`
+    'Sign and encrypt': ({ table }) => ({ content: table }),
     'View results': ({ table, resultCounts: { success, fail } }) => ({
         title: <TitleWithResult processed={success + fail} success={success} fail={fail} />,
         content: table

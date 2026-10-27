@@ -118,6 +118,12 @@ export const useMassStepActions = ({
         dispatch(actions.closeConfirmModal())
     }
 
+    /**
+     * Back from "Confirm operation" of mass signing to the certificates. The preInvoke confirm stays open:
+     * it is requested on "Review rows" and shown again after the certificates
+     */
+    const backToCertificates = () => moveToStep('Sign and encrypt')
+
     const exportRows = (onlyFailed: boolean) => {
         const [failRows] = onlyFailed && selectedRows ? filterByConditions(selectedRows, [item => !item.success]) : []
         const idFilters = filters.filter(filter => filter.fieldName === FIELDS.TECHNICAL.ID)
@@ -162,6 +168,7 @@ export const useMassStepActions = ({
         goToNextStep,
         apply,
         backToReview,
+        backToCertificates,
         exportRows,
         close
     }

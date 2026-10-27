@@ -22,7 +22,7 @@ export const MASS_OPERATION_BUTTON_TYPES = [
 /**
  * All steps in their order. A kind of operation shows only its steps, see `MassOperationKind.getSteps`
  */
-export const AVAILABLE_MASS_STEPS = ['Select rows', 'Review rows', 'Confirm operation', 'View results'] as const
+export const AVAILABLE_MASS_STEPS = ['Select rows', 'Review rows', 'Sign and encrypt', 'Confirm operation', 'View results'] as const
 
 export type MassOperationType = (typeof MASS_OPERATION_BUTTON_TYPES)[number]
 
@@ -67,6 +67,9 @@ export const MASS_STEPS: MassStep[] = [
     },
     {
         step: 'Review rows'
+    },
+    {
+        step: 'Sign and encrypt'
     },
     {
         step: 'Confirm operation'
@@ -118,7 +121,8 @@ const SETTINGS_GROUP_BUTTON: MassAdditionalOperationGroup = {
 export const OPERATIONS_ACCESSIBILITY_BY_STEP: Record<MassStepType, Array<MassAdditionalOperation | MassAdditionalOperationGroup>> = {
     'Select rows': [NEXT_BUTTON, CANCEL_BUTTON, SETTINGS_GROUP_BUTTON],
     'Review rows': [NEXT_BUTTON, APPLY_BUTTON, CANCEL_BUTTON, BACK_BUTTON],
-    // a kind of operation that processes the rows does it on this step after the confirm
+    'Sign and encrypt': [INTERRUPT_AND_NEXT_BUTTON, BACK_BUTTON],
+    // mass signing processes the rows on this step after the confirm
     'Confirm operation': [INTERRUPT_AND_NEXT_BUTTON, BACK_BUTTON],
     'View results': [CLOSE_BUTTON, EXPORT_BUTTON, RETRY_GROUP_BUTTON]
 }

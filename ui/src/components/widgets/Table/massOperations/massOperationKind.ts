@@ -8,7 +8,7 @@ import type { StepContentFactories } from '@components/widgets/Table/massOperati
 
 /**
  * How a kind of mass operation looks: its steps, the buttons and the content of every step.
- * A kind with its own behavior takes `defaultMassOperation` and replaces only what differs
+ * A kind with its own behavior takes `defaultMassOperation` and replaces only what differs, see `cryptoMassOperation`
  */
 export interface MassOperationKind {
     /**
@@ -27,7 +27,8 @@ export interface MassOperationKind {
 }
 
 export const defaultMassOperation: MassOperationKind = {
-    getSteps: hasPreInvoke => AVAILABLE_MASS_STEPS.filter(step => hasPreInvoke || step !== 'Confirm operation'),
+    getSteps: hasPreInvoke =>
+        AVAILABLE_MASS_STEPS.filter(step => step !== 'Sign and encrypt' && (hasPreInvoke || step !== 'Confirm operation')),
     stepButtons: defaultStepButtons,
     stepContent: defaultStepContent
 }

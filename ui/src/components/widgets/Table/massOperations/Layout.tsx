@@ -22,6 +22,8 @@ import { AppWidgetMeta } from '@interfaces/widget'
 import { postInvokeHasRefreshBc } from '@utils/postInvokeHasRefreshBc'
 import type { MassOperationProcessing } from '@components/widgets/Table/massOperations/stepButtons'
 import type { MassResultCounts } from '@components/widgets/Table/massOperations/stepContent'
+import { getCryptoGenerator } from '@components/CryptoGeneratorContent/cryptoFile'
+import type { CryptoSettings } from '@components/CryptoGeneratorContent/cryptoFile'
 import { FilterType } from '@interfaces/filters'
 import Title from '@components/widgets/Table/massOperations/Title'
 import { AVAILABLE_FILE_EXTENSIONS, getColumnValuesByHeaderFromFile } from '@utils/excel'
@@ -30,6 +32,7 @@ import { FIELDS } from '@constants'
 import { useMassStepActions } from '@components/widgets/Table/massOperations/hooks/useMassStepActions'
 import { getStepButtonProps } from '@components/widgets/Table/massOperations/stepButtons'
 import { defaultMassOperation } from '@components/widgets/Table/massOperations/massOperationKind'
+import { cryptoMassOperation } from '@components/widgets/Table/massOperations/Crypto/cryptoMassOperation'
 
 const { Header, Content, Sider } = AntdLayout
 
@@ -66,7 +69,9 @@ const Layout: React.FC<LayoutProps> = ({ widgetName, bcName, children }) => {
         () => flattenOperations.find(operation => operation.type === operationType),
         [flattenOperations, operationType]
     )
-    const operationKind = defaultMassOperation
+    // mass signing and encryption: certificates on the step "Sign and encrypt", the rows are processed after the confirm if there is one
+    const isCryptoOperation = !!getCryptoGenerator(widget, operationType)
+    const operationKind = isCryptoOperation ? cryptoMassOperation : defaultMassOperation
 
     const { select, selectItems, selectedRows, clearSelectedRows } = useRowSelection(widgetName)
 
@@ -131,39 +136,35 @@ const Layout: React.FC<LayoutProps> = ({ widgetName, bcName, children }) => {
 
     const [wasOperationCall, setWasOperationCall] = useState(false)
     const [processing, setProcessing] = useState<MassOperationProcessing>()
-    // a kind of operation that processes the rows after the confirm: the answer of the confirm, the action is sent after the processing
+    // mass signing with preInvoke: the certificates of the step before the confirm and the answer of the confirm,
+    // the rows are processed and the action is sent after the confirm
+    const [cryptoSettings, setCryptoSettings] = useState<CryptoSettings>()
     const [confirmed, setConfirmed] = useState<{ send: () => void }>()
+
+    const sendMassOperation = useCallback(() => {
+        dispatch(
+            actions.sendOperation({
+                bcName,
+                operationType: currentMassOperation?.type as string,
+                widgetName: widgetName,
+                bcKey: currentMassOperation?.bcKey,
+                confirmOperation: currentMassOperation?.preInvoke,
+                onSuccessAction: actions.changeOperationStep({
+                    bcName,
+                    step: 'View results' as MassStepType
+                })
+            })
+        )
+    }, [bcName, currentMassOperation?.bcKey, currentMassOperation?.preInvoke, currentMassOperation?.type, dispatch, widgetName])
 
     useEffect(() => {
         if (wasOperationCall && bcData?.length && !bc?.loading) {
             setWasOperationCall(false)
-            dispatch(
-                actions.sendOperation({
-                    bcName,
-                    operationType: currentMassOperation?.type as string,
-                    widgetName: widgetName,
-                    bcKey: currentMassOperation?.bcKey,
-                    confirmOperation: currentMassOperation?.preInvoke,
-                    onSuccessAction: actions.changeOperationStep({
-                        bcName,
-                        step: 'View results' as MassStepType
-                    })
-                })
-            )
+            sendMassOperation()
         } else if (bcData?.length === 0 && !bc?.loading) {
             setWasOperationCall(false)
         }
-    }, [
-        bc?.loading,
-        bcData?.length,
-        bcName,
-        currentMassOperation?.bcKey,
-        currentMassOperation?.preInvoke,
-        currentMassOperation?.type,
-        dispatch,
-        wasOperationCall,
-        widgetName
-    ])
+    }, [bc?.loading, bcData?.length, sendMassOperation, wasOperationCall])
 
     const selectFromFileInputRef = useRef<HTMLInputElement>(null)
 
@@ -213,6 +214,14 @@ const Layout: React.FC<LayoutProps> = ({ widgetName, bcName, children }) => {
         table: children,
         resultCounts,
         nextStep: steps[steps.indexOf(currentStep) + 1],
+        sendOperation: sendMassOperation,
+        settings: cryptoSettings,
+        onSettingsChosen: settings => {
+            setCryptoSettings(settings)
+            // an answer of a previous pass must not start the processing at once
+            setConfirmed(undefined)
+            stepActions.goToNextStep()
+        },
         confirmWidgetName: popupData?.widgetName ?? widgetName,
         onConfirm: send => setConfirmed({ send }),
         confirmedSend: confirmed?.send,

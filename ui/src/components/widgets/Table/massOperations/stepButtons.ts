@@ -77,6 +77,8 @@ export const defaultStepButtons: StepButtonsFactories = {
     'Confirm operation': (state, actions) => ({
         back: { onClick: actions.backToReview }
     }),
+    // the step is only in the kinds of operation that sign files, see `cryptoMassOperation`
+    'Sign and encrypt': () => ({}),
     'View results': (state, actions) => ({
         close: { onClick: actions.close },
         export: { onClick: () => actions.exportRows(false) },

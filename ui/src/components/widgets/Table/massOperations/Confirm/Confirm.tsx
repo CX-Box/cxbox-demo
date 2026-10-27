@@ -4,17 +4,22 @@ import SimpleConfirm from '@components/widgets/Table/massOperations/Confirm/Simp
 
 interface ConfirmProps {
     widgetName: string
+    /**
+     * Called instead of sending the confirmed action and gets this sending.
+     * Mass signing asks for the certificates and signs the rows before it calls `send`
+     */
+    onConfirm?: (send: () => void) => void
 }
 
-const Confirm: React.FC<ConfirmProps> = ({ widgetName }) => {
+const Confirm: React.FC<ConfirmProps> = ({ widgetName, onConfirm }) => {
     if (!widgetName) {
         return null
     }
 
     return (
         <div>
-            <ConfirmWithForm widgetName={widgetName} />
-            <SimpleConfirm widgetName={widgetName} />
+            <ConfirmWithForm widgetName={widgetName} onConfirm={onConfirm} />
+            <SimpleConfirm widgetName={widgetName} onConfirm={onConfirm} />
         </div>
     )
 }

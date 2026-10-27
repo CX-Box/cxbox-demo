@@ -37,9 +37,8 @@ const Operations: React.FC<OperationsProps> = ({ operations, getOperationProps, 
 
     const getMenuItem = useCallback(
         operation => {
-            const operationProps = getOperationProps?.(operation.type)
-            const hint = operationProps?.hint ?? operation.hint
-            delete operationProps?.['hint']
+            const { hint: propsHint, ...operationProps } = getOperationProps?.(operation.type) ?? {}
+            const hint = propsHint ?? operation.hint
 
             return (
                 <Menu.Item
@@ -97,9 +96,8 @@ const Operations: React.FC<OperationsProps> = ({ operations, getOperationProps, 
                 {otherOperations.map((operationOrGroup, i) => {
                     if (isMassOperationGroup(operationOrGroup)) {
                         const group = operationOrGroup
-                        const groupProps = getOperationProps?.(group.type)
-                        const hint = groupProps?.hint ?? group.hint
-                        delete groupProps?.['hint']
+                        const { hint: propsHint, ...groupProps } = getOperationProps?.(group.type) ?? {}
+                        const hint = propsHint ?? group.hint
 
                         return hasVisibleOperationsInGroups(group) ? (
                             <Dropdown
@@ -130,9 +128,8 @@ const Operations: React.FC<OperationsProps> = ({ operations, getOperationProps, 
                     }
 
                     const operation = operationOrGroup
-                    const operationProps = getOperationProps?.(operation.type)
-                    const hint = operationProps?.hint ?? operation.hint
-                    delete operationProps?.['hint']
+                    const { hint: propsHint, ...operationProps } = getOperationProps?.(operation.type) ?? {}
+                    const hint = propsHint ?? operation.hint
 
                     return (
                         <Tooltip key={operation.type} trigger="hover" title={hint && t(hint)}>

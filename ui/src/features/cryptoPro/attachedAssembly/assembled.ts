@@ -72,7 +72,7 @@ export async function checkDetachedCms(der: Uint8Array, hash: string): Promise<v
  * The plugin signs the hash (`SignHash`), our code inserts the file into the CMS ({@link attachContent}).
  * The plugin cannot verify such a signature of a large file (`VerifyCades` takes it whole): only the detached part is verified
  * by `VerifyHash`; check the result outside the browser (e.g. `csptest -sfsign -verify`) or at the recipient.
- * Why this is a valid CMS and what to agree on before using it — README, «Why» (assembled attached signature).
+ * Why this is a valid CMS and what to agree on before using it — README, «Attached signature of a large file».
  *
  * Above {@link VERIFIABLE_SIZE} CryptoPro tools may fail to verify it: a warning is logged, the signature is still made.
  *

@@ -112,7 +112,7 @@ export const CADES_ERROR_I18N_KEYS_NO_DATE: Partial<Record<CadesErrorCode, strin
  * (`0x800B010E` revocation check failed) are not listed — they get the code of the failed step.
  */
 const HRESULT_CODES: Record<string, CadesErrorCode> = {
-    '0x80090014': CADES_ERROR_CODES.UNSUPPORTED_KEY, // NTE_BAD_PROV_TYPE: key in CNG (Microsoft Software Key Storage Provider)
+    '0x80090014': CADES_ERROR_CODES.UNSUPPORTED_KEY, // NTE_BAD_PROV_TYPE, observed with keys in CNG (Microsoft Software Key Storage Provider)
     '0x800B0101': CADES_ERROR_CODES.CERT_EXPIRED, // CERT_E_EXPIRED: the certificate or one in its chain
     '0x800B0109': CADES_ERROR_CODES.CERT_UNTRUSTED, // CERT_E_UNTRUSTEDROOT
     '0x8010006E': CADES_ERROR_CODES.USER_CANCELLED // SCARD_W_CANCELLED_BY_USER: PIN dialog cancelled

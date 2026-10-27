@@ -1,4 +1,4 @@
-// Signing by hash: HashedData + SignHash, verification by VerifyHash (README, «Why», hash algorithm by the key).
+// Signing by hash: HashedData + SignHash, verification by VerifyHash (README, «What the wrapper solves», hash algorithm by the key).
 
 import { resolveCadesType } from './cadesType'
 import { createSigner } from './createSigner'

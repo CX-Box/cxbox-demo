@@ -1,4 +1,4 @@
-// Encryption in chunks with CPEnvelopedData.StreamEncrypt; the parts are joined into one CMS EnvelopedData (README, «Why», joined encrypted parts).
+// Encryption in chunks with CPEnvelopedData.StreamEncrypt; the parts are joined into one CMS EnvelopedData (README, «What the wrapper solves», one `.enc` file).
 // The bytes of the parts are joined, not the base64 strings: each string has its own padding.
 
 import { Base64TextBuilder, base64ToBytes, forEachBase64Chunk } from '@features/file'

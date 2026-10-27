@@ -3,8 +3,8 @@ import { CadesPluginError, CADES_ERROR_CODES } from './errors'
 
 /**
  * Key algorithm OID → hash algorithm for `HashedData` (`CADESCOM_HASH_ALGORITHM_*`).
- * Only GOST R 34.10-2012 (the interstate GOST 34.10-2018 is the same algorithm with the same OIDs) —
- * why not GOST 2001, RSA and ECDSA, see README, «What it can and cannot do».
+ * Only GOST R 34.10-2012 (the interstate GOST 34.10-2018 is the same algorithm with the same OIDs);
+ * what was checked with other keys — README, «Details», keys.
  *
  * @remarks
  * A key algorithm missing here cannot sign: its certificates are listed and marked, signing fails with `UNSUPPORTED_KEY` before the plugin is called

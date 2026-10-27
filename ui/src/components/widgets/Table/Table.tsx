@@ -13,8 +13,9 @@ import FilterSettingModal from './components/FilterSettingModal'
 import { usePresetFilterSettings } from './hooks/usePresetFilterSettings'
 import { DataItem, IdItemResponse } from '@cxbox-ui/core'
 import { ControlColumn, CustomDataItem } from '@components/widgets/Table/Table.interfaces'
-import { getGroupingHierarchyRowKey, useGroupingHierarchy } from '@components/widgets/Table/groupingHierarchy'
+import { getGroupingHierarchyRowKey, GroupingHierarchyCommonNode, useGroupingHierarchy } from '@components/widgets/Table/groupingHierarchy'
 import { isRecordRow } from '@components/widgets/Table/groupingHierarchy/utils/isRecordRow'
+import { getSubtreeGroupPaths } from '@components/widgets/Table/groupingHierarchy/utils/getSubtreeGroupPaths'
 import { selectBcData } from '@selectors/selectors'
 import ColumnOrderSettingModal from '@components/widgets/Table/components/ColumnOrderSettingModal'
 import StandardTable from '@components/widgets/Table/StandardTable'
@@ -121,6 +122,18 @@ function Table<T extends CustomDataItem>({
     const disabledCheckboxForMassMode = step !== 'Select rows'
     const showCheckboxForMassMode = (['Select rows', 'Review rows'] as (typeof step)[]).includes(step)
 
+    const selectRow = useCallback(
+        (record: DataItem, selected: boolean) => {
+            select(record, selected)
+
+            // the row of a group is selected alone, not the group: its group and child groups are opened to show it
+            if (selected && enabledGrouping) {
+                getSubtreeGroupPaths(record as GroupingHierarchyCommonNode, sortedGroupKeys).forEach(path => onParentExpand(true, path))
+            }
+        },
+        [enabledGrouping, onParentExpand, select, sortedGroupKeys]
+    )
+
     const rowSelectionForMassMode: AntdTableProps<DataItem>['rowSelection'] = useMemo(
         () =>
             showCheckboxForMassMode
@@ -130,7 +143,7 @@ function Table<T extends CustomDataItem>({
                       selectedRowKeys: enabledGrouping
                           ? selectedRowKeys?.map(id => getGroupingHierarchyRowKeyByRecordId(id) ?? id)
                           : selectedRowKeys,
-                      onSelect: select,
+                      onSelect: selectRow,
                       onSelectAll: selectAll,
                       getCheckboxProps: record => ({
                           'data-test-widget-list-column-select': true,
@@ -142,7 +155,7 @@ function Table<T extends CustomDataItem>({
             disabledCheckboxForMassMode,
             enabledGrouping,
             getGroupingHierarchyRowKeyByRecordId,
-            select,
+            selectRow,
             selectAll,
             selectedRowKeys,
             showCheckboxForMassMode

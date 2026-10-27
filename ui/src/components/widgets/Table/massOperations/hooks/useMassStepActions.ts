@@ -82,6 +82,7 @@ export const useMassStepActions = ({
             })
         )
         dispatch(actions.bcChangeCursors({ cursorsMap: { [bcName]: null as any } }))
+        dispatch(actions.setMassKeepRowMeta({ bcName, keep: true }))
         dispatch(actions.bcForceUpdate({ bcName }))
         changeStep('next')
     }
@@ -96,6 +97,7 @@ export const useMassStepActions = ({
      */
     const goFromReview = () => {
         dispatch(actions.bcChangeCursors({ cursorsMap: { [bcName]: null as any } }))
+        dispatch(actions.setMassKeepRowMeta({ bcName, keep: true }))
         dispatch(actions.bcAddSorter({ bcName, sorter: utils.parseSorters(defaultSort) || [] }))
         clearAllFilters()
         // the request with preInvoke shows the confirm; without preInvoke only mass signing gets here, it sends the action itself

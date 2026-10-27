@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { catchError, concat, EMPTY, filter, mergeMap, Observable, of, race } from 'rxjs'
+import { catchError, concat, defer, EMPTY, filter, mergeMap, Observable, of, race } from 'rxjs'
 import { AnyAction } from 'redux'
 import { DataItem, WidgetTypes } from '@cxbox-ui/schema'
 import { isAnyOf } from '@reduxjs/toolkit'
@@ -35,7 +35,7 @@ import {
 } from '@utils/defaultFilters'
 import { CustomWidgetTypes } from '@interfaces/widget'
 import { getAssocTreeSelectedNodeIds } from '@utils/getAssocTreeSelectedNodeIds'
-import { selectBcFilters, selectHasBcTree } from '@selectors/selectors'
+import { selectBcFilters, selectBcUrlRowMeta, selectHasBcTree } from '@selectors/selectors'
 import { getAllDataFromTree } from '@utils/tree'
 
 const {
@@ -448,15 +448,28 @@ export const bcFetchDataEpic: RootEpic = (action$, state$, { api, utils }) =>
                         widget,
                         internalUtils: utils
                     })
+                    // the mass operation wizard marks its own reloads of the same rows, see `setMassKeepRowMeta`.
+                    // Deferred to see the cursor set by `cursorChange`
+                    const fetchRowMeta = defer(() => {
+                        const currentState = state$.value
+
+                        if (!currentState.screen.viewerMode[bcName]?.keepRowMetaOnReload) {
+                            return sideEffects.fetchRowMeta
+                        }
+
+                        const resetMark = of(actions.setMassKeepRowMeta({ bcName, keep: false }))
+                        // the cursor may move to a row whose row-meta was not requested yet
+                        return selectBcUrlRowMeta(currentState, bcName) ? resetMark : concat(resetMark, sideEffects.fetchRowMeta)
+                    })
 
                     if (!sideEffects.widgetIsUsed) {
-                        return concat(sideEffects.cursorChange, setDataSuccess, sideEffects.fetchRowMeta)
+                        return concat(sideEffects.cursorChange, setDataSuccess, fetchRowMeta)
                     }
                     return concat(
                         sideEffects.cursorChange,
                         sideEffects.resetOutdatedData,
                         setDataSuccess,
-                        sideEffects.fetchRowMeta,
+                        fetchRowMeta,
                         sideEffects.fetchChildren
                     )
                 }),

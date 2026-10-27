@@ -155,6 +155,11 @@ export const setMassResultFilterEnabled = createAction<{
     enabled: boolean
 }>('setMassResultFilterEnabled')
 
+export const setMassKeepRowMeta = createAction<{
+    bcName: string
+    keep: boolean
+}>('setMassKeepRowMeta')
+
 export const setAlternativePaginationType = createAction<{ widgetName: string; type: PaginationMode }>('setAlternativePaginationType')
 
 export const setFilterGroup = createAction<{ bcName: string; filterGroupName: string | null; additionalFilters?: BcFilter[] }>(

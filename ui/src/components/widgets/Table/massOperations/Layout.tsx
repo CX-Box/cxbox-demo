@@ -260,6 +260,7 @@ const Layout: React.FC<LayoutProps> = ({ widgetName, bcName, children }) => {
                     title: id
                 }))
             )
+            dispatch(actions.setMassKeepRowMeta({ bcName, keep: true }))
             dispatch(actions.bcForceUpdate({ bcName }))
             moveToStep('Review rows')
         } else {

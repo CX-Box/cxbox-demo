@@ -13,6 +13,10 @@ export type ViewerModeMass = {
     widgetName: string
     bcName: string
     resultFilterEnabled?: boolean
+    /**
+     * The wizard reloads the same rows itself: the row-meta of the cursor is not requested again on this reload
+     */
+    keepRowMetaOnReload?: boolean
 }
 
 export interface RetainedBc {
@@ -150,6 +154,14 @@ const screenReducerBuilder = reducers
 
         state.viewerMode[bcName] = state.viewerMode[bcName] ?? ({} as (typeof state.viewerMode)[string])
         state.viewerMode[bcName]!.resultFilterEnabled = enabled
+    })
+    .addCase(actions.setMassKeepRowMeta, (state, action) => {
+        const { bcName, keep } = action.payload
+        const viewerMode = state.viewerMode[bcName]
+
+        if (viewerMode) {
+            viewerMode.keepRowMetaOnReload = keep
+        }
     })
     .addCase(actions.setAlternativePaginationType, (state, action) => {
         const { widgetName, type } = action.payload

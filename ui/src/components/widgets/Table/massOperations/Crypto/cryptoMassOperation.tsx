@@ -72,7 +72,7 @@ export const cryptoMassOperation: MassOperationKind = {
                         onNothingSent={props.onConfirmReset}
                     />
                 ) : (
-                    <Confirm widgetName={props.confirmWidgetName} onConfirm={props.onConfirm} />
+                    <Confirm widgetName={props.confirmWidgetName} onConfirm={props.onConfirm} onCancel={props.onCancel} />
                 )
         })
     }

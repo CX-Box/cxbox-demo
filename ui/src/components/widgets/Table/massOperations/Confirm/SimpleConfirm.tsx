@@ -18,9 +18,13 @@ interface SimpleConfirmProps {
      * Mass signing asks for the certificates and signs the rows before it calls `send`
      */
     onConfirm?: (send: () => void) => void
+    /**
+     * Leaves the mass operation, called by the cancel button of the confirm
+     */
+    onCancel: () => void
 }
 
-function SimpleConfirm({ widgetName, onConfirm }: SimpleConfirmProps) {
+function SimpleConfirm({ widgetName, onConfirm, onCancel }: SimpleConfirmProps) {
     const widget = useAppSelector(state => selectWidget(state, widgetName)) as WidgetFormMeta
     const bcName = widget?.bcName as string
 
@@ -92,7 +96,7 @@ function SimpleConfirm({ widgetName, onConfirm }: SimpleConfirmProps) {
                     <Button
                         onClick={() => {
                             dispatch(actions.bcCancelPendingChanges({ bcNames: [bcName] }))
-                            dispatch(actions.resetViewerMode({ bcName }))
+                            onCancel()
                         }}
                         type="formOperation"
                     >

@@ -18,11 +18,15 @@ interface ConfirmWithFormProps {
      * Mass signing asks for the certificates and signs the rows before it calls `send`
      */
     onConfirm?: (send: () => void) => void
+    /**
+     * Leaves the mass operation, called by the cancel button of the confirm
+     */
+    onCancel: () => void
 }
 
 const forceUpdateSetting = true // todo temporary enabled for all FormPopup widgets
 
-function ConfirmWithForm({ widgetName, onConfirm }: ConfirmWithFormProps) {
+function ConfirmWithForm({ widgetName, onConfirm, onCancel }: ConfirmWithFormProps) {
     const { t } = useTranslation()
 
     const widget = useAppSelector(state => selectWidget(state, widgetName)) as WidgetFormMeta
@@ -37,9 +41,8 @@ function ConfirmWithForm({ widgetName, onConfirm }: ConfirmWithFormProps) {
 
     const onClose = useCallback(() => {
         dispatch(actions.bcCancelPendingChanges({ bcNames: [bcName] }))
-
-        dispatch(actions.resetViewerMode({ bcName }))
-    }, [bcName, dispatch])
+        onCancel()
+    }, [bcName, dispatch, onCancel])
 
     const onSave = useCallback(() => {
         if (!bc?.loading && popupData?.options?.operation) {

@@ -19,7 +19,6 @@ import { BcFilter, OperationPostInvokeConfirm, OperationPostInvokeConfirmType, u
 import { OperationPreInvokeCustom, OperationPreInvokeSubType, OperationPreInvokeTypeCustom } from '@interfaces/operation'
 import { useTranslation } from 'react-i18next'
 import { AppWidgetMeta } from '@interfaces/widget'
-import { postInvokeHasRefreshBc } from '@utils/postInvokeHasRefreshBc'
 import type { MassOperationProcessing } from '@components/widgets/Table/massOperations/stepButtons'
 import type { MassResultCounts } from '@components/widgets/Table/massOperations/stepContent'
 import { getCryptoGenerator } from '@components/CryptoGeneratorContent/cryptoFile'
@@ -46,7 +45,6 @@ const Layout: React.FC<LayoutProps> = ({ widgetName, bcName, children }) => {
     const { t } = useTranslation()
 
     const { step, operationType, mode } = useAppSelector(state => state.screen.viewerMode[bcName]) ?? {}
-    const postInvoke = useAppSelector(state => state.view.pendingPostInvoke[bcName]?.[operationType as string])
     const viewName = useAppSelector(state => state.view.name)
     const widget = useAppSelector(state => selectWidget(state, widgetName)) as AppWidgetMeta | undefined
     const rowMeta = useAppSelector(state => selectBcUrlRowMeta(state, bcName))
@@ -101,14 +99,6 @@ const Layout: React.FC<LayoutProps> = ({ widgetName, bcName, children }) => {
             )
         }
     }, [bcName, dispatch])
-
-    const needBcForceUpdate = !postInvokeHasRefreshBc(bcName, postInvoke)
-
-    useEffect(() => {
-        return () => {
-            needBcForceUpdate && dispatch(actions.bcForceUpdate({ bcName }))
-        }
-    }, [bcName, dispatch, needBcForceUpdate])
 
     const currentStep = step as MassStepType
 
@@ -224,6 +214,7 @@ const Layout: React.FC<LayoutProps> = ({ widgetName, bcName, children }) => {
         },
         confirmWidgetName: popupData?.widgetName ?? widgetName,
         onConfirm: send => setConfirmed({ send }),
+        onCancel: stepActions.cancel,
         confirmedSend: confirmed?.send,
         onConfirmReset: () => setConfirmed(undefined),
         onProcessingChange: setProcessing

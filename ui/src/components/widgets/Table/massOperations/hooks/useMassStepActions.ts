@@ -8,6 +8,7 @@ import { FIELDS } from '@constants'
 import { FilterType } from '@interfaces/filters'
 import { AppWidgetMeta } from '@interfaces/widget'
 import { filterByConditions } from '@utils/filterByConditions'
+import { postInvokeHasRefreshBc } from '@utils/postInvokeHasRefreshBc'
 import { openNotification } from '@components/NotificationsContainer/utils'
 import { useClearAllFilters } from '@components/widgets/Table/hooks/hooks'
 import { useExportTable } from '@components/widgets/Table/hooks/useExportTable'
@@ -65,9 +66,15 @@ export const useMassStepActions = ({
 
     const goToNextStep = () => changeStep('next')
 
+    /**
+     * Leaves the mass operation: the table is read again without the filter by the selected rows,
+     * unless the postInvoke of the result reads the BC itself.
+     * Leaving the screen does not get here: the screen loads its data itself
+     */
     const cancel = () => {
         dispatch(actions.resetViewerMode({ bcName }))
         dispatch(actions.bcRemoveFilter({ bcName, filter: { type: 'equalsOneOf', fieldName: FIELDS.TECHNICAL.ID } as BcFilter }))
+        !postInvokeHasRefreshBc(bcName, postInvoke) && dispatch(actions.bcForceUpdate({ bcName }))
     }
 
     const goToReview = () => {

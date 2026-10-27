@@ -42,6 +42,10 @@ export interface MassStepContentProps {
      */
     onConfirm: (send: () => void) => void
     /**
+     * Leaves the mass operation, as "Cancel" does
+     */
+    onCancel: () => void
+    /**
      * Sending of the action with the answer of the preInvoke confirm, `undefined` until the confirm is answered
      */
     confirmedSend?: () => void
@@ -78,7 +82,9 @@ export type StepContentFactories = Record<MassStepType, StepContentFactory>
 export const defaultStepContent: StepContentFactories = {
     'Select rows': ({ table }) => ({ content: table }),
     'Review rows': ({ table }) => ({ content: table }),
-    'Confirm operation': ({ confirmWidgetName }) => ({ content: <Confirm widgetName={confirmWidgetName} /> }),
+    'Confirm operation': ({ confirmWidgetName, onCancel }) => ({
+        content: <Confirm widgetName={confirmWidgetName} onCancel={onCancel} />
+    }),
     // the step is only in the kinds of operation that sign files, see `cryptoMassOperation`
     'Sign and encrypt': ({ table }) => ({ content: table }),
     'View results': ({ table, resultCounts: { success, fail } }) => ({

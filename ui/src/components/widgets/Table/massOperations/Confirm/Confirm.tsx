@@ -9,17 +9,21 @@ interface ConfirmProps {
      * Mass signing asks for the certificates and signs the rows before it calls `send`
      */
     onConfirm?: (send: () => void) => void
+    /**
+     * Leaves the mass operation, called by the cancel button of the confirm
+     */
+    onCancel: () => void
 }
 
-const Confirm: React.FC<ConfirmProps> = ({ widgetName, onConfirm }) => {
+const Confirm: React.FC<ConfirmProps> = ({ widgetName, onConfirm, onCancel }) => {
     if (!widgetName) {
         return null
     }
 
     return (
         <div>
-            <ConfirmWithForm widgetName={widgetName} onConfirm={onConfirm} />
-            <SimpleConfirm widgetName={widgetName} onConfirm={onConfirm} />
+            <ConfirmWithForm widgetName={widgetName} onConfirm={onConfirm} onCancel={onCancel} />
+            <SimpleConfirm widgetName={widgetName} onConfirm={onConfirm} onCancel={onCancel} />
         </div>
     )
 }

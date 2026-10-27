@@ -98,6 +98,19 @@
         "encryptedFileNameKey": "fileEncrypt",
         "encryptedFileBaseNameKey": "NAME_FILE_OVERRIDE_ENCRYPT",
         "signatureFileBaseNameKey": "NAME_FILE_OVERRIDE_SIGN"
+      },
+      {
+        "type": "signAndEncrypt",
+        "signatureType": "CADES_BES",
+        "actionName": "massEncryptAndSign",
+        "documentFileIdKey": "fileId",
+        "documentFileNameKey": "file",
+        "signatureFileIdKey": "fileSignId",
+        "signatureFileNameKey": "fileSign",
+        "encryptedFileIdKey": "fileEncryptId",
+        "encryptedFileNameKey": "fileEncrypt",
+        "encryptedFileBaseNameKey": "NAME_FILE_OVERRIDE_ENCRYPT",
+        "signatureFileBaseNameKey": "NAME_FILE_OVERRIDE_SIGN"
       }
     ],
     "actionGroups": {
@@ -106,7 +119,8 @@
         "associate",
         "edit",
         "delete",
-        "documentEncryptSign"
+        "documentEncryptSign",
+        "massEncryptAndSign"
       ]
     }
   }

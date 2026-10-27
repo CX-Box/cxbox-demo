@@ -15,9 +15,13 @@ export const MASS_OPERATION_BUTTON_TYPES = [
     'export-failed',
     'close',
     'select-from-file',
-    'setting'
+    'setting',
+    'interrupt-and-next'
 ] as const
 
+/**
+ * All steps in their order. A kind of operation shows only its steps, see `MassOperationKind.getSteps`
+ */
 export const AVAILABLE_MASS_STEPS = ['Select rows', 'Review rows', 'Confirm operation', 'View results'] as const
 
 export type MassOperationType = (typeof MASS_OPERATION_BUTTON_TYPES)[number]
@@ -82,6 +86,13 @@ const BACK_BUTTON: MassAdditionalOperation = { type: 'back', text: 'Back', butto
 
 const CLOSE_BUTTON: MassAdditionalOperation = { type: 'close', text: 'Close', hidden: true }
 
+const INTERRUPT_AND_NEXT_BUTTON: MassAdditionalOperation = {
+    type: 'interrupt-and-next',
+    text: 'Stop and send processed',
+    hint: 'The current row is not waited for: it and the rows that are not processed get the error "Interrupted"',
+    hidden: true
+}
+
 const EXPORT_BUTTON: MassAdditionalOperation = { type: 'export', text: 'Export', hidden: true }
 
 const EXPORT_FAILED_BUTTON: MassAdditionalOperation = { type: 'export-failed', text: 'Export failed', hidden: true }
@@ -107,6 +118,7 @@ const SETTINGS_GROUP_BUTTON: MassAdditionalOperationGroup = {
 export const OPERATIONS_ACCESSIBILITY_BY_STEP: Record<MassStepType, Array<MassAdditionalOperation | MassAdditionalOperationGroup>> = {
     'Select rows': [NEXT_BUTTON, CANCEL_BUTTON, SETTINGS_GROUP_BUTTON],
     'Review rows': [NEXT_BUTTON, APPLY_BUTTON, CANCEL_BUTTON, BACK_BUTTON],
-    'Confirm operation': [BACK_BUTTON],
+    // a kind of operation that processes the rows does it on this step after the confirm
+    'Confirm operation': [INTERRUPT_AND_NEXT_BUTTON, BACK_BUTTON],
     'View results': [CLOSE_BUTTON, EXPORT_BUTTON, RETRY_GROUP_BUTTON]
 }

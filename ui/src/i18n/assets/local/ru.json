@@ -193,6 +193,8 @@
       "Certificate expired": "Срок действия истек ({{date}})",
       "No private key for certificate": "Нет привязки к закрытому ключу",
       "Certificate chain validation failed": "Цепочка сертификатов не прошла проверку",
+      "Stop and send processed": "Остановить и отправить обработанные",
+      "The current row is not waited for: it and the rows that are not processed get the error \"Interrupted\"": "Текущая строка не дожидается окончания: она и необработанные строки получат ошибку «Прервано»",
       "CryptoPro plugin is not available": "Плагин CryptoPro недоступен",
       "CryptoPro plugin is outdated": "Плагин CryptoPro устарел",
       "CryptoPro plugin is not responding": "Плагин CryptoPro не отвечает",

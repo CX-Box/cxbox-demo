@@ -2,9 +2,11 @@ import { CxBoxApiInstance } from 'api'
 import { DataItem } from '@cxbox-ui/schema'
 import { AppWidgetMeta, CryptoGeneratorItem, CryptoGeneratorTypes } from '@interfaces/widget'
 import {
+    CadesPluginError,
     CertificateData,
     encrypt,
     encryptAndSign,
+    getCertificateProblem,
     OperationOptions,
     sign,
     signAndEncrypt,
@@ -162,13 +164,28 @@ export const getSignedDocumentName = (
 ) => (generatorType === 'encryptAndSign' ? `${encryptedFileBaseName}.enc` : documentName)
 
 /**
+ * Throws, if the encryption certificate has a problem: the plugin itself encrypts with an expired certificate
+ * or one with a broken chain, while signing refuses them
+ */
+export function validateEncryptionCertificate({ generatorType, encCert }: Pick<CryptoSettings, 'generatorType' | 'encCert'>) {
+    const problem = hasEncryptInGeneratorType(generatorType) && encCert && getCertificateProblem(encCert, { purpose: 'encrypt' })
+
+    if (problem) {
+        throw new CadesPluginError(problem)
+    }
+}
+
+/**
  * Signs and/or encrypts one file with the CryptoPro plugin
  */
-export function createCryptoData(
+export async function createCryptoData(
     file: Blob,
     { generatorType, signaturePackage, signatureType, signCert, encCert }: CryptoSettings,
     { documentName, signal }: { documentName?: string; signal?: AbortSignal } = {}
 ): Promise<CryptoData> {
+    // before signing: with signAndEncrypt a refused certificate would leave a signature without the encrypted file
+    validateEncryptionCertificate({ generatorType, encCert })
+
     return runOperation(generatorType, file, { signCert, encCert }, { cadesType: signatureType, signaturePackage, documentName, signal })
 }
 

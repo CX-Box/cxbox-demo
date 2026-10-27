@@ -22,7 +22,8 @@ import {
     getCryptoFileBaseNames,
     getCryptoGenerator,
     getSignedDocumentName,
-    uploadCryptoData
+    uploadCryptoData,
+    validateEncryptionCertificate
 } from '@components/CryptoGeneratorContent/cryptoFile'
 
 /**
@@ -184,6 +185,8 @@ export const useMassCrypto = (widgetName: string, bcName: string, operationType:
             setProgress({ done: 0, total: ids.length })
 
             try {
+                // one certificate for all rows: a refused one fails every row at once, without downloading the files
+                validateEncryptionCertificate(settings)
                 // the previous step loads the selected rows, they are requested again only if they did not fit on its page
                 const loadedRecords = bcData?.filter(item => ids.includes(item.id)) ?? []
                 // the records are not waited for when interrupted: no row is processed yet

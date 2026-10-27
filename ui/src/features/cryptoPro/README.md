@@ -173,7 +173,9 @@ Not mapped on purpose: `0x800B010E` (revocation not checked — comes at signing
 
 `CERT_NOT_YET_VALID`, `CERT_EXPIRED`, `CERT_NO_PRIVATE_KEY`, `CERT_UNTRUSTED`, `UNSUPPORTED_KEY` are also returned by
 `getCertificateProblem` to mark a certificate in the list; nothing is blocked by it — the plugin decides at the
-operation.
+operation. The exception is encryption: the plugin encrypts for a recipient with an expired certificate or a broken chain,
+so `validateEncryptionCertificate` (`components/CryptoGeneratorContent/cryptoFile.ts`) refuses such a certificate
+before encryption.
 
 ## Details
 

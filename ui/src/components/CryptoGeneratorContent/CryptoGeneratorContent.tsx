@@ -6,7 +6,7 @@ import { actions } from '@actions'
 import { CxBoxApiInstance } from 'api'
 import { ApplicationErrorType, PendingDataItem } from '@cxbox-ui/core'
 import styles from './CryptoGeneratorContent.module.less'
-import { AppWidgetMeta, CryptoGeneratorItem, CryptoGeneratorTypes } from '@interfaces/widget'
+import { AppWidgetMeta, CryptoGeneratorTypes } from '@interfaces/widget'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import moment from 'moment'
 import CertificateInfo from '@components/CryptoGeneratorContent/CertificateInfo'
@@ -22,35 +22,58 @@ import {
     CertificatePurpose,
     CRYPTOPRO_LINKS,
     DEFAULT_SIGNATURE_PACKAGE,
-    encrypt,
-    encryptAndSign,
     ensureCadesPluginInstalled,
     getCertificateProblem,
     getCertificates,
     isCadesPluginError,
     isNativeAttached,
     SIGNATURE_PACKAGE,
-    sign,
-    signAndEncrypt,
-    SignaturePackage,
-    SignedAndEncrypted
+    SignaturePackage
 } from '@features/cryptoPro'
-import { DataItem } from '@cxbox-ui/schema'
 import FieldBaseThemeWrapper from '@components/FieldBaseThemeWrapper/FieldBaseThemeWrapper'
 import Button from '@components/ui/Button/Button'
 import { DateFormat } from '@interfaces/date'
+import {
+    CRYPTO_GENERATOR_TYPES,
+    createCryptoData,
+    CryptoFile,
+    CryptoSettings,
+    getCryptoFileBaseNames,
+    getCryptoGenerator,
+    getSignedDocumentName,
+    hasEncryptInGeneratorType,
+    hasInvalidCryptoGeneratorType,
+    hasSignatureInGeneratorType,
+    resolveCryptoGeneratorType,
+    uploadCryptoData
+} from '@components/CryptoGeneratorContent/cryptoFile'
 
-const SIGN_CONTENT_STATES = Lookup.create(['PLUGIN_ERROR', 'LOADING', 'CERTIFICATES_EMPTY', 'CERTIFICATES_FOUND'])
+const SIGN_CONTENT_STATES = Lookup.create(['CONFIG_ERROR', 'PLUGIN_ERROR', 'LOADING', 'CERTIFICATES_EMPTY', 'CERTIFICATES_FOUND'])
 
 interface CryptoGeneratorContentProps {
     operationType: string
     meta: AppWidgetMeta
-    onClose: () => void
+    /**
+     * Closes the popup when the operation ends, mass signing does not need it
+     */
+    onClose?: () => void
     /**
      * Called when signing or encryption starts and ends. The popup uses it to block closing:
      * a running operation is left only by «Cancel», shown while an operation with an attached signature by `SignCades` runs.
      */
     onInProgressChange?: (inProgress: boolean) => void
+    /**
+     * Replaces signing of the current record, used by mass signing
+     */
+    onExecute?: (settings: CryptoSettings) => void
+    /**
+     * Text of the button instead of "Execute", when the button does not sign yet
+     */
+    executeText?: string
+    /**
+     * Certificates and signature type chosen before: they are selected again when the certificates are loaded
+     */
+    chosenSettings?: CryptoSettings
 }
 
 export function getErrorMessage(error: unknown): string {
@@ -68,62 +91,33 @@ export function getErrorMessage(error: unknown): string {
     return String(error)
 }
 
-const resolveCryptoGeneratorType = (
-    {
-        type: cryptoGeneratorType,
-        signatureFileIdKey,
-        signatureFileNameKey,
-        encryptedFileIdKey,
-        encryptedFileNameKey
-    }: CryptoGeneratorItem = {} as CryptoGeneratorItem
-) => {
-    const hasSignConfig = !!(signatureFileIdKey || signatureFileNameKey)
-    const hasEncryptConfig = !!(encryptedFileIdKey || encryptedFileNameKey)
-
-    let resolvedType: CryptoGeneratorTypes = cryptoGeneratorType || 'sign'
-
-    if (!cryptoGeneratorType) {
-        if (hasSignConfig && !hasEncryptConfig) {
-            resolvedType = 'sign'
-        } else if (!hasSignConfig && hasEncryptConfig) {
-            resolvedType = 'encrypt'
-        } else if (hasSignConfig && hasEncryptConfig) {
-            resolvedType = 'encryptAndSign'
-        }
-    }
-
-    return resolvedType
-}
-
-const hasSignatureInGeneratorType = (generatorType: CryptoGeneratorTypes) =>
-    generatorType === 'sign' || generatorType === 'signAndEncrypt' || generatorType === 'encryptAndSign'
-
-const hasEncryptInGeneratorType = (generatorType: CryptoGeneratorTypes) =>
-    generatorType === 'encrypt' || generatorType === 'signAndEncrypt' || generatorType === 'encryptAndSign'
-
-const hasCombinedTypeInGeneratorType = (generatorType: CryptoGeneratorTypes) =>
-    generatorType === 'signAndEncrypt' || generatorType === 'encryptAndSign'
-
-function CryptoGeneratorContent({ operationType, meta, onClose, onInProgressChange }: CryptoGeneratorContentProps) {
-    const { bcName, options, name: widgetName } = meta
+function CryptoGeneratorContent({
+    operationType,
+    meta,
+    onClose,
+    onInProgressChange,
+    onExecute,
+    executeText,
+    chosenSettings
+}: CryptoGeneratorContentProps) {
+    const { bcName, name: widgetName } = meta
     const { t } = useTranslation()
 
-    const cryptoGenerator = options?.cryptoGenerator?.find(item => item.actionName === operationType)
+    const cryptoGenerator = getCryptoGenerator(meta, operationType)
     const {
         documentFileIdKey,
         documentFileNameKey,
         signatureFileIdKey,
         signatureFileNameKey,
-        signatureFileBaseNameKey,
         signatureType,
         signaturePackage,
         actionName,
         encryptedFileIdKey,
-        encryptedFileNameKey,
-        encryptedFileBaseNameKey
+        encryptedFileNameKey
     } = cryptoGenerator || {}
 
     const resolvedType: CryptoGeneratorTypes = resolveCryptoGeneratorType(cryptoGenerator)
+    const configError = hasInvalidCryptoGeneratorType(cryptoGenerator)
 
     const dispatch = useDispatch()
 
@@ -134,8 +128,7 @@ function CryptoGeneratorContent({ operationType, meta, onClose, onInProgressChan
             fileId: data?.[documentFileIdKey!] as string | undefined,
             cursor: cursor,
             documentName: data?.[documentFileNameKey!] ? String(data[documentFileNameKey!]) : undefined,
-            signatureFileBaseName: String(data?.[signatureFileBaseNameKey!] ?? data?.[documentFileNameKey!] ?? 'signature'),
-            encryptedFileBaseName: String(data?.[encryptedFileBaseNameKey!] ?? data?.[documentFileNameKey!] ?? 'encrypted_file')
+            ...getCryptoFileBaseNames(data, cryptoGenerator ?? {})
         }
     }, shallowEqual)
     const [pluginUnavailable, setPluginUnavailable] = useState(false)
@@ -156,30 +149,57 @@ function CryptoGeneratorContent({ operationType, meta, onClose, onInProgressChan
     const attempt = useRef<AbortController | null>(null)
 
     useEffect(() => {
-        if (certificates) {
+        if (configError) {
+            console.error(
+                `Signing is not configured: the action ${actionName} has an unknown type "${cryptoGenerator?.type}" ` +
+                    `in options.cryptoGenerator of the widget. Expected: ${CRYPTO_GENERATOR_TYPES.join(', ')}`
+            )
+        }
+    }, [actionName, configError, cryptoGenerator?.type])
+
+    // read when the certificates are loaded: a change of the chosen settings must not read the certificates again
+    const chosenSettingsRef = useRef(chosenSettings)
+    chosenSettingsRef.current = chosenSettings
+
+    useEffect(() => {
+        if (certificates || configError) {
             return
         }
+        let cancelled = false
 
         ;(async () => {
             try {
                 await ensureCadesPluginInstalled()
             } catch (e) {
                 console.error(e)
-                setPluginUnavailable(true)
+                !cancelled && setPluginUnavailable(true)
                 return
             }
 
             try {
-                setCertificates(await getCertificates())
+                const certs = await getCertificates()
+                if (cancelled) {
+                    return
+                }
+                // the list is read again with new objects, the chosen certificates are found by their thumbprints
+                const chosen = chosenSettingsRef.current
+                const findChosen = (cert?: CertificateData) => certs.find(item => item.thumbprint === cert?.thumbprint)
+                chosen?.signCert && setSelectedSignCert(findChosen(chosen.signCert))
+                chosen?.encCert && setSelectedEncCert(findChosen(chosen.encCert))
+                setCertificates(certs)
             } catch (e) {
                 console.error(e)
-                setCertificatesReadFailed(true)
+                !cancelled && setCertificatesReadFailed(true)
             }
         })()
-    }, [certificates, dispatch])
+
+        return () => {
+            cancelled = true
+        }
+    }, [certificates, configError, dispatch])
 
     const updatePendingData = React.useCallback(
-        (data: DataItem, pickMap: Record<string, string>) => {
+        (data: CryptoFile, pickMap: Record<string, keyof CryptoFile>) => {
             if (cursor) {
                 const dataItemToUpdate: PendingDataItem = {}
                 let dataExist: boolean = false
@@ -198,12 +218,14 @@ function CryptoGeneratorContent({ operationType, meta, onClose, onInProgressChan
     )
 
     const executeCryptoAction = React.useCallback(
-        async (generatorType: CryptoGeneratorTypes, currentSignaturePackage: SignaturePackage) => {
-            if (!selectedSignCert && hasSignatureInGeneratorType(generatorType)) {
+        async (settings: CryptoSettings) => {
+            const { generatorType, signaturePackage: currentSignaturePackage } = settings
+
+            if (!settings.signCert && hasSignatureInGeneratorType(generatorType)) {
                 return
             }
 
-            if (!selectedEncCert && hasEncryptInGeneratorType(generatorType)) {
+            if (!settings.encCert && hasEncryptInGeneratorType(generatorType)) {
                 return
             }
 
@@ -217,62 +239,35 @@ function CryptoGeneratorContent({ operationType, meta, onClose, onInProgressChan
                     throw new Error('The record has no document file to sign or encrypt')
                 }
                 const response = await CxBoxApiInstance.getFile(fileId)
-                const file = response.data
-
-                // documentName goes into the signature: the signed document, for encryptAndSign — the .enc file
-                const options = {
-                    cadesType: signatureType,
-                    signaturePackage: currentSignaturePackage,
-                    documentName: generatorType === 'encryptAndSign' ? `${encryptedFileBaseName}.enc` : documentName,
-                    signal: controller.signal
-                }
-                // signature / encrypted — the .sig / .enc files, base64 text
-                const strategies: Record<CryptoGeneratorTypes, () => Promise<Partial<SignedAndEncrypted>>> = {
-                    sign: () => sign(file, selectedSignCert!, options),
-                    encrypt: () => encrypt(file, selectedEncCert!),
-                    signAndEncrypt: () => signAndEncrypt(file, selectedSignCert!, selectedEncCert!, options),
-                    encryptAndSign: () => encryptAndSign(file, selectedSignCert!, selectedEncCert!, options)
-                }
+                const baseNames = { signatureFileBaseName, encryptedFileBaseName }
 
                 // only the plugin phase: a stop during the upload would leave the record half-updated
                 setCancellable(hasSignatureInGeneratorType(generatorType) && isNativeAttached(currentSignaturePackage))
-                const { signature, encrypted } = await strategies[generatorType]().finally(() => setCancellable(false))
+                const cryptoData = await createCryptoData(response.data, settings, {
+                    documentName: getSignedDocumentName(generatorType, documentName, baseNames),
+                    signal: controller.signal
+                }).finally(() => setCancellable(false))
                 // after the plugin answered there is nothing to stop: a click on «Cancel» before it is hidden does nothing
                 attempt.current = null
 
-                if (!signature && !encrypted) {
+                if (!cryptoData.signature && !cryptoData.encrypted) {
                     return
                 }
 
                 dispatch(actions.uploadFile(null))
 
-                const isSingleOutputFile =
-                    signatureFileIdKey === encryptedFileIdKey && !!signatureFileIdKey && hasCombinedTypeInGeneratorType(generatorType)
+                const { signature, encrypted } = await uploadCryptoData(
+                    cryptoData,
+                    generatorType,
+                    { signatureFileIdKey, signatureFileNameKey, encryptedFileIdKey, encryptedFileNameKey },
+                    baseNames
+                )
 
-                const uploadAndUpdate = async (
-                    resultFile: Blob,
-                    extension: 'sig' | 'enc',
-                    baseName: string,
-                    idKey: string,
-                    nameKey: string
-                ) => {
-                    const response = await CxBoxApiInstance.uploadFile(resultFile, `${baseName}.${extension}`)
-                    updatePendingData(response.data.data, { [idKey]: 'id', [nameKey]: 'name' })
+                if (signature) {
+                    updatePendingData(signature, { [signatureFileIdKey!]: 'id', [signatureFileNameKey!]: 'name' })
                 }
-
-                if (isSingleOutputFile) {
-                    if (generatorType === 'signAndEncrypt' && encrypted) {
-                        await uploadAndUpdate(encrypted, 'enc', encryptedFileBaseName, encryptedFileIdKey!, encryptedFileNameKey!)
-                    } else if (generatorType === 'encryptAndSign' && signature) {
-                        await uploadAndUpdate(signature, 'sig', signatureFileBaseName, signatureFileIdKey!, signatureFileNameKey!)
-                    }
-                } else {
-                    if (signature && signatureFileIdKey && signatureFileNameKey) {
-                        await uploadAndUpdate(signature, 'sig', signatureFileBaseName, signatureFileIdKey, signatureFileNameKey)
-                    }
-                    if (encrypted && encryptedFileIdKey && encryptedFileNameKey) {
-                        await uploadAndUpdate(encrypted, 'enc', encryptedFileBaseName, encryptedFileIdKey, encryptedFileNameKey)
-                    }
+                if (encrypted) {
+                    updatePendingData(encrypted, { [encryptedFileIdKey!]: 'id', [encryptedFileNameKey!]: 'name' })
                 }
 
                 dispatch(actions.uploadFileDone(null))
@@ -283,8 +278,8 @@ function CryptoGeneratorContent({ operationType, meta, onClose, onInProgressChan
                 console.error(err)
                 if (isCadesPluginError(err)) {
                     const { type, key, hintKey, params, pluginMessage, duration } = cryptoProNotification(err, {
-                        signCert: selectedSignCert,
-                        encCert: selectedEncCert
+                        signCert: settings.signCert,
+                        encCert: settings.encCert
                     })
                     openNotification({
                         type,
@@ -311,12 +306,10 @@ function CryptoGeneratorContent({ operationType, meta, onClose, onInProgressChan
                 attempt.current = null
                 setInProgress(false)
                 onInProgressChange?.(false)
-                onClose()
+                onClose?.()
             }
         },
         [
-            selectedSignCert,
-            selectedEncCert,
             onClose,
             onInProgressChange,
             fileId,
@@ -326,7 +319,6 @@ function CryptoGeneratorContent({ operationType, meta, onClose, onInProgressChan
             bcName,
             widgetName,
             actionName,
-            signatureType,
             updatePendingData,
             documentName,
             encryptedFileBaseName,
@@ -338,14 +330,29 @@ function CryptoGeneratorContent({ operationType, meta, onClose, onInProgressChan
     )
 
     const [currentPackage, setCurrentPackage] = useState<SignaturePackage>(
-        signaturePackage && signaturePackage !== 'any' ? signaturePackage : DEFAULT_SIGNATURE_PACKAGE
+        signaturePackage && signaturePackage !== 'any' ? signaturePackage : chosenSettings?.signaturePackage ?? DEFAULT_SIGNATURE_PACKAGE
     )
 
     const handleExecute = async () => {
-        await executeCryptoAction(resolvedType, currentPackage)
+        const settings: CryptoSettings = {
+            generatorType: resolvedType,
+            signaturePackage: currentPackage,
+            signatureType,
+            signCert: selectedSignCert,
+            encCert: selectedEncCert
+        }
+
+        if (onExecute) {
+            onExecute(settings)
+        } else {
+            await executeCryptoAction(settings)
+        }
     }
 
     const currentState = useMemo(() => {
+        if (configError) {
+            return SIGN_CONTENT_STATES.CONFIG_ERROR
+        }
         if (pluginUnavailable) {
             return SIGN_CONTENT_STATES.PLUGIN_ERROR
         }
@@ -354,7 +361,7 @@ function CryptoGeneratorContent({ operationType, meta, onClose, onInProgressChan
             return SIGN_CONTENT_STATES.LOADING
         }
         return certificates.length ? SIGN_CONTENT_STATES.CERTIFICATES_FOUND : SIGN_CONTENT_STATES.CERTIFICATES_EMPTY
-    }, [certificates, pluginUnavailable])
+    }, [certificates, configError, pluginUnavailable])
 
     const createCertSelect = useCallback(
         (value: string | undefined, onChange: (value: string | undefined) => void, purpose: CertificatePurpose) => {
@@ -383,6 +390,10 @@ function CryptoGeneratorContent({ operationType, meta, onClose, onInProgressChan
     return (
         <>
             <Switch test={currentState}>
+                <Case value={SIGN_CONTENT_STATES.CONFIG_ERROR}>
+                    <Typography className={styles.typography}>{t('Operation is not configured. Contact your administrator.')}</Typography>
+                </Case>
+
                 <Case value={SIGN_CONTENT_STATES.PLUGIN_ERROR}>
                     <Typography className={styles.typography}>
                         <Trans
@@ -417,7 +428,7 @@ function CryptoGeneratorContent({ operationType, meta, onClose, onInProgressChan
 
                 <Case value={SIGN_CONTENT_STATES.CERTIFICATES_FOUND}>
                     <FieldBaseThemeWrapper className={styles.container}>
-                        <Form>
+                        <Form className={styles.certificates}>
                             {signaturePackage === 'any' && (
                                 <Form.Item label={t('Signature type')} className={styles.formItem}>
                                     <Select value={currentPackage} onChange={value => setCurrentPackage(value)} style={{ width: '100%' }}>
@@ -466,7 +477,7 @@ function CryptoGeneratorContent({ operationType, meta, onClose, onInProgressChan
                                     (hasEncryptInGeneratorType(resolvedType) && !selectedEncCert)
                                 }
                             >
-                                {t('Execute')}
+                                {executeText ?? t('Execute')}
                             </Button>
                             {cancellable && (
                                 <Button type="formOperation" onClick={() => attempt.current?.abort()}>

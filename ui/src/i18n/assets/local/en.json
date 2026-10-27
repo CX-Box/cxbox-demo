@@ -205,6 +205,7 @@
         "Certificate expired": "The certificate has expired ({{date}})",
         "No private key for certificate": "No private key for the certificate",
         "Certificate chain validation failed": "Certificate chain validation failed",
+        "Operation is not configured. Contact your administrator.": "Operation is not configured. Contact your administrator.",
         "Stop and send processed": "Stop and send processed",
         "The current row is not waited for: it and the rows that are not processed get the error \"Interrupted\"": "The current row is not waited for: it and the rows that are not processed get the error \"Interrupted\"",
         "CryptoPro plugin is not available": "The CryptoPro plugin is not available",

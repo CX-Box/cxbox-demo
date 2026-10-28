@@ -57,6 +57,28 @@ const getWidgetsForRowMetaUpdate = (state: RootState, activeBcName: string) => {
     return Object.values(bcDictionary)
 }
 
+/**
+ * Data of a widget hidden by showCondition is not fetched together with its parent bc,
+ * so when forceActive makes the widget visible, its data has to be fetched (not only the row meta)
+ */
+const isDataFetchRequired = (state: RootState, bcName: string) => {
+    const bc = state.screen.bo.bc[bcName]
+
+    if (!bc || bc.loading || state.data[bcName] !== undefined) {
+        return false
+    }
+
+    let parentName = bc.parentName
+    while (parentName) {
+        if (!state.screen.bo.bc[parentName]?.cursor) {
+            return false
+        }
+        parentName = state.screen.bo.bc[parentName]?.parentName
+    }
+
+    return true
+}
+
 export const updateRowMetaForRelatedBcEpic: RootEpic = (action$, state$) =>
     action$.pipe(
         filter(isAnyOf(actions.forceActiveRmUpdate)),
@@ -68,7 +90,9 @@ export const updateRowMetaForRelatedBcEpic: RootEpic = (action$, state$) =>
             if (widgetsForRowMetaUpdate.length) {
                 return concat(
                     ...widgetsForRowMetaUpdate.map(currentWidget =>
-                        of(actions.bcFetchRowMeta({ widgetName: currentWidget.name, bcName: currentWidget.bcName }))
+                        isDataFetchRequired(state, currentWidget.bcName)
+                            ? of(actions.bcFetchDataRequest({ widgetName: currentWidget.name, bcName: currentWidget.bcName }))
+                            : of(actions.bcFetchRowMeta({ widgetName: currentWidget.name, bcName: currentWidget.bcName }))
                     )
                 )
             }

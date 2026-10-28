@@ -59,24 +59,35 @@ const getWidgetsForRowMetaUpdate = (state: RootState, activeBcName: string) => {
 
 /**
  * Data of a widget hidden by showCondition is not fetched together with its parent bc,
- * so when forceActive makes the widget visible, its data has to be fetched (not only the row meta)
+ * so when forceActive makes the widget visible, its data has to be fetched (not only the row meta).
+ * Returns the shown widget of the bc to fetch the data for. Popup widgets are skipped: their data is fetched when the popup opens
  */
-const isDataFetchRequired = (state: RootState, bcName: string) => {
+const getWidgetForDataFetch = (state: RootState, bcName: string) => {
     const bc = state.screen.bo.bc[bcName]
 
     if (!bc || bc.loading || state.data[bcName] !== undefined) {
-        return false
+        return undefined
     }
 
     let parentName = bc.parentName
     while (parentName) {
         if (!state.screen.bo.bc[parentName]?.cursor) {
-            return false
+            return undefined
         }
         parentName = state.screen.bo.bc[parentName]?.parentName
     }
 
-    return true
+    return state.view.widgets.find(
+        widget =>
+            widget.bcName === bcName &&
+            !PopupWidgetTypes.includes(widget.type) &&
+            utils.checkShowCondition(
+                widget.showCondition,
+                state.screen.bo.bc[widget.showCondition?.bcName as string]?.cursor || '',
+                state.data[widget.showCondition?.bcName as string],
+                state.view.pendingDataChanges
+            )
+    )
 }
 
 export const updateRowMetaForRelatedBcEpic: RootEpic = (action$, state$) =>
@@ -89,11 +100,13 @@ export const updateRowMetaForRelatedBcEpic: RootEpic = (action$, state$) =>
 
             if (widgetsForRowMetaUpdate.length) {
                 return concat(
-                    ...widgetsForRowMetaUpdate.map(currentWidget =>
-                        isDataFetchRequired(state, currentWidget.bcName)
-                            ? of(actions.bcFetchDataRequest({ widgetName: currentWidget.name, bcName: currentWidget.bcName }))
+                    ...widgetsForRowMetaUpdate.map(currentWidget => {
+                        const widgetForDataFetch = getWidgetForDataFetch(state, currentWidget.bcName)
+
+                        return widgetForDataFetch
+                            ? of(actions.bcFetchDataRequest({ widgetName: widgetForDataFetch.name, bcName: widgetForDataFetch.bcName }))
                             : of(actions.bcFetchRowMeta({ widgetName: currentWidget.name, bcName: currentWidget.bcName }))
-                    )
+                    })
                 )
             }
 

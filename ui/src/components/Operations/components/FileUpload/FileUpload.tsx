@@ -18,6 +18,7 @@ import { UPLOAD_TYPE } from '@components/Operations/components/FileUpload/FileUp
 import Upload from '@components/Upload'
 import { WidgetMeta } from '@cxbox-ui/core'
 import { useRowMetaWithCache } from '@hooks/useRowMetaWithCache'
+import { AxiosError } from 'axios'
 
 interface FileUploadProps {
     widget: WidgetMeta
@@ -64,7 +65,8 @@ export const FileUpload = ({ mode, widget, operationInfo, children, uploadType =
 
     const onChange = useCallback(
         info => {
-            const { uid, status, percent, response } = info.file
+            const { uid, status, percent, response, error } = info.file
+
             const needUpdatePercents =
                 getAddedFile(uid)?.status === 'init' || (!!percent && Math.floor(percent) % 10 === 0 && status === 'uploading')
 
@@ -73,7 +75,10 @@ export const FileUpload = ({ mode, widget, operationInfo, children, uploadType =
             }
 
             if (isFileUploadComplete(status)) {
-                updateAddedFile(uid, { status, percent, id: response?.data?.id ?? null })
+                const axiosError: AxiosError<{ errorMessage: string | undefined }> = error
+                const uploadErrorText = axiosError?.response?.data?.errorMessage
+
+                updateAddedFile(uid, { status, percent, id: response?.data?.id ?? null, uploadErrorText })
             }
         },
         [getAddedFile, updateAddedFile]

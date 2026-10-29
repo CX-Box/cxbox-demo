@@ -56,13 +56,22 @@ export const useStatusesInformation = (accept?: string) => {
         ({
             fileName,
             fileStatus,
-            uploadType
-        }: { fileName?: string; fileStatus?: AddedFileInfo['status']; uploadType?: AddedFileInfo['uploadType'] } = {}) => {
+            uploadType,
+            uploadErrorText
+        }: {
+            fileName?: string
+            fileStatus?: AddedFileInfo['status']
+            uploadType?: AddedFileInfo['uploadType']
+            uploadErrorText?: AddedFileInfo['uploadErrorText']
+        } = {}) => {
             if (fileStatus === UPLOAD_FILE_STATUS.done) {
                 return uploadType === UPLOAD_TYPE.create
                     ? t('Success. File loaded and new row created')
                     : t('Success. File loaded to current row')
             } else if (fileStatus === UPLOAD_FILE_STATUS.error) {
+                if (uploadErrorText) {
+                    return uploadErrorText
+                }
                 return uploadType === UPLOAD_TYPE.create
                     ? t('Error. File not loaded and no new row created')
                     : t('Error. File not loaded to current row')
@@ -103,7 +112,8 @@ export const useUploadFilesInfo = (accept?: string) => {
                         statusInformation: getStatusInformation({
                             fileStatus: updatedFileInfo.status,
                             fileName: updatedFileInfo.name,
-                            uploadType: updatedFileInfo.uploadType
+                            uploadType: updatedFileInfo.uploadType,
+                            uploadErrorText: updatedFileInfo.uploadErrorText
                         }),
                         uid
                     }

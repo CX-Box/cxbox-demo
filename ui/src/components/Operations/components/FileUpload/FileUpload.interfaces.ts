@@ -9,4 +9,5 @@ export interface AddedFileInfo {
     statusInformation?: string
     percent?: number
     name: string
+    uploadErrorText?: unknown
 }

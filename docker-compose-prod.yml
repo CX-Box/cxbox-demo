@@ -139,6 +139,10 @@ services:
       MINIO_ROOT_USER: "4eb6a7db8b58994ea61b"
       MINIO_ROOT_PASSWORD: "prCv8t9LGRH18FB5pLr5jqDZ/dixZkb9cFajueGW"
       MINIO_DEFAULT_BUCKETS: "edcs3gnsadevb"
+      # The Bitnami setup script waits only 10 s for MinIO started in background and exits with code 1
+      # if it is not ready yet (on the prod server MinIO starts in ~15-20 s). Skip the 'mc' step of the script.
+      # NOTE: with this flag MINIO_DEFAULT_BUCKETS is not created on an empty volume - create the bucket manually.
+      MINIO_SKIP_CLIENT: "yes"
 
   activemq:
     image: symptoma/activemq:latest

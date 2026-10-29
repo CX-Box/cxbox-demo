@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react'
-import { Skeleton } from 'antd'
+import { Spin } from 'antd'
 import { useAppDispatch, useAppSelector } from '@store'
 import { usePopupVisibility } from '@hooks/popup'
 import { actions } from '@actions'
@@ -57,11 +57,7 @@ function ConfirmWithForm({ widgetName }: ConfirmWithFormProps) {
     return showed ? (
         <div className={styles.root}>
             <WidgetTitle className={styles.title} level={2} widgetName={widgetName} text={preInvoke?.message ?? widget?.title} />
-            {bc?.loading || forceUpdateRowMetaPending ? (
-                <div data-test-loading={true}>
-                    <Skeleton loading paragraph={{ rows: 5 }} />
-                </div>
-            ) : (
+            <Spin spinning={!!(bc?.loading || forceUpdateRowMetaPending)}>
                 <div className={styles.formPopupModal}>
                     <Form meta={widget} />
                     <div className={styles.actions}>
@@ -71,7 +67,7 @@ function ConfirmWithForm({ widgetName }: ConfirmWithFormProps) {
                         </Button>
                     </div>
                 </div>
-            )}
+            </Spin>
         </div>
     ) : null
 }

@@ -11,13 +11,16 @@ import { UploadListContainer } from '@components/Operations/components/FileUploa
 import {
     checkFileFormat,
     getFilesFromDataTransfer,
-    isFileUploadComplete
+    isFileUploadComplete,
+    processFileUploadErrorMessage
 } from '@components/Operations/components/FileUpload/FileUpload.utils'
 import { RowMetaField } from '@interfaces/rowMeta'
 import { UPLOAD_TYPE } from '@components/Operations/components/FileUpload/FileUpload.constants'
 import Upload from '@components/Upload'
 import { WidgetMeta } from '@cxbox-ui/core'
 import { useRowMetaWithCache } from '@hooks/useRowMetaWithCache'
+import { AxiosError } from 'axios'
+import { OperationError } from '@interfaces/operation'
 
 interface FileUploadProps {
     widget: WidgetMeta
@@ -64,7 +67,8 @@ export const FileUpload = ({ mode, widget, operationInfo, children, uploadType =
 
     const onChange = useCallback(
         info => {
-            const { uid, status, percent, response } = info.file
+            const { uid, status, percent, response, error } = info.file
+
             const needUpdatePercents =
                 getAddedFile(uid)?.status === 'init' || (!!percent && Math.floor(percent) % 10 === 0 && status === 'uploading')
 
@@ -73,7 +77,8 @@ export const FileUpload = ({ mode, widget, operationInfo, children, uploadType =
             }
 
             if (isFileUploadComplete(status)) {
-                updateAddedFile(uid, { status, percent, id: response?.data?.id ?? null })
+                const errorMessage = processFileUploadErrorMessage(error)
+                updateAddedFile(uid, { status, percent, id: response?.data?.id ?? null, errorMessage })
             }
         },
         [getAddedFile, updateAddedFile]

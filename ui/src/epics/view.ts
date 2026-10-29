@@ -234,10 +234,13 @@ export const sendOperationEpic: RootEpic = (action$, state$, { api }) =>
             const ids =
                 currentOperation?.scope === 'mass' && selectedRows?.length
                     ? selectedRows.map(
-                          row =>
-                              ({
-                                  id: row.id as string
-                              } as DataItem)
+                          (row): Omit<DataItem, 'vstamp'> => ({
+                              id: row.id as string,
+                              // mass signing: files of the row, or its result if the frontend could not process it
+                              options: row.options,
+                              success: row.success,
+                              errorMessage: row.errorMessage
+                          })
                       )
                     : undefined
             const isMassOperation = currentOperationScope === 'mass'
@@ -274,6 +277,12 @@ export const sendOperationEpic: RootEpic = (action$, state$, { api }) =>
                     // TODO: Remove in 2.0.0 in favor of postInvokeConfirm (is this todo needed?)
                     const preInvoke = response.preInvoke as OperationPreInvoke
                     const responseIds = response[FIELDS.MASS_OPERATION.MASS_IDS]
+                    // the answer can come after the user left the mass operation or started another one:
+                    // its step and rows must not get into the next one
+                    const massViewerMode = state$.value.screen.viewerMode[bcName]
+                    const massOperationOpen =
+                        isMassOperation && massViewerMode?.mode === 'mass' && massViewerMode.operationType === operationType
+                    const showMassResults = massOperationOpen && !!responseIds
                     const hasDataItem = !!dataItem && isDefined(dataItem[FIELDS.TECHNICAL.ID])
                     const refreshNodeId = treeEnabled && !hasDataItem ? cursor ?? undefined : undefined
                     const withoutBcForceUpdate =
@@ -289,13 +298,18 @@ export const sendOperationEpic: RootEpic = (action$, state$, { api }) =>
                                 : EMPTY
                             : concat(
                                   of(actions.sendOperationSuccess({ bcName, cursor: cursor as string, dataItem })),
-                                  isMassOperation && action.payload.onSuccessAction ? of(action.payload.onSuccessAction) : EMPTY,
-                                  isMassOperation && responseIds ? of(actions.clearSelectedRows({ bcName })) : EMPTY,
-                                  isMassOperation && responseIds ? of(actions.selectRows({ bcName, dataItems: responseIds })) : EMPTY,
+                                  massOperationOpen && action.payload.onSuccessAction ? of(action.payload.onSuccessAction) : EMPTY,
+                                  showMassResults ? of(actions.clearSelectedRows({ bcName })) : EMPTY,
+                                  showMassResults ? of(actions.selectRows({ bcName, dataItems: responseIds })) : EMPTY,
                                   isMassOperation ? EMPTY : of(actions.deselectTableRow()),
                                   withoutBcForceUpdate ? EMPTY : of(actions.bcForceUpdate({ bcName, nodeId: refreshNodeId })),
                                   ...(isMassOperation
-                                      ? [of(actions.setPendingPostInvoke({ bcName, operationType, postInvoke }))]
+                                      ? // a late answer must not leave its postInvoke for a mass operation opened again
+                                        [
+                                            massOperationOpen
+                                                ? of(actions.setPendingPostInvoke({ bcName, operationType, postInvoke }))
+                                                : EMPTY
+                                        ]
                                       : postOperationRoutine(widgetName, postInvoke, preInvoke, operationType, bcName))
                               )
                     )

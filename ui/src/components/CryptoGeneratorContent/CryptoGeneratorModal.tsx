@@ -12,7 +12,8 @@ interface CryptoGeneratorModalProps {
 /**
  * Popup for sign and encrypt operations.
  * While CryptoPro works and the result is uploaded, the popup cannot be closed:
- * the user sees the progress and cannot leave the screen until it ends.
+ * the user sees the progress and cannot leave the screen until it ends. The only way out is «Cancel» of the content,
+ * shown while an operation with an attached signature by `SignCades` runs: that call has no timeout.
  */
 function CryptoGeneratorModal({ operationType, meta, onClose }: CryptoGeneratorModalProps) {
     const [inProgress, setInProgress] = useState(false)

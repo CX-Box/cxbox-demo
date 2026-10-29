@@ -1,0 +1,124 @@
+import React, { useCallback, useEffect, useRef } from 'react'
+import { Progress, Spin } from 'antd'
+import { useTranslation } from 'react-i18next'
+import { useAppSelector } from '@store'
+import { useOperationInProgress } from '@hooks/useOperationInProgress'
+import { selectWidget } from '@selectors/selectors'
+import { AppWidgetMeta } from '@interfaces/widget'
+import CryptoGeneratorContent from '@components/CryptoGeneratorContent/CryptoGeneratorContent'
+import { CryptoSettings } from '@components/CryptoGeneratorContent/cryptoFile'
+import { useMassCrypto } from '@components/widgets/Table/massOperations/Crypto/useMassCrypto'
+import type { MassOperationProcessing } from '@components/widgets/Table/massOperations/stepButtons'
+import styles from './MassCryptoSign.less'
+
+interface MassCryptoSignProps {
+    widgetName: string
+    bcName: string
+    operationType: string
+    /**
+     * Certificates chosen on the step "Sign and encrypt": the rows are processed at once, the certificates are not shown
+     */
+    settings?: CryptoSettings
+    /**
+     * Certificates chosen before, for example when the user came back from the confirm: they are selected again
+     */
+    chosenSettings?: CryptoSettings
+    /**
+     * The action has a confirm after the certificates: they are given to it instead of processing the rows
+     */
+    onSettingsChosen?: (settings: CryptoSettings) => void
+    /**
+     * Sends the action after the rows are processed: with the answer of the preInvoke confirm, if the action has it
+     */
+    send: () => void
+    /**
+     * Gets the processing when it starts and `undefined` when it ends
+     */
+    onProcessingChange: (processing?: MassOperationProcessing) => void
+    /**
+     * Interrupted before any row is processed, nothing is sent
+     */
+    onNothingSent?: () => void
+}
+
+/**
+ * Mass signing and encryption: certificates, then the progress of processing the rows; the action is sent after them
+ */
+function MassCryptoSign({
+    widgetName,
+    bcName,
+    operationType,
+    settings,
+    chosenSettings,
+    onSettingsChosen,
+    send,
+    onProcessingChange,
+    onNothingSent
+}: MassCryptoSignProps) {
+    const { t } = useTranslation()
+    const widget = useAppSelector(state => selectWidget(state, widgetName)) as AppWidgetMeta | undefined
+    const { progress, processing, run, stop } = useMassCrypto(widgetName, bcName, operationType)
+    const sending = useOperationInProgress(bcName)(operationType)
+
+    const execute = useCallback(
+        async (chosenSettings: CryptoSettings) => {
+            const result = await run(chosenSettings, send)
+            result === 'nothing' && onNothingSent?.()
+        },
+        [onNothingSent, run, send]
+    )
+
+    // the rows are processed once when the settings are given: the confirm is answered and the step shows only the progress
+    const startedRef = useRef(false)
+    useEffect(() => {
+        if (settings && !startedRef.current) {
+            startedRef.current = true
+            execute(settings)
+        }
+    }, [execute, settings])
+
+    // without a cleanup on every change: the buttons of the step would blink.
+    // Sending of the action is a part of the processing: the step is not left until the answer comes
+    useEffect(() => {
+        if (processing) {
+            onProcessingChange({ stop })
+        } else {
+            onProcessingChange(sending ? {} : undefined)
+        }
+    }, [onProcessingChange, processing, sending, stop])
+
+    useEffect(() => {
+        return () => onProcessingChange(undefined)
+    }, [onProcessingChange])
+
+    if (progress) {
+        return (
+            <div className={styles.progress}>
+                <Spin spinning={processing || sending} />
+                <Progress
+                    className={styles.bar}
+                    percent={Math.floor((progress.done / progress.total) * 100)}
+                    showInfo={false}
+                    size="small"
+                />
+                <span className={styles.text}>{t('Mass crypto progress', progress)}</span>
+            </div>
+        )
+    }
+
+    if (settings || !widget) {
+        return null
+    }
+
+    return (
+        <CryptoGeneratorContent
+            meta={widget}
+            operationType={operationType}
+            chosenSettings={chosenSettings}
+            onExecute={onSettingsChosen ?? execute}
+            executeText={onSettingsChosen && t('Next')}
+        />
+    )
+}
+
+export default React.memo(MassCryptoSign)

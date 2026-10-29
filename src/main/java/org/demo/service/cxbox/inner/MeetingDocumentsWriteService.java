@@ -4,7 +4,7 @@ import static org.demo.dto.cxbox.inner.MeetingDocumentsDTO_.notes;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.cxbox.api.data.dto.AssociateDTO;
+import org.cxbox.api.data.dto.MassDTO;
+import org.cxbox.api.data.dto.MassOptionType;
 import org.cxbox.core.crudma.bc.BusinessComponent;
 import org.cxbox.core.crudma.impl.VersionAwareResponseService;
 import org.cxbox.core.dto.DrillDownType;
@@ -24,6 +26,7 @@ import org.cxbox.core.dto.MessageType;
 import org.cxbox.core.dto.rowmeta.ActionResultDTO;
 import org.cxbox.core.dto.rowmeta.AssociateResultDTO;
 import org.cxbox.core.dto.rowmeta.CreateResult;
+import org.cxbox.core.dto.rowmeta.MassActionResultDTO;
 import org.cxbox.core.dto.rowmeta.PostAction;
 import org.cxbox.core.file.dto.FileDownloadDto;
 import org.cxbox.core.file.service.CxboxFileService;
@@ -108,11 +111,7 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 		if (data.isFieldChanged(MeetingDocumentsDTO_.fileEncrypt)
 				&& data.isFieldChanged(MeetingDocumentsDTO_.fileSign) &&
 				!data.getFileSign().isEmpty() && !data.getFileEncrypt().isEmpty()) {
-			String zipName = entity.getFile().substring(0, entity.getFile().indexOf('.')) + ".zip";
-			String uploadId = createAndUploadZip(data, entity, zipName);
-			entity.setFileEncryptAndSignId(uploadId);
-			entity.setFileEncryptAndSign(zipName);
-			entity.setStatus(DocumentStatus.SIGNED);
+			saveSignedPackage(entity);
 		}
 
 		meetingDocumentsRepository.save(entity);
@@ -186,43 +185,61 @@ public class MeetingDocumentsWriteService extends VersionAwareResponseService<Me
 									));
 						})
 				)
+				.action(act -> act
+						.action("massEncryptAndSign", "Mass Encrypt And Sign")
+						.massInvoker((bc, data, ids) -> {
+							// rows that the frontend could not sign are added to the result by the platform
+							var massResult = data.getMassIds_().stream()
+									.map(mass -> {
+										try {
+											MeetingDocuments document = meetingDocumentsRepository.getReferenceById(Long.parseLong(mass.getId()));
+											document.setFileSignId(mass.getOption(MassOptionType.SIGNATURE_FILE_ID));
+											document.setFileSign(mass.getOption(MassOptionType.SIGNATURE_FILE_NAME));
+											document.setFileEncryptId(mass.getOption(MassOptionType.ENCRYPTED_FILE_ID));
+											document.setFileEncrypt(mass.getOption(MassOptionType.ENCRYPTED_FILE_NAME));
+											saveSignedPackage(document);
+											return MassDTO.success(mass.getId());
+										} catch (Exception e) {
+											log.error("Cannot save the signed package of the document {}", mass.getId(), e);
+											return MassDTO.fail(mass.getId(), "Cannot save the signed package");
+										}
+									})
+									.collect(Collectors.toSet());
+							return new MassActionResultDTO<MeetingDocumentsDTO>(massResult)
+									.setAction(PostAction.showMessage(MessageType.INFO, "The mass encryption and signing was completed!"));
+						})
+				)
 				.build();
 	}
 
-	public String createAndUploadZip(MeetingDocumentsDTO dto, MeetingDocuments entity, String zipName) {
-		try {
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ZipOutputStream zipOut = new ZipOutputStream(baos);
-
-			addFile(zipOut, entity.getFile(), entity.getFile().getBytes());
-			addFile(zipOut, dto.getFileSign(), dto.getFileSign().getBytes());
-			addFile(zipOut, dto.getFileEncrypt(), dto.getFileEncrypt().getBytes());
-
-			zipOut.finish();
-			return cxboxFileService.upload(
-					new FileDownloadDto(
-							() -> new ByteArrayInputStream(baos.toByteArray()),
-							baos.toByteArray().length,
-							zipName,
-							"application/zip"
-					),
-					null
-			);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+	/**
+	 * Puts the document, its encrypted file and its signature into one archive and marks the document as signed
+	 */
+	private void saveSignedPackage(MeetingDocuments document) {
+		String zipName = document.getFile().replaceFirst("\\.[^.]*$", "") + ".zip";
+		document.setFileEncryptAndSignId(uploadZip(zipName, document.getFileId(), document.getFileEncryptId(), document.getFileSignId()));
+		document.setFileEncryptAndSign(zipName);
+		document.setStatus(DocumentStatus.SIGNED);
 	}
 
-	private void addFile(ZipOutputStream zipOut, String fileName, byte[] content) throws IOException {
-		if (content == null || content.length == 0) {
-			return;
+	@SneakyThrows
+	private String uploadZip(String zipName, String... fileIds) {
+		var zipBytes = new ByteArrayOutputStream();
+		try (var zip = new ZipOutputStream(zipBytes)) {
+			for (String fileId : fileIds) {
+				FileDownloadDto file = cxboxFileService.download(fileId, null);
+				zip.putNextEntry(new ZipEntry(file.getName()));
+				try (InputStream content = file.getContent().get()) {
+					content.transferTo(zip);
+				}
+				zip.closeEntry();
+			}
 		}
-
-		ZipEntry zipEntry = new ZipEntry(fileName);
-
-		zipOut.putNextEntry(zipEntry);
-		zipOut.write(content);
-		zipOut.closeEntry();
+		byte[] content = zipBytes.toByteArray();
+		return cxboxFileService.upload(
+				new FileDownloadDto(() -> new ByteArrayInputStream(content), content.length, zipName, "application/zip"),
+				null
+		);
 	}
 
 	private ActionsBuilder<MeetingDocumentsDTO> addEditAction(ActionsBuilder<MeetingDocumentsDTO> builder) {

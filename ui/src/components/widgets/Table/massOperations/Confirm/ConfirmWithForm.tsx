@@ -13,11 +13,20 @@ import { useTranslation } from 'react-i18next'
 
 interface ConfirmWithFormProps {
     widgetName: string
+    /**
+     * Called instead of sending the confirmed action and gets this sending.
+     * Mass signing asks for the certificates and signs the rows before it calls `send`
+     */
+    onConfirm?: (send: () => void) => void
+    /**
+     * Leaves the mass operation, called by the cancel button of the confirm
+     */
+    onCancel: () => void
 }
 
 const forceUpdateSetting = true // todo temporary enabled for all FormPopup widgets
 
-function ConfirmWithForm({ widgetName }: ConfirmWithFormProps) {
+function ConfirmWithForm({ widgetName, onConfirm, onCancel }: ConfirmWithFormProps) {
     const { t } = useTranslation()
 
     const widget = useAppSelector(state => selectWidget(state, widgetName)) as WidgetFormMeta
@@ -32,9 +41,8 @@ function ConfirmWithForm({ widgetName }: ConfirmWithFormProps) {
 
     const onClose = useCallback(() => {
         dispatch(actions.bcCancelPendingChanges({ bcNames: [bcName] }))
-
-        dispatch(actions.resetViewerMode({ bcName }))
-    }, [bcName, dispatch])
+        onCancel()
+    }, [bcName, dispatch, onCancel])
 
     const onSave = useCallback(() => {
         if (!bc?.loading && popupData?.options?.operation) {
@@ -65,7 +73,7 @@ function ConfirmWithForm({ widgetName }: ConfirmWithFormProps) {
                 <div className={styles.formPopupModal}>
                     <Form meta={widget} />
                     <div className={styles.actions}>
-                        <Button onClick={onSave}>{preInvoke?.yesText ?? t('Save')}</Button>
+                        <Button onClick={onConfirm ? () => onConfirm(onSave) : onSave}>{preInvoke?.yesText ?? t('Save')}</Button>
                         <Button onClick={onClose} type="formOperation">
                             {preInvoke?.noText ?? t('Cancel')}
                         </Button>

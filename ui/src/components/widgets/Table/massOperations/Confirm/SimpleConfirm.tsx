@@ -13,9 +13,18 @@ import cn from 'classnames'
 
 interface SimpleConfirmProps {
     widgetName: string
+    /**
+     * Called instead of sending the confirmed action and gets this sending.
+     * Mass signing asks for the certificates and signs the rows before it calls `send`
+     */
+    onConfirm?: (send: () => void) => void
+    /**
+     * Leaves the mass operation, called by the cancel button of the confirm
+     */
+    onCancel: () => void
 }
 
-function SimpleConfirm({ widgetName }: SimpleConfirmProps) {
+function SimpleConfirm({ widgetName, onConfirm, onCancel }: SimpleConfirmProps) {
     const widget = useAppSelector(state => selectWidget(state, widgetName)) as WidgetFormMeta
     const bcName = widget?.bcName as string
 
@@ -76,8 +85,9 @@ function SimpleConfirm({ widgetName }: SimpleConfirmProps) {
                 <Button
                     onClick={() => {
                         const needSendOperation = OperationPreInvokeType.error !== confirmOperationType
+                        const send = () => sendOperation(value || 'ok', actions.changeOperationStep({ bcName, step: 'View results' }))
 
-                        needSendOperation && sendOperation(value || 'ok', actions.changeOperationStep({ bcName, step: 'View results' }))
+                        needSendOperation && (onConfirm ? onConfirm(send) : send())
                     }}
                 >
                     {okText}
@@ -86,7 +96,7 @@ function SimpleConfirm({ widgetName }: SimpleConfirmProps) {
                     <Button
                         onClick={() => {
                             dispatch(actions.bcCancelPendingChanges({ bcNames: [bcName] }))
-                            dispatch(actions.resetViewerMode({ bcName }))
+                            onCancel()
                         }}
                         type="formOperation"
                     >

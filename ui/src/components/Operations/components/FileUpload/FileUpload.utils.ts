@@ -4,6 +4,8 @@ import {
     UPLOAD_TO_PROGRESS_STATUS_MAP
 } from '@components/Operations/components/FileUpload/FileUpload.constants'
 import { AddedFileInfo } from '@components/Operations/components/FileUpload/FileUpload.interfaces'
+import { AxiosError } from 'axios'
+import { OperationError } from '@interfaces/operation'
 
 const { done, error, notSupportedExtension, uploading, init, canceled, removed } = UPLOAD_FILE_STATUS
 type UploadFileStatus = keyof typeof UPLOAD_FILE_STATUS
@@ -87,4 +89,21 @@ export const getFilesFromDataTransfer = (dataTransfer: DataTransfer) => {
               return acc
           }, [] as File[])
         : [...dataTransfer.files]
+}
+
+export const processFileUploadErrorMessage = (error: AxiosError<OperationError>) => {
+    const errors: string[] = []
+
+    const popupErrors = error?.response?.data?.error?.popup
+    if (Array.isArray(popupErrors) && popupErrors.length) {
+        console.warn('Popup is not intended for upload errors')
+        errors.push(...popupErrors)
+    }
+
+    const errorMessage = error?.response?.data?.errorMessage || undefined
+    if (errorMessage) {
+        errors.push(errorMessage)
+    }
+
+    return errors.filter(i => i).join('; ')
 }

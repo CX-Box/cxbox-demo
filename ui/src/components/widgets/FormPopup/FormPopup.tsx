@@ -22,8 +22,6 @@ export function FormPopup(props: FormPopupProps) {
     const bcName = props.meta.bcName
 
     const bc = useAppSelector(state => (bcName ? state.screen.bo.bc[bcName] : undefined))
-    const forceUpdateRowMetaPending =
-        useAppSelector(state => state.session.pendingRequests?.filter(item => item.type === 'force-active')?.length ?? 0) > 0
 
     // todo get from featureSettings or from options
     // const forceUpdateSetting = useAppSelector(
@@ -88,7 +86,7 @@ export function FormPopup(props: FormPopupProps) {
                 loading: isOperationInProgress(popupData?.options?.operation?.operationType)
             }}
         >
-            {bcLoading || forceUpdateRowMetaPending ? (
+            {bcLoading ? (
                 <div data-test-loading={true}>
                     <Skeleton loading paragraph={{ rows: 5 }} />
                 </div>

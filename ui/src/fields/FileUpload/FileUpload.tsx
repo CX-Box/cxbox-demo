@@ -9,7 +9,7 @@ import ReadOnlySingleFileUpload from './components/ReadOnlySingleFileUpload'
 import { useAppDispatch, useAppSelector } from '@store'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import { useUploadFilesInfoWithAutoRemove } from '@components/Operations/components/FileUpload/FileUpload.hooks'
-import { checkFileFormat } from '@components/Operations/components/FileUpload/FileUpload.utils'
+import { checkFileFormat, processFileUploadErrorMessage } from '@components/Operations/components/FileUpload/FileUpload.utils'
 import { applyParams, getFileUploadEndpoint } from '@utils/api'
 import { useSingleUploadRequest } from '@hooks/useSingleUploadRequest'
 import { actions } from '@actions'
@@ -18,6 +18,7 @@ import { RowMetaField } from '@interfaces/rowMeta'
 import { CustomWidgetTypes, FileUploadFieldMeta } from '@interfaces/widget'
 import { DataValue } from '@cxbox-ui/core'
 import { useFileIconClick } from '@fields/FileUpload/hooks'
+import { OperationError } from '@interfaces/operation'
 
 interface Props extends Omit<BaseFieldProps, 'meta'> {
     value: string
@@ -124,13 +125,14 @@ const FileUpload: React.FunctionComponent<Props> = ({
     )
 
     const onUploadFailed = React.useCallback(
-        (error: AxiosError<unknown>, response: any, file: UploadFile) => {
+        (error: AxiosError<any>, response: any, file: UploadFile) => {
             dispatch(actions.uploadFileFailed(null))
 
             if (axios.isCancel(error)) {
                 updateAddedFile(file.uid, { status: 'canceled', percent: 100, id: null })
             } else {
-                updateAddedFile(file.uid, { status: 'error', percent: 100, id: null })
+                const errorMessage = processFileUploadErrorMessage(error)
+                updateAddedFile(file.uid, { status: 'error', percent: 100, id: null, errorMessage })
             }
         },
         [dispatch, updateAddedFile]

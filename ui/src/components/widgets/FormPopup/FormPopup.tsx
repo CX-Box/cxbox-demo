@@ -1,4 +1,4 @@
-import { Skeleton } from 'antd'
+import { Spin } from 'antd'
 import React, { useCallback, useEffect } from 'react'
 import Form from '../Form/Form'
 import Popup from '../../Popup/Popup'
@@ -88,15 +88,11 @@ export function FormPopup(props: FormPopupProps) {
                 loading: isOperationInProgress(popupData?.options?.operation?.operationType)
             }}
         >
-            {bcLoading || forceUpdateRowMetaPending ? (
-                <div data-test-loading={true}>
-                    <Skeleton loading paragraph={{ rows: 5 }} />
-                </div>
-            ) : (
+            <Spin spinning={!!(bcLoading || forceUpdateRowMetaPending)}>
                 <div className={styles.formPopupModal}>
                     <Form meta={props.meta} />
                 </div>
-            )}
+            </Spin>
         </Popup>
     )
 }

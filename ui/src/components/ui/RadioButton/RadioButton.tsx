@@ -4,6 +4,8 @@ import { RadioChangeEvent } from 'antd/es/radio'
 import { BaseFieldProps } from '@components/Field/Field'
 import ReadOnlyField from '@components/ui/ReadOnlyField/ReadOnlyField'
 import { getIconByParams } from '@fields/Dictionary/Dictionary'
+import styles from './RadioButton.less'
+import cn from 'classnames'
 
 export interface RadioButtonProps extends BaseFieldProps {
     value?: string | null
@@ -27,8 +29,9 @@ const RadioButton: React.FunctionComponent<RadioButtonProps> = ({
     className,
     backgroundColor,
     disabled,
-    onChange,
     cursor,
+    metaError,
+    onChange,
     onDrillDown
 }) => {
     const handleOnChange = React.useCallback(
@@ -72,7 +75,9 @@ const RadioButton: React.FunctionComponent<RadioButtonProps> = ({
             onChange={handleOnChange}
             disabled={disabled}
             value={valueIndex >= 0 ? valueIndex.toString() : value}
-            className={className}
+            className={cn(className, {
+                [styles.error]: metaError
+            })}
         >
             {values?.map((el, index) => (
                 <Radio value={index.toString()} key={index}>

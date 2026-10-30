@@ -74,6 +74,18 @@ export const useGroupingHierarchy = <T extends CustomDataItem>(
         }
     }, [isIncorrectLimit, isGroupingHierarchy])
 
+    useEffect(() => {
+        if (enabledGrouping) {
+            meta.fields.forEach(field => {
+                if (field.drillDown && !!meta?.options?.groupingHierarchy?.fields?.includes(field.key)) {
+                    console.warn(
+                        `Drilldown is not supported on grouping columns. Field "${field.key}" is used in drilldown and is also a grouping field in widget "${meta.name}".`
+                    )
+                }
+            })
+        }
+    }, [enabledGrouping, meta])
+
     const getFlatTree = useCallback(() => {
         return nodeDictionary ? Object.values(nodeDictionary) : undefined
     }, [nodeDictionary])

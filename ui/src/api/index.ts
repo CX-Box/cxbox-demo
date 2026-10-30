@@ -11,6 +11,7 @@ import { saveAs } from 'file-saver'
 import { getFileNameFromDisposition } from '@utils/getFileNameFromDisposition'
 import { map, Observable } from 'rxjs'
 import { platformSession } from '../auth/platformSession'
+import { fileRequestLabel, isFileDownloadUrl, withFileRetry } from './fileRequestRetry'
 
 class Api extends CXBoxApi {
     loginByRoleRequest(role: string) {
@@ -149,12 +150,15 @@ class Api extends CXBoxApi {
     }
 
     async getBlob(url: string, params: { preview: boolean }) {
-        try {
-            return await this.api$.instance.get(url, {
+        const request = () =>
+            this.api$.instance.get<Blob>(url, {
                 baseURL: '',
                 params,
                 responseType: 'blob'
             })
+
+        try {
+            return await (isFileDownloadUrl(url) ? withFileRetry(request, fileRequestLabel(url)) : request())
         } catch (error: any) {
             const isBlobError = error.response?.data instanceof Blob && error.response.data.type?.includes('application/json')
 
@@ -182,7 +186,10 @@ class Api extends CXBoxApi {
     }
 
     getFile(fileId: string) {
-        return this.api$.instance.get('/file', { responseType: 'blob', params: { id: fileId } })
+        return withFileRetry(
+            () => this.api$.instance.get<Blob>('/file', { responseType: 'blob', params: { id: fileId } }),
+            fileRequestLabel(`${this.fileUploadEndpoint}?id=${encodeURIComponent(fileId)}`)
+        )
     }
 
     uploadFile(file: Blob, fileName: string) {

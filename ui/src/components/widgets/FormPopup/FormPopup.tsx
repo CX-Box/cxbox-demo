@@ -1,4 +1,4 @@
-import { Spin } from 'antd'
+import { Skeleton, Spin } from 'antd'
 import React, { useCallback, useEffect } from 'react'
 import Form from '../Form/Form'
 import Popup from '../../Popup/Popup'
@@ -6,6 +6,7 @@ import WidgetTitle from '@components/WidgetTitle/WidgetTitle'
 import { useAppDispatch, useAppSelector } from '@store'
 import { useOperationInProgress } from '@hooks/useOperationInProgress'
 import { usePopupVisibility } from '@hooks/popup'
+import { useWidgetLoading } from '@hooks/useWidgetLoading'
 import { actions } from '@actions'
 import { WidgetFormPopupMeta } from '@interfaces/widget'
 import styles from './FormPopup.less'
@@ -35,6 +36,7 @@ export function FormPopup(props: FormPopupProps) {
     const widgetName = props.meta.name
     const { popupData, closePopup, preInvoke, visibility: showed } = usePopupVisibility(widgetName, bcName)
     const bcLoading = bc && bc.loading
+    const { showSpinner, showSkeleton } = useWidgetLoading(bcName, !!(bcLoading || forceUpdateRowMetaPending))
 
     const isOperationInProgress = useOperationInProgress(bcName)
 
@@ -88,11 +90,17 @@ export function FormPopup(props: FormPopupProps) {
                 loading: isOperationInProgress(popupData?.options?.operation?.operationType)
             }}
         >
-            <Spin spinning={!!(bcLoading || forceUpdateRowMetaPending)}>
-                <div className={styles.formPopupModal}>
-                    <Form meta={props.meta} />
+            {showSkeleton ? (
+                <div data-test-loading={true}>
+                    <Skeleton loading paragraph={{ rows: 5 }} />
                 </div>
-            </Spin>
+            ) : (
+                <Spin spinning={showSpinner}>
+                    <div className={styles.formPopupModal}>
+                        <Form meta={props.meta} />
+                    </div>
+                </Spin>
+            )}
         </Popup>
     )
 }

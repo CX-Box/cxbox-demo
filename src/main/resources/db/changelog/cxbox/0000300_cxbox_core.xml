@@ -1070,4 +1070,17 @@
       </column>
     </addColumn>
   </changeSet>
+  <changeSet id="BC_FILTER_GROUPS_UNIQUE_INDEX_USER_ID" author="cxbox">
+    <dropIndex indexName="BC_FILTER_GROUPS_UNIQUE_INDEX" tableName="BC_FILTER_GROUPS"/>
+    <createIndex indexName="BC_FILTER_GROUPS_UNIQUE_INDEX" tableName="BC_FILTER_GROUPS" unique="true">
+      <column name="NAME"/>
+      <column name="BC"/>
+      <column name="USER_ID"/>
+    </createIndex>
+  </changeSet>
+  <changeSet id="BC_FILTER_GROUPS_UNIQUE_SHARED_INDEX" author="cxbox" dbms="postgresql">
+    <sql>
+      CREATE UNIQUE INDEX BC_FILTER_GROUPS_UNIQUE_SHARED ON BC_FILTER_GROUPS (NAME, BC) WHERE USER_ID IS NULL;
+    </sql>
+  </changeSet>
 </databaseChangeLog>

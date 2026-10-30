@@ -2,10 +2,10 @@ import React, { FunctionComponent } from 'react'
 import { connect } from 'react-redux'
 import { Skeleton, Spin } from 'antd'
 import { useWidgetCollapse } from '@hooks/useWidgetCollapse'
+import { useWidgetLoading } from '@hooks/useWidgetLoading'
 import { CustomWidgetDescriptor, isCustomWidget, PopupWidgetTypes, utils, WidgetMeta, WidgetMetaAny } from '@cxbox-ui/core'
 import { RootState } from '@store'
 import { WidgetShowCondition } from '@cxbox-ui/schema'
-import { buildBcUrl } from '@utils/buildBcUrl'
 import { ScreenState } from '../../reducers/screen'
 import styles from './Widget.less'
 import DebugWidgetWrapper from '@components/DebugWidgetWrapper/DebugWidgetWrapper'
@@ -23,8 +23,6 @@ interface WidgetProps extends WidgetOwnProps {
     parentCursor?: string
     customWidgets?: Record<string, CustomWidgetDescriptor>
     showWidget: boolean
-    rowMetaExists: boolean
-    dataExists: boolean
     bc?: ScreenState['bo']['bc'][string]
 }
 
@@ -37,6 +35,7 @@ const skeletonParams = { rows: 5 }
  */
 export const Widget: FunctionComponent<WidgetProps> = props => {
     const { isMainWidget, isCollapsed } = useWidgetCollapse(props.meta.name)
+    const { showSpinner, showSkeleton } = useWidgetLoading(props.meta.bcName, props.loading)
 
     if (!props.showWidget || (!isMainWidget && isCollapsed)) {
         return <DebugWidgetWrapper meta={props.meta} />
@@ -65,9 +64,6 @@ export const Widget: FunctionComponent<WidgetProps> = props => {
             </DebugWidgetWrapper>
         )
     }
-
-    const showSpinner = !!(props.loading && (props.rowMetaExists || props.dataExists))
-    const showSkeleton = props.loading && !showSpinner
 
     const spinnerElement = props.customSpinner ? (
         <props.customSpinner spinning={showSpinner}>{widgetElement}</props.customSpinner>
@@ -193,15 +189,11 @@ function mapStateToProps(state: RootState, ownProps: WidgetOwnProps) {
         showWidget = false
     }
 
-    const bcUrl = buildBcUrl(bcName, true)
-    const rowMeta = bcUrl && state.view.rowMeta[bcName]?.[bcUrl]
     return {
         debugMode: state.session.debugMode || false,
         loading: bc?.loading,
         parentCursor: hasParent && (parent.cursor as string),
         showWidget,
-        rowMetaExists: !!rowMeta,
-        dataExists: !!state.data[bcName],
         bc
     }
 }

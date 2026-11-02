@@ -292,6 +292,10 @@ export type FileUploadFieldMeta = CoreFileUploadFieldMeta & {
          * Where the value will come from is decided at the project level.
          */
         miniPreview?: boolean
+        /**
+         * todo
+         */
+        hideImageControl?: boolean
     }
 }
 

@@ -29,22 +29,21 @@ const VIEWER_WIDTH = 760
 const VIEWER_HEIGHT = 760
 
 interface FileViewerContainerProps {
-    isInline?: boolean
     widgetName?: string
     fieldKey?: string
 }
 
-function FileViewerContainer({ isInline, widgetName, fieldKey }: FileViewerContainerProps) {
+function FileViewerContainer({ widgetName, fieldKey }: FileViewerContainerProps) {
     const dispatch = useDispatch()
     const { t } = useTranslation()
 
     const popupData = useAppSelector(state => state.view.popupData)
     const { active, calleeWidgetName, options } = popupData ?? {}
     const { type, calleeFieldKey, mode, recordId: popupRecordId } = (options as FileViewerPopupOptions) ?? {}
-    // the inline preview is not a popup: it always shows the active record
-    const shownRecordId = isInline ? undefined : popupRecordId
+    // the row given to the popup is only viewed, otherwise the preview shows the active record
+    const shownRecordId = popupRecordId
 
-    const visible = isInline || active
+    const visible = active
     const fileFieldKey = fieldKey || calleeFieldKey
 
     const widget = useAppSelector(selectWidget(widgetName || calleeWidgetName))
@@ -98,13 +97,12 @@ function FileViewerContainer({ isInline, widgetName, fieldKey }: FileViewerConta
         }
     }, [dispatch, downloadUrl, fileName])
 
-    const commonHeaderProps: Pick<HeaderProps, 'title' | 'hint' | 'onDownload'> = useMemo(
+    const commonHeaderProps: Pick<HeaderProps, 'title' | 'hint'> = useMemo(
         () => ({
             title: preview?.titleKey ? record?.[preview.titleKey] : trimString(fileName),
-            hint: preview?.hintKey ? record?.[preview.hintKey] : undefined,
-            onDownload: handleDownload
+            hint: preview?.hintKey ? record?.[preview.hintKey] : undefined
         }),
-        [preview?.titleKey, preview?.hintKey, record, fileName, handleDownload]
+        [preview?.titleKey, preview?.hintKey, record, fileName]
     )
 
     const handleCloseFullscreen = useCallback(() => setFullscreen(false), [setFullscreen])
@@ -143,7 +141,7 @@ function FileViewerContainer({ isInline, widgetName, fieldKey }: FileViewerConta
         [handleCloseFullscreenFromViewer]
     )
 
-    if (!isInline && (type !== 'file-viewer' || !visible)) {
+    if (type !== 'file-viewer' || !visible) {
         return null
     }
 
@@ -163,6 +161,7 @@ function FileViewerContainer({ isInline, widgetName, fieldKey }: FileViewerConta
                                 })}
                             </div>
                         }
+                        operations={[{ icon: 'download', onClick: handleDownload, label: 'Download' }]}
                         onClose={mode === 'onlyFullscreen' ? handleCancel : handleCloseFullscreen}
                     />
                 }
@@ -182,72 +181,56 @@ function FileViewerContainer({ isInline, widgetName, fieldKey }: FileViewerConta
                 visible={visible && fullscreen}
             />
 
-            {isInline ? (
-                <>
-                    <Header {...commonHeaderProps} className={styles.headerInline} theme="light" onFullscreen={handleOpenFullscreen} />
-
+            <Popup
+                visible={visible && !fullscreen}
+                title={
+                    <Header
+                        {...commonHeaderProps}
+                        className={styles.popupHeader}
+                        theme="light"
+                        onClose={handleCancel}
+                        operations={[
+                            { icon: 'fullscreen', onClick: () => setFullscreen(true), label: 'Fullscreen' },
+                            { icon: 'download', onClick: handleDownload, label: 'Download' }
+                        ]}
+                    />
+                }
+                footer={null}
+                onCancel={handleCancel}
+                width={POPUP_WIDTH}
+                className={styles.popup}
+            >
+                <div style={{ width: VIEWER_WIDTH, maxHeight: VIEWER_HEIGHT }}>
                     <FileViewer
-                        className={styles.fileViewerInline}
                         fileName={fileName}
                         url={downloadUrl}
                         view="compact"
-                        width={'100%'}
-                        height={'100%'}
+                        width={VIEWER_WIDTH}
+                        height={VIEWER_HEIGHT}
+                        imageControlEnabled={true}
+                        footer={renderFileViewerFooter}
                     />
-
-                    <div className={styles.footer}>
-                        <ArrowPagination {...paginationProps} />
-                    </div>
-                </>
-            ) : (
-                <Popup
-                    visible={visible && !fullscreen}
-                    title={
-                        <Header
-                            {...commonHeaderProps}
-                            className={styles.popupHeader}
-                            theme="light"
-                            onClose={handleCancel}
-                            onFullscreen={() => setFullscreen(true)}
-                        />
-                    }
-                    footer={null}
-                    onCancel={handleCancel}
-                    width={POPUP_WIDTH}
-                    className={styles.popup}
-                >
-                    <div style={{ width: VIEWER_WIDTH, maxHeight: VIEWER_HEIGHT }}>
-                        <FileViewer
-                            fileName={fileName}
-                            url={downloadUrl}
-                            view="compact"
-                            width={VIEWER_WIDTH}
-                            height={VIEWER_HEIGHT}
-                            imageControlEnabled={true}
-                            footer={renderFileViewerFooter}
-                        />
-                    </div>
-                    <div className={styles.footer}>
-                        <ArrowPagination {...paginationProps} />
-                    </div>
-                    {/* the record form works with the active record, a row that is only viewed has no form */}
-                    {!shownRecordId && (
-                        <InnerWidget
-                            widgetName={internalWidget?.name}
-                            spinning={isLoading}
-                            afterWidget={
-                                internalWidget && internalWidgetOperations?.length ? (
-                                    <Operations
-                                        operations={internalWidgetOperations}
-                                        bcName={internalWidget?.bcName}
-                                        widgetMeta={internalWidget}
-                                    />
-                                ) : null
-                            }
-                        />
-                    )}
-                </Popup>
-            )}
+                </div>
+                <div className={styles.footer}>
+                    <ArrowPagination {...paginationProps} />
+                </div>
+                {/* the record form works with the active record, a row that is only viewed has no form */}
+                {!shownRecordId && (
+                    <InnerWidget
+                        widgetName={internalWidget?.name}
+                        spinning={isLoading}
+                        afterWidget={
+                            internalWidget && internalWidgetOperations?.length ? (
+                                <Operations
+                                    operations={internalWidgetOperations}
+                                    bcName={internalWidget?.bcName}
+                                    widgetMeta={internalWidget}
+                                />
+                            ) : null
+                        }
+                    />
+                )}
+            </Popup>
         </>
     )
 }

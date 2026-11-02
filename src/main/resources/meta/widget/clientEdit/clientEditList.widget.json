@@ -1,0 +1,35 @@
+{
+  "name": "clientEditList",
+  "title": "",
+  "type": "List",
+  "bc": "clientEdit",
+  "fields": [
+    {
+      "title": "Client Name",
+      "key": "fullName",
+      "type": "input",
+      "drillDown": "true",
+      "width": 300
+    },
+    {
+      "title": "Brief",
+      "key": "brief",
+      "type": "fileUpload",
+      "fileIdKey": "briefId",
+      "preview": {
+        "enabled": true,
+        "titleKey": "filePreviewTitle",
+        "hintKey": "filePreviewHint",
+        "mode": "popup"
+      }
+    }
+  ],
+  "options": {
+    "actionGroups": {
+      "include": [
+        "create",
+        "actions"
+      ]
+    }
+  }
+}

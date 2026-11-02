@@ -1,0 +1,50 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+// the field case: keep the header from shrinking and preserve the original 8px gap to the viewer
+.fieldHeader {
+    flex-shrink: 0;
+    padding-bottom: 8px;
+}
+
+.body {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+.footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin-top: 6px;
+
+    &:empty {
+        display: none;
+    }
+}
+
+.headerCenter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.uploadWrapper,
+.uploadWrapper :global(.ant-upload) {
+    display: block;
+    line-height: 0;
+}
+
+.fullscreenHeader {
+    height: 80px;
+    padding: 0 24px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, .15);
+}

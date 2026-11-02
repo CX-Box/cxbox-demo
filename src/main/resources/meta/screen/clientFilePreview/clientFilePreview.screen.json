@@ -1,0 +1,20 @@
+{
+  "name": "clientFilePreview",
+  "icon": "file",
+  "order": 4,
+  "title": "File Preview",
+  "navigation": {
+    "type": "standard",
+    "menu": [
+      {
+        "viewName": "clientFilePreview"
+      },
+      {
+        "viewName": "clientFilePreviewList"
+      },
+      {
+        "viewName": "clientFilePreviewMeeting"
+      }
+    ]
+  }
+}

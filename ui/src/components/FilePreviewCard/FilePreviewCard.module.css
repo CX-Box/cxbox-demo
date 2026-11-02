@@ -2,11 +2,19 @@
     position: fixed;
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
+    overflow: hidden;
     z-index: 10;
 }
 
-.fixedContainer :global(.ant-spin-nested-loading),
+.fixedContainer > * {
+    flex: 1 1 0;
+    min-height: 0;
+}
+
+.fixedContainer > :global(h2) {
+    flex: 0 0 auto;
+}
+
 .fixedContainer :global(.ant-spin-container) {
     height: 100%;
 }

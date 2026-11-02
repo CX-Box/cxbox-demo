@@ -1,0 +1,42 @@
+{
+  "name": "clientFilePreview",
+  "title": "Client Edit",
+  "template": "DashboardView",
+  "url": "/screen/clientFilePreview/view/clientFilePreview",
+  "widgets": [
+    {
+      "widgetName": "secondLevelMenu",
+      "position": 0,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "clientEditHeader",
+      "position": 10,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "clientEditStep",
+      "position": 20,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "clientEdit",
+      "position": 30,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "clientEditFilePreview",
+      "position": 40,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "companySuggestionPickList",
+      "position": 100,
+      "gridWidth": 24
+    }
+  ],
+  "rolesAllowed": [
+    "CXBOX_USER",
+    "ADMIN"
+  ]
+}

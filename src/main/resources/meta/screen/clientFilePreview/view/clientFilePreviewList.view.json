@@ -1,0 +1,27 @@
+{
+  "name": "clientFilePreviewList",
+  "title": "File Preview List",
+  "template": "DashboardView",
+  "url": "/screen/clientFilePreview/view/clientFilePreviewList",
+  "widgets": [
+    {
+      "widgetName": "secondLevelMenu",
+      "position": 0,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "clientEditList",
+      "position": 10,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "clientEditFilePreview",
+      "position": 20,
+      "gridWidth": 24
+    }
+  ],
+  "rolesAllowed": [
+    "CXBOX_USER",
+    "ADMIN"
+  ]
+}

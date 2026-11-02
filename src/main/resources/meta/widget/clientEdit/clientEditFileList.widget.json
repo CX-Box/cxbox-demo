@@ -1,0 +1,53 @@
+{
+  "name": "clientEditFileList",
+  "title": "Clients",
+  "type": "List",
+  "bc": "clientEdit",
+  "fields": [
+    {
+      "title": "Client Name",
+      "key": "fullName",
+      "type": "input",
+      "width": 300
+    },
+    {
+      "title": "Importance",
+      "key": "importance",
+      "type": "dictionary",
+      "bgColorKey": "color",
+      "width": 300
+    },
+    {
+      "title": "Status",
+      "key": "status",
+      "type": "dictionary",
+      "width": 300
+    },
+    {
+      "title": "Brief",
+      "key": "brief",
+      "type": "fileUpload",
+      "fileIdKey": "briefId",
+      "width": 300
+    }
+  ],
+  "options": {
+    "export": {
+      "enabled": true,
+      "title": "clientEdit"
+    },
+    "fullTextSearch": {
+      "enabled": true,
+      "placeholder": "Find by Client Name or Address"
+    },
+    "filterSetting": {
+      "enabled": true
+    },
+    "actionGroups": {
+      "include": [
+        "create",
+        "actions"
+      ]
+    }
+  }
+}

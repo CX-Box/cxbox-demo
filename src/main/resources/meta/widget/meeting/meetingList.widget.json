@@ -1,0 +1,26 @@
+{
+  "name": "clientFilePreviewMeetingList",
+  "title": "Meetings",
+  "type": "List",
+  "bc": "meeting",
+  "fields": [
+    {
+      "title": "Agenda",
+      "key": "agenda",
+      "type": "input",
+      "width": 400
+    },
+    {
+      "title": "Period",
+      "key": "period",
+      "type": "input",
+      "width": 200
+    },
+    {
+      "title": "Status",
+      "key": "status",
+      "type": "dictionary",
+      "width": 160
+    }
+  ]
+}

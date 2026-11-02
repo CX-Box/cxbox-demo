@@ -1,0 +1,45 @@
+{
+  "name": "meetingDocumentEditList",
+  "title": "",
+  "type": "List",
+  "bc": "meetingDocumentEdit",
+  "fields": [
+    {
+      "title": "Document Type",
+      "key": "document",
+      "type": "dictionary",
+      "width": 300
+    },
+    {
+      "title": "File",
+      "key": "file",
+      "type": "fileUpload",
+      "fileIdKey": "fileId",
+      "preview": {
+        "enabled": true,
+        "mode": "popup"
+      }
+    },
+    {
+      "title": "Notes",
+      "key": "notes",
+      "type": "input",
+      "width": 300
+    }
+  ],
+  "options": {
+    "create": {
+      "widget": "meetingDocumentsFormForList"
+    },
+    "edit": {
+      "widget": "meetingDocumentsFormForList"
+    },
+    "actionGroups": {
+      "include": [
+        "create",
+        "edit",
+        "delete"
+      ]
+    }
+  }
+}

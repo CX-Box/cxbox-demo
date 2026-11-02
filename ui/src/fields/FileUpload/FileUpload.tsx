@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { UploadFile } from 'antd/es/upload/interface'
 import axios, { AxiosError } from 'axios'
 import { UploadListContainer } from '@components/Operations/components/FileUpload/UploadListContainer'
-import FileViewerContainer from '@components/FileViewerContainer/FileViewerContainer'
+import InlineFilePreview from '@fields/FileUpload/components/InlineFilePreview/InlineFilePreview'
 import SingleFileUpload from './components/SingleFileUpload'
 import ReadOnlySingleFileUpload from './components/ReadOnlySingleFileUpload'
 import { useAppDispatch, useAppSelector } from '@store'
@@ -16,7 +16,7 @@ import { actions } from '@actions'
 import { BaseFieldProps } from '@components/Field/Field'
 import { RowMetaField } from '@interfaces/rowMeta'
 import { CustomWidgetTypes, FileUploadFieldMeta } from '@interfaces/widget'
-import { DataValue } from '@cxbox-ui/core'
+import { DataValue, WidgetTypes } from '@cxbox-ui/core'
 import { useFileIconClick } from '@fields/FileUpload/hooks'
 
 interface Props extends Omit<BaseFieldProps, 'meta'> {
@@ -212,8 +212,25 @@ const FileUpload: React.FunctionComponent<Props> = ({
         }
     }, [isInlineMode, widgetMeta?.type])
 
-    if (widgetMeta?.type === CustomWidgetTypes.FilePreview && displayFileViewer && isInlineMode) {
-        return <FileViewerContainer isInline={true} widgetName={widgetName as string} fieldKey={fieldMeta?.key} />
+    if (widgetMeta?.type && displayFileViewer && isInlineMode) {
+        if (widgetMeta.type === CustomWidgetTypes.FilePreview) {
+            return <InlineFilePreview widgetName={widgetName as string} fieldKey={fieldMeta?.key} forceHeight="100%" pagination />
+        }
+
+        if (
+            [WidgetTypes.Info, CustomWidgetTypes.AdditionalInfo].includes(widgetMeta.type as WidgetTypes) ||
+            (widgetMeta.type === WidgetTypes.Form && readOnly)
+        ) {
+            return (
+                <InlineFilePreview
+                    widgetName={widgetName as string}
+                    fieldKey={fieldMeta?.key}
+                    disabled={true}
+                    // AdditionalInfo is a read-only display widget: hide the image control buttons
+                    hideImageControl={widgetMeta?.type === CustomWidgetTypes.AdditionalInfo || preview.hideImageControl}
+                />
+            )
+        }
     }
 
     if (readOnly) {
@@ -232,24 +249,43 @@ const FileUpload: React.FunctionComponent<Props> = ({
 
     return (
         <>
-            <SingleFileUpload
-                downloadUrl={downloadUrl}
-                fileName={fileName}
-                placeholder={placeholder}
-                error={!!metaError}
-                onDelete={onFileDelete}
-                action={uploadUrl}
-                accept={fileAccept}
-                disabled={disabled}
-                beforeUpload={beforeUpload}
-                customRequest={customRequest}
-                onProgress={onProgressUpload}
-                onStart={onStartUpload}
-                onError={onUploadFailed}
-                onSuccess={onUploadSuccess}
-                onFileIconClick={displayFileViewer ? handleFileIconClick : undefined}
-                onDownload={handleDownload}
-            />
+            {displayFileViewer && isInlineMode ? (
+                <InlineFilePreview
+                    widgetName={widgetName as string}
+                    fieldKey={fieldMeta?.key}
+                    fileAccept={fileAccept}
+                    uploadUrl={uploadUrl}
+                    hideImageControl={preview.hideImageControl}
+                    customRequest={customRequest}
+                    beforeUpload={beforeUpload}
+                    onStartUpload={onStartUpload}
+                    onProgressUpload={onProgressUpload}
+                    onUploadSuccess={onUploadSuccess}
+                    onUploadFailed={onUploadFailed}
+                    onFileDelete={onFileDelete}
+                    disabled={disabled}
+                />
+            ) : (
+                <SingleFileUpload
+                    downloadUrl={downloadUrl}
+                    fileName={fileName}
+                    placeholder={placeholder}
+                    error={!!metaError}
+                    onDelete={onFileDelete}
+                    action={uploadUrl}
+                    accept={fileAccept}
+                    disabled={disabled}
+                    beforeUpload={beforeUpload}
+                    customRequest={customRequest}
+                    onProgress={onProgressUpload}
+                    onStart={onStartUpload}
+                    onError={onUploadFailed}
+                    onSuccess={onUploadSuccess}
+                    onFileIconClick={displayFileViewer ? handleFileIconClick : undefined}
+                    onDownload={handleDownload}
+                />
+            )}
+
             <UploadListContainer
                 ref={callbackRef}
                 addedFileList={getAddedFileList()}

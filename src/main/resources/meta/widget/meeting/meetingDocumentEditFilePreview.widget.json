@@ -1,0 +1,18 @@
+{
+  "name": "meetingDocumentEditFilePreview",
+  "title": "File",
+  "type": "FilePreview",
+  "bc": "meetingDocumentEdit",
+  "fields": [
+    {
+      "label": "File",
+      "key": "file",
+      "type": "fileUpload",
+      "fileIdKey": "fileId",
+      "preview": {
+        "enabled": true,
+        "mode": "inline"
+      }
+    }
+  ]
+}

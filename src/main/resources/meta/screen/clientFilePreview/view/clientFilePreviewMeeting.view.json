@@ -1,0 +1,32 @@
+{
+  "name": "clientFilePreviewMeeting",
+  "title": "Meeting File Preview",
+  "template": "DashboardView",
+  "url": "/screen/clientFilePreview/view/clientFilePreviewMeeting",
+  "widgets": [
+    {
+      "widgetName": "secondLevelMenu",
+      "position": 0,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "clientFilePreviewMeetingList",
+      "position": 10,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "meetingDocumentEditList",
+      "position": 20,
+      "gridWidth": 24
+    },
+    {
+      "widgetName": "meetingDocumentEditFilePreview",
+      "position": 30,
+      "gridWidth": 24
+    }
+  ],
+  "rolesAllowed": [
+    "CXBOX_USER",
+    "ADMIN"
+  ]
+}

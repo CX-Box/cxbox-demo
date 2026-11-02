@@ -5,36 +5,71 @@ import { useTranslation } from 'react-i18next'
 import { Icon } from 'antd'
 import cn from 'classnames'
 
+export interface HeaderOperation {
+    icon?: string
+    onClick?: () => void
+    /** visible label (translation key); omit → icon only */
+    label?: string
+    /** tooltip */
+    title?: string
+    removeIndentation?: boolean
+    /**
+     * Full custom node (e.g. `<Upload><Button/></Upload>`). When set it is rendered instead of the
+     * default link button, so composite triggers can live in the operations row.
+     */
+    node?: ReactNode
+}
+
 export interface HeaderProps {
     className?: string
     theme?: 'light' | 'dark'
     title?: string
     hint?: string
-    onDownload?: () => void
+    hideIfEmpty?: boolean
     onClose?: () => void
-    onFullscreen?: () => void
     center?: ReactNode
+    operations?: HeaderOperation[]
 }
 
-function Header({ className, theme = 'light', title, hint, onFullscreen, onClose, onDownload, center }: HeaderProps) {
+function Header({ className, theme = 'light', title, hint, onClose, center, operations, hideIfEmpty }: HeaderProps) {
     const { t } = useTranslation()
+
+    if (hideIfEmpty && !(title || hint || operations?.length || center || onClose)) {
+        return null
+    }
 
     return (
         <div className={cn(styles.header, styles[theme], className, { [styles.hasCenter]: !!center })}>
             <div className={styles.textBlock}>
-                <span className={styles.title}>{title}</span>
-                <span className={styles.hint}>{hint}</span>
-            </div>
-            {center && <div className={styles.centerBlock}>{center}</div>}
-            <div className={styles.operationsBlock}>
-                {onFullscreen && (
-                    <Button className={styles.button} type="link" icon="fullscreen" onClick={onFullscreen}>
-                        {t('Fullscreen')}
-                    </Button>
+                <span className={cn(styles.title, styles.ellipsis)} title={title}>
+                    {title}
+                </span>
+                {hint && (
+                    <span className={styles.hint} title={hint}>
+                        {hint}
+                    </span>
                 )}
-                <Button className={styles.button} type="link" icon="download" onClick={onDownload}>
-                    {t('Download')}
-                </Button>
+            </div>
+
+            {center && <div className={styles.centerBlock}>{center}</div>}
+
+            <div className={styles.operationsBlock}>
+                {operations?.map((op, i) => (
+                    <React.Fragment key={i}>
+                        {op.node ?? (
+                            <Button
+                                className={styles.button}
+                                type="link"
+                                removeIndentation={op.removeIndentation}
+                                icon={op.icon}
+                                onClick={op.onClick}
+                                title={op.title}
+                            >
+                                {op.label ? t(op.label) : undefined}
+                            </Button>
+                        )}
+                    </React.Fragment>
+                ))}
                 {onClose && <Icon className={styles.close} type="close" onClick={onClose} />}
             </div>
         </div>

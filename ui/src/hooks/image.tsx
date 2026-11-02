@@ -22,7 +22,7 @@ export const useImageControl = (imageRef: React.RefObject<HTMLImageElement>, ena
         return () => {
             imgElement?.removeEventListener('mousedown', mouseDown)
         }
-    }, [enabled, mouseDown, imageRef])
+    }, [enabled, mouseDown, imageRef, resetTrigger])
 
     const { rotate, rotateClockwise, rotateCounterClockwise, rollback: rollbackRotate } = useImageRotate()
     const { scale, increaseScale, decreaseScale, rollback: rollbackScale } = useImageScale(imageRef, resetTrigger)

@@ -75,6 +75,44 @@ export const processScreensOnLogin = (screens: SessionScreen[]) => {
             }
         })
 
+        // test substitution
+        if (['client'].includes(newScreen.name)) {
+            for (const aView of newScreen.meta?.views || []) {
+                if (['clientview'].includes(aView.name)) {
+                    for (const aWidget of aView.widgets) {
+                        if (['clientView'].includes(aWidget.name)) {
+                            for (const aField of (aWidget.fields[0] as any).fields as any[]) {
+                                if (aField.key === 'brief') {
+                                    aField.preview = {
+                                        ...aField.preview,
+                                        enabled: true,
+                                        mode: 'inline'
+                                    }
+                                }
+                            }
+                        }
+
+                        if (['clientViewAdditionalInfo'].includes(aWidget.name)) {
+                            ;(aWidget.options as any).layout.rows[1].cols[0].fieldKey = 'brief'
+                            for (const aField of aWidget.fields as any[]) {
+                                if (aField.key === 'address') {
+                                    aField.label = 'Brief'
+                                    aField.key = 'brief'
+                                    aField.type = 'fileUpload'
+                                    aField.fileIdKey = 'briefId'
+                                    aField.preview = {
+                                        ...aField.preview,
+                                        enabled: true,
+                                        mode: 'inline'
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         newScreen.meta?.navigation?.menu?.forEach(addUidToTree)
     })
 

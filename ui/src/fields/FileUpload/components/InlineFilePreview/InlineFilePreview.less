@@ -1,0 +1,103 @@
+.container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    // the preview is no longer the upload trigger (the ellipsis button triggers file selection),
+    // so clicking the image does nothing and we don't show a pointer cursor
+    cursor: default;
+}
+
+// positions the overlay action icons over the viewer area
+.wrapper {
+    display: flex;
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+// top bar with overlay actions: the file name fills the available width on the left,
+// the modify actions (upload + delete) stay pinned on the right
+.topActions {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: flex-start;
+    padding: 8px;
+    z-index: 2;
+
+    // let clicks pass through the empty area to the preview below; buttons stay clickable
+    pointer-events: none;
+}
+
+.actionsGroup {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+// full-width file name pinned to the top of the preview; it fills the available
+// width and truncates to an ellipsis where the action buttons begin on the right
+.fileName {
+    flex: 1;
+    min-width: 0;
+    font-size: 14px;
+    font-weight: bold;
+    // white fill with a 1px black outline for contrast against any image;
+    // text-shadow (not -webkit-text-stroke) is used because it's the universal,
+    // cross-browser way to draw a text outline — -webkit-text-stroke is WebKit-only,
+    // and the spec'd text-outline isn't implemented in any browser yet.
+    // four shadows (up/down/left/right) form a complete ring; blur 0 keeps it crisp.
+    color: #fff;
+    text-shadow:
+        -1px 0 0 #000,
+         1px 0 0 #000,
+         0 -1px 0 #000,
+         0  1px 0 #000;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    // gap between the truncated name (its ellipsis) and the action buttons on the right
+    margin-right: 10px;
+    cursor: pointer;
+    // the topActions bar is pointer-events:none so clicks pass through to the preview;
+    // re-enable interaction on the clickable file name
+    pointer-events: auto;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+// keep the overlay action buttons clickable on top of the pointer-events:none bar
+.topActions button {
+    pointer-events: auto;
+}
+
+// the upload trigger is an antd Upload span wrapping the button;
+// antd's base .ant-btn is inline-block, so turn it into a flex container, horizontally center the dots
+// and pin them to the bottom of the button. width is set back to 32px to match the square icon-only
+// buttons (antd applies that width via .ant-btn-icon-only, which this button no longer gets now that it
+// has a text child instead of an icon). the antd classes are wrapped in :global() because this is a CSS
+// module and they must match the un-scoped antd elements
+.topActions :global(.ant-upload-select .ant-btn) {
+    display: inline-flex;
+    justify-content: center;
+    width: 32px;
+}
+
+// the three dots upload label
+.uploadDots {
+    font-size: 16px;
+    line-height: 32px;
+}
+
+// fullscreen header: height, horizontal padding and the separating border, like FileViewerContainer
+.fullscreenHeader {
+    height: 80px;
+    padding: 0 24px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, .15);
+}

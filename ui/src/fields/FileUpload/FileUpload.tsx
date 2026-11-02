@@ -4,6 +4,7 @@ import { UploadFile } from 'antd/es/upload/interface'
 import axios, { AxiosError } from 'axios'
 import { UploadListContainer } from '@components/Operations/components/FileUpload/UploadListContainer'
 import FileViewerContainer from '@components/FileViewerContainer/FileViewerContainer'
+import InlineFilePreview from '@fields/FileUpload/components/InlineFilePreview/InlineFilePreview'
 import SingleFileUpload from './components/SingleFileUpload'
 import ReadOnlySingleFileUpload from './components/ReadOnlySingleFileUpload'
 import { useAppDispatch, useAppSelector } from '@store'
@@ -16,7 +17,7 @@ import { actions } from '@actions'
 import { BaseFieldProps } from '@components/Field/Field'
 import { RowMetaField } from '@interfaces/rowMeta'
 import { CustomWidgetTypes, FileUploadFieldMeta } from '@interfaces/widget'
-import { DataValue } from '@cxbox-ui/core'
+import { DataValue, WidgetTypes } from '@cxbox-ui/core'
 import { useFileIconClick } from '@fields/FileUpload/hooks'
 
 interface Props extends Omit<BaseFieldProps, 'meta'> {
@@ -211,7 +212,16 @@ const FileUpload: React.FunctionComponent<Props> = ({
         }
     }, [isInlineMode, widgetMeta?.type])
 
-    if (widgetMeta?.type === CustomWidgetTypes.FilePreview && displayFileViewer && isInlineMode) {
+    if (
+        widgetMeta?.type &&
+        [WidgetTypes.Info, CustomWidgetTypes.AdditionalInfo, CustomWidgetTypes.FilePreview].includes(widgetMeta.type as WidgetTypes) &&
+        // (widgetMeta.type === WidgetTypes.Form && readOnly)
+        displayFileViewer &&
+        isInlineMode
+    ) {
+        if ([WidgetTypes.Info, CustomWidgetTypes.AdditionalInfo].includes(widgetMeta.type as WidgetTypes)) {
+            return <InlineFilePreview widgetName={widgetName as string} fieldKey={fieldMeta?.key} disabled={true} />
+        }
         return <FileViewerContainer isInline={true} widgetName={widgetName as string} fieldKey={fieldMeta?.key} />
     }
 
@@ -259,6 +269,9 @@ const FileUpload: React.FunctionComponent<Props> = ({
                 data-test-field-key={fieldMeta.key}
                 data-test-widget-name={widgetName}
             />
+            {widgetMeta?.type === WidgetTypes.Form && displayFileViewer && isInlineMode && (
+                <InlineFilePreview widgetName={widgetName as string} fieldKey={fieldMeta?.key} />
+            )}
         </>
     )
 }

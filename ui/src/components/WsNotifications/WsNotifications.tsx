@@ -106,7 +106,7 @@ export function WsNotifications(props: NotificationProps) {
         </div>
     )
 
-    const columns = useColumns({ linksEnabled: notification.state.data?.some(message => Array.isArray(message.links)) })
+    const columns = useColumns()
 
     return (
         <>

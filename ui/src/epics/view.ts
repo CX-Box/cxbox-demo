@@ -34,46 +34,126 @@ import { DEFAULT_TREE_PARENT_FIELD_KEY, normalizeNodeId } from '@utils/tree'
 import { selectBcFilters } from '@selectors/selectors'
 import { TREE_ROOT_ID } from '@constants/tree'
 
-const getWidgetsForRowMetaUpdate = (state: RootState, activeBcName: string) => {
-    const { widgets, pendingDataChanges } = state.view
-    const bcDictionary: { [bcName: string]: WidgetMeta } = {}
+const createShowConditionChecker = (state: RootState) => {
+    // A new checker per event prevents reusing results after pending values change.
+    const visibilityByWidget = new Map<WidgetMeta, boolean>()
+
+    return (widget: WidgetMeta) => {
+        const cachedVisibility = visibilityByWidget.get(widget)
+        if (cachedVisibility !== undefined) {
+            return cachedVisibility
+        }
+
+        const conditionBcName = widget.showCondition?.bcName as string
+        const isWidgetShown = utils.checkShowCondition(
+            widget.showCondition,
+            state.screen.bo.bc[conditionBcName]?.cursor || '',
+            state.data[conditionBcName],
+            state.view.pendingDataChanges
+        )
+        visibilityByWidget.set(widget, isWidgetShown)
+        return isWidgetShown
+    }
+}
+
+const getRelatedBcUpdates = (state: RootState, activeBcName: string) => {
+    const { widgets } = state.view
+    const bcByName = state.screen.bo.bc
+    const isWidgetShown = createShowConditionChecker(state)
+    const relatedWidgetByBcName: Record<string, WidgetMeta> = {}
 
     widgets.forEach(widget => {
         if (
-            !bcDictionary[widget.bcName] &&
+            !relatedWidgetByBcName[widget.bcName] &&
             widget.showCondition?.bcName === activeBcName &&
             widget.bcName !== activeBcName &&
-            utils.checkShowCondition(
-                widget.showCondition,
-                state.screen.bo.bc[widget.showCondition?.bcName as string]?.cursor || '',
-                state.data[widget.showCondition?.bcName as string],
-                pendingDataChanges
-            )
+            isWidgetShown(widget)
         ) {
-            bcDictionary[widget.bcName] = widget
+            relatedWidgetByBcName[widget.bcName] = widget
         }
     })
 
-    return Object.values(bcDictionary)
+    const relatedWidgets = Object.values(relatedWidgetByBcName)
+    const dataRequestByBcName = new Map<string, { bcName: string; widgetName: string }>()
+    relatedWidgets.forEach(({ bcName }) => {
+        const bc = bcByName[bcName]
+        if (!bc || bc.loading || state.data[bcName] !== undefined) {
+            return
+        }
+
+        const widget = widgets.find(widget => widget.bcName === bcName && !PopupWidgetTypes.includes(widget.type) && isWidgetShown(widget))
+        if (!widget) {
+            return
+        }
+
+        let bcNameToFetch = bcName
+        let parentBcName = bc.parentName
+        // An ancestor's cursor is sufficient for the child URL; its data need not be loaded.
+        while (parentBcName && !bcByName[parentBcName]?.cursor) {
+            // An ancestor with loaded data and no cursor is empty: there is nothing to fetch for its descendants.
+            if (!bcByName[parentBcName] || state.data[parentBcName] !== undefined) {
+                return
+            }
+            bcNameToFetch = parentBcName
+            parentBcName = bcByName[parentBcName].parentName
+        }
+        if (bcByName[bcNameToFetch].loading) {
+            return
+        }
+        while (parentBcName) {
+            if (!bcByName[parentBcName]?.cursor) {
+                return
+            }
+            parentBcName = bcByName[parentBcName].parentName
+        }
+
+        if (!dataRequestByBcName.has(bcNameToFetch)) {
+            dataRequestByBcName.set(bcNameToFetch, { bcName: bcNameToFetch, widgetName: widget.name })
+        }
+    })
+
+    // Descendants receive both data and rowMeta through their ancestor's fetch cascade.
+    const hasNoDataFetchAncestor = (bcName: string) => {
+        let parentBcName = bcByName[bcName]?.parentName
+        while (parentBcName) {
+            if (dataRequestByBcName.has(parentBcName)) {
+                return false
+            }
+            parentBcName = bcByName[parentBcName]?.parentName
+        }
+        return true
+    }
+
+    // The rowMeta url needs the cursors of all the ancestors, e.g. there is no cursor in an empty ancestor.
+    const hasAncestorCursors = (bcName: string) => {
+        let parentBcName = bcByName[bcName]?.parentName
+        while (parentBcName) {
+            if (!bcByName[parentBcName]?.cursor) {
+                return false
+            }
+            parentBcName = bcByName[parentBcName].parentName
+        }
+        return true
+    }
+
+    return {
+        dataRequests: Array.from(dataRequestByBcName.values()).filter(({ bcName }) => hasNoDataFetchAncestor(bcName)),
+        rowMetaRequests: relatedWidgets
+            .filter(({ bcName }) => !dataRequestByBcName.has(bcName) && hasNoDataFetchAncestor(bcName) && hasAncestorCursors(bcName))
+            .map(({ bcName, name: widgetName }) => ({ bcName, widgetName }))
+    }
 }
 
 export const updateRowMetaForRelatedBcEpic: RootEpic = (action$, state$) =>
     action$.pipe(
-        filter(isAnyOf(actions.forceActiveRmUpdate)),
+        filter(actions.forceActiveRmUpdate.match),
         switchMap(action => {
-            const { bcName } = action.payload
-            const state = state$.value
-            const widgetsForRowMetaUpdate = getWidgetsForRowMetaUpdate(state, bcName)
+            const { dataRequests, rowMetaRequests } = getRelatedBcUpdates(state$.value, action.payload.bcName)
 
-            if (widgetsForRowMetaUpdate.length) {
-                return concat(
-                    ...widgetsForRowMetaUpdate.map(currentWidget =>
-                        of(actions.bcFetchRowMeta({ widgetName: currentWidget.name, bcName: currentWidget.bcName }))
-                    )
-                )
-            }
-
-            return EMPTY
+            return concat(
+                ...rowMetaRequests.map(request => of(actions.bcFetchRowMeta(request))),
+                ...dataRequests.map(request => of(actions.bcFetchDataRequest(request)))
+            )
         })
     )
 

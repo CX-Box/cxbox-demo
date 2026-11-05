@@ -31,7 +31,7 @@
   </changeSet>
 
   <changeSet id="cxbox_bc_filter_groups" author="cxbox" runOnChange="true" context="local">
-    <loadUpdateData tableName="bc_filter_groups" primaryKey="ID" encoding="UTF-8" separator=";" quotchar="&quot;"
+    <loadUpdateData tableName="bc_filter_groups" primaryKey="name,bc,user_id" encoding="UTF-8" separator=";" quotchar="&quot;"
       file="db/data/cxbox/BC_FILTER_GROUPS.csv">
       <column header="name" name="name" type="STRING"/>
       <column header="bc" name="bc" type="STRING"/>

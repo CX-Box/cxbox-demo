@@ -90,7 +90,8 @@ const getRelatedBcUpdates = (state: RootState, activeBcName: string) => {
         let parentBcName = bc.parentName
         // An ancestor's cursor is sufficient for the child URL; its data need not be loaded.
         while (parentBcName && !bcByName[parentBcName]?.cursor) {
-            if (!bcByName[parentBcName]) {
+            // An ancestor with loaded data and no cursor is empty: there is nothing to fetch for its descendants.
+            if (!bcByName[parentBcName] || state.data[parentBcName] !== undefined) {
                 return
             }
             bcNameToFetch = parentBcName

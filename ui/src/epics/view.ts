@@ -124,10 +124,22 @@ const getRelatedBcUpdates = (state: RootState, activeBcName: string) => {
         return true
     }
 
+    // The rowMeta url needs the cursors of all the ancestors, e.g. there is no cursor in an empty ancestor.
+    const hasAncestorCursors = (bcName: string) => {
+        let parentBcName = bcByName[bcName]?.parentName
+        while (parentBcName) {
+            if (!bcByName[parentBcName]?.cursor) {
+                return false
+            }
+            parentBcName = bcByName[parentBcName].parentName
+        }
+        return true
+    }
+
     return {
         dataRequests: Array.from(dataRequestByBcName.values()).filter(({ bcName }) => hasNoDataFetchAncestor(bcName)),
         rowMetaRequests: relatedWidgets
-            .filter(({ bcName }) => !dataRequestByBcName.has(bcName) && hasNoDataFetchAncestor(bcName))
+            .filter(({ bcName }) => !dataRequestByBcName.has(bcName) && hasNoDataFetchAncestor(bcName) && hasAncestorCursors(bcName))
             .map(({ bcName, name: widgetName }) => ({ bcName, widgetName }))
     }
 }

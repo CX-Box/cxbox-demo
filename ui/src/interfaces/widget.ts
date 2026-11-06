@@ -1,5 +1,6 @@
 import { EAggFunction } from '@constants/aggregation'
 import {
+    RadioButtonFieldMeta,
     DictionaryFieldMeta,
     FieldType,
     MultivalueFieldMeta,
@@ -292,6 +293,12 @@ export type FileUploadFieldMeta = CoreFileUploadFieldMeta & {
          */
         miniPreview?: boolean
     }
+}
+
+export type AppRadioButtonFieldMeta = RadioButtonFieldMeta & {
+    displayMode?: 'vertical' | 'horizontal'
+    maxRowsPerValue?: number
+    editMaxRowsPerValue?: number
 }
 
 export type WidgetField = CoreWidgetField | FileUploadFieldMeta

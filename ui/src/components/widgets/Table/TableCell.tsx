@@ -14,6 +14,7 @@ import { aggCellBgColorRgba, totalRowKey } from './groupingHierarchy/constants'
 import { getAggCellBgOpacity } from './groupingHierarchy/utils/aggregation'
 import FieldBaseThemeWrapper from '@components/FieldBaseThemeWrapper/FieldBaseThemeWrapper'
 import { ROW_KEY } from '@components/widgets/Table/constants'
+import { isRecordRow } from '@components/widgets/Table/groupingHierarchy/utils/isRecordRow'
 
 interface TableCellProps<T extends CustomDataItem> {
     item: WidgetListField | any
@@ -113,6 +114,7 @@ export function TableCell<T extends CustomDataItem>({
                 readonly={!editMode}
                 forceFocus={editMode}
                 className={cn(editMode ? styles.fullWidth : styles.fitContentWidth)}
+                disableDrillDown={enabledGrouping && !isRecordRow(dataItem)}
             />
             {showCounter ? <span className={styles.counter}>({countOfRecords})</span> : null}
         </FieldBaseThemeWrapper>

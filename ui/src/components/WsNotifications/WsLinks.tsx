@@ -10,7 +10,9 @@ interface Props {
     links: NotificationLink[]
 }
 
-export const WsLinks: React.FC<Props> = ({ links }) => {
+export const WsLinks: React.FC<Props> = ({ links: rawLinks }) => {
+    const links = Array.isArray(rawLinks) ? rawLinks : []
+
     const dispatch = useDispatch()
     const router = useAppSelector(state => state.router)
 

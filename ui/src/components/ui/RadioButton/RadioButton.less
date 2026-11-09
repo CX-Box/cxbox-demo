@@ -1,3 +1,32 @@
-.verticalRadioButton {
-    display: block;
+.group:global(.ant-radio-group) {
+    display: inline-flex;
+    vertical-align: top;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 0 8px;
+    max-width: 100%;
+
+    &.verticalGroup {
+        flex-direction: column;
+    }
+}
+
+.radio:global(.ant-radio-wrapper) {
+    display: inline-flex;
+    align-items: flex-start;
+    max-width: 100%;
+    margin-right: 0;
+
+    > :global(.ant-radio) {
+        margin-top: 0.2em;
+    }
+
+    > span:last-child {
+        display: flex;
+        min-width: 0;
+    }
+}
+
+.text {
+    min-width: 0;
 }

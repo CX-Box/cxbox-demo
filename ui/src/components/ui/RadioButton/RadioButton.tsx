@@ -4,6 +4,11 @@ import { RadioChangeEvent } from 'antd/es/radio'
 import { BaseFieldProps } from '@components/Field/Field'
 import ReadOnlyField from '@components/ui/ReadOnlyField/ReadOnlyField'
 import { getIconByParams } from '@fields/Dictionary/Dictionary'
+import { AppRadioButtonFieldMeta } from '@interfaces/widget'
+import cn from 'classnames'
+import { radioButtonConsts } from '@components/ui/RadioButton/constants'
+import TextClampWrapper from '@components/TextClampWrapper/TextClampWrapper'
+import styles from './RadioButton.less'
 
 export interface RadioButtonProps extends BaseFieldProps {
     value?: string | null
@@ -31,6 +36,8 @@ const RadioButton: React.FunctionComponent<RadioButtonProps> = ({
     cursor,
     onDrillDown
 }) => {
+    const fieldMeta = meta as AppRadioButtonFieldMeta
+
     const handleOnChange = React.useCallback(
         (e: RadioChangeEvent) => {
             let newValue: string
@@ -52,33 +59,38 @@ const RadioButton: React.FunctionComponent<RadioButtonProps> = ({
 
     if (readOnly) {
         const readOnlyValue = value ?? ''
+        const showMaxRows = fieldMeta.maxRowsPerValue ?? radioButtonConsts.maxRowsPerValue
 
         return (
-            <ReadOnlyField
-                widgetName={widgetName}
-                meta={meta}
-                className={className}
-                backgroundColor={backgroundColor}
-                cursor={cursor}
-                onDrillDown={onDrillDown}
-            >
-                {readOnlyValue}
-            </ReadOnlyField>
+            <TextClampWrapper maxRows={showMaxRows}>
+                <ReadOnlyField
+                    widgetName={widgetName}
+                    meta={meta}
+                    className={className}
+                    backgroundColor={backgroundColor}
+                    cursor={cursor}
+                    onDrillDown={onDrillDown}
+                >
+                    {readOnlyValue}
+                </ReadOnlyField>
+            </TextClampWrapper>
         )
     }
+
+    const showEditMaxRows = fieldMeta.editMaxRowsPerValue ?? fieldMeta.maxRowsPerValue ?? radioButtonConsts.editMaxRowsPerValue
 
     return (
         <Radio.Group
             onChange={handleOnChange}
             disabled={disabled}
             value={valueIndex >= 0 ? valueIndex.toString() : value}
-            className={className}
+            className={cn(styles.group, { [styles.verticalGroup]: fieldMeta.displayMode === 'vertical' }, className)}
         >
             {values?.map((el, index) => (
-                <Radio value={index.toString()} key={index}>
-                    <span>
-                        {el.icon && getIconByParams(el.icon)}
-                        <span data-test-field-radiobutton-item={true}>{el.value}</span>
+                <Radio key={index} className={styles.radio} value={index.toString()}>
+                    {el.icon && <span>{getIconByParams(el.icon)}</span>}
+                    <span className={styles.text} data-test-field-radiobutton-item={true}>
+                        <TextClampWrapper maxRows={showEditMaxRows}>{el.value}</TextClampWrapper>
                     </span>
                 </Radio>
             ))}

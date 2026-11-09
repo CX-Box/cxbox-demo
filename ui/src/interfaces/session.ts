@@ -31,6 +31,28 @@ export type FeatureSetting = {
     value: string | null
 }
 
+export interface BackendValidationMessage {
+    validatorName: string
+    title: string
+    message: string
+    /**
+     * An empty list does not restrict the message to a view.
+     */
+    views: string[]
+    widgets: string[]
+    executionFailed: boolean
+}
+
+export type RuntimeErrorLevel = 'error' | 'warning'
+
+export interface RuntimeError {
+    level: RuntimeErrorLevel
+    title?: string
+    message: string
+    widget?: string
+    count: number
+}
+
 export interface LoginResponse extends interfaces.LoginResponse {
     /** The same value is in the SIEM log (`session: ...`): support finds the requests of the user by it */
     sessionId?: string
@@ -38,6 +60,7 @@ export interface LoginResponse extends interfaces.LoginResponse {
     featureSettings?: FeatureSetting[]
     screens: SessionScreen[]
     language?: string | null | undefined
+    metaValidation: BackendValidationMessage[]
 }
 
 export interface SessionScreen extends interfaces.SessionScreen {

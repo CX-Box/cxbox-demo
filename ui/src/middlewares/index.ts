@@ -4,6 +4,7 @@ import { groupingHierarchyMiddleware } from './groupingHierarchyMiddleware'
 import { saveFormMiddleware } from './autosaveMiddleware'
 import { massOperationMiddleware } from './massOperationMiddleware'
 import { dropActionsForMissingBcMiddleware } from './dropActionsForMissingBcMiddleware'
+import { runtimeErrorsMiddleware } from './runtimeErrorsMiddleware'
 
 export const middlewares = {
     resetBlankValuesMiddleware,
@@ -11,6 +12,7 @@ export const middlewares = {
     massOperationMiddleware,
     groupingHierarchyMiddleware,
     autosave: saveFormMiddleware,
+    runtimeErrorsMiddleware,
     // the last one: it also checks an action that another middleware passes on later, after the unsaved changes dialog
     dropActionsForMissingBcMiddleware
 }

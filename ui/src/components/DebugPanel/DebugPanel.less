@@ -9,6 +9,13 @@
     gap: 3px 5px;
     margin: 1px;
     border-radius: 3px;
+
+    // Extra specificity overrides CopyableText width so long widget names do not wrap the buttons.
+    &.debugPanel :global(.ant-input-group-wrapper) {
+        flex: 1 1 120px;
+        min-width: 0;
+        max-width: 300px;
+    }
 }
 
 .button {

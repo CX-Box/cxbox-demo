@@ -59,7 +59,7 @@ const RadioButton: React.FunctionComponent<RadioButtonProps> = ({
 
     if (readOnly) {
         const readOnlyValue = value ?? ''
-        const showMaxRows = fieldMeta.maxRowsPerValue || radioButtonConsts.maxRowsPerValue
+        const showMaxRows = fieldMeta.maxRowsPerValue ?? radioButtonConsts.maxRowsPerValue
 
         return (
             <TextClampWrapper maxRows={showMaxRows}>
@@ -77,7 +77,7 @@ const RadioButton: React.FunctionComponent<RadioButtonProps> = ({
         )
     }
 
-    const showEditMaxRows = fieldMeta.editMaxRowsPerValue || radioButtonConsts.editMaxRowsPerValue
+    const showEditMaxRows = fieldMeta.editMaxRowsPerValue ?? fieldMeta.maxRowsPerValue ?? radioButtonConsts.editMaxRowsPerValue
 
     return (
         <Radio.Group

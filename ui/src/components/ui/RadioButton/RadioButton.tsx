@@ -85,23 +85,16 @@ const RadioButton: React.FunctionComponent<RadioButtonProps> = ({
             onChange={handleOnChange}
             disabled={disabled}
             value={valueIndex >= 0 ? valueIndex.toString() : value}
-            className={cn(className, {
-                [styles.error]: metaError
+            className={cn(styles.group, className, {
+                [styles.error]: metaError,
+                [styles.verticalGroup]: fieldMeta.displayMode === 'vertical'
             })}
         >
             {values?.map((el, index) => (
-                <Radio
-                    key={index}
-                    className={cn({
-                        [styles.verticalRadioButton]: fieldMeta.displayMode === 'vertical'
-                    })}
-                    value={index.toString()}
-                >
-                    <span>
-                        {el.icon && getIconByParams(el.icon)}
-                        <span data-test-field-radiobutton-item={true}>
-                            <TextClampWrapper maxRows={showEditMaxRows}>{el.value}</TextClampWrapper>
-                        </span>
+                <Radio key={index} className={styles.radio} value={index.toString()}>
+                    {el.icon && <span>{getIconByParams(el.icon)}</span>}
+                    <span className={styles.text} data-test-field-radiobutton-item={true}>
+                        <TextClampWrapper maxRows={showEditMaxRows}>{el.value}</TextClampWrapper>
                     </span>
                 </Radio>
             ))}

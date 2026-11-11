@@ -1,8 +1,30 @@
 import { describe, expect, it, vi } from 'vitest'
 import { CadesPluginError, CertificateData } from '@features/cryptoPro'
-import { validateEncryptionCertificate } from './cryptoFile'
+import { getCryptoRecord, validateEncryptionCertificate } from './cryptoFile'
 
 vi.mock('api', () => ({ CxBoxApiInstance: {} }))
+
+// CXBOX-1348
+describe('getCryptoRecord', () => {
+    const saved = { id: '1', vstamp: 1, fileId: null, fileName: null, notes: 'n' }
+
+    it('takes the document uploaded to the record that is not saved yet', () => {
+        expect(getCryptoRecord(saved, { fileId: 'f1', fileName: 'meeting.pdf' })).toEqual({
+            ...saved,
+            fileId: 'f1',
+            fileName: 'meeting.pdf'
+        })
+    })
+
+    it('a pending change overrides the saved document', () => {
+        expect(getCryptoRecord({ ...saved, fileId: 'old' }, { fileId: 'new' })?.fileId).toBe('new')
+    })
+
+    it('without pending changes is the saved record', () => {
+        expect(getCryptoRecord(saved, undefined)).toBe(saved)
+        expect(getCryptoRecord(undefined, undefined)).toBeUndefined()
+    })
+})
 
 describe('validateEncryptionCertificate', () => {
     const cert = (fields: Partial<CertificateData> = {}) =>

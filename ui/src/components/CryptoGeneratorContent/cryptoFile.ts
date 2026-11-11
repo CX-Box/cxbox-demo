@@ -142,6 +142,13 @@ export function runOperation(
     return operation.run(file, certs, options)
 }
 
+/**
+ * The record as the user sees it: the saved data with the changes not saved yet.
+ * The document uploaded to a record that is not saved yet (a new one, or with a changed file) is only in its pending changes
+ */
+export const getCryptoRecord = (record: DataItem | undefined, pendingChanges: Partial<DataItem> | undefined): DataItem | undefined =>
+    pendingChanges ? ({ ...record, ...pendingChanges } as DataItem) : record
+
 export const getCryptoFileBaseNames = (
     record: DataItem | undefined,
     {

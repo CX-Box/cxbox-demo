@@ -105,5 +105,6 @@ export const processFileUploadErrorMessage = (error: AxiosError<OperationError>)
         errors.push(errorMessage)
     }
 
-    return errors.filter(i => i).join('; ')
+    // each message on its own line: the tooltip keeps the line breaks
+    return errors.filter(i => i).join('\n')
 }

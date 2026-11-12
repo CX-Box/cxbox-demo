@@ -44,7 +44,18 @@ export function UploadList({ fileList }: UploadListProps) {
                         data-test-file-status={file.status}
                         data-test-file-status-information={file.statusInformation}
                     >
-                        <Tooltip overlay={file.statusInformation} placement="leftBottom">
+                        {/* a long error of the backend is scrolled inside the tooltip: the delay lets the mouse move from the line to the tooltip */}
+                        <Tooltip
+                            overlay={
+                                file.statusInformation ? (
+                                    <div className={styles.statusInformation} data-test-file-status-tooltip={true}>
+                                        {file.statusInformation}
+                                    </div>
+                                ) : undefined
+                            }
+                            placement="leftBottom"
+                            mouseLeaveDelay={0.3}
+                        >
                             <div className={styles.fileName}>
                                 {fileIcon}
                                 <span>{file.name}</span>

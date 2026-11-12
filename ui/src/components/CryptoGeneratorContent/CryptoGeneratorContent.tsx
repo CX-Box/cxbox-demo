@@ -40,6 +40,7 @@ import {
     CryptoSettings,
     getCryptoFileBaseNames,
     getCryptoGenerator,
+    getCryptoRecord,
     getSignedDocumentName,
     hasEncryptInGeneratorType,
     hasInvalidCryptoGeneratorType,
@@ -123,7 +124,10 @@ function CryptoGeneratorContent({
 
     const { fileId, cursor, documentName, signatureFileBaseName, encryptedFileBaseName } = useAppSelector(state => {
         const cursor = state.screen.bo.bc[bcName].cursor
-        const data = state.data[bcName].find(i => i.id === cursor)
+        const data = getCryptoRecord(
+            state.data[bcName]?.find(i => i.id === cursor),
+            cursor ? state.view.pendingDataChanges[bcName]?.[cursor] : undefined
+        )
         return {
             fileId: data?.[documentFileIdKey!] as string | undefined,
             cursor: cursor,

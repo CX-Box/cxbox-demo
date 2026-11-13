@@ -39,6 +39,22 @@
             padding: 31px 0;
         }
     }
+    // Disabled zone looks like a disabled field (background) with disabled button colors (CXBOX-1218)
+    &:global(.ant-upload.ant-upload-drag.ant-upload-disabled) {
+        background: var(--field-disabled-bg-color);
+        &:hover {
+            border-color: var(--field-border-color);
+        }
+        p.text,
+        .icon,
+        .hint,
+        .imitationButton {
+            color: @disabled-color;
+        }
+        .imitationButton {
+            border-color: var(--field-border-color);
+        }
+    }
 }
 
 .icon {

@@ -16,7 +16,7 @@ import {
 import { RowMetaField } from '@interfaces/rowMeta'
 import { UPLOAD_TYPE } from '@components/Operations/components/FileUpload/FileUpload.constants'
 import Upload from '@components/Upload'
-import { WidgetMeta } from '@cxbox-ui/core'
+import { utils, WidgetMeta } from '@cxbox-ui/core'
 import { useRowMetaWithCache } from '@hooks/useRowMetaWithCache'
 
 interface FileUploadProps {
@@ -34,8 +34,9 @@ export const FileUpload = ({ mode, widget, operationInfo, children, uploadType =
     const rowMeta = useRowMetaWithCache(bcName, true)
     const rowMetaField = rowMeta?.fields.find(field => field.key === operationInfo?.fieldKey)
     const fileAccept = (rowMetaField as RowMetaField)?.fileAccept
-    const available = rowMeta?.actions.find(action => action.type === operationInfo?.actionKey) !== undefined
-    const disabled = available && ((operationInfo?.fieldKey && !rowMetaField) || !rowMeta)
+    const available = !!rowMeta && utils.flattenOperations(rowMeta.actions).some(action => action.type === operationInfo?.actionKey)
+    // The zone is always shown, it is disabled until row meta is loaded and while the action is unavailable (CXBOX-1218)
+    const disabled = !available || (!!operationInfo?.fieldKey && !rowMetaField)
 
     const {
         initializeNewAddedFile,
@@ -103,9 +104,19 @@ export const FileUpload = ({ mode, widget, operationInfo, children, uploadType =
             })
     }
 
+    // A file dropped on a disabled zone must not be opened by the browser instead of the application
+    const rejectDrop: DragEventHandler<HTMLDivElement> = event => {
+        event.preventDefault()
+        event.dataTransfer.dropEffect = 'none'
+    }
+
     return (
         <>
-            <div onDrop={disabled ? undefined : handleDrop}>
+            <div
+                onDragOver={disabled ? rejectDrop : undefined}
+                onDrop={disabled ? rejectDrop : handleDrop}
+                data-test-file-upload-dnd={mode === 'drag' ? (rowMeta ? 'ready' : 'loading') : undefined}
+            >
                 {mode === 'drag' ? (
                     <Upload.Dragger {...commonUploadProps} className={styles.root}>
                         <p className={styles.icon}>

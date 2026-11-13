@@ -15,6 +15,15 @@
     }
 }
 
+// the text of the status in the tooltip: a long error of the backend does not go beyond the screen, it is scrolled;
+// each message of the answer is on its own line
+.statusInformation {
+    max-height: 300px;
+    overflow-y: auto;
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+}
+
 .fileRow {
     display: flex;
     flex-direction: column;

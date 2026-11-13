@@ -48,7 +48,7 @@ jobs:
           -Dsonar.organization=cx-box
           -Dsonar.projectKey=CX-Box_cxbox-demo
           -Dsonar.host.url=https://sonarcloud.io
-          -Dsonar.login=$SONAR_TOKEN
+          -Dsonar.token=$SONAR_TOKEN
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       - name: Login to Docker Hub

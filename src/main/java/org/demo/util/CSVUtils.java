@@ -1,12 +1,8 @@
 package org.demo.util;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.NonNull;
@@ -16,24 +12,14 @@ import org.cxbox.core.file.dto.FileDownloadDto;
 @UtilityClass
 public class CSVUtils {
 
-	public static FileDownloadDto toCsv(@NonNull List<String> header, @NonNull Stream<List<String>> body, @NonNull String name, @NonNull String delimiter)
-			throws IOException {
+	public static FileDownloadDto toCsv(@NonNull List<String> header, @NonNull Stream<List<String>> body, @NonNull String name, @NonNull String delimiter) {
 		var csv = Stream.concat(Stream.of(header), body)
 				.map(data -> convertToCSV(data, delimiter))
 				.collect(Collectors.joining("\n"));
-		var tmpFile = File.createTempFile(UUID.randomUUID().toString(), name);
-		try (FileWriter writer = new FileWriter(tmpFile)) {
-			writer.write(csv);
-		}
+		byte[] bytes = csv.getBytes(StandardCharsets.UTF_8);
 		return new FileDownloadDto(
-				() -> {
-					try {
-						return new FileInputStream(tmpFile);
-					} catch (FileNotFoundException e) {
-						throw new IllegalStateException(e);
-					}
-				},
-				tmpFile.length(),
+				() -> new ByteArrayInputStream(bytes),
+				bytes.length,
 				name,
 				"text/csv"
 		);

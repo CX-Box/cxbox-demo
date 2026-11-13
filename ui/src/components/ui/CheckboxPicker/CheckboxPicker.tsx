@@ -19,6 +19,7 @@ export interface CheckboxPickerOwnProps {
     readonly?: boolean
     placeholder?: string
     value: interfaces.DataValue
+    metaError?: string
 }
 
 interface CheckboxPickerProps extends CheckboxPickerOwnProps {
@@ -39,6 +40,7 @@ const CheckboxPicker: React.FC<CheckboxPickerProps> = ({
     value,
     readonly,
     placeholder,
+    metaError,
     onChange
 }) => {
     const { ref: containerRef, isMultiline } = useMultilineCheck<HTMLDivElement>()
@@ -57,7 +59,14 @@ const CheckboxPicker: React.FC<CheckboxPickerProps> = ({
     )
 
     return (
-        <div ref={containerRef} className={cn(styles.container, { [styles.readOnly]: readonly, [styles.multiline]: isMultiline })}>
+        <div
+            ref={containerRef}
+            className={cn(styles.container, {
+                [styles.readOnly]: readonly,
+                [styles.multiline]: isMultiline,
+                [styles.error]: !readonly && metaError
+            })}
+        >
             <Checkbox
                 data-test-field-checkbox-item={true}
                 checked={value as boolean}

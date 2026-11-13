@@ -34,10 +34,16 @@ export const Login: React.FC = () => {
     return (
         <Form onSubmit={handleClick}>
             <Form.Item>
-                <Input prefix={<Icon type="user" />} placeholder="Username" value={login} onChange={handleLogin} />
+                <Input className={styles.input} prefix={<Icon type="user" />} placeholder="Username" value={login} onChange={handleLogin} />
             </Form.Item>
             <Form.Item>
-                <Input.Password prefix={<Icon type="lock" />} placeholder="Password" value={password} onChange={handlePassword} />
+                <Input.Password
+                    className={styles.input}
+                    prefix={<Icon type="lock" />}
+                    placeholder="Password"
+                    value={password}
+                    onChange={handlePassword}
+                />
             </Form.Item>
             <Form.Item>
                 <Button block autoFocus loading={spin} type="primary" htmlType="submit">

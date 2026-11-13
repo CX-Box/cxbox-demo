@@ -19,6 +19,9 @@ public class JobStatsMeta extends AnySourceFieldMetaBuilder<JobStatsDTO> {
 	public void buildRowDependentMeta(RowDependentFieldsMeta<JobStatsDTO> fields, BcDescription bc,
 			String id, String parentId) {
 		JobStatsStateEnum state = JobStatsStateEnum.getById(id);
+		if (state == null) {
+			return;
+		}
 		fields.setDrilldown(
 				JobStatsDTO_.value,
 				DrillDownType.INNER,

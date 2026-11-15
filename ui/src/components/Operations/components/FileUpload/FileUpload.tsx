@@ -11,16 +11,13 @@ import { UploadListContainer } from '@components/Operations/components/FileUploa
 import {
     checkFileFormat,
     getFilesFromDataTransfer,
-    isFileUploadComplete,
-    processFileUploadErrorMessage
+    isFileUploadComplete
 } from '@components/Operations/components/FileUpload/FileUpload.utils'
 import { RowMetaField } from '@interfaces/rowMeta'
 import { UPLOAD_TYPE } from '@components/Operations/components/FileUpload/FileUpload.constants'
 import Upload from '@components/Upload'
 import { utils, WidgetMeta } from '@cxbox-ui/core'
 import { useRowMetaWithCache } from '@hooks/useRowMetaWithCache'
-import { AxiosError } from 'axios'
-import { OperationError } from '@interfaces/operation'
 
 interface FileUploadProps {
     widget: WidgetMeta
@@ -78,8 +75,7 @@ export const FileUpload = ({ mode, widget, operationInfo, children, uploadType =
             }
 
             if (isFileUploadComplete(status)) {
-                const errorMessage = processFileUploadErrorMessage(error)
-                updateAddedFile(uid, { status, percent, id: response?.data?.id ?? null, errorMessage })
+                updateAddedFile(uid, { status, percent, id: response?.data?.id ?? null }, error)
             }
         },
         [getAddedFile, updateAddedFile]

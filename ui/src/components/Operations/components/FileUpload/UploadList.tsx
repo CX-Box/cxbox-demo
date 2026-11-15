@@ -1,19 +1,25 @@
 import React from 'react'
-import { Icon, Progress, Tooltip } from 'antd'
+import { Button, Icon, Progress, Tooltip } from 'antd'
+import { useTranslation } from 'react-i18next'
+import copyTextToClipboard from '@utils/copyTextToClipboard'
 import {
     getProgressColorFromUploadStatus,
     isFileException,
     isFileUploading,
     isFileUploadSuccess
 } from '@components/Operations/components/FileUpload/FileUpload.utils'
-import styles from './UploadList.less'
 import { AddedFileInfo } from '@components/Operations/components/FileUpload/FileUpload.interfaces'
+import { UPLOAD_FILE_STATUS } from '@components/Operations/components/FileUpload/FileUpload.constants'
+import { tooltipErrorFileUploadTextMaxDisplayed } from '@components/Operations/components/FileUpload/UploadList.constants'
+import styles from './UploadList.less'
 
 interface UploadListProps {
     fileList?: AddedFileInfo[]
 }
 
 export function UploadList({ fileList }: UploadListProps) {
+    const { t } = useTranslation()
+
     return (
         <div className={styles.root} data-test-file-upload-prgress-list={true}>
             {fileList?.map(file => {
@@ -35,6 +41,17 @@ export function UploadList({ fileList }: UploadListProps) {
 
                 const percent = isFileException(file.status) ? 100 : file.percent
 
+                const isError = file.status === UPLOAD_FILE_STATUS.error
+                const errorText = file.errorMessage ?? ''
+                const errorTooLong = errorText.length > tooltipErrorFileUploadTextMaxDisplayed
+                // error: show the detailed error if it fits, otherwise the standard message + a copy button; any other status shows its status message
+                const displayedText = isError
+                    ? errorTooLong
+                        ? file.statusInformation
+                        : errorText || file.statusInformation
+                    : file.statusInformation
+                const showCopyButton = isError && errorTooLong
+
                 return 'percent' in file ? (
                     <div
                         key={file.uid}
@@ -47,9 +64,24 @@ export function UploadList({ fileList }: UploadListProps) {
                         {/* a long error of the backend is scrolled inside the tooltip: the delay lets the mouse move from the line to the tooltip */}
                         <Tooltip
                             overlay={
-                                file.statusInformation ? (
+                                displayedText ? (
                                     <div className={styles.statusInformation} data-test-file-status-tooltip={true}>
-                                        {file.statusInformation}
+                                        {displayedText}
+                                        {showCopyButton && (
+                                            <div>
+                                                <Button
+                                                    className={styles.copyDetailsBtn}
+                                                    type="link"
+                                                    size="small"
+                                                    icon="copy"
+                                                    onClick={() =>
+                                                        copyTextToClipboard(file.errorMessage ?? '', t('Text copied successfully'))
+                                                    }
+                                                >
+                                                    {t('Copy details')}
+                                                </Button>
+                                            </div>
+                                        )}
                                     </div>
                                 ) : undefined
                             }

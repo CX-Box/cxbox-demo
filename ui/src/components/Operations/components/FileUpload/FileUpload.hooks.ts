@@ -7,12 +7,15 @@ import {
     getFileExtension,
     getFilePermissionFromAccept,
     isFileUploadSuccess,
-    needSendAllFiles
+    needSendAllFiles,
+    processFileUploadErrorMessage
 } from '@components/Operations/components/FileUpload/FileUpload.utils'
 import { actions } from '@cxbox-ui/core'
 import { UPLOAD_FILE_STATUS, UPLOAD_TYPE } from '@components/Operations/components/FileUpload/FileUpload.constants'
 import { UploadFileStatus } from 'antd/es/upload/interface'
 import { useHover } from '@hooks/useHover'
+import { AxiosError } from 'axios'
+import { OperationError } from '@interfaces/operation'
 
 export const useTimeoutIdList = () => {
     const list = useRef<NodeJS.Timeout[]>([])
@@ -56,22 +59,17 @@ export const useStatusesInformation = (accept?: string) => {
         ({
             fileName,
             fileStatus,
-            uploadType,
-            errorMessage
+            uploadType
         }: {
             fileName?: string
             fileStatus?: AddedFileInfo['status']
             uploadType?: AddedFileInfo['uploadType']
-            errorMessage?: AddedFileInfo['errorMessage']
         } = {}) => {
             if (fileStatus === UPLOAD_FILE_STATUS.done) {
                 return uploadType === UPLOAD_TYPE.create
                     ? t('Success. File loaded and new row created')
                     : t('Success. File loaded to current row')
             } else if (fileStatus === UPLOAD_FILE_STATUS.error) {
-                if (errorMessage) {
-                    return errorMessage
-                }
                 return uploadType === UPLOAD_TYPE.create
                     ? t('Error. File not loaded and no new row created')
                     : t('Error. File not loaded to current row')
@@ -98,7 +96,7 @@ export const useUploadFilesInfo = (accept?: string) => {
     const { getStatusInformation } = useStatusesInformation(accept)
 
     const updateAddedFile = useCallback(
-        (uid: string, newFileInfo: Omit<Partial<AddedFileInfo>, 'uid'>) => {
+        (uid: string, newFileInfo: Omit<Partial<AddedFileInfo>, 'uid'>, error?: AxiosError<OperationError>) => {
             setAddedFileDictionary(addedFileDictionary => {
                 const updatedFileInfo: AddedFileInfo = {
                     ...addedFileDictionary[uid],
@@ -112,9 +110,9 @@ export const useUploadFilesInfo = (accept?: string) => {
                         statusInformation: getStatusInformation({
                             fileStatus: updatedFileInfo.status,
                             fileName: updatedFileInfo.name,
-                            uploadType: updatedFileInfo.uploadType,
-                            errorMessage: updatedFileInfo.errorMessage
+                            uploadType: updatedFileInfo.uploadType
                         }),
+                        errorMessage: error ? processFileUploadErrorMessage(error) : undefined,
                         uid
                     }
                 }

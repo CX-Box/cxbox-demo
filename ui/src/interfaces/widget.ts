@@ -363,6 +363,10 @@ export interface Pie1DWidgetMeta extends Omit<AppWidgetTableMeta, 'type'> {
 }
 
 export interface Chart2DConfig {
+    /** Column2D only. The category/value field keys keep their meaning in both orientations. Defaults to vertical. */
+    orientation?: 'vertical' | 'horizontal'
+    /** Column2D value labels. Omit to keep labels hidden. */
+    valuePosition?: 'inner' | 'outer'
     xValueFieldKey: string
     xMax?: number
     xMin?: number

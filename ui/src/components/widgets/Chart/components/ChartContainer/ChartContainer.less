@@ -1,0 +1,31 @@
+@import '../../../../../assets/styles/formRows';
+
+.container {
+  --chart-container-height: ~'min(var(--chart-default-height), calc(var(--form-row-height) * var(--chart-max-rows)))';
+
+  width: 100%;
+  height: var(--chart-container-height);
+  min-width: 0;
+
+  > div {
+    height: 100%;
+  }
+
+  canvas {
+    display: block;
+  }
+}
+
+.square {
+  position: relative;
+  flex: 0 1 var(--chart-container-height);
+  width: var(--chart-container-height);
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+
+  > div {
+    position: absolute;
+    inset: 0;
+  }
+}

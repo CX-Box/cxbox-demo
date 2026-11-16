@@ -1,6 +1,6 @@
 {
   "name": "dashboardSalesColumn2D",
-  "title": "Sales sum per product",
+ "title": "Sales sum per product",
   "type": "Column2D",
   "bc": "saleStatsProduct",
   "fields": [
@@ -24,10 +24,11 @@
   ],
   "options": {
     "chart2D": {
+      "maxRows": 3,
       "xValueFieldKey": "clientName",
       "yValueFieldKey": "sum",
       "groupFieldKey": "productName",
-      "valuePosition": "inner"
+      "orientation": "horizontal"
     }
   }
 }

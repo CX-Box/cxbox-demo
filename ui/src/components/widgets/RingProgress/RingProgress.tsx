@@ -3,6 +3,7 @@ import { RingProgress } from '@ant-design/plots'
 import styles from './RingProgress.less'
 import { RingProgressWidgetMeta } from '@interfaces/widget'
 import { Statistic, StyleAttr } from '@antv/g2plot/lib/types'
+import ChartContainer, { hasChartRowsLimit } from '@components/widgets/Chart/components/ChartContainer/ChartContainer'
 import { useAppSelector } from '@store'
 
 interface RingProgressProps {
@@ -12,6 +13,8 @@ interface RingProgressProps {
 function PrjRingProgress({ meta }: RingProgressProps) {
     const { bcName } = meta
     const text = meta.options.ringProgressOptions.text
+    const maxRows = meta.options.ringProgressOptions.maxRows
+    const size = hasChartRowsLimit(maxRows) ? undefined : 180
     const { numberFieldValue, descriptionFieldValue, percentFieldValue } = useAppSelector(state => {
         const cursor = state.screen.bo.bc[bcName]?.cursor
         const data = state.data[bcName]?.find(i => i.id === cursor)
@@ -43,15 +46,17 @@ function PrjRingProgress({ meta }: RingProgressProps) {
                     {numberFieldValue && <p className={styles.textValue}>{numberFieldValue}</p>}
                     {descriptionFieldValue && <p className={styles.textClarification}>{descriptionFieldValue}</p>}
                 </div>
-                <RingProgress
-                    percent={percentFieldValue}
-                    color={progressColor}
-                    height={180}
-                    width={180}
-                    progressStyle={progressStyle}
-                    innerRadius={0.7}
-                    statistic={progressStatistic}
-                />
+                <ChartContainer maxRows={maxRows} defaultHeight={180} square>
+                    <RingProgress
+                        percent={percentFieldValue}
+                        color={progressColor}
+                        height={size}
+                        width={size}
+                        progressStyle={progressStyle}
+                        innerRadius={0.7}
+                        statistic={progressStatistic}
+                    />
+                </ChartContainer>
             </div>
         </div>
     )

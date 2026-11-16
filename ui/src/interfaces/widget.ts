@@ -92,13 +92,13 @@ export interface StepsWidgetMeta extends WidgetMeta {
 
 export interface FunnelWidgetMeta extends WidgetMeta {
     type: CustomWidgetTypes.Funnel
-    options: WidgetOptions & { funnelOptions: { dataKey: string } }
+    options: WidgetOptions & { funnelOptions: ChartContainerOptions & { dataKey: string } }
 }
 
 export interface RingProgressWidgetMeta extends WidgetMeta {
     type: CustomWidgetTypes.RingProgress
     options: WidgetOptions & {
-        ringProgressOptions: { text: string; numberField: string; descriptionField: string; percentField: string }
+        ringProgressOptions: ChartContainerOptions & { text: string; numberField: string; descriptionField: string; percentField: string }
     }
 }
 
@@ -340,7 +340,13 @@ export interface AdditionalListWidgetMeta extends AppWidgetMeta {}
 
 export interface CardCarouselListWidgetMeta extends AppWidgetMeta {}
 
-export interface Chart1DConfig {
+/** Shared drawing-container limits, specified inside each chart type's existing options. */
+export interface ChartContainerOptions {
+    /** Maximum height in complete, standard Form rows. Omit to retain the chart's existing size. */
+    maxRows?: number
+}
+
+export interface Chart1DConfig extends ChartContainerOptions {
     valueFieldKey: string
     valuePosition?: 'inner' | 'outer'
     titleFieldKey?: string
@@ -362,7 +368,7 @@ export interface Pie1DWidgetMeta extends Omit<AppWidgetTableMeta, 'type'> {
     }
 }
 
-export interface Chart2DConfig {
+export interface Chart2DConfig extends ChartContainerOptions {
     /** Column2D only. The category/value field keys keep their meaning in both orientations. Defaults to vertical. */
     orientation?: 'vertical' | 'horizontal'
     /** Column2D value labels. Omit to keep labels hidden. */
@@ -387,7 +393,7 @@ export interface Chart2DWidgetMeta extends Omit<AppWidgetTableMeta, 'type'> {
     }
 }
 
-export interface Dual2DConfig {
+export interface Dual2DConfig extends ChartContainerOptions {
     widgets: string[]
 }
 
@@ -395,7 +401,7 @@ export interface DualAxes2DWidgetMeta extends Omit<AppWidgetTableMeta, 'type'> {
     type: CustomWidgetTypes.DualAxes2D
 }
 
-export interface RelationGraphConfig {
+export interface RelationGraphConfig extends ChartContainerOptions {
     mode?: 'TB' | 'BT' | 'LR' | 'RL'
     dragNode?: boolean
     nodes?: {

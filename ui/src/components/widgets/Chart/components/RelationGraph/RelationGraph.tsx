@@ -42,6 +42,7 @@ import { RelationGraphWidgetMeta } from '@interfaces/widget'
 import { FlowAnalysisGraphConfig } from '@ant-design/graphs/es/components/flow-analysis-graph'
 import { IEdge, INode } from './interfaces'
 import styles from './RelationGraph.less'
+import ChartContainer, { hasChartRowsLimit } from '../ChartContainer/ChartContainer'
 
 interface RelationGraphProps {
     meta: RelationGraphWidgetMeta
@@ -59,7 +60,7 @@ const RelationGraph: React.FC<RelationGraphProps> = ({ meta, setDataValidationEr
     const graphRef = useRef<IGraph>()
     const cursorRef = useRef(cursor)
 
-    const { mode: modeFromOptions, dragNode, nodes, edges } = options?.relationGraph || {}
+    const { mode: modeFromOptions, dragNode, nodes, edges, maxRows } = options?.relationGraph || {}
     const mode = modeFromOptions || defaultMode
     const sourceNodeKey = nodes?.fieldKeys?.[0] || defaultSourceKey
     const targetNodeKey = nodes?.fieldKeys?.[1] || defaultTargetKey
@@ -396,16 +397,18 @@ const RelationGraph: React.FC<RelationGraphProps> = ({ meta, setDataValidationEr
         }
     }, [hasDuplicates, setDataValidationError])
 
-    useGraphSizeChange(containerRef, graphRef)
+    useGraphSizeChange(containerRef, graphRef, hasChartRowsLimit(maxRows))
 
     if (!config) {
         return null
     }
 
     return (
-        <div ref={containerRef}>
-            <AntFlowAnalysisGraph {...config} />
-        </div>
+        <ChartContainer maxRows={maxRows} defaultHeight={500}>
+            <div ref={containerRef}>
+                <AntFlowAnalysisGraph {...config} />
+            </div>
+        </ChartContainer>
     )
 }
 

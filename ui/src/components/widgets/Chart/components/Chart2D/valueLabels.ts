@@ -24,10 +24,15 @@ export function getValueLabel(
               },
         autoRotate: false,
         offset: inner ? 0 : 8,
+        style: {
+            fill: '#fff',
+            stroke: '#000',
+            lineWidth: 1
+        },
         content: datum => {
             const value = datum[field.key]
             return typeof value === 'number' && Number.isFinite(value) ? String(normalizeFieldValue(value, field) ?? '') : ''
         },
-        layout: [{ type: 'limit-in-plot' }, { type: 'interval-hide-overlap' }, { type: 'adjust-color' }]
+        layout: [{ type: 'limit-in-plot' }, { type: 'interval-hide-overlap' }]
     }
 }

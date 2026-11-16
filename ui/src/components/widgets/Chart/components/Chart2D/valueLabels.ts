@@ -27,7 +27,8 @@ export function getValueLabel(
         style: {
             fill: '#fff',
             stroke: '#000',
-            lineWidth: 1
+            lineWidth: 1,
+            fontWeight: 700
         },
         content: datum => {
             const value = datum[field.key]

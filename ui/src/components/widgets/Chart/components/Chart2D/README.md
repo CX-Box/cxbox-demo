@@ -25,7 +25,7 @@ The legend keeps the standard Column2D placement in either orientation.
 `valuePosition` uses the same values as Pie1D: `inner` places numeric labels
 inside the bars and `outer` places them beyond the ends. Omit it to keep
 labels hidden. Both orientations use the numeric field's type, digits and
-currency. Labels stay horizontal, with white text and a black outline. The chart
+currency. Labels stay horizontal, with bold white text and a black outline. The chart
 hides overlapping labels. Labels that reach the plot boundary move inward to stay visible.
 Tooltips remain available for every bar.
 

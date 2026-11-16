@@ -106,12 +106,6 @@ const DualAxes2D: React.FC<DualAxes2DProps> = ({ meta }) => {
         }
     }, [firstChartConfig?.xField, meta.name, secondChartConfig?.xField])
 
-    useEffect(() => {
-        if (firstChartWidgetMeta?.bcName !== secondChartWidgetMeta?.bcName) {
-            console.info(`${meta.name} widget: widgets in 'options.dual2D' must have the same bc`)
-        }
-    }, [firstChartWidgetMeta?.bcName, meta.name, secondChartWidgetMeta?.bcName])
-
     if (!dualAxesConfig) {
         return null
     }

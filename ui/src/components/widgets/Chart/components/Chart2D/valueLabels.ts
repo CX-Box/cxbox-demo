@@ -2,6 +2,7 @@ import { ColumnConfig } from '@ant-design/plots/es/components/column'
 import { WidgetField } from '@cxbox-ui/schema'
 import { normalizeFieldValue } from '@components/TemplatedTitle/utils'
 import { Chart2DConfig } from '@interfaces/widget'
+import './innerValueLabels'
 
 export function getValueLabel(
     field: WidgetField | undefined,
@@ -34,6 +35,6 @@ export function getValueLabel(
             const value = datum[field.key]
             return typeof value === 'number' && Number.isFinite(value) ? String(normalizeFieldValue(value, field) ?? '') : ''
         },
-        layout: [{ type: 'limit-in-plot' }, { type: 'interval-hide-overlap' }]
+        layout: [{ type: 'limit-in-plot' }, { type: inner ? 'interval-shift-overlap' : 'interval-hide-overlap' }]
     }
 }

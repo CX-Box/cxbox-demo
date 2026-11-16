@@ -80,7 +80,7 @@ public class ClientReadWriteService extends VersionAwareResponseService<ClientWr
 
 	private Specification<Client> getFilterSpecification(BusinessComponent bc) {
 		Set<FieldOfActivity> filter = statisticUtils.getFilteredActivities(bc);
-		return filter.isEmpty() ?
+		return filter == null || filter.isEmpty() ?
 				(root, cq, cb) -> cb.and() :
 				clientRepository.findAllByFieldOfActivities(filter);
 	}

@@ -59,13 +59,8 @@ public class CxboxAuthUserRepository {
 				upsert(login);
 			}
 			user = userService.getUserByLogin(login.toUpperCase());
-			List<UserRole> userRoleList = user.getUserRoleList();
-			Set<String> currentRoles = userRoleList != null
-					? userRoleList.stream().filter(userRole -> Boolean.TRUE.equals(userRole.getActive())).map(UserRole::getInternalRoleCd).collect(Collectors.toSet())
-					: new HashSet<>();
-			if (!(currentRoles.containsAll(roles) && roles.containsAll(currentRoles))) {
-				authService.loginAs(authService.createAuthentication(VANILLA));
-				userRoleService.upsertUserRoles(user.getId(), new ArrayList<>(roles));
+			if (user != null) {
+				syncUserRoles(user, roles);
 			}
 		} catch (Exception e) {
 			log.error(e.getLocalizedMessage(), e);
@@ -76,6 +71,17 @@ public class CxboxAuthUserRepository {
 		}
 
 		return user;
+	}
+
+	private void syncUserRoles(User user, Set<String> roles) {
+		List<UserRole> userRoleList = user.getUserRoleList();
+		Set<String> currentRoles = userRoleList != null
+				? userRoleList.stream().filter(userRole -> Boolean.TRUE.equals(userRole.getActive())).map(UserRole::getInternalRoleCd).collect(Collectors.toSet())
+				: new HashSet<>();
+		if (!(currentRoles.containsAll(roles) && roles.containsAll(currentRoles))) {
+			authService.loginAs(authService.createAuthentication(VANILLA));
+			userRoleService.upsertUserRoles(user.getId(), new ArrayList<>(roles));
+		}
 	}
 
 	//TODO>>taken "as is" from real project - refactor

@@ -5,7 +5,6 @@ import styles from './ChartContainer.less'
 
 interface ChartContainerProps extends ChartContainerOptions {
     children: ReactNode
-    defaultHeight?: number
     square?: boolean
 }
 
@@ -14,14 +13,13 @@ export const hasChartRowsLimit = (maxRows: number | undefined): maxRows is numbe
     typeof maxRows === 'number' && Number.isInteger(maxRows) && maxRows > 0
 
 /** Limits the drawing container using the same row dimensions as the Form widget. */
-function ChartContainer({ children, maxRows, defaultHeight = 400, square = false }: ChartContainerProps) {
+function ChartContainer({ children, maxRows, square = false }: ChartContainerProps) {
     if (!hasChartRowsLimit(maxRows)) {
         return <>{children}</>
     }
 
     const style = {
-        '--chart-max-rows': maxRows,
-        '--chart-default-height': `${defaultHeight}px`
+        '--chart-max-rows': maxRows
     } as CSSProperties
 
     return (

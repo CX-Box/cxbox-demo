@@ -404,7 +404,7 @@ const RelationGraph: React.FC<RelationGraphProps> = ({ meta, setDataValidationEr
     }
 
     return (
-        <ChartContainer maxRows={maxRows} defaultHeight={500}>
+        <ChartContainer maxRows={maxRows}>
             <div ref={containerRef}>
                 <AntFlowAnalysisGraph {...config} />
             </div>

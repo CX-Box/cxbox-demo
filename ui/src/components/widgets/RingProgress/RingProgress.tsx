@@ -46,7 +46,7 @@ function PrjRingProgress({ meta }: RingProgressProps) {
                     {numberFieldValue && <p className={styles.textValue}>{numberFieldValue}</p>}
                     {descriptionFieldValue && <p className={styles.textClarification}>{descriptionFieldValue}</p>}
                 </div>
-                <ChartContainer maxRows={maxRows} defaultHeight={180} square>
+                <ChartContainer maxRows={maxRows} square>
                     <RingProgress
                         percent={percentFieldValue}
                         color={progressColor}

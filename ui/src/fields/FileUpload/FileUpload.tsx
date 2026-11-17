@@ -157,6 +157,7 @@ const FileUpload: React.FunctionComponent<Props> = ({
             const diffFileName = fieldDataItem?.[snapshotKey as keyof typeof fieldDataItem] as string
 
             return {
+                mode: 'snapshot' as const,
                 diffFileName,
                 diffDownloadUrl,
                 onDiffDownload: () => {

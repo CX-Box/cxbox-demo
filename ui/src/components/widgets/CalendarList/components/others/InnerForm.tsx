@@ -16,7 +16,14 @@ function InnerForm({ widgetMeta, operations, rowId, additionalOperations }: Inne
     }
 
     return (
-        <div data-test-widget-list-row-id={rowId}>
+        <div
+            data-test="WIDGET"
+            data-test-widget-type={widgetMeta.type}
+            data-test-widget-position={widgetMeta.position}
+            data-test-widget-title={widgetMeta.title}
+            data-test-widget-name={widgetMeta.name}
+            data-test-widget-list-row-id={rowId}
+        >
             <Form meta={widgetMeta as WidgetFormMeta} />
             {operations?.length ? (
                 <Operations

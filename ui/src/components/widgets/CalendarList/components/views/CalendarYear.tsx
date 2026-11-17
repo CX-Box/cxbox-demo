@@ -38,6 +38,7 @@ import { useFieldDrilldown } from '@hooks/useFieldDrilldown'
 import { useEventDataTransform } from '@components/widgets/CalendarList/hooks'
 import { useCleanOldRangeFilters } from '@hooks/useCleanOldRangeFilters'
 import { isDefined } from '@utils/isDefined'
+import { useInternalFormWidth } from '@components/InternalFormPopup/InternalFormPlace'
 import Calendar from '@components/widgets/CalendarList/components/views/Calendar'
 import { actions, resetRecordForm, setRecordForm } from '@actions'
 import { ConfigProvider, Spin } from 'antd'
@@ -249,6 +250,8 @@ const CalendarYear = React.forwardRef<CalendarYearApiHandle, CalendarYearProps>(
 
     const { internalWidget, internalWidgetOperations, internalWidgetActiveCursor, internalWidgetStyle } = useInternalWidget(meta)
     const rowMetaInProgress = useAppSelector(selectBcMetaInProgress(internalWidget?.bcName))
+    const formPopoverWidth = useInternalFormWidth(meta.options?.edit?.widget)
+    const formPopoverStyle = useMemo(() => (formPopoverWidth ? { width: formPopoverWidth } : undefined), [formPopoverWidth])
     const dispatch = useDispatch()
 
     const { drilldown: handleDrillDownByTitle, fieldMeta: titleFieldMeta } = useFieldDrilldown(
@@ -284,12 +287,16 @@ const CalendarYear = React.forwardRef<CalendarYearApiHandle, CalendarYearProps>(
             const isLoading = (internalWidget && arg.event.id !== internalWidgetActiveCursor) || rowMetaInProgress
             const isInlineForm = isDefined(internalWidget) && internalWidgetStyle === 'inlineForm'
             const withoutInlineForm = !isInlineForm
+            // "style": "popup": the form is drawn by the layout, a click on the event opens it
+            const isPopupForm = isDefined(internalWidget) && internalWidgetStyle === 'popup'
 
             const handleSelectRecord = () => {
                 if (arg.event.id !== internalWidgetActiveCursor) {
                     dispatch(actions.bcSelectRecord({ bcName: meta.bcName, cursor: arg.event.id }))
                 }
             }
+
+            const handleClick = isPopupForm ? () => toggleRecordForm(true, arg.event.extendedProps) : handleSelectRecord
 
             // Keep popups inside the event popover so it does not close, but not inside a clipping parent (richText toolbar)
             const getPopupContainer = (triggerNode: HTMLElement) =>
@@ -308,6 +315,7 @@ const CalendarYear = React.forwardRef<CalendarYearApiHandle, CalendarYearProps>(
                             <InnerForm
                                 widgetMeta={internalWidget}
                                 operations={internalWidgetOperations}
+                                rowId={arg.event.id}
                                 additionalOperations={<RowOperationsButton widget={meta} />}
                             />
                         </Spin>
@@ -331,8 +339,14 @@ const CalendarYear = React.forwardRef<CalendarYearApiHandle, CalendarYearProps>(
                     contentClick={clickContent}
                     overlayClassNameHover={styles.operationsPopover}
                     overlayClassNameClick={styles.formPopover}
+                    overlayStyleClick={formPopoverStyle}
                 >
-                    <div className={styles.calendarContainer} onClick={withoutInlineForm ? handleSelectRecord : undefined}>
+                    <div
+                        className={styles.calendarContainer}
+                        data-test-widget-list-row-id={arg.event.id}
+                        data-test-widget-list-row-type="Row"
+                        onClick={withoutInlineForm ? handleClick : undefined}
+                    >
                         <CalendarEvent
                             widgetName={meta.name}
                             drillDownFieldMeta={titleFieldMeta}
@@ -345,6 +359,7 @@ const CalendarYear = React.forwardRef<CalendarYearApiHandle, CalendarYearProps>(
         },
         [
             dispatch,
+            formPopoverStyle,
             handleDrillDownByTitle,
             internalWidget,
             internalWidgetActiveCursor,

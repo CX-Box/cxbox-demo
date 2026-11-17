@@ -34,15 +34,21 @@ const Filters: React.FC<FiltersProps> = ({ widgetName, ignoreFieldNames }) => {
 
                         if (fieldRowMeta?.filterable) {
                             return (
-                                <ColumnTitle
+                                <div
                                     key={widgetField.key}
-                                    className={styles.title}
-                                    showCloseButton={false}
-                                    widgetName={widgetName}
-                                    widgetMeta={widgetField}
-                                    rowMeta={fieldRowMeta as interfaces.RowMetaField}
-                                    disableSort={true}
-                                />
+                                    data-test-widget-list-header-column-title={widgetField.title}
+                                    data-test-widget-list-header-column-type={widgetField.type}
+                                    data-test-widget-list-header-column-key={widgetField.key}
+                                >
+                                    <ColumnTitle
+                                        className={styles.title}
+                                        showCloseButton={false}
+                                        widgetName={widgetName}
+                                        widgetMeta={widgetField}
+                                        rowMeta={fieldRowMeta as interfaces.RowMetaField}
+                                        disableSort={true}
+                                    />
+                                </div>
                             )
                         }
 

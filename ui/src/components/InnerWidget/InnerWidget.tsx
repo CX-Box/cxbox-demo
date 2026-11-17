@@ -17,6 +17,10 @@ interface InnerWidgetProps {
     beforeWidget?: React.ReactNode
     afterWidget?: React.ReactNode
     spinning?: boolean
+    /**
+     * Record which the widget shows, for autotests
+     */
+    rowId?: string | null
 }
 
 const InnerWidget: FunctionComponent<InnerWidgetProps> = ({
@@ -25,6 +29,7 @@ const InnerWidget: FunctionComponent<InnerWidgetProps> = ({
     beforeWidget,
     afterWidget,
     spinning: externalSpinning,
+    rowId,
     ...props
 }) => {
     const widgetVisibility = useWidgetVisibility(widgetName)
@@ -69,6 +74,7 @@ const InnerWidget: FunctionComponent<InnerWidgetProps> = ({
                 data-test-widget-position={widget.position}
                 data-test-widget-title={widget.title}
                 data-test-widget-name={widget.name}
+                data-test-widget-list-row-id={rowId}
             >
                 {widgetTitle}
                 {beforeWidget}

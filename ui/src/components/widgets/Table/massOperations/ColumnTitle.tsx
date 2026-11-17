@@ -105,7 +105,7 @@ const ColumnTitle: React.FC<ColumnTitleProps> = ({ widgetName, bcName, filterabl
     }, [handleCancel, resultFilterEnabled])
 
     const content = (
-        <Form onSubmit={handleApply} layout="vertical">
+        <Form onSubmit={handleApply} layout="vertical" data-test-filter-popup={true}>
             <Row gutter={[0, 5]}>
                 <Col className={styles.checkboxContainer} span={24}>
                     <Checkbox

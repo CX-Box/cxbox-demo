@@ -7,6 +7,8 @@ import { popupWidgets, sidebarWidgetsTypes } from '@constants/layout'
 import { useSidebarVisibility } from '@hooks/useSidebarVisibility'
 import { CustomWidgetDescriptor, WidgetTypes } from '@cxbox-ui/core'
 import { AppWidgetMeta, CustomWidgetTypes } from '@interfaces/widget'
+import { getInternalFormPlaces } from '@utils/internalFormPopup'
+import InternalFormPlace, { InternalFormWidthProvider } from '@components/InternalFormPopup/InternalFormPlace'
 import styles from './DashboardLayout.less'
 
 export interface DashboardLayoutProps {
@@ -18,9 +20,11 @@ export interface DashboardLayoutProps {
 }
 
 export function DashboardLayout(props: DashboardLayoutProps) {
+    const internalFormPlaces = useMemo(() => getInternalFormPlaces(props.widgets), [props.widgets])
+
     const widgetsByRow = React.useMemo(() => {
-        return groupByRow(props.widgets, props.skipWidgetTypes || [])
-    }, [props.widgets, props.skipWidgetTypes])
+        return groupByRow(props.widgets, props.skipWidgetTypes || [], Object.keys(internalFormPlaces))
+    }, [props.widgets, props.skipWidgetTypes, internalFormPlaces])
 
     const additionalInfoWidgets = useMemo(() => {
         const skipWidgetList = createSkipWidgetList(props.widgets)
@@ -36,13 +40,16 @@ export function DashboardLayout(props: DashboardLayoutProps) {
     const CommonWidgets = Object.values(widgetsByRow).map((row, rowIndex) => (
         <Row key={rowIndex} gutter={[24, 0]}>
             {row.map((widget, colIndex) => {
-                const widgetCol = (
+                const internalFormOwner = internalFormPlaces[widget.name]
+                const widgetCol = internalFormOwner ? (
+                    <InternalFormPlace key={colIndex} widget={widget} owner={internalFormOwner} />
+                ) : (
                     <Col key={colIndex} span={widget.gridWidth}>
                         <Widget meta={widget} card={props.card} customWidgets={props.customWidgets} customSpinner={props.customSpinner} />
                     </Col>
                 )
 
-                return popupWidgets.includes(widget.type as WidgetTypes) ? (
+                return popupWidgets.includes(widget.type as WidgetTypes) || internalFormOwner ? (
                     <Col key={colIndex} span={24}>
                         <Row gutter={[24, 0]}>{widgetCol}</Row>
                     </Col>
@@ -67,7 +74,9 @@ export function DashboardLayout(props: DashboardLayoutProps) {
     if (additionalInfoWidgets.length !== 0 && isSidebarVisible) {
         return (
             <Row gutter={24}>
-                <Col span={18}>{ProcessedCommonWidgets}</Col>
+                <Col span={18}>
+                    <InternalFormWidthProvider>{ProcessedCommonWidgets}</InternalFormWidthProvider>
+                </Col>
                 <Col span={6} className={styles.additionalInfoContainer}>
                     {additionalInfoWidgets.map(widget => (
                         <Row key={widget.name} gutter={[8, 8]}>
@@ -81,7 +90,7 @@ export function DashboardLayout(props: DashboardLayoutProps) {
         )
     }
 
-    return <React.Fragment>{ProcessedCommonWidgets}</React.Fragment>
+    return <InternalFormWidthProvider>{ProcessedCommonWidgets}</InternalFormWidthProvider>
 }
 
 export default React.memo(DashboardLayout)

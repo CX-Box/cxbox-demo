@@ -24,6 +24,11 @@ export const useCalendarYearDataCheck = (widgetName: string) => {
         const eventsInDay = new Map<string, number>()
 
         return data.some(item => {
+            // the record being created gets its dates in the create form
+            if (item?.vstamp === -1) {
+                return false
+            }
+
             const start = item?.[startKey] as MomentInput
             const end = item?.[endKey] as MomentInput
 

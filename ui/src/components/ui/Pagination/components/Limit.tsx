@@ -28,7 +28,7 @@ function Limit({
     const hideTotal = total === null
 
     return (
-        <div className={cn(styles.root, classNameContainer)}>
+        <div className={cn(styles.root, classNameContainer)} data-test-widget-list-pagination-total={hideTotal ? undefined : total}>
             <Select
                 className={className}
                 value={value}

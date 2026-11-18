@@ -64,7 +64,7 @@ function FilterField({ filterByRangeEnabled, ...props }: FilterFieldProps) {
                 <NumberInput
                     data-test-filter-popup-value={true}
                     value={value as number}
-                    type={widgetFieldMeta.type as any}
+                    type={widgetFieldMeta.type as unknown as NumberTypes}
                     onChange={onChange}
                     digits={fieldMeta.digits}
                     nullable={fieldMeta.nullable}
@@ -85,7 +85,6 @@ function FilterField({ filterByRangeEnabled, ...props }: FilterFieldProps) {
             )
         }
         case FieldType.dictionary: {
-            const rowFieldMeta = props.rowFieldMeta
             const rowFieldMetaFilterValues =
                 rowFieldMeta?.filterValues?.map(item => ({
                     ...item,
@@ -127,17 +126,17 @@ function FilterField({ filterByRangeEnabled, ...props }: FilterFieldProps) {
             )
         }
         case CustomFieldTypes.Time: {
-            const widgetFieldMeta = props.widgetFieldMeta as ITimePickerFieldMeta
-            const use12Hours = widgetFieldMeta.format?.includes('A') || widgetFieldMeta.format?.includes('a')
+            const timeFieldMeta = widgetFieldMeta as ITimePickerFieldMeta
+            const use12Hours = timeFieldMeta.format?.includes('A') || timeFieldMeta.format?.includes('a')
             return (
                 <TimeRangePicker
                     value={value as DataValue[]}
                     onChange={onChange}
                     use12Hours={use12Hours}
-                    format={widgetFieldMeta.format}
-                    hourStep={widgetFieldMeta.hourStep}
-                    minuteStep={widgetFieldMeta.minuteStep}
-                    secondStep={widgetFieldMeta.secondStep}
+                    format={timeFieldMeta.format}
+                    hourStep={timeFieldMeta.hourStep}
+                    minuteStep={timeFieldMeta.minuteStep}
+                    secondStep={timeFieldMeta.secondStep}
                 />
             )
         }

@@ -100,7 +100,7 @@ export const processFileUploadErrorMessage = (error: AxiosError<OperationError>)
         errors.push(...popupErrors)
     }
 
-    const errorMessage = error?.response?.data?.errorMessage || undefined
+    const errorMessage = error?.response?.data?.errorMessage
     if (errorMessage) {
         errors.push(errorMessage)
     }

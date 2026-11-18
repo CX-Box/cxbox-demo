@@ -61,7 +61,7 @@ export function UploadList({ fileList }: UploadListProps) {
                         data-test-file-status={file.status}
                         data-test-file-status-information={file.statusInformation}
                     >
-                        {/* a long error of the backend is scrolled inside the tooltip: the delay lets the mouse move from the line to the tooltip */}
+                        {/* The delay lets the pointer reach the copy button without closing the tooltip. */}
                         <Tooltip
                             overlay={
                                 displayedText ? (

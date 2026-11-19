@@ -31,4 +31,5 @@ export const TREE_SHOW_MORE_PADDING_TOP: number = 0
 
 export const TREE_WIDGETS = [CustomWidgetTypes.Tree, CustomWidgetTypes.AssocTreePopup, CustomWidgetTypes.PickTreePopup]
 
-export const WIDGETS_COMPATIBLE_WITH_TREE = [...TREE_WIDGETS, WidgetTypes.Form]
+// Form, Info and AdditionalInfo show only the cursor record, so they share a business component with a tree.
+export const WIDGETS_COMPATIBLE_WITH_TREE = [...TREE_WIDGETS, WidgetTypes.Form, WidgetTypes.Info, CustomWidgetTypes.AdditionalInfo]

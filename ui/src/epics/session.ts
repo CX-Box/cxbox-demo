@@ -61,7 +61,8 @@ const loginEpic: RootEpic = (action$, state$, { api }) =>
                             userId: data.userId,
                             featureSettings: data.featureSettings,
                             language: data.language,
-                            sessionId: data.sessionId
+                            sessionId: data.sessionId,
+                            metaValidation: data.metaValidation ?? []
                         })
                     )
                 }),
@@ -111,7 +112,7 @@ export const loginByAnotherRoleEpic: RootEpic = (action$, state$, { api }) =>
                     }
 
                     return concat([
-                        actions.loginDone({
+                        loginDone({
                             devPanelEnabled: data.devPanelEnabled,
                             activeRole: data.activeRole,
                             roles: data.roles,
@@ -123,6 +124,7 @@ export const loginByAnotherRoleEpic: RootEpic = (action$, state$, { api }) =>
                             featureSettings: data.featureSettings,
                             language: data.language,
                             sessionId: data.sessionId,
+                            metaValidation: data.metaValidation ?? [],
                             defaultUrl
                         })
                     ])

@@ -6,15 +6,17 @@ import styles from './CopyableText.less'
 interface CopyableTextProps {
     text: string
     className?: string
+    onCopy?: () => void
 }
 
 const CopyableText: React.FunctionComponent<CopyableTextProps> = props => {
-    const { text, className } = props
+    const { text, className, onCopy } = props
     const textRef = useRef<Input>(null)
     const handleCopyDetails = React.useCallback(() => {
         textRef.current?.select()
         document.execCommand('copy')
-    }, [textRef])
+        onCopy?.()
+    }, [textRef, onCopy])
 
     return (
         <Input

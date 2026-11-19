@@ -3,7 +3,7 @@ import { createReducer } from '@reduxjs/toolkit'
 import { createSettingMap, createSettingPath } from '@utils/tableSettings'
 import { TableSettingsMap } from '@interfaces/tableSettings'
 import { actions, AuthErrorInfo } from '@actions'
-import { FeatureSetting, SessionScreen } from '@interfaces/session'
+import { FeatureSetting, BackendValidationMessage, RuntimeError, SessionScreen } from '@interfaces/session'
 
 interface Session extends interfaces.Session {
     logout: boolean
@@ -15,6 +15,8 @@ interface Session extends interfaces.Session {
     sessionId?: string
     authError: AuthErrorInfo | null
     authErrorSnoozedUntil: number | null
+    metaValidation: BackendValidationMessage[]
+    runtimeErrors: RuntimeError[]
 }
 
 /** Every place that shows AuthErrorPopup checks it: failed requests, the websocket */
@@ -31,6 +33,8 @@ const initialState: Session = {
     tableSettings: null,
     authError: null,
     authErrorSnoozedUntil: null,
+    metaValidation: [],
+    runtimeErrors: [],
     disableDeprecatedFeatures: {
         popupCloseAfterChangeData: true,
         /**
@@ -77,6 +81,25 @@ const sessionReducerBuilder = reducers
     .addCase(actions.closeAuthErrorPopup, (state, action) => {
         state.authError = null
         state.authErrorSnoozedUntil = action.payload?.snoozedUntil ?? null
+    })
+    .addCase(actions.addRuntimeErrors, (state, action) => {
+        action.payload.forEach(error => {
+            const existingError = state.runtimeErrors.find(
+                item =>
+                    item.level === error.level &&
+                    item.title === error.title &&
+                    item.message === error.message &&
+                    item.widget === error.widget
+            )
+            if (existingError) {
+                existingError.count += error.count
+            } else {
+                state.runtimeErrors.push({ ...error })
+            }
+        })
+    })
+    .addCase(actions.clearRuntimeErrors, state => {
+        state.runtimeErrors = []
     }).builder
 
 export const sessionReducer = createReducer(initialState, sessionReducerBuilder)

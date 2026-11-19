@@ -26,6 +26,7 @@ import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.cxbox.api.MetaHotReloadService;
 import org.cxbox.api.ScreenResponsibilityService;
 import org.cxbox.api.config.CxboxBeanProperties;
 import org.cxbox.api.data.dictionary.SimpleDictionary;
@@ -63,6 +64,8 @@ public class LoginServiceImpl implements LoginService {
 	private final ScreenResponsibilityService screenResponsibilityService;
 
 	private final MetaConfigurationProperties metaConfigurationProperties;
+
+	private final MetaHotReloadService metaHotReloadService;
 
 	private final WidgetFieldsIdResolverProperties widgetFieldsIdResolverProperties;
 
@@ -113,6 +116,7 @@ public class LoginServiceImpl implements LoginService {
 					.language(LocaleContextHolder.getLocale().getLanguage())
 					.timezone(LocaleContextHolder.getTimeZone().getID())
 					.devPanelEnabled(metaConfigurationProperties.isDevPanelEnabled())
+					.metaValidation(metaHotReloadService.validateMeta())
 					.build();
 			return result;
 		} catch (Exception ex) {

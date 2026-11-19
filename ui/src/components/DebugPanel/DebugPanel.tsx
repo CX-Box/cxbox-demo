@@ -4,6 +4,7 @@ import cn from 'classnames'
 import { interfaces } from '@cxbox-ui/core'
 import FormattedJSON from '../FormattedJSON/FormattedJSON'
 import WidgetInfoLabel from './components/WidgetInfoLabel'
+import RuntimeErrors from '@components/RuntimeErrors/RuntimeErrors'
 import styles from './DebugPanel.less'
 import { useAppSelector } from '@store'
 
@@ -92,6 +93,8 @@ const DebugPanel: React.FunctionComponent<DebugPanelProps> = props => {
             >
                 <Icon type="menu" />
             </button>
+
+            <RuntimeErrors widget={widgetMeta.name} />
         </div>
     )
 }

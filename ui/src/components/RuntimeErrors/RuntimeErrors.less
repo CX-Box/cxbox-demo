@@ -1,0 +1,144 @@
+@import '../../assets/styles/theme';
+
+.counter {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 24px;
+    padding: 0 6px;
+    border: none;
+    border-radius: 4px;
+    background: transparent;
+    color: #fff;
+    cursor: pointer;
+
+    &:hover,
+    &:focus {
+        background: #525867;
+        outline: none;
+    }
+
+    :global(.anticon) {
+        margin-right: 4px;
+    }
+}
+
+.errorCount :global(.anticon) {
+    color: #ff4d4f;
+}
+
+.warningCount :global(.anticon) {
+    color: #faad14;
+}
+
+.content {
+    overflow-y: auto;
+}
+
+.section + .section {
+    margin-top: 8px;
+}
+
+.sectionTitle {
+    margin-bottom: 4px;
+    font-weight: 600;
+}
+
+.executionFailures {
+    margin-bottom: 8px;
+    color: #ff4d4f;
+
+    ul {
+        margin: 4px 0 0;
+        padding-left: 20px;
+        word-break: break-word;
+    }
+}
+
+.place {
+    padding: 4px 8px 6px;
+    border: 1px solid @debug-element;
+    border-radius: 4px;
+}
+
+.place + .place {
+    margin-top: 6px;
+}
+
+.placeLabel {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    max-width: 100%;
+    padding: 2px 6px;
+    border-radius: 3px;
+    background: @debug-main;
+
+    :global {
+        .ant-input-group-wrapper {
+            width: 300px;
+            min-width: 0;
+            flex: 0 1 auto;
+        }
+
+        .ant-input,
+        .ant-input-group-addon {
+            border-color: @debug-main;
+            background: @debug-element;
+            color: @debug-text;
+        }
+    }
+}
+
+.placeType {
+    font-weight: 600;
+    color: @debug-text;
+}
+
+.errors {
+    margin: 2px 0 0;
+    padding: 0;
+    list-style: none;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.error {
+    color: #ff7875;
+}
+
+.warning {
+    color: #ffc53d;
+}
+
+.title {
+    font-weight: 600;
+}
+
+.repeat {
+    margin-left: 6px;
+    color: rgba(255, 255, 255, 0.45);
+    white-space: nowrap;
+}
+
+.overlay {
+    :global {
+        .ant-popover-inner {
+            background: @debug-main;
+        }
+
+        .ant-popover-title {
+            border-bottom-color: @debug-element;
+            color: @debug-text;
+        }
+
+        .ant-popover-inner-content {
+            color: @debug-text;
+        }
+    }
+}
+
+.overlay.overlay :global(.ant-popover-content > .ant-popover-arrow) {
+    left: var(--runtime-errors-arrow-left, 16px);
+    border-color: @debug-main;
+}

@@ -24,6 +24,9 @@ cxbox:
     default-date: 1970.01.01
   meta:
     dev-panel-enabled: ${DEV_PANEL_ENABLED:true}
+    validation:
+      enabled: ${META_VALIDATION_ENABLED:true}
+      log-level: ${META_VALIDATION_LOG_LEVEL:error}
     directory: ${META_DIRECTORY:file:./src/main/resources/meta}
     view-allowed-roles-enabled: true
     widget-action-groups-enabled: true

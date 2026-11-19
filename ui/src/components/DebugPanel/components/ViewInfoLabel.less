@@ -6,9 +6,19 @@
 
 .container {
     display: flex;
+    flex-wrap: wrap;
+    align-items: center;
     gap: 10px;
     padding: 2px 2px 2px 6px;
     border-radius: 3px;
     background: @debug-main;
     box-shadow: 0 0 3px 2px @debug-main;
+}
+
+.problems {
+    box-shadow: 0 0 3px 2px #ff4d4f;
+}
+
+.warnings {
+    box-shadow: 0 0 3px 2px #faad14;
 }

@@ -2,7 +2,7 @@ import { AnyAction, createAction } from '@reduxjs/toolkit'
 import { actions, BcFilter, interfaces } from '@cxbox-ui/core'
 import { OperationPreInvokeCustom } from '@interfaces/operation'
 import { NotificationState } from '@interfaces/notification'
-import { LoginResponse } from '@interfaces/session'
+import { LoginResponse, RuntimeError } from '@interfaces/session'
 import { TableSettingsItem, TableSettingsList, TableSettingsMap } from '@interfaces/tableSettings'
 import { FilterGroup } from '@interfaces/filters'
 import { FileViewerPopupOptions, WsNotificationPopupOptions } from '@interfaces/view'
@@ -177,3 +177,10 @@ export const bcRemoveFilter = createAction<
         options?: { cancelResetFiltersGroup?: boolean }
     }
 >('bcRemoveFilter')
+
+/**
+ * Project code should report errors through addRuntimeError from utils/runtimeErrors.
+ */
+export const addRuntimeErrors = createAction<RuntimeError[]>('addRuntimeErrors')
+
+export const clearRuntimeErrors = createAction('clearRuntimeErrors')

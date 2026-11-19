@@ -5,20 +5,19 @@ import openInNewTab from '@utils/openInNewTab'
 import { openNotification } from '@components/NotificationsContainer/utils'
 import { RootState } from '@store'
 import { DrillDownType, RowMeta } from '@cxbox-ui/core'
-import { WidgetFieldBase } from '@cxbox-ui/schema'
+import getDrillDownWidgetField from './getDrillDownWidgetField'
 
 const processDrillDownInNewTab = (
     state: RootState,
     rowMeta: RowMeta,
+    widgetName: string,
     fieldKey: string,
     cursor: string,
     bcName: string,
     copyLink?: boolean
 ) => {
     const drillDownField = rowMeta.fields.find(field => field.key === fieldKey)
-    const drillDownKey = (
-        state.view.widgets.find(widget => widget.bcName === bcName)?.fields.find((field: any) => field.key === fieldKey) as WidgetFieldBase
-    )?.drillDownKey as string
+    const drillDownKey = getDrillDownWidgetField(state, widgetName, bcName, fieldKey)?.drillDownKey as string
     const customDrillDownUrl = state.data[bcName]?.find(record => record.id === cursor)?.[drillDownKey] as string
     const drillDownUrl = customDrillDownUrl || drillDownField?.drillDown
 

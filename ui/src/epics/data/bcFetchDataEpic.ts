@@ -36,7 +36,7 @@ import {
 import { CustomWidgetTypes } from '@interfaces/widget'
 import { getAssocTreeSelectedNodeIds } from '@utils/getAssocTreeSelectedNodeIds'
 import { selectBcFilters, selectBcUrlRowMeta, selectHasBcTree } from '@selectors/selectors'
-import { getAllDataFromTree } from '@utils/tree'
+import { getAllDataFromTree, getTreeFieldKeys } from '@utils/tree'
 
 const {
     checkShowCondition,
@@ -316,7 +316,11 @@ export const bcFetchDataEpic: RootEpic = (action$, state$, { api, utils }) =>
                 }
 
                 const isPopupOpen = showViewPopup.match(action)
-                const resetTree = bcForceUpdate.match(action) || bcChangePage.match(action) || isPopupOpen
+                // A root load replaces the whole tree: after a parent record change the old rows belong to another record.
+                const resetTree =
+                    bcFetchDataRequest.match(action) || bcForceUpdate.match(action) || bcChangePage.match(action) || isPopupOpen
+                // The tree may be loaded before its widget is shown (a show condition): the keys come from the widget.
+                const treeWidget = isTreeWidget(widget) ? widget : widgets?.find(item => item.bcName === bcName && isTreeWidget(item))
                 const withBcDataSideEffects = bcFetchDataRequest.match(action) || resetTree
 
                 const isAssocTreePopupOpen = isPopupOpen && widget.type === CustomWidgetTypes.AssocTreePopup
@@ -381,7 +385,7 @@ export const bcFetchDataEpic: RootEpic = (action$, state$, { api, utils }) =>
                 }
 
                 return concat(
-                    resetTree ? of(treeActions.initTree({ bcName, reset: true })) : EMPTY,
+                    resetTree ? of(treeActions.initTree({ bcName, reset: true, ...getTreeFieldKeys(treeWidget) })) : EMPTY,
                     setDefaultFilters,
                     of(
                         treeActions.fetchChildNodeData({

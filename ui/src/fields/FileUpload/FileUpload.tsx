@@ -124,13 +124,13 @@ const FileUpload: React.FunctionComponent<Props> = ({
     )
 
     const onUploadFailed = React.useCallback(
-        (error: AxiosError<unknown>, response: any, file: UploadFile) => {
+        (error: AxiosError<any>, response: any, file: UploadFile) => {
             dispatch(actions.uploadFileFailed(null))
 
             if (axios.isCancel(error)) {
                 updateAddedFile(file.uid, { status: 'canceled', percent: 100, id: null })
             } else {
-                updateAddedFile(file.uid, { status: 'error', percent: 100, id: null })
+                updateAddedFile(file.uid, { status: 'error', percent: 100, id: null }, error)
             }
         },
         [dispatch, updateAddedFile]

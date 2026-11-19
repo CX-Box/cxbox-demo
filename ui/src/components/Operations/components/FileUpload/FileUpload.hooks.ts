@@ -7,12 +7,15 @@ import {
     getFileExtension,
     getFilePermissionFromAccept,
     isFileUploadSuccess,
-    needSendAllFiles
+    needSendAllFiles,
+    processFileUploadErrorMessage
 } from '@components/Operations/components/FileUpload/FileUpload.utils'
 import { actions } from '@cxbox-ui/core'
 import { UPLOAD_FILE_STATUS, UPLOAD_TYPE } from '@components/Operations/components/FileUpload/FileUpload.constants'
 import { UploadFileStatus } from 'antd/es/upload/interface'
 import { useHover } from '@hooks/useHover'
+import { AxiosError } from 'axios'
+import { OperationError } from '@interfaces/operation'
 
 export const useTimeoutIdList = () => {
     const list = useRef<NodeJS.Timeout[]>([])
@@ -57,7 +60,11 @@ export const useStatusesInformation = (accept?: string) => {
             fileName,
             fileStatus,
             uploadType
-        }: { fileName?: string; fileStatus?: AddedFileInfo['status']; uploadType?: AddedFileInfo['uploadType'] } = {}) => {
+        }: {
+            fileName?: string
+            fileStatus?: AddedFileInfo['status']
+            uploadType?: AddedFileInfo['uploadType']
+        } = {}) => {
             if (fileStatus === UPLOAD_FILE_STATUS.done) {
                 return uploadType === UPLOAD_TYPE.create
                     ? t('Success. File loaded and new row created')
@@ -89,7 +96,7 @@ export const useUploadFilesInfo = (accept?: string) => {
     const { getStatusInformation } = useStatusesInformation(accept)
 
     const updateAddedFile = useCallback(
-        (uid: string, newFileInfo: Omit<Partial<AddedFileInfo>, 'uid'>) => {
+        (uid: string, newFileInfo: Omit<Partial<AddedFileInfo>, 'uid'>, error?: AxiosError<OperationError>) => {
             setAddedFileDictionary(addedFileDictionary => {
                 const updatedFileInfo: AddedFileInfo = {
                     ...addedFileDictionary[uid],
@@ -105,6 +112,7 @@ export const useUploadFilesInfo = (accept?: string) => {
                             fileName: updatedFileInfo.name,
                             uploadType: updatedFileInfo.uploadType
                         }),
+                        errorMessage: error ? processFileUploadErrorMessage(error) : undefined,
                         uid
                     }
                 }

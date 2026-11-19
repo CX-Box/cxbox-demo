@@ -1,3 +1,5 @@
+import { OperationError as CoreOperationError } from '@cxbox-ui/core'
+
 export interface OperationPreInvokeCustom {
     type: OperationPreInvokeTypeCustom.custom
     subtype: OperationPreInvokeSubType.confirmWithCustomWidget
@@ -13,4 +15,8 @@ export enum OperationPreInvokeTypeCustom {
 
 export enum OperationPreInvokeSubType {
     confirmWithCustomWidget = 'confirmWithCustomWidget'
+}
+
+export interface OperationError extends CoreOperationError {
+    errorMessage: string | null
 }

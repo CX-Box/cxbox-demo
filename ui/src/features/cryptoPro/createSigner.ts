@@ -1,4 +1,5 @@
-import { DEFAULT_DOCUMENT_NAME, DEFAULT_SIGNATURE_TYPE, SIGNATURE_TYPES, TSA_URL } from './constants'
+import { CRYPTOPRO_CONFIG } from './config'
+import { DEFAULT_DOCUMENT_NAME, DEFAULT_SIGNATURE_TYPE, SIGNATURE_TYPES } from './constants'
 import { getCadesPlugin } from './plugin'
 import { CertificateAsync, SignOptions } from './types'
 
@@ -9,7 +10,7 @@ import { CertificateAsync, SignOptions } from './types'
  * Same signer for `SignCades` and `SignHash`. For `CADES_T` the time stamp service address is set.
  */
 export async function createSigner(certificate: CertificateAsync, options: SignOptions = {}): Promise<CAdESCOM.CPSignerAsync> {
-    const { cadesType = DEFAULT_SIGNATURE_TYPE, tsaUrl = TSA_URL, documentName = DEFAULT_DOCUMENT_NAME } = options
+    const { cadesType = DEFAULT_SIGNATURE_TYPE, tsaUrl = CRYPTOPRO_CONFIG.tsaUrl, documentName = DEFAULT_DOCUMENT_NAME } = options
     const { cadesplugin } = await getCadesPlugin()
     const signer = await cadesplugin.CreateObjectAsync('CAdESCOM.CPSigner')
     const attributes = await signer.AuthenticatedAttributes2

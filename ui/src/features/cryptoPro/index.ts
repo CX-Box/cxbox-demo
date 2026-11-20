@@ -4,6 +4,8 @@
  *
  * @module features/cryptoPro
  */
+export { CRYPTOPRO_CONFIG } from './config'
+export { CRYPTOPRO_LINKS } from './links'
 export {
     CADES_ERROR_CODES,
     CADES_ERROR_I18N_KEYS,
@@ -14,15 +16,7 @@ export {
     isCadesPluginError
 } from './errors'
 export type { CadesErrorCode, CertificateProblem } from './errors'
-export {
-    SIGNATURE_TYPES,
-    DEFAULT_SIGNATURE_TYPE,
-    SIGNATURE_PACKAGE,
-    DEFAULT_SIGNATURE_PACKAGE,
-    TSA_URL,
-    CRYPTOPRO_LINKS,
-    DEFAULT_DOCUMENT_NAME
-} from './constants'
+export { SIGNATURE_TYPES, DEFAULT_SIGNATURE_TYPE, SIGNATURE_PACKAGE, DEFAULT_SIGNATURE_PACKAGE, DEFAULT_DOCUMENT_NAME } from './constants'
 export type { SignatureType, SignaturePackage } from './constants'
 export type { CertificateAsync, CertificateData, CertificatePurpose, EncryptResult, SignOptions, SignResult } from './types'
 export { ensureCadesPluginInstalled, getPluginVersion } from './plugin'

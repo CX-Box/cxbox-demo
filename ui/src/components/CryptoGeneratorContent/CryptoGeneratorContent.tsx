@@ -403,7 +403,7 @@ function CryptoGeneratorContent({
                         <Trans
                             i18nKey="Cryptopro plugin error"
                             components={[
-                                <a key="0" href={CRYPTOPRO_LINKS.INSTRUCTION_URL} target="_blank" rel="noreferrer">
+                                <a key="0" href={CRYPTOPRO_LINKS.instructionUrl} target="_blank" rel="noreferrer">
                                     placeholder
                                 </a>
                             ]}
@@ -422,7 +422,7 @@ function CryptoGeneratorContent({
                         <Trans
                             i18nKey="Certificate empty error"
                             components={[
-                                <a key="0" href={CRYPTOPRO_LINKS.INSTRUCTION_URL} target="_blank" rel="noreferrer">
+                                <a key="0" href={CRYPTOPRO_LINKS.instructionUrl} target="_blank" rel="noreferrer">
                                     placeholder
                                 </a>
                             ]}

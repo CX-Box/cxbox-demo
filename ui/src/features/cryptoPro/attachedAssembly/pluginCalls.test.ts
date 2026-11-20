@@ -22,9 +22,32 @@ beforeEach(() => {
 
 afterEach(() => {
     Object.assign(CRYPTOPRO_CONFIG, config)
+    vi.restoreAllMocks()
 })
 
 describe('signAttachedAssembled', () => {
+    it.each([true, false])('soft verification continues to CMS structure checks (valid: %s)', async valid => {
+        CRYPTOPRO_CONFIG.signatureVerificationMode = 'soft'
+        const warning = vi.spyOn(console, 'warn').mockImplementation(() => {})
+        const detached = Buffer.from(testCms({ hash: Buffer.from(valid ? 'AB12CD' : 'FFFFFF', 'hex') })).toString('base64')
+        const plugin = createFakePlugin({
+            signature: detached,
+            failOn: { call: 'VerifyHash', message: 'Verification failed (0x800B010E)' }
+        })
+        vi.mocked(getCadesPlugin).mockResolvedValue({ cadesplugin: plugin.cadesplugin, version: '2.0.15820' })
+
+        const pending = signAttachedAssembled(new Blob(['Document']), testCertificate())
+        if (valid) {
+            const result = await pending
+            expect(result.method).toBe('assembled')
+            expect(result.der.size).toBeGreaterThan(Buffer.from(detached, 'base64').length)
+        } else {
+            await expect(pending).rejects.toMatchObject({ code: 'INVALID_CMS' })
+        }
+        expect(plugin.calls.filter(call => call.startsWith('VerifyHash('))).toHaveLength(1)
+        expect(warning).toHaveBeenCalledTimes(1)
+    })
+
     it('passes the file to the plugin only in chunks; the plugin verifies only the detached part (VerifyHash, not VerifyCades)', async () => {
         // the fake HashedData.Value is AB12CD, so the detached signature must carry this messageDigest
         const detached = Buffer.from(testCms({ hash: Buffer.from('AB12CD', 'hex') })).toString('base64')

@@ -6,6 +6,7 @@ import { resolveHashAlgorithm } from '../hashAlgorithm'
 import { getCadesPlugin } from '../plugin'
 import { signatureDer, toSignedCms } from '../signature'
 import { CertificateData, SignOptions, SignedCms } from '../types'
+import { handleVerificationError } from '../verification'
 
 /**
  * Attached signature by `SignCades`: the plugin gets the whole file as one base64 string.
@@ -40,7 +41,7 @@ export async function signAttachedNative(file: Blob, cert: CertificateData, opti
         const verifier = await cadesplugin.CreateObjectAsync('CAdESCOM.CadesSignedData')
         await verifier.VerifyCades(base64, cadesType, false)
     } catch (error) {
-        throw wrapPluginError(error, CADES_ERROR_CODES.VERIFY_FAILED)
+        handleVerificationError(error, 'VerifyCades')
     }
 
     return toSignedCms(base64, der, 'native')

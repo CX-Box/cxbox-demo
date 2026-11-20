@@ -132,16 +132,49 @@ try {
 
 ## Settings
 
-`CRYPTOPRO_CONFIG` in `config.ts`. From environment variables (`ui/.env*`):
+`CRYPTOPRO_CONFIG` in `config.ts` contains the settings for signing and encryption, including environment values and fixed limits.
+`links.ts` contains configurable help links for the UI.
+`constants.ts` contains allowed values and defaults without reading the environment. The config passes the environment
+value to `getSignatureVerificationMode.ts` for validation. Constants and the parser do not import the config.
+From environment variables (`ui/.env*`):
 
 | Variable                                | Meaning                                                                         | Default       |
 | --------------------------------------- | ------------------------------------------------------------------------------- | ------------- |
 | `REACT_APP_CRYPTOPRO_TSA_URL`           | time stamp service, required for CAdES-T                                        | not set       |
 | `REACT_APP_CRYPTOPRO_ATTACHED_ASSEMBLY` | `true` — every attached signature is assembled from a detached one and the file | `false`       |
-| `REACT_APP_CRYPTOPRO_INSTRUCTION_LINK`  | setup link when the plugin or certificates are not found (`CRYPTOPRO_LINKS`)    | doc.cxbox.org |
+| `REACT_APP_CRYPTOPRO_INSTRUCTION_LINK`  | setup link when the plugin or certificates are not found (`CRYPTOPRO_LINKS.instructionUrl`) | doc.cxbox.org |
+| `REACT_APP_CRYPTOPRO_SIGNATURE_VERIFICATION_MODE` | `strict` — reject a failed verification; `soft` — log it and return the created signature | `strict` |
 
 Constants: `chunkSize` (3 MiB), `nativeAttachedMaxSize` (30 MB), `chunkTimeout` (60 s for one chunk),
 `minPluginVersion` (`2.0.15260`). MB is 1 000 000 bytes, MiB is 1 048 576 bytes.
+
+Use `CRYPTOPRO_CONFIG.tsaUrl` for the time stamp service and `CRYPTOPRO_LINKS.instructionUrl` for the UI help link.
+
+### Signature verification mode
+
+`REACT_APP_CRYPTOPRO_SIGNATURE_VERIFICATION_MODE` is embedded at build time; `CRYPTOPRO_CONFIG.signatureVerificationMode` is initialized
+once when the module loads.
+The allowed modes are `SIGNATURE_VERIFICATION_MODES`, with type `SignatureVerificationMode` and fallback
+`DEFAULT_SIGNATURE_VERIFICATION_MODE` in `constants.ts` (`strict`), resolved by `getSignatureVerificationMode.ts`.
+An unset or empty variable uses the fallback;
+an unrecognized value also uses it and reports the configuration error to the console.
+
+- **`strict` (default):** a verification failure prevents the signature from being returned, as before.
+- **`soft`:** verification is still attempted. If it fails, the created signature is returned for the usual upload and
+  subsequent operation, without a verification error notification in the UI. The failure is logged with `console.warn`,
+  the verification method, error code, plugin HRESULT and message. The signature and document contents are not logged.
+
+The mode applies to `VerifyHash` (detached signatures, including those used for attached assembly) and `VerifyCades`
+(native attached signatures), including failures while creating the verifier object. It also applies to combined and
+mass operations that use these signing functions. A returned signature in soft mode does not mean verification succeeded.
+Signing errors, existing local result checks (empty data, invalid base64 or a missing SEQUENCE tag), CMS assembly checks,
+encryption errors and cancellation still stop the operation. The local result checks do not establish that the complete
+CMS is valid; soft mode does not add another CMS validator in place of the plugin's failed verification.
+Cancellation of signing is handled before verification, and `AbortSignal` stops the surrounding operation through
+`untilAborted`. The verification error handler does not need separate cancellation-code exceptions.
+
+To enable soft verification for a build, set `REACT_APP_CRYPTOPRO_SIGNATURE_VERIFICATION_MODE=soft` in its environment or `.env`.
+Rebuild and deploy the frontend after changing the value; for local development restart the dev server.
 
 ## Errors
 
@@ -184,7 +217,8 @@ before encryption.
     with SHA-2 returned an empty signature without an error, CNG keys on Windows returned `0x80090014`. The encryption
     algorithm is chosen by the plugin.
 -   **Checks of the result.** The plugin may return an empty signature without an error (RSA with SHA-2), so the
-    signature is checked to be a CMS; an unknown signature type would silently become CAdES-X Long Type 1, the default
+    wrapper checks the base64 and leading SEQUENCE tag before verification; attached assembly also checks the CMS structure.
+    An unknown signature type would silently become CAdES-X Long Type 1, the default
     of `SignCades` and `SignHash` — it is rejected.
 -   **Calls one by one.** Plugin calls on one object are awaited one by one: otherwise the error of a part is lost and
     incomplete data gets signed. Chunk calls do not wait for user input: if a call does not complete within

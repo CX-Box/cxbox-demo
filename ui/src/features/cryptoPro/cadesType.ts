@@ -1,5 +1,6 @@
 import { Lookup } from '@utils/Lookup'
-import { DEFAULT_SIGNATURE_TYPE, SIGNATURE_TYPES, TSA_URL } from './constants'
+import { CRYPTOPRO_CONFIG } from './config'
+import { DEFAULT_SIGNATURE_TYPE, SIGNATURE_TYPES } from './constants'
 import { CadesPluginError, CADES_ERROR_CODES } from './errors'
 import { SignOptions } from './types'
 
@@ -13,7 +14,7 @@ export function resolveCadesType(
     cadesplugin: CADESPluginAsync,
     options: SignOptions = {}
 ): CADES_Common.ValuesOf<CAdESCOM.CADESCOM_CADES_TYPE> {
-    const { cadesType = DEFAULT_SIGNATURE_TYPE, tsaUrl = TSA_URL } = options
+    const { cadesType = DEFAULT_SIGNATURE_TYPE, tsaUrl = CRYPTOPRO_CONFIG.tsaUrl } = options
     if (!Lookup.hasKey(SIGNATURE_TYPES, cadesType)) {
         throw new CadesPluginError(
             CADES_ERROR_CODES.SIGN_FAILED,

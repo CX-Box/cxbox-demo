@@ -8,6 +8,7 @@ import { hashBlob } from './hashBlob'
 import { getCadesPlugin } from './plugin'
 import { signatureDer, toSignedCms } from './signature'
 import { CertificateData, SignOptions, SignedCms } from './types'
+import { handleVerificationError } from './verification'
 
 /** Detached signature with the file hash it signs; the hash is needed to assemble an attached signature. */
 export interface DetachedSignature {
@@ -48,10 +49,11 @@ export async function createDetachedSignature(file: Blob, cert: CertificateData,
     try {
         const verifier = await cadesplugin.CreateObjectAsync('CAdESCOM.CadesSignedData')
         await verifier.VerifyHash(hashedData, base64, cadesType)
-        return { base64, der, hash }
     } catch (error) {
-        throw wrapPluginError(error, CADES_ERROR_CODES.VERIFY_FAILED)
+        handleVerificationError(error, 'VerifyHash')
     }
+
+    return { base64, der, hash }
 }
 
 /**
@@ -59,7 +61,7 @@ export async function createDetachedSignature(file: Blob, cert: CertificateData,
  *
  * @remarks
  * The hash algorithm follows the certificate key ({@link resolveHashAlgorithm}); the signature is verified by `VerifyHash`
- * before it is returned.
+ * before it is returned. In soft verification mode a failed verification is logged and the created signature is returned.
  *
  * @example
  * ```ts

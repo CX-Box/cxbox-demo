@@ -5,6 +5,7 @@ import { useAppSelector } from '@store'
 import { Types } from '@antv/g2'
 import { Label } from '@antv/g2plot/lib/types/label'
 import { interfaces } from '@cxbox-ui/core'
+import ChartContainer from '@components/widgets/Chart/components/ChartContainer/ChartContainer'
 
 interface FunnelProps {
     meta: FunnelWidgetMeta
@@ -40,7 +41,9 @@ function Funnel({ meta }: FunnelProps) {
     }
     return (
         <div>
-            <AntFunnel data={funnelData} xField="id" yField="value" color={color} conversionTag={false} legend={legend} label={label} />
+            <ChartContainer maxRows={meta.options.funnelOptions.maxRows}>
+                <AntFunnel data={funnelData} xField="id" yField="value" color={color} conversionTag={false} legend={legend} label={label} />
+            </ChartContainer>
         </div>
     )
 }

@@ -8,6 +8,7 @@ import { defaultColorField } from './constants'
 import { DataItem } from '@cxbox-ui/core'
 import { PieConfig } from '@ant-design/plots/es/components/pie'
 import { Pie1DWidgetMeta } from '@interfaces/widget'
+import ChartContainer from '../ChartContainer/ChartContainer'
 
 interface Pie1DProps {
     meta: Pie1DWidgetMeta
@@ -150,7 +151,11 @@ const Pie1D: React.FC<Pie1DProps> = ({ meta }) => {
         return null
     }
 
-    return <AntPie {...pieConfig} />
+    return (
+        <ChartContainer maxRows={options.chart1D.maxRows}>
+            <AntPie {...pieConfig} />
+        </ChartContainer>
+    )
 }
 
 export default Pie1D

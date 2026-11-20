@@ -34,6 +34,7 @@
   ],
   "options": {
     "chart2D": {
+      "maxRows": 3,
       "xValueFieldKey": "dateCreatedSales",
       "yValueFieldKey": "count",
       "groupFieldKey": "saleStatus"

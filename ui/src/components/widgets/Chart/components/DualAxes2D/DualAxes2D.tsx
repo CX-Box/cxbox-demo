@@ -7,6 +7,7 @@ import { getCombinedAxisOptions, getGeometryOption } from './utils'
 import { availableWidgetTypesForDualAxes2D, emptyArray } from './constants'
 import { DualAxesConfig } from '@ant-design/plots/es/components/dual-axes'
 import { Chart2DWidgetMeta, DualAxes2DWidgetMeta } from '@interfaces/widget'
+import ChartContainer from '../ChartContainer/ChartContainer'
 
 interface DualAxes2DProps {
     meta: DualAxes2DWidgetMeta
@@ -41,8 +42,8 @@ const DualAxes2D: React.FC<DualAxes2DProps> = ({ meta }) => {
                 xField: firstChartConfig.xField as string,
                 yField: [firstChartConfig.yField as string, secondChartConfig.yField as string],
                 geometryOptions: [
-                    getGeometryOption(firstChartWidgetMeta?.type, firstChartConfig),
-                    getGeometryOption(secondChartWidgetMeta?.type, secondChartConfig)
+                    getGeometryOption(firstChartWidgetMeta, firstChartConfig),
+                    getGeometryOption(secondChartWidgetMeta, secondChartConfig)
                 ],
                 ...(needToHideSecondYAxis && {
                     meta: {
@@ -76,10 +77,10 @@ const DualAxes2D: React.FC<DualAxes2DProps> = ({ meta }) => {
             },
         [
             firstChartConfig,
-            firstChartWidgetMeta?.type,
+            firstChartWidgetMeta,
             needToHideSecondYAxis,
             secondChartConfig,
-            secondChartWidgetMeta?.type,
+            secondChartWidgetMeta,
             uniqueDescriptionFieldKeys
         ]
     )
@@ -105,17 +106,15 @@ const DualAxes2D: React.FC<DualAxes2DProps> = ({ meta }) => {
         }
     }, [firstChartConfig?.xField, meta.name, secondChartConfig?.xField])
 
-    useEffect(() => {
-        if (firstChartWidgetMeta?.bcName !== secondChartWidgetMeta?.bcName) {
-            console.info(`${meta.name} widget: widgets in 'options.dual2D' must have the same bc`)
-        }
-    }, [firstChartWidgetMeta?.bcName, meta.name, secondChartWidgetMeta?.bcName])
-
     if (!dualAxesConfig) {
         return null
     }
 
-    return <AntDualAxes {...dualAxesConfig} />
+    return (
+        <ChartContainer maxRows={optionsDual2D?.maxRows}>
+            <AntDualAxes {...dualAxesConfig} />
+        </ChartContainer>
+    )
 }
 
 export default DualAxes2D

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useAppDispatch, useAppSelector } from '@store'
 import { getItemColor, getItemDescriptionValue } from '../utils'
 import { actions } from '@actions'
@@ -69,6 +69,14 @@ export const useChart2D = (meta: Chart2DWidgetMeta, needToChangeGroupFieldData?:
         [dispatch, bcName, name, xValueFieldMeta?.drillDown, xValueFieldMeta?.key]
     )
 
+    // The chart binds its click once, when it is created. A tab with a chart of the same business component keeps
+    // the chart and gives it the new widget, so the click calls the drill-down of the current widget.
+    const onDrillDownRef = useRef(onDrillDown)
+
+    useEffect(() => {
+        onDrillDownRef.current = onDrillDown
+    }, [onDrillDown])
+
     const chart2DConfig: ColumnConfig | LineConfig = useMemo(
         () =>
             options?.chart2D && {
@@ -137,7 +145,7 @@ export const useChart2D = (meta: Chart2DWidgetMeta, needToChangeGroupFieldData?:
                         const item = args?.[0]?.data?.data
 
                         if (item && !Array.isArray(item)) {
-                            onDrillDown(item)
+                            onDrillDownRef.current(item)
                         }
                     })
                 }
@@ -148,7 +156,6 @@ export const useChart2D = (meta: Chart2DWidgetMeta, needToChangeGroupFieldData?:
             groupFieldKey,
             isXValueFieldTypeNumber,
             isYValueFieldTypeNumber,
-            onDrillDown,
             options?.chart2D,
             stack,
             type,

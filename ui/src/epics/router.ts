@@ -1,8 +1,10 @@
 import { catchError, EMPTY, filter, map, mergeMap, of, switchMap } from 'rxjs'
+import { utils } from '@cxbox-ui/core'
 import { RootEpic } from '@store'
 import { actions } from '@actions'
 import { buildBcUrl } from '@utils/buildBcUrl'
 import processDrillDownInNewTab from './utils/processDrillDownInNewTab'
+import processUserDrillDown from './utils/processUserDrillDown'
 
 const drillDownInNewTabChangeCursorsEpic: RootEpic = (action$, state$) =>
     action$.pipe(
@@ -33,13 +35,13 @@ const drillDownInNewTabEpic: RootEpic = (action$, state$, { api }) =>
             const rowMeta = state.view.rowMeta[bcName]?.[bcUrl]
 
             if (rowMeta) {
-                processDrillDownInNewTab(state, rowMeta, fieldKey, cursor, bcName, copyLink)
+                processDrillDownInNewTab(state, rowMeta, widgetName, fieldKey, cursor, bcName, copyLink)
                 return EMPTY
             }
 
             return api.fetchRowMeta(state.screen.screenName, bcUrl).pipe(
                 mergeMap(rowMeta => {
-                    processDrillDownInNewTab(state, rowMeta, fieldKey, cursor, bcName, copyLink)
+                    processDrillDownInNewTab(state, rowMeta, widgetName, fieldKey, cursor, bcName, copyLink)
                     return of(actions.bcFetchRowMetaSuccess({ bcName, rowMeta, bcUrl, cursor }))
                 }),
                 catchError(err => {
@@ -50,7 +52,34 @@ const drillDownInNewTabEpic: RootEpic = (action$, state$, { api }) =>
         })
     )
 
+/**
+ * userDrillDownEpic of the core: the drill-down of the clicked widget, see processUserDrillDown.
+ */
+const userDrillDownEpic: RootEpic = (action$, state$, { api }) =>
+    action$.pipe(
+        filter(actions.userDrillDown.match),
+        switchMap(action => {
+            const state = state$.value
+            const { widgetName, bcName, fieldKey, cursor } = action.payload
+            const bcUrl = buildBcUrl(bcName, true, state)
+            const existingRowMeta = state.view.rowMeta[bcName]?.[bcUrl]
+
+            if (existingRowMeta) {
+                return processUserDrillDown(state, existingRowMeta, widgetName, fieldKey, cursor, bcName, bcUrl)
+            }
+
+            return api.fetchRowMeta(state.screen.screenName, bcUrl).pipe(
+                mergeMap(rowMeta => processUserDrillDown(state, rowMeta, widgetName, fieldKey, cursor, bcName, bcUrl, true)),
+                catchError(error => {
+                    console.error(error)
+                    return utils.createApiErrorObservable(error)
+                })
+            )
+        })
+    )
+
 export const routerEpics = {
     drillDownInNewTabChangeCursorsEpic,
-    drillDownInNewTabEpic
+    drillDownInNewTabEpic,
+    userDrillDownEpic
 }

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import { Pie as AntPie } from '@ant-design/plots'
 import { useAppDispatch, useAppSelector } from '@store'
 import { getAggFieldValue } from './utils'
@@ -41,6 +41,14 @@ const Pie1D: React.FC<Pie1DProps> = ({ meta }) => {
         },
         [dispatch, bcName, name, valueFieldMeta?.drillDown, valueFieldMeta?.key]
     )
+
+    // The chart binds its click once, when it is created. A tab with a chart of the same business component keeps
+    // the chart and gives it the new widget, so the click calls the drill-down of the current widget.
+    const onDrillDownRef = useRef(onDrillDown)
+
+    useEffect(() => {
+        onDrillDownRef.current = onDrillDown
+    }, [onDrillDown])
 
     const pieConfig: PieConfig = useMemo(
         () =>
@@ -114,14 +122,13 @@ const Pie1D: React.FC<Pie1DProps> = ({ meta }) => {
                         const item = args?.[0]?.data?.data
 
                         if (item) {
-                            onDrillDown(item)
+                            onDrillDownRef.current(item)
                         }
                     })
                 }
             },
         [
             descriptionFieldKey,
-            onDrillDown,
             options?.chart1D,
             processedData,
             titleFieldKey,

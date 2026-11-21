@@ -307,7 +307,9 @@ const upsertTreeNode = (
 
     tree.nodes[nextId] = nextNode
     const nextSiblings = tree.childIdsByParent[nextParentId] ?? []
-    const insertionIndex = insertPosition === 'end' ? nextSiblings.length : 0
+    // A row saved under the same parent keeps its place. insertPosition places created and moved rows.
+    const insertionIndex =
+        previousParentId === nextParentId && previousIndex >= 0 ? previousIndex : insertPosition === 'end' ? nextSiblings.length : 0
     nextSiblings.splice(insertionIndex, 0, nextId)
     tree.childIdsByParent[nextParentId] = getUniqueValues(nextSiblings)
 

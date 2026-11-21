@@ -1,5 +1,23 @@
 import { RootEpic, RootState } from '@store'
-import { catchError, concat, concatWith, EMPTY, expand, filter, from, last, map, mergeMap, Observable, of, race, switchMap } from 'rxjs'
+import {
+    catchError,
+    concat,
+    concatWith,
+    EMPTY,
+    expand,
+    filter,
+    from,
+    ignoreElements,
+    last,
+    map,
+    mergeMap,
+    Observable,
+    of,
+    race,
+    switchMap,
+    take,
+    tap
+} from 'rxjs'
 import { AnyAction } from 'redux'
 import { DataItem, OperationTypeCrud, utils, WidgetFieldBase } from '@cxbox-ui/core'
 import { actions } from '@actions'
@@ -107,6 +125,25 @@ export const fetchPagesUntilDataChanges = ({
         last()
     )
 }
+
+/**
+ * Stops a request of a tree when the tree is reloaded: the first root page is requested again (a record change of the
+ * parent, an action, a page, a sorter). What the request brings belongs to the tree before the reload.
+ * The reload owns the loading state of the root, so nothing is emitted here.
+ */
+const cancelByTreeReload = (action$: Observable<AnyAction>, bcName: string, cancel?: () => void) =>
+    action$.pipe(
+        filter(
+            action =>
+                treeActions.fetchChildNodeData.match(action) &&
+                action.payload.bcName === bcName &&
+                !isDefined(action.payload.parentId) &&
+                !action.payload.more
+        ),
+        take(1),
+        tap(() => cancel?.()),
+        ignoreElements()
+    )
 
 const getPaginationType = (state: RootState, widget?: AppWidgetMeta) =>
     widget ? state.screen.alternativePagination?.[widget.name] ?? getWidgetPaginationType(widget) : MAIN_DEFAULT_PAGINATION_TYPE
@@ -684,7 +721,7 @@ export const refreshNodeEpic: RootEpic = (action$, state$, { api, utils: interna
                     })
                 )
 
-            return race(cancelFlow, normalFlow)
+            return race(cancelFlow, cancelByTreeReload(action$, bcName, canceler.cancel), normalFlow)
         })
     )
 
@@ -880,7 +917,7 @@ export const fetchTreeNodesEpic: RootEpic = (action$, state$, { api, utils: inte
                 })
             )
 
-            return race(cancelFlow, cancelByParentBc, normalFlow)
+            return race(cancelFlow, cancelByParentBc, cancelByTreeReload(action$, bcName, canceler.cancel), normalFlow)
         })
     )
 
@@ -911,7 +948,7 @@ export const applyTreeFilterEpic: RootEpic = (action$, state$, { api }) =>
                 return of(treeActions.applyFilterFail({ bcName, more: action.payload.more }))
             }
 
-            return fetchPagesUntilDataChanges({
+            const filterFlow = fetchPagesUntilDataChanges({
                 fetchPage: page =>
                     api.fetchBcData(state.screen.screenName, fetchContext.bcUrl, { ...fetchContext.fetchParams, _page: page }),
                 initialPage: fetchContext.page,
@@ -957,6 +994,8 @@ export const applyTreeFilterEpic: RootEpic = (action$, state$, { api }) =>
                     )
                 })
             )
+
+            return race(cancelByTreeReload(action$, bcName), filterFlow)
         })
     )
 
@@ -984,7 +1023,7 @@ const restoreNodePathsEpic: RootEpic = (action$, state$, { api }) =>
                 return EMPTY
             }
 
-            return restoreTreePaths({
+            const restoreFlow = restoreTreePaths({
                 api,
                 state,
                 bcName,
@@ -1005,6 +1044,8 @@ const restoreNodePathsEpic: RootEpic = (action$, state$, { api }) =>
                     return utils.createApiErrorObservable(error)
                 })
             )
+
+            return race(cancelByTreeReload(action$, bcName), restoreFlow)
         })
     )
 

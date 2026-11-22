@@ -11,6 +11,7 @@ import { exportTable } from '@utils/export'
 import { EFeatureSettingKey } from '@interfaces/session'
 import { calculateFieldsOrder, calculateHiddenFields, createSettingPath } from '@utils/tableSettings'
 import { isFilterGroupTempId } from '@components/widgets/Table/filterGroup'
+import { getWidgetTitleText } from '@components/TemplatedTitle/utils'
 
 const findFormPopupWidget = (operationType: string, widgets: interfaces.WidgetMeta[], calleeBcName: string, widgetName?: string) => {
     const formPopupWidget = widgetName
@@ -213,6 +214,8 @@ const exportToExcelEpic: RootEpic = (action$, state$, { api }) =>
             const exportConfig = widgetMeta?.options?.export
             const bcName = action.payload.bcName
             const bc = state.screen.bo.bc[bcName]
+            // ${field} in the titles: the values of the current record in the format of the field, as on the screen
+            const record = state.data[bcName]?.find(item => item.id === bc?.cursor)
             const additionalFields = widgetMeta?.options?.additional?.fields
             const tableSetting =
                 state.session.tableSettings?.[createSettingPath({ view: state.view.name, widget: widgetMeta.name }) as string]
@@ -246,8 +249,8 @@ const exportToExcelEpic: RootEpic = (action$, state$, { api }) =>
                 exportTable(
                     screenName,
                     bcName,
-                    fields,
-                    title,
+                    fields.map(field => ({ ...field, title: getWidgetTitleText(field.title, record, widgetMeta.fields) })),
+                    getWidgetTitleText(title, record, widgetMeta.fields),
                     exportWithDate,
                     hasData,
                     exportExcelLimit,

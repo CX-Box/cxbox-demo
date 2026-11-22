@@ -28,7 +28,7 @@ interface RowOperationsButtonProps {
  * {@link RowOperationsButton | RowOperationsButton} instance
  */
 export interface RowOperationsButtonInstance {
-    setRow: (record: DataItem, e: React.MouseEvent<HTMLElement>) => void
+    setRow: (record: DataItem, e: React.MouseEvent) => void
     containerRef: MutableRefObject<HTMLElement>
 }
 

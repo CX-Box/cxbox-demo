@@ -1,11 +1,19 @@
 import { DEFAULT_CHUNK_SIZE, MB } from '@features/file'
 import { envBoolean, envString } from '@utils/env'
+import { getSignatureVerificationMode } from './getSignatureVerificationMode'
 
 /**
- * CryptoPro settings. Only the time stamp service and the assembly flag come from environment variables (`ui/.env*`);
- * the rest are constants.
+ * CryptoPro settings resolved once from build-time environment variables (`ui/.env*`) and fixed defaults.
  */
 export const CRYPTOPRO_CONFIG = {
+    /**
+     * `REACT_APP_CRYPTOPRO_SIGNATURE_VERIFICATION_MODE`: `strict` rejects a failed verification; `soft` logs it and returns the signature.
+     * Both modes verify the created signature. Signing failures and cancellation still reject.
+     * CryptoPro can fail during verification even when the created signature is valid.
+     * Soft mode prevents such verification failures from blocking the return of the created signature.
+     * @defaultValue {@link DEFAULT_SIGNATURE_VERIFICATION_MODE}
+     */
+    signatureVerificationMode: getSignatureVerificationMode(envString('REACT_APP_CRYPTOPRO_SIGNATURE_VERIFICATION_MODE')),
     /** Bytes per chunk for hashing and encryption; a multiple of 3. 3 MiB, as in plugin-samples-fileapi_stream */
     chunkSize: DEFAULT_CHUNK_SIZE,
     /**

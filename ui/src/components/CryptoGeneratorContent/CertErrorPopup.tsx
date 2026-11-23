@@ -23,7 +23,7 @@ const CertErrorPopup: React.FC<CertErrorPopupProps> = ({ hasError, onClose }) =>
                 <Trans
                     i18nKey="Failed to get certificate"
                     components={[
-                        <a key="0" href={CRYPTOPRO_LINKS.INSTRUCTION_URL} target="_blank" rel="noreferrer">
+                        <a key="0" href={CRYPTOPRO_LINKS.instructionUrl} target="_blank" rel="noreferrer">
                             placeholder
                         </a>
                     ]}

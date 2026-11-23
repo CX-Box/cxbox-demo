@@ -16,6 +16,10 @@ export interface FakePluginOptions {
     streamEncrypt?: (chunk: string, isLast: boolean) => string
     /** Rejects the call with this name, e.g. `SignHash`, as the plugin does: with a plain object, not an `Error` */
     failOn?: { call: string; message: string }
+    /** Rejects a specific creation, e.g. the second CadesSignedData is the verifier, after signing has succeeded */
+    failOnCreate?: { name: string; occurrence: number; message: string }
+    /** Optional pending verification, to test cancellation while a created signature is being verified */
+    verify?: () => Promise<void>
     /** Delay of each Hash call, ms — to see that every Hash is awaited */
     hashDelay?: number
     /** Certificates of the store, see {@link storeCertificate} */
@@ -119,9 +123,9 @@ export function createFakePlugin(options: FakePluginOptions = {}) {
             propset_ContentEncoding: method('SignedData.ContentEncoding'),
             propset_Content: method('SignedData.Content', () => undefined),
             SignHash: method('SignHash', () => options.signature ?? SIGNATURE_BASE64),
-            VerifyHash: method('VerifyHash'),
+            VerifyHash: method('VerifyHash', options.verify),
             SignCades: method('SignCades', () => options.signature ?? SIGNATURE_BASE64),
-            VerifyCades: method('VerifyCades')
+            VerifyCades: method('VerifyCades', options.verify)
         }),
         'CAdESCOM.CPSigner': () => ({
             get AuthenticatedAttributes2() {
@@ -166,6 +170,9 @@ export function createFakePlugin(options: FakePluginOptions = {}) {
             const object = objects[name]()
             const shortName = name.replace('CAdESCOM.', '')
             created[shortName] = (created[shortName] ?? 0) + 1
+            if (options.failOnCreate?.name === name && options.failOnCreate.occurrence === created[shortName]) {
+                return Promise.reject({ message: options.failOnCreate.message, requestid: 1, type: 'error' })
+            }
             ids.set(object, `${shortName}#${created[shortName]}`)
             return object
         }

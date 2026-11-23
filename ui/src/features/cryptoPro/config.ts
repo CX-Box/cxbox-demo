@@ -9,6 +9,8 @@ export const CRYPTOPRO_CONFIG = {
     /**
      * `REACT_APP_CRYPTOPRO_SIGNATURE_VERIFICATION_MODE`: `strict` rejects a failed verification; `soft` logs it and returns the signature.
      * Both modes verify the created signature. Signing failures and cancellation still reject.
+     * CryptoPro can fail during verification even when the created signature is valid.
+     * Soft mode prevents such verification failures from blocking the return of the created signature.
      * @defaultValue {@link DEFAULT_SIGNATURE_VERIFICATION_MODE}
      */
     signatureVerificationMode: getSignatureVerificationMode(envString('REACT_APP_CRYPTOPRO_SIGNATURE_VERIFICATION_MODE')),

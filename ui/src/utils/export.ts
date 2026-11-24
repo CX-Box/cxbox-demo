@@ -11,6 +11,7 @@ import { defaultExcelLimit, maxExcelLimit } from '@constants/export'
 import { AppNumberFieldMeta, CustomFieldTypes, TableWidgetField } from '@interfaces/widget'
 import { BcFilter, BcSorter, DataItem, DataValue, FieldType, MultiFieldMeta, MultivalueSingleValue } from '@cxbox-ui/core'
 import { FIELDS } from '@constants'
+import { getPlainTextTitle } from '@components/TemplatedTitle/utils'
 
 export type ExportOptions = { page?: number; limit?: number }
 
@@ -110,7 +111,7 @@ export async function exportTable(
     filteredFieldsMetaWithId.push({ key: FIELDS.TECHNICAL.ID, type: FieldType.input, title: FIELDS.TECHNICAL.ID, excelWidth: 5 })
 
     const keys: string[] = getKeyArray(filteredFieldsMetaWithId)
-    const dateFileName = fileName + ' ' + getCurrentDate()
+    const dateFileName = getPlainTextTitle(fileName, parsedData[0], fieldsMeta) + ' ' + getCurrentDate()
     switch (exportType) {
         case 'excel': {
             return exportXlsx(parsedData, filteredFieldsMetaWithId, keys, dateFileName, bcName, currentDate)

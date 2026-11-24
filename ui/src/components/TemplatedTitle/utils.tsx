@@ -19,7 +19,17 @@ function getFieldMeta<T extends WidgetFieldBase>(key: string, fields?: T[]) {
     return fields?.find(field => field.key === key)
 }
 
-export function normalizeFieldValue(value: DataValue | undefined, fieldMeta?: WidgetField) {
+function getPlaceholderText(token: string, item?: Omit<DataItem, 'vstamp'>, fields?: WidgetFieldBase[]): string {
+    const [key, defaultValue] = token.split(':')
+    return String(normalizeFieldValue(item?.[key], getFieldMeta(key, fields)) || defaultValue || '')
+}
+
+/** Resolves the same title placeholders as the UI for plain-text consumers such as Excel. */
+export function getPlainTextTitle(title: string, item?: Omit<DataItem, 'vstamp'>, fields?: WidgetFieldBase[]): string {
+    return title.replace(TAG_PLACEHOLDER_FULL, token => getPlaceholderText(token.slice(2, -1), item, fields))
+}
+
+export function normalizeFieldValue(value: DataValue | undefined, fieldMeta?: WidgetFieldBase) {
     if (Array.isArray(value)) {
         return Array.isArray(value) ? value.map(item => item.value).join(', ') : undefined
     }
@@ -80,12 +90,12 @@ const convertTemplatedString = (
                 const value = str.match(TAG_PLACEHOLDER_VALUE)
 
                 if (value !== null) {
-                    const [key, defaultValue] = value[1].split(':')
+                    const [key] = value[1].split(':')
                     const field = getFieldMeta(key, fields)
                     const staticBgColor = field?.bgColor
                     const bgColorKey = field?.bgColorKey
                     const dynamicBgColor = bgColorKey ? (item?.[bgColorKey] as string) : undefined
-                    const normalizedValue = String(normalizeFieldValue(item?.[key], field) || defaultValue || '')
+                    const normalizedValue = getPlaceholderText(value[1], item, fields)
                     const bgColor = dynamicBgColor || staticBgColor
 
                     acc.push(

@@ -205,6 +205,8 @@ export interface AppWidgetMeta extends WidgetMeta {
             titleFieldKey?: string
             iconFieldKey?: string
             descriptionFieldKey?: string
+            /** Field shown as a colored tag right after the value, like `${field}` in a widget title. */
+            tagFieldKey?: string
         }
         card?: { valueFieldKey?: string; titleFieldKey?: string; descriptionFieldKey?: string }
         buttons?: OperationInfo[]

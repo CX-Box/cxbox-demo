@@ -1,14 +1,18 @@
 import { DataItem } from '@cxbox-ui/core'
 import { AppWidgetTableMeta } from '@interfaces/widget'
 
-export const getItemPropertyValue = (item: DataItem, meta: AppWidgetTableMeta, key: 'value' | 'icon' | 'description' | 'title') => {
+export const getItemPropertyValue = (item: DataItem, meta: AppWidgetTableMeta, key: 'value' | 'icon' | 'description' | 'title' | 'tag') => {
     const statsKey = meta.options?.stats?.[`${key}FieldKey`]
     const field = meta.fields.find(field => field.key === statsKey)
     if (typeof statsKey === 'string' && field === undefined) {
         console.error(
-            `widget fields does not contain "${statsKey}" that was referenced in options.stats.{value/title/icon/description}FieldKey`
+            `widget fields does not contain "${statsKey}" that was referenced in options.stats.{value/title/icon/description/tag}FieldKey`
         )
         return
+    }
+    if (key === 'tag') {
+        // The tag has no default field name, and 0 is a value of the tag.
+        return field && item[field.key]
     }
     const result = field && item[field.key] ? item[field.key] : item[key]
     if (key === 'value' && result === undefined) {
@@ -20,6 +24,8 @@ export const getItemPropertyValue = (item: DataItem, meta: AppWidgetTableMeta, k
 }
 
 export const getItemColor = (item: DataItem, meta: AppWidgetTableMeta) => {
-    const colorKey = meta.fields.find(field => field.bgColorKey !== undefined)?.bgColorKey
-    return colorKey ? (item[colorKey] as string) : meta.fields.find(field => field.bgColor !== undefined)?.bgColor
+    // The color of the tag field colors the tag only, not the card.
+    const fields = meta.fields.filter(field => field.key !== meta.options?.stats?.tagFieldKey)
+    const colorKey = fields.find(field => field.bgColorKey !== undefined)?.bgColorKey
+    return colorKey ? (item[colorKey] as string) : fields.find(field => field.bgColor !== undefined)?.bgColor
 }

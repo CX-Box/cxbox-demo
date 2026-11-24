@@ -17,10 +17,16 @@ export function useRowMenu() {
     const operationsRef = React.useRef<RowOperationsButtonInstance>()
     const parentRef = React.useRef()
     const handleRowHover = (record: DataItem) => ({
-        onMouseEnter: (e: React.MouseEvent<HTMLTableRowElement>) => {
+        onMouseEnter: (e: React.MouseEvent) => {
             operationsRef.current?.setRow?.(record, e)
         },
-        onMouseLeave: (e: React.MouseEvent<HTMLTableRowElement>) => {
+        // Closing the menu hides the button, and the pointer can still be in this row: a move shows the button again
+        onMouseMove: (e: React.MouseEvent) => {
+            if (operationsRef.current?.containerRef.current?.style.display === 'none') {
+                operationsRef.current?.setRow?.(record, e)
+            }
+        },
+        onMouseLeave: (e: React.MouseEvent) => {
             operationsRef.current?.setRow?.(null as any, e)
         }
     })
@@ -92,7 +98,7 @@ export function useRowMenuInstance(
  * @param e Mouse event
  * @param container Bounding container
  */
-export function isOutsideMove(e: React.MouseEvent<HTMLElement>, container: HTMLElement) {
+export function isOutsideMove(e: React.MouseEvent, container: HTMLElement) {
     let parent = e.relatedTarget as HTMLElement
     let fadeAway = true
     let isHierarchy = false

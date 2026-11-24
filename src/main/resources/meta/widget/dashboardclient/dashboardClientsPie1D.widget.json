@@ -24,6 +24,7 @@
   ],
   "options": {
     "chart1D": {
+      "maxRows": 3,
       "valueFieldKey": "value",
       "titleFieldKey": "title",
       "descriptionFieldKey": ["description"],

@@ -1,7 +1,9 @@
+@import '../../../assets/styles/formRows';
+
 .formItem {
     display: flex;
     flex-direction: column;
-    margin-bottom: 16px;
+    margin-bottom: var(--form-item-margin-bottom);
 }
 
 .formLabel {
@@ -9,9 +11,9 @@
     font-size: 14px;
     font-style: normal;
     font-weight: 700;
-    line-height: 22px;
+    line-height: var(--form-label-line-height);
 
-    padding-bottom: 2px;
+    padding-bottom: var(--form-label-padding-bottom);
     white-space: normal;
 }
 
@@ -21,10 +23,14 @@
 
 
 .formContainer {
-    --field-height: 40px;
+    --field-height: var(--form-field-height);
     --field-tag-height: calc(var(--field-height) - (var(--field-vertical-padding) * 2));
     --field-inner-height: calc(var(--field-height) - (var(--field-border-size) * 2));
     --field-tag-inner-height: calc(var(--field-tag-height) - (var(--field-border-size) * 2));
+
+    :global(.ant-form-vertical) .formItem {
+        padding-bottom: var(--form-item-padding-bottom);
+    }
 
     :global {
         .ant-col.ant-form-item-control-wrapper {

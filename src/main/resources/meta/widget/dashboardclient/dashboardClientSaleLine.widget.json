@@ -34,6 +34,7 @@
   ],
   "options": {
     "chart2D": {
+      "maxRows": 3,
       "xValueFieldKey": "dateSales",
       "yValueFieldKey": "sum",
       "groupFieldKey": "fullName"

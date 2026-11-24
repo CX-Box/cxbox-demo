@@ -34,9 +34,11 @@
   ],
   "options": {
     "chart2D": {
+      "maxRows": 3,
       "xValueFieldKey": "dateCreatedSales",
       "yValueFieldKey": "sum",
-      "groupFieldKey": "productType"
+      "groupFieldKey": "productType",
+      "valuePosition": "inner"
     }
   }
 }

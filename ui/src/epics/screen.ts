@@ -12,6 +12,7 @@ import { EFeatureSettingKey } from '@interfaces/session'
 import { calculateFieldsOrder, calculateHiddenFields, createSettingPath } from '@utils/tableSettings'
 import { isFilterGroupTempId } from '@components/widgets/Table/filterGroup'
 import { getWidgetTitleText } from '@components/TemplatedTitle/utils'
+import { downloadFileWithProgress } from './utils/downloadFileWithProgress'
 
 const findFormPopupWidget = (operationType: string, widgets: interfaces.WidgetMeta[], calleeBcName: string, widgetName?: string) => {
     const formPopupWidget = widgetName
@@ -180,12 +181,7 @@ export const downloadFileEpic: RootEpic = (action$, state$, { api }) =>
     action$.pipe(
         filter(actions.downloadFile.match),
         mergeMap(action => {
-            return from(api.saveBlob(`${api.fileUploadEndpoint}?id=${encodeURIComponent(action.payload.fileId)}`)).pipe(
-                mergeMap(() => EMPTY),
-                catchError(error => {
-                    return utils.createApiErrorObservable(error)
-                })
-            )
+            return downloadFileWithProgress(api, `${api.fileUploadEndpoint}?id=${encodeURIComponent(action.payload.fileId)}`)
         })
     )
 
@@ -195,12 +191,7 @@ export const downloadFileByUrlEpic: RootEpic = (action$, state$, { api }) =>
         mergeMap(action => {
             const { url, name } = action.payload
 
-            return from(api.saveBlob(url, name)).pipe(
-                mergeMap(() => EMPTY),
-                catchError(error => {
-                    return utils.createApiErrorObservable(error)
-                })
-            )
+            return downloadFileWithProgress(api, url, name)
         })
     )
 

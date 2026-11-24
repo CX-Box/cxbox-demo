@@ -15,6 +15,8 @@ export const SSO_AUTH = createAction('SSO_AUTH')
 
 export type AuthErrorStatusCode = 401 | 403
 
+export const AUTH_ERROR_STATUS_CODES: number[] = [401, 403]
+
 export type AuthErrorInfo = RequestErrorInfo & { statusCode: AuthErrorStatusCode }
 
 /** Opens AuthErrorPopup after a 401 (the session has expired) or 403 (insufficient permissions) response */

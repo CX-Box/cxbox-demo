@@ -1,4 +1,4 @@
-import { AuthErrorStatusCode, loginDone, showAuthErrorPopup, SSO_AUTH } from '@actions'
+import { AUTH_ERROR_STATUS_CODES, AuthErrorStatusCode, loginDone, showAuthErrorPopup, SSO_AUTH } from '@actions'
 import { AxiosError } from 'axios'
 import { catchError, concat, EMPTY, exhaustMap, filter, from, map, mergeMap, of, switchMap } from 'rxjs'
 import { processScreensOnLogin } from './utils/processScreensOnLogin'
@@ -160,8 +160,6 @@ const logoutDoneEpic: RootEpic = action$ =>
             return EMPTY
         })
     )
-
-const AUTH_ERROR_STATUS_CODES: number[] = [401, 403]
 
 /**
  * Replaces the core epic with the same name. It works before the session is active too: an SSO user without

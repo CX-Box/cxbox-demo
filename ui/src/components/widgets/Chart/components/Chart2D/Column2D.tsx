@@ -30,7 +30,8 @@ const Column2D: React.FC<Column2DProps> = ({ config, mode, valuePosition, valueF
         ...shared,
         xField: yField,
         yField: xField,
-        xAxis: yAxis,
+        // RL mirrors the value axis, and G2 would turn its title upside down.
+        xAxis: mode === 'RL' && yAxis && yAxis.title ? { ...yAxis, title: { ...yAxis.title, autoRotate: false } } : yAxis,
         yAxis: xAxis,
         // Preserve Column's legend placement when changing only the direction.
         legend:

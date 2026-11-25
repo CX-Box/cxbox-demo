@@ -41,7 +41,7 @@ function Funnel({ meta }: FunnelProps) {
     }
     return (
         <div>
-            <ChartRowsWrapper widgetName={meta.name} maxRows={meta.options.funnelOptions.maxRows}>
+            <ChartRowsWrapper widgetName={meta.name} maxRows={meta.options?.funnelOptions?.maxRows}>
                 <AntFunnel data={funnelData} xField="id" yField="value" color={color} conversionTag={false} legend={legend} label={label} />
             </ChartRowsWrapper>
         </div>

@@ -93,7 +93,7 @@ export interface StepsWidgetMeta extends WidgetMeta {
 
 export interface FunnelWidgetMeta extends WidgetMeta {
     type: CustomWidgetTypes.Funnel
-    options: WidgetOptions & { funnelOptions: ChartRowsConfig & { dataKey: string } }
+    options?: WidgetOptions & { funnelOptions?: ChartRowsConfig & { dataKey?: string } }
 }
 
 export interface RingProgressWidgetMeta extends WidgetMeta {

@@ -107,6 +107,12 @@ const DualAxes2D: React.FC<DualAxes2DProps> = ({ meta }) => {
     }, [firstChartConfig?.xField, meta.name, secondChartConfig?.xField])
 
     useEffect(() => {
+        if (firstChartWidgetMeta?.bcName !== secondChartWidgetMeta?.bcName) {
+            console.info(`${meta.name} widget: widgets in 'options.dual2D' must have the same bc`)
+        }
+    }, [firstChartWidgetMeta?.bcName, meta.name, secondChartWidgetMeta?.bcName])
+
+    useEffect(() => {
         if ([firstChartWidgetMeta, secondChartWidgetMeta].some(widget => (widget?.options?.chart2D?.mode ?? 'BT') !== 'BT')) {
             console.info(`${meta.name} widget: 'mode' of widgets in 'options.dual2D' is ignored; the columns are vertical`)
         }

@@ -135,7 +135,8 @@ function InlineFilePreview({
         const ops: HeaderOperation[] = []
 
         const addUploadOperation = customRequest && beforeUpload && onStartUpload && onProgressUpload && onUploadSuccess && onUploadFailed
-        if (addUploadOperation && !disabled) {
+        // fixme: false for testing
+        if (addUploadOperation && !disabled && false) {
             const uploadProps = {
                 name: 'file',
                 accept: fileAccept,
@@ -158,7 +159,8 @@ function InlineFilePreview({
             })
         }
 
-        if (downloadUrl && !disabled && onFileDelete) {
+        // fixme: false for testing
+        if (downloadUrl && !disabled && onFileDelete && false) {
             ops.push({ icon: 'delete', onClick: onDelete, title: t('Delete'), removeIndentation: true })
         }
 

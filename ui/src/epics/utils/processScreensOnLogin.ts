@@ -86,8 +86,8 @@ export const processScreensOnLogin = (screens: SessionScreen[]) => {
                                     aField.preview = {
                                         ...aField.preview,
                                         enabled: true,
-                                        mode: 'inline',
-                                        hideImageControl: true
+                                        mode: 'inline'
+                                        // hideImageControl: true
                                     }
                                 }
                             }
@@ -101,6 +101,8 @@ export const processScreensOnLogin = (screens: SessionScreen[]) => {
                                     aField.key = 'brief'
                                     aField.type = 'fileUpload'
                                     aField.fileIdKey = 'briefId'
+
+                                    aField.minRows = 5
                                     aField.preview = {
                                         ...aField.preview,
                                         enabled: true,
@@ -120,7 +122,9 @@ export const processScreensOnLogin = (screens: SessionScreen[]) => {
                                     aField.preview = {
                                         ...aField.preview,
                                         enabled: true,
-                                        mode: 'inline'
+                                        mode: 'inline',
+                                        titleKey: undefined,
+                                        hintKey: undefined
                                     }
                                 }
                             }

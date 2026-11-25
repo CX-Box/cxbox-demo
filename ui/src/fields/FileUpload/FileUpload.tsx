@@ -18,6 +18,8 @@ import { RowMetaField } from '@interfaces/rowMeta'
 import { CustomWidgetTypes, FileUploadFieldMeta } from '@interfaces/widget'
 import { DataValue, WidgetTypes } from '@cxbox-ui/core'
 import { useFileIconClick } from '@fields/FileUpload/hooks'
+import cn from 'classnames'
+import styles from './FileUpload.less'
 
 interface Props extends Omit<BaseFieldProps, 'meta'> {
     value: string
@@ -217,73 +219,120 @@ const FileUpload: React.FunctionComponent<Props> = ({
             return <InlineFilePreview widgetName={widgetName as string} fieldKey={fieldMeta?.key} forceHeight="100%" pagination />
         }
 
-        if (
-            [WidgetTypes.Info, CustomWidgetTypes.AdditionalInfo].includes(widgetMeta.type as WidgetTypes) ||
-            (widgetMeta.type === WidgetTypes.Form && readOnly)
-        ) {
-            return (
-                <InlineFilePreview
-                    widgetName={widgetName as string}
-                    fieldKey={fieldMeta?.key}
-                    disabled={true}
-                    // AdditionalInfo is a read-only display widget: hide the image control buttons
-                    hideImageControl={widgetMeta?.type === CustomWidgetTypes.AdditionalInfo || preview.hideImageControl}
-                />
-            )
-        }
+        // fixme:
+        // if (
+        //     [WidgetTypes.Info, CustomWidgetTypes.AdditionalInfo].includes(widgetMeta.type as WidgetTypes) ||
+        //     (widgetMeta.type === WidgetTypes.Form && readOnly)
+        // ) {
+        //     return (
+        //         <InlineFilePreview
+        //             widgetName={widgetName as string}
+        //             fieldKey={fieldMeta?.key}
+        //             disabled={true}
+        //             // AdditionalInfo is a read-only display widget: hide the image control buttons
+        //             hideImageControl={widgetMeta?.type === CustomWidgetTypes.AdditionalInfo || preview.hideImageControl}
+        //         />
+        //     )
+        // }
     }
 
     if (readOnly) {
         const diffProps = getReadOnlyDiffProps()
 
         return (
-            <ReadOnlySingleFileUpload
-                fileName={fileName}
-                downloadUrl={downloadUrl}
-                onDownload={handleDownload}
-                {...diffProps}
-                onFileIconClick={displayFileViewer ? handleFileIconClick : undefined}
-            />
+            <>
+                <ReadOnlySingleFileUpload
+                    fileName={fileName}
+                    downloadUrl={downloadUrl}
+                    onDownload={handleDownload}
+                    {...diffProps}
+                    onFileIconClick={displayFileViewer ? handleFileIconClick : undefined}
+                />
+
+                {displayFileViewer && isInlineMode && (
+                    <div
+                        className={cn({
+                            [styles.inlineFilePreviewWithUpload]: downloadUrl
+                        })}
+                    >
+                        <InlineFilePreview
+                            widgetName={widgetName as string}
+                            fieldKey={fieldMeta?.key}
+                            fileAccept={fileAccept}
+                            uploadUrl={uploadUrl}
+                            hideImageControl={preview.hideImageControl}
+                            customRequest={customRequest}
+                            beforeUpload={beforeUpload}
+                            onStartUpload={onStartUpload}
+                            onProgressUpload={onProgressUpload}
+                            onUploadSuccess={onUploadSuccess}
+                            onUploadFailed={onUploadFailed}
+                            onFileDelete={onFileDelete}
+                            disabled={
+                                disabled ||
+                                !!(
+                                    widgetMeta?.type &&
+                                    ([WidgetTypes.Info, CustomWidgetTypes.AdditionalInfo].includes(widgetMeta.type as WidgetTypes) ||
+                                        (widgetMeta.type === WidgetTypes.Form && readOnly))
+                                )
+                            }
+                        />
+                    </div>
+                )}
+            </>
         )
     }
 
     return (
         <>
-            {displayFileViewer && isInlineMode ? (
-                <InlineFilePreview
-                    widgetName={widgetName as string}
-                    fieldKey={fieldMeta?.key}
-                    fileAccept={fileAccept}
-                    uploadUrl={uploadUrl}
-                    hideImageControl={preview.hideImageControl}
-                    customRequest={customRequest}
-                    beforeUpload={beforeUpload}
-                    onStartUpload={onStartUpload}
-                    onProgressUpload={onProgressUpload}
-                    onUploadSuccess={onUploadSuccess}
-                    onUploadFailed={onUploadFailed}
-                    onFileDelete={onFileDelete}
-                    disabled={disabled}
-                />
-            ) : (
-                <SingleFileUpload
-                    downloadUrl={downloadUrl}
-                    fileName={fileName}
-                    placeholder={placeholder}
-                    error={!!metaError}
-                    onDelete={onFileDelete}
-                    action={uploadUrl}
-                    accept={fileAccept}
-                    disabled={disabled}
-                    beforeUpload={beforeUpload}
-                    customRequest={customRequest}
-                    onProgress={onProgressUpload}
-                    onStart={onStartUpload}
-                    onError={onUploadFailed}
-                    onSuccess={onUploadSuccess}
-                    onFileIconClick={displayFileViewer ? handleFileIconClick : undefined}
-                    onDownload={handleDownload}
-                />
+            <SingleFileUpload
+                downloadUrl={downloadUrl}
+                fileName={fileName}
+                placeholder={placeholder}
+                error={!!metaError}
+                onDelete={onFileDelete}
+                action={uploadUrl}
+                accept={fileAccept}
+                disabled={disabled}
+                beforeUpload={beforeUpload}
+                customRequest={customRequest}
+                onProgress={onProgressUpload}
+                onStart={onStartUpload}
+                onError={onUploadFailed}
+                onSuccess={onUploadSuccess}
+                onFileIconClick={displayFileViewer ? handleFileIconClick : undefined}
+                onDownload={handleDownload}
+            />
+
+            {displayFileViewer && isInlineMode && (
+                <div
+                    className={cn({
+                        [styles.inlineFilePreviewWithUpload]: downloadUrl
+                    })}
+                >
+                    <InlineFilePreview
+                        widgetName={widgetName as string}
+                        fieldKey={fieldMeta?.key}
+                        fileAccept={fileAccept}
+                        uploadUrl={uploadUrl}
+                        hideImageControl={preview.hideImageControl}
+                        customRequest={customRequest}
+                        beforeUpload={beforeUpload}
+                        onStartUpload={onStartUpload}
+                        onProgressUpload={onProgressUpload}
+                        onUploadSuccess={onUploadSuccess}
+                        onUploadFailed={onUploadFailed}
+                        onFileDelete={onFileDelete}
+                        disabled={
+                            disabled ||
+                            !!(
+                                widgetMeta?.type &&
+                                ([WidgetTypes.Info, CustomWidgetTypes.AdditionalInfo].includes(widgetMeta.type as WidgetTypes) ||
+                                    (widgetMeta.type === WidgetTypes.Form && readOnly))
+                            )
+                        }
+                    />
+                </div>
             )}
 
             <UploadListContainer

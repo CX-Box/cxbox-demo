@@ -1,4 +1,6 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, isAnyOf, PayloadAction } from '@reduxjs/toolkit'
+import { actions } from '@cxbox-ui/core'
+import { allNotificationsClosed } from '@actions'
 import { AddedFileInfo } from '@components/Operations/components/FileUpload/FileUpload.interfaces'
 
 type FileDownloadUpdate = Pick<AddedFileInfo, 'uid'> & Partial<Pick<AddedFileInfo, 'name' | 'status' | 'percent' | 'errorMessage'>>
@@ -29,6 +31,9 @@ const fileDownloadSlice = createSlice({
         clearFiles() {
             return []
         }
+    },
+    extraReducers: builder => {
+        builder.addMatcher(isAnyOf(allNotificationsClosed, actions.logout, actions.switchRole), () => [])
     }
 })
 

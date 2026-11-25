@@ -70,8 +70,3 @@ export const closeNotification = (key: string) => {
     notification.close(key)
     notifications.delete(key)
 }
-
-export const closeAllNotifications = () => {
-    notification.destroy()
-    notifications.clear()
-}

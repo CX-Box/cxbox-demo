@@ -10,12 +10,9 @@ import { DataItem } from '@cxbox-ui/core'
 import { ViewerModeMass } from '../reducers/screen'
 import { PaginationMode } from '@constants/pagination'
 import { RequestErrorInfo } from '@utils/requestErrorInfo'
+import type { AuthErrorStatusCode } from '../auth/authErrorStatus'
 
 export const SSO_AUTH = createAction('SSO_AUTH')
-
-export type AuthErrorStatusCode = 401 | 403
-
-export const AUTH_ERROR_STATUS_CODES: number[] = [401, 403]
 
 export type AuthErrorInfo = RequestErrorInfo & { statusCode: AuthErrorStatusCode }
 
@@ -92,6 +89,8 @@ export const processPreInvoke = createAction<
 export const loginDone = createAction<LoginResponse>('loginDone')
 
 export const changeNotification = createAction<Partial<NotificationState>>('changeNotification')
+
+export const allNotificationsClosed = createAction('allNotificationsClosed')
 
 export const initTableSettings = createAction<{ rawSettings: TableSettingsList | TableSettingsMap }>('initTableSettings')
 

@@ -2,7 +2,7 @@ import { AnyAction, nanoid } from '@reduxjs/toolkit'
 import { catchError, EMPTY, Observable } from 'rxjs'
 import { utils } from '@cxbox-ui/core'
 import { AxiosError } from 'axios'
-import { AUTH_ERROR_STATUS_CODES } from '@actions'
+import { isAuthErrorStatus } from '../../auth/authErrorStatus'
 import { CxBoxApiInstance } from '../../api'
 import { fileDownloadActions } from '../../slices/fileDownload'
 import { getFileNameFromDisposition } from '@utils/getFileNameFromDisposition'
@@ -50,8 +50,4 @@ export const downloadFileWithProgress = (api: typeof CxBoxApiInstance, url: stri
                 subscriber.error(error)
             }
         )
-    }).pipe(
-        catchError((error: AxiosError) =>
-            AUTH_ERROR_STATUS_CODES.includes(error.response?.status as number) ? utils.createApiErrorObservable(error) : EMPTY
-        )
-    )
+    }).pipe(catchError((error: AxiosError) => (isAuthErrorStatus(error.response?.status) ? utils.createApiErrorObservable(error) : EMPTY)))

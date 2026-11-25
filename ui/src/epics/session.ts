@@ -1,4 +1,4 @@
-import { AUTH_ERROR_STATUS_CODES, AuthErrorStatusCode, loginDone, showAuthErrorPopup, SSO_AUTH } from '@actions'
+import { loginDone, showAuthErrorPopup, SSO_AUTH } from '@actions'
 import { AxiosError } from 'axios'
 import { catchError, concat, EMPTY, exhaustMap, filter, from, map, mergeMap, of, switchMap } from 'rxjs'
 import { processScreensOnLogin } from './utils/processScreensOnLogin'
@@ -6,6 +6,7 @@ import { actions, interfaces, utils } from '@cxbox-ui/core'
 import { RootEpic } from '@store'
 import { LoginResponse } from '@interfaces/session'
 import { platformSession } from '../auth/platformSession'
+import { AUTH_ERROR_STATUS_CODES, AuthErrorStatusCode, isAuthErrorStatus } from '../auth/authErrorStatus'
 import { toRequestErrorInfo } from '@utils/requestErrorInfo'
 import { isAuthErrorSnoozed } from '../reducers/session'
 
@@ -161,6 +162,8 @@ const logoutDoneEpic: RootEpic = action$ =>
         })
     )
 
+type AuthHttpErrorAction = ReturnType<typeof actions.httpError> & { payload: { statusCode: AuthErrorStatusCode } }
+
 /**
  * Replaces the core epic with the same name. It works before the session is active too: an SSO user without
  * roles gets 403 at the sign in. Only in the build without SSO the login form shows that error itself.
@@ -168,15 +171,10 @@ const logoutDoneEpic: RootEpic = action$ =>
 const httpError401Epic: RootEpic = (action$, state$) =>
     action$.pipe(
         filter(actions.httpError.match),
-        filter(action => AUTH_ERROR_STATUS_CODES.includes(action.payload.statusCode)),
+        filter((action): action is AuthHttpErrorAction => isAuthErrorStatus(action.payload.statusCode)),
         filter(() => state$.value.session.active || !process.env['REACT_APP_NO_SSO']),
         filter(() => !isAuthErrorSnoozed(state$.value.session)),
-        map(action =>
-            showAuthErrorPopup({
-                ...toRequestErrorInfo(action.payload.error),
-                statusCode: action.payload.statusCode as AuthErrorStatusCode
-            })
-        )
+        map(({ payload: { error, statusCode } }) => showAuthErrorPopup({ ...toRequestErrorInfo(error), statusCode }))
     )
 
 const knownHttpErrors = [...AUTH_ERROR_STATUS_CODES, 409, 418, 500]

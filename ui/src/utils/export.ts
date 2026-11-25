@@ -110,7 +110,8 @@ export async function exportTable(
     filteredFieldsMetaWithId.push({ key: FIELDS.TECHNICAL.ID, type: FieldType.input, title: FIELDS.TECHNICAL.ID, excelWidth: 5 })
 
     const keys: string[] = getKeyArray(filteredFieldsMetaWithId)
-    const dateFileName = fileName + ' ' + getCurrentDate()
+    // without a title the file is named by the date
+    const dateFileName = [fileName, getCurrentDate()].filter(Boolean).join(' ')
     switch (exportType) {
         case 'excel': {
             return exportXlsx(parsedData, filteredFieldsMetaWithId, keys, dateFileName, bcName, currentDate)

@@ -171,6 +171,7 @@ function Table<T extends CustomDataItem>({
     const { resultedFields } = useTableSettingResultedFields(processedMeta, sortedGroupKeys)
     const { exportTable } = useExportTable({
         bcName: bcName,
+        widgetName,
         fields: resultedFields,
         title: exportConfig?.title ?? processedMeta.title
     })
@@ -379,6 +380,7 @@ function Table<T extends CustomDataItem>({
             )}
 
             <ColumnOrderSettingModal
+                widgetName={widgetName}
                 visible={transfer.visibility}
                 onCancel={transfer.toggleVisibility}
                 dataSource={allFields}

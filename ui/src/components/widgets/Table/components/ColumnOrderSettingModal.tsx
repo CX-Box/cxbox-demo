@@ -3,12 +3,21 @@ import { Modal, Transfer } from 'antd'
 import { ModalProps } from 'antd/lib/modal'
 import { useTranslation } from 'react-i18next'
 import { TransferProps } from 'antd/lib/transfer'
+import TemplatedTitle from '@components/TemplatedTitle/TemplatedTitle'
 
 interface ColumnOrderSettingModalProps extends Pick<ModalProps, 'onCancel' | 'visible'>, Pick<TransferProps, 'dataSource' | 'targetKeys'> {
+    widgetName: string
     onChange: (fieldKeys: string[], visibility: boolean) => void
 }
 
-const ColumnOrderSettingModal: React.FC<ColumnOrderSettingModalProps> = ({ visible, onCancel, dataSource, onChange, targetKeys }) => {
+const ColumnOrderSettingModal: React.FC<ColumnOrderSettingModalProps> = ({
+    widgetName,
+    visible,
+    onCancel,
+    dataSource,
+    onChange,
+    targetKeys
+}) => {
     const { t } = useTranslation()
 
     const handleChange = useCallback(
@@ -32,7 +41,7 @@ const ColumnOrderSettingModal: React.FC<ColumnOrderSettingModalProps> = ({ visib
                 titles={[t('Main'), t('Additional')]}
                 targetKeys={targetKeys}
                 onChange={handleChange}
-                render={item => item.title ?? ''}
+                render={item => <TemplatedTitle widgetName={widgetName} title={item.title ?? ''} />}
                 listStyle={{ width: '44%' }}
             />
         </Modal>

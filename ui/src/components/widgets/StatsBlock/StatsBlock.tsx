@@ -1,6 +1,8 @@
 import React, { useCallback, useMemo } from 'react'
 import { Icon, List, Tooltip } from 'antd'
 import WidgetTitle from '@components/WidgetTitle/WidgetTitle'
+import TemplatedTitle from '@components/TemplatedTitle/TemplatedTitle'
+import { isEmptyValue } from '@components/ColumnTitle/components/utils'
 import { useAppDispatch, useAppSelector } from '@store'
 import { useWidgetCollapse } from '@hooks/useWidgetCollapse'
 import { getItemPropertyValue, getItemColor } from './utils'
@@ -40,6 +42,7 @@ const StatsBlock: React.FC<Props> = ({ meta }) => {
     )
 
     const isBcCursorShow = !valueField?.drillDown && meta.options?.stats?.bcCursor === EStatsBcCursor.show
+    const tagFieldKey = meta.options?.stats?.tagFieldKey
 
     return (
         <>
@@ -60,7 +63,17 @@ const StatsBlock: React.FC<Props> = ({ meta }) => {
                                 onClick={() => handleClick(item)}
                             >
                                 <div className={styles.itemContent}>
-                                    <div style={{ fontSize: 30 }}>{getItemPropertyValue(item, meta, 'value')}</div>
+                                    <div className={styles.itemValueLine}>
+                                        <div style={{ fontSize: 30 }}>{getItemPropertyValue(item, meta, 'value')}</div>
+                                        {(() => {
+                                            const tag = getItemPropertyValue(item, meta, 'tag')
+
+                                            // TemplatedTitle, not WidgetTitle: WidgetTitle adds the collapse arrow to the main widget of a group.
+                                            return tagFieldKey && !isEmptyValue(tag) ? (
+                                                <TemplatedTitle widgetName={meta.name} title={`$\{${tagFieldKey}}`} id={item.id} />
+                                            ) : null
+                                        })()}
+                                    </div>
 
                                     <div>{getItemPropertyValue(item, meta, 'title')}</div>
                                 </div>

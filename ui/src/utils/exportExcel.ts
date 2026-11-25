@@ -4,7 +4,6 @@ import { Alignment, Borders, Fill, Workbook, Worksheet } from 'exceljs'
 import { DateFormat } from '@interfaces/date'
 import { TableWidgetField } from '@interfaces/widget'
 import { interfaces } from '@cxbox-ui/core'
-import { getPlainTextTitle } from '@components/TemplatedTitle/utils'
 
 const maxDigitWidthPx = 7 // Calibri 11 point font
 
@@ -106,7 +105,7 @@ function buildHeader(sheet: Worksheet, filteredFieldsMeta: TableWidgetField[], d
             horizontal: 'right'
         }
     }
-    const headers: string[] = filteredFieldsMeta.map(column => getPlainTextTitle(column.title || '', data[0], filteredFieldsMeta))
+    const headers: string[] = filteredFieldsMeta.map(column => column.title || '')
     sheet.addRow(headers)
     const headerFont = { bold: true }
     const headerRowIndex = sheet.rowCount

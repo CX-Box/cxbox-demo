@@ -55,6 +55,7 @@ export const useMassStepActions = ({
     const clearAllFilters = useClearAllFilters(bcName)
     const { exportTable } = useExportTable({
         bcName,
+        widgetName,
         fields: widget?.fields as WidgetListField[],
         title: widget?.options?.export?.title ?? widget?.title ?? ''
     })

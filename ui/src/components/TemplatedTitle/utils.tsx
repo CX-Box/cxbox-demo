@@ -19,17 +19,12 @@ function getFieldMeta<T extends WidgetFieldBase>(key: string, fields?: T[]) {
     return fields?.find(field => field.key === key)
 }
 
-function getPlaceholderText(token: string, item?: Omit<DataItem, 'vstamp'>, fields?: WidgetFieldBase[]): string {
+function getPlaceholderText(token: string, item?: Omit<DataItem, 'vstamp'>, fields?: WidgetField[]): string {
     const [key, defaultValue] = token.split(':')
     return String(normalizeFieldValue(item?.[key], getFieldMeta(key, fields)) || defaultValue || '')
 }
 
-/** Resolves the same title placeholders as the UI for plain-text consumers such as Excel. */
-export function getPlainTextTitle(title: string, item?: Omit<DataItem, 'vstamp'>, fields?: WidgetFieldBase[]): string {
-    return title.replace(TAG_PLACEHOLDER_FULL, token => getPlaceholderText(token.slice(2, -1), item, fields))
-}
-
-export function normalizeFieldValue(value: DataValue | undefined, fieldMeta?: WidgetFieldBase) {
+export function normalizeFieldValue(value: DataValue | undefined, fieldMeta?: WidgetField) {
     if (Array.isArray(value)) {
         return Array.isArray(value) ? value.map(item => item.value).join(', ') : undefined
     }
@@ -138,4 +133,16 @@ export function getWidgetTitle(str: string, record?: Omit<DataItem, 'vstamp'>, f
     } else {
         return <>{str}</>
     }
+}
+
+/**
+ * The title as text with the values of the record, as getWidgetTitle shows them, for the Excel export.
+ * Not utils.getFieldTitle of @cxbox-ui/core: it puts the raw value, the screen formats it by the field type.
+ */
+export function getWidgetTitleText(str: string, record?: Omit<DataItem, 'vstamp'>, fields?: WidgetField[]) {
+    if (!str) {
+        return str
+    }
+
+    return str.replace(TAG_PLACEHOLDER_FULL, token => getPlaceholderText(token.slice(2, -1), record, fields))
 }

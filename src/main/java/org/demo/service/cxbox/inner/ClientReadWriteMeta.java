@@ -40,6 +40,7 @@ public class ClientReadWriteMeta extends FieldMetaBuilder<ClientWriteDTO> {
 				ClientWriteDTO_.importance,
 				ClientWriteDTO_.address,
 				ClientWriteDTO_.fieldOfActivity,
+				ClientWriteDTO_.brief,
 				ClientWriteDTO_.status
 		);
 

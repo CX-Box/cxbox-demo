@@ -249,7 +249,7 @@ const FileUpload: React.FunctionComponent<Props> = ({
                     onFileIconClick={displayFileViewer ? handleFileIconClick : undefined}
                 />
 
-                {displayFileViewer && isInlineMode && (
+                {downloadUrl && displayFileViewer && isInlineMode && (
                     <div
                         className={cn({
                             [styles.inlineFilePreviewWithUpload]: downloadUrl

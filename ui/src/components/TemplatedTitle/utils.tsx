@@ -19,6 +19,11 @@ function getFieldMeta<T extends WidgetFieldBase>(key: string, fields?: T[]) {
     return fields?.find(field => field.key === key)
 }
 
+function getPlaceholderText(token: string, item?: Omit<DataItem, 'vstamp'>, fields?: WidgetField[]): string {
+    const [key, defaultValue] = token.split(':')
+    return String(normalizeFieldValue(item?.[key], getFieldMeta(key, fields)) || defaultValue || '')
+}
+
 export function normalizeFieldValue(value: DataValue | undefined, fieldMeta?: WidgetField) {
     if (Array.isArray(value)) {
         return Array.isArray(value) ? value.map(item => item.value).join(', ') : undefined
@@ -80,12 +85,12 @@ const convertTemplatedString = (
                 const value = str.match(TAG_PLACEHOLDER_VALUE)
 
                 if (value !== null) {
-                    const [key, defaultValue] = value[1].split(':')
+                    const [key] = value[1].split(':')
                     const field = getFieldMeta(key, fields)
                     const staticBgColor = field?.bgColor
                     const bgColorKey = field?.bgColorKey
                     const dynamicBgColor = bgColorKey ? (item?.[bgColorKey] as string) : undefined
-                    const normalizedValue = String(normalizeFieldValue(item?.[key], field) || defaultValue || '')
+                    const normalizedValue = getPlaceholderText(value[1], item, fields)
                     const bgColor = dynamicBgColor || staticBgColor
 
                     acc.push(
@@ -128,4 +133,16 @@ export function getWidgetTitle(str: string, record?: Omit<DataItem, 'vstamp'>, f
     } else {
         return <>{str}</>
     }
+}
+
+/**
+ * The title as text with the values of the record, as getWidgetTitle shows them, for the Excel export.
+ * Not utils.getFieldTitle of @cxbox-ui/core: it puts the raw value, the screen formats it by the field type.
+ */
+export function getWidgetTitleText(str: string, record?: Omit<DataItem, 'vstamp'>, fields?: WidgetField[]) {
+    if (!str) {
+        return str
+    }
+
+    return str.replace(TAG_PLACEHOLDER_FULL, token => getPlaceholderText(token.slice(2, -1), record, fields))
 }

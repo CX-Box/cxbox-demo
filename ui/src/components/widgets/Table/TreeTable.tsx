@@ -184,6 +184,7 @@ function TreeTable<T extends CustomDataItem>({
 
     const { exportTable } = useExportTable({
         bcName: bcName,
+        widgetName,
         fields: resultedFields,
         title: exportConfig?.title ?? widget.title
     })

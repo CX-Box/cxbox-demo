@@ -171,6 +171,7 @@ function Table<T extends CustomDataItem>({
     const { resultedFields } = useTableSettingResultedFields(processedMeta, sortedGroupKeys)
     const { exportTable } = useExportTable({
         bcName: bcName,
+        widgetName,
         fields: resultedFields,
         title: exportConfig?.title ?? processedMeta.title
     })

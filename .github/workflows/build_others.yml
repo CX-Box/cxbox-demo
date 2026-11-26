@@ -165,3 +165,13 @@ jobs:
           -Dsonar.token=$SONAR_TOKEN
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  # --- Telegram notifications (secrets TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID) ---
+  # main: message when the workflow finishes (success / failure; a cancelled run sends nothing). Other branches: message only if something failed.
+  notify-result:
+    needs: [validate-title, build]
+    if: always() && (contains(needs.*.result, 'failure') || (github.ref == 'refs/heads/main' && !contains(needs.*.result, 'cancelled')))
+    uses: ./.github/workflows/telegram-notify.yml
+    secrets: inherit
+    with:
+      status: ${{ contains(needs.*.result, 'failure') && 'failure' || contains(needs.*.result, 'success') && 'success' || 'skipped' }}

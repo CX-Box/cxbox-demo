@@ -123,3 +123,13 @@ jobs:
             cd /home/cxbox/rqdemo
             sudo docker compose -f docker-compose-rq.yml up -d --wait -t 60
             docker ps
+
+  # --- Telegram notifications (secrets TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID) ---
+  # Only a failed build sends a message. No message on start, success or cancel.
+  notify-failure:
+    needs: [build]
+    if: always() && contains(needs.*.result, 'failure')
+    uses: ./.github/workflows/telegram-notify.yml
+    secrets: inherit
+    with:
+      status: failure

@@ -133,3 +133,20 @@ jobs:
             cd /home/cxbox/demo
             sudo docker compose -f docker-compose-prod.yml up -d --wait -t 60
             docker ps
+
+  # --- Telegram notifications (secrets TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID) ---
+  # main: message when the deploy starts. Any branch: message when a job failed. No message on success or cancel.
+  notify-start:
+    if: github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/telegram-notify.yml
+    secrets: inherit
+    with:
+      status: started
+
+  notify-failure:
+    needs: [build]
+    if: always() && contains(needs.*.result, 'failure')
+    uses: ./.github/workflows/telegram-notify.yml
+    secrets: inherit
+    with:
+      status: failure

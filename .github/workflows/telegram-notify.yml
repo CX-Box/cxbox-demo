@@ -1,0 +1,56 @@
+name: Telegram notify
+
+# Reusable workflow: sends one message to Telegram.
+# Called from build workflows:
+#   - on main: when the workflow starts and when it finishes (with status)
+#   - on any other branch: only when something failed
+# Needs secrets TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID (pass them with `secrets: inherit`).
+on:
+  workflow_call:
+    inputs:
+      status:
+        description: started | success | failure | skipped
+        required: true
+        type: string
+
+permissions: {}
+
+jobs:
+  telegram:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send message to Telegram
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          STATUS: ${{ inputs.status }}
+          REPOSITORY: ${{ github.repository }}
+          BRANCH: ${{ github.head_ref || github.ref_name }}
+          WORKFLOW: ${{ github.workflow }}
+          ACTOR: ${{ github.actor }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          if [ -z "$TELEGRAM_BOT_TOKEN" ] || [ -z "$TELEGRAM_CHAT_ID" ]; then
+            echo "::warning::TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID is not available (secrets are not passed to runs from forks), notification skipped"
+            exit 0
+          fi
+          case "$STATUS" in
+            started)   ICON="🚀"; TEXT="STARTED" ;;
+            success)   ICON="✅"; TEXT="SUCCESS" ;;
+            failure)   ICON="❌"; TEXT="FAILED" ;;
+            skipped)   ICON="⏭️"; TEXT="SKIPPED (no job ran)" ;;
+            *)         ICON="ℹ️"; TEXT="$STATUS" ;;
+          esac
+          MESSAGE=$(printf '%s %s\nRepository: %s\nBranch: %s\nWorkflow: %s\nBy: %s\n%s' \
+            "$ICON" "$TEXT" "$REPOSITORY" "$BRANCH" "$WORKFLOW" "$ACTOR" "$RUN_URL")
+          HTTP_CODE=$(curl --silent --show-error --output /tmp/telegram-response.json --write-out '%{http_code}' \
+            --request POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+            --data-urlencode "chat_id=${TELEGRAM_CHAT_ID}" \
+            --data-urlencode "text=${MESSAGE}" \
+            --data-urlencode "disable_web_page_preview=true")
+          if [ "$HTTP_CODE" != "200" ]; then
+            # A broken notification must not turn a green build red: only a warning (see the annotations of the run).
+            echo "::warning::Telegram notification was NOT sent. Telegram API answered HTTP $HTTP_CODE: $(cat /tmp/telegram-response.json 2>/dev/null)"
+            exit 0
+          fi
+          echo "Notification sent: $TEXT"

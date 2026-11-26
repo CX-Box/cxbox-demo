@@ -55,6 +55,7 @@
   ],
   "options": {
     "relationGraph": {
+      "maxRows": 3,
       "dragNode": true,
       "nodes": {
         "fieldKeys": ["sourceNodeId", "targetNodeId"],

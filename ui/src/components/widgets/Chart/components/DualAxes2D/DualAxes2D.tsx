@@ -7,6 +7,7 @@ import { getCombinedAxisOptions, getGeometryOption } from './utils'
 import { availableWidgetTypesForDualAxes2D, emptyArray } from './constants'
 import { DualAxesConfig } from '@ant-design/plots/es/components/dual-axes'
 import { Chart2DWidgetMeta, DualAxes2DWidgetMeta } from '@interfaces/widget'
+import ChartRowsWrapper from '../ChartRowsWrapper/ChartRowsWrapper'
 
 interface DualAxes2DProps {
     meta: DualAxes2DWidgetMeta
@@ -41,8 +42,8 @@ const DualAxes2D: React.FC<DualAxes2DProps> = ({ meta }) => {
                 xField: firstChartConfig.xField as string,
                 yField: [firstChartConfig.yField as string, secondChartConfig.yField as string],
                 geometryOptions: [
-                    getGeometryOption(firstChartWidgetMeta?.type, firstChartConfig),
-                    getGeometryOption(secondChartWidgetMeta?.type, secondChartConfig)
+                    getGeometryOption(firstChartWidgetMeta, firstChartConfig),
+                    getGeometryOption(secondChartWidgetMeta, secondChartConfig)
                 ],
                 ...(needToHideSecondYAxis && {
                     meta: {
@@ -76,10 +77,10 @@ const DualAxes2D: React.FC<DualAxes2DProps> = ({ meta }) => {
             },
         [
             firstChartConfig,
-            firstChartWidgetMeta?.type,
+            firstChartWidgetMeta,
             needToHideSecondYAxis,
             secondChartConfig,
-            secondChartWidgetMeta?.type,
+            secondChartWidgetMeta,
             uniqueDescriptionFieldKeys
         ]
     )
@@ -111,11 +112,21 @@ const DualAxes2D: React.FC<DualAxes2DProps> = ({ meta }) => {
         }
     }, [firstChartWidgetMeta?.bcName, meta.name, secondChartWidgetMeta?.bcName])
 
+    useEffect(() => {
+        if ([firstChartWidgetMeta, secondChartWidgetMeta].some(widget => (widget?.options?.chart2D?.mode ?? 'BT') !== 'BT')) {
+            console.info(`${meta.name} widget: 'mode' of widgets in 'options.dual2D' is ignored; the columns are vertical`)
+        }
+    }, [firstChartWidgetMeta, meta.name, secondChartWidgetMeta])
+
     if (!dualAxesConfig) {
         return null
     }
 
-    return <AntDualAxes {...dualAxesConfig} />
+    return (
+        <ChartRowsWrapper widgetName={meta.name} maxRows={optionsDual2D?.maxRows}>
+            <AntDualAxes {...dualAxesConfig} />
+        </ChartRowsWrapper>
+    )
 }
 
 export default DualAxes2D

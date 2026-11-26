@@ -24,9 +24,11 @@
   ],
   "options": {
     "chart2D": {
+      "maxRows": 3,
       "xValueFieldKey": "clientName",
       "yValueFieldKey": "sum",
-      "groupFieldKey": "productName"
+      "groupFieldKey": "productName",
+      "mode": "LR"
     }
   }
 }

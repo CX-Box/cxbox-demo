@@ -1,14 +1,22 @@
 import { LineConfig } from '@ant-design/plots/es/components/line'
 import { ColumnConfig } from '@ant-design/plots/es/components/column'
 import { Axis } from '@antv/g2plot/src/types/axis'
-import { CustomWidgetTypes } from '@interfaces/widget'
+import { Chart2DWidgetMeta, CustomWidgetTypes } from '@interfaces/widget'
+import { getValueLabel } from '../../utils'
 
-export const getGeometryOption = (widgetType: CustomWidgetTypes, chartConfig: ColumnConfig | LineConfig) => ({
-    geometry: widgetType === CustomWidgetTypes.Column2D ? 'column' : 'line',
-    ...(widgetType === CustomWidgetTypes.Column2D
+export const getGeometryOption = (widgetMeta: Chart2DWidgetMeta, chartConfig: ColumnConfig | LineConfig) => ({
+    geometry: widgetMeta?.type === CustomWidgetTypes.Column2D ? 'column' : 'line',
+    ...(widgetMeta?.type === CustomWidgetTypes.Column2D
         ? {
               columnStyle: (chartConfig as ColumnConfig).columnStyle,
-              isGroup: (chartConfig as ColumnConfig).isGroup
+              isGroup: (chartConfig as ColumnConfig).isGroup,
+              // The label is built here and not in useChart2D: the columns in DualAxes2D are always vertical (BT),
+              // whatever mode the widget has on its own.
+              label: getValueLabel(
+                  widgetMeta.fields.find(field => field.key === widgetMeta.options.chart2D.yValueFieldKey),
+                  widgetMeta.options.chart2D.valuePosition,
+                  'BT'
+              )
           }
         : {
               point: (chartConfig as LineConfig).point

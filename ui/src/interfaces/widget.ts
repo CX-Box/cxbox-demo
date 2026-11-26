@@ -93,13 +93,13 @@ export interface StepsWidgetMeta extends WidgetMeta {
 
 export interface FunnelWidgetMeta extends WidgetMeta {
     type: CustomWidgetTypes.Funnel
-    options: WidgetOptions & { funnelOptions: { dataKey: string } }
+    options?: WidgetOptions & { funnelOptions?: ChartRowsConfig & { dataKey?: string } }
 }
 
 export interface RingProgressWidgetMeta extends WidgetMeta {
     type: CustomWidgetTypes.RingProgress
     options: WidgetOptions & {
-        ringProgressOptions: { text: string; numberField: string; descriptionField: string; percentField: string }
+        ringProgressOptions: ChartRowsConfig & { text: string; numberField: string; descriptionField: string; percentField: string }
     }
 }
 
@@ -349,7 +349,13 @@ export interface AdditionalListWidgetMeta extends AppWidgetMeta {}
 
 export interface CardCarouselListWidgetMeta extends AppWidgetMeta {}
 
-export interface Chart1DConfig {
+/** Chart height, set inside the options of each chart type. */
+export interface ChartRowsConfig {
+    /** Chart height in rows of the standard Form. Omit to keep the chart's own size. */
+    maxRows?: number
+}
+
+export interface Chart1DConfig extends ChartRowsConfig {
     valueFieldKey: string
     valuePosition?: 'inner' | 'outer'
     titleFieldKey?: string
@@ -371,7 +377,14 @@ export interface Pie1DWidgetMeta extends Omit<AppWidgetTableMeta, 'type'> {
     }
 }
 
-export interface Chart2DConfig {
+export interface Chart2DConfig extends ChartRowsConfig {
+    /**
+     * Column2D only. The direction in which the columns grow, as `mode` of RelationGraph: BT (default), TB, LR, RL.
+     * The category and value field keys keep their meaning in every direction.
+     */
+    mode?: 'TB' | 'BT' | 'LR' | 'RL'
+    /** Column2D value labels. Omit to keep labels hidden. */
+    valuePosition?: 'inner' | 'outer'
     xValueFieldKey: string
     xMax?: number
     xMin?: number
@@ -392,7 +405,7 @@ export interface Chart2DWidgetMeta extends Omit<AppWidgetTableMeta, 'type'> {
     }
 }
 
-export interface Dual2DConfig {
+export interface Dual2DConfig extends ChartRowsConfig {
     widgets: string[]
 }
 
@@ -400,7 +413,7 @@ export interface DualAxes2DWidgetMeta extends Omit<AppWidgetTableMeta, 'type'> {
     type: CustomWidgetTypes.DualAxes2D
 }
 
-export interface RelationGraphConfig {
+export interface RelationGraphConfig extends ChartRowsConfig {
     mode?: 'TB' | 'BT' | 'LR' | 'RL'
     dragNode?: boolean
     nodes?: {

@@ -181,5 +181,11 @@ export const useChart2D = (meta: Chart2DWidgetMeta, needToChangeGroupFieldData?:
         }
     }, [isXValueFieldTypeNumber, isYValueFieldTypeNumber, name, xMax, xMin, xStep, yMax, yMin, yStep])
 
+    useEffect(() => {
+        if (type === CustomWidgetTypes.Line2D && (options?.chart2D?.mode || options?.chart2D?.valuePosition)) {
+            console.info(`${name} widget: 'mode, valuePosition' work only for Column2D; they are ignored`)
+        }
+    }, [name, options?.chart2D?.mode, options?.chart2D?.valuePosition, type])
+
     return chart2DConfig
 }

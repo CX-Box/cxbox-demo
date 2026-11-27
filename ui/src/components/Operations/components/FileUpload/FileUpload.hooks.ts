@@ -203,11 +203,8 @@ export const useUploadFilesInfo = (accept?: string) => {
     }
 }
 
-export const useUploadFilesInfoWithAutoRemove = (accept?: string) => {
-    const uploadFilesInfo = useUploadFilesInfo(accept)
-    const { removeAddedFiles, getAddedFileList } = uploadFilesInfo
-    const addedFileList = getAddedFileList()
-
+/** Removes the done files from the list in 5 seconds; while the pointer is over the list, they stay */
+export const useAutoRemoveSuccessFiles = (addedFileList: AddedFileInfo[], removeAddedFiles: (uidList: string[]) => void) => {
     const [callbackRef, isHovering] = useHover<HTMLDivElement>()
     const timeoutIdList = useTimeoutIdList()
 
@@ -231,6 +228,13 @@ export const useUploadFilesInfoWithAutoRemove = (accept?: string) => {
             timeoutIdList.clear()
         }
     }, [isHovering, timeoutIdList])
+
+    return callbackRef
+}
+
+export const useUploadFilesInfoWithAutoRemove = (accept?: string) => {
+    const uploadFilesInfo = useUploadFilesInfo(accept)
+    const callbackRef = useAutoRemoveSuccessFiles(uploadFilesInfo.getAddedFileList(), uploadFilesInfo.removeAddedFiles)
 
     return {
         callbackRef,

@@ -1,8 +1,8 @@
-import React, { forwardRef, ReactElement, useEffect, useRef, useState } from 'react'
+import React, { forwardRef, ReactElement, useEffect, useReducer, useRef, useState } from 'react'
 import { notification, Typography } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { createPortal } from 'react-dom'
-import { UploadList } from '@components/Operations/components/FileUpload/UploadList'
+import { UploadList, UploadListProps } from '@components/Operations/components/FileUpload/UploadList'
 import { AddedFileInfo } from '@components/Operations/components/FileUpload/FileUpload.interfaces'
 import { isFileUploadSuccess } from '@components/Operations/components/FileUpload/FileUpload.utils'
 import { openNotification } from '@components/NotificationsContainer/utils'
@@ -13,13 +13,18 @@ interface UploadListContainerProps {
     onClose: () => void
     title?: string
     successHint?: string
+    direction?: UploadListProps['direction']
 }
 
 export const UploadListContainer = forwardRef(
-    ({ title, addedFileList, onClose, successHint, ...dataAttributes }: UploadListContainerProps, ref: React.LegacyRef<HTMLDivElement>) => {
+    (
+        { title, addedFileList, onClose, successHint, direction, ...dataAttributes }: UploadListContainerProps,
+        ref: React.LegacyRef<HTMLDivElement>
+    ) => {
         const { t } = useTranslation()
         const [visibleProgress, setVisibleProgress] = useState(false)
         const progressKey = useRef(`upload-progress_${Date.now()}`)
+        const [, forceUpdate] = useReducer((count: number) => count + 1, 0)
 
         // closes an open notification if it is empty
         useEffect(() => {
@@ -46,7 +51,8 @@ export const UploadListContainer = forwardRef(
                 openNotification({
                     key: progressKey.current,
                     message,
-                    description: <div id={progressKey.current}></div>,
+                    // the list is drawn into this element, and it appears only after the notification is shown
+                    description: <div id={progressKey.current} ref={element => element && forceUpdate()}></div>,
                     duration: null,
                     onClose: () => {
                         notification.close(progressKey.current)
@@ -72,7 +78,7 @@ export const UploadListContainer = forwardRef(
         return notificationElement
             ? createPortal(
                   <div ref={ref} className={styles.uploadList} {...dataAttributes}>
-                      <UploadList fileList={addedFileList} />
+                      <UploadList fileList={addedFileList} direction={direction} />
                       {hint}
                   </div>,
                   document.body.querySelector(`#${progressKey.current}`) as Element

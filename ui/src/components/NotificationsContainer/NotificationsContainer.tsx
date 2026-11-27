@@ -1,16 +1,24 @@
 import React, { useEffect, useRef } from 'react'
+import { notification } from 'antd'
 import { useTranslation } from 'react-i18next'
+import { allNotificationsClosed } from '@actions'
+import { useAppDispatch } from '@store'
 import Button from '@components/ui/Button/Button'
-import { closeAllNotifications } from '@components/NotificationsContainer/utils'
-import { directionItems, EDirection, notificationsContainerId } from '@components/NotificationsContainer/constants'
+import { directionItems, EDirection, notifications, notificationsContainerId } from '@components/NotificationsContainer/constants'
 import styles from './NotificationsContainer.module.css'
 
 const isUpward = directionItems === EDirection.upward
 
 export const NotificationsContainer = () => {
     const { t } = useTranslation()
-
+    const dispatch = useAppDispatch()
     const containerRef = useRef<HTMLDivElement>(null)
+
+    const handleCloseAll = () => {
+        notification.destroy()
+        notifications.clear()
+        dispatch(allNotificationsClosed())
+    }
 
     useEffect(() => {
         const checkNotifications = () => {
@@ -54,7 +62,7 @@ export const NotificationsContainer = () => {
 
     return (
         <div ref={containerRef} className={styles.container} id={notificationsContainerId}>
-            <Button className={styles.closeAllButton} type="link" onClick={closeAllNotifications}>
+            <Button className={styles.closeAllButton} type="link" onClick={handleCloseAll}>
                 {t('Close all')}
             </Button>
         </div>

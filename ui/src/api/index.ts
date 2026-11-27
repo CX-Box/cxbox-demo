@@ -149,12 +149,13 @@ class Api extends CXBoxApi {
             .pipe(map(response => response.data))
     }
 
-    async getBlob(url: string, params: { preview: boolean }) {
+    async getBlob(url: string, params: { preview: boolean }, onDownloadProgress?: AxiosRequestConfig['onDownloadProgress']) {
         const request = () =>
             this.api$.instance.get<Blob>(url, {
                 baseURL: '',
                 params,
-                responseType: 'blob'
+                responseType: 'blob',
+                onDownloadProgress
             })
 
         try {
@@ -175,8 +176,8 @@ class Api extends CXBoxApi {
         }
     }
 
-    async saveBlob(url: string, filename?: string) {
-        const response = await this.getBlob(url, { preview: false })
+    async saveBlob(url: string, filename?: string, onDownloadProgress?: AxiosRequestConfig['onDownloadProgress']) {
+        const response = await this.getBlob(url, { preview: false }, onDownloadProgress)
         const disposition = response.request.getResponseHeader('content-disposition')
 
         // TODO add parser for disposition

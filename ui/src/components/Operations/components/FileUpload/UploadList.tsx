@@ -13,11 +13,13 @@ import { UPLOAD_FILE_STATUS } from '@components/Operations/components/FileUpload
 import { tooltipErrorFileUploadTextMaxDisplayed } from '@components/Operations/components/FileUpload/UploadList.constants'
 import styles from './UploadList.less'
 
-interface UploadListProps {
+export interface UploadListProps {
     fileList?: AddedFileInfo[]
+    // the arrow of a line in progress
+    direction?: 'upload' | 'download'
 }
 
-export function UploadList({ fileList }: UploadListProps) {
+export function UploadList({ fileList, direction = 'upload' }: UploadListProps) {
     const { t } = useTranslation()
 
     return (
@@ -31,7 +33,7 @@ export function UploadList({ fileList }: UploadListProps) {
                     fileIcon = <Icon type="loading" />
                 }
 
-                let uploadTypeIcon = <Icon type="upload" style={{ color: mainColor }} />
+                let uploadTypeIcon = <Icon type={direction} style={{ color: mainColor }} />
 
                 if (isFileUploadSuccess(file.status)) {
                     uploadTypeIcon = <Icon type="check-circle" theme="filled" style={{ color: mainColor }} />

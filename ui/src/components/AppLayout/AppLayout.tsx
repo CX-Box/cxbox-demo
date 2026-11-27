@@ -8,6 +8,7 @@ import styles from './AppLayout.less'
 import View from '../View/View'
 import ModalInvoke from '../ModalInvoke/ModalInvoke'
 import SystemNotifications from '../SystemNotifications/SystemNotifications'
+import FileDownloadProgress from '@components/FileDownloadProgress/FileDownloadProgress'
 import ErrorPopup from '../containers/ErrorPopup/ErrorPopup'
 import AuthErrorPopup from '@components/AuthErrorPopup/AuthErrorPopup'
 import { useAppDispatch, useAppSelector } from '@store'
@@ -54,6 +55,7 @@ export const AppLayout: React.FC = () => {
                     <AuthErrorPopup />
                     <ModalInvoke />
                     <SystemNotifications />
+                    <FileDownloadProgress />
                     <Layout className={styles.appLayout}>
                         <AppSide />
                         <Layout.Content className={styles.mainContent}>

@@ -96,7 +96,7 @@ export const processFileUploadErrorMessage = (error: AxiosError<OperationError>)
 
     const popupErrors = error?.response?.data?.error?.popup
     if (Array.isArray(popupErrors) && popupErrors.length) {
-        console.warn('Popup is not intended for upload errors')
+        console.warn('Popup is not intended for errors of a file upload or download')
         errors.push(...popupErrors)
     }
 

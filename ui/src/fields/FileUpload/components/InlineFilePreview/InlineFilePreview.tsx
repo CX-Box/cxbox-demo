@@ -44,6 +44,8 @@ interface InlineFilePreviewProps {
     forceHeight?: string
     // enables record/file pagination across the field (the FilePreview widget case).
     pagination?: boolean
+    // red border around the inline preview when the field has a validation error
+    error?: boolean
 }
 
 function InlineFilePreview({
@@ -61,7 +63,8 @@ function InlineFilePreview({
     onUploadFailed,
     onFileDelete,
     forceHeight,
-    pagination = false
+    pagination = false,
+    error = false
 }: InlineFilePreviewProps) {
     const dispatch = useAppDispatch()
     const { t } = useTranslation()
@@ -196,6 +199,7 @@ function InlineFilePreview({
     const renderFullscreenContent = () => {
         const viewer = (
             <FileViewer
+                error={error}
                 fileName={fileName}
                 url={downloadUrl}
                 view="full"
@@ -230,6 +234,7 @@ function InlineFilePreview({
 
             <div className={styles.body}>
                 <FileViewer
+                    error={error}
                     fileName={fileName}
                     url={downloadUrl}
                     view="compact"

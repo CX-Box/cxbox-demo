@@ -20,6 +20,7 @@ import { DataValue, WidgetTypes } from '@cxbox-ui/core'
 import { useFileIconClick } from '@fields/FileUpload/hooks'
 import cn from 'classnames'
 import styles from './FileUpload.less'
+import inlineFilePreview from '@fields/FileUpload/components/InlineFilePreview/InlineFilePreview'
 
 interface Props extends Omit<BaseFieldProps, 'meta'> {
     value: string
@@ -216,7 +217,15 @@ const FileUpload: React.FunctionComponent<Props> = ({
 
     if (widgetMeta?.type && displayFileViewer && isInlineMode) {
         if (widgetMeta.type === CustomWidgetTypes.FilePreview) {
-            return <InlineFilePreview widgetName={widgetName as string} fieldKey={fieldMeta?.key} forceHeight="100%" pagination />
+            return (
+                <InlineFilePreview
+                    widgetName={widgetName as string}
+                    fieldKey={fieldMeta?.key}
+                    error={!!metaError}
+                    forceHeight="100%"
+                    pagination
+                />
+            )
         }
 
         // fixme:
@@ -258,6 +267,7 @@ const FileUpload: React.FunctionComponent<Props> = ({
                         <InlineFilePreview
                             widgetName={widgetName as string}
                             fieldKey={fieldMeta?.key}
+                            error={!!metaError}
                             fileAccept={fileAccept}
                             uploadUrl={uploadUrl}
                             hideImageControl={preview.hideImageControl}
@@ -304,15 +314,16 @@ const FileUpload: React.FunctionComponent<Props> = ({
                 onDownload={handleDownload}
             />
 
-            {displayFileViewer && isInlineMode && (
+            {downloadUrl && displayFileViewer && isInlineMode && (
                 <div
-                    className={cn({
+                    className={cn(styles.inlineFilePreviewEdit, {
                         [styles.inlineFilePreviewWithUpload]: downloadUrl
                     })}
                 >
                     <InlineFilePreview
                         widgetName={widgetName as string}
                         fieldKey={fieldMeta?.key}
+                        error={!!metaError}
                         fileAccept={fileAccept}
                         uploadUrl={uploadUrl}
                         hideImageControl={preview.hideImageControl}

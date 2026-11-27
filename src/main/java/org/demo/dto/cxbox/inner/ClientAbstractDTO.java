@@ -1,6 +1,7 @@
 package org.demo.dto.cxbox.inner;
 
 import java.util.Optional;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -34,6 +35,7 @@ public abstract class ClientAbstractDTO extends DataResponseDTO {
 
 	private String color;
 
+	@Pattern(regexp = "^[\\p{L}.]+$", message = "Brief may contain only letters and dots")
 	private String brief;
 
 	private String briefId;

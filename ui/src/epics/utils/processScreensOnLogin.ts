@@ -100,6 +100,7 @@ export const processScreensOnLogin = (screens: SessionScreen[]) => {
                                     aField.label = 'Brief'
                                     aField.key = 'brief'
                                     aField.type = 'fileUpload'
+                                    // aField.type = 'hidden'
                                     aField.fileIdKey = 'briefId'
 
                                     aField.minRows = 5

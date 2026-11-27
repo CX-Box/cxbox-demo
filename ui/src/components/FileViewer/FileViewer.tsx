@@ -28,6 +28,7 @@ export interface FileViewerProps {
     style?: CSSProperties
     imageControlEnabled?: boolean
     footer?: (params: { displayType: FileViewerType; imageControl?: ImageControl }) => JSX.Element | null
+    error?: boolean
 }
 
 export type FileViewerRef = {
@@ -52,7 +53,8 @@ const FileViewer = forwardRef<FileViewerRef | undefined, FileViewerProps>(
             fileName,
             pageWidth = DOCUMENT_PAGE_WIDTH,
             imageControlEnabled = false,
-            footer
+            footer,
+            error = false
         },
         ref
     ) => {
@@ -108,7 +110,7 @@ const FileViewer = forwardRef<FileViewerRef | undefined, FileViewerProps>(
 
         return (
             <div
-                className={cn(styles.root, className, styles[view], styles[displayType])}
+                className={cn(styles.root, className, styles[view], styles[displayType], { [styles.error]: error })}
                 onDoubleClick={onDoubleClick}
                 onClick={onClick}
                 style={wrapperStyle}
